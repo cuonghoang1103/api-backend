@@ -1,0 +1,1007 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-11-4-scale-adapter-backpressure",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-11-4-scale-adapter-backpressure"
+  },
+  "exercises": [
+    {
+      "title": "The second process: what breaks, silently",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "scaling",
+        "Socket.IO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>From the lesson: two Socket.IO processes with and without the Redis adapter, polling vs websocket behind a round-robin balancer, one slow client costing 192 MB, and the six things that break at the second process.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ bài: hai tiến trình Socket.IO có và không có adapter Redis, polling so với websocket sau bộ cân bằng luân phiên, một client chậm tốn 192 MB, và sáu thứ hỏng ở tiến trình thứ hai.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For each question ask: where does this state live — one process, or something shared?|||Mỗi câu hỏi: trạng thái này nằm ở đâu — một tiến trình, hay thứ dùng chung?",
+        "Adapter and sticky sessions solve different halves: broadcasts vs sessions.|||Adapter và sticky session giải hai nửa khác nhau: phát tin vs session."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The second process: what breaks, silently\n\nAnswer in the answer panel (no code needed).\n\n1. A client is on process A. Process B emits to the client’s room, without an adapter. What did the lesson measure?Client nối vào tiến trình A. Tiến trình B emit tới room của client, không có adapter. Bài đo được gì?\n2. Why must the Redis adapter get pub.duplicate() as its subscriber instead of reusing pub?Vì sao adapter Redis phải nhận pub.duplicate() làm subscriber thay vì dùng lại pub?\n3. Two processes behind a round-robin balancer with no session affinity. Which transport setting worked?Hai tiến trình sau bộ cân bằng luân phiên, không có affinity. Cấu hình transport nào chạy?\n4. A client stops reading. The server keeps calling send(): 3,000 × 64 KB. What did the socket report?Một client ngừng đọc. Server vẫn gọi send(): 3.000 × 64 KB. Socket báo gì?\n5. Which break when the second container ships? (choose all)Cái nào hỏng khi container thứ hai lên? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The second process: what breaks, silently — answer key\n\n1. A client is on process A. Process B emits to the client’s room, without an adapter. What did the lesson measure?Client nối vào tiến trình A. Tiến trình B emit tới room của client, không có adapter. Bài đo được gì?\n   Answer: d) emit returned in 0.42 ms \"successfully\" and the client received nothing — no error anywhere\n   Rooms are an in-memory map inside one process: B’s room is genuinely empty. Symptom in production: \"messages arrive sometimes\".VI: Room là một bảng trong bộ nhớ của một tiến trình: room của B thật sự rỗng. Triệu chứng trên production: \"tin lúc tới lúc không\".\n\n2. Why must the Redis adapter get pub.duplicate() as its subscriber instead of reusing pub?Vì sao adapter Redis phải nhận pub.duplicate() làm subscriber thay vì dùng lại pub?\n   Answer: a) A connection in SUBSCRIBE mode cannot run other commands — sharing one hangs everything\n   Mistake (2) of six. The cost of the adapter is two extra Redis connections per process and one round trip per broadcast (5.02 ms measured).VI: Lỗi (2) trong sáu lỗi. Cái giá của adapter là thêm hai kết nối Redis mỗi tiến trình và một vòng đi về mỗi lần phát (đo 5,02 ms).\n\n3. Two processes behind a round-robin balancer with no session affinity. Which transport setting worked?Hai tiến trình sau bộ cân bằng luân phiên, không có affinity. Cấu hình transport nào chạy?\n   Answer: d) websocket only — one connection lives on the process that accepted it; polling failed with \"xhr post error\"\n   Long-polling is many requests with one session id; request 2 lands on a process that never heard of it. The adapter fans out broadcasts — it does NOT make a session portable.VI: Long-polling là nhiều request cùng một session id; request 2 rơi vào tiến trình chưa từng nghe tới nó. Adapter phát tin qua các tiến trình — nó KHÔNG làm session di chuyển được.\n\n4. A client stops reading. The server keeps calling send(): 3,000 × 64 KB. What did the socket report?Một client ngừng đọc. Server vẫn gọi send(): 3.000 × 64 KB. Socket báo gì?\n   Answer: d) readyState 1 (OPEN), no error — and bufferedAmount 187 MB, RSS +192 MB\n   TCP backpressure piles everything up in YOUR memory. Look before you write: if bufferedAmount > limit, drop (the client refetches over REST).VI: Áp lực ngược của TCP dồn mọi thứ vào bộ nhớ CỦA BẠN. Nhìn trước khi ghi: bufferedAmount > ngưỡng thì bỏ (client lấy lại qua REST).\n\n5. Which break when the second container ships? (choose all)Cái nào hỏng khi container thứ hai lên? (chọn mọi câu đúng)\n   Answer: b) An online-users Set kept in the socket server’s memory + c) A deploy that restarts every container at once (everyone reconnects in the same second) + d) Long-polling enabled without sticky sessions + e) Rooms without an adapter\n   Shared state must move out of the process (Redis); the database was already shared. A self-inflicted reconnect flood is fixed by staggering or jittered backoff.VI: Trạng thái dùng chung phải ra khỏi tiến trình (Redis); CSDL vốn đã dùng chung. Cơn lũ kết nối lại tự gây ra được sửa bằng cách deploy so le hoặc backoff có jitter.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> emit returned in 0.42 ms \"successfully\" and the client received nothing — no error anywhere</p><p>Rooms are an in-memory map inside one process: B’s room is genuinely empty. Symptom in production: \"messages arrive sometimes\".</p><p><i>VI: Room là một bảng trong bộ nhớ của một tiến trình: room của B thật sự rỗng. Triệu chứng trên production: \"tin lúc tới lúc không\".</i></p></li><li><p><b>a)</b> A connection in SUBSCRIBE mode cannot run other commands — sharing one hangs everything</p><p>Mistake (2) of six. The cost of the adapter is two extra Redis connections per process and one round trip per broadcast (5.02 ms measured).</p><p><i>VI: Lỗi (2) trong sáu lỗi. Cái giá của adapter là thêm hai kết nối Redis mỗi tiến trình và một vòng đi về mỗi lần phát (đo 5,02 ms).</i></p></li><li><p><b>d)</b> websocket only — one connection lives on the process that accepted it; polling failed with \"xhr post error\"</p><p>Long-polling is many requests with one session id; request 2 lands on a process that never heard of it. The adapter fans out broadcasts — it does NOT make a session portable.</p><p><i>VI: Long-polling là nhiều request cùng một session id; request 2 rơi vào tiến trình chưa từng nghe tới nó. Adapter phát tin qua các tiến trình — nó KHÔNG làm session di chuyển được.</i></p></li><li><p><b>d)</b> readyState 1 (OPEN), no error — and bufferedAmount 187 MB, RSS +192 MB</p><p>TCP backpressure piles everything up in YOUR memory. Look before you write: if bufferedAmount > limit, drop (the client refetches over REST).</p><p><i>VI: Áp lực ngược của TCP dồn mọi thứ vào bộ nhớ CỦA BẠN. Nhìn trước khi ghi: bufferedAmount > ngưỡng thì bỏ (client lấy lại qua REST).</i></p></li><li><p><b>b)</b> An online-users Set kept in the socket server’s memory + <b>c)</b> A deploy that restarts every container at once (everyone reconnects in the same second) + <b>d)</b> Long-polling enabled without sticky sessions + <b>e)</b> Rooms without an adapter</p><p>Shared state must move out of the process (Redis); the database was already shared. A self-inflicted reconnect flood is fixed by staggering or jittered backoff.</p><p><i>VI: Trạng thái dùng chung phải ra khỏi tiến trình (Redis); CSDL vốn đã dùng chung. Cơn lũ kết nối lại tự gây ra được sửa bằng cách deploy so le hoặc backoff có jitter.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "<p>A client is on process A. Process B emits to the client’s room, without an adapter. What did the lesson measure?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client nối vào tiến trình A. Tiến trình B emit tới room của client, không có adapter. Bài đo được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "B threw \"room not found\", which showed up in the logs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B forwarded the emit to A over TCP automatically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The message was delivered after 5 ms through the shared HTTP server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "emit returned in 0.42 ms \"successfully\" and the client received nothing — no error anywhere"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Rooms are an in-memory map inside one process: B’s room is genuinely empty. Symptom in production: \"messages arrive sometimes\".</p><p><i>VI: Room là một bảng trong bộ nhớ của một tiến trình: room của B thật sự rỗng. Triệu chứng trên production: \"tin lúc tới lúc không\".</i></p>"
+          },
+          {
+            "ma": "s2",
+            "de": "<p>Why must the Redis adapter get <code>pub.duplicate()</code> as its subscriber instead of reusing <code>pub</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao adapter Redis phải nhận <code>pub.duplicate()</code> làm subscriber thay vì dùng lại <code>pub</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A connection in SUBSCRIBE mode cannot run other commands — sharing one hangs everything"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis limits each connection to one channel"
+              },
+              {
+                "ma": "c",
+                "noiDung": "duplicate() is faster because it skips authentication"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The adapter publishes on the subscriber connection to save memory"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Mistake (2) of six. The cost of the adapter is two extra Redis connections per process and one round trip per broadcast (5.02 ms measured).</p><p><i>VI: Lỗi (2) trong sáu lỗi. Cái giá của adapter là thêm hai kết nối Redis mỗi tiến trình và một vòng đi về mỗi lần phát (đo 5,02 ms).</i></p>"
+          },
+          {
+            "ma": "s3",
+            "de": "<p>Two processes behind a round-robin balancer with no session affinity. Which transport setting worked?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai tiến trình sau bộ cân bằng luân phiên, không có affinity. Cấu hình transport nào chạy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Neither: Socket.IO always requires sticky sessions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both, as long as the Redis adapter is attached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "polling only — every request carries the session id, so any process can answer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "websocket only — one connection lives on the process that accepted it; polling failed with \"xhr post error\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Long-polling is many requests with one session id; request 2 lands on a process that never heard of it. The adapter fans out broadcasts — it does NOT make a session portable.</p><p><i>VI: Long-polling là nhiều request cùng một session id; request 2 rơi vào tiến trình chưa từng nghe tới nó. Adapter phát tin qua các tiến trình — nó KHÔNG làm session di chuyển được.</i></p>"
+          },
+          {
+            "ma": "s4",
+            "de": "<p>A client stops reading. The server keeps calling <code>send()</code>: 3,000 × 64 KB. What did the socket report?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một client ngừng đọc. Server vẫn gọi <code>send()</code>: 3.000 × 64 KB. Socket báo gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "readyState 3 (CLOSED) after the first megabyte"
+              },
+              {
+                "ma": "b",
+                "noiDung": "send() threw ERR_BUFFER_FULL after 1 MB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP dropped the frames, so memory stayed flat"
+              },
+              {
+                "ma": "d",
+                "noiDung": "readyState 1 (OPEN), no error — and bufferedAmount 187 MB, RSS +192 MB"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>TCP backpressure piles everything up in YOUR memory. Look before you write: if bufferedAmount > limit, drop (the client refetches over REST).</p><p><i>VI: Áp lực ngược của TCP dồn mọi thứ vào bộ nhớ CỦA BẠN. Nhìn trước khi ghi: bufferedAmount > ngưỡng thì bỏ (client lấy lại qua REST).</i></p>"
+          },
+          {
+            "ma": "s5",
+            "de": "<p>Which break when the second container ships? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào hỏng khi container thứ hai lên? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A REST endpoint that reads messages from PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An online-users Set kept in the socket server’s memory"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A deploy that restarts every container at once (everyone reconnects in the same second)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Long-polling enabled without sticky sessions"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Rooms without an adapter"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Shared state must move out of the process (Redis); the database was already shared. A self-inflicted reconnect flood is fixed by staggering or jittered backoff.</p><p><i>VI: Trạng thái dùng chung phải ra khỏi tiến trình (Redis); CSDL vốn đã dùng chung. Cơn lũ kết nối lại tự gây ra được sửa bằng cách deploy so le hoặc backoff có jitter.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming the adapter also fixes long-polling across processes.|||Tưởng adapter cũng sửa được long-polling qua nhiều tiến trình."
+        },
+        {
+          "loi": "Trusting readyState === OPEN as \"the client is keeping up\".|||Tin readyState === OPEN nghĩa là \"client theo kịp\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "adapter",
+          "vi": "bộ chuyển phát",
+          "giaiThich": "đưa broadcast qua các tiến trình"
+        },
+        {
+          "en": "sticky session",
+          "vi": "phiên dính",
+          "giaiThich": "cân bằng tải gửi mọi request của một phiên về cùng tiến trình"
+        },
+        {
+          "en": "bufferedAmount",
+          "vi": "số byte đang chờ",
+          "giaiThich": "đã send() nhưng chưa ra mạng"
+        }
+      ]
+    },
+    {
+      "title": "Who receives it, and which transport survives the balancer",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "scaling",
+        "load balancing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two functions from measurements 1–3:</p>\n<ul><li><code>deliveredTo(processes, fromIndex, room, withAdapter)</code> — <code>processes</code> is <code>[{ sockets: { socketId: [rooms…] } }, …]</code>. An emit to <code>room</code> from <code>processes[fromIndex]</code> reaches only that process’s sockets without an adapter, and the sockets of every process with one. Return the sorted socket ids.</li>\n<li><code>transportWorks({ transports, sticky, processes })</code> — <code>true</code> if Socket.IO keeps working: always with one process or with sticky sessions; with several processes and no stickiness only if <code>'polling'</code> is not in <code>transports</code>.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai hàm từ phép đo 1–3:</p>\n<ul><li><code>deliveredTo(processes, fromIndex, room, withAdapter)</code> — <code>processes</code> là <code>[{ sockets: { socketId: [room…] } }, …]</code>. Một lần emit tới <code>room</code> từ <code>processes[fromIndex]</code> chỉ tới socket của tiến trình đó nếu không có adapter, và tới socket của mọi tiến trình nếu có. Trả các socket id đã sắp xếp.</li>\n<li><code>transportWorks({ transports, sticky, processes })</code> — <code>true</code> nếu Socket.IO vẫn chạy: luôn đúng với một tiến trình hoặc có sticky session; nhiều tiến trình không sticky thì chỉ đúng khi <code>'polling'</code> không có trong <code>transports</code>.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[deliveredTo([{ sockets: { JBrW: ['JBrW', 'thread:42'] } }, { sockets: {} }], 1, 'thread:42', false), deliveredTo([{ sockets: { JBrW: ['JBrW', 'thread:42'] } }, { sockets: {} }], 1, 'thread:42', true)]",
+          "output": "[[],[\"JBrW\"]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Choose the scope first: <code>withAdapter ? processes : [processes[fromIndex]]</code>.|||Chọn phạm vi trước: <code>withAdapter ? processes : [processes[fromIndex]]</code>.",
+        "transportWorks is three early returns.|||transportWorks là ba lần return sớm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Which sockets receive an emit to `room` from processes[fromIndex]? */\nfunction deliveredTo(processes, fromIndex, room, withAdapter) {\n  // Write your solution here\n  const out = [];\n  for (const p of processes) for (const [id, rooms] of Object.entries(p.sockets)) if (rooms.includes(room)) out.push(id);\n  return out;\n}\n\n/** Does Socket.IO keep working with this deployment? */\nfunction transportWorks({ transports, sticky, processes }) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction deliveredTo(processes, fromIndex, room, withAdapter) {\n  // Without an adapter, a process can only see ITS OWN sockets; the adapter makes the room cluster-wide.\n  const scope = withAdapter ? processes : [processes[fromIndex]];\n  const out = [];\n  for (const p of scope) for (const [id, rooms] of Object.entries(p.sockets)) if (rooms.includes(room)) out.push(id);\n  return out.sort();\n}\n\nfunction transportWorks({ transports, sticky, processes }) {\n  if (processes <= 1) return true;                 // one process: every request lands where its session lives\n  if (sticky) return true;                         // the balancer keeps a session on one process\n  // No affinity: long-polling sends request 2 to a process that has never seen the session id.\n  return !transports.includes('polling');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both functions encode where state lives. Room membership lives in the memory of the process that holds the socket, so the reach of an emit is that process — until an adapter republishes it to all of them. A long-polling session also lives in one process, so without affinity it breaks whatever the adapter does; a WebSocket is one connection and is \"sticky\" by construction.</p>",
+      "solutionExplanationHtmlVi": "<p>Cả hai hàm mã hoá nơi trạng thái sống. Thành viên room sống trong bộ nhớ tiến trình giữ socket, nên tầm của một lần emit là tiến trình đó — cho tới khi adapter phát lại tới tất cả. Một session long-polling cũng sống trong một tiến trình, nên không có affinity thì hỏng bất kể adapter; WebSocket là một kết nối nên \"dính\" sẵn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Measurement 1 and 2: emit from B",
+              "vi": "Phép đo 1 và 2: emit từ B"
+            },
+            "goi": "[deliveredTo([{ sockets: { JBrW: ['JBrW', 'thread:42'] } }, { sockets: {} }], 1, 'thread:42', false), deliveredTo([{ sockets: { JBrW: ['JBrW', 'thread:42'] } }, { sockets: {} }], 1, 'thread:42', true)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              [],
+              [
+                "JBrW"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Measurement 3",
+              "vi": "Phép đo 3"
+            },
+            "goi": "[transportWorks({ transports: ['websocket', 'polling'], sticky: false, processes: 2 }), transportWorks({ transports: ['websocket'], sticky: false, processes: 2 })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "This site today, and with sticky sessions",
+              "vi": "Site này hôm nay, và khi có sticky session"
+            },
+            "goi": "[transportWorks({ transports: ['websocket', 'polling'], sticky: false, processes: 1 }), transportWorks({ transports: ['websocket', 'polling'], sticky: true, processes: 4 })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const P = [{ sockets: { a: ['a', 'user:7'], b: ['b', 'post:1'] } }, { sockets: { c: ['c', 'user:7'], d: ['d'] } }, { sockets: { e: ['e', 'user:7', 'post:1'] } }]; return [deliveredTo(P, 0, 'user:7', false), deliveredTo(P, 2, 'user:7', true), deliveredTo(P, 1, 'post:1', false), deliveredTo(P, 1, 'nope', true)]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              [
+                "a"
+              ],
+              [
+                "a",
+                "c",
+                "e"
+              ],
+              [],
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[transportWorks({ transports: ['polling'], sticky: false, processes: 3 }), transportWorks({ transports: [], sticky: false, processes: 2 }), transportWorks({ transports: ['polling', 'websocket'], sticky: false, processes: 0 })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              false,
+              true,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the adapter fixes polling — it fans out broadcasts, not sessions.|||Nghĩ adapter sửa được polling — nó phát tin, không chuyển session."
+        },
+        {
+          "loi": "Returning every socket in the cluster without an adapter: that is exactly the delivery that silently does NOT happen.|||Trả mọi socket trong cụm khi không có adapter: đó chính là lần giao tin âm thầm KHÔNG xảy ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round-robin",
+          "vi": "luân phiên",
+          "giaiThich": "lần lượt gửi kết nối mới tới từng tiến trình"
+        },
+        {
+          "en": "affinity",
+          "vi": "gắn phiên",
+          "giaiThich": "giữ một client ở cùng một tiến trình"
+        }
+      ]
+    },
+    {
+      "title": "Make rooms cluster-wide with a pub/sub adapter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "scaling",
+        "pub/sub",
+        "Redis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"The adapter publishes every broadcast to a Redis channel and each process replays it to its own local sockets.\" Write <code>attachAdapter(proc, redis)</code> → <code>{ emitToRoom(room, event, data) }</code>:</p>\n<ul><li><code>proc = { id, local: Map(room → Set(socketIds)), deliver(socketId, event, data) }</code>; <code>redis</code> has async <code>publish(channel, message)</code>, <code>subscribe(channel, callback)</code> and <code>duplicate()</code> (a new connection);</li>\n<li>subscribe on a <b>duplicated</b> connection to channel <code>'socket.io#/#'</code>; for each message (a JSON string) from <b>another</b> process, deliver it to this process’s local sockets in that room;</li>\n<li><code>async emitToRoom</code>: deliver to the local sockets of the room, then publish <code>JSON.stringify({ from: proc.id, room, event, data })</code> on the original connection; return the number of local deliveries.</li></ul>\n<p>The fake Redis behaves like the real one: a connection that has subscribed throws on <code>publish</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Adapter đăng mỗi lần phát lên một kênh Redis và mỗi tiến trình phát lại nó cho các socket cục bộ của mình.\" Viết <code>attachAdapter(proc, redis)</code> → <code>{ emitToRoom(room, event, data) }</code>:</p>\n<ul><li><code>proc = { id, local: Map(room → Set(socketId)), deliver(socketId, event, data) }</code>; <code>redis</code> có các hàm async <code>publish(channel, message)</code>, <code>subscribe(channel, callback)</code> và <code>duplicate()</code> (một kết nối mới);</li>\n<li>subscribe trên một kết nối <b>nhân bản</b> vào kênh <code>'socket.io#/#'</code>; mỗi tin (chuỗi JSON) từ tiến trình <b>khác</b> thì giao cho các socket cục bộ của tiến trình này trong room đó;</li>\n<li><code>async emitToRoom</code>: giao cho socket cục bộ của room, rồi publish <code>JSON.stringify({ from: proc.id, room, event, data })</code> trên kết nối gốc; trả số lần giao cục bộ.</li></ul>\n<p>Redis giả cư xử như thật: kết nối đã subscribe sẽ ném lỗi khi <code>publish</code>.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const A = makeProc(\"A\", { \"thread:42\": [\"JBrW\"] }), B = makeProc(\"B\"); attachAdapter(A, createRedis()); const b = attachAdapter(B, createRedis()); const n = await b.emitToRoom(\"thread:42\", \"thread:new-message\", { id: 5 }); await tick(); return [n, A.got, B.got]; })()",
+          "output": "[0,[[\"JBrW\",\"thread:new-message\",{\"id\":5}]],[]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const sub = redis.duplicate()</code>, and only ever publish on <code>redis</code> itself.|||<code>const sub = redis.duplicate()</code>, và chỉ publish trên chính <code>redis</code>.",
+        "Put <code>from: proc.id</code> in the message and skip your own — you already delivered locally.|||Đặt <code>from: proc.id</code> vào tin và bỏ qua tin của chính mình — bạn đã giao cục bộ rồi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Republish broadcasts so every process delivers to its own sockets. */\nfunction attachAdapter(proc, redis) {\n  // Write your solution here\n  redis.subscribe('socket.io#/#', (raw) => {\n    const m = JSON.parse(raw);\n    for (const id of proc.local.get(m.room) || []) proc.deliver(id, m.event, m.data);\n  });\n  return {\n    async emitToRoom(room, event, data) {\n      await redis.publish('socket.io#/#', JSON.stringify({ from: proc.id, room, event, data }));\n      return 0;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction attachAdapter(proc, redis) {\n  const CHANNEL = 'socket.io#/#';\n  const pub = redis;\n  const sub = redis.duplicate();          // MUST be its own connection: a subscribed client cannot PUBLISH\n  const deliverLocal = (room, event, data) => {\n    const ids = [...(proc.local.get(room) || [])];\n    for (const id of ids) proc.deliver(id, event, data);\n    return ids.length;\n  };\n  // Every process replays broadcasts from the OTHER processes to its own local sockets.\n  sub.subscribe(CHANNEL, (raw) => {\n    const m = JSON.parse(raw);\n    if (m.from === proc.id) return;       // our own broadcast was already delivered locally\n    deliverLocal(m.room, m.event, m.data);\n  });\n  return {\n    async emitToRoom(room, event, data) {\n      const local = deliverLocal(room, event, data);\n      await pub.publish(CHANNEL, JSON.stringify({ from: proc.id, room, event, data }));\n      return local;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The adapter turns \"the sockets in this room\" from a local question into a cluster question without moving any socket: each process keeps its own map and replays what the others publish. Two connections are mandatory because a subscribed Redis connection only accepts subscriber commands. The cost is one Redis round trip per broadcast — 5 ms in the measurement — which is why it is the fix for measurement 1, not an optimisation.</p>",
+      "solutionExplanationHtmlVi": "<p>Adapter biến \"các socket trong room này\" từ câu hỏi cục bộ thành câu hỏi của cả cụm mà không di chuyển socket nào: mỗi tiến trình giữ bảng riêng và phát lại thứ các tiến trình khác đăng. Bắt buộc hai kết nối vì kết nối Redis đã subscribe chỉ nhận lệnh subscriber. Cái giá là một vòng Redis mỗi lần phát — 5 ms trong phép đo — vì vậy nó là bản sửa cho phép đo 1, không phải tối ưu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Emit from B reaches the client on A",
+              "vi": "Emit từ B tới client ở A"
+            },
+            "goi": "await (async () => { const A = makeProc(\"A\", { \"thread:42\": [\"JBrW\"] }), B = makeProc(\"B\"); attachAdapter(A, createRedis()); const b = attachAdapter(B, createRedis()); const n = await b.emitToRoom(\"thread:42\", \"thread:new-message\", { id: 5 }); await tick(); return [n, A.got, B.got]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis server shared by every process: publish fans out to subscribers after 5 ms (virtual)\nconst SERVER = { channels: {} };\nfunction createRedis() { const c = { subscribed: false };\n  c.duplicate = () => createRedis();\n  c.subscribe = (ch, cb) => { c.subscribed = true; (SERVER.channels[ch] = SERVER.channels[ch] || []).push(cb); };\n  c.publish = async (ch, msg) => { if (c.subscribed) throw new Error('ERR Connection in subscriber mode, only subscriber commands may be used'); for (const cb of SERVER.channels[ch] || []) setTimeout(() => cb(msg), 5); };\n  return c; }\nfunction makeProc(id, rooms) { const p = { id, local: new Map(), got: [] }; for (const [room, ids] of Object.entries(rooms || {})) p.local.set(room, new Set(ids)); p.deliver = (sid, e, d) => p.got.push([sid, e, d]); return p; }\nconst tick = (ms) => new Promise((r) => setTimeout(r, ms || 20));\n",
+            "mongDoi": [
+              0,
+              [
+                [
+                  "JBrW",
+                  "thread:new-message",
+                  {
+                    "id": 5
+                  }
+                ]
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Local delivery once, remote delivery once",
+              "vi": "Giao cục bộ một lần, giao từ xa một lần"
+            },
+            "goi": "await (async () => { const A = makeProc(\"A\", { \"user:7\": [\"a1\", \"a2\"] }), B = makeProc(\"B\", { \"user:7\": [\"b1\"] }); const a = attachAdapter(A, createRedis()); attachAdapter(B, createRedis()); const n = await a.emitToRoom(\"user:7\", \"social:notification\", { n: 1 }); await tick(); return [n, A.got.length, B.got]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis server shared by every process: publish fans out to subscribers after 5 ms (virtual)\nconst SERVER = { channels: {} };\nfunction createRedis() { const c = { subscribed: false };\n  c.duplicate = () => createRedis();\n  c.subscribe = (ch, cb) => { c.subscribed = true; (SERVER.channels[ch] = SERVER.channels[ch] || []).push(cb); };\n  c.publish = async (ch, msg) => { if (c.subscribed) throw new Error('ERR Connection in subscriber mode, only subscriber commands may be used'); for (const cb of SERVER.channels[ch] || []) setTimeout(() => cb(msg), 5); };\n  return c; }\nfunction makeProc(id, rooms) { const p = { id, local: new Map(), got: [] }; for (const [room, ids] of Object.entries(rooms || {})) p.local.set(room, new Set(ids)); p.deliver = (sid, e, d) => p.got.push([sid, e, d]); return p; }\nconst tick = (ms) => new Promise((r) => setTimeout(r, ms || 20));\n",
+            "mongDoi": [
+              2,
+              2,
+              [
+                [
+                  "b1",
+                  "social:notification",
+                  {
+                    "n": 1
+                  }
+                ]
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Publishing works (separate subscriber connection)",
+              "vi": "Publish chạy được (kết nối nghe riêng)"
+            },
+            "goi": "await (async () => { const A = makeProc(\"A\", { r: [\"x\"] }); const a = attachAdapter(A, createRedis()); try { await a.emitToRoom(\"r\", \"e\", 1); return \"ok\"; } catch (e) { return e.message; } })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis server shared by every process: publish fans out to subscribers after 5 ms (virtual)\nconst SERVER = { channels: {} };\nfunction createRedis() { const c = { subscribed: false };\n  c.duplicate = () => createRedis();\n  c.subscribe = (ch, cb) => { c.subscribed = true; (SERVER.channels[ch] = SERVER.channels[ch] || []).push(cb); };\n  c.publish = async (ch, msg) => { if (c.subscribed) throw new Error('ERR Connection in subscriber mode, only subscriber commands may be used'); for (const cb of SERVER.channels[ch] || []) setTimeout(() => cb(msg), 5); };\n  return c; }\nfunction makeProc(id, rooms) { const p = { id, local: new Map(), got: [] }; for (const [room, ids] of Object.entries(rooms || {})) p.local.set(room, new Set(ids)); p.deliver = (sid, e, d) => p.got.push([sid, e, d]); return p; }\nconst tick = (ms) => new Promise((r) => setTimeout(r, ms || 20));\n",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const P = [\"A\", \"B\", \"C\"].map((id, i) => makeProc(id, { \"post:9\": [\"s\" + i] })); const ad = P.map((p) => attachAdapter(p, createRedis())); await ad[2].emitToRoom(\"post:9\", \"post:reacted\", { c: 3 }); await ad[0].emitToRoom(\"post:1\", \"x\", null); await tick(); return P.map((p) => p.got); })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis server shared by every process: publish fans out to subscribers after 5 ms (virtual)\nconst SERVER = { channels: {} };\nfunction createRedis() { const c = { subscribed: false };\n  c.duplicate = () => createRedis();\n  c.subscribe = (ch, cb) => { c.subscribed = true; (SERVER.channels[ch] = SERVER.channels[ch] || []).push(cb); };\n  c.publish = async (ch, msg) => { if (c.subscribed) throw new Error('ERR Connection in subscriber mode, only subscriber commands may be used'); for (const cb of SERVER.channels[ch] || []) setTimeout(() => cb(msg), 5); };\n  return c; }\nfunction makeProc(id, rooms) { const p = { id, local: new Map(), got: [] }; for (const [room, ids] of Object.entries(rooms || {})) p.local.set(room, new Set(ids)); p.deliver = (sid, e, d) => p.got.push([sid, e, d]); return p; }\nconst tick = (ms) => new Promise((r) => setTimeout(r, ms || 20));\n",
+            "mongDoi": [
+              [
+                [
+                  "s0",
+                  "post:reacted",
+                  {
+                    "c": 3
+                  }
+                ]
+              ],
+              [
+                [
+                  "s1",
+                  "post:reacted",
+                  {
+                    "c": 3
+                  }
+                ]
+              ],
+              [
+                [
+                  "s2",
+                  "post:reacted",
+                  {
+                    "c": 3
+                  }
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const A = makeProc(\"A\"), B = makeProc(\"B\", { \"thread:1\": [\"b1\"] }); const a = attachAdapter(A, createRedis()); attachAdapter(B, createRedis()); const n = await a.emitToRoom(\"thread:1\", \"thread:typing\", { u: 7 }); const before = B.got.length; await tick(); return [n, before, B.got]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis server shared by every process: publish fans out to subscribers after 5 ms (virtual)\nconst SERVER = { channels: {} };\nfunction createRedis() { const c = { subscribed: false };\n  c.duplicate = () => createRedis();\n  c.subscribe = (ch, cb) => { c.subscribed = true; (SERVER.channels[ch] = SERVER.channels[ch] || []).push(cb); };\n  c.publish = async (ch, msg) => { if (c.subscribed) throw new Error('ERR Connection in subscriber mode, only subscriber commands may be used'); for (const cb of SERVER.channels[ch] || []) setTimeout(() => cb(msg), 5); };\n  return c; }\nfunction makeProc(id, rooms) { const p = { id, local: new Map(), got: [] }; for (const [room, ids] of Object.entries(rooms || {})) p.local.set(room, new Set(ids)); p.deliver = (sid, e, d) => p.got.push([sid, e, d]); return p; }\nconst tick = (ms) => new Promise((r) => setTimeout(r, ms || 20));\n",
+            "mongDoi": [
+              0,
+              0,
+              [
+                [
+                  "b1",
+                  "thread:typing",
+                  {
+                    "u": 7
+                  }
+                ]
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Subscribing and publishing on the same connection: \"ERR Connection in subscriber mode\" (or, in real life, everything hangs).|||Subscribe và publish trên cùng kết nối: \"ERR Connection in subscriber mode\" (ngoài đời thì mọi thứ treo)."
+        },
+        {
+          "loi": "Not skipping your own message: local sockets receive every broadcast twice.|||Không bỏ qua tin của mình: socket cục bộ nhận mọi lần phát hai lần."
+        },
+        {
+          "loi": "Publishing the room object or a Set: only strings travel over pub/sub — JSON.stringify.|||Publish object room hay Set: qua pub/sub chỉ chuỗi đi được — JSON.stringify."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pub/sub",
+          "vi": "đăng/nhận",
+          "giaiThich": "gửi tin lên kênh, mọi người nghe kênh đều nhận"
+        },
+        {
+          "en": "subscriber mode",
+          "vi": "chế độ nghe",
+          "giaiThich": "kết nối đã SUBSCRIBE chỉ nhận lệnh nghe"
+        }
+      ]
+    },
+    {
+      "title": "Drop frames for the slow client before it costs 192 MB",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "backpressure",
+        "WebSocket",
+        "memory"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"The socket still reports OPEN. send() returns normally. One client cost 192 MB and there is no error anywhere. The guard is to look before you write.\" Write <code>makeBroadcaster({ limit, maxDrops })</code> → <code>broadcast(sockets, payload)</code> → <code>{ sent, dropped, closed }</code>:</p>\n<ul><li>skip sockets whose <code>readyState</code> is not 1 (OPEN);</li>\n<li>if <code>ws.bufferedAmount &gt; limit</code>: do not send — count a drop for that socket; when a socket reaches <code>maxDrops</code> <b>consecutive</b> drops, <code>ws.close(1013, 'slow consumer')</code> (it will refetch over REST);</li>\n<li>otherwise <code>ws.send(payload)</code> and reset that socket’s drop streak to 0;</li>\n<li>the drop counters live inside the broadcaster and survive between calls.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Socket vẫn báo OPEN. send() vẫn trả về bình thường. Một client tốn 192 MB mà không có lỗi ở đâu cả. Cách chặn là nhìn trước khi ghi.\" Viết <code>makeBroadcaster({ limit, maxDrops })</code> → <code>broadcast(sockets, payload)</code> → <code>{ sent, dropped, closed }</code>:</p>\n<ul><li>bỏ qua socket có <code>readyState</code> khác 1 (OPEN);</li>\n<li>nếu <code>ws.bufferedAmount &gt; limit</code>: không gửi — đếm một lần bỏ cho socket đó; khi socket đạt <code>maxDrops</code> lần bỏ <b>liên tiếp</b>, <code>ws.close(1013, 'slow consumer')</code> (nó sẽ lấy lại qua REST);</li>\n<li>còn lại <code>ws.send(payload)</code> và đặt lại chuỗi bỏ của socket đó về 0;</li>\n<li>bộ đếm lần bỏ nằm trong broadcaster và giữ qua các lần gọi.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const slow = fakeWs(\"slow\"); const b = makeBroadcaster({ limit: MB, maxDrops: 1e9 }); let t = { sent: 0, dropped: 0 }; for (let i = 0; i < 3000; i++) { const r = b([slow], KB64); t.sent += r.sent; t.dropped += r.dropped; } return [t, slow.bufferedAmount <= MB + 65536]; })()",
+          "output": "[{\"sent\":17,\"dropped\":2983},true]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A <code>Map</code> from socket object to its consecutive-drop count, created once in makeBroadcaster.|||Một <code>Map</code> từ object socket tới số lần bỏ liên tiếp, tạo một lần trong makeBroadcaster.",
+        "Check order per socket: OPEN? → over the limit? (drop / maybe close) → send.|||Thứ tự kiểm cho mỗi socket: OPEN? → vượt ngưỡng? (bỏ / có thể đóng) → gửi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Broadcast that never lets one slow client grow the server's memory. */\nfunction makeBroadcaster({ limit, maxDrops }) {\n  return function broadcast(sockets, payload) {\n    // Write your solution here\n    const r = { sent: 0, dropped: 0, closed: 0 };\n    for (const ws of sockets) { if (ws.readyState === 1) { ws.send(payload); r.sent++; } }\n    return r;\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction makeBroadcaster({ limit, maxDrops }) {\n  const drops = new Map();                  // socket -> consecutive drops\n  return function broadcast(sockets, payload) {\n    const r = { sent: 0, dropped: 0, closed: 0 };\n    for (const ws of sockets) {\n      if (ws.readyState !== 1) continue;    // only OPEN sockets\n      // readyState stays OPEN and send() never fails for a client that stopped reading:\n      // bufferedAmount is the only signal that the bytes are piling up in OUR memory.\n      if (ws.bufferedAmount > limit) {\n        const n = (drops.get(ws) || 0) + 1;\n        drops.set(ws, n);\n        r.dropped++;\n        if (n >= maxDrops) {\n          ws.close(1013, 'slow consumer');  // 1013 \"try again later\": the client reconnects and refetches over REST\n          drops.delete(ws);\n          r.closed++;\n        }\n        continue;\n      }\n      drops.set(ws, 0);                     // keeping up again: reset the streak\n      ws.send(payload);\n      r.sent++;\n    }\n    return r;\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>bufferedAmount is the only honest measure of \"bytes I have promised this client but TCP has not taken\". Bounding it per socket turns an unbounded memory leak into dropped frames — acceptable only because the socket is a signal and REST is the truth (11.3). Closing after a streak gives a stuck client a clean reconnect-and-refetch instead of a slow drip of stale frames.</p>",
+      "solutionExplanationHtmlVi": "<p>bufferedAmount là thước đo trung thực duy nhất cho \"số byte tôi đã hứa với client này mà TCP chưa nhận\". Chặn nó theo từng socket biến một rò rỉ bộ nhớ không đáy thành các frame bị bỏ — chấp nhận được chỉ vì socket là tín hiệu và REST là sự thật (11.3). Đóng sau một chuỗi cho client bị kẹt một lần kết nối lại và lấy lại sạch sẽ, thay vì nhỏ giọt các frame cũ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "3000 × 64 KB to a client that stopped reading",
+              "vi": "3000 × 64 KB tới một client ngừng đọc"
+            },
+            "goi": "(() => { const slow = fakeWs(\"slow\"); const b = makeBroadcaster({ limit: MB, maxDrops: 1e9 }); let t = { sent: 0, dropped: 0 }; for (let i = 0; i < 3000; i++) { const r = b([slow], KB64); t.sent += r.sent; t.dropped += r.dropped; } return [t, slow.bufferedAmount <= MB + 65536]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake ws: send() never fails; unread bytes accumulate in bufferedAmount until drain()\nfunction fakeWs(name) { const w = { name, readyState: 1, bufferedAmount: 0, sentCount: 0, closed: null };\n  w.send = (p) => { w.bufferedAmount += p.length; w.sentCount++; };\n  w.drain = () => { w.bufferedAmount = 0; };\n  w.close = (code, reason) => { w.closed = [code, reason]; w.readyState = 3; }; return w; }\nconst KB64 = 'x'.repeat(65536);\nconst MB = 1024 * 1024;\n",
+            "mongDoi": [
+              {
+                "sent": 17,
+                "dropped": 2983
+              },
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Three consecutive drops close the slow client with 1013",
+              "vi": "Ba lần bỏ liên tiếp đóng client chậm bằng 1013"
+            },
+            "goi": "(() => { const fast = fakeWs(\"fast\"), slow = fakeWs(\"slow\"); slow.bufferedAmount = 2 * MB; const b = makeBroadcaster({ limit: MB, maxDrops: 3 }); const rs = []; for (let i = 0; i < 4; i++) { rs.push(b([fast, slow], \"hi\")); fast.drain(); } return [rs, slow.closed, fast.closed]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake ws: send() never fails; unread bytes accumulate in bufferedAmount until drain()\nfunction fakeWs(name) { const w = { name, readyState: 1, bufferedAmount: 0, sentCount: 0, closed: null };\n  w.send = (p) => { w.bufferedAmount += p.length; w.sentCount++; };\n  w.drain = () => { w.bufferedAmount = 0; };\n  w.close = (code, reason) => { w.closed = [code, reason]; w.readyState = 3; }; return w; }\nconst KB64 = 'x'.repeat(65536);\nconst MB = 1024 * 1024;\n",
+            "mongDoi": [
+              [
+                {
+                  "sent": 1,
+                  "dropped": 1,
+                  "closed": 0
+                },
+                {
+                  "sent": 1,
+                  "dropped": 1,
+                  "closed": 0
+                },
+                {
+                  "sent": 1,
+                  "dropped": 1,
+                  "closed": 1
+                },
+                {
+                  "sent": 1,
+                  "dropped": 0,
+                  "closed": 0
+                }
+              ],
+              [
+                1013,
+                "slow consumer"
+              ],
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Recovering resets the streak",
+              "vi": "Hồi phục thì đặt lại chuỗi"
+            },
+            "goi": "(() => { const w = fakeWs(\"w\"); const b = makeBroadcaster({ limit: 10, maxDrops: 3 }); const out = []; w.bufferedAmount = 50; out.push(b([w], \"a\")); out.push(b([w], \"a\")); w.drain(); out.push(b([w], \"a\")); w.bufferedAmount = 50; out.push(b([w], \"a\")); out.push(b([w], \"a\")); return [out, w.closed]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake ws: send() never fails; unread bytes accumulate in bufferedAmount until drain()\nfunction fakeWs(name) { const w = { name, readyState: 1, bufferedAmount: 0, sentCount: 0, closed: null };\n  w.send = (p) => { w.bufferedAmount += p.length; w.sentCount++; };\n  w.drain = () => { w.bufferedAmount = 0; };\n  w.close = (code, reason) => { w.closed = [code, reason]; w.readyState = 3; }; return w; }\nconst KB64 = 'x'.repeat(65536);\nconst MB = 1024 * 1024;\n",
+            "mongDoi": [
+              [
+                {
+                  "sent": 0,
+                  "dropped": 1,
+                  "closed": 0
+                },
+                {
+                  "sent": 0,
+                  "dropped": 1,
+                  "closed": 0
+                },
+                {
+                  "sent": 1,
+                  "dropped": 0,
+                  "closed": 0
+                },
+                {
+                  "sent": 0,
+                  "dropped": 1,
+                  "closed": 0
+                },
+                {
+                  "sent": 0,
+                  "dropped": 1,
+                  "closed": 0
+                }
+              ],
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const a = fakeWs(\"a\"), c = fakeWs(\"c\"); c.readyState = 3; const b = makeBroadcaster({ limit: 100, maxDrops: 2 }); return [b([a, c], \"x\".repeat(60)), b([a, c], \"x\".repeat(60)), b([a, c], \"x\".repeat(60)), b([a, c], \"x\".repeat(60)), a.closed, a.sentCount]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake ws: send() never fails; unread bytes accumulate in bufferedAmount until drain()\nfunction fakeWs(name) { const w = { name, readyState: 1, bufferedAmount: 0, sentCount: 0, closed: null };\n  w.send = (p) => { w.bufferedAmount += p.length; w.sentCount++; };\n  w.drain = () => { w.bufferedAmount = 0; };\n  w.close = (code, reason) => { w.closed = [code, reason]; w.readyState = 3; }; return w; }\nconst KB64 = 'x'.repeat(65536);\nconst MB = 1024 * 1024;\n",
+            "mongDoi": [
+              {
+                "sent": 1,
+                "dropped": 0,
+                "closed": 0
+              },
+              {
+                "sent": 1,
+                "dropped": 0,
+                "closed": 0
+              },
+              {
+                "sent": 0,
+                "dropped": 1,
+                "closed": 0
+              },
+              {
+                "sent": 0,
+                "dropped": 1,
+                "closed": 1
+              },
+              [
+                1013,
+                "slow consumer"
+              ],
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const w = fakeWs(\"w\"); const b1 = makeBroadcaster({ limit: 0, maxDrops: 2 }), b2 = makeBroadcaster({ limit: 0, maxDrops: 2 }); w.bufferedAmount = 1; return [b1([w], \"p\"), b2([w], \"p\"), w.closed, b1([w], \"p\"), w.closed]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake ws: send() never fails; unread bytes accumulate in bufferedAmount until drain()\nfunction fakeWs(name) { const w = { name, readyState: 1, bufferedAmount: 0, sentCount: 0, closed: null };\n  w.send = (p) => { w.bufferedAmount += p.length; w.sentCount++; };\n  w.drain = () => { w.bufferedAmount = 0; };\n  w.close = (code, reason) => { w.closed = [code, reason]; w.readyState = 3; }; return w; }\nconst KB64 = 'x'.repeat(65536);\nconst MB = 1024 * 1024;\n",
+            "mongDoi": [
+              {
+                "sent": 0,
+                "dropped": 1,
+                "closed": 0
+              },
+              {
+                "sent": 0,
+                "dropped": 1,
+                "closed": 0
+              },
+              null,
+              {
+                "sent": 0,
+                "dropped": 1,
+                "closed": 1
+              },
+              [
+                1013,
+                "slow consumer"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Relying on send() errors or readyState: the slow client looks perfectly healthy.|||Dựa vào lỗi của send() hay readyState: client chậm trông hoàn toàn khoẻ."
+        },
+        {
+          "loi": "Closing on the first drop: a phone that hiccups for a second is disconnected every time.|||Đóng ngay lần bỏ đầu: điện thoại trục trặc một giây là bị ngắt mỗi lần."
+        },
+        {
+          "loi": "Never resetting the streak: a client that recovers is still closed later.|||Không bao giờ đặt lại chuỗi: client đã hồi phục về sau vẫn bị đóng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "slow consumer",
+          "vi": "người nhận chậm",
+          "giaiThich": "client đọc chậm hơn tốc độ server gửi"
+        },
+        {
+          "en": "1013 Try Again Later",
+          "vi": "mã đóng 1013",
+          "giaiThich": "server quá tải, hãy thử lại"
+        }
+      ]
+    },
+    {
+      "title": "Presence that survives the second process (and a crash)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "scaling",
+        "Redis",
+        "presence",
+        "TTL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Mistake (4): \"In-memory state on the socket server (an online-users Set…) — each process has its own, so ‘who is online’ is now per-process; that state has to move to Redis.\" Write <code>createPresence(redis, { ttlMs })</code> where <code>redis</code> is shared by every process and has async <code>set(key, value, ttlMs)</code>, <code>del(key)</code>, <code>keys(prefix)</code> (only unexpired keys, sorted). Return:</p>\n<ul><li><code>connect(userId, socketId)</code> — store key <code>presence:&lt;userId&gt;:&lt;socketId&gt;</code> with the TTL; resolve <code>true</code> if this person had <b>no</b> live socket before (they just came online);</li>\n<li><code>heartbeat(userId, socketId)</code> — refresh that key’s TTL;</li>\n<li><code>disconnect(userId, socketId)</code> — delete it; resolve <code>true</code> only if that was the person’s <b>last</b> live socket;</li>\n<li><code>isOnline(userId)</code> and <code>onlineUsers()</code> (ids as numbers, ascending).</li></ul>\n<p>Prefixes are compared as text: the prefix for user 7 is <code>presence:7:</code> (with the colon, so user 70 does not match). A process that crashes stops heartbeating; its sockets must disappear when the TTL runs out.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lỗi (4): \"Trạng thái trong bộ nhớ của socket server (một Set người online…) — mỗi tiến trình có bản riêng, nên ‘ai đang online’ thành theo từng tiến trình; trạng thái đó phải chuyển sang Redis.\" Viết <code>createPresence(redis, { ttlMs })</code> với <code>redis</code> dùng chung cho mọi tiến trình, có các hàm async <code>set(key, value, ttlMs)</code>, <code>del(key)</code>, <code>keys(prefix)</code> (chỉ khoá chưa hết hạn, đã sắp). Trả về:</p>\n<ul><li><code>connect(userId, socketId)</code> — lưu khoá <code>presence:&lt;userId&gt;:&lt;socketId&gt;</code> với TTL; trả <code>true</code> nếu trước đó người này <b>không có</b> socket nào còn sống (vừa online);</li>\n<li><code>heartbeat(userId, socketId)</code> — làm mới TTL của khoá đó;</li>\n<li><code>disconnect(userId, socketId)</code> — xoá nó; trả <code>true</code> chỉ khi đó là socket <b>cuối cùng</b> còn sống của người đó;</li>\n<li><code>isOnline(userId)</code> và <code>onlineUsers()</code> (id là số, tăng dần).</li></ul>\n<p>Tiền tố so theo chữ: tiền tố của người 7 là <code>presence:7:</code> (có dấu hai chấm, để người 70 không khớp). Tiến trình bị sập ngừng heartbeat; socket của nó phải biến mất khi hết TTL.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const A = createPresence(redis, { ttlMs: 60000 }), B = createPresence(redis, { ttlMs: 60000 }); const first = await A.connect(7, \"JBrW\"); return [first, await B.isOnline(7), await B.onlineUsers()]; })()",
+          "output": "[true,true,[7]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One key per socket, not one per user: a person with three tabs is online until the third tab closes.|||Một khoá cho mỗi socket, không phải mỗi người: người có ba tab còn online tới khi tab thứ ba đóng.",
+        "\"Came online\" = count the person’s keys BEFORE setting; \"went offline\" = count AFTER deleting.|||\"Vừa online\" = đếm khoá của người đó TRƯỚC khi set; \"vừa offline\" = đếm SAU khi xoá.",
+        "The TTL is what handles a crash — nobody calls disconnect for a dead process.|||TTL là thứ xử lý lần sập — không ai gọi disconnect cho một tiến trình đã chết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Who is online — across every process. */\nfunction createPresence(redis, { ttlMs }) {\n  // Write your solution here (this is the per-process Set the lesson warns about)\n  const online = new Set();\n  return {\n    async connect(userId, socketId) { const was = online.has(userId); online.add(userId); return !was; },\n    async heartbeat(userId, socketId) {},\n    async disconnect(userId, socketId) { online.delete(userId); return true; },\n    async isOnline(userId) { return online.has(userId); },\n    async onlineUsers() { return [...online].sort((a, b) => a - b); },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createPresence(redis, { ttlMs }) {\n  const key = (userId, socketId) => 'presence:' + userId + ':' + socketId;\n  const socketsOf = async (userId) => (await redis.keys('presence:' + userId + ':')).length;\n  return {\n    // One key PER SOCKET, with a TTL: a crashed process stops heartbeating and its keys expire on their own.\n    async connect(userId, socketId) {\n      const before = await socketsOf(userId);\n      await redis.set(key(userId, socketId), '1', ttlMs);\n      return before === 0;                         // true ⇒ the user just came online (emit presence:update)\n    },\n    async heartbeat(userId, socketId) {\n      await redis.set(key(userId, socketId), '1', ttlMs);\n    },\n    async disconnect(userId, socketId) {\n      await redis.del(key(userId, socketId));\n      return (await socketsOf(userId)) === 0;      // offline only when the LAST socket of that person is gone\n    },\n    async isOnline(userId) {\n      return (await socketsOf(userId)) > 0;\n    },\n    async onlineUsers() {\n      const ids = new Set((await redis.keys('presence:')).map((k) => Number(k.split(':')[1])));\n      return [...ids].sort((a, b) => a - b);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Anything a second process must agree on cannot live in a process. Moving presence into a shared store with one key per socket makes \"online\" a cluster-wide fact, makes multi-device users correct, and lets the TTL clean up after a crash that never gets to say goodbye — the same ghost problem as pingTimeout in 11.3, solved at the storage layer. Returning the online/offline transitions lets the caller emit presence:update only when something actually changed, to the audience computed in 11.2.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi thứ tiến trình thứ hai phải đồng thuận không thể nằm trong một tiến trình. Đưa presence vào kho dùng chung với một khoá mỗi socket biến \"online\" thành sự thật của cả cụm, làm đúng cho người dùng nhiều thiết bị, và để TTL dọn sau một lần sập không kịp chào — cùng bài toán bóng ma với pingTimeout ở 11.3, giải ở tầng lưu trữ. Trả về các lần chuyển online/offline cho phép bên gọi chỉ emit presence:update khi có gì thật sự đổi, tới nhóm nhận đã tính ở 11.2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Connected on A, visible from B",
+              "vi": "Nối ở A, B thấy được"
+            },
+            "goi": "await (async () => { const A = createPresence(redis, { ttlMs: 60000 }), B = createPresence(redis, { ttlMs: 60000 }); const first = await A.connect(7, \"JBrW\"); return [first, await B.isOnline(7), await B.onlineUsers()]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              true,
+              true,
+              [
+                7
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Two devices: offline only after the last one",
+              "vi": "Hai thiết bị: offline chỉ sau cái cuối"
+            },
+            "goi": "await (async () => { const A = createPresence(redis, { ttlMs: 60000 }), B = createPresence(redis, { ttlMs: 60000 }); const r = [await A.connect(7, \"phone\"), await B.connect(7, \"laptop\"), await A.disconnect(7, \"phone\"), await B.isOnline(7), await B.disconnect(7, \"laptop\"), await A.isOnline(7)]; return r; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              true,
+              false,
+              false,
+              true,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Process A crashes (no heartbeat): user 3 expires, user 9 stays",
+              "vi": "Tiến trình A sập (không heartbeat): người 3 hết hạn, người 9 còn"
+            },
+            "goi": "await (async () => { const A = createPresence(redis, { ttlMs: 85000 }), B = createPresence(redis, { ttlMs: 85000 }); await A.connect(3, \"s1\"); await B.connect(9, \"s2\"); for (let i = 0; i < 5; i++) { await sleep(25000); await B.heartbeat(9, \"s2\"); } return [await B.onlineUsers(), await B.isOnline(3)]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              [
+                9
+              ],
+              false
+            ],
+            "timeoutMs": 200000
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const P = createPresence(redis, { ttlMs: 1000 }); await P.connect(7, \"a\"); await P.connect(70, \"b\"); const r1 = await P.disconnect(70, \"b\"); return [r1, await P.isOnline(7), await P.isOnline(70), await P.onlineUsers()]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              [
+                7
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const P = createPresence(redis, { ttlMs: 1000 }); const c1 = await P.connect(5, \"a\"); await sleep(1500); const c2 = await P.connect(5, \"b\"); const d = await P.disconnect(5, \"zzz\"); return [c1, c2, d, await P.onlineUsers()]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              [
+                5
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const P = createPresence(redis, { ttlMs: 1000 }); await P.connect(12, \"x\"); await P.connect(2, \"y\"); await P.connect(12, \"z\"); return [await P.onlineUsers(), await P.disconnect(12, \"x\"), await P.disconnect(12, \"z\")]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a fake Redis SHARED by all processes (one object), with TTLs on the virtual clock\nconst store = new Map();\nconst redis = {\n  async set(k, v, ttlMs) { await new Promise((r) => setTimeout(r, 1)); store.set(k, { v, exp: Date.now() + ttlMs }); },\n  async del(k) { await new Promise((r) => setTimeout(r, 1)); store.delete(k); },\n  async keys(prefix) { await new Promise((r) => setTimeout(r, 1)); const now = Date.now(); return [...store.entries()].filter(([k, e]) => e.exp > now && k.startsWith(prefix)).map(([k]) => k).sort(); },\n};\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              [
+                2,
+                12
+              ],
+              false,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A <code>new Set()</code> in the process: process B answers \"offline\" for a user connected to A.|||Một <code>new Set()</code> trong tiến trình: tiến trình B trả lời \"offline\" cho người đang nối vào A."
+        },
+        {
+          "loi": "One key per user: closing one of three tabs marks the person offline.|||Một khoá cho mỗi người: đóng một trong ba tab là đánh dấu cả người đó offline."
+        },
+        {
+          "loi": "Keys without a TTL: after a crash, ghosts stay online forever.|||Khoá không có TTL: sau một lần sập, bóng ma online mãi mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shared state",
+          "vi": "trạng thái dùng chung",
+          "giaiThich": "mọi tiến trình đọc/ghi cùng một nơi"
+        },
+        {
+          "en": "heartbeat",
+          "vi": "nhịp tim",
+          "giaiThich": "làm mới TTL định kỳ để báo còn sống"
+        }
+      ]
+    }
+  ]
+}

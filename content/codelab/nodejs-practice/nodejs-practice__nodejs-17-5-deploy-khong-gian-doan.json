@@ -1,0 +1,760 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-5-deploy-khong-gian-doan",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-5-deploy-khong-gian-doan"
+  },
+  "exercises": [
+    {
+      "title": "Where the hole is: the port, not the health of the container",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "deployment",
+        "nginx"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 17.5 (a probe every ~25 ms on /health/live, a new connection each time, 9-second window, median of 5 runs).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 17.5 (probe ~25 ms một lần vào /health/live, mỗi lần một kết nối mới, cửa sổ 9 giây, trung vị 5 lượt).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: who listens on the public port at every instant?|||Hỏi: ở mỗi thời điểm, ai đang nghe ở cổng công khai?",
+        "“Container started” and “app ready” are seconds apart.|||“Container đã chạy” và “app đã sẵn sàng” cách nhau vài giây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where the hole is: the port, not the health of the container\n\nAnswer in the answer panel (no code needed).\n\n1. “Blue-green” without a proxy (green on a second port, wait healthy, remove blue, re-create green on the real port) lost 35 of 291 requests — worse than stop-then-start. Why?“Blue-green” không proxy (green ở cổng thứ hai, chờ healthy, xoá blue, tạo lại green ở cổng thật) mất 35/291 request — tệ hơn cả stop-rồi-start. Vì sao?\n2. Method 3 (nginx holds the port, reload, drop blue at once) had a median of 0 failures, but 2 of 5 runs had exactly one 502. The fix that gave 0 in 5 of 5?Cách 3 (nginx giữ cổng, reload, bỏ blue ngay) có trung vị 0 lỗi, nhưng 2/5 lượt có đúng một 502. Cách sửa cho 0 lỗi ở cả 5/5 lượt?\n3. The website’s deploy-nha.sh recreates the backend in place (docker compose up -d --no-build), then reloads nginx. What do users see during the swap?deploy-nha.sh của website tạo lại backend tại chỗ (docker compose up -d --no-build), rồi reload nginx. Người dùng thấy gì trong lúc tráo?\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where the hole is: the port, not the health of the container — answer key\n\n1. “Blue-green” without a proxy (green on a second port, wait healthy, remove blue, re-create green on the real port) lost 35 of 291 requests — worse than stop-then-start. Why?“Blue-green” không proxy (green ở cổng thứ hai, chờ healthy, xoá blue, tạo lại green ở cổng thật) mất 35/291 request — tệ hơn cả stop-rồi-start. Vì sao?\n   Answer: b) Between blue releasing the port and green binding it nothing listens, and that gap was longer (1.05 s)\n   The problem was never which container was healthy; it is the port. The health check still matters — if green is broken, blue keeps serving, a failed deploy instead of an outage.VI: Vấn đề chưa bao giờ là container nào healthy; mà là cái cổng. Health check vẫn có giá trị — nếu green hỏng, blue vẫn phục vụ, một lần deploy hỏng thay vì một sự cố.\n\n2. Method 3 (nginx holds the port, reload, drop blue at once) had a median of 0 failures, but 2 of 5 runs had exactly one 502. The fix that gave 0 in 5 of 5?Cách 3 (nginx giữ cổng, reload, bỏ blue ngay) có trung vị 0 lỗi, nhưng 2/5 lượt có đúng một 502. Cách sửa cho 0 lỗi ở cả 5/5 lượt?\n   Answer: c) Wait about 1 s after the reload so old nginx workers drain before dropping blue\n   An old nginx worker still handed one request to blue as it shut down. Something long-lived owns the address; everything else is detail.VI: Một worker nginx cũ vẫn chuyển một request cho blue lúc nó đang tắt. Có một thứ sống lâu giữ địa chỉ; còn lại là chi tiết.\n\n3. The website’s deploy-nha.sh recreates the backend in place (docker compose up -d --no-build), then reloads nginx. What do users see during the swap?deploy-nha.sh của website tạo lại backend tại chỗ (docker compose up -d --no-build), rồi reload nginx. Người dùng thấy gì trong lúc tráo?\n   Answer: c) A short window of 502s from nginx instead of refused connections — method 1 behind a proxy\n   nginx (never restarted by a deploy) is the right piece; running old and new side by side is the missing one. On 11/09/2026 recreated containers swapped IPs while nginx kept the old ones: 502 on both domains for 15 minutes.VI: nginx (không bao giờ bị deploy khởi động lại) là mảnh đúng; chạy cũ và mới song song là mảnh còn thiếu. Ngày 11/09/2026 các container tạo lại bị tráo IP trong khi nginx giữ IP cũ: 502 trên cả hai tên miền 15 phút.\n\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: a) The switch gate must be a real HTTP answer from a real route, not docker ps showing Up + b) A Socket.IO connection is cut on every deploy; the client must rejoin rooms and refetch + c) During a rolling deploy, two versions use one database, so schema changes must stay compatible\n   The probe opens a new connection each time, like a new visitor: keep-alive could hide failures behind one lucky connection.VI: Probe mở kết nối mới mỗi lần, như một khách mới: keep-alive có thể giấu lỗi sau một kết nối may mắn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Between blue releasing the port and green binding it nothing listens, and that gap was longer (1.05 s)</p><p>The problem was never which container was healthy; it is the port. The health check still matters — if green is broken, blue keeps serving, a failed deploy instead of an outage.</p><p><i>VI: Vấn đề chưa bao giờ là container nào healthy; mà là cái cổng. Health check vẫn có giá trị — nếu green hỏng, blue vẫn phục vụ, một lần deploy hỏng thay vì một sự cố.</i></p></li><li><p><b>c)</b> Wait about 1 s after the reload so old nginx workers drain before dropping blue</p><p>An old nginx worker still handed one request to blue as it shut down. Something long-lived owns the address; everything else is detail.</p><p><i>VI: Một worker nginx cũ vẫn chuyển một request cho blue lúc nó đang tắt. Có một thứ sống lâu giữ địa chỉ; còn lại là chi tiết.</i></p></li><li><p><b>c)</b> A short window of 502s from nginx instead of refused connections — method 1 behind a proxy</p><p>nginx (never restarted by a deploy) is the right piece; running old and new side by side is the missing one. On 11/09/2026 recreated containers swapped IPs while nginx kept the old ones: 502 on both domains for 15 minutes.</p><p><i>VI: nginx (không bao giờ bị deploy khởi động lại) là mảnh đúng; chạy cũ và mới song song là mảnh còn thiếu. Ngày 11/09/2026 các container tạo lại bị tráo IP trong khi nginx giữ IP cũ: 502 trên cả hai tên miền 15 phút.</i></p></li><li><p><b>a)</b> The switch gate must be a real HTTP answer from a real route, not docker ps showing Up + <b>b)</b> A Socket.IO connection is cut on every deploy; the client must rejoin rooms and refetch + <b>c)</b> During a rolling deploy, two versions use one database, so schema changes must stay compatible</p><p>The probe opens a new connection each time, like a new visitor: keep-alive could hide failures behind one lucky connection.</p><p><i>VI: Probe mở kết nối mới mỗi lần, như một khách mới: keep-alive có thể giấu lỗi sau một kết nối may mắn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>“Blue-green” without a proxy (green on a second port, wait healthy, remove blue, re-create green on the real port) lost 35 of 291 requests — worse than stop-then-start. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>“Blue-green” không proxy (green ở cổng thứ hai, chờ healthy, xoá blue, tạo lại green ở cổng thật) mất 35/291 request — tệ hơn cả stop-rồi-start. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Green was not healthy, so the probe counted every request to it as failed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Between blue releasing the port and green binding it nothing listens, and that gap was longer (1.05 s)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two containers on one machine halved the CPU each one could use"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The health check itself overloaded green during the switch"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The problem was never which container was healthy; it is the port. The health check still matters — if green is broken, blue keeps serving, a failed deploy instead of an outage.</p><p><i>VI: Vấn đề chưa bao giờ là container nào healthy; mà là cái cổng. Health check vẫn có giá trị — nếu green hỏng, blue vẫn phục vụ, một lần deploy hỏng thay vì một sự cố.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Method 3 (nginx holds the port, reload, drop blue at once) had a median of 0 failures, but 2 of 5 runs had exactly one 502. The fix that gave 0 in 5 of 5?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách 3 (nginx giữ cổng, reload, bỏ blue ngay) có trung vị 0 lỗi, nhưng 2/5 lượt có đúng một 502. Cách sửa cho 0 lỗi ở cả 5/5 lượt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Make green listen on port 80 directly, next to nginx"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reload nginx twice, so both worker generations get the new config"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Wait about 1 s after the reload so old nginx workers drain before dropping blue"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Restart nginx instead of reloading it, so no old worker survives"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>An old nginx worker still handed one request to blue as it shut down. Something long-lived owns the address; everything else is detail.</p><p><i>VI: Một worker nginx cũ vẫn chuyển một request cho blue lúc nó đang tắt. Có một thứ sống lâu giữ địa chỉ; còn lại là chi tiết.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The website’s deploy-nha.sh recreates the backend in place (docker compose up -d --no-build), then reloads nginx. What do users see during the swap?</p><p style=\"opacity:.75;font-size:.92em\"><i>deploy-nha.sh của website tạo lại backend tại chỗ (docker compose up -d --no-build), rồi reload nginx. Người dùng thấy gì trong lúc tráo?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing: nginx owns the port, so recreating the backend is zero-downtime"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Connection refused, because nginx is restarted by every deploy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A short window of 502s from nginx instead of refused connections — method 1 behind a proxy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Old responses from cache, because nginx serves stale content on errors"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>nginx (never restarted by a deploy) is the right piece; running old and new side by side is the missing one. On 11/09/2026 recreated containers swapped IPs while nginx kept the old ones: 502 on both domains for 15 minutes.</p><p><i>VI: nginx (không bao giờ bị deploy khởi động lại) là mảnh đúng; chạy cũ và mới song song là mảnh còn thiếu. Ngày 11/09/2026 các container tạo lại bị tráo IP trong khi nginx giữ IP cũ: 502 trên cả hai tên miền 15 phút.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The switch gate must be a real HTTP answer from a real route, not docker ps showing Up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A Socket.IO connection is cut on every deploy; the client must rejoin rooms and refetch"
+              },
+              {
+                "ma": "c",
+                "noiDung": "During a rolling deploy, two versions use one database, so schema changes must stay compatible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keep-alive in the probe makes the measurement more honest"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The probe opens a new connection each time, like a new visitor: keep-alive could hide failures behind one lucky connection.</p><p><i>VI: Probe mở kết nối mới mỗi lần, như một khách mới: keep-alive có thể giấu lỗi sau một kết nối may mắn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling “health check after the swap” blue-green.|||Gọi “health check sau khi tráo” là blue-green."
+        },
+        {
+          "loi": "Dropping the old container the instant the proxy reloads.|||Bỏ container cũ ngay khi proxy vừa reload."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blue-green",
+          "vi": "blue-green",
+          "giaiThich": "two full versions, switch all at once"
+        },
+        {
+          "en": "reverse proxy",
+          "vi": "proxy ngược"
+        },
+        {
+          "en": "drain",
+          "vi": "xả dần"
+        }
+      ]
+    },
+    {
+      "title": "Zero downtime, step by step — and the schema change a rolling deploy needs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "deployment",
+        "migrations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two orders from lesson 17.5 (and chapter 7).</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai thứ tự của bài 17.5 (và chương 7).</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Something long-lived must own the address.|||Phải có thứ sống lâu giữ địa chỉ.",
+        "Every intermediate state must work for both versions.|||Mọi trạng thái trung gian phải chạy được cho cả hai phiên bản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Zero downtime, step by step — and the schema change a rolling deploy needs\n\nAnswer in the answer panel (no code needed).\n\n1. Blue-green behind a proxy.Blue-green sau một proxy.\n2. Make notes.summary NOT NULL while old and new versions both run.Đặt notes.summary thành NOT NULL trong khi bản cũ và bản mới cùng chạy.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Zero downtime, step by step — and the schema change a rolling deploy needs — answer key\n\n1. Blue-green behind a proxy.Blue-green sau một proxy.\n   Answer: m1) The proxy holds the public port (and is never restarted by a deploy)  →  m2) Start green alongside blue  →  m4) Health-check green through a real route until it answers  →  m3) Rewrite the proxy target and reload  →  m5) Wait ~1 s for old workers to drain, then stop blue\n   You change the destination, not the listener — like a receptionist who never goes home.VI: Bạn đổi đích đến, không đổi người nghe máy — như một lễ tân không bao giờ về nhà.\n\n2. Make notes.summary NOT NULL while old and new versions both run.Đặt notes.summary thành NOT NULL trong khi bản cũ và bản mới cùng chạy.\n   Answer: m2) Add summary as a nullable column  →  m1) Deploy code that writes summary on every insert and update  →  m5) Backfill summary for the old rows  →  m3) Switch the reads to summary  →  m4) Make the column NOT NULL\n   Each step can be undone on its own, and at every moment both versions work against the schema that exists. NOT NULL first would break the old version, which still inserts rows without summary.VI: Mỗi bước tự hoàn tác được, và ở mọi thời điểm cả hai phiên bản đều chạy được trên lược đồ đang có. NOT NULL trước sẽ làm hỏng bản cũ, vốn vẫn chèn dòng không có summary.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You change the destination, not the listener — like a receptionist who never goes home.</p><p><i>VI: Bạn đổi đích đến, không đổi người nghe máy — như một lễ tân không bao giờ về nhà.</i></p><p>Each step can be undone on its own, and at every moment both versions work against the schema that exists. NOT NULL first would break the old version, which still inserts rows without summary.</p><p><i>VI: Mỗi bước tự hoàn tác được, và ở mọi thời điểm cả hai phiên bản đều chạy được trên lược đồ đang có. NOT NULL trước sẽ làm hỏng bản cũ, vốn vẫn chèn dòng không có summary.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Blue-green behind a proxy.</p><p style=\"opacity:.75;font-size:.92em\"><i>Blue-green sau một proxy.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The proxy holds the public port (and is never restarted by a deploy)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Start green alongside blue"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Rewrite the proxy target and reload"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Health-check green through a real route until it answers"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Wait ~1 s for old workers to drain, then stop blue"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m4",
+              "m3",
+              "m5"
+            ],
+            "giaiThich": "<p>You change the destination, not the listener — like a receptionist who never goes home.</p><p><i>VI: Bạn đổi đích đến, không đổi người nghe máy — như một lễ tân không bao giờ về nhà.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>Make notes.summary NOT NULL while old and new versions both run.</p><p style=\"opacity:.75;font-size:.92em\"><i>Đặt notes.summary thành NOT NULL trong khi bản cũ và bản mới cùng chạy.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Deploy code that writes summary on every insert and update"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Add summary as a nullable column"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Switch the reads to summary"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Make the column NOT NULL"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Backfill summary for the old rows"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m5",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Each step can be undone on its own, and at every moment both versions work against the schema that exists. NOT NULL first would break the old version, which still inserts rows without summary.</p><p><i>VI: Mỗi bước tự hoàn tác được, và ở mọi thời điểm cả hai phiên bản đều chạy được trên lược đồ đang có. NOT NULL trước sẽ làm hỏng bản cũ, vốn vẫn chèn dòng không có summary.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping blue before green is healthy.|||Dừng blue trước khi green healthy."
+        },
+        {
+          "loi": "NOT NULL in the same migration that adds the column.|||NOT NULL ngay trong migration thêm cột."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "expand / contract",
+          "vi": "mở rộng / thu hẹp",
+          "giaiThich": "additive migration first, removal last"
+        }
+      ]
+    },
+    {
+      "title": "Blue-green, rolling, canary, recreate",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Match each property to the strategy.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi tính chất với chiến lược.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "How many versions run at the same time, and for how much traffic?|||Bao nhiêu phiên bản chạy cùng lúc, và cho bao nhiêu lưu lượng?",
+        "Canary needs metrics to decide.|||Canary cần metric để quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Blue-green, rolling, canary, recreate\n\nAnswer in the answer panel (no code needed).\n\n1. Which strategy?Chiến lược nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Blue-green, rolling, canary, recreate — answer key\n\n1. Which strategy?Chiến lược nào?\n   - r1.s: blue-green\n   - r2.s: rolling\n   - r3.s: canary\n   - r4.s: recreate\n   - r5.s: canary\n   Rolling and canary both run two versions against one database for a while, so every schema change must stay backward compatible. Recreate is what a single docker compose service does by default.VI: Rolling và canary đều chạy hai phiên bản trên một CSDL trong một lúc, nên mọi thay đổi lược đồ phải tương thích ngược. Recreate là điều một service docker compose đơn lẻ làm theo mặc định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rolling and canary both run two versions against one database for a while, so every schema change must stay backward compatible. Recreate is what a single docker compose service does by default.</p><p><i>VI: Rolling và canary đều chạy hai phiên bản trên một CSDL trong một lúc, nên mọi thay đổi lược đồ phải tương thích ngược. Recreate là điều một service docker compose đơn lẻ làm theo mặc định.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Which strategy?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chiến lược nào?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Property"
+              },
+              {
+                "ma": "s",
+                "ten": "Strategy",
+                "luaChon": [
+                  "blue-green",
+                  "rolling",
+                  "canary",
+                  "recreate"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Two full versions, switch all at once, instant rollback by switching back"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Replace one replica at a time, a little extra capacity"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "5% of traffic first, watch the metrics of chapter 15, then the rest"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Stop all, start all — the 5.3% of method 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "The safest, and the most infrastructure"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "blue-green",
+              "r2.s": "rolling",
+              "r3.s": "canary",
+              "r4.s": "recreate",
+              "r5.s": "canary"
+            },
+            "giaiThich": "<p>Rolling and canary both run two versions against one database for a while, so every schema change must stay backward compatible. Recreate is what a single docker compose service does by default.</p><p><i>VI: Rolling và canary đều chạy hai phiên bản trên một CSDL trong một lúc, nên mọi thay đổi lược đồ phải tương thích ngược. Recreate là điều một service docker compose đơn lẻ làm theo mặc định.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling compose recreate “rolling”.|||Gọi recreate của compose là “rolling”."
+        },
+        {
+          "loi": "Rolling with a destructive migration.|||Rolling với một migration phá huỷ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "canary",
+          "vi": "canary",
+          "giaiThich": "a small share of traffic first"
+        }
+      ]
+    },
+    {
+      "title": "probeReport(probes): do not claim zero downtime, count it",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "deployment",
+        "measurement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A probe fired a request about every 25 ms through the whole deploy; anything that is not 200 (refused, reset, 502, timeout) is a failure. <code>probes = [{ t, ok }]</code> in time order (ms). Write <code>probeReport(probes)</code> returning <code>{ total, failed, pct, holes, longestHoleMs }</code>: <code>pct</code> = failed share × 100 rounded to 2 decimals (0 for no probes); <code>holes</code> = one entry per run of consecutive failed probes, <code>{ from, to, ms, failed }</code>, where <code>from</code> is the first failed probe’s time and <code>to</code> the time of the next successful probe (or of the last failed probe if none follows), <code>ms = to − from</code>, <code>failed</code> the probes in the run; <code>longestHoleMs</code> the largest <code>ms</code> (0 if none).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một probe bắn request khoảng 25 ms một lần suốt lần deploy; bất cứ thứ gì không phải 200 (bị từ chối, bị reset, 502, quá giờ) là lỗi. <code>probes = [{ t, ok }]</code> theo thứ tự thời gian (ms). Viết <code>probeReport(probes)</code> trả về <code>{ total, failed, pct, holes, longestHoleMs }</code>: <code>pct</code> = tỉ lệ lỗi × 100 làm tròn 2 chữ số (0 nếu không có probe); <code>holes</code> = mỗi chuỗi probe lỗi liên tiếp một mục <code>{ from, to, ms, failed }</code>, với <code>from</code> là thời điểm probe lỗi đầu và <code>to</code> là thời điểm probe đạt kế tiếp (hoặc của probe lỗi cuối nếu không có cái nào sau), <code>ms = to − from</code>, <code>failed</code> là số probe trong chuỗi; <code>longestHoleMs</code> là <code>ms</code> lớn nhất (0 nếu không có).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "probeReport([{\"t\":0,\"ok\":true},{\"t\":30,\"ok\":true},{\"t\":60,\"ok\":true},{\"t\":90,\"ok\":true},{\"t\":120,\"ok\":true},{\"t\":150,\"ok\":true},{\"t\":180,\"ok\":true},{\"t\":210,\"ok\":true},{\"t\":240,\"ok\":true},{\"t\":270,\"ok\":true},{\"t\":300,\"ok\":true},{\"t\":330,\"ok\":true},{\"t\":360,\"ok\":true},{\"t\":390,\"ok\":true},{\"t\":420,\"ok\":true},{\"t\":450,\"ok\":true},{\"t\":480,\"ok\":true},{\"t\":510,\"ok\":true},{\"t\":540,\"ok\":true},{\"t\":570,\"ok\":true},{\"t\":600,\"ok\":true},{\"t\":630,\"ok\":true},{\"t\":660,\"ok\":true},{\"t\":690,\"ok\":true},{\"t\":720,\"ok\":true},{\"t\":750,\"ok\":true},{\"t\":780,\"ok\":true},{\"t\":810,\"ok\":true},{\"t\":840,\"ok\":true},{\"t\":870,\"ok\":true},{\"t\":900,\"ok\":true},{\"t\":930,\"ok\":true},{\"t\":960,\"ok\":true},{\"t\":990,\"ok\":true},{\"t\":1020,\"ok\":true},{\"t\":1050,\"ok\":true},{\"t\":1080,\"ok\":true},{\"t\":1110,\"ok\":true},{\"t\":1140,\"ok\":true},{\"t\":1170,\"ok\":true},{\"t\":1200,\"ok\":true},{\"t\":1230,\"ok\":true},{\"t\":1260,\"ok\":true},{\"t\":1290,\"ok\":true},{\"t\":1320,\"ok\":true},{\"t\":1350,\"ok\":true},{\"t\":1380,\"ok\":true},{\"t\":1410,\"ok\":true},{\"t\":1440,\"ok\":true},{\"t\":1470,\"ok\":true},{\"t\":1500,\"ok\":false},{\"t\":1530,\"ok\":false},{\"t\":1560,\"ok\":false},{\"t\":1590,\"ok\":false},{\"t\":1620,\"ok\":false},{\"t\":1650,\"ok\":false},{\"t\":1680,\"ok\":false},{\"t\":1710,\"ok\":false},{\"t\":1740,\"ok\":false},{\"t\":1770,\"ok\":false},{\"t\":1800,\"ok\":false},{\"t\":1830,\"ok\":false},{\"t\":1860,\"ok\":false},{\"t\":1890,\"ok\":false},{\"t\":1920,\"ok\":false},{\"t\":1950,\"ok\":false},{\"t\":1980,\"ok\":true},{\"t\":2010,\"ok\":true},{\"t\":2040,\"ok\":true},{\"t\":2070,\"ok\":true},{\"t\":2100,\"ok\":true},{\"t\":2130,\"ok\":true},{\"t\":2160,\"ok\":true},{\"t\":2190,\"ok\":true},{\"t\":2220,\"ok\":true},{\"t\":2250,\"ok\":true},{\"t\":2280,\"ok\":true},{\"t\":2310,\"ok\":true},{\"t\":2340,\"ok\":true},{\"t\":2370,\"ok\":true},{\"t\":2400,\"ok\":true},{\"t\":2430,\"ok\":true},{\"t\":2460,\"ok\":true},{\"t\":2490,\"ok\":true},{\"t\":2520,\"ok\":true},{\"t\":2550,\"ok\":true},{\"t\":2580,\"ok\":true},{\"t\":2610,\"ok\":true},{\"t\":2640,\"ok\":true},{\"t\":2670,\"ok\":true},{\"t\":2700,\"ok\":true},{\"t\":2730,\"ok\":true},{\"t\":2760,\"ok\":true},{\"t\":2790,\"ok\":true},{\"t\":2820,\"ok\":true},{\"t\":2850,\"ok\":true},{\"t\":2880,\"ok\":true},{\"t\":2910,\"ok\":true},{\"t\":2940,\"ok\":true},{\"t\":2970,\"ok\":true},{\"t\":3000,\"ok\":true},{\"t\":3030,\"ok\":true},{\"t\":3060,\"ok\":true},{\"t\":3090,\"ok\":true},{\"t\":3120,\"ok\":true},{\"t\":3150,\"ok\":true},{\"t\":3180,\"ok\":true},{\"t\":3210,\"ok\":true},{\"t\":3240,\"ok\":true},{\"t\":3270,\"ok\":true},{\"t\":3300,\"ok\":true},{\"t\":3330,\"ok\":true},{\"t\":3360,\"ok\":true},{\"t\":3390,\"ok\":true},{\"t\":3420,\"ok\":true},{\"t\":3450,\"ok\":true},{\"t\":3480,\"ok\":true},{\"t\":3510,\"ok\":true},{\"t\":3540,\"ok\":true},{\"t\":3570,\"ok\":true},{\"t\":3600,\"ok\":true},{\"t\":3630,\"ok\":true},{\"t\":3660,\"ok\":true},{\"t\":3690,\"ok\":true},{\"t\":3720,\"ok\":true},{\"t\":3750,\"ok\":true},{\"t\":3780,\"ok\":true},{\"t\":3810,\"ok\":true},{\"t\":3840,\"ok\":true},{\"t\":3870,\"ok\":true},{\"t\":3900,\"ok\":true},{\"t\":3930,\"ok\":true},{\"t\":3960,\"ok\":true},{\"t\":3990,\"ok\":true},{\"t\":4020,\"ok\":true},{\"t\":4050,\"ok\":true},{\"t\":4080,\"ok\":true},{\"t\":4110,\"ok\":true},{\"t\":4140,\"ok\":true},{\"t\":4170,\"ok\":true},{\"t\":4200,\"ok\":true},{\"t\":4230,\"ok\":true},{\"t\":4260,\"ok\":true},{\"t\":4290,\"ok\":true},{\"t\":4320,\"ok\":true},{\"t\":4350,\"ok\":true},{\"t\":4380,\"ok\":true},{\"t\":4410,\"ok\":true},{\"t\":4440,\"ok\":true},{\"t\":4470,\"ok\":true},{\"t\":4500,\"ok\":true},{\"t\":4530,\"ok\":true},{\"t\":4560,\"ok\":true},{\"t\":4590,\"ok\":true},{\"t\":4620,\"ok\":true},{\"t\":4650,\"ok\":true},{\"t\":4680,\"ok\":true},{\"t\":4710,\"ok\":true},{\"t\":4740,\"ok\":true},{\"t\":4770,\"ok\":true},{\"t\":4800,\"ok\":true},{\"t\":4830,\"ok\":true},{\"t\":4860,\"ok\":true},{\"t\":4890,\"ok\":true},{\"t\":4920,\"ok\":true},{\"t\":4950,\"ok\":true},{\"t\":4980,\"ok\":true},{\"t\":5010,\"ok\":true},{\"t\":5040,\"ok\":true},{\"t\":5070,\"ok\":true},{\"t\":5100,\"ok\":true},{\"t\":5130,\"ok\":true},{\"t\":5160,\"ok\":true},{\"t\":5190,\"ok\":true},{\"t\":5220,\"ok\":true},{\"t\":5250,\"ok\":true},{\"t\":5280,\"ok\":true},{\"t\":5310,\"ok\":true},{\"t\":5340,\"ok\":true},{\"t\":5370,\"ok\":true},{\"t\":5400,\"ok\":true},{\"t\":5430,\"ok\":true},{\"t\":5460,\"ok\":true},{\"t\":5490,\"ok\":true},{\"t\":5520,\"ok\":true},{\"t\":5550,\"ok\":true},{\"t\":5580,\"ok\":true},{\"t\":5610,\"ok\":true},{\"t\":5640,\"ok\":true},{\"t\":5670,\"ok\":true},{\"t\":5700,\"ok\":true},{\"t\":5730,\"ok\":true},{\"t\":5760,\"ok\":true},{\"t\":5790,\"ok\":true},{\"t\":5820,\"ok\":true},{\"t\":5850,\"ok\":true},{\"t\":5880,\"ok\":true},{\"t\":5910,\"ok\":true},{\"t\":5940,\"ok\":true},{\"t\":5970,\"ok\":true},{\"t\":6000,\"ok\":true},{\"t\":6030,\"ok\":true},{\"t\":6060,\"ok\":true},{\"t\":6090,\"ok\":true},{\"t\":6120,\"ok\":true},{\"t\":6150,\"ok\":true},{\"t\":6180,\"ok\":true},{\"t\":6210,\"ok\":true},{\"t\":6240,\"ok\":true},{\"t\":6270,\"ok\":true},{\"t\":6300,\"ok\":true},{\"t\":6330,\"ok\":true},{\"t\":6360,\"ok\":true},{\"t\":6390,\"ok\":true},{\"t\":6420,\"ok\":true},{\"t\":6450,\"ok\":true},{\"t\":6480,\"ok\":true},{\"t\":6510,\"ok\":true},{\"t\":6540,\"ok\":true},{\"t\":6570,\"ok\":true},{\"t\":6600,\"ok\":true},{\"t\":6630,\"ok\":true},{\"t\":6660,\"ok\":true},{\"t\":6690,\"ok\":true},{\"t\":6720,\"ok\":true},{\"t\":6750,\"ok\":true},{\"t\":6780,\"ok\":true},{\"t\":6810,\"ok\":true},{\"t\":6840,\"ok\":true},{\"t\":6870,\"ok\":true},{\"t\":6900,\"ok\":true},{\"t\":6930,\"ok\":true},{\"t\":6960,\"ok\":true},{\"t\":6990,\"ok\":true},{\"t\":7020,\"ok\":true},{\"t\":7050,\"ok\":true},{\"t\":7080,\"ok\":true},{\"t\":7110,\"ok\":true},{\"t\":7140,\"ok\":true},{\"t\":7170,\"ok\":true},{\"t\":7200,\"ok\":true},{\"t\":7230,\"ok\":true},{\"t\":7260,\"ok\":true},{\"t\":7290,\"ok\":true},{\"t\":7320,\"ok\":true},{\"t\":7350,\"ok\":true},{\"t\":7380,\"ok\":true},{\"t\":7410,\"ok\":true},{\"t\":7440,\"ok\":true},{\"t\":7470,\"ok\":true},{\"t\":7500,\"ok\":true},{\"t\":7530,\"ok\":true},{\"t\":7560,\"ok\":true},{\"t\":7590,\"ok\":true},{\"t\":7620,\"ok\":true},{\"t\":7650,\"ok\":true},{\"t\":7680,\"ok\":true},{\"t\":7710,\"ok\":true},{\"t\":7740,\"ok\":true},{\"t\":7770,\"ok\":true},{\"t\":7800,\"ok\":true},{\"t\":7830,\"ok\":true},{\"t\":7860,\"ok\":true},{\"t\":7890,\"ok\":true},{\"t\":7920,\"ok\":true},{\"t\":7950,\"ok\":true},{\"t\":7980,\"ok\":true},{\"t\":8010,\"ok\":true},{\"t\":8040,\"ok\":true},{\"t\":8070,\"ok\":true},{\"t\":8100,\"ok\":true},{\"t\":8130,\"ok\":true},{\"t\":8160,\"ok\":true},{\"t\":8190,\"ok\":true},{\"t\":8220,\"ok\":true},{\"t\":8250,\"ok\":true},{\"t\":8280,\"ok\":true},{\"t\":8310,\"ok\":true},{\"t\":8340,\"ok\":true},{\"t\":8370,\"ok\":true},{\"t\":8400,\"ok\":true},{\"t\":8430,\"ok\":true},{\"t\":8460,\"ok\":true},{\"t\":8490,\"ok\":true},{\"t\":8520,\"ok\":true},{\"t\":8550,\"ok\":true},{\"t\":8580,\"ok\":true},{\"t\":8610,\"ok\":true},{\"t\":8640,\"ok\":true},{\"t\":8670,\"ok\":true},{\"t\":8700,\"ok\":true},{\"t\":8730,\"ok\":true},{\"t\":8760,\"ok\":true},{\"t\":8790,\"ok\":true},{\"t\":8820,\"ok\":true},{\"t\":8850,\"ok\":true},{\"t\":8880,\"ok\":true},{\"t\":8910,\"ok\":true},{\"t\":8940,\"ok\":true},{\"t\":8970,\"ok\":true},{\"t\":9000,\"ok\":true}])",
+          "output": "{\"total\":301,\"failed\":16,\"pct\":5.32,\"holes\":[{\"from\":1500,\"to\":1980,\"ms\":480,\"failed\":16}],\"longestHoleMs\":480}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A run starts at a failed probe whose previous probe was ok (or that is the first probe).|||Một chuỗi bắt đầu ở probe lỗi mà probe trước nó đạt (hoặc là probe đầu tiên).",
+        "Walk j forward while probes fail; probes[j] (if it exists) is the first success after the hole.|||Cho j tiến lên khi probe còn lỗi; probes[j] (nếu có) là lần đạt đầu tiên sau lỗ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** how much did the deploy cost? */\nfunction probeReport(probes) {\n  // Write your solution here\n  const failed = probes.filter((p) => !p.ok);\n  const longest = failed.length ? failed[failed.length - 1].t - failed[0].t : 0;\n  return { total: probes.length, failed: failed.length, pct: 100 * failed.length / probes.length, holes: [], longestHoleMs: longest };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction probeReport(probes) {\n  // probes: [{ t, ok }] theo thời gian (ms). Một \"lỗ\" = chuỗi probe trượt liên tiếp, đo từ probe trượt đầu tới probe ĐẠT kế tiếp.\n  const failed = probes.filter((p) => !p.ok).length;\n  const holes = [];\n  for (let i = 0; i < probes.length; i++) {\n    if (probes[i].ok || (i > 0 && !probes[i - 1].ok)) continue;          // chỉ bắt đầu ở probe trượt đầu tiên của một chuỗi\n    let j = i;\n    while (j < probes.length && !probes[j].ok) j++;\n    const to = j < probes.length ? probes[j].t : probes[j - 1].t;\n    holes.push({ from: probes[i].t, to, ms: to - probes[i].t, failed: j - i });\n  }\n  return {\n    total: probes.length,\n    failed,\n    pct: probes.length ? Number(((100 * failed) / probes.length).toFixed(2)) : 0,\n    holes,\n    longestHoleMs: holes.reduce((m, h) => Math.max(m, h.ms), 0),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stop-then-start, median of 5: 16 of 301 failed (5.32%) with a 0.43 s hole — exactly what docker compose up does to a single container when the image changed. The same probe after the proxy method reads 0. Numbers, not claims.</p>",
+      "solutionExplanationHtmlVi": "<p>Stop-rồi-start, trung vị 5 lượt: 16/301 lỗi (5,32%) với lỗ 0,43 s — đúng điều docker compose up làm với một container duy nhất khi ảnh đổi. Cùng probe đó sau cách dùng proxy đọc ra 0. Con số, không phải lời khẳng định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Stop-then-start: one hole",
+              "vi": "Stop-rồi-start: một lỗ"
+            },
+            "goi": "probeReport([{\"t\":0,\"ok\":true},{\"t\":30,\"ok\":true},{\"t\":60,\"ok\":true},{\"t\":90,\"ok\":true},{\"t\":120,\"ok\":true},{\"t\":150,\"ok\":true},{\"t\":180,\"ok\":true},{\"t\":210,\"ok\":true},{\"t\":240,\"ok\":true},{\"t\":270,\"ok\":true},{\"t\":300,\"ok\":true},{\"t\":330,\"ok\":true},{\"t\":360,\"ok\":true},{\"t\":390,\"ok\":true},{\"t\":420,\"ok\":true},{\"t\":450,\"ok\":true},{\"t\":480,\"ok\":true},{\"t\":510,\"ok\":true},{\"t\":540,\"ok\":true},{\"t\":570,\"ok\":true},{\"t\":600,\"ok\":true},{\"t\":630,\"ok\":true},{\"t\":660,\"ok\":true},{\"t\":690,\"ok\":true},{\"t\":720,\"ok\":true},{\"t\":750,\"ok\":true},{\"t\":780,\"ok\":true},{\"t\":810,\"ok\":true},{\"t\":840,\"ok\":true},{\"t\":870,\"ok\":true},{\"t\":900,\"ok\":true},{\"t\":930,\"ok\":true},{\"t\":960,\"ok\":true},{\"t\":990,\"ok\":true},{\"t\":1020,\"ok\":true},{\"t\":1050,\"ok\":true},{\"t\":1080,\"ok\":true},{\"t\":1110,\"ok\":true},{\"t\":1140,\"ok\":true},{\"t\":1170,\"ok\":true},{\"t\":1200,\"ok\":true},{\"t\":1230,\"ok\":true},{\"t\":1260,\"ok\":true},{\"t\":1290,\"ok\":true},{\"t\":1320,\"ok\":true},{\"t\":1350,\"ok\":true},{\"t\":1380,\"ok\":true},{\"t\":1410,\"ok\":true},{\"t\":1440,\"ok\":true},{\"t\":1470,\"ok\":true},{\"t\":1500,\"ok\":false},{\"t\":1530,\"ok\":false},{\"t\":1560,\"ok\":false},{\"t\":1590,\"ok\":false},{\"t\":1620,\"ok\":false},{\"t\":1650,\"ok\":false},{\"t\":1680,\"ok\":false},{\"t\":1710,\"ok\":false},{\"t\":1740,\"ok\":false},{\"t\":1770,\"ok\":false},{\"t\":1800,\"ok\":false},{\"t\":1830,\"ok\":false},{\"t\":1860,\"ok\":false},{\"t\":1890,\"ok\":false},{\"t\":1920,\"ok\":false},{\"t\":1950,\"ok\":false},{\"t\":1980,\"ok\":true},{\"t\":2010,\"ok\":true},{\"t\":2040,\"ok\":true},{\"t\":2070,\"ok\":true},{\"t\":2100,\"ok\":true},{\"t\":2130,\"ok\":true},{\"t\":2160,\"ok\":true},{\"t\":2190,\"ok\":true},{\"t\":2220,\"ok\":true},{\"t\":2250,\"ok\":true},{\"t\":2280,\"ok\":true},{\"t\":2310,\"ok\":true},{\"t\":2340,\"ok\":true},{\"t\":2370,\"ok\":true},{\"t\":2400,\"ok\":true},{\"t\":2430,\"ok\":true},{\"t\":2460,\"ok\":true},{\"t\":2490,\"ok\":true},{\"t\":2520,\"ok\":true},{\"t\":2550,\"ok\":true},{\"t\":2580,\"ok\":true},{\"t\":2610,\"ok\":true},{\"t\":2640,\"ok\":true},{\"t\":2670,\"ok\":true},{\"t\":2700,\"ok\":true},{\"t\":2730,\"ok\":true},{\"t\":2760,\"ok\":true},{\"t\":2790,\"ok\":true},{\"t\":2820,\"ok\":true},{\"t\":2850,\"ok\":true},{\"t\":2880,\"ok\":true},{\"t\":2910,\"ok\":true},{\"t\":2940,\"ok\":true},{\"t\":2970,\"ok\":true},{\"t\":3000,\"ok\":true},{\"t\":3030,\"ok\":true},{\"t\":3060,\"ok\":true},{\"t\":3090,\"ok\":true},{\"t\":3120,\"ok\":true},{\"t\":3150,\"ok\":true},{\"t\":3180,\"ok\":true},{\"t\":3210,\"ok\":true},{\"t\":3240,\"ok\":true},{\"t\":3270,\"ok\":true},{\"t\":3300,\"ok\":true},{\"t\":3330,\"ok\":true},{\"t\":3360,\"ok\":true},{\"t\":3390,\"ok\":true},{\"t\":3420,\"ok\":true},{\"t\":3450,\"ok\":true},{\"t\":3480,\"ok\":true},{\"t\":3510,\"ok\":true},{\"t\":3540,\"ok\":true},{\"t\":3570,\"ok\":true},{\"t\":3600,\"ok\":true},{\"t\":3630,\"ok\":true},{\"t\":3660,\"ok\":true},{\"t\":3690,\"ok\":true},{\"t\":3720,\"ok\":true},{\"t\":3750,\"ok\":true},{\"t\":3780,\"ok\":true},{\"t\":3810,\"ok\":true},{\"t\":3840,\"ok\":true},{\"t\":3870,\"ok\":true},{\"t\":3900,\"ok\":true},{\"t\":3930,\"ok\":true},{\"t\":3960,\"ok\":true},{\"t\":3990,\"ok\":true},{\"t\":4020,\"ok\":true},{\"t\":4050,\"ok\":true},{\"t\":4080,\"ok\":true},{\"t\":4110,\"ok\":true},{\"t\":4140,\"ok\":true},{\"t\":4170,\"ok\":true},{\"t\":4200,\"ok\":true},{\"t\":4230,\"ok\":true},{\"t\":4260,\"ok\":true},{\"t\":4290,\"ok\":true},{\"t\":4320,\"ok\":true},{\"t\":4350,\"ok\":true},{\"t\":4380,\"ok\":true},{\"t\":4410,\"ok\":true},{\"t\":4440,\"ok\":true},{\"t\":4470,\"ok\":true},{\"t\":4500,\"ok\":true},{\"t\":4530,\"ok\":true},{\"t\":4560,\"ok\":true},{\"t\":4590,\"ok\":true},{\"t\":4620,\"ok\":true},{\"t\":4650,\"ok\":true},{\"t\":4680,\"ok\":true},{\"t\":4710,\"ok\":true},{\"t\":4740,\"ok\":true},{\"t\":4770,\"ok\":true},{\"t\":4800,\"ok\":true},{\"t\":4830,\"ok\":true},{\"t\":4860,\"ok\":true},{\"t\":4890,\"ok\":true},{\"t\":4920,\"ok\":true},{\"t\":4950,\"ok\":true},{\"t\":4980,\"ok\":true},{\"t\":5010,\"ok\":true},{\"t\":5040,\"ok\":true},{\"t\":5070,\"ok\":true},{\"t\":5100,\"ok\":true},{\"t\":5130,\"ok\":true},{\"t\":5160,\"ok\":true},{\"t\":5190,\"ok\":true},{\"t\":5220,\"ok\":true},{\"t\":5250,\"ok\":true},{\"t\":5280,\"ok\":true},{\"t\":5310,\"ok\":true},{\"t\":5340,\"ok\":true},{\"t\":5370,\"ok\":true},{\"t\":5400,\"ok\":true},{\"t\":5430,\"ok\":true},{\"t\":5460,\"ok\":true},{\"t\":5490,\"ok\":true},{\"t\":5520,\"ok\":true},{\"t\":5550,\"ok\":true},{\"t\":5580,\"ok\":true},{\"t\":5610,\"ok\":true},{\"t\":5640,\"ok\":true},{\"t\":5670,\"ok\":true},{\"t\":5700,\"ok\":true},{\"t\":5730,\"ok\":true},{\"t\":5760,\"ok\":true},{\"t\":5790,\"ok\":true},{\"t\":5820,\"ok\":true},{\"t\":5850,\"ok\":true},{\"t\":5880,\"ok\":true},{\"t\":5910,\"ok\":true},{\"t\":5940,\"ok\":true},{\"t\":5970,\"ok\":true},{\"t\":6000,\"ok\":true},{\"t\":6030,\"ok\":true},{\"t\":6060,\"ok\":true},{\"t\":6090,\"ok\":true},{\"t\":6120,\"ok\":true},{\"t\":6150,\"ok\":true},{\"t\":6180,\"ok\":true},{\"t\":6210,\"ok\":true},{\"t\":6240,\"ok\":true},{\"t\":6270,\"ok\":true},{\"t\":6300,\"ok\":true},{\"t\":6330,\"ok\":true},{\"t\":6360,\"ok\":true},{\"t\":6390,\"ok\":true},{\"t\":6420,\"ok\":true},{\"t\":6450,\"ok\":true},{\"t\":6480,\"ok\":true},{\"t\":6510,\"ok\":true},{\"t\":6540,\"ok\":true},{\"t\":6570,\"ok\":true},{\"t\":6600,\"ok\":true},{\"t\":6630,\"ok\":true},{\"t\":6660,\"ok\":true},{\"t\":6690,\"ok\":true},{\"t\":6720,\"ok\":true},{\"t\":6750,\"ok\":true},{\"t\":6780,\"ok\":true},{\"t\":6810,\"ok\":true},{\"t\":6840,\"ok\":true},{\"t\":6870,\"ok\":true},{\"t\":6900,\"ok\":true},{\"t\":6930,\"ok\":true},{\"t\":6960,\"ok\":true},{\"t\":6990,\"ok\":true},{\"t\":7020,\"ok\":true},{\"t\":7050,\"ok\":true},{\"t\":7080,\"ok\":true},{\"t\":7110,\"ok\":true},{\"t\":7140,\"ok\":true},{\"t\":7170,\"ok\":true},{\"t\":7200,\"ok\":true},{\"t\":7230,\"ok\":true},{\"t\":7260,\"ok\":true},{\"t\":7290,\"ok\":true},{\"t\":7320,\"ok\":true},{\"t\":7350,\"ok\":true},{\"t\":7380,\"ok\":true},{\"t\":7410,\"ok\":true},{\"t\":7440,\"ok\":true},{\"t\":7470,\"ok\":true},{\"t\":7500,\"ok\":true},{\"t\":7530,\"ok\":true},{\"t\":7560,\"ok\":true},{\"t\":7590,\"ok\":true},{\"t\":7620,\"ok\":true},{\"t\":7650,\"ok\":true},{\"t\":7680,\"ok\":true},{\"t\":7710,\"ok\":true},{\"t\":7740,\"ok\":true},{\"t\":7770,\"ok\":true},{\"t\":7800,\"ok\":true},{\"t\":7830,\"ok\":true},{\"t\":7860,\"ok\":true},{\"t\":7890,\"ok\":true},{\"t\":7920,\"ok\":true},{\"t\":7950,\"ok\":true},{\"t\":7980,\"ok\":true},{\"t\":8010,\"ok\":true},{\"t\":8040,\"ok\":true},{\"t\":8070,\"ok\":true},{\"t\":8100,\"ok\":true},{\"t\":8130,\"ok\":true},{\"t\":8160,\"ok\":true},{\"t\":8190,\"ok\":true},{\"t\":8220,\"ok\":true},{\"t\":8250,\"ok\":true},{\"t\":8280,\"ok\":true},{\"t\":8310,\"ok\":true},{\"t\":8340,\"ok\":true},{\"t\":8370,\"ok\":true},{\"t\":8400,\"ok\":true},{\"t\":8430,\"ok\":true},{\"t\":8460,\"ok\":true},{\"t\":8490,\"ok\":true},{\"t\":8520,\"ok\":true},{\"t\":8550,\"ok\":true},{\"t\":8580,\"ok\":true},{\"t\":8610,\"ok\":true},{\"t\":8640,\"ok\":true},{\"t\":8670,\"ok\":true},{\"t\":8700,\"ok\":true},{\"t\":8730,\"ok\":true},{\"t\":8760,\"ok\":true},{\"t\":8790,\"ok\":true},{\"t\":8820,\"ok\":true},{\"t\":8850,\"ok\":true},{\"t\":8880,\"ok\":true},{\"t\":8910,\"ok\":true},{\"t\":8940,\"ok\":true},{\"t\":8970,\"ok\":true},{\"t\":9000,\"ok\":true}])",
+            "mongDoi": {
+              "total": 301,
+              "failed": 16,
+              "pct": 5.32,
+              "holes": [
+                {
+                  "from": 1500,
+                  "to": 1980,
+                  "ms": 480,
+                  "failed": 16
+                }
+              ],
+              "longestHoleMs": 480
+            }
+          },
+          {
+            "moTa": {
+              "en": "The proxy method: nothing failed",
+              "vi": "Cách dùng proxy: không có lỗi"
+            },
+            "goi": "probeReport([{\"t\":0,\"ok\":true},{\"t\":25,\"ok\":true},{\"t\":50,\"ok\":true},{\"t\":75,\"ok\":true},{\"t\":100,\"ok\":true},{\"t\":125,\"ok\":true},{\"t\":150,\"ok\":true},{\"t\":175,\"ok\":true},{\"t\":200,\"ok\":true},{\"t\":225,\"ok\":true},{\"t\":250,\"ok\":true},{\"t\":275,\"ok\":true},{\"t\":300,\"ok\":true},{\"t\":325,\"ok\":true},{\"t\":350,\"ok\":true},{\"t\":375,\"ok\":true},{\"t\":400,\"ok\":true},{\"t\":425,\"ok\":true},{\"t\":450,\"ok\":true},{\"t\":475,\"ok\":true}])",
+            "mongDoi": {
+              "total": 20,
+              "failed": 0,
+              "pct": 0,
+              "holes": [],
+              "longestHoleMs": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "probeReport([{\"t\":0,\"ok\":true},{\"t\":25,\"ok\":true},{\"t\":50,\"ok\":true},{\"t\":75,\"ok\":true},{\"t\":100,\"ok\":true},{\"t\":125,\"ok\":true},{\"t\":150,\"ok\":true},{\"t\":175,\"ok\":true},{\"t\":200,\"ok\":true},{\"t\":225,\"ok\":true},{\"t\":250,\"ok\":true},{\"t\":275,\"ok\":true},{\"t\":300,\"ok\":false},{\"t\":325,\"ok\":true},{\"t\":350,\"ok\":true},{\"t\":375,\"ok\":true},{\"t\":400,\"ok\":true},{\"t\":425,\"ok\":true},{\"t\":450,\"ok\":true},{\"t\":475,\"ok\":true},{\"t\":500,\"ok\":true},{\"t\":525,\"ok\":true},{\"t\":550,\"ok\":true},{\"t\":575,\"ok\":true},{\"t\":600,\"ok\":false},{\"t\":625,\"ok\":false},{\"t\":650,\"ok\":false},{\"t\":675,\"ok\":false},{\"t\":700,\"ok\":false},{\"t\":725,\"ok\":true},{\"t\":750,\"ok\":true},{\"t\":775,\"ok\":true},{\"t\":800,\"ok\":true},{\"t\":825,\"ok\":true},{\"t\":850,\"ok\":true},{\"t\":875,\"ok\":true},{\"t\":900,\"ok\":true},{\"t\":925,\"ok\":true},{\"t\":950,\"ok\":false},{\"t\":975,\"ok\":false}])",
+            "mongDoi": {
+              "total": 40,
+              "failed": 8,
+              "pct": 20,
+              "holes": [
+                {
+                  "from": 300,
+                  "to": 325,
+                  "ms": 25,
+                  "failed": 1
+                },
+                {
+                  "from": 600,
+                  "to": 725,
+                  "ms": 125,
+                  "failed": 5
+                },
+                {
+                  "from": 950,
+                  "to": 975,
+                  "ms": 25,
+                  "failed": 2
+                }
+              ],
+              "longestHoleMs": 125
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "probeReport([])",
+            "mongDoi": {
+              "total": 0,
+              "failed": 0,
+              "pct": 0,
+              "holes": [],
+              "longestHoleMs": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Measuring once by hand after the deploy: the hole of 0.43 s is invisible to a human with curl.|||Đo tay một lần sau khi deploy: lỗ 0,43 s vô hình với người dùng curl."
+        },
+        {
+          "loi": "Reusing one keep-alive connection in the probe: the failures hide behind it.|||Dùng một kết nối keep-alive cho probe: lỗi trốn sau nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "probe",
+          "vi": "probe"
+        },
+        {
+          "en": "downtime",
+          "vi": "thời gian gián đoạn"
+        }
+      ]
+    },
+    {
+      "title": "checkDeployPlan(steps): review a deploy script against the five steps",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "deployment",
+        "blue-green",
+        "review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A deploy plan is a list of steps: <code>{ do: \"start\", name }</code>, <code>{ do: \"health\", name, check: \"route\" | \"docker-ps\" }</code>, <code>{ do: \"switch\" }</code> (rewrite the proxy target + reload), <code>{ do: \"wait\", ms }</code>, <code>{ do: \"stop\" | \"restart\", name }</code>; names are <code>\"old\"</code>, <code>\"new\"</code>, <code>\"proxy\"</code>. Return the violations, in this order:</p><ol><li><code>PROXY_RESTARTED</code> — the proxy is stopped or restarted;</li><li><code>NO_NEW_CONTAINER</code> — <code>new</code> is never started;</li><li><code>OLD_STOPPED_FIRST</code> — <code>old</code> is stopped before <code>new</code> starts (or <code>new</code> never starts);</li><li><code>WEAK_HEALTH_CHECK</code> if <code>new</code> is only checked with <code>docker-ps</code>, otherwise <code>NO_HEALTH_GATE</code> — when there is no <code>route</code> check of <code>new</code> before the switch;</li><li><code>NO_SWITCH</code> — no switch step;</li><li><code>NO_DRAIN_WAIT</code> — <code>old</code> is stopped after the switch with less than 1000 ms of waits between them.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một kế hoạch deploy là danh sách bước: <code>{ do: \"start\", name }</code>, <code>{ do: \"health\", name, check: \"route\" | \"docker-ps\" }</code>, <code>{ do: \"switch\" }</code> (sửa đích của proxy + reload), <code>{ do: \"wait\", ms }</code>, <code>{ do: \"stop\" | \"restart\", name }</code>; tên là <code>\"old\"</code>, <code>\"new\"</code>, <code>\"proxy\"</code>. Trả về các vi phạm, theo thứ tự:</p><ol><li><code>PROXY_RESTARTED</code> — proxy bị dừng hoặc khởi động lại;</li><li><code>NO_NEW_CONTAINER</code> — <code>new</code> không bao giờ được chạy;</li><li><code>OLD_STOPPED_FIRST</code> — <code>old</code> bị dừng trước khi <code>new</code> chạy (hoặc <code>new</code> không bao giờ chạy);</li><li><code>WEAK_HEALTH_CHECK</code> nếu <code>new</code> chỉ được kiểm bằng <code>docker-ps</code>, không thì <code>NO_HEALTH_GATE</code> — khi không có lần kiểm <code>route</code> của <code>new</code> trước bước switch;</li><li><code>NO_SWITCH</code> — không có bước switch;</li><li><code>NO_DRAIN_WAIT</code> — <code>old</code> bị dừng sau switch mà tổng thời gian chờ giữa hai bước dưới 1000 ms.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkDeployPlan([{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"route\"},{\"do\":\"switch\"},{\"do\":\"wait\",\"ms\":1000},{\"do\":\"stop\",\"name\":\"old\"}])",
+          "output": "[]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "findIndex each key step once; most rules compare two indexes.|||findIndex mỗi bước then chốt một lần; đa số luật so hai chỉ số.",
+        "For the drain rule, sum the ms of wait steps strictly between the switch and the stop.|||Với luật xả, cộng ms của các bước wait nằm hẳn giữa switch và stop."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** review a deploy plan */\nfunction checkDeployPlan(steps) {\n  // Write your solution here\n  const v = [];\n  if (!steps.some((s) => s.do === 'health')) v.push('NO_HEALTH_GATE');\n  if (!steps.some((s) => s.do === 'switch')) v.push('NO_SWITCH');\n  return v;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkDeployPlan(steps) {\n  // Năm bước: proxy giữ cổng · chạy song song · health check THẬT · đổi đích + reload · chờ rồi mới bỏ bản cũ.\n  const v = [];\n  const at = (pred) => steps.findIndex(pred);\n  const startNew = at((s) => s.do === 'start' && s.name === 'new');\n  const healthNew = at((s) => s.do === 'health' && s.name === 'new' && s.check === 'route');\n  const sw = at((s) => s.do === 'switch');\n  const stopOld = at((s) => s.do === 'stop' && s.name === 'old');\n  if (steps.some((s) => (s.do === 'stop' || s.do === 'restart') && s.name === 'proxy')) v.push('PROXY_RESTARTED');\n  if (startNew < 0) v.push('NO_NEW_CONTAINER');\n  if (stopOld >= 0 && (startNew < 0 || stopOld < startNew)) v.push('OLD_STOPPED_FIRST');\n  if (healthNew < 0 || (sw >= 0 && healthNew > sw)) v.push(steps.some((s) => s.do === 'health' && s.name === 'new') && healthNew < 0 ? 'WEAK_HEALTH_CHECK' : 'NO_HEALTH_GATE');\n  if (sw < 0) v.push('NO_SWITCH');\n  if (sw >= 0 && stopOld > sw) {\n    const waited = steps.slice(sw + 1, stopOld).filter((s) => s.do === 'wait').reduce((a, s) => a + s.ms, 0);\n    if (waited < 1000) v.push('NO_DRAIN_WAIT');\n  }\n  return v;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1) The proxy holds the public port permanently; (2) start the new version alongside the old one; (3) health-check it through a real route until truly ready; (4) switch the target and reload; (5) wait, then drop the old one with the grace period of 17.3. Step 5 is exactly where method 3 let its 502 through.</p>",
+      "solutionExplanationHtmlVi": "<p>(1) Proxy giữ cổng công khai vĩnh viễn; (2) chạy bản mới song song bản cũ; (3) kiểm health qua một route thật tới khi thật sự sẵn sàng; (4) đổi đích và reload; (5) chờ, rồi bỏ bản cũ với thời gian ân hạn của 17.3. Bước 5 chính là chỗ cách 3 để lọt cái 502.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Method 4: proxy, health gate, drain wait",
+              "vi": "Cách 4: proxy, cổng health, chờ xả"
+            },
+            "goi": "checkDeployPlan([{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"route\"},{\"do\":\"switch\"},{\"do\":\"wait\",\"ms\":1000},{\"do\":\"stop\",\"name\":\"old\"}])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Method 1: stop-then-start",
+              "vi": "Cách 1: stop-rồi-start"
+            },
+            "goi": "checkDeployPlan([{\"do\":\"stop\",\"name\":\"old\"},{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"route\"}])",
+            "mongDoi": [
+              "OLD_STOPPED_FIRST",
+              "NO_SWITCH"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkDeployPlan([{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"route\"},{\"do\":\"switch\"},{\"do\":\"stop\",\"name\":\"old\"}])",
+            "mongDoi": [
+              "NO_DRAIN_WAIT"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkDeployPlan([{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"docker-ps\"},{\"do\":\"switch\"},{\"do\":\"wait\",\"ms\":400},{\"do\":\"wait\",\"ms\":700},{\"do\":\"stop\",\"name\":\"old\"},{\"do\":\"restart\",\"name\":\"proxy\"}])",
+            "mongDoi": [
+              "PROXY_RESTARTED",
+              "WEAK_HEALTH_CHECK"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkDeployPlan([{\"do\":\"start\",\"name\":\"new\"},{\"do\":\"switch\"},{\"do\":\"health\",\"name\":\"new\",\"check\":\"route\"},{\"do\":\"wait\",\"ms\":2000},{\"do\":\"stop\",\"name\":\"old\"}])",
+            "mongDoi": [
+              "NO_HEALTH_GATE"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking health AFTER the switch: it gates nothing — users already hit the new version.|||Kiểm health SAU khi switch: không chặn được gì — người dùng đã chạm bản mới."
+        },
+        {
+          "loi": "docker ps | grep green as the gate: Up while every request still returns 502.|||docker ps | grep green làm cổng: Up trong khi mọi request vẫn trả 502."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "health gate",
+          "vi": "cổng health check",
+          "giaiThich": "the switch happens only after the new version answers"
+        }
+      ]
+    }
+  ]
+}

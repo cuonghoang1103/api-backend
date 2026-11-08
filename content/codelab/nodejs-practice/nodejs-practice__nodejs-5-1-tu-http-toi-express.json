@@ -1,0 +1,962 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-5-1-tu-http-toi-express",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-5-1-tu-http-toi-express"
+  },
+  "exercises": [
+    {
+      "title": "5.1 · What Express put on the wire",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Express"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the lesson’s <code>curl -i</code> outputs. Each answer was checked against express@5 with a real HTTP request.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu về output <code>curl -i</code> của bài. Mỗi đáp án đã được kiểm với express@5 bằng request HTTP thật.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the Content-Type line of each curl -i output in the lesson.|||Nhìn dòng Content-Type của từng output curl -i trong bài.",
+        "Which of these methods actually ends the response?|||Trong các hàm này, hàm nào thật sự kết thúc phản hồi?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1 · What Express put on the wire\n\nAnswer in the answer panel (no code needed).\n\n1. res.send('xin chao') answers with which Content-Type?res.send('xin chao') trả về Content-Type nào?\n2. A handler does res.status(201) and nothing else. The client…Một handler chỉ làm res.status(201) và không gì nữa. Client…\n3. res.json({ title: 'x', draft: undefined, at: new Date(0) }) sends…res.json({ title: 'x', draft: undefined, at: new Date(0) }) gửi…\n4. A request to a route that does not exist, with no 404 handler of your own, gets…Request tới một route không tồn tại, khi bạn chưa có handler 404 riêng, nhận…\n5. Express 4 vs Express 5: which difference does the lesson say matters now?Express 4 và Express 5: khác biệt nào bài nói là quan trọng ngay?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1 · What Express put on the wire — answer key\n\n1. res.send('xin chao') answers with which Content-Type?res.send('xin chao') trả về Content-Type nào?\n   Answer: c) text/html; charset=utf-8\n   send() guesses from the argument: a string becomes HTML. A frontend calling await r.json() on it throws — for an API, use res.json() everywhere.VI: send() đoán theo đối số: chuỗi thành HTML. Frontend gọi await r.json() trên đó sẽ ném lỗi — với API, dùng res.json() ở mọi nơi.\n\n2. A handler does res.status(201) and nothing else. The client…Một handler chỉ làm res.status(201) và không gì nữa. Client…\n   Answer: d) waits — status() only sets the code, it does not send\n   Chain it: res.status(201).json(…). res.sendStatus(201) is a different function that sets the code AND sends “Created”.VI: Nối tiếp: res.status(201).json(…). res.sendStatus(201) là hàm khác, đặt mã VÀ gửi “Created”.\n\n3. res.json({ title: 'x', draft: undefined, at: new Date(0) }) sends…res.json({ title: 'x', draft: undefined, at: new Date(0) }) gửi…\n   Answer: c) {\"title\":\"x\",\"at\":\"1970-01-01T00:00:00.000Z\"}\n   res.json uses JSON.stringify: undefined fields disappear and a Date becomes an ISO string.VI: res.json dùng JSON.stringify: trường undefined biến mất và Date thành chuỗi ISO.\n\n4. A request to a route that does not exist, with no 404 handler of your own, gets…Request tới một route không tồn tại, khi bạn chưa có handler 404 riêng, nhận…\n   Answer: c) 404 with an HTML page “Cannot GET /does-not-exist”\n   Express’s default is HTML — the wrong shape for a JSON API. Lesson 5.4 replaces it; every default is replaceable.VI: Mặc định của Express là HTML — sai dạng cho một API JSON. Bài 5.4 thay nó; mọi mặc định đều thay được.\n\n5. Express 4 vs Express 5: which difference does the lesson say matters now?Express 4 và Express 5: khác biệt nào bài nói là quan trọng ngay?\n   Answer: c) v5 forwards async handler errors, and wildcards must be named (*splat)\n   Measured: on Express 4.22.2 a throw after an await never answers (timeout + unhandledRejection); on 5.x the same route returns 500 through the error handler.VI: Đo được: trên Express 4.22.2, throw sau một await không bao giờ trả lời (hết giờ + unhandledRejection); trên 5.x cùng route đó trả 500 qua error handler.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> text/html; charset=utf-8</p><p>send() guesses from the argument: a string becomes HTML. A frontend calling await r.json() on it throws — for an API, use res.json() everywhere.</p><p><i>VI: send() đoán theo đối số: chuỗi thành HTML. Frontend gọi await r.json() trên đó sẽ ném lỗi — với API, dùng res.json() ở mọi nơi.</i></p></li><li><p><b>d)</b> waits — status() only sets the code, it does not send</p><p>Chain it: res.status(201).json(…). res.sendStatus(201) is a different function that sets the code AND sends “Created”.</p><p><i>VI: Nối tiếp: res.status(201).json(…). res.sendStatus(201) là hàm khác, đặt mã VÀ gửi “Created”.</i></p></li><li><p><b>c)</b> {\"title\":\"x\",\"at\":\"1970-01-01T00:00:00.000Z\"}</p><p>res.json uses JSON.stringify: undefined fields disappear and a Date becomes an ISO string.</p><p><i>VI: res.json dùng JSON.stringify: trường undefined biến mất và Date thành chuỗi ISO.</i></p></li><li><p><b>c)</b> 404 with an HTML page “Cannot GET /does-not-exist”</p><p>Express’s default is HTML — the wrong shape for a JSON API. Lesson 5.4 replaces it; every default is replaceable.</p><p><i>VI: Mặc định của Express là HTML — sai dạng cho một API JSON. Bài 5.4 thay nó; mọi mặc định đều thay được.</i></p></li><li><p><b>c)</b> v5 forwards async handler errors, and wildcards must be named (*splat)</p><p>Measured: on Express 4.22.2 a throw after an await never answers (timeout + unhandledRejection); on 5.x the same route returns 500 through the error handler.</p><p><i>VI: Đo được: trên Express 4.22.2, throw sau một await không bao giờ trả lời (hết giờ + unhandledRejection); trên 5.x cùng route đó trả 500 qua error handler.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>res.send('xin chao')</code> answers with which Content-Type?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>res.send('xin chao')</code> trả về Content-Type nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "application/octet-stream"
+              },
+              {
+                "ma": "b",
+                "noiDung": "application/json; charset=utf-8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "text/html; charset=utf-8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "text/plain; charset=utf-8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>send() guesses from the argument: a string becomes HTML. A frontend calling await r.json() on it throws — for an API, use res.json() everywhere.</p><p><i>VI: send() đoán theo đối số: chuỗi thành HTML. Frontend gọi await r.json() trên đó sẽ ném lỗi — với API, dùng res.json() ở mọi nơi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A handler does <code>res.status(201)</code> and nothing else. The client…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một handler chỉ làm <code>res.status(201)</code> và không gì nữa. Client…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "receives 201 Created as text, like sendStatus"
+              },
+              {
+                "ma": "b",
+                "noiDung": "receives 201 with an empty body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "receives 500 because the body is missing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "waits — status() only sets the code, it does not send"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Chain it: res.status(201).json(…). res.sendStatus(201) is a different function that sets the code AND sends “Created”.</p><p><i>VI: Nối tiếp: res.status(201).json(…). res.sendStatus(201) là hàm khác, đặt mã VÀ gửi “Created”.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>res.json({ title: 'x', draft: undefined, at: new Date(0) })</code> sends…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>res.json({ title: 'x', draft: undefined, at: new Date(0) })</code> gửi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"title\":\"x\",\"draft\":undefined,\"at\":\"1970-01-01\"}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"title\":\"x\",\"draft\":null,\"at\":0}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"title\":\"x\",\"at\":\"1970-01-01T00:00:00.000Z\"}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{\"title\":\"x\",\"at\":{}}"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>res.json uses JSON.stringify: undefined fields disappear and a Date becomes an ISO string.</p><p><i>VI: res.json dùng JSON.stringify: trường undefined biến mất và Date thành chuỗi ISO.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A request to a route that does not exist, with no 404 handler of your own, gets…</p><p style=\"opacity:.75;font-size:.92em\"><i>Request tới một route không tồn tại, khi bạn chưa có handler 404 riêng, nhận…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "404 with {\"error\":\"Not Found\"}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 with an empty body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "404 with an HTML page “Cannot GET /does-not-exist”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A closed connection with no response"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Express’s default is HTML — the wrong shape for a JSON API. Lesson 5.4 replaces it; every default is replaceable.</p><p><i>VI: Mặc định của Express là HTML — sai dạng cho một API JSON. Bài 5.4 thay nó; mọi mặc định đều thay được.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Express 4 vs Express 5: which difference does the lesson say matters now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Express 4 và Express 5: khác biệt nào bài nói là quan trọng ngay?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "v5 removed res.json, so every route has to answer with res.send"
+              },
+              {
+                "ma": "b",
+                "noiDung": "v5 only runs on TypeScript projects and refuses plain JavaScript files"
+              },
+              {
+                "ma": "c",
+                "noiDung": "v5 forwards async handler errors, and wildcards must be named (*splat)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "v5 parses JSON bodies by itself, so express.json() is no longer needed"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Measured: on Express 4.22.2 a throw after an await never answers (timeout + unhandledRejection); on 5.x the same route returns 500 through the error handler.</p><p><i>VI: Đo được: trên Express 4.22.2, throw sau một await không bao giờ trả lời (hết giờ + unhandledRejection); trên 5.x cùng route đó trả 500 qua error handler.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using res.send for JSON APIs and wondering why the frontend’s r.json() fails.|||Dùng res.send cho API JSON rồi thắc mắc vì sao r.json() của frontend hỏng."
+        },
+        {
+          "loi": "Confusing res.status(201) with res.sendStatus(201).|||Nhầm res.status(201) với res.sendStatus(201)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "res.json",
+          "vi": "gửi JSON"
+        },
+        {
+          "en": "res.sendStatus",
+          "vi": "đặt mã và gửi chữ của mã"
+        },
+        {
+          "en": "Content-Type",
+          "vi": "kiểu nội dung"
+        }
+      ]
+    },
+    {
+      "title": "5.1 · Your first Express app: four responses",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Express"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>createApp()</code> that builds and returns an Express app (do not call <code>listen</code>) with:</p>\n<table><thead><tr><th>route</th><th>response</th></tr></thead><tbody>\n<tr><td>GET /health</td><td>200, JSON <code>{ \"status\": \"ok\" }</code></td></tr><tr><td>GET /text</td><td>200, the text <code>xin chao</code> sent with <code>res.send</code></td></tr>\n<tr><td>GET /created</td><td>201, JSON <code>{ \"id\": 7 }</code></td></tr><tr><td>DELETE /notes/:id</td><td>204, no body</td></tr></tbody></table><p>The checks look at the status, the <code>Content-Type</code> header and the body — exactly what <code>curl -i</code> showed in the lesson.</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the app from createApp(); never call app.listen().</li>\n  <li>Use res.json for JSON — not res.send(JSON.stringify(…)).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>createApp()</code> dựng và trả về một app Express (không gọi <code>listen</code>) có:</p>\n<table><thead><tr><th>route</th><th>phản hồi</th></tr></thead><tbody>\n<tr><td>GET /health</td><td>200, JSON <code>{ \"status\": \"ok\" }</code></td></tr><tr><td>GET /text</td><td>200, chữ <code>xin chao</code> gửi bằng <code>res.send</code></td></tr>\n<tr><td>GET /created</td><td>201, JSON <code>{ \"id\": 7 }</code></td></tr><tr><td>DELETE /notes/:id</td><td>204, không có thân</td></tr></tbody></table><p>Các kiểm nhìn status, header <code>Content-Type</code> và thân — đúng những gì <code>curl -i</code> cho thấy trong bài.</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả app từ createApp(); không bao giờ gọi app.listen().</li>\n  <li>Dùng res.json cho JSON — không phải res.send(JSON.stringify(…)).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "view(await request(createApp(), \"GET\", \"/health\"))",
+          "output": "{\"status\":200,\"type\":\"application/json; charset=utf-8\",\"text\":\"{\\\"status\\\":\\\"ok\\\"}\"}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const app = express(); app.get(path, (req, res) => …); return app;",
+        "res.status(n) returns res, so .json() or .end() can follow on the same line.|||res.status(n) trả về res, nên .json() hay .end() theo ngay trên cùng dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "/** build the app; the grader calls request(createApp(), method, url) */\nfunction createApp() {\n  const app = express();\n  // Write your solution here\n  app.get('/health', (req, res) => {\n    res.send(JSON.stringify({ status: 'ok' }));\n  });\n  app.get('/created', (req, res) => {\n    res.status(201);\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Reference solution — one line per response, the sender always chained after status()\nfunction createApp() {\n  const app = express();\n  app.get('/health', (req, res) => {\n    res.json({ status: 'ok' });                       // always application/json\n  });\n  app.get('/text', (req, res) => {\n    res.send('xin chao');                             // a string → text/html (the lesson's surprise)\n  });\n  app.get('/created', (req, res) => {\n    res.status(201).json({ id: 7 });                  // status() only sets the code — chain the sender\n  });\n  app.delete('/notes/:id', (req, res) => {\n    res.status(204).end();                            // 204 No Content: no body at all\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nine meaningful lines in the lesson produced status, Content-Type, Content-Length (and an ETag) on the wire. The grader’s <code>request()</code> reads them back the same way curl does: <code>/text</code> really is <code>text/html; charset=utf-8</code>, which is the lesson’s argument for using <code>res.json</code> in an API.</p>",
+      "solutionExplanationHtmlVi": "<p>Chín dòng có nghĩa trong bài tạo ra status, Content-Type, Content-Length (và ETag) trên dây. <code>request()</code> của máy chấm đọc lại chúng như curl: <code>/text</code> thật sự là <code>text/html; charset=utf-8</code>, đó là lập luận của bài để dùng <code>res.json</code> trong API.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "app.js",
+        "tepNap": [
+          "mini-express.js",
+          "app.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /health: JSON, not HTML",
+              "vi": "GET /health: JSON, không phải HTML"
+            },
+            "goi": "view(await request(createApp(), \"GET\", \"/health\"))",
+            "chuanBi": "const view = (r) => ({ status: r.status, type: r.headers[\"content-type\"] || null, text: r.text });",
+            "mongDoi": {
+              "status": 200,
+              "type": "application/json; charset=utf-8",
+              "text": "{\"status\":\"ok\"}"
+            }
+          },
+          {
+            "moTa": {
+              "en": "GET /created: 201 and a body",
+              "vi": "GET /created: 201 và có thân"
+            },
+            "goi": "view(await request(createApp(), \"GET\", \"/created\"))",
+            "chuanBi": "const view = (r) => ({ status: r.status, type: r.headers[\"content-type\"] || null, text: r.text });",
+            "mongDoi": {
+              "status": 201,
+              "type": "application/json; charset=utf-8",
+              "text": "{\"id\":7}"
+            }
+          },
+          {
+            "moTa": {
+              "en": "GET /text: res.send of a string",
+              "vi": "GET /text: res.send một chuỗi"
+            },
+            "goi": "view(await request(createApp(), \"GET\", \"/text\"))",
+            "chuanBi": "const view = (r) => ({ status: r.status, type: r.headers[\"content-type\"] || null, text: r.text });",
+            "mongDoi": {
+              "status": 200,
+              "type": "text/html; charset=utf-8",
+              "text": "xin chao"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "view(await request(createApp(), \"DELETE\", \"/notes/3\"))",
+            "chuanBi": "const view = (r) => ({ status: r.status, type: r.headers[\"content-type\"] || null, text: r.text });",
+            "mongDoi": {
+              "status": 204,
+              "type": null,
+              "text": ""
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[(await request(createApp(), \"GET\", \"/nope\")).status, (await request(createApp(), \"POST\", \"/health\")).status]",
+            "chuanBi": "const view = (r) => ({ status: r.status, type: r.headers[\"content-type\"] || null, text: r.text });",
+            "mongDoi": [
+              404,
+              404
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "res.send(JSON.stringify(obj)) — the body is JSON text but Content-Type says text/html.|||res.send(JSON.stringify(obj)) — thân là chữ JSON nhưng Content-Type ghi text/html."
+        },
+        {
+          "loi": "res.status(201) on its own — the request hangs.|||Chỉ res.status(201) — request treo."
+        },
+        {
+          "loi": "res.status(204).json({}) and expecting {} to arrive — a 204 never has a body.|||res.status(204).json({}) và mong {} tới nơi — 204 không bao giờ có thân."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "app",
+          "vi": "ứng dụng Express"
+        },
+        {
+          "en": "route handler",
+          "vi": "hàm xử lý route"
+        }
+      ]
+    },
+    {
+      "title": "5.1 · Fix the week-one bug: a response without return",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "control flow"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s “mistake everyone makes in week one”:</p><pre>if (!req.query.token) res.status(401).json({ error: 'Unauthorized' });  // no return!\nres.json({ secret: 'private data' });</pre><pre>client sees : {\"error\":\"Unauthorized\"}   [401]\nserver logs : [error handler] ERR_HTTP_HEADERS_SENT</pre><p>The client got the right answer, so the bug hides for months — while the handler keeps running. Here the route also writes to an <code>audit</code> log (think: an expensive database write). Fix <code>createApp(audit)</code> so that a request without a token gets the 401, <b>nothing else runs</b>, and the server logs nothing; a request with <code>?token=…</code> pushes one audit line and gets the secret.</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Keep the route and the error handler; change only what is needed.</li>\n</ul>",
+      "problemHtmlVi": "<p>“Lỗi ai cũng mắc trong tuần đầu” của bài:</p><pre>if (!req.query.token) res.status(401).json({ error: 'Unauthorized' });  // thiếu return!\nres.json({ secret: 'private data' });</pre><pre>client sees : {\"error\":\"Unauthorized\"}   [401]\nserver logs : [error handler] ERR_HTTP_HEADERS_SENT</pre><p>Client nhận đúng câu trả lời nên lỗi trốn được hàng tháng — trong khi handler vẫn chạy tiếp. Ở đây route còn ghi vào nhật ký <code>audit</code> (hãy nghĩ: một lệnh ghi CSDL tốn kém). Sửa <code>createApp(audit)</code> để request không có token nhận 401, <b>không gì khác chạy</b>, và server không log gì; request có <code>?token=…</code> đẩy một dòng audit và nhận secret.</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giữ route và error handler; chỉ sửa chỗ cần sửa.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ status: r.status, body: r.body, audit, serverLog: __log })",
+          "output": "{\"status\":401,\"body\":{\"error\":\"Unauthorized\"},\"audit\":[],\"serverLog\":[]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One word fixes it.|||Một từ là đủ sửa.",
+        "Rule: every res.* that ends a request gets a return in front of it, unless it is the last statement.|||Luật: mọi res.* kết thúc request đều có return phía trước, trừ khi nó là câu lệnh cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "/** the lesson's /secret route, with an audit write — fix it */\nfunction createApp3(audit) {\n  const app = express();\n  app.get('/secret', (req, res) => {\n    if (!req.query.token) res.status(401).json({ error: 'Unauthorized' });\n    audit.push(`read secret with ${req.query.token}`);\n    res.json({ secret: 'private data' });\n  });\n  app.use((err, req, res, next) => {\n    console.log('[error handler]', err.code || err.message);\n    if (!res.headersSent) res.status(500).json({ error: 'Internal' });\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Reference solution — return in front of the response that ends the request\nfunction createApp3(audit) {\n  const app = express();\n  app.get('/secret', (req, res) => {\n    // every res.* that ends the request gets a return in front of it\n    if (!req.query.token) return res.status(401).json({ error: 'Unauthorized' });\n    audit.push(`read secret with ${req.query.token}`);   // the expensive write runs only for accepted requests\n    res.json({ secret: 'private data' });\n  });\n  app.use((err, req, res, next) => {\n    console.log('[error handler]', err.code || err.message);\n    if (!res.headersSent) res.status(500).json({ error: 'Internal' });\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The mini Express raises the same <code>ERR_HTTP_HEADERS_SENT</code> as real Express when a second <code>res.json</code> tries to set headers, and forwards it to your error handler — so the starter reproduces the lesson’s server log line exactly. With <code>return</code>, execution stops at the 401; the audit stays empty for rejected requests.</p>",
+      "solutionExplanationHtmlVi": "<p>Mini Express ném đúng <code>ERR_HTTP_HEADERS_SENT</code> như Express thật khi res.json thứ hai cố đặt header, và chuyển nó tới error handler của bạn — nên code khởi đầu tái hiện đúng dòng log server của bài. Có <code>return</code>, code dừng ở 401; audit rỗng với request bị từ chối.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "app.js",
+        "tepNap": [
+          "mini-express.js",
+          "app.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No token: 401, no audit write, no server error",
+              "vi": "Không token: 401, không ghi audit, server không lỗi"
+            },
+            "goi": "({ status: r.status, body: r.body, audit, serverLog: __log })",
+            "chuanBi": "const audit = []; const r = await request(createApp3(audit), \"GET\", \"/secret\");",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "Unauthorized"
+              },
+              "audit": [],
+              "serverLog": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "With a token: one audit line",
+              "vi": "Có token: một dòng audit"
+            },
+            "goi": "({ status: r.status, body: r.body, audit, serverLog: __log })",
+            "chuanBi": "const audit = []; const r = await request(createApp3(audit), \"GET\", \"/secret?token=abc\");",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "secret": "private data"
+              },
+              "audit": [
+                "read secret with abc"
+              ],
+              "serverLog": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "({ audit, serverLog: __log, last: ok.status })",
+            "chuanBi": "const audit = []; const app = createApp3(audit); for (let i = 0; i < 5; i++) await request(app, \"GET\", \"/secret\"); const ok = await request(app, \"GET\", \"/secret?token=t1\");",
+            "mongDoi": {
+              "audit": [
+                "read secret with t1"
+              ],
+              "serverLog": [],
+              "last": 200
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding an else around the second res.json but leaving the audit write before it.|||Thêm else quanh res.json thứ hai nhưng để lệnh ghi audit nằm trước nó."
+        },
+        {
+          "loi": "Silencing the error handler instead of fixing the route — the write for rejected requests still happens.|||Bịt error handler thay vì sửa route — lệnh ghi cho request bị từ chối vẫn xảy ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "early return",
+          "vi": "trả về sớm"
+        },
+        {
+          "en": "ERR_HTTP_HEADERS_SENT",
+          "vi": "gửi header lần hai"
+        }
+      ]
+    },
+    {
+      "title": "5.1 · Rewrite the raw server of 3.5 in Express",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "body parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 3.5’s four pains — routing by hand, reading the body, repetition, errors — crossed out one at a time. Rebuild that Notes server as <code>createApp(notes)</code>:</p>\n<ul><li><code>express.json()</code> instead of collecting <code>data</code> events;</li><li><code>GET /notes</code> → the array; <code>GET /notes/:id</code> → the note or 404 <code>{ error: \"Not Found\" }</code> (<code>req.params.id</code> is a string!);</li><li><code>POST /notes</code> → 422 <code>{ error: \"title is required\" }</code> if <code>title</code> is missing or blank, else 201 with <code>{ id: notes.length + 1, title: trimmed }</code>, pushed into <code>notes</code>.</li></ul><p>A malformed JSON body must be answered with <b>400</b> by the parser — and the next request must still work. Unknown routes keep Express’s default 404 (lesson 5.4 replaces it).</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Register express.json() before the routes that read req.body.</li>\n  <li>Convert req.params.id with Number(…).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn nỗi khổ của bài 3.5 — định tuyến tay, đọc body, lặp lại, lỗi — được gạch từng cái. Dựng lại server Notes đó thành <code>createApp(notes)</code>:</p>\n<ul><li><code>express.json()</code> thay cho việc gom sự kiện <code>data</code>;</li><li><code>GET /notes</code> → mảng; <code>GET /notes/:id</code> → ghi chú hoặc 404 <code>{ error: \"Not Found\" }</code> (<code>req.params.id</code> là chuỗi!);</li><li><code>POST /notes</code> → 422 <code>{ error: \"title is required\" }</code> nếu thiếu <code>title</code> hoặc toàn khoảng trắng, ngược lại 201 với <code>{ id: notes.length + 1, title: đã trim }</code>, push vào <code>notes</code>.</li></ul><p>Body JSON hỏng phải được parser trả <b>400</b> — và request sau vẫn phải chạy. Route lạ giữ 404 mặc định của Express (bài 5.4 sẽ thay nó).</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đăng ký express.json() trước các route đọc req.body.</li>\n  <li>Đổi req.params.id bằng Number(…).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[s(await request(app, \"GET\", \"/notes/1\")), s(await request(app, \"GET\", \"/notes/2\"))]",
+          "output": "[{\"status\":200,\"body\":{\"id\":1,\"title\":\"First note\"}},{\"status\":404,\"body\":{\"error\":\"Not Found\"}}]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "app.use(express.json()) at the top; then one app.get / app.post per route.|||app.use(express.json()) ở đầu; rồi mỗi route một app.get / app.post.",
+        "notes.find((n) => n.id === Number(req.params.id)) — \"1\" === 1 is false.|||notes.find((n) => n.id === Number(req.params.id)) — \"1\" === 1 là false.",
+        "req.body ?? {} protects the destructuring if a client forgets Content-Type.|||req.body ?? {} bảo vệ phép destructure khi client quên Content-Type."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "/** the Notes server of lesson 3.5, rebuilt with Express */\nfunction createApp4(notes) {\n  const app = express();\n  // Write your solution here\n  app.get('/notes', (req, res) => res.json(notes));\n  app.get('/notes/:id', (req, res) => {\n    const note = notes.find((n) => n.id === req.params.id);\n    if (!note) return res.status(404).json({ error: 'Not Found' });\n    res.json(note);\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Reference solution — the four pains, crossed out\nfunction createApp4(notes) {\n  const app = express();\n  app.use(express.json({ limit: '100kb' }));        // collects the stream, parses it, 400 on broken JSON\n  app.get('/notes', (req, res) => res.json(notes));\n  app.get('/notes/:id', (req, res) => {\n    const note = notes.find((n) => n.id === Number(req.params.id));   // params are strings\n    if (!note) return res.status(404).json({ error: 'Not Found' });\n    res.json(note);\n  });\n  app.post('/notes', (req, res) => {\n    const { title } = req.body ?? {};\n    if (typeof title !== 'string' || title.trim() === '') return res.status(422).json({ error: 'title is required' });\n    const note = { id: notes.length + 1, title: title.trim() };\n    notes.push(note);\n    res.status(201).json(note);\n  });\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Compare with 3.5’s <code>createHandler</code>: no URL splitting, no data events, no try/catch around JSON.parse — <code>express.json()</code> turns a broken body into a 400 before your handler runs, and the process never sees the SyntaxError. The lines that remain are the ones only you can write: which status, which validation.</p>",
+      "solutionExplanationHtmlVi": "<p>So với <code>createHandler</code> của 3.5: không tách URL, không sự kiện data, không try/catch quanh JSON.parse — <code>express.json()</code> biến body hỏng thành 400 trước khi handler của bạn chạy, và tiến trình không bao giờ thấy SyntaxError. Những dòng còn lại là thứ chỉ bạn viết được: status nào, kiểm tra gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "app.js",
+        "tepNap": [
+          "mini-express.js",
+          "app.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET by id: \"1\" must find note 1",
+              "vi": "GET theo id: \"1\" phải tìm thấy ghi chú 1"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/notes/1\")), s(await request(app, \"GET\", \"/notes/2\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });\nconst app = createApp4([{ id: 1, title: \"First note\" }]);",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "id": 1,
+                  "title": "First note"
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Not Found"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "POST then GET (lesson 3.5’s curl session)",
+              "vi": "POST rồi GET (phiên curl của bài 3.5)"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/notes\", { body: { title: \" Second note \" } })), s(await request(app, \"GET\", \"/notes\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });\nconst notes = [{ id: 1, title: \"First note\" }]; const app = createApp4(notes);",
+            "mongDoi": [
+              {
+                "status": 201,
+                "body": {
+                  "id": 2,
+                  "title": "Second note"
+                }
+              },
+              {
+                "status": 200,
+                "body": [
+                  {
+                    "id": 1,
+                    "title": "First note"
+                  },
+                  {
+                    "id": 2,
+                    "title": "Second note"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Broken JSON → 400, then the server still works",
+              "vi": "JSON hỏng → 400, sau đó server vẫn chạy"
+            },
+            "goi": "[(await request(app, \"POST\", \"/notes\", { body: \"{title:}\" })).status, s(await request(app, \"POST\", \"/notes\", { body: { title: \"still alive\" } }))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });\nconst app = createApp4([]);",
+            "mongDoi": [
+              400,
+              {
+                "status": 201,
+                "body": {
+                  "id": 1,
+                  "title": "still alive"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/notes\", { body: { title: \"   \" } })), s(await request(app, \"POST\", \"/notes\", { body: { body: \"no title\" } })), (await request(app, \"GET\", \"/nope\")).status]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });\nconst app = createApp4([]);",
+            "mongDoi": [
+              {
+                "status": 422,
+                "body": {
+                  "error": "title is required"
+                }
+              },
+              {
+                "status": 422,
+                "body": {
+                  "error": "title is required"
+                }
+              },
+              404
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "s(await request(app, \"POST\", \"/notes\", { body: \"{\\\"title\\\":\\\"x\\\"}\", headers: { \"content-type\": \"text/plain\" } }))",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });\nconst app = createApp4([]);",
+            "mongDoi": {
+              "status": 422,
+              "body": {
+                "error": "title is required"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing n.id === req.params.id: every lookup 404s.|||So n.id === req.params.id: mọi lần tra đều 404."
+        },
+        {
+          "loi": "Putting express.json() after the POST route: req.body is undefined there.|||Đặt express.json() sau route POST: req.body ở đó là undefined."
+        },
+        {
+          "loi": "Calling JSON.parse yourself on req.body.|||Tự gọi JSON.parse trên req.body."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "body parser",
+          "vi": "bộ phân tích thân request"
+        },
+        {
+          "en": "route parameter",
+          "vi": "tham số route"
+        }
+      ]
+    },
+    {
+      "title": "5.1 · Express is a thin layer: build res.json on raw http",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Express",
+        "http"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Express is not magic: everything it does, you could write yourself.” Prove it for the response helpers. Write <code>attachHelpers(res)</code> that adds Express-like methods to a raw <code>node:http</code> response (which only has <code>writeHead</code> and <code>end</code>) and returns <code>res</code>:</p>\n<ul><li><code>res.status(code)</code> — remembers the code (start at 200), sends nothing, returns <code>res</code>;</li><li><code>res.json(obj)</code> — <code>Content-Type: application/json; charset=utf-8</code>, <code>Content-Length</code> = UTF-8 bytes of <code>JSON.stringify(obj)</code> (as a string), then <code>writeHead</code> + <code>end</code>;</li><li><code>res.send(body)</code> — a string is sent with <code>Content-Type: text/html; charset=utf-8</code>; <code>null</code>/<code>undefined</code> → an empty body with <b>no</b> Content-Type (Content-Length <code>\"0\"</code>); anything else (object, array, number, boolean) behaves like <code>json</code>;</li><li><code>res.sendStatus(code)</code> — sets the code and sends its text (<code>STATUS_TEXT</code>) as <code>text/plain; charset=utf-8</code>;</li><li>with status <b>204</b>, every sender writes no body and no Content-Type / Content-Length.</li></ul><p>These are exactly the headers express@5 produced in the lesson and in the grader’s checks. <code>STATUS_TEXT</code> and <code>utf8Length</code> are provided.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>“Express không phải phép màu: mọi thứ nó làm, bạn đều tự viết được.” Hãy chứng minh với các hàm phản hồi. Viết <code>attachHelpers(res)</code> thêm các hàm kiểu Express vào một response <code>node:http</code> thuần (chỉ có <code>writeHead</code> và <code>end</code>) và trả về <code>res</code>:</p>\n<ul><li><code>res.status(code)</code> — nhớ mã (bắt đầu là 200), không gửi gì, trả <code>res</code>;</li><li><code>res.json(obj)</code> — <code>Content-Type: application/json; charset=utf-8</code>, <code>Content-Length</code> = số byte UTF-8 của <code>JSON.stringify(obj)</code> (dạng chuỗi), rồi <code>writeHead</code> + <code>end</code>;</li><li><code>res.send(body)</code> — chuỗi được gửi với <code>Content-Type: text/html; charset=utf-8</code>; <code>null</code>/<code>undefined</code> → thân rỗng và <b>không</b> có Content-Type (Content-Length <code>\"0\"</code>); mọi thứ khác (object, mảng, số, boolean) xử lý như <code>json</code>;</li><li><code>res.sendStatus(code)</code> — đặt mã và gửi chữ của mã (<code>STATUS_TEXT</code>) dạng <code>text/plain; charset=utf-8</code>;</li><li>với status <b>204</b>, mọi hàm gửi đều không ghi thân và không Content-Type / Content-Length.</li></ul><p>Đây đúng là các header express@5 tạo ra trong bài và trong các kiểm của máy chấm. Có sẵn <code>STATUS_TEXT</code> và <code>utf8Length</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "res — a raw response with writeHead(status, headers) and end(body)|||res — response thuần có writeHead(status, headers) và end(body)",
+      "outputSpec": "res, with status/json/send/sendStatus|||res, có status/json/send/sendStatus",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "wire((res) => res.json({ status: \"ok\", uptime: 1.23 }))",
+          "output": "{\"status\":200,\"headers\":{\"content-type\":\"application/json; charset=utf-8\",\"content-length\":\"29\"},\"body\":\"{\\\"status\\\":\\\"ok\\\",\\\"uptime\\\":1.23}\",\"ends\":1,\"errors\":[]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write one private finish(type, body) that every sender calls: it handles 204, the two headers, writeHead and end.|||Viết một hàm riêng finish(type, body) mà mọi hàm gửi đều gọi: nó lo 204, hai header, writeHead và end.",
+        "status() must return res — that is the whole trick behind chaining.|||status() phải trả về res — đó là toàn bộ bí quyết của việc nối tiếp.",
+        "After the string and null checks, send can simply return res.json(body).|||Sau khi xét chuỗi và null, send chỉ cần return res.json(body)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const STATUS_TEXT = { 200: 'OK', 201: 'Created', 204: 'No Content', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 422: 'Unprocessable Entity', 500: 'Internal Server Error' };\nfunction utf8Length(str) { let n = 0; for (const ch of str) { const cp = ch.codePointAt(0); n += cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4; } return n; }\n\n/** add status/json/send/sendStatus to a raw node:http response */\nfunction attachHelpers(res) {\n  // Write your solution here — status() sends too early\n  res.status = function (code) { res.writeHead(code); return res; };\n  res.json = function (obj) { res.end(JSON.stringify(obj)); return res; };\n  res.send = function (body) { res.end(String(body)); return res; };\n  res.sendStatus = function (code) { res.writeHead(code); res.end(STATUS_TEXT[code]); return res; };\n  return res;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const STATUS_TEXT = { 200: 'OK', 201: 'Created', 204: 'No Content', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 422: 'Unprocessable Entity', 500: 'Internal Server Error' };\nfunction utf8Length(str) { let n = 0; for (const ch of str) { const cp = ch.codePointAt(0); n += cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4; } return n; }\n\n// Reference solution — status() only remembers; one finish() writes headers and body\nfunction attachHelpers(res) {\n  res.statusCode = 200;\n  res.status = function (code) {\n    res.statusCode = code;                         // only remembers the code — sending is someone else's job\n    return res;                                    // chainable: res.status(201).json(…)\n  };\n  function finish(type, body) {\n    const headers = {};\n    if (res.statusCode === 204) {\n      body = '';                                   // 204 never carries a body or content headers\n    } else {\n      if (type) headers['Content-Type'] = type;\n      headers['Content-Length'] = String(utf8Length(body));   // bytes, as a header string\n    }\n    res.writeHead(res.statusCode, headers);\n    res.end(body);\n    return res;\n  }\n  res.json = function (obj) {\n    return finish('application/json; charset=utf-8', JSON.stringify(obj) ?? '');\n  };\n  res.send = function (body) {\n    if (body === null || body === undefined) return finish(null, '');           // nothing to send, nothing to guess\n    if (typeof body === 'string') return finish('text/html; charset=utf-8', body);   // a string is guessed to be HTML\n    return res.json(body);                                                       // objects, arrays, numbers, booleans\n  };\n  res.sendStatus = function (code) {\n    res.statusCode = code;\n    return finish('text/plain; charset=utf-8', STATUS_TEXT[code] || String(code));\n  };\n  return res;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is roughly what <code>express/lib/response.js</code> does: <code>status</code> stores, <code>json</code> stringifies and delegates to <code>send</code>, <code>send</code> picks a Content-Type and computes Content-Length, and the 204 branch strips the body. Express adds ETag, HEAD handling and charset negotiation on top — but there is no magic underneath, only <code>writeHead</code> and <code>end</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây đại khái là việc <code>express/lib/response.js</code> làm: <code>status</code> cất mã, <code>json</code> stringify rồi giao cho <code>send</code>, <code>send</code> chọn Content-Type và tính Content-Length, và nhánh 204 bỏ thân. Express thêm ETag, xử lý HEAD và thương lượng charset ở trên — nhưng bên dưới không có phép màu nào, chỉ <code>writeHead</code> và <code>end</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "res.json: the lesson’s /health (Content-Length 29)",
+              "vi": "res.json: /health của bài (Content-Length 29)"
+            },
+            "goi": "wire((res) => res.json({ status: \"ok\", uptime: 1.23 }))",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-8",
+                "content-length": "29"
+              },
+              "body": "{\"status\":\"ok\",\"uptime\":1.23}",
+              "ends": 1,
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "status() chains, sends once",
+              "vi": "status() nối tiếp, gửi một lần"
+            },
+            "goi": "wire((res) => res.status(201).json({ id: 7 }))",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": {
+              "status": 201,
+              "headers": {
+                "content-type": "application/json; charset=utf-8",
+                "content-length": "8"
+              },
+              "body": "{\"id\":7}",
+              "ends": 1,
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "send(string) → text/html",
+              "vi": "send(chuỗi) → text/html"
+            },
+            "goi": "wire((res) => res.send(\"xin chao\"))",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "content-type": "text/html; charset=utf-8",
+                "content-length": "8"
+              },
+              "body": "xin chao",
+              "ends": 1,
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "wire((res) => res.sendStatus(201))",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": {
+              "status": 201,
+              "headers": {
+                "content-type": "text/plain; charset=utf-8",
+                "content-length": "7"
+              },
+              "body": "Created",
+              "ends": 1,
+              "errors": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[wire((res) => res.status(204).json({ a: 1 })), wire((res) => res.status(204).send(\"x\"))]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": [
+              {
+                "status": 204,
+                "headers": {},
+                "body": "",
+                "ends": 1,
+                "errors": []
+              },
+              {
+                "status": 204,
+                "headers": {},
+                "body": "",
+                "ends": 1,
+                "errors": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[wire((res) => res.send({ title: \"Ghi chú\" })), wire((res) => res.send(null)), wire((res) => res.status(404).send(42))]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": [
+              {
+                "status": 200,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8",
+                  "content-length": "20"
+                },
+                "body": "{\"title\":\"Ghi chú\"}",
+                "ends": 1,
+                "errors": []
+              },
+              {
+                "status": 200,
+                "headers": {
+                  "content-length": "0"
+                },
+                "body": "",
+                "ends": 1,
+                "errors": []
+              },
+              {
+                "status": 404,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8",
+                  "content-length": "2"
+                },
+                "body": "42",
+                "ends": 1,
+                "errors": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "wire((res) => { const r = res.status(422); r.json({ error: \"title is required\" }); })",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction wire(fn) { const res = attachHelpers(mkRes()); fn(res); return res.rec; }",
+            "mongDoi": {
+              "status": 422,
+              "headers": {
+                "content-type": "application/json; charset=utf-8",
+                "content-length": "29"
+              },
+              "body": "{\"error\":\"title is required\"}",
+              "ends": 1,
+              "errors": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "status() calling writeHead right away: the later json() then writes headers twice (ERR_HTTP_HEADERS_SENT).|||status() gọi writeHead ngay: json() sau đó ghi header hai lần (ERR_HTTP_HEADERS_SENT)."
+        },
+        {
+          "loi": "Content-Length from body.length: wrong for \"Ghi chú\".|||Content-Length từ body.length: sai với \"Ghi chú\"."
+        },
+        {
+          "loi": "typeof null === \"object\" — send(null) must not become the JSON text \"null\".|||typeof null === \"object\" — send(null) không được thành chữ JSON \"null\"."
+        },
+        {
+          "loi": "send(42) as text/html: Express 5 sends numbers as JSON.|||send(42) dạng text/html: Express 5 gửi số dạng JSON."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "method chaining",
+          "vi": "gọi nối tiếp"
+        },
+        {
+          "en": "thin layer",
+          "vi": "lớp mỏng phủ lên"
+        }
+      ]
+    }
+  ]
+}

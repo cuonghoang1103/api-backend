@@ -1,0 +1,524 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-16-lab-hieu-nang",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-16-lab-hieu-nang"
+  },
+  "exercises": [
+    {
+      "title": "Lab 16 · 1 — GET /courses: 300 courses, computeRating per request, a 20 KB description nobody shows",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson-16.1 exercise as a plan. Put the work in order.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài tập của bài 16.1 thành một kế hoạch. Sắp công việc theo thứ tự.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Measurement surrounds every change.|||Phép đo bao quanh mọi thay đổi.",
+        "The biggest wins remove work.|||Thắng lợi lớn nhất là bỏ bớt việc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 16 · 1 — GET /courses: 300 courses, computeRating per request, a 20 KB description nobody shows\n\nAnswer in the answer panel (no code needed).\n\n1. From “it is slow” to “done”.Từ “nó chậm” tới “xong”.\n2. The five categories, in the order to try them.Năm nhóm, theo thứ tự nên thử.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 16 · 1 — GET /courses: 300 courses, computeRating per request, a 20 KB description nobody shows — answer key\n\n1. From “it is slow” to “done”.Từ “nó chậm” tới “xong”.\n   Answer: m7) Set the finish line: p95 of GET /courses under 300 ms  →  m2) Baseline with autocannon (req/s, p97.5), after a warm-up  →  m4) node --cpu-prof under load, exit with SIGTERM, read the self-time table  →  m5) Do it once: cache the ratings, refreshed when a review arrives  →  m3) Measure again; keep it only if the whole range moved  →  m6) Send less: select only the fields the list renders  →  m1) Measure again and stop when the p95 target is met\n   One fix per lap, measured before and after; the two fixes of 16.1 that apply are “do it once” and “send less”. The finish line is decided before starting, or optimisation never ends.VI: Mỗi vòng một bản sửa, đo trước và sau; hai cách sửa của 16.1 áp dụng được là “làm một lần” và “gửi ít hơn”. Vạch đích quyết định trước khi bắt đầu, không thì tối ưu không bao giờ kết thúc.\n\n2. The five categories, in the order to try them.Năm nhóm, theo thứ tự nên thử.\n   Answer: m1) Do less work (index, cache, fewer fields, fewer queries)  →  m4) Do it once (precompute, pre-serialise, batch)  →  m3) Do it somewhere else (queue, CDN, nginx)  →  m5) Add hardware (cluster, containers) — only when CPU-bound  →  m2) Make it faster (a faster library, a cleverer loop)\n   2.5×–657×, ~2×, off the critical path, linear and paid for, 0.96×–1.35×.VI: 2,5×–657×, ~2×, ra khỏi đường găng, tuyến tính và tốn tiền, 0,96×–1,35×.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One fix per lap, measured before and after; the two fixes of 16.1 that apply are “do it once” and “send less”. The finish line is decided before starting, or optimisation never ends.</p><p><i>VI: Mỗi vòng một bản sửa, đo trước và sau; hai cách sửa của 16.1 áp dụng được là “làm một lần” và “gửi ít hơn”. Vạch đích quyết định trước khi bắt đầu, không thì tối ưu không bao giờ kết thúc.</i></p><p>2.5×–657×, ~2×, off the critical path, linear and paid for, 0.96×–1.35×.</p><p><i>VI: 2,5×–657×, ~2×, ra khỏi đường găng, tuyến tính và tốn tiền, 0,96×–1,35×.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From “it is slow” to “done”.</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ “nó chậm” tới “xong”.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Measure again and stop when the p95 target is met"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Baseline with autocannon (req/s, p97.5), after a warm-up"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Measure again; keep it only if the whole range moved"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "node --cpu-prof under load, exit with SIGTERM, read the self-time table"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Do it once: cache the ratings, refreshed when a review arrives"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Send less: select only the fields the list renders"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Set the finish line: p95 of GET /courses under 300 ms"
+              }
+            ],
+            "dapAn": [
+              "m7",
+              "m2",
+              "m4",
+              "m5",
+              "m3",
+              "m6",
+              "m1"
+            ],
+            "giaiThich": "<p>One fix per lap, measured before and after; the two fixes of 16.1 that apply are “do it once” and “send less”. The finish line is decided before starting, or optimisation never ends.</p><p><i>VI: Mỗi vòng một bản sửa, đo trước và sau; hai cách sửa của 16.1 áp dụng được là “làm một lần” và “gửi ít hơn”. Vạch đích quyết định trước khi bắt đầu, không thì tối ưu không bao giờ kết thúc.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>The five categories, in the order to try them.</p><p style=\"opacity:.75;font-size:.92em\"><i>Năm nhóm, theo thứ tự nên thử.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Do less work (index, cache, fewer fields, fewer queries)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Make it faster (a faster library, a cleverer loop)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Do it somewhere else (queue, CDN, nginx)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Do it once (precompute, pre-serialise, batch)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Add hardware (cluster, containers) — only when CPU-bound"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m3",
+              "m5",
+              "m2"
+            ],
+            "giaiThich": "<p>2.5×–657×, ~2×, off the critical path, linear and paid for, 0.96×–1.35×.</p><p><i>VI: 2,5×–657×, ~2×, ra khỏi đường găng, tuyến tính và tốn tiền, 0,96×–1,35×.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Starting with the faster library.|||Bắt đầu bằng thư viện nhanh hơn."
+        },
+        {
+          "loi": "No finish line: “make it faster” never ends.|||Không có vạch đích: “làm nhanh hơn” không bao giờ xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "finish line",
+          "vi": "vạch đích"
+        }
+      ]
+    },
+    {
+      "title": "Lab 16 · 2 — profileToPlan(profile, rps, proposals): from a .cpuprofile to a ranked plan with predicted req/s",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "profiling",
+        "Amdahl",
+        "planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The route is CPU-bound ((idle) is small), so the time per request falls with every percent of CPU you remove. Combine 16.1 and 16.6. <code>profile.nodes</code> are <code>{ callFrame: { functionName }, hitCount }</code> (empty name = <code>\"(anonymous)\"</code>; add hits per name). Each proposal is <code>{ name, fns, speedup }</code>: it speeds up all the functions in <code>fns</code> by <code>speedup</code> (<code>Infinity</code> = removed). For each proposal compute:</p><ul><li><code>share</code> = hits of its functions ÷ all hits;</li><li><code>saving</code> = share × (1 − 1/speedup);</li><li><code>predictedRps</code> = <code>Math.round(rps / (1 − saving))</code>.</li></ul><p>Return <code>{ name, sharePct, savingPct, predictedRps }</code> (percentages × 100, 1 decimal) sorted by <code>savingPct</code> descending (ties by name A→Z).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Route bị giới hạn bởi CPU ((idle) nhỏ), nên thời gian mỗi request giảm theo mỗi phần trăm CPU bạn bỏ được. Gộp 16.1 và 16.6. <code>profile.nodes</code> là <code>{ callFrame: { functionName }, hitCount }</code> (tên rỗng = <code>\"(anonymous)\"</code>; cộng mẫu theo tên). Mỗi đề xuất là <code>{ name, fns, speedup }</code>: nó tăng tốc mọi hàm trong <code>fns</code> lên <code>speedup</code> lần (<code>Infinity</code> = bỏ hẳn). Với mỗi đề xuất tính:</p><ul><li><code>share</code> = số mẫu của các hàm đó ÷ tổng số mẫu;</li><li><code>saving</code> = share × (1 − 1/speedup);</li><li><code>predictedRps</code> = <code>Math.round(rps / (1 − saving))</code>.</li></ul><p>Trả về <code>{ name, sharePct, savingPct, predictedRps }</code> (phần trăm × 100, 1 chữ số) sắp theo <code>savingPct</code> giảm dần (hoà theo tên A→Z).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "profileToPlan({\"nodes\":[{\"id\":0,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":1180},{\"id\":0,\"callFrame\":{\"functionName\":\"reduce\",\"url\":\"\"},\"hitCount\":420},{\"id\":0,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":610},{\"id\":0,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":300},{\"id\":0,\"callFrame\":{\"functionName\":\"formatDate\",\"url\":\"\"},\"hitCount\":75},{\"id\":0,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":40},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":220},{\"id\":0,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":155}]}, 300, [{\"name\":\"cache ratings (refresh on review)\",\"fns\":[\"computeRating\",\"reduce\"],\"speedup\":Infinity},{\"name\":\"pre-serialise the list\",\"fns\":[\"stringify\"],\"speedup\":Infinity},{\"name\":\"faster date helper\",\"fns\":[\"formatDate\"],\"speedup\":3},{\"name\":\"fast-json-stringify\",\"fns\":[\"stringify\"],\"speedup\":1.35}])",
+          "output": "[{\"name\":\"cache ratings (refresh on review)\",\"sharePct\":60.7,\"savingPct\":60.7,\"predictedRps\":763},{\"name\":\"pre-serialise the list\",\"sharePct\":20.3,\"savingPct\":20.3,\"predictedRps\":377},{\"name\":\"fast-json-stringify\",\"sharePct\":20.3,\"savingPct\":5.3,\"predictedRps\":317},{\"name\":\"faster date helper\",\"sharePct\":2.5,\"savingPct\":1.7,\"predictedRps\":305}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reuse topSelf’s Map of hits per function name.|||Dùng lại Map số mẫu theo tên hàm của topSelf.",
+        "If the request took T and you save s·T, it now takes (1 − s)·T, so throughput is multiplied by 1 / (1 − s).|||Nếu request mất T và bạn tiết kiệm s·T, giờ nó mất (1 − s)·T, nên thông lượng nhân 1 / (1 − s)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rank optimisation proposals from a CPU profile */\nfunction profileToPlan(profile, rps, proposals) {\n  // Write your solution here\n  const total = profile.nodes.reduce((s, n) => s + n.hitCount, 0);\n  return proposals.map((p) => {\n    const node = profile.nodes.find((n) => n.callFrame.functionName === p.fns[0]);\n    const share = node ? node.hitCount / total : 0;\n    return { name: p.name, sharePct: Number((share * 100).toFixed(1)), savingPct: Number((share * 100).toFixed(1)), predictedRps: Math.round(rps * (1 + share)) };\n  });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction profileToPlan(profile, rps, proposals) {\n  // 1) tỉ lệ tự thân của từng hàm từ .cpuprofile (cộng các nút cùng tên)\n  const hits = new Map();\n  let total = 0;\n  for (const n of profile.nodes) {\n    const name = n.callFrame.functionName || '(anonymous)';\n    hits.set(name, (hits.get(name) || 0) + n.hitCount);\n    total += n.hitCount;\n  }\n  // 2) Amdahl cho từng đề xuất ⇒ 3) thông lượng dự đoán (tuyến CPU-bound: thời gian mỗi request giảm theo phần tiết kiệm)\n  return proposals\n    .map((p) => {\n      const share = p.fns.reduce((s, f) => s + (hits.get(f) || 0), 0) / total;   // một đề xuất có thể bỏ nhiều dòng\n      const saving = share * (1 - 1 / p.speedup);\n      return { name: p.name, sharePct: Number((share * 100).toFixed(1)), savingPct: Number((saving * 100).toFixed(1)), predictedRps: Math.round(rps / (1 - saving)) };\n    })\n    .sort((a, b) => b.savingPct - a.savingPct || (a.name < b.name ? -1 : 1));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The plan ranks “do it once” far above “make it faster”: caching the ratings removes about 61% of the CPU and predicts ~2.5× the req/s, while the faster serialiser is worth about 5%. The prediction holds only for a CPU-bound route — on the 16.2 route (97% database) the same arithmetic says the JavaScript is not worth touching.</p>",
+      "solutionExplanationHtmlVi": "<p>Kế hoạch xếp “làm một lần” cao hơn hẳn “làm nhanh hơn”: cache điểm đánh giá bỏ được khoảng 61% CPU và dự đoán ~2,5 lần req/s, còn bộ tuần tự hoá nhanh hơn chỉ đáng khoảng 5%. Dự đoán chỉ đúng với route bị giới hạn bởi CPU — trên route 16.2 (97% CSDL) cùng phép tính nói rằng JavaScript không đáng đụng tới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /courses at 300 req/s, four proposals",
+              "vi": "GET /courses ở 300 req/s, bốn đề xuất"
+            },
+            "goi": "profileToPlan({\"nodes\":[{\"id\":0,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":1180},{\"id\":0,\"callFrame\":{\"functionName\":\"reduce\",\"url\":\"\"},\"hitCount\":420},{\"id\":0,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":610},{\"id\":0,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":300},{\"id\":0,\"callFrame\":{\"functionName\":\"formatDate\",\"url\":\"\"},\"hitCount\":75},{\"id\":0,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":40},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":220},{\"id\":0,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":155}]}, 300, [{\"name\":\"cache ratings (refresh on review)\",\"fns\":[\"computeRating\",\"reduce\"],\"speedup\":Infinity},{\"name\":\"pre-serialise the list\",\"fns\":[\"stringify\"],\"speedup\":Infinity},{\"name\":\"faster date helper\",\"fns\":[\"formatDate\"],\"speedup\":3},{\"name\":\"fast-json-stringify\",\"fns\":[\"stringify\"],\"speedup\":1.35}])",
+            "mongDoi": [
+              {
+                "name": "cache ratings (refresh on review)",
+                "sharePct": 60.7,
+                "savingPct": 60.7,
+                "predictedRps": 763
+              },
+              {
+                "name": "pre-serialise the list",
+                "sharePct": 20.3,
+                "savingPct": 20.3,
+                "predictedRps": 377
+              },
+              {
+                "name": "fast-json-stringify",
+                "sharePct": 20.3,
+                "savingPct": 5.3,
+                "predictedRps": 317
+              },
+              {
+                "name": "faster date helper",
+                "sharePct": 2.5,
+                "savingPct": 1.7,
+                "predictedRps": 305
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Half the CPU, 2× faster",
+              "vi": "Một nửa CPU, nhanh gấp 2"
+            },
+            "goi": "profileToPlan({\"nodes\":[{\"id\":0,\"callFrame\":{\"functionName\":\"a\",\"url\":\"\"},\"hitCount\":50},{\"id\":0,\"callFrame\":{\"functionName\":\"b\",\"url\":\"\"},\"hitCount\":50}]}, 100, [{\"name\":\"remove a\",\"fns\":[\"a\"],\"speedup\":2}])",
+            "mongDoi": [
+              {
+                "name": "remove a",
+                "sharePct": 50,
+                "savingPct": 25,
+                "predictedRps": 133
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "profileToPlan({\"nodes\":[{\"id\":0,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":1180},{\"id\":0,\"callFrame\":{\"functionName\":\"reduce\",\"url\":\"\"},\"hitCount\":420},{\"id\":0,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":610},{\"id\":0,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":300},{\"id\":0,\"callFrame\":{\"functionName\":\"formatDate\",\"url\":\"\"},\"hitCount\":75},{\"id\":0,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":40},{\"id\":0,\"callFrame\":{\"functionName\":\"computeRating\",\"url\":\"\"},\"hitCount\":220},{\"id\":0,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":155}]}, 1200, [{\"name\":\"z\",\"fns\":[\"(anonymous)\"],\"speedup\":5},{\"name\":\"gc\",\"fns\":[\"(garbage collector)\"],\"speedup\":1.5},{\"name\":\"none\",\"fns\":[\"missing\"],\"speedup\":9}])",
+            "mongDoi": [
+              {
+                "name": "z",
+                "sharePct": 5.2,
+                "savingPct": 4.1,
+                "predictedRps": 1252
+              },
+              {
+                "name": "gc",
+                "sharePct": 10,
+                "savingPct": 3.3,
+                "predictedRps": 1241
+              },
+              {
+                "name": "none",
+                "sharePct": 0,
+                "savingPct": 0,
+                "predictedRps": 1200
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "profileToPlan({\"nodes\":[{\"id\":0,\"callFrame\":{\"functionName\":\"x\",\"url\":\"\"},\"hitCount\":10},{\"id\":0,\"callFrame\":{\"functionName\":\"y\",\"url\":\"\"},\"hitCount\":10},{\"id\":0,\"callFrame\":{\"functionName\":\"x\",\"url\":\"\"},\"hitCount\":20}]}, 50, [{\"name\":\"b\",\"fns\":[\"y\"],\"speedup\":Infinity},{\"name\":\"a\",\"fns\":[\"y\"],\"speedup\":Infinity}])",
+            "mongDoi": [
+              {
+                "name": "a",
+                "sharePct": 25,
+                "savingPct": 25,
+                "predictedRps": 67
+              },
+              {
+                "name": "b",
+                "sharePct": 25,
+                "savingPct": 25,
+                "predictedRps": 67
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting computeRating once: it appears in two nodes (two call paths), and the second one holds a sixth of its samples.|||Đếm computeRating một lần: nó xuất hiện ở hai nút (hai đường gọi), và nút thứ hai giữ một phần sáu số mẫu của nó."
+        },
+        {
+          "loi": "Predicting rps × (1 + saving): removing half the work doubles throughput, it does not add 50%.|||Dự đoán rps × (1 + saving): bỏ một nửa công việc làm thông lượng gấp đôi, không phải cộng 50%."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "predicted throughput",
+          "vi": "thông lượng dự đoán"
+        }
+      ]
+    },
+    {
+      "title": "Lab 16 · 3 — createTtlCache({ max, ttlMs, now }): a cap for memory, a TTL for freshness, one load per key",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "caching",
+        "promises",
+        "memory"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Cache the ratings of Lab 16 · 2 in process, safely. <code>createTtlCache({ max, ttlMs, now })</code> returns <code>{ getOrLoad, stats, keys }</code>:</p><ul><li><code>async getOrLoad(key, loader)</code> — a fresh entry (stored less than <code>ttlMs</code> ago: <code>exp = storedAt + ttlMs</code>, fresh while <code>exp &gt; now()</code>) is a <b>hit</b>: move it to the newest position and return its value. Otherwise it is a <b>miss</b> (an expired entry is removed and counted in <code>expired</code>); if a load for this key is already in flight, return the same promise; else call <code>loader(key)</code> once (count in <code>loads</code>), store the result and return it. A rejected load is not stored and the next call loads again;</li><li>storing a new key into a full cache (<code>max</code> entries) first evicts the least recently used key (count in <code>evictions</code>);</li><li><code>stats()</code> → <code>{ hits, misses, evictions, expired, loads, size }</code>; <code>keys()</code> → keys from least to most recently used.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Concurrent misses for the same key call the loader once.</li>\n  <li>Never cache an error.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache điểm đánh giá của Lab 16 · 2 ngay trong tiến trình, một cách an toàn. <code>createTtlCache({ max, ttlMs, now })</code> trả về <code>{ getOrLoad, stats, keys }</code>:</p><ul><li><code>async getOrLoad(key, loader)</code> — mục còn tươi (lưu chưa tới <code>ttlMs</code>: <code>exp = lúcLưu + ttlMs</code>, tươi khi <code>exp &gt; now()</code>) là <b>trúng</b>: đưa về vị trí mới nhất và trả giá trị. Không thì là <b>trượt</b> (mục hết hạn bị xoá và đếm vào <code>expired</code>); nếu đang có một lần nạp khoá này dở dang thì trả về đúng promise đó; không thì gọi <code>loader(key)</code> một lần (đếm vào <code>loads</code>), lưu kết quả rồi trả về. Lần nạp bị reject thì không lưu và lần gọi sau nạp lại;</li><li>lưu khoá mới vào cache đầy (<code>max</code> mục) thì trước hết đuổi khoá ít dùng gần đây nhất (đếm vào <code>evictions</code>);</li><li><code>stats()</code> → <code>{ hits, misses, evictions, expired, loads, size }</code>; <code>keys()</code> → các khoá từ ít tới nhiều dùng gần đây.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhiều lần trượt đồng thời cho cùng khoá chỉ gọi loader một lần.</li>\n  <li>Không bao giờ cache lỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ same: vs.every((v) => v === vs[0]), dbCalls, stats: c.stats() })",
+          "output": "{\"same\":true,\"dbCalls\":1,\"stats\":{\"hits\":0,\"misses\":50,\"evictions\":0,\"expired\":0,\"loads\":1,\"size\":1}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Store { v, exp } per key in one Map; a second Map holds the in-flight promises.|||Lưu { v, exp } mỗi khoá trong một Map; Map thứ hai giữ các promise đang nạp.",
+        "Delete the in-flight entry in both the success and the failure branch, then store only on success.|||Xoá mục đang nạp ở cả nhánh thành công lẫn thất bại, rồi chỉ lưu khi thành công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** bounded LRU + TTL cache with one load per key */\nfunction createTtlCache({ max, ttlMs, now }) {\n  // Write your solution here\n  const m = new Map();\n  const stats = { hits: 0, misses: 0, evictions: 0, expired: 0, loads: 0 };\n  async function getOrLoad(k, loader) {\n    if (m.has(k)) { stats.hits++; return m.get(k); }\n    stats.misses++; stats.loads++;\n    const v = await loader(k);\n    m.set(k, v);\n    return v;\n  }\n  return { getOrLoad, stats: () => ({ ...stats, size: m.size }), keys: () => [...m.keys()] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createTtlCache({ max, ttlMs, now }) {\n  const m = new Map();                       // key → { v, exp } — thứ tự chèn ⇒ đầu Map là mục ít dùng gần đây nhất\n  const inflight = new Map();                // key → Promise đang nạp (gộp lời gọi trùng)\n  const stats = { hits: 0, misses: 0, evictions: 0, expired: 0, loads: 0 };\n  function getFresh(k) {\n    const e = m.get(k);\n    if (!e) return undefined;\n    if (e.exp <= now()) { m.delete(k); stats.expired++; return undefined; }   // TTL bảo vệ độ tươi\n    m.delete(k); m.set(k, e);                // LRU: trúng ⇒ làm mới vị trí\n    return e;\n  }\n  function set(k, v) {\n    if (m.has(k)) m.delete(k);\n    else if (m.size >= max) { m.delete(m.keys().next().value); stats.evictions++; }   // trần bảo vệ bộ nhớ\n    m.set(k, { v, exp: now() + ttlMs });\n  }\n  async function getOrLoad(k, loader) {\n    const e = getFresh(k);\n    if (e) { stats.hits++; return e.v; }\n    stats.misses++;\n    if (inflight.has(k)) return inflight.get(k);           // đang có người nạp ⇒ chờ chung, không gọi CSDL lần nữa\n    stats.loads++;\n    const p = Promise.resolve().then(() => loader(k)).then(\n      (v) => { inflight.delete(k); set(k, v); return v; },\n      (err) => { inflight.delete(k); throw err; },           // lỗi không được cache\n    );\n    inflight.set(k, p);\n    return p;\n  }\n  return { getOrLoad, stats: () => ({ ...stats, size: m.size }), keys: () => [...m.keys()] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A size cap protects memory (leak 1 of 16.5), a TTL protects freshness, and the in-flight map makes “do it once” true even under concurrency. In one process this is the cheap version of chapter 12’s Redis cache; the moment a second process appears (16.4), the copies disagree and the cache belongs in Redis.</p>",
+      "solutionExplanationHtmlVi": "<p>Trần kích thước bảo vệ bộ nhớ (rò 1 của 16.5), TTL bảo vệ độ tươi, và map đang nạp làm “làm một lần” đúng cả khi đồng thời. Trong một tiến trình đây là phiên bản rẻ của cache Redis chương 12; ngay khi có tiến trình thứ hai (16.4), các bản sao lệch nhau và cache thuộc về Redis.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "50 concurrent requests for a cold key",
+              "vi": "50 request đồng thời cho một khoá nguội"
+            },
+            "goi": "({ same: vs.every((v) => v === vs[0]), dbCalls, stats: c.stats() })",
+            "chuanBi": "let t = 0; const now = () => t; let dbCalls = 0; const load = (k) => new Promise((r) => setTimeout(() => { dbCalls++; r({ id: k, rating: 4.5 }); }, 5)); const c = createTtlCache({ max: 100, ttlMs: 10000, now }); const vs = await Promise.all(Array.from({ length: 50 }, () => c.getOrLoad(\"course:42\", load)));",
+            "mongDoi": {
+              "same": true,
+              "dbCalls": 1,
+              "stats": {
+                "hits": 0,
+                "misses": 50,
+                "evictions": 0,
+                "expired": 0,
+                "loads": 1,
+                "size": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "TTL: fresh at 9,999 ms, expired at 10,000 ms",
+              "vi": "TTL: còn tươi ở 9.999 ms, hết hạn ở 10.000 ms"
+            },
+            "goi": "({ dbCalls, stats: c.stats() })",
+            "chuanBi": "let t = 0; const now = () => t; let dbCalls = 0; const load = (k) => new Promise((r) => setTimeout(() => { dbCalls++; r({ id: k, rating: 4.5 }); }, 5)); const c = createTtlCache({ max: 100, ttlMs: 10000, now }); await c.getOrLoad(\"a\", load); t = 9999; await c.getOrLoad(\"a\", load); t = 10000; await c.getOrLoad(\"a\", load);",
+            "mongDoi": {
+              "dbCalls": 2,
+              "stats": {
+                "hits": 1,
+                "misses": 2,
+                "evictions": 0,
+                "expired": 1,
+                "loads": 2,
+                "size": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "({ keys: c.keys(), stats: c.stats() })",
+            "chuanBi": "let t = 0; const now = () => t; let dbCalls = 0; const load = (k) => new Promise((r) => setTimeout(() => { dbCalls++; r({ id: k, rating: 4.5 }); }, 5)); const c = createTtlCache({ max: 2, ttlMs: 60000, now }); await c.getOrLoad(\"a\", load); await c.getOrLoad(\"b\", load); await c.getOrLoad(\"a\", load); await c.getOrLoad(\"c\", load);",
+            "mongDoi": {
+              "keys": [
+                "a",
+                "c"
+              ],
+              "stats": {
+                "hits": 1,
+                "misses": 3,
+                "evictions": 1,
+                "expired": 0,
+                "loads": 3,
+                "size": 2
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "({ err, v, dbCalls, stats: c.stats() })",
+            "chuanBi": "let t = 0; const now = () => t; let dbCalls = 0; const load = (k) => new Promise((r) => setTimeout(() => { dbCalls++; r({ id: k, rating: 4.5 }); }, 5)); const c = createTtlCache({ max: 10, ttlMs: 60000, now }); let fail = true; const flaky = async (k) => { dbCalls++; if (fail) throw new Error(\"ETIMEDOUT\"); return k; }; let err = \"\"; try { await c.getOrLoad(\"x\", flaky); } catch (e) { err = e.message; } fail = false; const v = await c.getOrLoad(\"x\", flaky);",
+            "mongDoi": {
+              "err": "ETIMEDOUT",
+              "v": "x",
+              "dbCalls": 2,
+              "stats": {
+                "hits": 0,
+                "misses": 2,
+                "evictions": 0,
+                "expired": 0,
+                "loads": 2,
+                "size": 1
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "({ keys: c.keys(), stats: c.stats() })",
+            "chuanBi": "let t = 0; const now = () => t; let dbCalls = 0; const load = (k) => new Promise((r) => setTimeout(() => { dbCalls++; r({ id: k, rating: 4.5 }); }, 5)); const c = createTtlCache({ max: 3, ttlMs: 1000, now }); for (const k of [\"a\", \"b\", \"c\", \"d\", \"e\"]) await c.getOrLoad(k, load); t = 5000; await c.getOrLoad(\"e\", load);",
+            "mongDoi": {
+              "keys": [
+                "c",
+                "d",
+                "e"
+              ],
+              "stats": {
+                "hits": 0,
+                "misses": 6,
+                "evictions": 2,
+                "expired": 1,
+                "loads": 6,
+                "size": 3
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "No in-flight map: 50 concurrent requests for a cold key run 50 identical queries — the cache stampede.|||Không có map đang nạp: 50 request đồng thời cho một khoá nguội chạy 50 truy vấn giống hệt — cơn giẫm đạp cache."
+        },
+        {
+          "loi": "Caching the rejected promise: one database blip becomes an error served to everyone until the TTL ends.|||Cache luôn promise bị reject: một lần CSDL trục trặc thành lỗi trả cho mọi người tới khi hết TTL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache stampede",
+          "vi": "giẫm đạp cache",
+          "giaiThich": "many misses for one key at once"
+        },
+        {
+          "en": "single-flight",
+          "vi": "gộp lời gọi trùng"
+        },
+        {
+          "en": "TTL",
+          "vi": "thời gian sống"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-2-lab-express-tasks-api",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-2-2-middleware"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2 · warm-up — plan the middleware chain",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "middleware order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Plan app.js before writing it: the order decides what works.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lên kế hoạch app.js trước khi viết: thứ tự quyết định cái gì chạy được.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who must see everything? Who must come last?|||Ai phải thấy mọi thứ? Ai phải đứng cuối?",
+        "A guard can live on a route, not only on the app.|||Lệnh chặn có thể nằm trên một route, không chỉ trên app."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2 · warm-up — plan the middleware chain\n\nAnswer in the answer panel (no code needed).\n\n1. Order the lines of the lab's app.js.Sắp các dòng app.js của lab.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2 · warm-up — plan the middleware chain — answer key\n\n1. Order the lines of the lab's app.js.Sắp các dòng app.js của lab.\n   Answer: m3) app.use(logger) — logs every request when it finishes  →  m2) app.use(express.json())  →  m4) app.use('/api/tasks', tasksRouter) — GET routes open, writes guarded by requireApiKey inside the router  →  m1) app.use(notFound) — JSON 404  →  m5) app.use(errorHandler) — four parameters\n   Logger first so it sees every request (even 404s and errors); parser before the router; the guard is scoped to the write routes inside the router; 404 after all routes; the error handler last.VI: Logger trước để thấy mọi request (kể cả 404 và lỗi); bộ đọc trước router; lệnh chặn giới hạn cho các route ghi bên trong router; 404 sau mọi route; error handler cuối cùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Logger first so it sees every request (even 404s and errors); parser before the router; the guard is scoped to the write routes inside the router; 404 after all routes; the error handler last.</p><p><i>VI: Logger trước để thấy mọi request (kể cả 404 và lỗi); bộ đọc trước router; lệnh chặn giới hạn cho các route ghi bên trong router; 404 sau mọi route; error handler cuối cùng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the lines of the lab's app.js.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các dòng app.js của lab.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "<code>app.use(notFound)</code> — JSON 404"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "<code>app.use(express.json())</code>"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "<code>app.use(logger)</code> — logs every request when it finishes"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "<code>app.use('/api/tasks', tasksRouter)</code> — GET routes open, writes guarded by <code>requireApiKey</code> inside the router"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "<code>app.use(errorHandler)</code> — four parameters"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m4",
+              "m1",
+              "m5"
+            ],
+            "giaiThich": "<p>Logger first so it sees every request (even 404s and errors); parser before the router; the guard is scoped to the write routes inside the router; 404 after all routes; the error handler last.</p><p><i>VI: Logger trước để thấy mọi request (kể cả 404 và lỗi); bộ đọc trước router; lệnh chặn giới hạn cho các route ghi bên trong router; 404 sau mọi route; error handler cuối cùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Guarding GET routes too.|||Chặn cả route GET."
+        },
+        {
+          "loi": "Logger after the router.|||Logger sau router."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scoped guard",
+          "vi": "lệnh chặn theo phạm vi"
+        }
+      ]
+    },
+    {
+      "title": "Lab 2 — Tasks API with Express routing and middleware",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 30,
+      "concepts": [
+        "Express",
+        "middleware",
+        "validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<h1>Lab 2 — Tasks API (Express)</h1>\n<p class=\"bi-phu\">Express 4 · Router · middleware · 80 minutes · 10 marks</p>\n<h2>1. Overview</h2>\n<p>A small task tracker for a team. The data lives in the given asynchronous <code>tasksRepo</code> (it waits like a database and can fail). Write the Express app in <code>answer.js</code> below the given part and export <code>{ app, tasksRepo }</code>. The grader calls <code>app.inject(…)</code>. All answers are JSON.</p>\n<h3>General requirements</h3>\n<ul>\n  <li>One <code>express.Router()</code> mounted at <code>/api/tasks</code>.</li>\n  <li>Write routes (POST, PATCH) require header <code>x-api-key</code> equal to <code>process.env.API_KEY</code> → else 401 <code>{ \"error\": \"API key required\" }</code> (missing) / <code>{ \"error\": \"Invalid API key\" }</code> (wrong). GET routes are open.</li>\n  <li>Every async route is wrapped so repository errors reach the error handler.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answer.js   ← the given repository + your app\nlib/        ← provided (Express stand-in)</pre>\n<h2>3. Data model</h2>\n<p><b>Task</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>Number</td><td>given by the repository</td></tr><tr><td><code>title</code></td><td>String</td><td>3–80 characters after trim</td></tr><tr><td><code>status</code></td><td>String</td><td>'todo' | 'doing' | 'done' (new tasks start as 'todo')</td></tr><tr><td><code>priority</code></td><td>Number</td><td>integer 1–3, default 2</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>id 1 · Set up Express · done · priority 2\nid 2 · Write the router · doing · priority 1\nid 3 · Add middleware · todo · priority 3</pre>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. List with filters <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>GET /api/tasks</code> → 200 all tasks (repository order).</li>\n  <li><code>?status=todo,doing</code> — one or several statuses, comma-separated; an unknown status → 400 <code>{ \"error\": \"Invalid status\" }</code>.</li>\n  <li><code>?sort=priority</code> (ascending) or <code>?sort=-priority</code>; another value → 400 <code>{ \"error\": \"Invalid sort\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Read one <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>GET /api/tasks/:id</code> → 200 · id not a positive integer → 400 <code>{ \"error\": \"Invalid id\" }</code> · unknown → 404 <code>{ \"error\": \"Task not found\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Create (guarded, validated) <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>POST /api/tasks</code> with the API key; title 3–80 characters → else 400 <code>{ \"error\": \"title must be 3-80 characters\" }</code>; priority (optional) integer 1–3 → else 400 <code>{ \"error\": \"priority must be 1, 2 or 3\" }</code>.</li>\n  <li>201 + the task (<code>status: 'todo'</code>, priority default 2). Fields other than title/priority are ignored.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Move a task forward <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>PATCH /api/tasks/:id</code> with the API key and <code>{ \"status\": \"…\" }</code>: only the NEXT status is allowed (todo → doing → done) → else 409 <code>{ \"error\": \"Cannot move from X to Y\" }</code>; an unknown status → 400 <code>{ \"error\": \"Invalid status\" }</code>.</li>\n  <li>200 + the updated task; 400 / 404 for the id as in feature 2.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Logger, 404 and errors <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A logger prints one line per request when it finishes: <code>METHOD originalUrl STATUS</code> (e.g. <code>GET /api/tasks/9 404</code>).</li>\n  <li>Unknown routes → 404 <code>{ \"error\": \"Not found\" }</code>; invalid JSON body → 400 <code>{ \"error\": \"Invalid JSON\" }</code>; repository failure → 500 <code>{ \"error\": \"Internal Server Error\" }</code> (never hangs).</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>List with filters</td><td>2</td></tr><tr><td>2</td><td>Read one</td><td>1.5</td></tr><tr><td>3</td><td>Create (guarded, validated)</td><td>2.5</td></tr><tr><td>4</td><td>Move a task forward</td><td>2</td></tr><tr><td>5</td><td>Logger, 404 and errors</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A request that hangs (no answer) loses the feature it belongs to.</li>\n  <li>Hard-coding the API key: −1.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Submit <code>answer.js</code> (keep the given part unchanged).</p>",
+      "problemHtmlVi": "<h1>Lab 2 — Tasks API (Express)</h1>\n<p class=\"bi-phu\">Express 4 · Router · middleware · 80 phút · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Một công cụ theo dõi việc nhỏ cho nhóm. Dữ liệu nằm trong <code>tasksRepo</code> bất đồng bộ cho sẵn (nó chờ như một CSDL và có thể hỏng). Viết app Express trong <code>answer.js</code> bên dưới phần cho sẵn và export <code>{ app, tasksRepo }</code>. Máy chấm gọi <code>app.inject(…)</code>. Mọi câu trả lời là JSON.</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Một <code>express.Router()</code> gắn ở <code>/api/tasks</code>.</li>\n  <li>Route ghi (POST, PATCH) cần header <code>x-api-key</code> bằng <code>process.env.API_KEY</code> → không thì 401 <code>{ \"error\": \"API key required\" }</code> (thiếu) / <code>{ \"error\": \"Invalid API key\" }</code> (sai). Route GET thì mở.</li>\n  <li>Mọi route async được bọc để lỗi của kho tới được error handler.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answer.js   ← the given repository + your app\nlib/        ← provided (Express stand-in)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Task</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>Number</td><td>kho cấp</td></tr><tr><td><code>title</code></td><td>String</td><td>3–80 ký tự sau trim</td></tr><tr><td><code>status</code></td><td>String</td><td>'todo' | 'doing' | 'done' (việc mới bắt đầu là 'todo')</td></tr><tr><td><code>priority</code></td><td>Number</td><td>số nguyên 1–3, mặc định 2</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>id 1 · Set up Express · done · priority 2\nid 2 · Write the router · doing · priority 1\nid 3 · Add middleware · todo · priority 3</pre>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Danh sách có lọc <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>GET /api/tasks</code> → 200 mọi việc (thứ tự của kho).</li>\n  <li><code>?status=todo,doing</code> — một hay nhiều trạng thái, cách nhau dấu phẩy; trạng thái lạ → 400 <code>{ \"error\": \"Invalid status\" }</code>.</li>\n  <li><code>?sort=priority</code> (tăng dần) hoặc <code>?sort=-priority</code>; giá trị khác → 400 <code>{ \"error\": \"Invalid sort\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Đọc một việc <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>GET /api/tasks/:id</code> → 200 · id không phải số nguyên dương → 400 <code>{ \"error\": \"Invalid id\" }</code> · không có → 404 <code>{ \"error\": \"Task not found\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Tạo (có chặn, có kiểm) <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>POST /api/tasks</code> kèm API key; title 3–80 ký tự → không thì 400 <code>{ \"error\": \"title must be 3-80 characters\" }</code>; priority (tuỳ chọn) số nguyên 1–3 → không thì 400 <code>{ \"error\": \"priority must be 1, 2 or 3\" }</code>.</li>\n  <li>201 + việc (<code>status: 'todo'</code>, priority mặc định 2). Field khác title/priority bị bỏ qua.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Chuyển trạng thái tiến lên <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>PATCH /api/tasks/:id</code> kèm API key và <code>{ \"status\": \"…\" }</code>: chỉ trạng thái KẾ TIẾP được phép (todo → doing → done) → không thì 409 <code>{ \"error\": \"Cannot move from X to Y\" }</code>; trạng thái lạ → 400 <code>{ \"error\": \"Invalid status\" }</code>.</li>\n  <li>200 + việc đã sửa; 400 / 404 cho id như chức năng 2.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Logger, 404 và lỗi <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Logger in mỗi request một dòng khi xong: <code>METHOD originalUrl STATUS</code> (vd <code>GET /api/tasks/9 404</code>).</li>\n  <li>Route lạ → 404 <code>{ \"error\": \"Not found\" }</code>; thân JSON hỏng → 400 <code>{ \"error\": \"Invalid JSON\" }</code>; kho hỏng → 500 <code>{ \"error\": \"Internal Server Error\" }</code> (không bao giờ treo).</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Danh sách có lọc</td><td>2</td></tr><tr><td>2</td><td>Đọc một việc</td><td>1.5</td></tr><tr><td>3</td><td>Tạo (có chặn, có kiểm)</td><td>2.5</td></tr><tr><td>4</td><td>Chuyển trạng thái tiến lên</td><td>2</td></tr><tr><td>5</td><td>Logger, 404 và lỗi</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Request bị treo (không trả lời) mất điểm chức năng chứa nó.</li>\n  <li>Viết cứng API key: −1.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Nộp <code>answer.js</code> (giữ nguyên phần cho sẵn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One <code>express.Router()</code> mounted at <code>/api/tasks</code>.|||Một <code>express.Router()</code> gắn ở <code>/api/tasks</code>.\nWrite routes (POST, PATCH) require header <code>x-api-key</code> equal to <code>process.env.API_KEY</code> → else 401 <code>{ \"error\": \"API key required\" }</code> (missing) / <code>{ \"error\": \"Invalid API key\" }</code> (wrong). GET routes are open.|||Route ghi (POST, PATCH) cần header <code>x-api-key</code> bằng <code>process.env.API_KEY</code> → không thì 401 <code>{ \"error\": \"API key required\" }</code> (thiếu) / <code>{ \"error\": \"Invalid API key\" }</code> (sai). Route GET thì mở.\nEvery async route is wrapped so repository errors reach the error handler.|||Mọi route async được bọc để lỗi của kho tới được error handler.",
+      "examplesJson": [
+        {
+          "input": "GET /api/tasks?status=todo,doing&sort=priority",
+          "output": "200 [{\"id\":2,…,\"priority\":1},{\"id\":3,…,\"priority\":3}]",
+          "explanation": "Filter by several statuses, sorted.|||Lọc nhiều trạng thái, có sắp."
+        }
+      ],
+      "hintsJson": [
+        "Write <code>wrap</code> first (lesson 2.2) and use it on every route: the repository is async and can fail.|||Viết <code>wrap</code> trước (bài 2.2) và dùng cho mọi route: kho là async và có thể hỏng.",
+        "Status moves only forward: <code>const ORDER = ['todo', 'doing', 'done']</code>; allowed when <code>ORDER.indexOf(next) === ORDER.indexOf(current) + 1</code>.|||Trạng thái chỉ tiến: <code>const ORDER = ['todo', 'doing', 'done']</code>; được phép khi <code>ORDER.indexOf(next) === ORDER.indexOf(current) + 1</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const express = require('express');\n// ───── GIVEN: an asynchronous repository (pretend it is a database) ─────\nconst tasksRepo = {\n  rows: [\n    { id: 1, title: 'Set up Express', status: 'done', priority: 2 },\n    { id: 2, title: 'Write the router', status: 'doing', priority: 1 },\n    { id: 3, title: 'Add middleware', status: 'todo', priority: 3 },\n  ],\n  failNext: false,                                   // the grader flips this to simulate a database error\n  async _wait() { await new Promise((r) => setTimeout(r, 5)); if (this.failNext) { this.failNext = false; throw new Error('Database timeout'); } },\n  async all() { await this._wait(); return this.rows.map((t) => ({ ...t })); },\n  async get(id) { await this._wait(); const t = this.rows.find((x) => x.id === id); return t ? { ...t } : null; },\n  async add(data) { await this._wait(); const t = { id: this.rows.reduce((m, x) => Math.max(m, x.id), 0) + 1, ...data }; this.rows.push(t); return { ...t }; },\n  async update(id, changes) { await this._wait(); const t = this.rows.find((x) => x.id === id); if (!t) return null; Object.assign(t, changes); return { ...t }; },\n};\n// ───── end of the given part ─────\n\nconst app = express();\nconst router = express.Router();\nrouter.get('/', async (req, res) => res.json(await tasksRepo.all()));\nrouter.get('/:id', async (req, res) => res.json(await tasksRepo.get(req.params.id)));\nrouter.post('/', async (req, res) => res.json(await tasksRepo.add(req.body)));\napp.use('/api/tasks', router);\napp.use(express.json());\n\nmodule.exports = { app, tasksRepo };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/express.js",
+          "language": "javascript",
+          "code": "// lib/express.js — PROVIDED by the practice grader. An in-memory stand-in for Express 4 (the version in the\n// lesson): express(), app.use / get / post / put / patch / delete, express.Router(), express.json(),\n// express.urlencoded(), express.static(), error handlers detected by their 4 parameters, route order,\n// req.params / req.query / req.body, res.status().json(), res.send(), res.sendStatus(), res.redirect(),\n// res.cookie(), res.render(), res.download(). Like Express 4, a REJECTED PROMISE from an async handler is\n// NOT sent to your error handler (Express 5 does that) — the request just hangs until the client gives up.\n// Instead of listening on a port, the grader sends requests with  await app.inject({ method, url, headers, body }).\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(d){\"use strict\";var p=d.__modules,S=p.events,w={100:\"Continue\",200:\"OK\",201:\"Created\",202:\"Accepted\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",303:\"See Other\",304:\"Not Modified\",307:\"Temporary Redirect\",308:\"Permanent Redirect\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",409:\"Conflict\",410:\"Gone\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",422:\"Unprocessable Entity\",429:\"Too Many Requests\",500:\"Internal Server Error\",501:\"Not Implemented\",502:\"Bad Gateway\",503:\"Service Unavailable\"};d.__STATUS=w;var j={\".html\":\"text/html; charset=utf-8\",\".txt\":\"text/plain; charset=utf-8\",\".json\":\"application/json; charset=utf-8\",\".css\":\"text/css; charset=utf-8\",\".js\":\"application/javascript; charset=utf-8\",\".png\":\"image/png\",\".jpg\":\"image/jpeg\",\".jpeg\":\"image/jpeg\",\".gif\":\"image/gif\",\".pdf\":\"application/pdf\",\".csv\":\"text/csv; charset=utf-8\",\".svg\":\"image/svg+xml\"};function C(){var t=new Error(\"Cannot set headers after they are sent to the client\");return t.code=\"ERR_HTTP_HEADERS_SENT\",t}function m(t,e){t=t||{};var r=t.url||\"/\";this._ev={},this.app=e,this.method=String(t.method||\"GET\").toUpperCase(),this.url=r,this.originalUrl=r,this.baseUrl=\"\";var n={},i=t.headers||{};Object.keys(i).forEach(function(o){n[o.toLowerCase()]=String(i[o])});var s=t.body;s!=null&&typeof s!=\"string\"&&(s=JSON.stringify(s),n[\"content-type\"]||(n[\"content-type\"]=\"application/json\")),s!=null&&(n[\"content-length\"]=String(s.length)),t.cookies&&(n.cookie=Object.keys(t.cookies).map(function(o){return o+\"=\"+t.cookies[o]}).join(\"; \")),this.headers=n,this._raw=s===void 0?null:s,this.body=t.parsedBody!==void 0?t.parsedBody:void 0,this.params={},this.ip=t.ip||\"127.0.0.1\",this.protocol=t.protocol||\"http\",this.secure=this.protocol===\"https\",this.hostname=(n.host||\"localhost\").split(\":\")[0],t.user!==void 0&&(this.user=t.user),t.session!==void 0&&(this.session=t.session),t.file!==void 0&&(this._file=t.file),t.files!==void 0&&(this._files=t.files),this._setUrl(r)}m.prototype=Object.create(S.prototype),m.prototype._setUrl=function(t){this.url=t;var e=t.indexOf(\"?\");if(this.path=e<0?t:t.slice(0,e),this.query===void 0){var r={};new URLSearchParams(e<0?\"\":t.slice(e+1)).forEach(function(n,i){Object.prototype.hasOwnProperty.call(r,i)?r[i]=[].concat(r[i],n):r[i]=n}),this.query=r}},m.prototype.get=m.prototype.header=function(t){var e=String(t).toLowerCase();return e===\"referer\"||e===\"referrer\"?this.headers.referer||this.headers.referrer:this.headers[e]},m.prototype.is=function(t){var e=(this.headers[\"content-type\"]||\"\").split(\";\")[0].trim();return e?(t===\"json\"&&(t=\"application/json\"),t===\"urlencoded\"&&(t=\"application/x-www-form-urlencoded\"),e===t||t.slice(-2)===\"/*\"&&e.indexOf(t.slice(0,-1))===0?e:!1):null};function u(t,e,r){S.call(this),this.req=t,this.app=e,this.statusCode=200,this._h={},this.finished=!1,this.headersSent=!1,this.locals={},this._body=void 0,this._json=!1,this._onFinish=r}u.prototype=Object.create(S.prototype),u.prototype._guard=function(){if(this.headersSent)throw C()},u.prototype.status=function(t){return this.statusCode=Number(t),this},u.prototype.set=u.prototype.header=function(t,e){if(t&&typeof t==\"object\"){var r=this;return Object.keys(t).forEach(function(n){r.set(n,t[n])}),this}return this._guard(),this._h[String(t).toLowerCase()]=Array.isArray(e)?e.map(String):String(e),this},u.prototype.setHeader=function(t,e){return this._guard(),this._h[String(t).toLowerCase()]=Array.isArray(e)?e.map(String):String(e),this},u.prototype.get=u.prototype.getHeader=function(t){return this._h[String(t).toLowerCase()]},u.prototype.removeHeader=function(t){this._guard(),delete this._h[String(t).toLowerCase()]},u.prototype.getHeaders=function(){return Object.assign({},this._h)},u.prototype.hasHeader=function(t){return String(t).toLowerCase()in this._h},u.prototype.append=function(t,e){var r=this.get(t),n=[].concat(e);return this.set(t,r===void 0?n.length===1?n[0]:n:[].concat(r,n))},u.prototype.vary=function(t){var e=this.get(\"vary\");return e?(e.split(/\\s*,\\s*/).indexOf(t)<0&&this.set(\"Vary\",e+\", \"+t),this):this.set(\"Vary\",t)},u.prototype.type=u.prototype.contentType=function(t){var e=t.indexOf(\"/\")>=0?t:j[\".\"+t.replace(/^\\./,\"\")]||t;return this.set(\"Content-Type\",e)},u.prototype.location=function(t){return this.set(\"Location\",t)},u.prototype.attachment=function(t){return t&&this.type(p.path.extname(t)||\"txt\"),this.set(\"Content-Disposition\",t?'attachment; filename=\"'+p.path.basename(t)+'\"':\"attachment\")},u.prototype._finish=function(t){if(this.headersSent)throw C();this.headersSent=!0,this.finished=!0,this.writableEnded=!0,t!==void 0&&(this._body=(this._body||\"\")+t);var e=this;this.emit(\"finish\"),this._onFinish&&this._onFinish(e)},u.prototype.writeHead=function(t,e){this._guard(),this.statusCode=t;var r=this;return Object.keys(e||{}).forEach(function(n){r._h[n.toLowerCase()]=String(e[n])}),this},u.prototype.write=function(t){return this._body=(this._body||\"\")+String(t),!0},u.prototype.end=function(t){return this._finish(t===void 0?void 0:String(t)),this},u.prototype.json=function(t){this._guard();var e=JSON.stringify(t);return this.get(\"content-type\")||this.set(\"Content-Type\",\"application/json; charset=utf-8\"),this._json=!0,this._finish(e===void 0?\"\":e),this},u.prototype.send=function(t){return this._guard(),typeof t==\"number\"&&arguments.length===1&&(this.statusCode=t,t=w[t]||String(t)),t==null?(this._finish(\"\"),this):typeof t==\"object\"&&!t.__buffer?this.json(t):typeof t==\"boolean\"?this.json(t):(this.get(\"content-type\")||this.set(\"Content-Type\",t.__buffer?\"application/octet-stream\":\"text/html; charset=utf-8\"),this.statusCode===204||this.statusCode===304?(this._finish(\"\"),this):(this._finish(String(t)),this))},u.prototype.sendStatus=function(t){return this.statusCode=t,t===204||t===304?(this._finish(\"\"),this):(this.set(\"Content-Type\",\"text/plain; charset=utf-8\"),this._finish(w[t]||String(t)),this)},u.prototype.redirect=function(t,e){var r=typeof t==\"number\"?t:302,n=typeof t==\"number\"?e:t;return this.statusCode=r,this.set(\"Location\",n),this.set(\"Content-Type\",\"text/plain; charset=utf-8\"),this._finish((w[r]||\"Found\")+\". Redirecting to \"+n),this},u.prototype.cookie=function(t,e,r){r=Object.assign({path:\"/\"},r||{});var n=typeof e==\"object\"?\"j:\"+JSON.stringify(e):String(e),i=t+\"=\"+encodeURIComponent(n);return r.maxAge!=null&&(i+=\"; Max-Age=\"+Math.floor(r.maxAge/1e3)),r.domain&&(i+=\"; Domain=\"+r.domain),r.path&&(i+=\"; Path=\"+r.path),r.maxAge!=null?i+=\"; Expires=\"+new Date(Date.now()+r.maxAge).toUTCString():r.expires&&(i+=\"; Expires=\"+new Date(r.expires).toUTCString()),r.httpOnly&&(i+=\"; HttpOnly\"),r.sameSite&&(i+=\"; SameSite=\"+(r.sameSite===!0?\"Strict\":String(r.sameSite).charAt(0).toUpperCase()+String(r.sameSite).slice(1).toLowerCase())),r.secure&&(i+=\"; Secure\"),this.append(\"Set-Cookie\",i)},u.prototype.clearCookie=function(t,e){return this.append(\"Set-Cookie\",t+\"=; Path=\"+(e&&e.path||\"/\")+\"; Expires=Thu, 01 Jan 1970 00:00:00 GMT\")},u.prototype.sendFile=function(t,e,r){typeof e==\"function\"&&(r=e);var n=d.__disk.get(t),i=this;if(n===void 0){var s=new Error(\"ENOENT: no such file or directory, stat '\"+t+\"'\");return s.code=\"ENOENT\",s.status=s.statusCode=404,r?r(s):this.req.next?this.req.next(s):void 0}this.get(\"content-type\")||this.set(\"Content-Type\",j[p.path.extname(t).toLowerCase()]||\"application/octet-stream\"),this._finish(n),r&&r()},u.prototype.download=function(t,e,r){return typeof e==\"function\"&&(r=e,e=null),d.__disk.get(t)!==void 0&&this.set(\"Content-Disposition\",'attachment; filename=\"'+(e||p.path.basename(t))+'\"'),this.sendFile(t,r)},u.prototype.render=function(t,e,r){typeof e==\"function\"&&(r=e,e={});var n=this.app,i=this,s;try{s=k(n,t,Object.assign({},n&&n.locals,this.locals,e||{}))}catch(o){if(r)return r(o);throw o}if(r)return r(null,s);this.set(\"Content-Type\",\"text/html; charset=utf-8\"),this._finish(s)};function k(t,e,r){var n=t&&t.get(\"views\"),i=t&&t.get(\"view engine\")||\"\";if(!n||typeof n!=\"object\")throw new Error('No views registered \\u2014 in this practice use app.set(\"views\", { name: \"template text\" }).');var s=e,o=\"\",a=/\\.(\\w+)$/.exec(e);a&&(o=a[1],s=e.slice(0,-a[0].length));var c=n[e]!==void 0?n[e]:n[s]!==void 0?n[s]:n[s+\".\"+i];if(c===void 0){var f=new Error('Failed to lookup view \"'+e+'\" in views directory \"views\"');throw f.view=e,f}var l=o||i;if(l===\"ejs\")return p.ejs.render(c,r);if(l===\"hbs\"||l===\"handlebars\")return p.handlebars.compile(c)(r);throw new Error(\"No default engine was specified and no extension was provided.\")}function M(t,e){if(t instanceof RegExp)return{re:t,keys:[]};for(var r=[],n=String(t).replace(/\\/+$/,\"\"),i=\"\",s=0;s<n.length;){var o=n.charAt(s);if(o===\":\"){var a=/^:(\\w+)(\\?)?/.exec(n.slice(s));r.push(a[1]);var c=i.slice(-1)===\"/\";a[2]&&c?i=i.slice(0,-1)+\"(?:/([^/]+?))?\":i+=\"([^/]+?)\",s+=a[0].length;continue}if(o===\"*\"){r.push(String(r.length)),i+=\"(.*)\",s++;continue}i+=/[.+?^${}()|[\\]\\\\]/.test(o)?\"\\\\\"+o:o,s++}return{re:new RegExp(\"^\"+i+(e?\"\\\\/?$\":\"(?=\\\\/|$)\"),\"i\"),keys:r}}function E(t,e,r){this.path=t,this.fn=e,this.method=r.method||null,this.isRoute=!!r.route,this.handlers=r.handlers;var n=M(t===\"/\"&&!r.route?\"\":t,!!r.route);this.re=n.re,this.keys=n.keys}E.prototype.match=function(t){var e=this.re.exec(t);if(!e)return null;for(var r={},n=0;n<this.keys.length;n++)if(e[n+1]!==void 0)try{r[this.keys[n]]=decodeURIComponent(e[n+1])}catch{r[this.keys[n]]=e[n+1]}return{params:r,matched:e[0]}};function x(t,e,r,n,i){var s;try{if(e)if(t.length===4)s=t(e,r,n,i);else return i(e);else{if(t.length===4)return i();s=t(r,n,i)}}catch(o){return i(o)}s&&typeof s.then==\"function\"&&s.then(null,function(o){(d.__unhandled=d.__unhandled||[]).push(o&&o.name?o.name+\": \"+o.message:String(o))})}var O=[\"get\",\"post\",\"put\",\"patch\",\"delete\",\"options\",\"head\",\"all\"];function T(){function t(e,r,n){t.handle(e,r,n)}return t.stack=[],t.__isRouter=!0,t.use=function(){var e=[].slice.call(arguments),r=\"/\";(typeof e[0]==\"string\"||e[0]instanceof RegExp||Array.isArray(e[0]))&&(r=e.shift());var n=[].concat.apply([],e);if(!n.length)throw new TypeError(\"app.use() requires a middleware function\");return n.forEach(function(i){if(typeof i!=\"function\")throw new TypeError(\"app.use() requires a middleware function but got a \"+(i===null?\"null\":typeof i));[].concat(r).forEach(function(s){t.stack.push(new E(s,i,{}))})}),t},t.route=function(e){var r={};return O.forEach(function(n){r[n]=function(){return t[n].apply(t,[e].concat([].slice.call(arguments))),r}}),r},O.forEach(function(e){var r=t[e];t[e]=function(n){if(e===\"get\"&&arguments.length===1&&typeof n==\"string\"&&t.__settings)return t.__settings[n];var i=[].concat.apply([],[].slice.call(arguments,1));if(!i.length)throw new TypeError(\"Route.\"+e+\"() requires a callback function but got a [object Undefined]\");return i.forEach(function(s){if(typeof s!=\"function\")throw new TypeError(\"Route.\"+e+\"() requires a callback function but got a [object \"+(s===void 0?\"Undefined\":s===null?\"Null\":typeof s==\"object\"?\"Object\":typeof s)+\"]\")}),[].concat(n).forEach(function(s){t.stack.push(new E(s,null,{method:e,route:!0,handlers:i}))}),t}}),t.handle=function(e,r,n){var i=0,s=e.url,o=e.baseUrl;function a(c){if(c===\"router\")return e._setUrl(s),e.baseUrl=o,n();c===\"route\"&&(c=void 0);var f=t.stack[i++];if(!f)return e._setUrl(s),e.baseUrl=o,n(c);var l=e.url.split(\"?\")[0],y=f.match(l);if(!y)return a(c);if(f.isRoute){if(f.method!==\"all\"&&f.method.toUpperCase()!==e.method&&!(e.method===\"HEAD\"&&f.method===\"get\"))return e.method===\"OPTIONS\"&&(e._allow=e._allow||[],[f.method.toUpperCase()].concat(f.method===\"get\"?[\"HEAD\"]:[]).forEach(function(g){e._allow.indexOf(g)<0&&e._allow.push(g)})),a(c);e.params=y.params;var v=0,h=function(g){if(g===\"route\")return a();if(g===\"router\")return a(\"router\");var L=f.handlers[v++];if(!L)return a(g);e.next=h,x(L,g,e,r,h)};return h(c)}var A=y.matched.replace(/\\/$/,\"\"),F=e.url,N=e.baseUrl,b=e.url.slice(A.length);b.charAt(0)!==\"/\"&&(b=\"/\"+b),e.baseUrl=N+A,e._setUrl(b),(f.fn.__isRouter||Object.keys(y.params).length)&&(e.params=Object.assign({},e.params,y.params));var P=function(g){e._setUrl(F),e.baseUrl=N,a(g)};e.next=P,x(f.fn,c,e,r,P)}a()},t}function H(t,e,r){return function(n){if(!e.headersSent)if(n){var i=n.status||n.statusCode;i>=400&&i<600||(i=500),e.statusCode=i,e._h={\"content-type\":\"text/html; charset=utf-8\"},e._uncaught={name:n.name||\"Error\",message:String(n.message||n)},e._finish(w[i]||\"Error\")}else if(t.method===\"OPTIONS\"&&t._allow&&t._allow.length){var s=t._allow.join(\",\");e.statusCode=200,e._h.allow=s,e._h[\"content-type\"]=\"text/html; charset=utf-8\",e._finish(s)}else e.statusCode=404,e._h={\"content-type\":\"text/html; charset=utf-8\"},e._finish(\"Cannot \"+t.method+\" \"+t.originalUrl.split(\"?\")[0])}}function U(t,e){var r=t._body,n=t.get(\"content-type\")||\"\";if(r!==void 0&&/json/.test(n))try{r=r===\"\"?\"\":JSON.parse(r)}catch{}var i={status:t.finished?t.statusCode:null,headers:Object.assign({},t._h),body:r};return t._uncaught&&(i.error=t._uncaught),e&&Object.keys(e).forEach(function(s){i[s]=e[s]}),i}function _(){var t=T(),e={\"x-powered-by\":!0,env:\"production\"};t.__settings=e,t.locals={},t.set=function(n,i){return arguments.length===1?e[n]:(e[n]=i,t)};var r=t.get;return t.get=function(n){return arguments.length===1&&typeof n==\"string\"?e[n]:r.apply(t,arguments)},t.enable=function(n){return e[n]=!0,t},t.disable=function(n){return e[n]=!1,t},t.enabled=function(n){return!!e[n]},t.engine=function(){return t},t.listen=function(n,i,s){var o=typeof i==\"function\"?i:s;t.__port=n,(d.__listening=d.__listening||[]).push(n);var a={address:function(){return{port:n}},close:function(c){c&&c()},on:function(){return a}};return o&&d.setTimeout(o,0),a},t.inject=function(n){return new Promise(function(i){var s=!1,o,a=new m(n,t),c=function(l){s||(s=!0,d.clearTimeout(o),i(U(l)))},f=new u(a,t,c);a.res=f,e[\"x-powered-by\"]&&(f._h[\"x-powered-by\"]=\"Express\"),o=d.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0,unhandled:(d.__unhandled||[]).slice()}))},n&&n.timeoutMs||3e4),t.handle(a,f,H(a,f,c))})},t}_.Router=function(){return T()},_.json=function(t){t=t||{};var e=t.limit?R(t.limit):100*1024;return function(n,i,s){if(n._bodyParsed)return s();n._bodyParsed=!0,n.body===void 0&&(n.body={});var o=(n.headers[\"content-type\"]||\"\").split(\";\")[0].trim().toLowerCase();if(!/^application\\/(.+\\+)?json$/.test(o)||n._raw==null||n._raw===\"\")return n._raw!=null&&o.indexOf(\"json\")<0&&(n._bodyParsed=!1),s();if(n._raw.length>e){var a=new Error(\"request entity too large\");return a.status=a.statusCode=413,a.type=\"entity.too.large\",a.expose=!0,s(a)}var c=n._raw.trim().charAt(0);try{if(t.strict!==!1&&c!==\"{\"&&c!==\"[\")throw new SyntaxError(\"Unexpected token \"+c+\" in JSON (strict mode: only objects and arrays)\");n.body=JSON.parse(n._raw)}catch(l){var f=new SyntaxError(l.message);return f.status=f.statusCode=400,f.type=\"entity.parse.failed\",f.body=n._raw,f.expose=!0,s(f)}s()}},_.urlencoded=function(){return function(e,r,n){e.body===void 0&&(e.body={});var i=(e.headers[\"content-type\"]||\"\").split(\";\")[0].trim().toLowerCase();if(i!==\"application/x-www-form-urlencoded\"||e._raw==null)return n();var s={};new URLSearchParams(e._raw).forEach(function(o,a){s[a]=Object.prototype.hasOwnProperty.call(s,a)?[].concat(s[a],o):o}),e.body=s,e._bodyParsed=!0,n()}},_.static=function(t){return function(r,n,i){if(r.method!==\"GET\"&&r.method!==\"HEAD\")return i();var s=p.path.join(t,decodeURIComponent(r.path));if(d.__disk.get(s)===void 0)return i();n.sendFile(p.path.resolve(s))}};function R(t){if(typeof t==\"number\")return t;var e=/^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(t));if(!e)return 100*1024;var r={b:1,kb:1024,mb:1048576,gb:1073741824}[(e[2]||\"b\").toLowerCase()];return Math.floor(parseFloat(e[1])*r)}d.__parseSize=R,_.__Req=m,_.__Res=u,d.express=_,p.express=_,d.__goi=function(t,e,r){return r=r||{},new Promise(function(n){var i=new m(e,r.app||null);e&&e.body!==void 0&&e.raw!==!0&&(i.body=typeof e.body==\"string\"?e.body:JSON.parse(JSON.stringify(e.body))),e&&e.params&&(i.params=Object.assign({},e.params)),e&&e.locals&&Object.keys(e.locals).forEach(function(h){i[h]=e.locals[h]});var s=!1,o=null,a=null,c,f=new u(i,r.app||{get:function(){},locals:{}},function(){d.setTimeout(l,0)});r.views&&(f.app={get:function(h){return h===\"views\"?r.views:h===\"view engine\"?r.engine:void 0},locals:{}}),i.res=f;function l(){if(!s){s=!0,d.clearTimeout(c);var h=U(f);n({status:h.status,body:h.body,headers:h.headers,next:o,thrown:a,req:{user:i.user===void 0?null:d.__json(i.user),body:d.__json(i.body)}})}}var y=function(h){h==null?o=!0:o=h instanceof Error||h&&h.message?{name:h.name||\"Error\",message:String(h.message),status:h.status||h.statusCode||null}:{value:String(h)},d.setTimeout(l,0)};i.next=y,c=d.setTimeout(l,r.timeoutMs||5e3);var v;try{v=t.length===4&&r.err!==void 0?t(r.err,i,f,y):t(i,f,y)}catch(h){a={name:h.name||\"Error\",message:String(h.message)},d.setTimeout(l,0);return}v&&typeof v.then==\"function\"?v.then(function(){d.setTimeout(l,0)},function(h){a={name:h&&h.name||\"Error\",message:String(h&&h.message)},d.setTimeout(l,0)}):f.finished})},d.__res=function(t){return{status:t.status,body:t.body}}})(globalThis);\n"
+        },
+        {
+          "name": "lib/env.js",
+          "language": "javascript",
+          "code": "// lib/env.js — PROVIDED: what dotenv would load from .env into process.env before your code runs.\nprocess.env.API_KEY = \"lab2-key\";\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const express = require('express');\n// ───── GIVEN: an asynchronous repository (pretend it is a database) ─────\nconst tasksRepo = {\n  rows: [\n    { id: 1, title: 'Set up Express', status: 'done', priority: 2 },\n    { id: 2, title: 'Write the router', status: 'doing', priority: 1 },\n    { id: 3, title: 'Add middleware', status: 'todo', priority: 3 },\n  ],\n  failNext: false,                                   // the grader flips this to simulate a database error\n  async _wait() { await new Promise((r) => setTimeout(r, 5)); if (this.failNext) { this.failNext = false; throw new Error('Database timeout'); } },\n  async all() { await this._wait(); return this.rows.map((t) => ({ ...t })); },\n  async get(id) { await this._wait(); const t = this.rows.find((x) => x.id === id); return t ? { ...t } : null; },\n  async add(data) { await this._wait(); const t = { id: this.rows.reduce((m, x) => Math.max(m, x.id), 0) + 1, ...data }; this.rows.push(t); return { ...t }; },\n  async update(id, changes) { await this._wait(); const t = this.rows.find((x) => x.id === id); if (!t) return null; Object.assign(t, changes); return { ...t }; },\n};\n// ───── end of the given part ─────\n\nconst STATUSES = ['todo', 'doing', 'done'];\nconst wrap = (fn) => (req, res, next) => Promise.resolve().then(() => fn(req, res, next)).catch(next);\nconst parseId = (s) => (/^[1-9]\\d*$/.test(s) ? Number(s) : null);\n\n// ── middleware ──\nfunction logger(req, res, next) {\n  res.on('finish', () => console.log(`${req.method} ${req.originalUrl} ${res.statusCode}`));\n  next();\n}\nfunction requireApiKey(req, res, next) {\n  const key = req.get('x-api-key');\n  if (!key) return res.status(401).json({ error: 'API key required' });\n  if (key !== process.env.API_KEY) return res.status(401).json({ error: 'Invalid API key' });\n  next();\n}\n\n// ── the tasks router ──\nconst router = express.Router();\n\nrouter.get('/', wrap(async (req, res) => {\n  let list = await tasksRepo.all();\n  if (req.query.status !== undefined) {\n    const wanted = String(req.query.status).split(',').map((s) => s.trim());\n    if (!wanted.every((s) => STATUSES.includes(s))) return res.status(400).json({ error: 'Invalid status' });\n    list = list.filter((t) => wanted.includes(t.status));\n  }\n  if (req.query.sort !== undefined) {\n    if (req.query.sort !== 'priority' && req.query.sort !== '-priority') return res.status(400).json({ error: 'Invalid sort' });\n    const dir = req.query.sort === '-priority' ? -1 : 1;\n    list = [...list].sort((a, b) => dir * (a.priority - b.priority));\n  }\n  res.json(list);\n}));\n\nrouter.get('/:id', wrap(async (req, res) => {\n  const id = parseId(req.params.id);\n  if (id === null) return res.status(400).json({ error: 'Invalid id' });\n  const task = await tasksRepo.get(id);\n  if (!task) return res.status(404).json({ error: 'Task not found' });\n  res.json(task);\n}));\n\nrouter.post('/', requireApiKey, wrap(async (req, res) => {\n  const title = typeof req.body.title === 'string' ? req.body.title.trim() : '';\n  if (title.length < 3 || title.length > 80) return res.status(400).json({ error: 'title must be 3-80 characters' });\n  const priority = req.body.priority === undefined ? 2 : req.body.priority;\n  if (![1, 2, 3].includes(priority)) return res.status(400).json({ error: 'priority must be 1, 2 or 3' });\n  res.status(201).json(await tasksRepo.add({ title, status: 'todo', priority }));\n}));\n\nrouter.patch('/:id', requireApiKey, wrap(async (req, res) => {\n  const id = parseId(req.params.id);\n  if (id === null) return res.status(400).json({ error: 'Invalid id' });\n  const next = req.body.status;\n  if (!STATUSES.includes(next)) return res.status(400).json({ error: 'Invalid status' });\n  const task = await tasksRepo.get(id);\n  if (!task) return res.status(404).json({ error: 'Task not found' });\n  if (STATUSES.indexOf(next) !== STATUSES.indexOf(task.status) + 1) {\n    return res.status(409).json({ error: `Cannot move from ${task.status} to ${next}` });\n  }\n  res.json(await tasksRepo.update(id, { status: next }));\n}));\n\n// ── app ──\nconst app = express();\napp.use(logger);                                   // first: sees every request, even 404s and errors\napp.use(express.json());\napp.use('/api/tasks', router);\napp.use((req, res) => res.status(404).json({ error: 'Not found' }));\n// eslint-disable-next-line no-unused-vars\napp.use((err, req, res, next) => {\n  if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Invalid JSON' });\n  console.error(err.message);\n  res.status(500).json({ error: 'Internal Server Error' });\n});\n\nmodule.exports = { app, tasksRepo };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/express.js",
+          "language": "javascript",
+          "code": "// lib/express.js — PROVIDED by the practice grader. An in-memory stand-in for Express 4 (the version in the\n// lesson): express(), app.use / get / post / put / patch / delete, express.Router(), express.json(),\n// express.urlencoded(), express.static(), error handlers detected by their 4 parameters, route order,\n// req.params / req.query / req.body, res.status().json(), res.send(), res.sendStatus(), res.redirect(),\n// res.cookie(), res.render(), res.download(). Like Express 4, a REJECTED PROMISE from an async handler is\n// NOT sent to your error handler (Express 5 does that) — the request just hangs until the client gives up.\n// Instead of listening on a port, the grader sends requests with  await app.inject({ method, url, headers, body }).\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(d){\"use strict\";var p=d.__modules,S=p.events,w={100:\"Continue\",200:\"OK\",201:\"Created\",202:\"Accepted\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",303:\"See Other\",304:\"Not Modified\",307:\"Temporary Redirect\",308:\"Permanent Redirect\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",409:\"Conflict\",410:\"Gone\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",422:\"Unprocessable Entity\",429:\"Too Many Requests\",500:\"Internal Server Error\",501:\"Not Implemented\",502:\"Bad Gateway\",503:\"Service Unavailable\"};d.__STATUS=w;var j={\".html\":\"text/html; charset=utf-8\",\".txt\":\"text/plain; charset=utf-8\",\".json\":\"application/json; charset=utf-8\",\".css\":\"text/css; charset=utf-8\",\".js\":\"application/javascript; charset=utf-8\",\".png\":\"image/png\",\".jpg\":\"image/jpeg\",\".jpeg\":\"image/jpeg\",\".gif\":\"image/gif\",\".pdf\":\"application/pdf\",\".csv\":\"text/csv; charset=utf-8\",\".svg\":\"image/svg+xml\"};function C(){var t=new Error(\"Cannot set headers after they are sent to the client\");return t.code=\"ERR_HTTP_HEADERS_SENT\",t}function m(t,e){t=t||{};var r=t.url||\"/\";this._ev={},this.app=e,this.method=String(t.method||\"GET\").toUpperCase(),this.url=r,this.originalUrl=r,this.baseUrl=\"\";var n={},i=t.headers||{};Object.keys(i).forEach(function(o){n[o.toLowerCase()]=String(i[o])});var s=t.body;s!=null&&typeof s!=\"string\"&&(s=JSON.stringify(s),n[\"content-type\"]||(n[\"content-type\"]=\"application/json\")),s!=null&&(n[\"content-length\"]=String(s.length)),t.cookies&&(n.cookie=Object.keys(t.cookies).map(function(o){return o+\"=\"+t.cookies[o]}).join(\"; \")),this.headers=n,this._raw=s===void 0?null:s,this.body=t.parsedBody!==void 0?t.parsedBody:void 0,this.params={},this.ip=t.ip||\"127.0.0.1\",this.protocol=t.protocol||\"http\",this.secure=this.protocol===\"https\",this.hostname=(n.host||\"localhost\").split(\":\")[0],t.user!==void 0&&(this.user=t.user),t.session!==void 0&&(this.session=t.session),t.file!==void 0&&(this._file=t.file),t.files!==void 0&&(this._files=t.files),this._setUrl(r)}m.prototype=Object.create(S.prototype),m.prototype._setUrl=function(t){this.url=t;var e=t.indexOf(\"?\");if(this.path=e<0?t:t.slice(0,e),this.query===void 0){var r={};new URLSearchParams(e<0?\"\":t.slice(e+1)).forEach(function(n,i){Object.prototype.hasOwnProperty.call(r,i)?r[i]=[].concat(r[i],n):r[i]=n}),this.query=r}},m.prototype.get=m.prototype.header=function(t){var e=String(t).toLowerCase();return e===\"referer\"||e===\"referrer\"?this.headers.referer||this.headers.referrer:this.headers[e]},m.prototype.is=function(t){var e=(this.headers[\"content-type\"]||\"\").split(\";\")[0].trim();return e?(t===\"json\"&&(t=\"application/json\"),t===\"urlencoded\"&&(t=\"application/x-www-form-urlencoded\"),e===t||t.slice(-2)===\"/*\"&&e.indexOf(t.slice(0,-1))===0?e:!1):null};function u(t,e,r){S.call(this),this.req=t,this.app=e,this.statusCode=200,this._h={},this.finished=!1,this.headersSent=!1,this.locals={},this._body=void 0,this._json=!1,this._onFinish=r}u.prototype=Object.create(S.prototype),u.prototype._guard=function(){if(this.headersSent)throw C()},u.prototype.status=function(t){return this.statusCode=Number(t),this},u.prototype.set=u.prototype.header=function(t,e){if(t&&typeof t==\"object\"){var r=this;return Object.keys(t).forEach(function(n){r.set(n,t[n])}),this}return this._guard(),this._h[String(t).toLowerCase()]=Array.isArray(e)?e.map(String):String(e),this},u.prototype.setHeader=function(t,e){return this._guard(),this._h[String(t).toLowerCase()]=Array.isArray(e)?e.map(String):String(e),this},u.prototype.get=u.prototype.getHeader=function(t){return this._h[String(t).toLowerCase()]},u.prototype.removeHeader=function(t){this._guard(),delete this._h[String(t).toLowerCase()]},u.prototype.getHeaders=function(){return Object.assign({},this._h)},u.prototype.hasHeader=function(t){return String(t).toLowerCase()in this._h},u.prototype.append=function(t,e){var r=this.get(t),n=[].concat(e);return this.set(t,r===void 0?n.length===1?n[0]:n:[].concat(r,n))},u.prototype.vary=function(t){var e=this.get(\"vary\");return e?(e.split(/\\s*,\\s*/).indexOf(t)<0&&this.set(\"Vary\",e+\", \"+t),this):this.set(\"Vary\",t)},u.prototype.type=u.prototype.contentType=function(t){var e=t.indexOf(\"/\")>=0?t:j[\".\"+t.replace(/^\\./,\"\")]||t;return this.set(\"Content-Type\",e)},u.prototype.location=function(t){return this.set(\"Location\",t)},u.prototype.attachment=function(t){return t&&this.type(p.path.extname(t)||\"txt\"),this.set(\"Content-Disposition\",t?'attachment; filename=\"'+p.path.basename(t)+'\"':\"attachment\")},u.prototype._finish=function(t){if(this.headersSent)throw C();this.headersSent=!0,this.finished=!0,this.writableEnded=!0,t!==void 0&&(this._body=(this._body||\"\")+t);var e=this;this.emit(\"finish\"),this._onFinish&&this._onFinish(e)},u.prototype.writeHead=function(t,e){this._guard(),this.statusCode=t;var r=this;return Object.keys(e||{}).forEach(function(n){r._h[n.toLowerCase()]=String(e[n])}),this},u.prototype.write=function(t){return this._body=(this._body||\"\")+String(t),!0},u.prototype.end=function(t){return this._finish(t===void 0?void 0:String(t)),this},u.prototype.json=function(t){this._guard();var e=JSON.stringify(t);return this.get(\"content-type\")||this.set(\"Content-Type\",\"application/json; charset=utf-8\"),this._json=!0,this._finish(e===void 0?\"\":e),this},u.prototype.send=function(t){return this._guard(),typeof t==\"number\"&&arguments.length===1&&(this.statusCode=t,t=w[t]||String(t)),t==null?(this._finish(\"\"),this):typeof t==\"object\"&&!t.__buffer?this.json(t):typeof t==\"boolean\"?this.json(t):(this.get(\"content-type\")||this.set(\"Content-Type\",t.__buffer?\"application/octet-stream\":\"text/html; charset=utf-8\"),this.statusCode===204||this.statusCode===304?(this._finish(\"\"),this):(this._finish(String(t)),this))},u.prototype.sendStatus=function(t){return this.statusCode=t,t===204||t===304?(this._finish(\"\"),this):(this.set(\"Content-Type\",\"text/plain; charset=utf-8\"),this._finish(w[t]||String(t)),this)},u.prototype.redirect=function(t,e){var r=typeof t==\"number\"?t:302,n=typeof t==\"number\"?e:t;return this.statusCode=r,this.set(\"Location\",n),this.set(\"Content-Type\",\"text/plain; charset=utf-8\"),this._finish((w[r]||\"Found\")+\". Redirecting to \"+n),this},u.prototype.cookie=function(t,e,r){r=Object.assign({path:\"/\"},r||{});var n=typeof e==\"object\"?\"j:\"+JSON.stringify(e):String(e),i=t+\"=\"+encodeURIComponent(n);return r.maxAge!=null&&(i+=\"; Max-Age=\"+Math.floor(r.maxAge/1e3)),r.domain&&(i+=\"; Domain=\"+r.domain),r.path&&(i+=\"; Path=\"+r.path),r.maxAge!=null?i+=\"; Expires=\"+new Date(Date.now()+r.maxAge).toUTCString():r.expires&&(i+=\"; Expires=\"+new Date(r.expires).toUTCString()),r.httpOnly&&(i+=\"; HttpOnly\"),r.sameSite&&(i+=\"; SameSite=\"+(r.sameSite===!0?\"Strict\":String(r.sameSite).charAt(0).toUpperCase()+String(r.sameSite).slice(1).toLowerCase())),r.secure&&(i+=\"; Secure\"),this.append(\"Set-Cookie\",i)},u.prototype.clearCookie=function(t,e){return this.append(\"Set-Cookie\",t+\"=; Path=\"+(e&&e.path||\"/\")+\"; Expires=Thu, 01 Jan 1970 00:00:00 GMT\")},u.prototype.sendFile=function(t,e,r){typeof e==\"function\"&&(r=e);var n=d.__disk.get(t),i=this;if(n===void 0){var s=new Error(\"ENOENT: no such file or directory, stat '\"+t+\"'\");return s.code=\"ENOENT\",s.status=s.statusCode=404,r?r(s):this.req.next?this.req.next(s):void 0}this.get(\"content-type\")||this.set(\"Content-Type\",j[p.path.extname(t).toLowerCase()]||\"application/octet-stream\"),this._finish(n),r&&r()},u.prototype.download=function(t,e,r){return typeof e==\"function\"&&(r=e,e=null),d.__disk.get(t)!==void 0&&this.set(\"Content-Disposition\",'attachment; filename=\"'+(e||p.path.basename(t))+'\"'),this.sendFile(t,r)},u.prototype.render=function(t,e,r){typeof e==\"function\"&&(r=e,e={});var n=this.app,i=this,s;try{s=k(n,t,Object.assign({},n&&n.locals,this.locals,e||{}))}catch(o){if(r)return r(o);throw o}if(r)return r(null,s);this.set(\"Content-Type\",\"text/html; charset=utf-8\"),this._finish(s)};function k(t,e,r){var n=t&&t.get(\"views\"),i=t&&t.get(\"view engine\")||\"\";if(!n||typeof n!=\"object\")throw new Error('No views registered \\u2014 in this practice use app.set(\"views\", { name: \"template text\" }).');var s=e,o=\"\",a=/\\.(\\w+)$/.exec(e);a&&(o=a[1],s=e.slice(0,-a[0].length));var c=n[e]!==void 0?n[e]:n[s]!==void 0?n[s]:n[s+\".\"+i];if(c===void 0){var f=new Error('Failed to lookup view \"'+e+'\" in views directory \"views\"');throw f.view=e,f}var l=o||i;if(l===\"ejs\")return p.ejs.render(c,r);if(l===\"hbs\"||l===\"handlebars\")return p.handlebars.compile(c)(r);throw new Error(\"No default engine was specified and no extension was provided.\")}function M(t,e){if(t instanceof RegExp)return{re:t,keys:[]};for(var r=[],n=String(t).replace(/\\/+$/,\"\"),i=\"\",s=0;s<n.length;){var o=n.charAt(s);if(o===\":\"){var a=/^:(\\w+)(\\?)?/.exec(n.slice(s));r.push(a[1]);var c=i.slice(-1)===\"/\";a[2]&&c?i=i.slice(0,-1)+\"(?:/([^/]+?))?\":i+=\"([^/]+?)\",s+=a[0].length;continue}if(o===\"*\"){r.push(String(r.length)),i+=\"(.*)\",s++;continue}i+=/[.+?^${}()|[\\]\\\\]/.test(o)?\"\\\\\"+o:o,s++}return{re:new RegExp(\"^\"+i+(e?\"\\\\/?$\":\"(?=\\\\/|$)\"),\"i\"),keys:r}}function E(t,e,r){this.path=t,this.fn=e,this.method=r.method||null,this.isRoute=!!r.route,this.handlers=r.handlers;var n=M(t===\"/\"&&!r.route?\"\":t,!!r.route);this.re=n.re,this.keys=n.keys}E.prototype.match=function(t){var e=this.re.exec(t);if(!e)return null;for(var r={},n=0;n<this.keys.length;n++)if(e[n+1]!==void 0)try{r[this.keys[n]]=decodeURIComponent(e[n+1])}catch{r[this.keys[n]]=e[n+1]}return{params:r,matched:e[0]}};function x(t,e,r,n,i){var s;try{if(e)if(t.length===4)s=t(e,r,n,i);else return i(e);else{if(t.length===4)return i();s=t(r,n,i)}}catch(o){return i(o)}s&&typeof s.then==\"function\"&&s.then(null,function(o){(d.__unhandled=d.__unhandled||[]).push(o&&o.name?o.name+\": \"+o.message:String(o))})}var O=[\"get\",\"post\",\"put\",\"patch\",\"delete\",\"options\",\"head\",\"all\"];function T(){function t(e,r,n){t.handle(e,r,n)}return t.stack=[],t.__isRouter=!0,t.use=function(){var e=[].slice.call(arguments),r=\"/\";(typeof e[0]==\"string\"||e[0]instanceof RegExp||Array.isArray(e[0]))&&(r=e.shift());var n=[].concat.apply([],e);if(!n.length)throw new TypeError(\"app.use() requires a middleware function\");return n.forEach(function(i){if(typeof i!=\"function\")throw new TypeError(\"app.use() requires a middleware function but got a \"+(i===null?\"null\":typeof i));[].concat(r).forEach(function(s){t.stack.push(new E(s,i,{}))})}),t},t.route=function(e){var r={};return O.forEach(function(n){r[n]=function(){return t[n].apply(t,[e].concat([].slice.call(arguments))),r}}),r},O.forEach(function(e){var r=t[e];t[e]=function(n){if(e===\"get\"&&arguments.length===1&&typeof n==\"string\"&&t.__settings)return t.__settings[n];var i=[].concat.apply([],[].slice.call(arguments,1));if(!i.length)throw new TypeError(\"Route.\"+e+\"() requires a callback function but got a [object Undefined]\");return i.forEach(function(s){if(typeof s!=\"function\")throw new TypeError(\"Route.\"+e+\"() requires a callback function but got a [object \"+(s===void 0?\"Undefined\":s===null?\"Null\":typeof s==\"object\"?\"Object\":typeof s)+\"]\")}),[].concat(n).forEach(function(s){t.stack.push(new E(s,null,{method:e,route:!0,handlers:i}))}),t}}),t.handle=function(e,r,n){var i=0,s=e.url,o=e.baseUrl;function a(c){if(c===\"router\")return e._setUrl(s),e.baseUrl=o,n();c===\"route\"&&(c=void 0);var f=t.stack[i++];if(!f)return e._setUrl(s),e.baseUrl=o,n(c);var l=e.url.split(\"?\")[0],y=f.match(l);if(!y)return a(c);if(f.isRoute){if(f.method!==\"all\"&&f.method.toUpperCase()!==e.method&&!(e.method===\"HEAD\"&&f.method===\"get\"))return e.method===\"OPTIONS\"&&(e._allow=e._allow||[],[f.method.toUpperCase()].concat(f.method===\"get\"?[\"HEAD\"]:[]).forEach(function(g){e._allow.indexOf(g)<0&&e._allow.push(g)})),a(c);e.params=y.params;var v=0,h=function(g){if(g===\"route\")return a();if(g===\"router\")return a(\"router\");var L=f.handlers[v++];if(!L)return a(g);e.next=h,x(L,g,e,r,h)};return h(c)}var A=y.matched.replace(/\\/$/,\"\"),F=e.url,N=e.baseUrl,b=e.url.slice(A.length);b.charAt(0)!==\"/\"&&(b=\"/\"+b),e.baseUrl=N+A,e._setUrl(b),(f.fn.__isRouter||Object.keys(y.params).length)&&(e.params=Object.assign({},e.params,y.params));var P=function(g){e._setUrl(F),e.baseUrl=N,a(g)};e.next=P,x(f.fn,c,e,r,P)}a()},t}function H(t,e,r){return function(n){if(!e.headersSent)if(n){var i=n.status||n.statusCode;i>=400&&i<600||(i=500),e.statusCode=i,e._h={\"content-type\":\"text/html; charset=utf-8\"},e._uncaught={name:n.name||\"Error\",message:String(n.message||n)},e._finish(w[i]||\"Error\")}else if(t.method===\"OPTIONS\"&&t._allow&&t._allow.length){var s=t._allow.join(\",\");e.statusCode=200,e._h.allow=s,e._h[\"content-type\"]=\"text/html; charset=utf-8\",e._finish(s)}else e.statusCode=404,e._h={\"content-type\":\"text/html; charset=utf-8\"},e._finish(\"Cannot \"+t.method+\" \"+t.originalUrl.split(\"?\")[0])}}function U(t,e){var r=t._body,n=t.get(\"content-type\")||\"\";if(r!==void 0&&/json/.test(n))try{r=r===\"\"?\"\":JSON.parse(r)}catch{}var i={status:t.finished?t.statusCode:null,headers:Object.assign({},t._h),body:r};return t._uncaught&&(i.error=t._uncaught),e&&Object.keys(e).forEach(function(s){i[s]=e[s]}),i}function _(){var t=T(),e={\"x-powered-by\":!0,env:\"production\"};t.__settings=e,t.locals={},t.set=function(n,i){return arguments.length===1?e[n]:(e[n]=i,t)};var r=t.get;return t.get=function(n){return arguments.length===1&&typeof n==\"string\"?e[n]:r.apply(t,arguments)},t.enable=function(n){return e[n]=!0,t},t.disable=function(n){return e[n]=!1,t},t.enabled=function(n){return!!e[n]},t.engine=function(){return t},t.listen=function(n,i,s){var o=typeof i==\"function\"?i:s;t.__port=n,(d.__listening=d.__listening||[]).push(n);var a={address:function(){return{port:n}},close:function(c){c&&c()},on:function(){return a}};return o&&d.setTimeout(o,0),a},t.inject=function(n){return new Promise(function(i){var s=!1,o,a=new m(n,t),c=function(l){s||(s=!0,d.clearTimeout(o),i(U(l)))},f=new u(a,t,c);a.res=f,e[\"x-powered-by\"]&&(f._h[\"x-powered-by\"]=\"Express\"),o=d.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0,unhandled:(d.__unhandled||[]).slice()}))},n&&n.timeoutMs||3e4),t.handle(a,f,H(a,f,c))})},t}_.Router=function(){return T()},_.json=function(t){t=t||{};var e=t.limit?R(t.limit):100*1024;return function(n,i,s){if(n._bodyParsed)return s();n._bodyParsed=!0,n.body===void 0&&(n.body={});var o=(n.headers[\"content-type\"]||\"\").split(\";\")[0].trim().toLowerCase();if(!/^application\\/(.+\\+)?json$/.test(o)||n._raw==null||n._raw===\"\")return n._raw!=null&&o.indexOf(\"json\")<0&&(n._bodyParsed=!1),s();if(n._raw.length>e){var a=new Error(\"request entity too large\");return a.status=a.statusCode=413,a.type=\"entity.too.large\",a.expose=!0,s(a)}var c=n._raw.trim().charAt(0);try{if(t.strict!==!1&&c!==\"{\"&&c!==\"[\")throw new SyntaxError(\"Unexpected token \"+c+\" in JSON (strict mode: only objects and arrays)\");n.body=JSON.parse(n._raw)}catch(l){var f=new SyntaxError(l.message);return f.status=f.statusCode=400,f.type=\"entity.parse.failed\",f.body=n._raw,f.expose=!0,s(f)}s()}},_.urlencoded=function(){return function(e,r,n){e.body===void 0&&(e.body={});var i=(e.headers[\"content-type\"]||\"\").split(\";\")[0].trim().toLowerCase();if(i!==\"application/x-www-form-urlencoded\"||e._raw==null)return n();var s={};new URLSearchParams(e._raw).forEach(function(o,a){s[a]=Object.prototype.hasOwnProperty.call(s,a)?[].concat(s[a],o):o}),e.body=s,e._bodyParsed=!0,n()}},_.static=function(t){return function(r,n,i){if(r.method!==\"GET\"&&r.method!==\"HEAD\")return i();var s=p.path.join(t,decodeURIComponent(r.path));if(d.__disk.get(s)===void 0)return i();n.sendFile(p.path.resolve(s))}};function R(t){if(typeof t==\"number\")return t;var e=/^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(t));if(!e)return 100*1024;var r={b:1,kb:1024,mb:1048576,gb:1073741824}[(e[2]||\"b\").toLowerCase()];return Math.floor(parseFloat(e[1])*r)}d.__parseSize=R,_.__Req=m,_.__Res=u,d.express=_,p.express=_,d.__goi=function(t,e,r){return r=r||{},new Promise(function(n){var i=new m(e,r.app||null);e&&e.body!==void 0&&e.raw!==!0&&(i.body=typeof e.body==\"string\"?e.body:JSON.parse(JSON.stringify(e.body))),e&&e.params&&(i.params=Object.assign({},e.params)),e&&e.locals&&Object.keys(e.locals).forEach(function(h){i[h]=e.locals[h]});var s=!1,o=null,a=null,c,f=new u(i,r.app||{get:function(){},locals:{}},function(){d.setTimeout(l,0)});r.views&&(f.app={get:function(h){return h===\"views\"?r.views:h===\"view engine\"?r.engine:void 0},locals:{}}),i.res=f;function l(){if(!s){s=!0,d.clearTimeout(c);var h=U(f);n({status:h.status,body:h.body,headers:h.headers,next:o,thrown:a,req:{user:i.user===void 0?null:d.__json(i.user),body:d.__json(i.body)}})}}var y=function(h){h==null?o=!0:o=h instanceof Error||h&&h.message?{name:h.name||\"Error\",message:String(h.message),status:h.status||h.statusCode||null}:{value:String(h)},d.setTimeout(l,0)};i.next=y,c=d.setTimeout(l,r.timeoutMs||5e3);var v;try{v=t.length===4&&r.err!==void 0?t(r.err,i,f,y):t(i,f,y)}catch(h){a={name:h.name||\"Error\",message:String(h.message)},d.setTimeout(l,0);return}v&&typeof v.then==\"function\"?v.then(function(){d.setTimeout(l,0)},function(h){a={name:h&&h.name||\"Error\",message:String(h&&h.message)},d.setTimeout(l,0)}):f.finished})},d.__res=function(t){return{status:t.status,body:t.body}}})(globalThis);\n"
+        },
+        {
+          "name": "lib/env.js",
+          "language": "javascript",
+          "code": "// lib/env.js — PROVIDED: what dotenv would load from .env into process.env before your code runs.\nprocess.env.API_KEY = \"lab2-key\";\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every idea of Chapter 2 in one app: a resource router, query parsing, a scoped guard, validation that returns precise 400/409 answers, a logger that sees the final status, and the 404 + error handler pair that turns every failure — including async ones forwarded by <code>wrap</code> — into one JSON shape.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ý của Chương 2 trong một app: router theo tài nguyên, đọc query, lệnh chặn theo phạm vi, validation trả 400/409 chính xác, logger thấy mã cuối cùng, và cặp 404 + error handler biến mọi thất bại — kể cả lỗi async được <code>wrap</code> chuyển tới — thành một dạng JSON.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/express.js",
+          "lib/env.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "List, filter by statuses, sort both ways",
+              "vi": "Danh sách, lọc theo trạng thái, sắp hai chiều"
+            },
+            "goi": "[await go('GET', '/api/tasks'), await go('GET', '/api/tasks?status=todo,doing&sort=priority'), await go('GET', '/api/tasks?sort=-priority')]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": [
+                  "1:done:2",
+                  "2:doing:1",
+                  "3:todo:3"
+                ]
+              },
+              {
+                "status": 200,
+                "body": [
+                  "2:doing:1",
+                  "3:todo:3"
+                ]
+              },
+              {
+                "status": 200,
+                "body": [
+                  "3:todo:3",
+                  "1:done:2",
+                  "2:doing:1"
+                ]
+              }
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 2",
+              "vi": "Kiểm ẩn 2"
+            },
+            "goi": "[await go('GET', '/api/tasks?status=blocked'), await go('GET', '/api/tasks?sort=title')]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 400,
+                "body": {
+                  "error": "Invalid status"
+                }
+              },
+              {
+                "status": 400,
+                "body": {
+                  "error": "Invalid sort"
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Read one: 200 / 404 / 400",
+              "vi": "Đọc một: 200 / 404 / 400"
+            },
+            "goi": "[await go('GET', '/api/tasks/2'), await go('GET', '/api/tasks/9'), await go('GET', '/api/tasks/two')]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "id": 2,
+                  "title": "Write the router",
+                  "status": "doing",
+                  "priority": 1
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Task not found"
+                }
+              },
+              {
+                "status": 400,
+                "body": {
+                  "error": "Invalid id"
+                }
+              }
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "POST without / with a wrong key → 401",
+              "vi": "POST thiếu / sai key → 401"
+            },
+            "goi": "[await go('POST', '/api/tasks', { title: 'x' }), await go('POST', '/api/tasks', { title: 'Deploy' }, { 'x-api-key': 'nope' })]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 401,
+                "body": {
+                  "error": "API key required"
+                }
+              },
+              {
+                "status": 401,
+                "body": {
+                  "error": "Invalid API key"
+                }
+              }
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "201 status todo priority 2; 400 title; 400 priority",
+              "vi": "201 status todo priority 2; 400 title; 400 priority"
+            },
+            "goi": "[await go('POST', '/api/tasks', { title: '  Write tests ', status: 'done', id: 1 }, K), await go('POST', '/api/tasks', { title: 'Hi' }, K), await go('POST', '/api/tasks', { title: 'Deploy app', priority: 5 }, K)]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 201,
+                "body": {
+                  "id": 4,
+                  "title": "Write tests",
+                  "status": "todo",
+                  "priority": 2
+                }
+              },
+              {
+                "status": 400,
+                "body": {
+                  "error": "title must be 3-80 characters"
+                }
+              },
+              {
+                "status": 400,
+                "body": {
+                  "error": "priority must be 1, 2 or 3"
+                }
+              }
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "todo → doing OK; backwards / same → 409",
+              "vi": "todo → doing được; lùi / giữ nguyên → 409"
+            },
+            "goi": "[await go('PATCH', '/api/tasks/3', { status: 'doing' }, K), await go('PATCH', '/api/tasks/3', { status: 'todo' }, K), await go('PATCH', '/api/tasks/1', { status: 'done' }, K)]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "id": 3,
+                  "title": "Add middleware",
+                  "status": "doing",
+                  "priority": 3
+                }
+              },
+              {
+                "status": 409,
+                "body": {
+                  "error": "Cannot move from doing to todo"
+                }
+              },
+              {
+                "status": 409,
+                "body": {
+                  "error": "Cannot move from done to done"
+                }
+              }
+            ],
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 7",
+              "vi": "Kiểm ẩn 7"
+            },
+            "goi": "[await go('PATCH', '/api/tasks/2', { status: 'archived' }, K), await go('PATCH', '/api/tasks/9', { status: 'done' }, K), await go('PATCH', '/api/tasks/2', { status: 'done' }), await go('PATCH', '/api/tasks/2', { status: 'done' }, K)]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 400,
+                "body": {
+                  "error": "Invalid status"
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Task not found"
+                }
+              },
+              {
+                "status": 401,
+                "body": {
+                  "error": "API key required"
+                }
+              },
+              {
+                "status": 200,
+                "body": {
+                  "id": 2,
+                  "title": "Write the router",
+                  "status": "done",
+                  "priority": 1
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "The logger prints METHOD URL STATUS; JSON 404",
+              "vi": "Logger in METHOD URL STATUS; 404 JSON"
+            },
+            "goi": "(await go('GET', '/api/tasks/9'), await go('GET', '/api/nope'), __log)",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              "GET /api/tasks/9 404",
+              "GET /api/nope 404"
+            ],
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "Invalid JSON → 400; database errors → 500, never a hang",
+              "vi": "JSON hỏng → 400; lỗi CSDL → 500, không bao giờ treo"
+            },
+            "goi": "[await go('POST', '/api/tasks', '{\"title\": oops', { ...K, 'content-type': 'application/json' }), (tasksRepo.failNext = true, await go('GET', '/api/tasks')), (tasksRepo.failNext = true, await go('GET', '/api/tasks/1'))]",
+            "chuanBi": "const { app, tasksRepo } = module.exports; const K = { 'x-api-key': 'lab2-key' };\nconst go = async (method, url, body, headers = {}) => { const r = await app.inject({ method, url, body, headers, timeoutMs: 3000 }); return { status: r.status, body: Array.isArray(r.body) ? r.body.map((t) => t.id + ':' + t.status + ':' + t.priority) : r.body }; };",
+            "mongDoi": [
+              {
+                "status": 400,
+                "body": {
+                  "error": "Invalid JSON"
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "Internal Server Error"
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "Internal Server Error"
+                }
+              }
+            ],
+            "nhom": "f5"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "The API key is read from process.env",
+              "vi": "API key đọc từ process.env"
+            },
+            "khop": "process\\.env\\.API_KEY",
+            "tep": "answer.js",
+            "nhom": "f3"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. List with filters",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Read one",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Create (guarded, validated)",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Move a task forward",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Logger, 404 and errors",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Declaring <code>/:id</code> before a fixed path, or putting <code>express.json()</code> after the router.|||Khai <code>/:id</code> trước một đường cố định, hoặc đặt <code>express.json()</code> sau router."
+        },
+        {
+          "loi": "Guarding the whole router: the GET routes must stay open.|||Chặn cả router: các route GET phải mở."
+        },
+        {
+          "loi": "Async routes without <code>wrap</code>: a database error hangs the request (Express 4).|||Route async không có <code>wrap</code>: lỗi CSDL làm treo request (Express 4)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state machine",
+          "vi": "máy trạng thái",
+          "giaiThich": "todo → doing → done"
+        }
+      ]
+    }
+  ]
+}

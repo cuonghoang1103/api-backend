@@ -1,0 +1,1067 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-1-2-http-server",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-1-2-http-server"
+  },
+  "exercises": [
+    {
+      "title": "Anatomy of a request: method and status for each intention",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HTTP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>For each thing the React app wants to do, choose the HTTP method and the status code of the <b>successful</b> (or described) answer — the vocabulary of the lesson's anatomy table.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi việc app React muốn làm, chọn phương thức HTTP và mã trạng thái của câu trả lời <b>thành công</b> (hoặc như mô tả) — từ vựng của bảng giải phẫu trong bài.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the verb of the intention: read / create / replace / change / remove.|||Đọc động từ của ý định: đọc / tạo / thay / sửa / xoá.",
+        "Status codes: 2xx success, 4xx the client's fault.|||Mã trạng thái: 2xx thành công, 4xx lỗi phía client."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anatomy of a request: method and status for each intention\n\nAnswer in the answer panel (no code needed).\n\n1. Intention → method + statusÝ định → phương thức + mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anatomy of a request: method and status for each intention — answer key\n\n1. Intention → method + statusÝ định → phương thức + mã\n   - r1.m: GET\n   - r1.s: 200\n   - r2.m: POST\n   - r2.s: 201\n   - r3.m: PUT\n   - r3.s: 200\n   - r4.m: PATCH\n   - r4.s: 200\n   - r5.m: DELETE\n   - r5.s: 204\n   - r6.m: GET\n   - r6.s: 404\n   - r7.m: POST\n   - r7.s: 400\n   - r8.m: GET\n   - r8.s: 401\n   GET reads, POST creates (201 Created), PUT replaces, PATCH changes part, DELETE removes (204 = success with an empty body). The failure rows reuse the method of the attempt: the status code says what went wrong.VI: GET đọc, POST tạo (201 Created), PUT thay toàn bộ, PATCH sửa một phần, DELETE xoá (204 = thành công, thân rỗng). Các hàng thất bại giữ phương thức của lần thử: mã trạng thái nói cái gì sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>GET reads, POST creates (201 Created), PUT replaces, PATCH changes part, DELETE removes (204 = success with an empty body). The failure rows reuse the method of the attempt: the status code says what went wrong.</p><p><i>VI: GET đọc, POST tạo (201 Created), PUT thay toàn bộ, PATCH sửa một phần, DELETE xoá (204 = thành công, thân rỗng). Các hàng thất bại giữ phương thức của lần thử: mã trạng thái nói cái gì sai.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "t1",
+            "de": "<p>Intention → method + status</p><p style=\"opacity:.75;font-size:.92em\"><i>Ý định → phương thức + mã</i></p>",
+            "cot": [
+              {
+                "ma": "viec",
+                "ten": "Intention"
+              },
+              {
+                "ma": "m",
+                "ten": "Method",
+                "luaChon": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              },
+              {
+                "ma": "s",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "201",
+                  "204",
+                  "400",
+                  "401",
+                  "404"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "viec": "Read the list of products"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "viec": "Create a product from a JSON body"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "viec": "Replace product 42 with a full new version"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "viec": "Change only the price of product 42"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "viec": "Remove product 42 (nothing to send back)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "viec": "Read product 999, which does not exist"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "viec": "Create a product but the body has no name"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "viec": "Read /api/me without sending a token"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "GET",
+              "r1.s": "200",
+              "r2.m": "POST",
+              "r2.s": "201",
+              "r3.m": "PUT",
+              "r3.s": "200",
+              "r4.m": "PATCH",
+              "r4.s": "200",
+              "r5.m": "DELETE",
+              "r5.s": "204",
+              "r6.m": "GET",
+              "r6.s": "404",
+              "r7.m": "POST",
+              "r7.s": "400",
+              "r8.m": "GET",
+              "r8.s": "401"
+            },
+            "giaiThich": "<p>GET reads, POST creates (201 Created), PUT replaces, PATCH changes part, DELETE removes (204 = success with an empty body). The failure rows reuse the method of the attempt: the status code says what went wrong.</p><p><i>VI: GET đọc, POST tạo (201 Created), PUT thay toàn bộ, PATCH sửa một phần, DELETE xoá (204 = thành công, thân rỗng). Các hàng thất bại giữ phương thức của lần thử: mã trạng thái nói cái gì sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 200 for a create.|||Trả 200 cho thao tác tạo."
+        },
+        {
+          "loi": "Using POST to update.|||Dùng POST để sửa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "method",
+          "vi": "phương thức"
+        },
+        {
+          "en": "status code",
+          "vi": "mã trạng thái"
+        }
+      ]
+    },
+    {
+      "title": "The raw Node server of the lesson: GET /api/hello",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "http module"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Before Express, a server is <code>http.createServer((req, res) => …)</code> and you do everything by hand. Rebuild the lesson's server and export it:</p>\n<ul><li><code>GET /api/hello</code> → <code>200</code>, header <code>Content-Type: application/json</code>, body <code>{\"message\":\"Hello Node\"}</code>;</li>\n<li>anything else (another path, or another method on <code>/api/hello</code>) → <code>404</code>, body <code>Not found</code>.</li></ul>\n<p><code>module.exports = server;</code> — do not call <code>listen</code>; the grader sends requests with <code>await server.inject({ method, url })</code> and gets <code>{ status, headers, body }</code> (body as text, like curl).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Match both <code>req.url</code> AND <code>req.method</code>.</li>\n  <li>Send the JSON with <code>res.writeHead(200, { 'Content-Type': 'application/json' })</code> + <code>res.end(JSON.stringify(…))</code>.</li>\n  <li>Every branch must end the response, or the client waits forever.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước Express, server là <code>http.createServer((req, res) => …)</code> và bạn tự làm mọi thứ. Dựng lại server của bài và export nó:</p>\n<ul><li><code>GET /api/hello</code> → <code>200</code>, header <code>Content-Type: application/json</code>, thân <code>{\"message\":\"Hello Node\"}</code>;</li>\n<li>mọi thứ khác (đường khác, hoặc phương thức khác trên <code>/api/hello</code>) → <code>404</code>, thân <code>Not found</code>.</li></ul>\n<p><code>module.exports = server;</code> — không gọi <code>listen</code>; máy chấm gửi request bằng <code>await server.inject({ method, url })</code> và nhận <code>{ status, headers, body }</code> (thân dạng chữ, như curl).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khớp cả <code>req.url</code> LẪN <code>req.method</code>.</li>\n  <li>Gửi JSON bằng <code>res.writeHead(200, { 'Content-Type': 'application/json' })</code> + <code>res.end(JSON.stringify(…))</code>.</li>\n  <li>Mọi nhánh phải kết thúc response, nếu không client chờ mãi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "GET /api/hello",
+          "output": "200  content-type: application/json  {\"message\":\"Hello Node\"}",
+          "explanation": "The happy path.|||Đường thuận."
+        },
+        {
+          "input": "POST /api/hello",
+          "output": "404  Not found",
+          "explanation": "Right path, wrong method.|||Đúng đường, sai phương thức."
+        }
+      ],
+      "hintsJson": [
+        "<code>if (req.url === '/api/hello' && req.method === 'GET') { … } else { … }</code>",
+        "<code>res.end()</code> only accepts a string (or Buffer): pass <code>JSON.stringify(obj)</code>, not the object.|||<code>res.end()</code> chỉ nhận chuỗi (hoặc Buffer): truyền <code>JSON.stringify(obj)</code>, không truyền đối tượng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\n\nconst server = http.createServer((req, res) => {\n  if (req.url === '/api/hello') {\n    res.end({ message: 'Hello Node' });\n  }\n});\n\nmodule.exports = server;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\n\nconst server = http.createServer((req, res) => {\n  // match BOTH the path and the method\n  if (req.url === '/api/hello' && req.method === 'GET') {\n    res.writeHead(200, { 'Content-Type': 'application/json' });   // status + headers\n    res.end(JSON.stringify({ message: 'Hello Node' }));            // body must be a string\n  } else {\n    res.writeHead(404);\n    res.end('Not found');                                           // every branch ends the response\n  }\n});\n\nmodule.exports = server;   // bin/www (or a test) decides when to listen\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every part of the anatomy table is manual here: matching method + URL, writing the status and headers, serialising the body and ending the response. That is exactly the list of things <code>app.get('/api/hello', (req, res) => res.json({…}))</code> does for you in lesson 2.1 — which is why seeing it once by hand makes Express easier to trust.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi phần của bảng giải phẫu ở đây đều làm tay: khớp phương thức + URL, ghi mã và header, tuần tự hoá thân và kết thúc response. Đó đúng là danh sách những việc <code>app.get('/api/hello', (req, res) => res.json({…}))</code> làm giúp bạn ở bài 2.1 — vì vậy tự tay làm một lần giúp bạn tin Express hơn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /api/hello → 200 + JSON",
+              "vi": "GET /api/hello → 200 + JSON"
+            },
+            "goi": "await go('GET', '/api/hello')",
+            "chuanBi": "const go = async (method, url) => __pick(await module.exports.inject({ method, url }), 'status body');",
+            "mongDoi": {
+              "status": 200,
+              "body": "{\"message\":\"Hello Node\"}"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Content-Type is application/json",
+              "vi": "Content-Type là application/json"
+            },
+            "goi": "(await module.exports.inject({ url: '/api/hello' })).headers['content-type']",
+            "chuanBi": "const go = async (method, url) => __pick(await module.exports.inject({ method, url }), 'status body');",
+            "mongDoi": "application/json"
+          },
+          {
+            "moTa": {
+              "en": "Unknown path → 404 Not found",
+              "vi": "Đường lạ → 404 Not found"
+            },
+            "goi": "await go('GET', '/nope')",
+            "chuanBi": "const go = async (method, url) => __pick(await module.exports.inject({ method, url }), 'status body');",
+            "mongDoi": {
+              "status": 404,
+              "body": "Not found"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "await go('POST', '/api/hello')",
+            "chuanBi": "const go = async (method, url) => __pick(await module.exports.inject({ method, url }), 'status body');",
+            "mongDoi": {
+              "status": 404,
+              "body": "Not found"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "await go('DELETE', '/')",
+            "chuanBi": "const go = async (method, url) => __pick(await module.exports.inject({ method, url }), 'status body');",
+            "mongDoi": {
+              "status": 404,
+              "body": "Not found"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>res.end({ message: 'Hello Node' })</code> — Node throws a TypeError: the chunk must be a string or Buffer.|||<code>res.end({ message: 'Hello Node' })</code> — Node ném TypeError: chunk phải là chuỗi hoặc Buffer."
+        },
+        {
+          "loi": "Forgetting the Content-Type header: browsers and axios then treat the body as plain text.|||Quên header Content-Type: trình duyệt và axios coi thân là chữ thường."
+        },
+        {
+          "loi": "An <code>if</code> without <code>else</code>: unknown URLs never get an answer.|||<code>if</code> không có <code>else</code>: URL lạ không bao giờ được trả lời."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "http.createServer",
+          "vi": "tạo server HTTP"
+        },
+        {
+          "en": "res.writeHead",
+          "vi": "ghi dòng trạng thái + header"
+        }
+      ]
+    },
+    {
+      "title": "Parse the URL by hand: /api/products/:id and ?minPrice=",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "URL parsing",
+        "405"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Without Express there is no <code>req.params</code> or <code>req.query</code> — only the raw string <code>req.url</code> (e.g. <code>/api/products/2?x=1</code>). Use <code>new URL(req.url, 'http://localhost')</code> to split it. Build a read-only products API:</p>\n<ul><li><code>GET /api/products</code> → 200 + all products; with <code>?minPrice=N</code> only those with <code>price ≥ N</code>;</li>\n<li><code>GET /api/products/:id</code> → 200 + one product, or 404 <code>{\"error\":\"Product not found\"}</code>;</li>\n<li>any other method on these paths → <code>405</code> with header <code>Allow: GET</code> and <code>{\"error\":\"Method not allowed\"}</code>;</li>\n<li>any other path → 404 <code>{\"error\":\"Not found\"}</code>.</li></ul>\n<p>Every answer is JSON with <code>Content-Type: application/json</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>const url = new URL(req.url, 'http://localhost')</code> ⇒ <code>url.pathname</code> and <code>url.searchParams.get('minPrice')</code>.</li>\n  <li>Match the id with a regular expression, e.g. <code>/^\\/api\\/products\\/(\\d+)$/</code>.</li>\n  <li>Write one helper <code>send(res, status, data, headers)</code> instead of repeating writeHead/end.</li>\n</ul>",
+      "problemHtmlVi": "<p>Không có Express thì không có <code>req.params</code> hay <code>req.query</code> — chỉ có chuỗi thô <code>req.url</code> (vd <code>/api/products/2?x=1</code>). Dùng <code>new URL(req.url, 'http://localhost')</code> để tách. Dựng API sản phẩm chỉ đọc:</p>\n<ul><li><code>GET /api/products</code> → 200 + mọi sản phẩm; có <code>?minPrice=N</code> thì chỉ những sản phẩm <code>price ≥ N</code>;</li>\n<li><code>GET /api/products/:id</code> → 200 + một sản phẩm, hoặc 404 <code>{\"error\":\"Product not found\"}</code>;</li>\n<li>phương thức khác trên các đường này → <code>405</code> kèm header <code>Allow: GET</code> và <code>{\"error\":\"Method not allowed\"}</code>;</li>\n<li>đường khác → 404 <code>{\"error\":\"Not found\"}</code>.</li></ul>\n<p>Mọi câu trả lời là JSON với <code>Content-Type: application/json</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>const url = new URL(req.url, 'http://localhost')</code> ⇒ <code>url.pathname</code> và <code>url.searchParams.get('minPrice')</code>.</li>\n  <li>Khớp id bằng biểu thức chính quy, vd <code>/^\\/api\\/products\\/(\\d+)$/</code>.</li>\n  <li>Viết một hàm <code>send(res, status, data, headers)</code> thay vì lặp writeHead/end.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "GET /api/products?minPrice=5",
+          "output": "200 [{\"id\":1,\"name\":\"Book\",\"price\":25},{\"id\":3,\"name\":\"Notebook\",\"price\":5}]",
+          "explanation": "searchParams values are strings — convert to Number.|||Giá trị searchParams là chuỗi — đổi sang Number."
+        },
+        {
+          "input": "DELETE /api/products/1",
+          "output": "405  Allow: GET  {\"error\":\"Method not allowed\"}",
+          "explanation": "The path exists, the method does not.|||Đường có, phương thức thì không."
+        }
+      ],
+      "hintsJson": [
+        "Compare <code>url.pathname</code>, not <code>req.url</code>: <code>/api/products?minPrice=5</code> is not equal to <code>/api/products</code>.|||So <code>url.pathname</code>, không so <code>req.url</code>: <code>/api/products?minPrice=5</code> không bằng <code>/api/products</code>.",
+        "Decide the path first (list / one / unknown), then check the method — that is how you know 405 vs 404.|||Xác định đường trước (danh sách / một cái / lạ), rồi mới kiểm phương thức — vậy mới phân biệt được 405 với 404."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst products = [\n  { id: 1, name: 'Book', price: 25 },\n  { id: 2, name: 'Pen', price: 2 },\n  { id: 3, name: 'Notebook', price: 5 },\n];\n\nconst server = http.createServer((req, res) => {\n  if (req.url === '/api/products') {\n    res.writeHead(200, { 'Content-Type': 'application/json' });\n    return res.end(JSON.stringify(products));\n  }\n  res.writeHead(404, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify({ error: 'Not found' }));\n});\n\nmodule.exports = server;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst products = [\n  { id: 1, name: 'Book', price: 25 },\n  { id: 2, name: 'Pen', price: 2 },\n  { id: 3, name: 'Notebook', price: 5 },\n];\n\nfunction send(res, status, data, headers = {}) {\n  res.writeHead(status, { 'Content-Type': 'application/json', ...headers });\n  res.end(JSON.stringify(data));\n}\n\nconst server = http.createServer((req, res) => {\n  const url = new URL(req.url, 'http://localhost');      // req.url is only \"/path?query\"\n  const one = url.pathname.match(/^\\/api\\/products\\/(\\d+)$/);\n  const isList = url.pathname === '/api/products';\n\n  if (!isList && !one) return send(res, 404, { error: 'Not found' });                 // unknown path\n  if (req.method !== 'GET') return send(res, 405, { error: 'Method not allowed' }, { Allow: 'GET' });\n\n  if (isList) {\n    const raw = url.searchParams.get('minPrice');        // a string, or null when absent\n    const min = raw === null ? -Infinity : Number(raw);\n    return send(res, 200, products.filter((p) => p.price >= min));\n  }\n  const product = products.find((p) => p.id === Number(one[1]));\n  if (!product) return send(res, 404, { error: 'Product not found' });\n  send(res, 200, product);\n});\n\nmodule.exports = server;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>new URL</code> needs a base because <code>req.url</code> is only the path; it then gives the pathname and a parsed <code>searchParams</code>. Routing by regex + method is what Express's router does internally — and it also explains 405: the path matched, the method did not. Seeing how much code this takes is the argument for <code>express.Router()</code>.</p>",
+      "solutionExplanationHtmlVi": "<p><code>new URL</code> cần một gốc vì <code>req.url</code> chỉ là phần đường dẫn; sau đó nó cho pathname và <code>searchParams</code> đã tách. Định tuyến bằng regex + phương thức là việc router của Express làm bên trong — và cũng giải thích 405: đường khớp, phương thức không. Thấy việc này tốn bao nhiêu mã chính là lý lẽ để dùng <code>express.Router()</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "?minPrice=5 filters by price",
+              "vi": "?minPrice=5 lọc theo giá"
+            },
+            "goi": "await go('GET', '/api/products?minPrice=5')",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": {
+              "status": 200,
+              "allow": null,
+              "type": "application/json",
+              "body": [
+                {
+                  "id": 1,
+                  "name": "Book",
+                  "price": 25
+                },
+                {
+                  "id": 3,
+                  "name": "Notebook",
+                  "price": 5
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "/api/products/2 → the Pen",
+              "vi": "/api/products/2 → cây bút"
+            },
+            "goi": "await go('GET', '/api/products/2')",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": {
+              "status": 200,
+              "allow": null,
+              "type": "application/json",
+              "body": {
+                "id": 2,
+                "name": "Pen",
+                "price": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Unknown id → 404 Product not found",
+              "vi": "Id lạ → 404 Product not found"
+            },
+            "goi": "await go('GET', '/api/products/9')",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": {
+              "status": 404,
+              "allow": null,
+              "type": "application/json",
+              "body": {
+                "error": "Product not found"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Wrong method → 405 + Allow: GET",
+              "vi": "Sai phương thức → 405 + Allow: GET"
+            },
+            "goi": "await go('DELETE', '/api/products/1')",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": {
+              "status": 405,
+              "allow": "GET",
+              "type": "application/json",
+              "body": {
+                "error": "Method not allowed"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "[await go('GET', '/api/products'), await go('GET', '/api/users')]",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": [
+              {
+                "status": 200,
+                "allow": null,
+                "type": "application/json",
+                "body": [
+                  {
+                    "id": 1,
+                    "name": "Book",
+                    "price": 25
+                  },
+                  {
+                    "id": 2,
+                    "name": "Pen",
+                    "price": 2
+                  },
+                  {
+                    "id": 3,
+                    "name": "Notebook",
+                    "price": 5
+                  }
+                ]
+              },
+              {
+                "status": 404,
+                "allow": null,
+                "type": "application/json",
+                "body": {
+                  "error": "Not found"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 6",
+              "vi": "Kiểm ẩn 6"
+            },
+            "goi": "[await go('POST', '/api/products'), await go('GET', '/api/products/2/reviews')]",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": [
+              {
+                "status": 405,
+                "allow": "GET",
+                "type": "application/json",
+                "body": {
+                  "error": "Method not allowed"
+                }
+              },
+              {
+                "status": 404,
+                "allow": null,
+                "type": "application/json",
+                "body": {
+                  "error": "Not found"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 7",
+              "vi": "Kiểm ẩn 7"
+            },
+            "goi": "await go('GET', '/api/products?minPrice=30')",
+            "chuanBi": "const go = async (method, url) => { const r = await module.exports.inject({ method, url }); return { status: r.status, allow: r.headers.allow || null, type: r.headers['content-type'] || null, body: r.body === undefined ? null : JSON.parse(r.body) }; };",
+            "mongDoi": {
+              "status": 200,
+              "allow": null,
+              "type": "application/json",
+              "body": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>if (req.url === '/api/products')</code> — the version with a query string falls into the 404 branch.|||<code>if (req.url === '/api/products')</code> — bản có query string rơi vào nhánh 404."
+        },
+        {
+          "loi": "Answering 404 for a wrong method: the resource exists, so 405 + <code>Allow</code> tells the client what IS allowed.|||Trả 404 cho sai phương thức: tài nguyên có tồn tại, nên 405 + <code>Allow</code> cho client biết cái gì ĐƯỢC phép."
+        },
+        {
+          "loi": "<code>p.price >= url.searchParams.get('minPrice')</code> with no minPrice: <code>null</code> becomes 0 and hides the bug until someone sends <code>abc</code>.|||<code>p.price >= url.searchParams.get('minPrice')</code> khi không có minPrice: <code>null</code> thành 0 và giấu lỗi tới khi có người gửi <code>abc</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pathname",
+          "vi": "phần đường dẫn của URL"
+        },
+        {
+          "en": "405 Method Not Allowed",
+          "vi": "sai phương thức",
+          "giaiThich": "kèm header Allow"
+        }
+      ]
+    },
+    {
+      "title": "Read a JSON body chunk by chunk (what express.json() does)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "streams",
+        "request body"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>A raw server does not parse bodies: <code>req</code> is a stream, the body arrives in several <code>'data'</code> chunks and then <code>'end'</code>. Implement <code>POST /api/products</code>:</p>\n<ul><li>header <code>Content-Type</code> not starting with <code>application/json</code> ⇒ <code>415</code> <code>{\"error\":\"Content-Type must be application/json\"}</code>;</li>\n<li>collect every chunk, then <code>JSON.parse</code>; invalid JSON ⇒ <code>400</code> <code>{\"error\":\"Invalid JSON\"}</code>;</li>\n<li><code>name</code> not a non-empty string or <code>price</code> not a number ⇒ <code>400</code> <code>{\"error\":\"name and price required\"}</code>;</li>\n<li>otherwise add <code>{ id, name, price }</code> (next id = biggest + 1) and answer <code>201</code> with the product and a header <code>Location: /api/products/&lt;id&gt;</code>.</li></ul>\n<p>Other routes: 404 <code>{\"error\":\"Not found\"}</code>. All JSON.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>let raw = ''; req.on('data', (chunk) => { raw += chunk; }); req.on('end', () => { … });</code> — or <code>for await (const chunk of req)</code>.</li>\n  <li>Only parse inside <code>'end'</code>: a single chunk is usually NOT the whole JSON.</li>\n  <li>Wrap <code>JSON.parse</code> in try/catch — a throw inside an event callback crashes a real server.</li>\n</ul>",
+      "problemHtmlVi": "<p>Server thô không đọc thân: <code>req</code> là một luồng, thân đến thành nhiều mẩu <code>'data'</code> rồi <code>'end'</code>. Hiện thực <code>POST /api/products</code>:</p>\n<ul><li>header <code>Content-Type</code> không bắt đầu bằng <code>application/json</code> ⇒ <code>415</code> <code>{\"error\":\"Content-Type must be application/json\"}</code>;</li>\n<li>gom mọi mẩu, rồi <code>JSON.parse</code>; JSON hỏng ⇒ <code>400</code> <code>{\"error\":\"Invalid JSON\"}</code>;</li>\n<li><code>name</code> không phải chuỗi khác rỗng hoặc <code>price</code> không phải số ⇒ <code>400</code> <code>{\"error\":\"name and price required\"}</code>;</li>\n<li>còn lại thì thêm <code>{ id, name, price }</code> (id kế = lớn nhất + 1) và trả <code>201</code> với sản phẩm và header <code>Location: /api/products/&lt;id&gt;</code>.</li></ul>\n<p>Route khác: 404 <code>{\"error\":\"Not found\"}</code>. Tất cả là JSON.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>let raw = ''; req.on('data', (chunk) => { raw += chunk; }); req.on('end', () => { … });</code> — hoặc <code>for await (const chunk of req)</code>.</li>\n  <li>Chỉ parse trong <code>'end'</code>: một mẩu thường KHÔNG phải cả JSON.</li>\n  <li>Bọc <code>JSON.parse</code> trong try/catch — lỗi ném trong callback sự kiện làm sập server thật.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "POST /api/products  Content-Type: application/json  {\"name\":\"Ruler\",\"price\":3}",
+          "output": "201  Location: /api/products/4  {\"id\":4,\"name\":\"Ruler\",\"price\":3}",
+          "explanation": "The body arrived in 3 chunks.|||Thân đến thành 3 mẩu."
+        },
+        {
+          "input": "POST /api/products  Content-Type: text/plain",
+          "output": "415 {\"error\":\"Content-Type must be application/json\"}",
+          "explanation": "Checked before reading the body.|||Kiểm trước khi đọc thân."
+        }
+      ],
+      "hintsJson": [
+        "Check the content type first: <code>(req.headers['content-type'] || '').startsWith('application/json')</code>.|||Kiểm kiểu nội dung trước: <code>(req.headers['content-type'] || '').startsWith('application/json')</code>.",
+        "Inside 'end': <code>let data; try { data = JSON.parse(raw); } catch { return send(res, 400, { error: 'Invalid JSON' }); }</code>|||Trong 'end': <code>let data; try { data = JSON.parse(raw); } catch { return send(res, 400, { error: 'Invalid JSON' }); }</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst products = [{ id: 1, name: 'Book', price: 25 }, { id: 2, name: 'Pen', price: 2 }, { id: 3, name: 'Notebook', price: 5 }];\n\nconst server = http.createServer((req, res) => {\n  if (req.method === 'POST' && req.url === '/api/products') {\n    req.on('data', (chunk) => {\n      const data = JSON.parse(chunk);\n      products.push(data);\n      res.writeHead(201, { 'Content-Type': 'application/json' });\n      res.end(JSON.stringify(data));\n    });\n    return;\n  }\n  res.writeHead(404, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify({ error: 'Not found' }));\n});\n\nmodule.exports = server;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst products = [{ id: 1, name: 'Book', price: 25 }, { id: 2, name: 'Pen', price: 2 }, { id: 3, name: 'Notebook', price: 5 }];\n\nfunction send(res, status, data, headers = {}) {\n  res.writeHead(status, { 'Content-Type': 'application/json', ...headers });\n  res.end(JSON.stringify(data));\n}\n\nconst server = http.createServer((req, res) => {\n  if (!(req.method === 'POST' && req.url === '/api/products')) return send(res, 404, { error: 'Not found' });\n\n  // 1) check the media type BEFORE reading anything\n  if (!(req.headers['content-type'] || '').startsWith('application/json')) {\n    return send(res, 415, { error: 'Content-Type must be application/json' });\n  }\n\n  // 2) the body arrives in chunks: collect them all\n  let raw = '';\n  req.on('data', (chunk) => { raw += chunk; });\n  req.on('end', () => {\n    // 3) parse ONCE, at the end, and never let a bad body throw out of this callback\n    let data;\n    try { data = JSON.parse(raw); } catch { return send(res, 400, { error: 'Invalid JSON' }); }\n\n    const { name, price } = data || {};\n    if (typeof name !== 'string' || !name.trim() || typeof price !== 'number') {\n      return send(res, 400, { error: 'name and price required' });\n    }\n    const id = products.reduce((m, p) => Math.max(m, p.id), 0) + 1;\n    const product = { id, name, price };\n    products.push(product);\n    send(res, 201, product, { Location: '/api/products/' + id });   // where the new resource lives\n  });\n});\n\nmodule.exports = server;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>HTTP bodies stream: Node hands them over in pieces as they arrive from the network. Concatenating the chunks and parsing once on <code>'end'</code> is precisely the job of <code>express.json()</code> — it also checks the Content-Type, caps the size and turns a parse failure into a 400. <code>201</code> + <code>Location</code> tells the client where the new resource lives.</p>",
+      "solutionExplanationHtmlVi": "<p>Thân HTTP là luồng: Node trao chúng từng mẩu khi chúng đến từ mạng. Nối các mẩu rồi parse một lần ở <code>'end'</code> đúng là việc của <code>express.json()</code> — nó còn kiểm Content-Type, giới hạn kích thước và biến lỗi parse thành 400. <code>201</code> + <code>Location</code> cho client biết tài nguyên mới nằm ở đâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A valid body in several chunks → 201 + Location",
+              "vi": "Thân hợp lệ nhiều mẩu → 201 + Location"
+            },
+            "goi": "await post('{\"name\":\"Ruler\",\"price\":3}')",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": {
+              "status": 201,
+              "location": "/api/products/4",
+              "body": {
+                "id": 4,
+                "name": "Ruler",
+                "price": 3
+              },
+              "crashed": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Invalid JSON → 400 (the server survives)",
+              "vi": "JSON hỏng → 400 (server còn sống)"
+            },
+            "goi": "await post('{\"name\":\"Ruler\", price: 3}')",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": {
+              "status": 400,
+              "location": null,
+              "body": {
+                "error": "Invalid JSON"
+              },
+              "crashed": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "text/plain → 415",
+              "vi": "text/plain → 415"
+            },
+            "goi": "await post('hello', 'text/plain')",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": {
+              "status": 415,
+              "location": null,
+              "body": {
+                "error": "Content-Type must be application/json"
+              },
+              "crashed": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Empty name → 400",
+              "vi": "Tên rỗng → 400"
+            },
+            "goi": "await post('{\"name\":\"\",\"price\":3}')",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": {
+              "status": 400,
+              "location": null,
+              "body": {
+                "error": "name and price required"
+              },
+              "crashed": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "[await post('{\"name\":\"Clip\",\"price\":1}'), await post('{\"name\":\"Tape\",\"price\":4}', 'application/json; charset=utf-8')]",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": [
+              {
+                "status": 201,
+                "location": "/api/products/4",
+                "body": {
+                  "id": 4,
+                  "name": "Clip",
+                  "price": 1
+                },
+                "crashed": null
+              },
+              {
+                "status": 201,
+                "location": "/api/products/5",
+                "body": {
+                  "id": 5,
+                  "name": "Tape",
+                  "price": 4
+                },
+                "crashed": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 6",
+              "vi": "Kiểm ẩn 6"
+            },
+            "goi": "[await post('{\"name\":\"Glue\",\"price\":\"3\"}'), await post('null'), await post('{}', null)]",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": [
+              {
+                "status": 400,
+                "location": null,
+                "body": {
+                  "error": "name and price required"
+                },
+                "crashed": null
+              },
+              {
+                "status": 400,
+                "location": null,
+                "body": {
+                  "error": "name and price required"
+                },
+                "crashed": null
+              },
+              {
+                "status": 415,
+                "location": null,
+                "body": {
+                  "error": "Content-Type must be application/json"
+                },
+                "crashed": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 7",
+              "vi": "Kiểm ẩn 7"
+            },
+            "goi": "__pick(await module.exports.inject({ url: '/api/products' }), 'status body')",
+            "chuanBi": "const post = async (body, type = 'application/json') => { const r = await module.exports.inject({ method: 'POST', url: '/api/products', headers: type ? { 'content-type': type } : {}, body }); return { status: r.status, location: r.headers.location || null, body: r.body ? JSON.parse(r.body) : null, crashed: r.crashed || null }; };",
+            "mongDoi": {
+              "status": 404,
+              "body": "{\"error\":\"Not found\"}"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Parsing in the <code>'data'</code> handler: the first chunk <code>{\"name\":\"Ru</code> is not valid JSON.|||Parse trong handler <code>'data'</code>: mẩu đầu <code>{\"name\":\"Ru</code> không phải JSON hợp lệ."
+        },
+        {
+          "loi": "Answering outside the 'end' callback: the response is sent before the body has arrived.|||Trả lời bên ngoài callback 'end': response gửi đi trước khi thân tới."
+        },
+        {
+          "loi": "No try/catch around <code>JSON.parse</code>: one bad request kills the process for every user.|||Không try/catch quanh <code>JSON.parse</code>: một request xấu giết tiến trình của mọi người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chunk",
+          "vi": "mẩu dữ liệu"
+        },
+        {
+          "en": "stream",
+          "vi": "luồng",
+          "giaiThich": "dữ liệu đến dần dần"
+        },
+        {
+          "en": "415 Unsupported Media Type",
+          "vi": "sai kiểu nội dung"
+        }
+      ]
+    },
+    {
+      "title": "REST methods mean something: safe, idempotent, cacheable",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "REST semantics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The ★ note of the lesson: \"REST maps HTTP methods to intentions\". These questions check what each method promises.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghi chú ★ của bài: \"REST ánh xạ phương thức HTTP vào ý định\". Các câu hỏi kiểm xem mỗi phương thức hứa điều gì.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: what if this request is sent twice?|||Hỏi: nếu request này bị gửi hai lần thì sao?",
+        "Safe = no side effects.|||An toàn = không tác dụng phụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# REST methods mean something: safe, idempotent, cacheable\n\nAnswer in the answer panel (no code needed).\n\n1. Why must a GET never change data (e.g. GET /api/products/2/delete)?Vì sao GET không bao giờ được đổi dữ liệu (vd GET /api/products/2/delete)?\n2. The network drops while a client sends PUT /api/products/2 {\"price\": 9}. Is it safe to retry?Mạng rớt khi client gửi PUT /api/products/2 {\"price\": 9}. Thử lại có an toàn không?\n3. What does the raw http server NOT do for you that Express does?Server http thô KHÔNG làm giúp bạn việc gì mà Express làm?\n4. Which requests should have a body? (choose all)Request nào nên có thân? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# REST methods mean something: safe, idempotent, cacheable — answer key\n\n1. Why must a GET never change data (e.g. GET /api/products/2/delete)?Vì sao GET không bao giờ được đổi dữ liệu (vd GET /api/products/2/delete)?\n   Answer: a) Browsers and caches may send GETs on their own, e.g. prefetching a link\n   GET is \"safe\": anything may repeat it, prefetch it or cache it. Changes belong to POST/PUT/PATCH/DELETE.VI: GET là \"an toàn\": bất cứ thứ gì cũng có thể lặp lại, tải trước hay cache nó. Thay đổi thuộc về POST/PUT/PATCH/DELETE.\n\n2. The network drops while a client sends PUT /api/products/2 {\"price\": 9}. Is it safe to retry?Mạng rớt khi client gửi PUT /api/products/2 {\"price\": 9}. Thử lại có an toàn không?\n   Answer: d) Yes — PUT is idempotent: sending it twice leaves the same final state\n   Idempotent = same request N times ⇒ same result as once. POST (create) is not: retrying may create a duplicate.VI: Idempotent = cùng request N lần ⇒ cùng kết quả như một lần. POST (tạo) thì không: thử lại có thể tạo bản trùng.\n\n3. What does the raw http server NOT do for you that Express does?Server http thô KHÔNG làm giúp bạn việc gì mà Express làm?\n   Answer: c) Parse the JSON body, extract :params/query, and pick the handler by method + path\n   The http module already accepts connections and exposes method/url/headers; everything above that (routing, body parsing, res.json) is Express.VI: Module http đã nhận kết nối và cho method/url/header; mọi thứ phía trên (định tuyến, đọc thân, res.json) là Express.\n\n4. Which requests should have a body? (choose all)Request nào nên có thân? (chọn hết)\n   Answer: a) POST /api/products + b) PUT /api/products/2 + c) PATCH /api/products/2\n   GET carries its parameters in the URL; DELETE identifies the target by URL. Create/replace/change send the new data in the body.VI: GET mang tham số trên URL; DELETE xác định đối tượng bằng URL. Tạo/thay/sửa gửi dữ liệu mới trong thân.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Browsers and caches may send GETs on their own, e.g. prefetching a link</p><p>GET is \"safe\": anything may repeat it, prefetch it or cache it. Changes belong to POST/PUT/PATCH/DELETE.</p><p><i>VI: GET là \"an toàn\": bất cứ thứ gì cũng có thể lặp lại, tải trước hay cache nó. Thay đổi thuộc về POST/PUT/PATCH/DELETE.</i></p></li><li><p><b>d)</b> Yes — PUT is idempotent: sending it twice leaves the same final state</p><p>Idempotent = same request N times ⇒ same result as once. POST (create) is not: retrying may create a duplicate.</p><p><i>VI: Idempotent = cùng request N lần ⇒ cùng kết quả như một lần. POST (tạo) thì không: thử lại có thể tạo bản trùng.</i></p></li><li><p><b>c)</b> Parse the JSON body, extract <code>:params</code>/query, and pick the handler by method + path</p><p>The http module already accepts connections and exposes method/url/headers; everything above that (routing, body parsing, res.json) is Express.</p><p><i>VI: Module http đã nhận kết nối và cho method/url/header; mọi thứ phía trên (định tuyến, đọc thân, res.json) là Express.</i></p></li><li><p><b>a)</b> <code>POST /api/products</code> + <b>b)</b> <code>PUT /api/products/2</code> + <b>c)</b> <code>PATCH /api/products/2</code></p><p>GET carries its parameters in the URL; DELETE identifies the target by URL. Create/replace/change send the new data in the body.</p><p><i>VI: GET mang tham số trên URL; DELETE xác định đối tượng bằng URL. Tạo/thay/sửa gửi dữ liệu mới trong thân.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "<p>Why must a GET never change data (e.g. <code>GET /api/products/2/delete</code>)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao GET không bao giờ được đổi dữ liệu (vd <code>GET /api/products/2/delete</code>)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Browsers and caches may send GETs on their own, e.g. prefetching a link"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A GET request cannot carry the id of a product in its URL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express refuses to run a handler that changes data on GET"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A GET is always slower than a DELETE on the same server"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>GET is \"safe\": anything may repeat it, prefetch it or cache it. Changes belong to POST/PUT/PATCH/DELETE.</p><p><i>VI: GET là \"an toàn\": bất cứ thứ gì cũng có thể lặp lại, tải trước hay cache nó. Thay đổi thuộc về POST/PUT/PATCH/DELETE.</i></p>"
+          },
+          {
+            "ma": "r2",
+            "de": "<p>The network drops while a client sends <code>PUT /api/products/2 {\"price\": 9}</code>. Is it safe to retry?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mạng rớt khi client gửi <code>PUT /api/products/2 {\"price\": 9}</code>. Thử lại có an toàn không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — the price would become 18"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — PUT must never be retried, only POST can"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if the first request returned 201"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — PUT is idempotent: sending it twice leaves the same final state"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Idempotent = same request N times ⇒ same result as once. POST (create) is not: retrying may create a duplicate.</p><p><i>VI: Idempotent = cùng request N lần ⇒ cùng kết quả như một lần. POST (tạo) thì không: thử lại có thể tạo bản trùng.</i></p>"
+          },
+          {
+            "ma": "r3",
+            "de": "<p>What does the raw <code>http</code> server NOT do for you that Express does?</p><p style=\"opacity:.75;font-size:.92em\"><i>Server <code>http</code> thô KHÔNG làm giúp bạn việc gì mà Express làm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Send a status code and headers back to the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Give you the request method and the request URL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Parse the JSON body, extract <code>:params</code>/query, and pick the handler by method + path"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Open a TCP port and accept connections"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The http module already accepts connections and exposes method/url/headers; everything above that (routing, body parsing, res.json) is Express.</p><p><i>VI: Module http đã nhận kết nối và cho method/url/header; mọi thứ phía trên (định tuyến, đọc thân, res.json) là Express.</i></p>"
+          },
+          {
+            "ma": "r4",
+            "de": "<p>Which requests should have a body? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Request nào nên có thân? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>POST /api/products</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>PUT /api/products/2</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>PATCH /api/products/2</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>GET /api/products?minPrice=5</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>DELETE /api/products/2</code>"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>GET carries its parameters in the URL; DELETE identifies the target by URL. Create/replace/change send the new data in the body.</p><p><i>VI: GET mang tham số trên URL; DELETE xác định đối tượng bằng URL. Tạo/thay/sửa gửi dữ liệu mới trong thân.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Changing data with GET.|||Đổi dữ liệu bằng GET."
+        },
+        {
+          "loi": "Thinking PUT is not retry-safe.|||Tưởng PUT không thử lại được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safe method",
+          "vi": "phương thức an toàn",
+          "giaiThich": "không đổi dữ liệu"
+        },
+        {
+          "en": "idempotent",
+          "vi": "luỹ đẳng",
+          "giaiThich": "lặp lại không đổi kết quả"
+        }
+      ]
+    }
+  ]
+}

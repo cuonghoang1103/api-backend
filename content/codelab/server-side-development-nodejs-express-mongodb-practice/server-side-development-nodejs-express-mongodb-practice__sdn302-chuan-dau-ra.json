@@ -1,0 +1,651 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-chuan-dau-ra",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-chuan-dau-ra"
+  },
+  "exercises": [
+    {
+      "title": "CLOs and the chapters that teach them",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "CLO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The CLO table of lesson 0.3. For each outcome, choose the chapter(s) where it is taught.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng CLO của bài 0.3. Với mỗi chuẩn đầu ra, chọn (các) chương dạy nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Follow the order of the course map.|||Đi theo thứ tự bản đồ môn học.",
+        "Templating sits next to the REST API.|||Templating nằm cạnh REST API."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLOs and the chapters that teach them\n\nAnswer in the answer panel (no code needed).\n\n1. CLO → chapterCLO → chương\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLOs and the chapters that teach them — answer key\n\n1. CLO → chapterCLO → chương\n   - r1.ch: Ch1\n   - r2.ch: Ch2 · Ch8\n   - r3.ch: Ch2\n   - r4.ch: Ch3\n   - r5.ch: Ch4\n   - r6.ch: Ch5\n   - r7.ch: Ch6\n   - r8.ch: Ch4\n   CLO2 spans two chapters: Express in Chapter 2 and the two other prescribed frameworks (NestJS, Hono) in Chapter 8. CLO5 and CLO8 both live in Chapter 4 (REST in MVC + templating).VI: CLO2 trải hai chương: Express ở Chương 2 và hai framework bắt buộc còn lại (NestJS, Hono) ở Chương 8. CLO5 và CLO8 cùng nằm ở Chương 4 (REST theo MVC + templating).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CLO2 spans two chapters: Express in Chapter 2 and the two other prescribed frameworks (NestJS, Hono) in Chapter 8. CLO5 and CLO8 both live in Chapter 4 (REST in MVC + templating).</p><p><i>VI: CLO2 trải hai chương: Express ở Chương 2 và hai framework bắt buộc còn lại (NestJS, Hono) ở Chương 8. CLO5 và CLO8 cùng nằm ở Chương 4 (REST theo MVC + templating).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "c1",
+            "de": "<p>CLO → chapter</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO → chương</i></p>",
+            "cot": [
+              {
+                "ma": "clo",
+                "ten": "CLO"
+              },
+              {
+                "ma": "ch",
+                "ten": "Chapter",
+                "luaChon": [
+                  "Ch1",
+                  "Ch2",
+                  "Ch2 · Ch8",
+                  "Ch3",
+                  "Ch4",
+                  "Ch5",
+                  "Ch6"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "clo": "CLO1 — Node, modules, APIs, the HTTP server"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "clo": "CLO2 — Express (and NestJS/Hono), build a web server"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "clo": "CLO3 — Express Generator"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "clo": "CLO4 — MongoDB, Node apps working with data"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "clo": "CLO5 — REST APIs with Express, MongoDB, Mongoose & population"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "clo": "CLO6 — user authentication"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "clo": "CLO7 — Backend-as-a-Service"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "clo": "CLO8 — EJS and Handlebars templating"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ch": "Ch1",
+              "r2.ch": "Ch2 · Ch8",
+              "r3.ch": "Ch2",
+              "r4.ch": "Ch3",
+              "r5.ch": "Ch4",
+              "r6.ch": "Ch5",
+              "r7.ch": "Ch6",
+              "r8.ch": "Ch4"
+            },
+            "giaiThich": "<p>CLO2 spans two chapters: Express in Chapter 2 and the two other prescribed frameworks (NestJS, Hono) in Chapter 8. CLO5 and CLO8 both live in Chapter 4 (REST in MVC + templating).</p><p><i>VI: CLO2 trải hai chương: Express ở Chương 2 và hai framework bắt buộc còn lại (NestJS, Hono) ở Chương 8. CLO5 và CLO8 cùng nằm ở Chương 4 (REST theo MVC + templating).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that NestJS/Hono belong to CLO2.|||Quên rằng NestJS/Hono thuộc CLO2."
+        },
+        {
+          "loi": "Putting BaaS in Chapter 5.|||Đặt BaaS ở Chương 5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CLO",
+          "vi": "Course Learning Outcome — chuẩn đầu ra"
+        }
+      ]
+    },
+    {
+      "title": "Which Progress Test checks which CLO?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "CLO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>PT1 covers CLO1–5 and CLO8, PT2 covers CLO6, PT3 covers CLO7. Fill in the test for each CLO.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>PT1 gồm CLO1–5 và CLO8, PT2 gồm CLO6, PT3 gồm CLO7. Điền bài test cho mỗi CLO.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only two CLOs are not in PT1.|||Chỉ hai CLO không nằm trong PT1.",
+        "Auth has its own test.|||Xác thực có bài test riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which Progress Test checks which CLO?\n\nAnswer in the answer panel (no code needed).\n\n1. CLO → Progress TestCLO → Progress Test\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which Progress Test checks which CLO? — answer key\n\n1. CLO → Progress TestCLO → Progress Test\n   - r1.pt: PT1\n   - r2.pt: PT1\n   - r3.pt: PT1\n   - r4.pt: PT2\n   - r5.pt: PT3\n   - r6.pt: PT1\n   PT1 is the big one (everything up to the REST API and templating); PT2 is only authentication; PT3 is only BaaS. Plan your revision accordingly.VI: PT1 là bài lớn (mọi thứ tới REST API và templating); PT2 chỉ có xác thực; PT3 chỉ có BaaS. Lên kế hoạch ôn theo đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PT1 is the big one (everything up to the REST API and templating); PT2 is only authentication; PT3 is only BaaS. Plan your revision accordingly.</p><p><i>VI: PT1 là bài lớn (mọi thứ tới REST API và templating); PT2 chỉ có xác thực; PT3 chỉ có BaaS. Lên kế hoạch ôn theo đó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "c2",
+            "de": "<p>CLO → Progress Test</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO → Progress Test</i></p>",
+            "cot": [
+              {
+                "ma": "clo",
+                "ten": "CLO"
+              },
+              {
+                "ma": "pt",
+                "ten": "Progress Test",
+                "luaChon": [
+                  "PT1",
+                  "PT2",
+                  "PT3"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "clo": "CLO1 (Node, HTTP)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "clo": "CLO4 (MongoDB)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "clo": "CLO5 (REST + Mongoose)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "clo": "CLO6 (authentication)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "clo": "CLO7 (BaaS)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "clo": "CLO8 (EJS/Handlebars)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.pt": "PT1",
+              "r2.pt": "PT1",
+              "r3.pt": "PT1",
+              "r4.pt": "PT2",
+              "r5.pt": "PT3",
+              "r6.pt": "PT1"
+            },
+            "giaiThich": "<p>PT1 is the big one (everything up to the REST API and templating); PT2 is only authentication; PT3 is only BaaS. Plan your revision accordingly.</p><p><i>VI: PT1 là bài lớn (mọi thứ tới REST API và templating); PT2 chỉ có xác thực; PT3 chỉ có BaaS. Lên kế hoạch ôn theo đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting CLO8 in PT3.|||Đặt CLO8 vào PT3."
+        },
+        {
+          "loi": "Putting CLO6 in PT1.|||Đặt CLO6 vào PT1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Progress Test",
+          "vi": "bài kiểm tra tiến độ"
+        }
+      ]
+    },
+    {
+      "title": "Which CLO does this piece of work demonstrate?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CLO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>\"Understand\" and \"implement\" mean producing working code. Match each task to the CLO it proves.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Hiểu\" và \"hiện thực\" nghĩa là tạo ra mã chạy được. Ghép mỗi việc với CLO mà nó chứng minh.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the tool: populate, bcrypt, EJS, http, generator.|||Nhìn công cụ: populate, bcrypt, EJS, http, generator.",
+        "Each CLO has one signature technique.|||Mỗi CLO có một kỹ thuật đặc trưng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which CLO does this piece of work demonstrate?\n\nAnswer in the answer panel (no code needed).\n\n1. GET /api/posts returns every post with its author filled in by .populate('author', 'name').GET /api/posts trả mọi bài viết kèm tác giả được điền bằng .populate('author', 'name').\n2. A register handler that hashes with bcrypt and a JWT requireAuth middleware.Một handler đăng ký băm bằng bcrypt và một middleware requireAuth dùng JWT.\n3. An admin page rendered with res.render('products', { products }) and an EJS loop.Một trang admin render bằng res.render('products', { products }) và vòng lặp EJS.\n4. A server built with http.createServer that answers GET /api/hello.Một server dựng bằng http.createServer trả lời GET /api/hello.\n5. The app skeleton created by npx express-generator --view=ejs myapp.Bộ khung app tạo bằng npx express-generator --view=ejs myapp.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which CLO does this piece of work demonstrate? — answer key\n\n1. GET /api/posts returns every post with its author filled in by .populate('author', 'name').GET /api/posts trả mọi bài viết kèm tác giả được điền bằng .populate('author', 'name').\n   Answer: c) CLO5\n   REST + Mongoose + population is the headline of CLO5.VI: REST + Mongoose + population là điểm chính của CLO5.\n\n2. A register handler that hashes with bcrypt and a JWT requireAuth middleware.Một handler đăng ký băm bằng bcrypt và một middleware requireAuth dùng JWT.\n   Answer: c) CLO6\n   Authentication mechanisms = CLO6.VI: Cơ chế xác thực = CLO6.\n\n3. An admin page rendered with res.render('products', { products }) and an EJS loop.Một trang admin render bằng res.render('products', { products }) và vòng lặp EJS.\n   Answer: c) CLO8\n   Templating with EJS/Handlebars = CLO8.VI: Templating với EJS/Handlebars = CLO8.\n\n4. A server built with http.createServer that answers GET /api/hello.Một server dựng bằng http.createServer trả lời GET /api/hello.\n   Answer: b) CLO1\n   The Node HTTP server itself, before Express = CLO1.VI: Chính server HTTP của Node, trước Express = CLO1.\n\n5. The app skeleton created by npx express-generator --view=ejs myapp.Bộ khung app tạo bằng npx express-generator --view=ejs myapp.\n   Answer: a) CLO3\n   Using Express Generator = CLO3.VI: Dùng Express Generator = CLO3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> CLO5</p><p>REST + Mongoose + population is the headline of CLO5.</p><p><i>VI: REST + Mongoose + population là điểm chính của CLO5.</i></p></li><li><p><b>c)</b> CLO6</p><p>Authentication mechanisms = CLO6.</p><p><i>VI: Cơ chế xác thực = CLO6.</i></p></li><li><p><b>c)</b> CLO8</p><p>Templating with EJS/Handlebars = CLO8.</p><p><i>VI: Templating với EJS/Handlebars = CLO8.</i></p></li><li><p><b>b)</b> CLO1</p><p>The Node HTTP server itself, before Express = CLO1.</p><p><i>VI: Chính server HTTP của Node, trước Express = CLO1.</i></p></li><li><p><b>a)</b> CLO3</p><p>Using Express Generator = CLO3.</p><p><i>VI: Dùng Express Generator = CLO3.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "<p><code>GET /api/posts</code> returns every post with its author filled in by <code>.populate('author', 'name')</code>.</p><p style=\"opacity:.75;font-size:.92em\"><i><code>GET /api/posts</code> trả mọi bài viết kèm tác giả được điền bằng <code>.populate('author', 'name')</code>.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CLO2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CLO8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CLO5"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CLO4"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>REST + Mongoose + population is the headline of CLO5.</p><p><i>VI: REST + Mongoose + population là điểm chính của CLO5.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "<p>A register handler that hashes with bcrypt and a JWT <code>requireAuth</code> middleware.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một handler đăng ký băm bằng bcrypt và một middleware <code>requireAuth</code> dùng JWT.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CLO7"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CLO1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CLO6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CLO5"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Authentication mechanisms = CLO6.</p><p><i>VI: Cơ chế xác thực = CLO6.</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "<p>An admin page rendered with <code>res.render('products', { products })</code> and an EJS loop.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một trang admin render bằng <code>res.render('products', { products })</code> và vòng lặp EJS.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CLO5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CLO3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CLO8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CLO2"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Templating with EJS/Handlebars = CLO8.</p><p><i>VI: Templating với EJS/Handlebars = CLO8.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "<p>A server built with <code>http.createServer</code> that answers <code>GET /api/hello</code>.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một server dựng bằng <code>http.createServer</code> trả lời <code>GET /api/hello</code>.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CLO4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CLO1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CLO2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CLO3"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The Node HTTP server itself, before Express = CLO1.</p><p><i>VI: Chính server HTTP của Node, trước Express = CLO1.</i></p>"
+          },
+          {
+            "ma": "t5",
+            "de": "<p>The app skeleton created by <code>npx express-generator --view=ejs myapp</code>.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ khung app tạo bằng <code>npx express-generator --view=ejs myapp</code>.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CLO3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CLO2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CLO1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CLO8"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Using Express Generator = CLO3.</p><p><i>VI: Dùng Express Generator = CLO3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a populate task CLO4.|||Gọi việc populate là CLO4."
+        },
+        {
+          "loi": "Mixing CLO2 and CLO3.|||Lẫn CLO2 với CLO3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "outcome",
+          "vi": "kết quả đầu ra"
+        }
+      ]
+    },
+    {
+      "title": "Which CLOs does my project still miss? missingClos(features)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Set",
+        "lookup tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Pair each CLO with something that runs. Given a list of project features (strings) and the table <code>FEATURE_CLOS</code> (given) that says which CLOs a feature demonstrates, write <code>missingClos(features)</code>: the CLOs from <code>CLO1</code> to <code>CLO8</code> that NO feature covers, in numeric order.</p>\n<ul><li>features are matched case-insensitively and ignoring surrounding spaces;</li>\n<li>unknown features are ignored (but collected: return <code>{ missing, unknown }</code>, unknown in input order, lower-cased, without duplicates).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Use a <code>Set</code> of covered CLOs.</li>\n  <li>Build the list CLO1…CLO8 with a loop, not by sorting strings (\"CLO10\" would sort before \"CLO2\").</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi CLO với một thứ chạy được. Cho danh sách tính năng dự án (chuỗi) và bảng <code>FEATURE_CLOS</code> (cho sẵn) nói tính năng nào chứng minh CLO nào, viết <code>missingClos(features)</code>: các CLO từ <code>CLO1</code> tới <code>CLO8</code> mà KHÔNG tính năng nào phủ, theo thứ tự số.</p>\n<ul><li>tính năng được khớp không phân biệt hoa thường và bỏ khoảng trắng hai đầu;</li>\n<li>tính năng lạ bị bỏ qua (nhưng được gom lại: trả <code>{ missing, unknown }</code>, unknown theo thứ tự đầu vào, chữ thường, không trùng).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng một <code>Set</code> các CLO đã phủ.</li>\n  <li>Dựng danh sách CLO1…CLO8 bằng vòng lặp, không bằng sắp chuỗi (\"CLO10\" sẽ đứng trước \"CLO2\").</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "missingClos(['express router', 'populate', 'JWT login'])",
+          "output": "{\"missing\":[\"CLO1\",\"CLO3\",\"CLO4\",\"CLO7\",\"CLO8\"],\"unknown\":[]}",
+          "explanation": "Router → CLO2, populate → CLO5 + CLO4, JWT → CLO6.|||Router → CLO2, populate → CLO5 + CLO4, JWT → CLO6."
+        }
+      ],
+      "hintsJson": [
+        "<code>const key = f.trim().toLowerCase(); const clos = FEATURE_CLOS[key];</code>",
+        "<code>for (let i = 1; i &lt;= 8; i++) if (!covered.has('CLO' + i)) missing.push('CLO' + i);</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const FEATURE_CLOS = {\n  'http server': ['CLO1'], 'event loop demo': ['CLO1'],\n  'express router': ['CLO2'], 'error middleware': ['CLO2'], 'nestjs module': ['CLO2'], 'hono app': ['CLO2'],\n  'express generator': ['CLO3'],\n  'mongodb crud': ['CLO4'], 'mongoose schema': ['CLO4', 'CLO5'],\n  'populate': ['CLO5', 'CLO4'], 'rest crud': ['CLO5'],\n  'bcrypt register': ['CLO6'], 'jwt login': ['CLO6'], 'session login': ['CLO6'],\n  'firebase auth': ['CLO7'], 'supabase storage': ['CLO7'],\n  'ejs view': ['CLO8'], 'handlebars view': ['CLO8'],\n};\n\nfunction missingClos(features) {\n  const covered = features.map((f) => FEATURE_CLOS[f]).flat();\n  return { missing: ['CLO1', 'CLO2', 'CLO3', 'CLO4', 'CLO5', 'CLO6', 'CLO7', 'CLO8'].filter((c) => !covered.includes(c)), unknown: [] };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const FEATURE_CLOS = {\n  'http server': ['CLO1'], 'event loop demo': ['CLO1'],\n  'express router': ['CLO2'], 'error middleware': ['CLO2'], 'nestjs module': ['CLO2'], 'hono app': ['CLO2'],\n  'express generator': ['CLO3'],\n  'mongodb crud': ['CLO4'], 'mongoose schema': ['CLO4', 'CLO5'],\n  'populate': ['CLO5', 'CLO4'], 'rest crud': ['CLO5'],\n  'bcrypt register': ['CLO6'], 'jwt login': ['CLO6'], 'session login': ['CLO6'],\n  'firebase auth': ['CLO7'], 'supabase storage': ['CLO7'],\n  'ejs view': ['CLO8'], 'handlebars view': ['CLO8'],\n};\n\nfunction missingClos(features) {\n  const covered = new Set();\n  const unknown = [];\n  for (const f of features) {\n    const key = String(f).trim().toLowerCase();          // tolerant matching\n    const clos = FEATURE_CLOS[key];\n    if (!clos) { if (!unknown.includes(key)) unknown.push(key); continue; }\n    clos.forEach((c) => covered.add(c));\n  }\n  const missing = [];\n  for (let i = 1; i <= 8; i++) if (!covered.has('CLO' + i)) missing.push('CLO' + i);   // numeric order\n  return { missing, unknown };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A set records \"seen\" once per CLO, however many features cover it; walking CLO1…CLO8 afterwards gives the gaps in a stable order. The function turns the advice of the lesson — pair each CLO with a working example — into a checklist you can run on your own project plan.</p>",
+      "solutionExplanationHtmlVi": "<p>Một set ghi \"đã thấy\" một lần cho mỗi CLO, dù bao nhiêu tính năng phủ nó; đi CLO1…CLO8 sau đó cho ra các lỗ hổng theo thứ tự ổn định. Hàm biến lời khuyên của bài — ghép mỗi CLO với một ví dụ chạy được — thành một checklist chạy được trên kế hoạch dự án của bạn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three features → five gaps",
+              "vi": "Ba tính năng → năm lỗ hổng"
+            },
+            "goi": "missingClos(['express router', 'populate', 'JWT login'])",
+            "mongDoi": {
+              "missing": [
+                "CLO1",
+                "CLO3",
+                "CLO7",
+                "CLO8"
+              ],
+              "unknown": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case/space tolerant, unknown collected once",
+              "vi": "Chịu hoa thường/khoảng trắng, tính năng lạ gom một lần"
+            },
+            "goi": "missingClos(['  Populate ', 'EJS VIEW', 'blockchain', 'Blockchain'])",
+            "mongDoi": {
+              "missing": [
+                "CLO1",
+                "CLO2",
+                "CLO3",
+                "CLO6",
+                "CLO7"
+              ],
+              "unknown": [
+                "blockchain"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "missingClos([])",
+            "mongDoi": {
+              "missing": [
+                "CLO1",
+                "CLO2",
+                "CLO3",
+                "CLO4",
+                "CLO5",
+                "CLO6",
+                "CLO7",
+                "CLO8"
+              ],
+              "unknown": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "missingClos(['http server', 'express generator', 'mongoose schema', 'session login', 'firebase auth', 'handlebars view', 'hono app'])",
+            "mongDoi": {
+              "missing": [],
+              "unknown": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Exact-case lookup: \"Populate\" is not found.|||Tra đúng hoa thường: \"Populate\" không tìm thấy."
+        },
+        {
+          "loi": "Throwing on an unknown feature instead of reporting it.|||Ném lỗi với tính năng lạ thay vì báo nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "coverage",
+          "vi": "độ phủ"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,662 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-14-1-vi-sao-test",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-14-1-vi-sao-test"
+  },
+  "exercises": [
+    {
+      "title": "14.1 · Which level catches this bug most cheaply?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "test levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Unit ≈ 0.0006 ms, integration ≈ 5.5 ms, e2e ≈ 3.3 ms per test (lesson 14.1). Each level catches a different kind of bug. For each bug from the Notes API, pick the CHEAPEST level that reliably catches it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Unit ≈ 0,0006 ms, integration ≈ 5,5 ms, e2e ≈ 3,3 ms mỗi test (bài 14.1). Mỗi tầng bắt một loại lỗi khác nhau. Với mỗi lỗi của Notes API, chọn tầng RẺ NHẤT bắt được nó một cách chắc chắn.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the bug live in one pure function, below the route, or in how the pieces are assembled?|||Lỗi nằm trong một hàm thuần, bên dưới route, hay trong cách các mảnh được lắp lại?",
+        "A fake repository accepts any SQL and any duplicate.|||Repo giả nhận mọi SQL và mọi bản trùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.1 · Which level catches this bug most cheaply?\n\nAnswer in the answer panel (no code needed).\n\n1. Bug → cheapest levelLỗi → tầng rẻ nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.1 · Which level catches this bug most cheaply? — answer key\n\n1. Bug → cheapest levelLỗi → tầng rẻ nhất\n   - r1.l: Unit test (fake repo)\n   - r2.l: Integration test (route + service + real DB)\n   - r3.l: End-to-end test (real server on a port)\n   - r4.l: Unit test (fake repo)\n   - r5.l: Integration test (route + service + real DB)\n   - r6.l: End-to-end test (real server on a port)\n   Unit tests catch logic, boundary and arithmetic errors in pure functions. Integration tests (route + service + a real DB) catch SQL errors, constraint violations, status codes and authorisation. End-to-end tests catch assembly errors — middleware in the wrong order, a route never mounted — the class of bug the site’s post-deploy smoke test exists for. (An integration test through the app would also see the last two; e2e is where they are certain, because it runs exactly what was deployed.)VI: Unit test bắt lỗi logic, biên và số học trong hàm thuần. Integration test (route + service + CSDL thật) bắt lỗi SQL, vi phạm ràng buộc, mã trạng thái và phân quyền. End-to-end bắt lỗi lắp ráp — middleware sai thứ tự, route chưa từng được gắn — đúng loại lỗi mà smoke test sau deploy của website tồn tại để bắt. (Integration test qua app cũng thấy được hai lỗi cuối; e2e là chỗ chắc chắn, vì nó chạy đúng thứ đã deploy.)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Unit tests catch logic, boundary and arithmetic errors in pure functions. Integration tests (route + service + a real DB) catch SQL errors, constraint violations, status codes and authorisation. End-to-end tests catch assembly errors — middleware in the wrong order, a route never mounted — the class of bug the site’s post-deploy smoke test exists for. (An integration test through the app would also see the last two; e2e is where they are certain, because it runs exactly what was deployed.)</p><p><i>VI: Unit test bắt lỗi logic, biên và số học trong hàm thuần. Integration test (route + service + CSDL thật) bắt lỗi SQL, vi phạm ràng buộc, mã trạng thái và phân quyền. End-to-end bắt lỗi lắp ráp — middleware sai thứ tự, route chưa từng được gắn — đúng loại lỗi mà smoke test sau deploy của website tồn tại để bắt. (Integration test qua app cũng thấy được hai lỗi cuối; e2e là chỗ chắc chắn, vì nó chạy đúng thứ đã deploy.)</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bug → cheapest level</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → tầng rẻ nhất</i></p>",
+            "cot": [
+              {
+                "ma": "b",
+                "ten": "Bug"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Unit test (fake repo)",
+                  "Integration test (route + service + real DB)",
+                  "End-to-end test (real server on a port)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "b": "slugify('a'.repeat(200)) returns 61 characters"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "b": "A duplicate slug answers 500 because the 23505 from PostgreSQL is not mapped to 409"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "b": "The router was mounted at /note, so POST /notes is a 404 in the deployed build"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "b": "HALF_UP rounding of −2.5 gives −2 instead of −3"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "b": "The INSERT names a column that the last migration renamed"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "b": "The error handler is registered before the routes, so every error becomes Express’s default HTML page"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "Unit test (fake repo)",
+              "r2.l": "Integration test (route + service + real DB)",
+              "r3.l": "End-to-end test (real server on a port)",
+              "r4.l": "Unit test (fake repo)",
+              "r5.l": "Integration test (route + service + real DB)",
+              "r6.l": "End-to-end test (real server on a port)"
+            },
+            "giaiThich": "<p>Unit tests catch logic, boundary and arithmetic errors in pure functions. Integration tests (route + service + a real DB) catch SQL errors, constraint violations, status codes and authorisation. End-to-end tests catch assembly errors — middleware in the wrong order, a route never mounted — the class of bug the site’s post-deploy smoke test exists for. (An integration test through the app would also see the last two; e2e is where they are certain, because it runs exactly what was deployed.)</p><p><i>VI: Unit test bắt lỗi logic, biên và số học trong hàm thuần. Integration test (route + service + CSDL thật) bắt lỗi SQL, vi phạm ràng buộc, mã trạng thái và phân quyền. End-to-end bắt lỗi lắp ráp — middleware sai thứ tự, route chưa từng được gắn — đúng loại lỗi mà smoke test sau deploy của website tồn tại để bắt. (Integration test qua app cũng thấy được hai lỗi cuối; e2e là chỗ chắc chắn, vì nó chạy đúng thứ đã deploy.)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing every test end-to-end “to be safe”: a 10-second suite holds 1,800 of them instead of millions of unit assertions.|||Viết mọi test kiểu end-to-end \"cho chắc\": bộ test 10 giây chỉ chứa 1.800 cái thay vì hàng triệu khẳng định unit."
+        },
+        {
+          "loi": "Expecting a unit test with a fake repo to catch a constraint violation — the fake answers whatever you told it.|||Chờ unit test dùng repo giả bắt được vi phạm ràng buộc — repo giả trả lời đúng điều bạn bảo nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unit test",
+          "vi": "test đơn vị",
+          "giaiThich": "một hàm, mọi phụ thuộc là đồ giả"
+        },
+        {
+          "en": "integration test",
+          "vi": "test tích hợp",
+          "giaiThich": "route + service + CSDL thật"
+        },
+        {
+          "en": "end-to-end test",
+          "vi": "test đầu-cuối",
+          "giaiThich": "server thật trên một cổng, client HTTP thật"
+        }
+      ]
+    },
+    {
+      "title": "14.1 · Choosing a runner with numbers",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "test runners"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson ran the same assertions under node:test, vitest and jest on the same machine. Answer from the measurements, not from the marketing.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài chạy cùng các khẳng định dưới node:test, vitest và jest trên cùng một máy. Trả lời theo số đo, không theo quảng cáo.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Startup time dominates small suites.|||Thời gian khởi động chiếm phần lớn ở bộ test nhỏ.",
+        "Read the measurement before the diagram.|||Đọc số đo trước khi đọc sơ đồ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.1 · Choosing a runner with numbers\n\nAnswer in the answer panel (no code needed).\n\n1. End-to-end (3.3 ms) came out CHEAPER than integration (5.5 ms), against every pyramid diagram. Why?End-to-end (3,3 ms) lại RẺ HƠN integration (5,5 ms), trái với mọi sơ đồ kim tự tháp. Vì sao?\n2. 6 tests: node:test 0.10 s, vitest 0.76 s, jest 0.86 s. Which conclusion matches the lesson’s recommendation for a plain Node backend?6 test: node:test 0,10 s, vitest 0,76 s, jest 0,86 s. Kết luận nào khớp khuyến nghị của bài cho một backend Node thuần?\n3. node --test nodetest/ dies with MODULE_NOT_FOUND. What is wrong?node --test nodetest/ chết với MODULE_NOT_FOUND. Sai ở đâu?\n4. npx jest on a \"type\": \"module\" project prints SyntaxError: Cannot use import statement outside a module. The fix measured in the lesson?npx jest trên dự án \"type\": \"module\" in ra SyntaxError: Cannot use import statement outside a module. Cách chữa đã đo trong bài?\n5. The site’s money.test.ts says: “Pure functions — no DB, no network — so they run fast and deterministically in CI.” What did it choose to test?money.test.ts của website ghi: \"Hàm thuần — không DB, không mạng — nên chạy nhanh và tất định trong CI.\" Nó chọn test cái gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.1 · Choosing a runner with numbers — answer key\n\n1. End-to-end (3.3 ms) came out CHEAPER than integration (5.5 ms), against every pyramid diagram. Why?End-to-end (3,3 ms) lại RẺ HƠN integration (5,5 ms), trái với mọi sơ đồ kim tự tháp. Vì sao?\n   Answer: c) supertest starts and stops a server per request; e2e reused one\n   A tool detail, not a law of nature (14.3 comes back to it). The lesson: measure your own suite instead of trusting the diagram.VI: Một chi tiết công cụ, không phải định luật (14.3 quay lại chuyện này). Bài học: đo bộ test của chính bạn thay vì tin sơ đồ.\n\n2. 6 tests: node:test 0.10 s, vitest 0.76 s, jest 0.86 s. Which conclusion matches the lesson’s recommendation for a plain Node backend?6 test: node:test 0,10 s, vitest 0,76 s, jest 0,86 s. Kết luận nào khớp khuyến nghị của bài cho một backend Node thuần?\n   Answer: b) node:test — zero dependencies, and fastest on the small suite you run hundreds of times a day\n   “vitest is much faster than jest” held only in a Vite front-end; at 1,000 plain tests jest was slightly ahead. node:test beat both at every size. Keep vitest for a Vite front-end, keep jest in an old repo full of jest tests.VI: \"vitest nhanh hơn jest nhiều\" chỉ đúng trong front-end Vite; với 1.000 test thuần jest còn nhỉnh hơn. node:test thắng cả hai ở mọi cỡ. Giữ vitest cho front-end Vite, giữ jest trong repo cũ đầy test jest.\n\n3. node --test nodetest/ dies with MODULE_NOT_FOUND. What is wrong?node --test nodetest/ chết với MODULE_NOT_FOUND. Sai ở đâu?\n   Answer: a) A bare directory is treated as a file to run — pass a glob\n   Or let Node discover *.test.* files itself by passing no argument.VI: Hoặc để Node tự tìm các tệp *.test.* bằng cách không truyền đối số nào.\n\n4. npx jest on a \"type\": \"module\" project prints SyntaxError: Cannot use import statement outside a module. The fix measured in the lesson?npx jest trên dự án \"type\": \"module\" in ra SyntaxError: Cannot use import statement outside a module. Cách chữa đã đo trong bài?\n   Answer: b) NODE_OPTIONS=--experimental-vm-modules npx jest\n   Friction you pay once per project, plus vi.fn → jest.fn and missing matchers when porting. None of it is hard; all of it is cost.VI: Ma sát trả một lần cho mỗi dự án, cộng vi.fn → jest.fn và matcher thiếu khi chuyển. Không có gì khó; tất cả đều là chi phí.\n\n5. The site’s money.test.ts says: “Pure functions — no DB, no network — so they run fast and deterministically in CI.” What did it choose to test?money.test.ts của website ghi: \"Hàm thuần — không DB, không mạng — nên chạy nhanh và tất định trong CI.\" Nó chọn test cái gì?\n   Answer: b) What is expensive to get wrong and cheap to check: money, signatures\n   Nobody wrote a test for “the profile page renders”. 0.1 + 0.2 must be 0.3, not 0.30000000000000004.VI: Không ai viết test cho \"trang hồ sơ hiển thị được\". 0.1 + 0.2 phải là 0.3, không phải 0.30000000000000004.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> supertest starts and stops a server per request; e2e reused one</p><p>A tool detail, not a law of nature (14.3 comes back to it). The lesson: measure your own suite instead of trusting the diagram.</p><p><i>VI: Một chi tiết công cụ, không phải định luật (14.3 quay lại chuyện này). Bài học: đo bộ test của chính bạn thay vì tin sơ đồ.</i></p></li><li><p><b>b)</b> node:test — zero dependencies, and fastest on the small suite you run hundreds of times a day</p><p>“vitest is much faster than jest” held only in a Vite front-end; at 1,000 plain tests jest was slightly ahead. node:test beat both at every size. Keep vitest for a Vite front-end, keep jest in an old repo full of jest tests.</p><p><i>VI: \"vitest nhanh hơn jest nhiều\" chỉ đúng trong front-end Vite; với 1.000 test thuần jest còn nhỉnh hơn. node:test thắng cả hai ở mọi cỡ. Giữ vitest cho front-end Vite, giữ jest trong repo cũ đầy test jest.</i></p></li><li><p><b>a)</b> A bare directory is treated as a file to run — pass a glob</p><p>Or let Node discover *.test.* files itself by passing no argument.</p><p><i>VI: Hoặc để Node tự tìm các tệp *.test.* bằng cách không truyền đối số nào.</i></p></li><li><p><b>b)</b> NODE_OPTIONS=--experimental-vm-modules npx jest</p><p>Friction you pay once per project, plus vi.fn → jest.fn and missing matchers when porting. None of it is hard; all of it is cost.</p><p><i>VI: Ma sát trả một lần cho mỗi dự án, cộng vi.fn → jest.fn và matcher thiếu khi chuyển. Không có gì khó; tất cả đều là chi phí.</i></p></li><li><p><b>b)</b> What is expensive to get wrong and cheap to check: money, signatures</p><p>Nobody wrote a test for “the profile page renders”. 0.1 + 0.2 must be 0.3, not 0.30000000000000004.</p><p><i>VI: Không ai viết test cho \"trang hồ sơ hiển thị được\". 0.1 + 0.2 phải là 0.3, không phải 0.30000000000000004.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>End-to-end (3.3 ms) came out CHEAPER than integration (5.5 ms), against every pyramid diagram. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>End-to-end (3,3 ms) lại RẺ HƠN integration (5,5 ms), trái với mọi sơ đồ kim tự tháp. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The e2e test skipped the database, so it did less work"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node caches HTTP responses for repeated identical requests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "supertest starts and stops a server per request; e2e reused one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The integration test ran under jest, which is slower"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A tool detail, not a law of nature (14.3 comes back to it). The lesson: measure your own suite instead of trusting the diagram.</p><p><i>VI: Một chi tiết công cụ, không phải định luật (14.3 quay lại chuyện này). Bài học: đo bộ test của chính bạn thay vì tin sơ đồ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>6 tests: node:test 0.10 s, vitest 0.76 s, jest 0.86 s. Which conclusion matches the lesson’s recommendation for a plain Node backend?</p><p style=\"opacity:.75;font-size:.92em\"><i>6 test: node:test 0,10 s, vitest 0,76 s, jest 0,86 s. Kết luận nào khớp khuyến nghị của bài cho một backend Node thuần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Any of them — runners only differ in syntax"
+              },
+              {
+                "ma": "b",
+                "noiDung": "node:test — zero dependencies, and fastest on the small suite you run hundreds of times a day"
+              },
+              {
+                "ma": "c",
+                "noiDung": "jest — it won at 1,000 tests, so it is the fastest overall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "vitest — it is always much faster than jest"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>“vitest is much faster than jest” held only in a Vite front-end; at 1,000 plain tests jest was slightly ahead. node:test beat both at every size. Keep vitest for a Vite front-end, keep jest in an old repo full of jest tests.</p><p><i>VI: \"vitest nhanh hơn jest nhiều\" chỉ đúng trong front-end Vite; với 1.000 test thuần jest còn nhỉnh hơn. node:test thắng cả hai ở mọi cỡ. Giữ vitest cho front-end Vite, giữ jest trong repo cũ đầy test jest.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>node --test nodetest/ dies with MODULE_NOT_FOUND. What is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>node --test nodetest/ chết với MODULE_NOT_FOUND. Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A bare directory is treated as a file to run — pass a glob"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The directory must be called test/, not nodetest/"
+              },
+              {
+                "ma": "c",
+                "noiDung": "node:test requires a config file in the directory"
+              },
+              {
+                "ma": "d",
+                "noiDung": "node --test only runs files with a .cjs extension"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Or let Node discover *.test.* files itself by passing no argument.</p><p><i>VI: Hoặc để Node tự tìm các tệp *.test.* bằng cách không truyền đối số nào.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>npx jest on a \"type\": \"module\" project prints SyntaxError: Cannot use import statement outside a module. The fix measured in the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>npx jest trên dự án \"type\": \"module\" in ra SyntaxError: Cannot use import statement outside a module. Cách chữa đã đo trong bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Add \"jest\": { \"esm\": true } to package.json"
+              },
+              {
+                "ma": "b",
+                "noiDung": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rename every test file to .cjs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Install babel-jest and remove \"type\": \"module\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Friction you pay once per project, plus vi.fn → jest.fn and missing matchers when porting. None of it is hard; all of it is cost.</p><p><i>VI: Ma sát trả một lần cho mỗi dự án, cộng vi.fn → jest.fn và matcher thiếu khi chuyển. Không có gì khó; tất cả đều là chi phí.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The site’s money.test.ts says: “Pure functions — no DB, no network — so they run fast and deterministically in CI.” What did it choose to test?</p><p style=\"opacity:.75;font-size:.92em\"><i>money.test.ts của website ghi: \"Hàm thuần — không DB, không mạng — nên chạy nhanh và tất định trong CI.\" Nó chọn test cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every page of the site, so that no regression reaches users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "What is expensive to get wrong and cheap to check: money, signatures"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the slowest endpoints, because they are the riskiest"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The profile page rendering, because users see it most"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Nobody wrote a test for “the profile page renders”. 0.1 + 0.2 must be 0.3, not 0.30000000000000004.</p><p><i>VI: Không ai viết test cho \"trang hồ sơ hiển thị được\". 0.1 + 0.2 phải là 0.3, không phải 0.30000000000000004.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing a runner from a blog benchmark of a different kind of project.|||Chọn runner theo benchmark trên blog của một loại dự án khác."
+        },
+        {
+          "loi": "Passing a bare directory to node --test.|||Truyền một thư mục trần cho node --test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test runner",
+          "vi": "trình chạy test",
+          "giaiThich": "node:test, vitest, jest"
+        },
+        {
+          "en": "node:test",
+          "vi": "runner có sẵn của Node",
+          "giaiThich": "không cài gì thêm, có --watch và độ phủ"
+        }
+      ]
+    },
+    {
+      "title": "14.1 · Your first tests: pin down slugify",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "unit tests",
+        "mutation testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p>Every note’s URL comes from <code>slugify(title)</code> in <code>src/slug.js</code> (open it in the file tabs): lowercase, Vietnamese tone marks removed and <code>đ</code> → <code>d</code>, every run of other characters becomes ONE dash, no dash at either end, at most 60 characters.</p><p>This time <b>you write the tests</b>, in <code>src/slug.test.js</code>. The grader runs them against the correct <code>slug.js</code> (they must pass), then against <b>5 mutants</b> — copies with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. A test suite is the automated re-check of chapter 8 when you change chapter 12; this is what makes it able to fail.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>4</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>5</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n</ul>",
+      "problemHtmlVi": "<p>URL của mỗi ghi chú lấy từ <code>slugify(title)</code> trong <code>src/slug.js</code> (mở ở tab tệp): chữ thường, bỏ dấu thanh tiếng Việt và <code>đ</code> → <code>d</code>, mọi chuỗi ký tự khác thành MỘT dấu gạch, không có gạch ở hai đầu, tối đa 60 ký tự.</p><p>Lần này <b>bạn viết test</b>, trong <code>src/slug.test.js</code>. Máy chấm chạy chúng với <code>slug.js</code> đúng (phải xanh), rồi với <b>5 đột biến</b> — các bản sao mỗi bản cài một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Bộ test là phép kiểm lại tự động chương 8 khi bạn sửa chương 12; đây là thứ làm cho nó có khả năng đỏ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>4</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>5</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n</ul>",
+      "inputSpec": "Your test file src/slug.test.js (Vitest syntax).|||Tệp test src/slug.test.js của bạn (cú pháp Vitest).",
+      "outputSpec": "Green on the correct code; red on each mutant.|||Xanh với code đúng; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: .slice(0, 59)  (instead of 60)|||Đột biến: .slice(0, 59)  (thay cho 60)",
+          "output": "Killed by: expect(slugify('a'.repeat(200))).toHaveLength(60)|||Bị diệt bởi: expect(slugify('a'.repeat(200))).toHaveLength(60)",
+          "explanation": "A test with a short title passes on both versions — it cannot tell them apart. Test the boundary itself.|||Test với tiêu đề ngắn xanh với cả hai bản — nó không phân biệt được. Hãy test đúng cái biên."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter tests first and read which mutants SURVIVE: each one names a rule your tests never looked at.|||Nộp bộ test khởi đầu trước rồi xem đột biến nào CÒN SỐNG: mỗi cái chỉ đúng một luật mà test của bạn chưa nhìn tới.",
+        "One test per rule: double spaces / punctuation runs, a title with ĐẦU and tone marks, digits (“Lab 211”), and the exact length 60.|||Mỗi luật một test: hai dấu cách / chuỗi dấu câu, tiêu đề có ĐẦU và dấu thanh, chữ số (\"Lab 211\"), và đúng độ dài 60."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/slug.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { slugify } from './slug.js';\n\n// Four tests, all green on the correct code — and still weak. Submit, read which mutants survive, add tests.\n// Bốn test, đều xanh với code đúng — mà vẫn yếu. Nộp, xem đột biến nào sống, thêm test.\ndescribe('slugify', () => {\n  it('lowercases and joins words with a dash', () => {\n    expect(slugify('Hello World')).toBe('hello-world');\n  });\n\n  it('drops leading and trailing separators', () => {\n    expect(slugify('  --Hello--  ')).toBe('hello');\n  });\n\n  it('keeps a simple lowercase word as it is', () => {\n    expect(slugify('notes')).toBe('notes');\n  });\n\n  it('lowercases an all-caps title', () => {\n    expect(slugify('NOTES API')).toBe('notes-api');\n  });\n});\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/slug.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { slugify } from './slug.js';\n\ndescribe('slugify', () => {\n  it('lowercases and joins words with a dash', () => {\n    expect(slugify('Hello World')).toBe('hello-world');\n  });\n\n  // a RUN of separators becomes one dash — kills \"[^a-z0-9]\" without the +\n  it('collapses runs of spaces and punctuation into one dash', () => {\n    expect(slugify('Hello,   World!!  Again')).toBe('hello-world-again');\n  });\n\n  // both ends — kills the version that only trims the start\n  it('drops leading and trailing separators', () => {\n    expect(slugify('  --Hello--  ')).toBe('hello');\n    expect(slugify('Notes API!!!')).toBe('notes-api');\n  });\n\n  // Vietnamese: tone marks AND đ — kills the version that forgets đ\n  it('removes Vietnamese tone marks and maps đ to d', () => {\n    expect(slugify('Ghi chú đầu tiên')).toBe('ghi-chu-dau-tien');\n  });\n\n  // digits are kept — kills \"[^a-z]+\"\n  it('keeps digits', () => {\n    expect(slugify('Lab 211 – Week 3')).toBe('lab-211-week-3');\n  });\n\n  // the boundary itself, exact value — kills slice(0, 59)\n  it('caps the length at exactly 60', () => {\n    expect(slugify('a'.repeat(200))).toHaveLength(60);\n  });\n});\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each mutant changes exactly one rule, so a suite kills it only if some test observes that rule: a run of separators (one dash, not two), the đ and tone-mark mapping, digits kept, both ends trimmed, the length capped at exactly 60. The habit behind it is the lesson’s: break the code on purpose and watch a test go red.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi đột biến đổi đúng một luật, nên bộ test chỉ diệt được nó khi có test quan sát luật đó: một chuỗi dấu phân cách (một gạch, không phải hai), cách đổi đ và dấu thanh, giữ chữ số, cắt cả hai đầu, giới hạn đúng 60. Thói quen phía sau là của bài: cố ý làm hỏng code và nhìn một test chuyển đỏ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+        },
+        "toiThieuTest": 4,
+        "timeoutMs": 4000,
+        "tepTest": "src/slug.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 4 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: length capped at 59",
+            "goiY": "assert the EXACT length of a long title: 60 · khẳng định ĐÚNG độ dài của tiêu đề dài: 60",
+            "ma": {
+              "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 59);                                       // URLs stay short\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: only the leading dash is trimmed",
+            "goiY": "a title that ENDS with punctuation, e.g. \"Notes API!!!\" → \"notes-api\" · tiêu đề KẾT THÚC bằng dấu câu",
+            "ma": {
+              "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: every separator becomes its own dash",
+            "goiY": "two spaces or \", \" between words must still give ONE dash · hai dấu cách hoặc \", \" giữa hai từ vẫn chỉ ra MỘT gạch",
+            "ma": {
+              "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: đ is not mapped",
+            "goiY": "a Vietnamese title with đ: \"Ghi chú đầu tiên\" → \"ghi-chu-dau-tien\" · tiêu đề tiếng Việt có chữ đ",
+            "ma": {
+              "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n                                      // đ does not decompose — map it by hand\n    .replace(/[^a-z0-9]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: digits are dropped",
+            "goiY": "a title with digits: \"Lab 211\" → \"lab-211\" · tiêu đề có chữ số",
+            "an": true,
+            "ma": {
+              "src/slug.js": "/** Notes API — the slug of a note (lesson 14.1/14.2). */\nexport function slugify(title) {\n  return String(title)\n    .toLowerCase()\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')   // drop Vietnamese tone marks: \"chú\" → \"chu\"\n    .replace(/đ/g, 'd')                                  // đ does not decompose — map it by hand\n    .replace(/[^a-z]+/g, '-')                         // every run of other characters → ONE dash\n    .replace(/^-+|-+$/g, '')                             // no dash at either end\n    .slice(0, 60);                                       // URLs stay short\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only testing “Hello World”: almost every mutant still produces hello-world.|||Chỉ test \"Hello World\": gần như mọi đột biến vẫn ra hello-world."
+        },
+        {
+          "loi": "expect(slugify(long).length <= 60).toBe(true) — the 59-character mutant passes it; assert the exact value.|||expect(slugify(long).length <= 60).toBe(true) — đột biến 59 ký tự vẫn qua; hãy khẳng định giá trị chính xác."
+        },
+        {
+          "loi": "A test name like it('works'): when it goes red in CI nobody knows which rule broke. Name the rule.|||Tên test kiểu it('works'): khi nó đỏ trên CI không ai biết luật nào hỏng. Hãy đặt tên theo luật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên",
+          "giaiThich": "giá trị nằm đúng mép luật (60 ký tự) và ±1"
+        }
+      ]
+    },
+    {
+      "title": "14.1 · Test what is expensive to get wrong: money",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "unit tests",
+        "money"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p>The site’s first three test files were money, payments and the CV linter — “expensive to get wrong and cheap to check”. <code>src/money.js</code> has three pure functions:</p><ul><li><code>roundHalfUp(x)</code> — half away from zero: <code>2.5 → 3</code>, <code>-2.5 → -3</code> (JavaScript’s <code>Math.round(-2.5)</code> is <code>-2</code>);</li><li><code>vat(amount, ratePercent)</code> — integer đồng in, <code>roundHalfUp</code> of the tax out (<code>vat(12345, 8) === 988</code>); a negative or non-integer amount throws <code>RangeError</code>;</li><li><code>sum(amounts)</code> — integers only; a float throws <code>TypeError</code>.</li></ul><p>Write <code>src/money.test.js</code> that kills all 5 mutants.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>4</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>5</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba tệp test đầu tiên của website là tiền, thanh toán và bộ soát CV — \"đắt nếu sai và rẻ để kiểm\". <code>src/money.js</code> có ba hàm thuần:</p><ul><li><code>roundHalfUp(x)</code> — nửa làm tròn ra xa số 0: <code>2.5 → 3</code>, <code>-2.5 → -3</code> (<code>Math.round(-2.5)</code> của JavaScript là <code>-2</code>);</li><li><code>vat(amount, ratePercent)</code> — vào là số đồng nguyên, ra là <code>roundHalfUp</code> của tiền thuế (<code>vat(12345, 8) === 988</code>); số tiền âm hoặc không nguyên ném <code>RangeError</code>;</li><li><code>sum(amounts)</code> — chỉ số nguyên; số thực ném <code>TypeError</code>.</li></ul><p>Viết <code>src/money.test.js</code> diệt cả 5 đột biến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>4</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>5</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n</ul>",
+      "inputSpec": "src/money.test.js (Vitest).",
+      "outputSpec": "Green on the correct code; red on each mutant.|||Xanh với code đúng; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: roundHalfUp uses Math.round(x)|||Đột biến: roundHalfUp dùng Math.round(x)",
+          "output": "Killed by: expect(roundHalfUp(-2.5)).toBe(-3)|||Bị diệt bởi: expect(roundHalfUp(-2.5)).toBe(-3)",
+          "explanation": "Math.round agrees with HALF_UP on every positive number — only a negative half tells them apart.|||Math.round khớp HALF_UP ở mọi số dương — chỉ một nửa âm mới phân biệt được."
+        }
+      ],
+      "hintsJson": [
+        "Exact halves on both sides of zero: 2.5, -2.5, 0.5, -0.5.|||Đúng các nửa ở hai phía số 0: 2.5, -2.5, 0.5, -0.5.",
+        "vat(12345, 8) is 987.6 before rounding — a floor would give 987. And throws: expect(() => vat(10.5, 8)).toThrow(RangeError), expect(() => sum([0.1, 0.2])).toThrow(TypeError).|||vat(12345, 8) là 987,6 trước khi làm tròn — làm tròn xuống sẽ ra 987. Và các lần ném: expect(() => vat(10.5, 8)).toThrow(RangeError), expect(() => sum([0.1, 0.2])).toThrow(TypeError)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/money.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { roundHalfUp, vat, sum } from './money.js';\n\ndescribe('money', () => {\n  it('rounds 2.5 up to 3', () => {\n    expect(roundHalfUp(2.5)).toBe(3);\n  });\n\n  it('computes 8% VAT', () => {\n    expect(vat(10000, 8)).toBe(800);\n  });\n\n  it('sums integer amounts', () => {\n    expect(sum([1000, 2500])).toBe(3500);\n  });\n\n  it('rounds 2.4 down to 2', () => {\n    expect(roundHalfUp(2.4)).toBe(2);\n  });\n});\n"
+        },
+        {
+          "name": "src/money.js",
+          "language": "javascript",
+          "code": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/money.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { roundHalfUp, vat, sum } from './money.js';\n\ndescribe('roundHalfUp (half away from zero)', () => {\n  it('rounds positive halves up', () => {\n    expect(roundHalfUp(2.5)).toBe(3);\n    expect(roundHalfUp(0.5)).toBe(1);\n  });\n\n  // the case Math.round gets wrong: Math.round(-2.5) === -2\n  it('rounds negative halves away from zero', () => {\n    expect(roundHalfUp(-2.5)).toBe(-3);\n  });\n\n  it('keeps values below the half', () => {\n    expect(roundHalfUp(2.49)).toBe(2);\n  });\n});\n\ndescribe('vat', () => {\n  // 987.6 must become 988 — a floor() would give 987\n  it('rounds the tax HALF_UP to a whole đồng', () => {\n    expect(vat(12345, 8)).toBe(988);\n    expect(vat(10000, 8)).toBe(800);\n  });\n\n  it('refuses non-integer and negative amounts', () => {\n    expect(() => vat(10.5, 8)).toThrow(RangeError);   // wrap the call: expect(fn).toThrow\n    expect(() => vat(-1, 8)).toThrow(RangeError);\n  });\n});\n\ndescribe('sum', () => {\n  it('adds integers exactly', () => {\n    expect(sum([1000, 2500])).toBe(3500);\n  });\n\n  // 0.1 + 0.2 is the reason money is never a float\n  it('refuses floats', () => {\n    expect(() => sum([0.1, 0.2])).toThrow(TypeError);\n  });\n});\n"
+        },
+        {
+          "name": "src/money.js",
+          "language": "javascript",
+          "code": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Money bugs survive “normal” inputs: positive numbers hide the difference between HALF_UP and Math.round, round amounts hide floor vs round, and integer inputs hide a missing float check. The killing tests are the edges — a negative half, a fractional tax, a float — which is exactly why the site tests 0.1 + 0.2 and HALF_UP explicitly.</p>",
+      "solutionExplanationHtmlVi": "<p>Lỗi tiền sống sót qua dữ liệu \"bình thường\": số dương che sự khác nhau giữa HALF_UP và Math.round, số tròn che floor với round, đầu vào nguyên che việc thiếu kiểm số thực. Test diệt được là các cạnh — một nửa âm, tiền thuế có phần lẻ, một số thực — chính vì thế website test 0.1 + 0.2 và HALF_UP một cách tường minh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+        },
+        "toiThieuTest": 4,
+        "timeoutMs": 4000,
+        "tepTest": "src/money.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 4 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: Math.round instead of HALF_UP",
+            "goiY": "a NEGATIVE half: roundHalfUp(-2.5) must be -3 · một nửa ÂM: roundHalfUp(-2.5) phải là -3",
+            "ma": {
+              "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.round(x);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: an exact half rounds down",
+            "goiY": "an EXACT half: 2.5 → 3 · đúng một nửa: 2.5 → 3",
+            "ma": {
+              "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.49);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: vat accepts a fractional amount",
+            "goiY": "expect(() => vat(10.5, 8)).toThrow(RangeError)",
+            "ma": {
+              "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: sum accepts floats",
+            "goiY": "expect(() => sum([0.1, 0.2])).toThrow(TypeError)",
+            "ma": {
+              "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return roundHalfUp((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    \n    total += a;\n  }\n  return total;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: VAT is truncated, not rounded",
+            "goiY": "a tax with a fraction ≥ .5: vat(12345, 8) === 988 · tiền thuế có phần lẻ ≥ ,5",
+            "an": true,
+            "ma": {
+              "src/money.js": "/** Money for the Notes API's paid plan — amounts are INTEGERS in đồng, never floats. */\n\n/** HALF_UP = half away from zero (accounting): 2.5 → 3, -2.5 → -3. Math.round is NOT that: Math.round(-2.5) === -2. */\nexport function roundHalfUp(x) {\n  const r = Math.sign(x) * Math.floor(Math.abs(x) + 0.5);\n  return r === 0 ? 0 : r;                      // never return -0\n}\n\n/** VAT on an integer amount, rounded HALF_UP to a whole đồng: vat(12345, 8) === 988 */\nexport function vat(amount, ratePercent) {\n  if (!Number.isInteger(amount) || amount < 0) throw new RangeError('AMOUNT');\n  return Math.floor((amount * ratePercent) / 100);\n}\n\n/** Sum integer amounts — floats are refused (0.1 + 0.2 is the reason). */\nexport function sum(amounts) {\n  let total = 0;\n  for (const a of amounts) {\n    if (!Number.isInteger(a)) throw new TypeError('NOT_INTEGER');\n    total += a;\n  }\n  return total;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing rounding with positive numbers only: Math.round passes all of them.|||Chỉ test làm tròn với số dương: Math.round qua hết."
+        },
+        {
+          "loi": "vat(10000, 8) === 800 as the only VAT test: no rounding happens, so a floor() mutant survives.|||vat(10000, 8) === 800 là test VAT duy nhất: không có làm tròn nào xảy ra, nên đột biến floor() sống sót."
+        },
+        {
+          "loi": "expect(vat(10.5, 8)).toThrow() without the arrow: the error is thrown before expect runs and the test crashes on the correct code.|||expect(vat(10.5, 8)).toThrow() thiếu mũi tên: lỗi ném ra trước khi expect chạy và test đỏ ngay với code đúng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "HALF_UP",
+          "vi": "làm tròn nửa ra xa 0",
+          "giaiThich": "2,5 → 3 và −2,5 → −3 (kế toán)"
+        }
+      ]
+    }
+  ]
+}

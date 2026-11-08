@@ -1,0 +1,725 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-4-monolith-hay-tach",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-4-monolith-hay-tach"
+  },
+  "exercises": [
+    {
+      "title": "What splitting buys, and the bill",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "microservices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 18.4.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 18.4.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count what each boundary costs per call.|||Đếm giá mỗi lời gọi qua ranh giới.",
+        "Ask which part needs a different number of cores, a different release day, or a different team.|||Hỏi phần nào cần số nhân khác, ngày phát hành khác, hay một nhóm khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What splitting buys, and the bill\n\nAnswer in the answer panel (no code needed).\n\n1. Two reasons people often give for splitting: “deploys are risky” and “the code is hard to understand”. What does splitting do to them?Hai lý do người ta hay đưa ra để tách: “deploy rủi ro” và “mã khó hiểu”. Tách làm gì với chúng?\n2. Inside one bank money moves or it does not. Between two banks there is a moment when it has left one and not reached the other. What is the software version?Trong một ngân hàng, tiền chuyển hoặc không. Giữa hai ngân hàng có lúc tiền đã rời một bên mà chưa tới bên kia. Phiên bản phần mềm là gì?\n3. Which one is the middle option between one file and twelve services?Đâu là lựa chọn ở giữa một tệp và mười hai dịch vụ?\n4. Which statements about the website are true? (choose all that apply)Những câu nào về website là đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What splitting buys, and the bill — answer key\n\n1. Two reasons people often give for splitting: “deploys are risky” and “the code is hard to understand”. What does splitting do to them?Hai lý do người ta hay đưa ra để tách: “deploy rủi ro” và “mã khó hiểu”. Tách làm gì với chúng?\n   Answer: b) Neither: one deploy becomes several ordered ones, and confusing code spreads over six repos\n   Scary deploys have chapter 17’s smoke test and rollback; confusing code has the layers and facades of 18.1–18.3. Team frustration is a symptom, not a signal.VI: Deploy đáng sợ đã có smoke test và quay lui của chương 17; mã khó hiểu đã có tầng và facade của 18.1–18.3. Sự bực bội của nhóm là triệu chứng, không phải tín hiệu.\n\n2. Inside one bank money moves or it does not. Between two banks there is a moment when it has left one and not reached the other. What is the software version?Trong một ngân hàng, tiền chuyển hoặc không. Giữa hai ngân hàng có lúc tiền đã rời một bên mà chưa tới bên kia. Phiên bản phần mềm là gì?\n   Answer: a) No transaction across two services: a state like “paid, but stock not reserved” must be designed for\n   Idempotency, compensation, reconciliation. Chapter 13 met it once: a non-idempotent job retried 3 times charged 300,000 VND instead of 100,000.VI: Idempotency, bù trừ, đối soát. Chương 13 đã gặp một lần: một job không idempotent thử lại 3 lần tính 300.000 đồng thay vì 100.000.\n\n3. Which one is the middle option between one file and twelve services?Đâu là lựa chọn ở giữa một tệp và mười hai dịch vụ?\n   Answer: d) A modular monolith: one deploy, narrow facades enforced by lint, tables with owners\n   You keep transactions, JOINs and nanosecond calls, and a later split becomes a change of transport, not a rewrite — if tables have owners.VI: Bạn giữ transaction, JOIN và lời gọi tính bằng nano giây, và lần tách sau này chỉ là đổi đường truyền, không phải viết lại — nếu bảng có chủ.\n\n4. Which statements about the website are true? (choose all that apply)Những câu nào về website là đúng? (chọn mọi câu đúng)\n   Answer: a) embedQueue.service.ts is an in-process array queue that a second process would break + c) The 40 cron jobs share a per-process flag, so a second process would run each twice + d) 7 containers, one backend process, one database, one VPS — correct on all three signals\n   Useful boundaries already exist (R2 for files, Redis for shared state, external APIs for payments and AI), each adopted because something concrete required it. “The codebase is big” is not a signal.VI: Các ranh giới hữu ích đã có sẵn (R2 cho tệp, Redis cho trạng thái chung, API ngoài cho thanh toán và AI), mỗi cái được dùng vì có thứ cụ thể đòi hỏi. “Mã nguồn lớn” không phải tín hiệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Neither: one deploy becomes several ordered ones, and confusing code spreads over six repos</p><p>Scary deploys have chapter 17’s smoke test and rollback; confusing code has the layers and facades of 18.1–18.3. Team frustration is a symptom, not a signal.</p><p><i>VI: Deploy đáng sợ đã có smoke test và quay lui của chương 17; mã khó hiểu đã có tầng và facade của 18.1–18.3. Sự bực bội của nhóm là triệu chứng, không phải tín hiệu.</i></p></li><li><p><b>a)</b> No transaction across two services: a state like “paid, but stock not reserved” must be designed for</p><p>Idempotency, compensation, reconciliation. Chapter 13 met it once: a non-idempotent job retried 3 times charged 300,000 VND instead of 100,000.</p><p><i>VI: Idempotency, bù trừ, đối soát. Chương 13 đã gặp một lần: một job không idempotent thử lại 3 lần tính 300.000 đồng thay vì 100.000.</i></p></li><li><p><b>d)</b> A modular monolith: one deploy, narrow facades enforced by lint, tables with owners</p><p>You keep transactions, JOINs and nanosecond calls, and a later split becomes a change of transport, not a rewrite — if tables have owners.</p><p><i>VI: Bạn giữ transaction, JOIN và lời gọi tính bằng nano giây, và lần tách sau này chỉ là đổi đường truyền, không phải viết lại — nếu bảng có chủ.</i></p></li><li><p><b>a)</b> embedQueue.service.ts is an in-process array queue that a second process would break + <b>c)</b> The 40 cron jobs share a per-process flag, so a second process would run each twice + <b>d)</b> 7 containers, one backend process, one database, one VPS — correct on all three signals</p><p>Useful boundaries already exist (R2 for files, Redis for shared state, external APIs for payments and AI), each adopted because something concrete required it. “The codebase is big” is not a signal.</p><p><i>VI: Các ranh giới hữu ích đã có sẵn (R2 cho tệp, Redis cho trạng thái chung, API ngoài cho thanh toán và AI), mỗi cái được dùng vì có thứ cụ thể đòi hỏi. “Mã nguồn lớn” không phải tín hiệu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Two reasons people often give for splitting: “deploys are risky” and “the code is hard to understand”. What does splitting do to them?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai lý do người ta hay đưa ra để tách: “deploy rủi ro” và “mã khó hiểu”. Tách làm gì với chúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both are fixed, because each service is smaller, simpler and deploys on its own"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neither: one deploy becomes several ordered ones, and confusing code spreads over six repos"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The code gets easier to read, but every deploy becomes riskier than it was before"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Deploys get safer because each one is smaller, but the code stays as hard to read"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Scary deploys have chapter 17’s smoke test and rollback; confusing code has the layers and facades of 18.1–18.3. Team frustration is a symptom, not a signal.</p><p><i>VI: Deploy đáng sợ đã có smoke test và quay lui của chương 17; mã khó hiểu đã có tầng và facade của 18.1–18.3. Sự bực bội của nhóm là triệu chứng, không phải tín hiệu.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Inside one bank money moves or it does not. Between two banks there is a moment when it has left one and not reached the other. What is the software version?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong một ngân hàng, tiền chuyển hoặc không. Giữa hai ngân hàng có lúc tiền đã rời một bên mà chưa tới bên kia. Phiên bản phần mềm là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No transaction across two services: a state like “paid, but stock not reserved” must be designed for"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A longer deploy, because both services must be released together"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A slower database, because two services share its connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A bigger image, because both services include the same libraries"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Idempotency, compensation, reconciliation. Chapter 13 met it once: a non-idempotent job retried 3 times charged 300,000 VND instead of 100,000.</p><p><i>VI: Idempotency, bù trừ, đối soát. Chương 13 đã gặp một lần: một job không idempotent thử lại 3 lần tính 300.000 đồng thay vì 100.000.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which one is the middle option between one file and twelve services?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lựa chọn ở giữa một tệp và mười hai dịch vụ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Serverless functions, one per route, sharing one schema"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A distributed monolith: services that share one database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A monorepo with one folder per team and no rules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A modular monolith: one deploy, narrow facades enforced by lint, tables with owners"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>You keep transactions, JOINs and nanosecond calls, and a later split becomes a change of transport, not a rewrite — if tables have owners.</p><p><i>VI: Bạn giữ transaction, JOIN và lời gọi tính bằng nano giây, và lần tách sau này chỉ là đổi đường truyền, không phải viết lại — nếu bảng có chủ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statements about the website are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào về website là đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "embedQueue.service.ts is an in-process array queue that a second process would break"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It should split into services because it has 608 models"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The 40 cron jobs share a per-process flag, so a second process would run each twice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "7 containers, one backend process, one database, one VPS — correct on all three signals"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Useful boundaries already exist (R2 for files, Redis for shared state, external APIs for payments and AI), each adopted because something concrete required it. “The codebase is big” is not a signal.</p><p><i>VI: Các ranh giới hữu ích đã có sẵn (R2 cho tệp, Redis cho trạng thái chung, API ngoài cho thanh toán và AI), mỗi cái được dùng vì có thứ cụ thể đòi hỏi. “Mã nguồn lớn” không phải tín hiệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting because “it scales”: for I/O-bound work more processes bought +6.7%.|||Tách vì “nó mở rộng được”: với việc I/O, thêm tiến trình chỉ được +6,7%."
+        },
+        {
+          "loi": "Ignoring the partial-failure state until it happens in production.|||Lờ trạng thái thất bại một phần cho tới khi nó xảy ra trên production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "monolith",
+          "vi": "khối nguyên"
+        },
+        {
+          "en": "modular monolith",
+          "vi": "khối nguyên mô-đun"
+        },
+        {
+          "en": "Conway’s law",
+          "vi": "định luật Conway",
+          "giaiThich": "systems mirror the organisation that builds them"
+        }
+      ]
+    },
+    {
+      "title": "boundaryCost(calls, inProcNs, httpMs, rps): a function call vs the same call over HTTP",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "latency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measured: “price a note” in the same process 2.0 ns; in another process over HTTP on loopback 0.072 ms with keep-alive, 0.177 ms with a new connection. Write <code>boundaryCost(callsPerRequest, inProcNs, httpMs, rps)</code> returning <code>{ ratio, addedMsPerRequest, addedCpuSecPerSec }</code>: <code>ratio</code> = HTTP time ÷ in-process time (same unit), rounded to an integer; <code>addedMsPerRequest</code> = calls × (httpMs − inProcNs / 10<sup>6</sup>), 3 decimals; <code>addedCpuSecPerSec</code> = that × rps ÷ 1000, 2 decimals (seconds of added latency per second of traffic).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đo được: “tính giá một ghi chú” trong cùng tiến trình 2,0 ns; ở tiến trình khác qua HTTP trên loopback 0,072 ms với keep-alive, 0,177 ms với kết nối mới. Viết <code>boundaryCost(callsPerRequest, inProcNs, httpMs, rps)</code> trả về <code>{ ratio, addedMsPerRequest, addedCpuSecPerSec }</code>: <code>ratio</code> = thời gian HTTP ÷ thời gian trong tiến trình (cùng đơn vị), làm tròn thành số nguyên; <code>addedMsPerRequest</code> = số lời gọi × (httpMs − inProcNs / 10<sup>6</sup>), 3 chữ số; <code>addedCpuSecPerSec</code> = giá trị đó × rps ÷ 1000, 2 chữ số (số giây độ trễ thêm vào mỗi giây lưu lượng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "boundaryCost(1, 2, 0.072, 1000)",
+          "output": "{\"ratio\":36000,\"addedMsPerRequest\":0.072,\"addedCpuSecPerSec\":0.07}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "1 ms = 1,000,000 ns.|||1 ms = 1.000.000 ns.",
+        "Round only the returned values.|||Chỉ làm tròn các giá trị trả về."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the cost of a process boundary */\nfunction boundaryCost(callsPerRequest, inProcNs, httpMs, rps) {\n  // Write your solution here\n  return { ratio: Math.round(httpMs / inProcNs), addedMsPerRequest: callsPerRequest * httpMs, addedCpuSecPerSec: callsPerRequest * httpMs * rps };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction boundaryCost(callsPerRequest, inProcNs, httpMs, rps) {\n  // Mỗi lời gọi qua tiến trình khác thay 2 ns bằng ~0,07 ms (loopback, keep-alive) — trước khi tính mạng thật, TLS, lỗi.\n  const extraMs = callsPerRequest * (httpMs - inProcNs / 1e6);\n  return {\n    ratio: Math.round((httpMs * 1e6) / inProcNs),\n    addedMsPerRequest: Number(extraMs.toFixed(3)),\n    addedCpuSecPerSec: Number(((extraMs * rps) / 1000).toFixed(2)),   // thời gian chờ mạng nhân lưu lượng: bao nhiêu \"giây\" mỗi giây\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every process boundary costs about 10⁴–10⁵ times a function call (0.072 ms vs 2.0 ns), before any failure handling. Ten calls per request at 1,000 req/s add 0.72 s of waiting every second — and from then on every one of those calls can fail.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi ranh giới tiến trình tốn khoảng 10⁴–10⁵ lần một lời gọi hàm (0,072 ms so với 2,0 ns), chưa tính xử lý lỗi. Mười lời gọi mỗi request ở 1.000 req/s thêm 0,72 s chờ mỗi giây — và từ đó mỗi lời gọi đều có thể hỏng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One call, keep-alive",
+              "vi": "Một lời gọi, keep-alive"
+            },
+            "goi": "boundaryCost(1, 2, 0.072, 1000)",
+            "mongDoi": {
+              "ratio": 36000,
+              "addedMsPerRequest": 0.072,
+              "addedCpuSecPerSec": 0.07
+            }
+          },
+          {
+            "moTa": {
+              "en": "Ten calls per request",
+              "vi": "Mười lời gọi mỗi request"
+            },
+            "goi": "boundaryCost(10, 2, 0.072, 1000)",
+            "mongDoi": {
+              "ratio": 36000,
+              "addedMsPerRequest": 0.72,
+              "addedCpuSecPerSec": 0.72
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "boundaryCost(3, 2, 0.177, 500)",
+            "mongDoi": {
+              "ratio": 88500,
+              "addedMsPerRequest": 0.531,
+              "addedCpuSecPerSec": 0.27
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "boundaryCost(0, 2, 0.072, 1000)",
+            "mongDoi": {
+              "ratio": 36000,
+              "addedMsPerRequest": 0,
+              "addedCpuSecPerSec": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ms with ns directly: the ratio comes out a million times too small.|||So ms với ns trực tiếp: tỉ lệ nhỏ đi một triệu lần."
+        },
+        {
+          "loi": "Forgetting that this is loopback: a real network, TLS and a second machine only add to it.|||Quên rằng đây là loopback: mạng thật, TLS và máy thứ hai chỉ cộng thêm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loopback",
+          "vi": "loopback",
+          "giaiThich": "127.0.0.1: no real network"
+        }
+      ]
+    },
+    {
+      "title": "Split, or not? The three signals that survive measurement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "architecture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>For each situation, say whether a split is justified and by which signal.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi tình huống, cho biết việc tách có chính đáng không và theo tín hiệu nào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Check with a CPU profile per route, git log per folder, and a count of merge conflicts.|||Kiểm bằng CPU profile theo route, git log theo thư mục, và đếm số xung đột merge.",
+        "None of the signals is “the codebase is big”.|||Không tín hiệu nào là “mã nguồn lớn”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Split, or not? The three signals that survive measurement\n\nAnswer in the answer panel (no code needed).\n\n1. Decide with numbersQuyết định bằng con số\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Split, or not? The three signals that survive measurement — answer key\n\n1. Decide with numbersQuyết định bằng con số\n   - r1.d: do not split\n   - r2.d: split: scaling profile\n   - r3.d: split: release cadence\n   - r4.d: split: teams\n   - r5.d: do not split\n   - r6.d: do not split\n   Signal 3 (teams) is decisive; the other two are often solvable without splitting. A boundary that matches a team boundary buys independence; one that matches no team is pure cost. Scary deploys and big code have chapter 17 and 18.1–18.3, not a network.VI: Tín hiệu 3 (nhóm) là quyết định; hai tín hiệu kia thường giải được mà không cần tách. Ranh giới trùng ranh giới nhóm thì mua được sự độc lập; ranh giới không trùng nhóm nào là chi phí thuần. Deploy đáng sợ và mã lớn đã có chương 17 và 18.1–18.3, không cần mạng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Signal 3 (teams) is decisive; the other two are often solvable without splitting. A boundary that matches a team boundary buys independence; one that matches no team is pure cost. Scary deploys and big code have chapter 17 and 18.1–18.3, not a network.</p><p><i>VI: Tín hiệu 3 (nhóm) là quyết định; hai tín hiệu kia thường giải được mà không cần tách. Ranh giới trùng ranh giới nhóm thì mua được sự độc lập; ranh giới không trùng nhóm nào là chi phí thuần. Deploy đáng sợ và mã lớn đã có chương 17 và 18.1–18.3, không cần mạng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decide with numbers</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định bằng con số</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Situation"
+              },
+              {
+                "ma": "d",
+                "ten": "Decision",
+                "luaChon": [
+                  "do not split",
+                  "split: scaling profile",
+                  "split: release cadence",
+                  "split: teams"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Two developers, one Notes API, 95% of request time in the database, one release cadence"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Image resizing needs 16 cores and is CPU-bound (idle 3%); the rest of the API needs 2 and waits on the DB"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The payments part changes quarterly under audit; the rest ships several times a day"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Three teams wait for each other’s deploys and hit merge conflicts every week in the same files"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "“The codebase is big” — 900 files, one team, one cadence, I/O-bound"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "“Deploys are scary” — no smoke test, no immutable tags"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "do not split",
+              "r2.d": "split: scaling profile",
+              "r3.d": "split: release cadence",
+              "r4.d": "split: teams",
+              "r5.d": "do not split",
+              "r6.d": "do not split"
+            },
+            "giaiThich": "<p>Signal 3 (teams) is decisive; the other two are often solvable without splitting. A boundary that matches a team boundary buys independence; one that matches no team is pure cost. Scary deploys and big code have chapter 17 and 18.1–18.3, not a network.</p><p><i>VI: Tín hiệu 3 (nhóm) là quyết định; hai tín hiệu kia thường giải được mà không cần tách. Ranh giới trùng ranh giới nhóm thì mua được sự độc lập; ranh giới không trùng nhóm nào là chi phí thuần. Deploy đáng sợ và mã lớn đã có chương 17 và 18.1–18.3, không cần mạng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting to fix risky deploys.|||Tách để chữa deploy rủi ro."
+        },
+        {
+          "loi": "Splitting an I/O-bound app “to scale”.|||Tách một app I/O “để mở rộng”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "release cadence",
+          "vi": "nhịp phát hành"
+        }
+      ]
+    },
+    {
+      "title": "reconcile(state): find the “paid, but stock not reserved” orders",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "distributed systems",
+        "consistency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Across two services there is no rollback, so the half-done states will exist; reconciliation finds them. <code>orders</code> are <code>{ id, total }</code>, <code>payments</code> <code>{ orderId, amount, status }</code> (only <code>\"succeeded\"</code> counts; several payments for one order add up), <code>reservations</code> <code>{ orderId }</code>. Return <code>{ paidNotReserved, reservedNotPaid, overcharged }</code>, each in order of <code>orders</code>: ids paid (sum &gt; 0) with no reservation; ids reserved with nothing paid; and <code>\"&lt;id&gt;: &lt;paid&gt; &gt; &lt;total&gt;\"</code> for orders charged more than their total.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giữa hai dịch vụ không có quay lui, nên các trạng thái làm dở sẽ tồn tại; đối soát tìm ra chúng. <code>orders</code> là <code>{ id, total }</code>, <code>payments</code> là <code>{ orderId, amount, status }</code> (chỉ <code>\"succeeded\"</code> được tính; nhiều lần thanh toán cho một đơn thì cộng dồn), <code>reservations</code> là <code>{ orderId }</code>. Trả về <code>{ paidNotReserved, reservedNotPaid, overcharged }</code>, mỗi danh sách theo thứ tự của <code>orders</code>: id đã trả (tổng &gt; 0) mà không giữ hàng; id đã giữ hàng mà chưa trả gì; và <code>\"&lt;id&gt;: &lt;đã trả&gt; &gt; &lt;tổng&gt;\"</code> cho đơn bị thu nhiều hơn tổng tiền.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reconcile({\"orders\":[{\"id\":\"o1\",\"total\":100000},{\"id\":\"o2\",\"total\":250000}],\"payments\":[{\"orderId\":\"o1\",\"amount\":100000,\"status\":\"succeeded\"},{\"orderId\":\"o2\",\"amount\":250000,\"status\":\"succeeded\"}],\"reservations\":[{\"orderId\":\"o2\"}]})",
+          "output": "{\"paidNotReserved\":[\"o1\"],\"reservedNotPaid\":[],\"overcharged\":[]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sum succeeded payments per order in a Map; put reserved order ids in a Set.|||Cộng các lần thanh toán thành công theo đơn trong một Map; cho id đơn đã giữ hàng vào một Set.",
+        "Walk the orders once and test the three conditions.|||Duyệt các đơn một lần và kiểm ba điều kiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** find half-done orders */\nfunction reconcile({ orders, payments, reservations }) {\n  // Write your solution here\n  const paidIds = payments.map((p) => p.orderId);\n  const resIds = reservations.map((r) => r.orderId);\n  return {\n    paidNotReserved: orders.filter((o) => paidIds.includes(o.id) && !resIds.includes(o.id)).map((o) => o.id),\n    reservedNotPaid: [],\n    overcharged: [],\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reconcile({ orders, payments, reservations }) {\n  // Không có transaction xuyên dịch vụ ⇒ trạng thái nửa vời là CHẮC CHẮN có. Đối soát tìm chúng thay vì chờ khách báo.\n  const paid = new Map();\n  for (const p of payments) if (p.status === 'succeeded') paid.set(p.orderId, (paid.get(p.orderId) || 0) + p.amount);\n  const reserved = new Set(reservations.map((r) => r.orderId));\n  const out = { paidNotReserved: [], reservedNotPaid: [], overcharged: [] };\n  for (const o of orders) {\n    const got = paid.get(o.id) || 0;\n    if (got > 0 && !reserved.has(o.id)) out.paidNotReserved.push(o.id);\n    if (got === 0 && reserved.has(o.id)) out.reservedNotPaid.push(o.id);\n    if (got > o.total) out.overcharged.push(`${o.id}: ${got} > ${o.total}`);     // bài 13.3: 300.000 thay vì 100.000\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In one process a transaction makes these states impossible; across services you design for them — idempotency keys so a retry cannot charge twice, compensation (refund or release) for a half-done step, and a reconciliation job like this one. That bill is part of the price of splitting.</p>",
+      "solutionExplanationHtmlVi": "<p>Trong một tiến trình, transaction làm các trạng thái này bất khả; giữa các dịch vụ bạn phải thiết kế cho chúng — khoá idempotency để lần thử lại không trừ tiền hai lần, bù trừ (hoàn tiền hoặc nhả hàng) cho bước làm dở, và một job đối soát như thế này. Hoá đơn đó là một phần giá của việc tách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "o1 paid, stock never reserved",
+              "vi": "o1 đã trả, chưa bao giờ giữ hàng"
+            },
+            "goi": "reconcile({\"orders\":[{\"id\":\"o1\",\"total\":100000},{\"id\":\"o2\",\"total\":250000}],\"payments\":[{\"orderId\":\"o1\",\"amount\":100000,\"status\":\"succeeded\"},{\"orderId\":\"o2\",\"amount\":250000,\"status\":\"succeeded\"}],\"reservations\":[{\"orderId\":\"o2\"}]})",
+            "mongDoi": {
+              "paidNotReserved": [
+                "o1"
+              ],
+              "reservedNotPaid": [],
+              "overcharged": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The retried charge of chapter 13",
+              "vi": "Cú trừ tiền thử lại của chương 13"
+            },
+            "goi": "reconcile({\"orders\":[{\"id\":\"o3\",\"total\":100000}],\"payments\":[{\"orderId\":\"o3\",\"amount\":100000,\"status\":\"succeeded\"},{\"orderId\":\"o3\",\"amount\":100000,\"status\":\"succeeded\"},{\"orderId\":\"o3\",\"amount\":100000,\"status\":\"succeeded\"}],\"reservations\":[{\"orderId\":\"o3\"}]})",
+            "mongDoi": {
+              "paidNotReserved": [],
+              "reservedNotPaid": [],
+              "overcharged": [
+                "o3: 300000 > 100000"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "reconcile({\"orders\":[{\"id\":\"a\",\"total\":50},{\"id\":\"b\",\"total\":70},{\"id\":\"c\",\"total\":10}],\"payments\":[{\"orderId\":\"a\",\"amount\":50,\"status\":\"failed\"},{\"orderId\":\"c\",\"amount\":6,\"status\":\"succeeded\"},{\"orderId\":\"c\",\"amount\":4,\"status\":\"succeeded\"}],\"reservations\":[{\"orderId\":\"a\"},{\"orderId\":\"b\"}]})",
+            "mongDoi": {
+              "paidNotReserved": [
+                "c"
+              ],
+              "reservedNotPaid": [
+                "a",
+                "b"
+              ],
+              "overcharged": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "reconcile({\"orders\":[],\"payments\":[],\"reservations\":[]})",
+            "mongDoi": {
+              "paidNotReserved": [],
+              "reservedNotPaid": [],
+              "overcharged": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting failed payment attempts as paid.|||Tính các lần thanh toán thất bại là đã trả."
+        },
+        {
+          "loi": "Checking only one succeeded payment per order: a retried, non-idempotent charge is exactly the triple charge of chapter 13.|||Chỉ kiểm một lần thanh toán thành công mỗi đơn: một lần trừ tiền thử lại không idempotent chính là cú trừ ba lần của chương 13."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reconciliation",
+          "vi": "đối soát"
+        },
+        {
+          "en": "compensation",
+          "vi": "bù trừ",
+          "giaiThich": "an action that undoes a completed step"
+        },
+        {
+          "en": "idempotency key",
+          "vi": "khoá idempotency"
+        }
+      ]
+    },
+    {
+      "title": "facadeViolations({ imports, queries, owners }): the lint rule of a modular monolith",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "modular monolith",
+        "lint",
+        "architecture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Enforce the two walls of a modular monolith. Files of module <code>x</code> live under <code>modules/x/</code>; its facade is <code>modules/x/index.js</code>. <code>imports</code> are <code>{ from, to }</code> file paths, <code>queries</code> are <code>{ module, table }</code> (who queries which table directly), <code>owners</code> maps each table to its owning module. Return, in input order (imports first, then queries), without duplicates:</p><ul><li><code>\"IMPORT_INTERNAL &lt;from&gt; -&gt; &lt;to&gt;\"</code> — a file of one module imports a file of <b>another</b> module that is not its <code>index.js</code> (paths outside <code>modules/</code> are ignored);</li><li><code>\"FOREIGN_TABLE &lt;module&gt; -&gt; &lt;table&gt; (owner: &lt;owner&gt;)\"</code> — a module queries a table it does not own;</li><li><code>\"NO_OWNER &lt;table&gt;\"</code> — a queried table has no owner.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cưỡng chế hai bức tường của khối nguyên mô-đun. Tệp của module <code>x</code> nằm dưới <code>modules/x/</code>; facade của nó là <code>modules/x/index.js</code>. <code>imports</code> là các đường dẫn tệp <code>{ from, to }</code>, <code>queries</code> là <code>{ module, table }</code> (ai truy vấn trực tiếp bảng nào), <code>owners</code> ánh xạ mỗi bảng ⇒ module sở hữu. Trả về, theo thứ tự đầu vào (imports trước, rồi queries), không trùng:</p><ul><li><code>\"IMPORT_INTERNAL &lt;from&gt; -&gt; &lt;to&gt;\"</code> — một tệp của một module import một tệp của module <b>khác</b> mà không phải <code>index.js</code> của nó (đường dẫn ngoài <code>modules/</code> được bỏ qua);</li><li><code>\"FOREIGN_TABLE &lt;module&gt; -&gt; &lt;table&gt; (owner: &lt;owner&gt;)\"</code> — một module truy vấn bảng nó không sở hữu;</li><li><code>\"NO_OWNER &lt;table&gt;\"</code> — một bảng được truy vấn mà không có chủ.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "facadeViolations({\"imports\":[{\"from\":\"modules/notes/service.js\",\"to\":\"modules/courses/index.js\"},{\"from\":\"modules/notes/service.js\",\"to\":\"modules/notes/repo.js\"},{\"from\":\"modules/stats/report.js\",\"to\":\"modules/notes/repo.js\"}],\"queries\":[{\"module\":\"notes\",\"table\":\"note\"},{\"module\":\"stats\",\"table\":\"note\"}],\"owners\":{\"note\":\"notes\",\"course\":\"courses\"}})",
+          "output": "[\"IMPORT_INTERNAL modules/stats/report.js -> modules/notes/repo.js\",\"FOREIGN_TABLE stats -> note (owner: notes)\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Extract the module name with /^modules\\/([^/]+)\\//.|||Lấy tên module bằng /^modules\\/([^/]+)\\//.",
+        "Imports inside the same module are always allowed; only the cross-module ones must hit index.js.|||Import trong cùng module luôn được phép; chỉ import chéo module mới phải tới index.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** enforce facades and table owners */\nfunction facadeViolations({ imports, queries, owners }) {\n  // Write your solution here\n  const out = [];\n  for (const { from, to } of imports) if (to.includes('/internal/')) out.push('IMPORT_INTERNAL ' + from + ' -> ' + to);\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction facadeViolations({ imports, queries, owners }) {\n  // imports: [{ from, to }] đường dẫn tệp \"modules/<tên>/…\"; queries: [{ module, table }]; owners: { table: module }.\n  const mod = (p) => (/^modules\\/([^/]+)\\//.exec(p) || [])[1];\n  const out = [];\n  for (const { from, to } of imports) {\n    const a = mod(from);\n    const b = mod(to);\n    // từ module khác chỉ được đi qua facade: modules/<b>/index.js\n    if (a && b && a !== b && to !== `modules/${b}/index.js`) out.push(`IMPORT_INTERNAL ${from} -> ${to}`);\n  }\n  for (const { module, table } of queries) {\n    const owner = owners[table];\n    if (owner === undefined) out.push(`NO_OWNER ${table}`);\n    else if (owner !== module) out.push(`FOREIGN_TABLE ${module} -> ${table} (owner: ${owner})`);\n  }\n  return [...new Set(out)];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With both walls, only the courses module queries course tables and everyone else asks getCourse(id) through the facade — so a future split is a change of transport (function call → network call), not a rewrite. Measured in 18.3: prisma.user is queried from 57 places, exactly what this rule would forbid.</p>",
+      "solutionExplanationHtmlVi": "<p>Có cả hai bức tường, chỉ module courses truy vấn bảng course còn mọi bên khác hỏi getCourse(id) qua facade — nên lần tách tương lai chỉ là đổi đường truyền (lời gọi hàm → lời gọi mạng), không phải viết lại. Đo ở 18.3: prisma.user bị truy vấn từ 57 chỗ, đúng thứ luật này cấm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "stats reaches into notes",
+              "vi": "stats thò tay vào notes"
+            },
+            "goi": "facadeViolations({\"imports\":[{\"from\":\"modules/notes/service.js\",\"to\":\"modules/courses/index.js\"},{\"from\":\"modules/notes/service.js\",\"to\":\"modules/notes/repo.js\"},{\"from\":\"modules/stats/report.js\",\"to\":\"modules/notes/repo.js\"}],\"queries\":[{\"module\":\"notes\",\"table\":\"note\"},{\"module\":\"stats\",\"table\":\"note\"}],\"owners\":{\"note\":\"notes\",\"course\":\"courses\"}})",
+            "mongDoi": [
+              "IMPORT_INTERNAL modules/stats/report.js -> modules/notes/repo.js",
+              "FOREIGN_TABLE stats -> note (owner: notes)"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Both walls hold",
+              "vi": "Cả hai bức tường đứng vững"
+            },
+            "goi": "facadeViolations({\"imports\":[{\"from\":\"modules/a/x.js\",\"to\":\"modules/b/index.js\"}],\"queries\":[{\"module\":\"a\",\"table\":\"a_rows\"}],\"owners\":{\"a_rows\":\"a\"}})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "facadeViolations({\"imports\":[{\"from\":\"src/index.js\",\"to\":\"modules/notes/repo.js\"},{\"from\":\"modules/cv/a.js\",\"to\":\"modules/users/internal/hash.js\"},{\"from\":\"modules/cv/a.js\",\"to\":\"modules/users/internal/hash.js\"}],\"queries\":[{\"module\":\"cv\",\"table\":\"user\"},{\"module\":\"cv\",\"table\":\"cv_draft\"},{\"module\":\"users\",\"table\":\"user\"}],\"owners\":{\"user\":\"users\"}})",
+            "mongDoi": [
+              "IMPORT_INTERNAL modules/cv/a.js -> modules/users/internal/hash.js",
+              "FOREIGN_TABLE cv -> user (owner: users)",
+              "NO_OWNER cv_draft"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "facadeViolations({\"imports\":[],\"queries\":[],\"owners\":{}})",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Folders without the lint rule: “a folder called domain/ that anything can import from is not a boundary; it is a wish”.|||Thư mục mà không có luật lint: “một thư mục tên domain/ mà gì cũng import được thì không phải ranh giới; chỉ là mong ước”."
+        },
+        {
+          "loi": "Enforcing imports but not tables: every module still reaches into every table, and a later split must be rewritten from scratch.|||Cưỡng chế import mà không cưỡng chế bảng: mọi module vẫn thò tay vào mọi bảng, và lần tách sau phải viết lại từ đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "facade",
+          "vi": "mặt tiền (facade)",
+          "giaiThich": "the narrow public entry of a module"
+        },
+        {
+          "en": "table owner",
+          "vi": "chủ sở hữu bảng"
+        }
+      ]
+    }
+  ]
+}

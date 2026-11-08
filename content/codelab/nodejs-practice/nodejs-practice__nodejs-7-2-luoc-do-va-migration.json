@@ -1,0 +1,1053 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-7-2-luoc-do-va-migration",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-7-2-luoc-do-va-migration"
+  },
+  "exercises": [
+    {
+      "title": "7.2 · 1 — migrate dev, deploy, status, diff, resolve: which one, where, and why",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "migrations",
+        "Prisma Migrate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A migration is the only code that runs once, against data you cannot recreate, usually while users are online. Six questions from lesson 7.2’s rehearsal on a table that has rows.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Migration là đoạn code duy nhất chạy một lần, trên dữ liệu bạn không tạo lại được, thường khi người dùng đang online. Sáu câu hỏi từ buổi diễn tập của bài 7.2 trên một bảng đã có dữ liệu.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate the history table (what Prisma believes) from the real schema (what PostgreSQL has).|||Tách bảng lịch sử (điều Prisma tin) khỏi lược đồ thật (thứ PostgreSQL có).",
+        "On production the safe set is tiny: deploy, status, diff — and resolve only after a human checked.|||Trên production tập lệnh an toàn rất nhỏ: deploy, status, diff — và resolve chỉ sau khi con người đã kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2 · 1 — migrate dev, deploy, status, diff, resolve: which one, where, and why\n\nAnswer in the answer panel (no code needed).\n\n1. Which command runs in CI against production?Lệnh nào chạy trong CI trên production?\n2. Someone added a column with psql at 2 a.m. npx prisma migrate status prints “Database schema is up to date!”. Why?Ai đó thêm một cột bằng psql lúc 2 giờ sáng. npx prisma migrate status in \"Database schema is up to date!\". Vì sao?\n3. ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL; on a table with rows fails with 23502 (P3018). The deploy is retried. What do you get now?ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL; trên bảng có dữ liệu hỏng với 23502 (P3018). Deploy được chạy lại. Giờ bạn nhận gì?\n4. Before touching anything after P3018, what is the only question that matters?Trước khi đụng vào gì sau P3018, câu hỏi duy nhất quan trọng là gì?\n5. Why should you never reach for migrate resolve --applied “to make the red go away”?Vì sao không bao giờ dùng migrate resolve --applied \"cho hết đỏ\"?\n6. You forget notes Note[] on model User. What happens?Bạn quên notes Note[] trong model User. Chuyện gì xảy ra?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2 · 1 — migrate dev, deploy, status, diff, resolve: which one, where, and why — answer key\n\n1. Which command runs in CI against production?Lệnh nào chạy trong CI trên production?\n   Answer: a) migrate deploy — applies pending files in order, never creates a file, never resets, never asks\n   migrate dev is development only, and it is exactly the command that offers to reset when it cannot reconcile.VI: migrate dev chỉ cho môi trường phát triển, và chính nó là lệnh đề nghị reset khi không khớp được.\n\n2. Someone added a column with psql at 2 a.m. npx prisma migrate status prints “Database schema is up to date!”. Why?Ai đó thêm một cột bằng psql lúc 2 giờ sáng. npx prisma migrate status in \"Database schema is up to date!\". Vì sao?\n   Answer: a) status only reads the _prisma_migrations history table; it never compares real columns\n   To resolve drift honestly: put the diff output into a real migration file and mark it applied.VI: Xử lý lệch thật thà: đưa output của diff vào một tệp migration thật rồi đánh dấu đã áp dụng.\n\n3. ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL; on a table with rows fails with 23502 (P3018). The deploy is retried. What do you get now?ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL; trên bảng có dữ liệu hỏng với 23502 (P3018). Deploy được chạy lại. Giờ bạn nhận gì?\n   Answer: d) P3009 — a failed migration is recorded, and no migration can deploy any more, including a teammate’s innocent one\n   P3018 is the first failure; P3009 is every attempt after it. A stuck migration is an outage of your ability to ship.VI: P3018 là lần hỏng đầu; P3009 là mọi lần sau đó. Migration bị kẹt là sự cố mất khả năng phát hành.\n\n4. Before touching anything after P3018, what is the only question that matters?Trước khi đụng vào gì sau P3018, câu hỏi duy nhất quan trọng là gì?\n   Answer: b) How much of it applied? Check the columns and the history table\n   Here: no slug column, applied_steps_count = 0, no finished_at — PostgreSQL ran the DDL in a transaction and rolled back. Then resolve --rolled-back is honest.VI: Ở đây: không có cột slug, applied_steps_count = 0, không có finished_at — PostgreSQL chạy DDL trong transaction và đã rollback. Khi đó resolve --rolled-back là trung thực.\n\n5. Why should you never reach for migrate resolve --applied “to make the red go away”?Vì sao không bao giờ dùng migrate resolve --applied \"cho hết đỏ\"?\n   Answer: c) It records a success that never happened; later migrations build on a lie\n   Use --applied only when you finished the work by hand and verified it.VI: Chỉ dùng --applied khi bạn đã tự làm xong việc bằng tay và kiểm lại.\n\n6. You forget notes Note[] on model User. What happens?Bạn quên notes Note[] trong model User. Chuyện gì xảy ra?\n   Answer: d) prisma generate stops: the relation is “missing an opposite relation field”\n   Every relation is two fields. The back-relation creates no column; it is how you write include: { notes: true }. Two relations to the same model need @relation(\"Name\") on each pair.VI: Mỗi quan hệ là hai trường. Quan hệ ngược không tạo cột; nó là cách bạn viết include: { notes: true }. Hai quan hệ tới cùng model cần @relation(\"Tên\") cho mỗi cặp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> migrate deploy — applies pending files in order, never creates a file, never resets, never asks</p><p>migrate dev is development only, and it is exactly the command that offers to reset when it cannot reconcile.</p><p><i>VI: migrate dev chỉ cho môi trường phát triển, và chính nó là lệnh đề nghị reset khi không khớp được.</i></p></li><li><p><b>a)</b> status only reads the _prisma_migrations history table; it never compares real columns</p><p>To resolve drift honestly: put the diff output into a real migration file and mark it applied.</p><p><i>VI: Xử lý lệch thật thà: đưa output của diff vào một tệp migration thật rồi đánh dấu đã áp dụng.</i></p></li><li><p><b>d)</b> P3009 — a failed migration is recorded, and no migration can deploy any more, including a teammate’s innocent one</p><p>P3018 is the first failure; P3009 is every attempt after it. A stuck migration is an outage of your ability to ship.</p><p><i>VI: P3018 là lần hỏng đầu; P3009 là mọi lần sau đó. Migration bị kẹt là sự cố mất khả năng phát hành.</i></p></li><li><p><b>b)</b> How much of it applied? Check the columns and the history table</p><p>Here: no slug column, applied_steps_count = 0, no finished_at — PostgreSQL ran the DDL in a transaction and rolled back. Then resolve --rolled-back is honest.</p><p><i>VI: Ở đây: không có cột slug, applied_steps_count = 0, không có finished_at — PostgreSQL chạy DDL trong transaction và đã rollback. Khi đó resolve --rolled-back là trung thực.</i></p></li><li><p><b>c)</b> It records a success that never happened; later migrations build on a lie</p><p>Use --applied only when you finished the work by hand and verified it.</p><p><i>VI: Chỉ dùng --applied khi bạn đã tự làm xong việc bằng tay và kiểm lại.</i></p></li><li><p><b>d)</b> prisma generate stops: the relation is “missing an opposite relation field”</p><p>Every relation is two fields. The back-relation creates no column; it is how you write include: { notes: true }. Two relations to the same model need @relation(\"Name\") on each pair.</p><p><i>VI: Mỗi quan hệ là hai trường. Quan hệ ngược không tạo cột; nó là cách bạn viết include: { notes: true }. Hai quan hệ tới cùng model cần @relation(\"Tên\") cho mỗi cặp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which command runs in CI against production?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh nào chạy trong CI trên production?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "migrate deploy — applies pending files in order, never creates a file, never resets, never asks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "db push — it is the fastest"
+              },
+              {
+                "ma": "c",
+                "noiDung": "migrate reset — it guarantees a clean state"
+              },
+              {
+                "ma": "d",
+                "noiDung": "migrate dev — it keeps the schema and the database in sync"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>migrate dev is development only, and it is exactly the command that offers to reset when it cannot reconcile.</p><p><i>VI: migrate dev chỉ cho môi trường phát triển, và chính nó là lệnh đề nghị reset khi không khớp được.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Someone added a column with psql at 2 a.m. <code>npx prisma migrate status</code> prints “Database schema is up to date!”. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai đó thêm một cột bằng psql lúc 2 giờ sáng. <code>npx prisma migrate status</code> in \"Database schema is up to date!\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "status only reads the _prisma_migrations history table; it never compares real columns"
+              },
+              {
+                "ma": "b",
+                "noiDung": "psql changes are invisible to PostgreSQL until a restart"
+              },
+              {
+                "ma": "c",
+                "noiDung": "status compares only table names, and no table was added"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Prisma ignores columns whose names end in _col"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>To resolve drift honestly: put the diff output into a real migration file and mark it applied.</p><p><i>VI: Xử lý lệch thật thà: đưa output của diff vào một tệp migration thật rồi đánh dấu đã áp dụng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL;</code> on a table with rows fails with 23502 (P3018). The deploy is retried. What do you get now?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>ALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL;</code> trên bảng có dữ liệu hỏng với 23502 (P3018). Deploy được chạy lại. Giờ bạn nhận gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Success — Prisma fills the column with empty strings on the second try"
+              },
+              {
+                "ma": "b",
+                "noiDung": "P2002, because the unique index already exists"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The same 23502 again, nothing else changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "P3009 — a failed migration is recorded, and no migration can deploy any more, including a teammate’s innocent one"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>P3018 is the first failure; P3009 is every attempt after it. A stuck migration is an outage of your ability to ship.</p><p><i>VI: P3018 là lần hỏng đầu; P3009 là mọi lần sau đó. Migration bị kẹt là sự cố mất khả năng phát hành.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Before touching anything after P3018, what is the only question that matters?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi đụng vào gì sau P3018, câu hỏi duy nhất quan trọng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Is the shadow database up to date with the production schema?"
+              },
+              {
+                "ma": "b",
+                "noiDung": "How much of it applied? Check the columns and the history table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Which developer wrote the migration, so they can fix it themselves?"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Can we raise the statement timeout and simply deploy it again?"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Here: no slug column, applied_steps_count = 0, no finished_at — PostgreSQL ran the DDL in a transaction and rolled back. Then resolve --rolled-back is honest.</p><p><i>VI: Ở đây: không có cột slug, applied_steps_count = 0, không có finished_at — PostgreSQL chạy DDL trong transaction và đã rollback. Khi đó resolve --rolled-back là trung thực.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why should you never reach for <code>migrate resolve --applied</code> “to make the red go away”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao không bao giờ dùng <code>migrate resolve --applied</code> \"cho hết đỏ\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It deletes the failed migration file from the repository for good"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It only works with SQLite and corrupts PostgreSQL databases"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It records a success that never happened; later migrations build on a lie"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It drops and recreates the whole database from the migration files"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Use --applied only when you finished the work by hand and verified it.</p><p><i>VI: Chỉ dùng --applied khi bạn đã tự làm xong việc bằng tay và kiểm lại.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>You forget <code>notes Note[]</code> on model User. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn quên <code>notes Note[]</code> trong model User. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The foreign key column authorId is silently not created in the table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing at all, because a back-relation is only an optional hint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deleting a user no longer cascades to the notes that user wrote"
+              },
+              {
+                "ma": "d",
+                "noiDung": "prisma generate stops: the relation is “missing an opposite relation field”"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every relation is two fields. The back-relation creates no column; it is how you write include: { notes: true }. Two relations to the same model need @relation(\"Name\") on each pair.</p><p><i>VI: Mỗi quan hệ là hai trường. Quan hệ ngược không tạo cột; nó là cách bạn viết include: { notes: true }. Hai quan hệ tới cùng model cần @relation(\"Tên\") cho mỗi cặp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running migrate dev against a real database and accepting the reset prompt.|||Chạy migrate dev trên CSDL thật và đồng ý lời mời reset."
+        },
+        {
+          "loi": "resolve --applied on a migration that never finished.|||resolve --applied cho migration chưa bao giờ chạy xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "drift",
+          "vi": "lệch lược đồ",
+          "giaiThich": "CSDL khác lịch sử migration."
+        },
+        {
+          "en": "P3018 / P3009",
+          "vi": "P3018 / P3009",
+          "giaiThich": "Migration hỏng / đã có migration hỏng nên chặn mọi migration."
+        },
+        {
+          "en": "shadow database",
+          "vi": "CSDL bóng",
+          "giaiThich": "CSDL tạm migrate dev dùng để so."
+        }
+      ]
+    },
+    {
+      "title": "7.2 · 2 — Rewrite the add_slug migration so it survives a table that has rows",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "migrations",
+        "zero-downtime"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>The schema gained <code>slug String @unique</code> on <code>Note</code>, and <code>migrate dev</code> generated the two-line migration in the starter. On a table with rows it dies with <code>ERROR: column \"slug\" of relation \"Note\" contains null values</code> (23502 ⇒ P3018). Rewrite it in the three steps of lesson 7.2 so it applies on <b>any</b> table:</p>\n<ol><li>add <code>\"slug\"</code> as <code>TEXT</code>, <b>nullable</b>;</li><li>backfill every row with <code>'note-' || \"id\"</code>;</li><li>set it <code>NOT NULL</code>;</li><li>create the unique index <code>\"Note_slug_key\"</code>.</li></ol>\n<p>The grader runs your file on the sample database (10 notes, no slug column), then checks the data and the constraints. A hidden check runs it on different rows (some added, one deleted), so the backfill must not hard-code ids.</p>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 notes</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Plain PostgreSQL statements, no BEGIN/COMMIT (the grader wraps your file in a transaction, like migrate deploy).</li>\n  <li>Keep the index name <code>\"Note_slug_key\"</code> — Prisma looks for it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lược đồ có thêm <code>slug String @unique</code> trên <code>Note</code>, và <code>migrate dev</code> sinh ra migration hai dòng trong code khởi đầu. Trên bảng có dữ liệu nó chết với <code>ERROR: column \"slug\" of relation \"Note\" contains null values</code> (23502 ⇒ P3018). Viết lại theo ba bước của bài 7.2 để nó chạy được trên <b>mọi</b> bảng:</p>\n<ol><li>thêm <code>\"slug\"</code> kiểu <code>TEXT</code>, <b>cho phép NULL</b>;</li><li>điền mọi dòng bằng <code>'note-' || \"id\"</code>;</li><li>đặt <code>NOT NULL</code>;</li><li>tạo chỉ mục unique <code>\"Note_slug_key\"</code>.</li></ol>\n<p>Máy chấm chạy tệp của bạn trên CSDL mẫu (10 ghi chú, chưa có cột slug), rồi kiểm dữ liệu và ràng buộc. Một kiểm ẩn chạy trên các dòng khác (thêm vài dòng, xoá một dòng), nên bước điền không được ghi cứng id.</p>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 ghi chú</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Câu lệnh PostgreSQL thường, không BEGIN/COMMIT (máy chấm tự bọc tệp trong transaction, như migrate deploy).</li>\n  <li>Giữ tên chỉ mục <code>\"Note_slug_key\"</code> — Prisma tìm đúng tên này.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | slug  \n---+-------\n1  | note-1\n2  | note-2\n3  | note-3\n4  | note-4\n5  | note-5\n6  | note-6\n7  | note-7\n8  | note-8\n… (10 rows)",
+          "explanation": "Expected result of check \"Every note got slug = note-ID\" (row order matters).|||Kết quả mong đợi của kiểm \"Mọi ghi chú có slug = note-ID\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Step 1 is the same ALTER TABLE without NOT NULL. Step 2 is an UPDATE with string concatenation <code>||</code>.|||Bước 1 là cùng câu ALTER TABLE nhưng bỏ NOT NULL. Bước 2 là một UPDATE với phép nối chuỗi <code>||</code>.",
+        "Step 3: <code>ALTER TABLE \"Note\" ALTER COLUMN \"slug\" SET NOT NULL;</code>. Quote the camelCase column names: <code>\"authorId\"</code>, not <code>authorId</code>.|||Bước 3: <code>ALTER TABLE \"Note\" ALTER COLUMN \"slug\" SET NOT NULL;</code>. Đặt tên cột camelCase trong ngoặc kép: <code>\"authorId\"</code>, không phải <code>authorId</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- prisma/migrations/20260727170000_add_slug/migration.sql — generated by migrate dev\nALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL;\nCREATE UNIQUE INDEX \"Note_slug_key\" ON \"Note\"(\"slug\");\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- prisma/migrations/20260727170000_add_slug/migration.sql — the version that survives a table with rows\nALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT;                        -- 1. nullable first: every existing row can take NULL\nUPDATE \"Note\" SET \"slug\" = 'note-' || \"id\" WHERE \"slug\" IS NULL;  -- 2. backfill from something unique (the id)\nALTER TABLE \"Note\" ALTER COLUMN \"slug\" SET NOT NULL;              -- 3. then tighten\nCREATE UNIQUE INDEX \"Note_slug_key\" ON \"Note\"(\"slug\");            -- the @unique of the schema\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each step is safe on its own and safe to stop after: adding a nullable column never fails, the backfill derives a unique value from the primary key, and SET NOT NULL succeeds because no NULL is left. The same shape — add, copy, tighten — covers renames and type changes while users are online.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi bước tự nó an toàn và dừng sau nó cũng an toàn: thêm cột cho phép NULL không bao giờ hỏng, bước điền lấy giá trị duy nhất từ khoá chính, và SET NOT NULL thành công vì không còn NULL. Cùng hình dạng — thêm, chép, siết — dùng được cho đổi tên và đổi kiểu khi người dùng đang online.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Every note got slug = note-ID|||Mọi ghi chú có slug = note-ID",
+            "kiemTra": "SELECT id, slug FROM \"Note\" ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug"
+              ],
+              "hang": [
+                [
+                  1,
+                  "note-1"
+                ],
+                [
+                  2,
+                  "note-2"
+                ],
+                [
+                  3,
+                  "note-3"
+                ],
+                [
+                  4,
+                  "note-4"
+                ],
+                [
+                  5,
+                  "note-5"
+                ],
+                [
+                  6,
+                  "note-6"
+                ],
+                [
+                  7,
+                  "note-7"
+                ],
+                [
+                  8,
+                  "note-8"
+                ],
+                [
+                  9,
+                  "note-9"
+                ],
+                [
+                  10,
+                  "note-10"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "slug is NOT NULL now|||slug giờ là NOT NULL",
+            "kiemTra": "SELECT is_nullable, data_type FROM information_schema.columns WHERE table_name = 'Note' AND column_name = 'slug'",
+            "mongDoi": {
+              "cot": [
+                "is_nullable",
+                "data_type"
+              ],
+              "hang": [
+                [
+                  "NO",
+                  "text"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A duplicate slug is rejected (unique index)|||slug trùng bị từ chối (chỉ mục unique)",
+            "thu": "INSERT INTO \"Note\" (title, slug, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('dup', 'note-1', 1, now(), now())",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A note without slug is rejected|||Ghi chú không có slug bị từ chối",
+            "thu": "INSERT INTO \"Note\" (title, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('no slug', 1, now(), now())",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The index is called \"Note_slug_key\"|||Chỉ mục tên \"Note_slug_key\"",
+            "kiemTra": "SELECT indexname FROM pg_indexes WHERE tablename = 'Note' AND indexdef LIKE '%UNIQUE%slug%'",
+            "mongDoi": {
+              "cot": [
+                "indexname"
+              ],
+              "hang": [
+                [
+                  "Note_slug_key"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: other rows — the backfill uses each row’s own id|||Ẩn: dòng khác — bước điền dùng id của chính từng dòng",
+            "kiemTra": "SELECT id, slug FROM \"Note\" ORDER BY id",
+            "thuTu": true,
+            "an": true,
+            "themCsdl": "INSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Late note A', '', false, 2, '2026-08-01 09:00', '2026-08-01 09:00'), ('Late note B', '', true, 3, '2026-08-01 10:00', '2026-08-01 10:00'), ('Late note C', '', false, 1, '2026-08-02 09:00', '2026-08-02 09:00');\nDELETE FROM \"Note\" WHERE id = 4;",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug"
+              ],
+              "hang": [
+                [
+                  1,
+                  "note-1"
+                ],
+                [
+                  2,
+                  "note-2"
+                ],
+                [
+                  3,
+                  "note-3"
+                ],
+                [
+                  5,
+                  "note-5"
+                ],
+                [
+                  6,
+                  "note-6"
+                ],
+                [
+                  7,
+                  "note-7"
+                ],
+                [
+                  8,
+                  "note-8"
+                ],
+                [
+                  9,
+                  "note-9"
+                ],
+                [
+                  10,
+                  "note-10"
+                ],
+                [
+                  11,
+                  "note-11"
+                ],
+                [
+                  12,
+                  "note-12"
+                ],
+                [
+                  13,
+                  "note-13"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping <code>ADD COLUMN … NOT NULL</code> without a default on a table with rows — 23502, P3018, then P3009 blocks every deploy.|||Giữ <code>ADD COLUMN … NOT NULL</code> không có mặc định trên bảng có dữ liệu — 23502, P3018, rồi P3009 chặn mọi deploy."
+        },
+        {
+          "loi": "Backfilling with a constant (<code>'note'</code>): the column is filled, and the unique index then fails on duplicates.|||Điền bằng hằng số (<code>'note'</code>): cột có dữ liệu, rồi chỉ mục unique hỏng vì trùng."
+        },
+        {
+          "loi": "Using <code>DEFAULT 'x'</code> to make the error disappear: every row gets the same slug and the column keeps a default nobody wanted.|||Dùng <code>DEFAULT 'x'</code> cho hết lỗi: mọi dòng cùng một slug và cột giữ một mặc định không ai muốn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backfill",
+          "vi": "điền dữ liệu cũ",
+          "giaiThich": "Gán giá trị cho các dòng đã có."
+        },
+        {
+          "en": "23502",
+          "vi": "23502",
+          "giaiThich": "not_null_violation."
+        }
+      ]
+    },
+    {
+      "title": "7.2 · 3 — Write the add_tags_and_version migration by hand, the way Prisma generates it",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "migrations",
+        "many-to-many"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>Lesson 7.2’s second migration: tags and a version column. The generated SQL is ordinary SQL you must be able to read in a pull request — so write it yourself. On the sample database (10 notes, no <code>version</code>, no tag tables):</p>\n<ul><li><code>\"Note\".\"version\"</code> — <code>INTEGER NOT NULL DEFAULT 1</code> (safe on a table with rows: every row takes the default).</li>\n<li><code>\"Tag\"</code> — <code>\"id\" SERIAL</code> primary key, <code>\"name\" VARCHAR(40) NOT NULL</code>, unique index <code>\"Tag_name_key\"</code>.</li>\n<li><code>\"NoteTag\"</code> — <code>\"noteId\"</code>, <code>\"tagId\"</code> (both <code>INTEGER NOT NULL</code>), compound primary key <code>(\"noteId\", \"tagId\")</code>, a foreign key to <code>\"Note\"(\"id\")</code> and one to <code>\"Tag\"(\"id\")</code>, both <code>ON DELETE CASCADE</code>.</li></ul>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp) — 10 notes</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Run on a table that has rows.</li>\n  <li>Constraints live in the database, not in your service code.</li>\n</ul>",
+      "problemHtmlVi": "<p>Migration thứ hai của bài 7.2: tag và cột version. SQL được sinh ra là SQL bình thường mà bạn phải đọc được trong pull request — nên hãy tự viết. Trên CSDL mẫu (10 ghi chú, chưa có <code>version</code>, chưa có bảng tag):</p>\n<ul><li><code>\"Note\".\"version\"</code> — <code>INTEGER NOT NULL DEFAULT 1</code> (an toàn trên bảng có dữ liệu: mọi dòng nhận mặc định).</li>\n<li><code>\"Tag\"</code> — khoá chính <code>\"id\" SERIAL</code>, <code>\"name\" VARCHAR(40) NOT NULL</code>, chỉ mục unique <code>\"Tag_name_key\"</code>.</li>\n<li><code>\"NoteTag\"</code> — <code>\"noteId\"</code>, <code>\"tagId\"</code> (đều <code>INTEGER NOT NULL</code>), khoá chính ghép <code>(\"noteId\", \"tagId\")</code>, một khoá ngoại tới <code>\"Note\"(\"id\")</code> và một tới <code>\"Tag\"(\"id\")</code>, cả hai <code>ON DELETE CASCADE</code>.</li></ul>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp) — 10 ghi chú</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chạy được trên bảng đã có dữ liệu.</li>\n  <li>Ràng buộc nằm trong CSDL, không nằm trong code service.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "notes | lo | hi\n------+----+---\n10    | 1  | 1 ",
+          "explanation": "Expected result of check \"Existing notes have version = 1\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Ghi chú cũ có version = 1\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Write it in the order Prisma does: AlterTable, CreateTable ×2, CreateIndex, AddForeignKey ×2.|||Viết theo thứ tự Prisma làm: AlterTable, CreateTable ×2, CreateIndex, AddForeignKey ×2.",
+        "The compound key is <code>CONSTRAINT \"NoteTag_pkey\" PRIMARY KEY (\"noteId\", \"tagId\")</code>; a foreign key is <code>ALTER TABLE \"NoteTag\" ADD CONSTRAINT … FOREIGN KEY (\"noteId\") REFERENCES \"Note\"(\"id\") ON DELETE CASCADE</code>.|||Khoá ghép là <code>CONSTRAINT \"NoteTag_pkey\" PRIMARY KEY (\"noteId\", \"tagId\")</code>; khoá ngoại là <code>ALTER TABLE \"NoteTag\" ADD CONSTRAINT … FOREIGN KEY (\"noteId\") REFERENCES \"Note\"(\"id\") ON DELETE CASCADE</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- prisma/migrations/20260727163003_add_tags_and_version/migration.sql\n-- Write the migration here: version column, \"Tag\", \"NoteTag\"\nALTER TABLE \"Note\" ADD COLUMN \"version\" INTEGER NOT NULL;\nCREATE TABLE \"Tag\" (\"id\" SERIAL PRIMARY KEY, \"name\" VARCHAR(40) NOT NULL);\nCREATE TABLE \"NoteTag\" (\"noteId\" INTEGER NOT NULL, \"tagId\" INTEGER NOT NULL);\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- prisma/migrations/20260727163003_add_tags_and_version/migration.sql\n-- AlterTable: safe on a table with rows, because every existing row can take the default\nALTER TABLE \"Note\" ADD COLUMN \"version\" INTEGER NOT NULL DEFAULT 1;\n\n-- CreateTable\nCREATE TABLE \"Tag\" (\n    \"id\" SERIAL NOT NULL,\n    \"name\" VARCHAR(40) NOT NULL,\n    CONSTRAINT \"Tag_pkey\" PRIMARY KEY (\"id\")\n);\n\n-- CreateTable: a many-to-many relation IS a table with two foreign keys and a compound primary key\nCREATE TABLE \"NoteTag\" (\n    \"noteId\" INTEGER NOT NULL,\n    \"tagId\" INTEGER NOT NULL,\n    CONSTRAINT \"NoteTag_pkey\" PRIMARY KEY (\"noteId\", \"tagId\")\n);\n\n-- CreateIndex\nCREATE UNIQUE INDEX \"Tag_name_key\" ON \"Tag\"(\"name\");\n\n-- AddForeignKey: deleting a note (or a tag) removes its links, enforced by PostgreSQL\nALTER TABLE \"NoteTag\" ADD CONSTRAINT \"NoteTag_noteId_fkey\" FOREIGN KEY (\"noteId\") REFERENCES \"Note\"(\"id\") ON DELETE CASCADE ON UPDATE CASCADE;\nALTER TABLE \"NoteTag\" ADD CONSTRAINT \"NoteTag_tagId_fkey\" FOREIGN KEY (\"tagId\") REFERENCES \"Tag\"(\"id\") ON DELETE CASCADE ON UPDATE CASCADE;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Writing the join table explicitly (instead of Prisma’s implicit many-to-many) is what lets you add columns later — who attached the tag, and when. And every rule the checks exercise — no duplicate link, no link to a missing note, links disappear with their note — is enforced by PostgreSQL itself, so no bug in a service can break it.</p>",
+      "solutionExplanationHtmlVi": "<p>Viết bảng nối tường minh (thay vì nhiều-nhiều ngầm của Prisma) cho phép sau này thêm cột — ai gắn tag, lúc nào. Và mọi luật mà các kiểm thử — không trùng liên kết, không liên kết tới ghi chú không có, liên kết biến mất theo ghi chú — đều do chính PostgreSQL thực thi, nên không lỗi service nào phá được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Existing notes have version = 1|||Ghi chú cũ có version = 1",
+            "kiemTra": "SELECT count(*) AS notes, min(version) AS lo, max(version) AS hi FROM \"Note\"",
+            "mongDoi": {
+              "cot": [
+                "notes",
+                "lo",
+                "hi"
+              ],
+              "hang": [
+                [
+                  10,
+                  1,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A note can be tagged|||Gắn tag cho ghi chú được",
+            "thu": "INSERT INTO \"Tag\" (name) VALUES ('work'); INSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same tag twice on one note is rejected (compound PK)|||Gắn cùng tag hai lần lên một ghi chú bị từ chối (khoá ghép)",
+            "thu": "INSERT INTO \"Tag\" (name) VALUES ('work'); INSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (1, 1)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A link to a note that does not exist is rejected (FK)|||Liên kết tới ghi chú không tồn tại bị từ chối (FK)",
+            "thu": "INSERT INTO \"Tag\" (name) VALUES ('work'); INSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (999, 1)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Tag names are unique|||Tên tag là duy nhất",
+            "thu": "INSERT INTO \"Tag\" (name) VALUES ('work'), ('work')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: deleting a note and a tag cascades to NoteTag|||Ẩn: xoá ghi chú và tag thì NoteTag bị xoá theo",
+            "kiemTra": "INSERT INTO \"Tag\" (name) VALUES ('a'), ('b'); INSERT INTO \"NoteTag\" VALUES (1, 1), (2, 1), (2, 2), (3, 2); DELETE FROM \"Note\" WHERE id = 2; DELETE FROM \"Tag\" WHERE name = 'b'; SELECT \"noteId\", \"tagId\" FROM \"NoteTag\" ORDER BY 1, 2",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "noteId",
+                "tagId"
+              ],
+              "hang": [
+                [
+                  1,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: a new note gets version 1 by default|||Ẩn: ghi chú mới nhận version 1 mặc định",
+            "kiemTra": "INSERT INTO \"Note\" (title, slug, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('new', 'note-new', 1, now(), now()); SELECT version FROM \"Note\" WHERE slug = 'note-new'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "version"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>version INTEGER NOT NULL</code> without DEFAULT — the most common way a migration fails on production.|||<code>version INTEGER NOT NULL</code> không có DEFAULT — cách phổ biến nhất để migration hỏng trên production."
+        },
+        {
+          "loi": "A primary key on noteId alone: a note can then have only one tag.|||Khoá chính chỉ trên noteId: khi đó một ghi chú chỉ có được một tag."
+        },
+        {
+          "loi": "Foreign keys without ON DELETE CASCADE: deleting a tagged note fails with 23503.|||Khoá ngoại thiếu ON DELETE CASCADE: xoá ghi chú có tag hỏng với 23503."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "join table",
+          "vi": "bảng nối",
+          "giaiThich": "Hai khoá ngoại + khoá chính ghép."
+        },
+        {
+          "en": "compound primary key",
+          "vi": "khoá chính ghép"
+        },
+        {
+          "en": "ON DELETE CASCADE",
+          "vi": "xoá theo"
+        }
+      ]
+    },
+    {
+      "title": "7.2 · 4 — Write migrateStatus(files, history): read _prisma_migrations like Prisma does",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "migrations",
+        "Prisma Migrate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Prisma keeps a table in your database listing what has been applied. Nothing else — no magic.” Write <code>migrateStatus(files, history)</code>. <code>files</code> = migration folder names in the repo (sorted); <code>history</code> = rows of <code>_prisma_migrations</code> <code>{ migration_name, finished_at, rolled_back_at, applied_steps_count }</code> (times are strings or <code>null</code>). A name may appear in several rows (the lesson’s history holds both attempts of add_slug). Return:</p>\n<ul><li><code>applied</code>: names of rows with <code>finished_at</code> set and <code>rolled_back_at</code> null, in history order.</li>\n<li><code>failed</code>: names of rows with neither <code>finished_at</code> nor <code>rolled_back_at</code>. Rolled-back rows are ignored.</li>\n<li><code>pending</code>: files (in file order) that are neither applied nor failed.</li>\n<li><code>missingLocally</code>: applied names that are not in <code>files</code> (each once).</li>\n<li><code>canDeploy</code>: <code>true</code> unless something failed; when it is <code>false</code> also set <code>error: \"P3009\"</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Judge each ROW, then the names.</li>\n  <li>Only add <code>error</code> when deploy is blocked.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Prisma giữ một bảng trong CSDL liệt kê những gì đã áp dụng. Không gì khác — không phép màu.\" Viết <code>migrateStatus(files, history)</code>. <code>files</code> = tên các thư mục migration trong repo (đã sắp); <code>history</code> = các dòng của <code>_prisma_migrations</code> <code>{ migration_name, finished_at, rolled_back_at, applied_steps_count }</code> (thời gian là chuỗi hoặc <code>null</code>). Một tên có thể xuất hiện ở nhiều dòng (lịch sử của bài giữ cả hai lần thử add_slug). Trả về:</p>\n<ul><li><code>applied</code>: tên các dòng có <code>finished_at</code> và <code>rolled_back_at</code> là null, theo thứ tự lịch sử.</li>\n<li><code>failed</code>: tên các dòng không có cả <code>finished_at</code> lẫn <code>rolled_back_at</code>. Dòng đã rollback bị bỏ qua.</li>\n<li><code>pending</code>: các tệp (theo thứ tự tệp) không applied cũng không failed.</li>\n<li><code>missingLocally</code>: tên applied mà không có trong <code>files</code> (mỗi tên một lần).</li>\n<li><code>canDeploy</code>: <code>true</code> trừ khi có cái hỏng; khi <code>false</code> thì đặt thêm <code>error: \"P3009\"</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Xét từng DÒNG, rồi mới tới tên.</li>\n  <li>Chỉ thêm <code>error</code> khi deploy bị chặn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"2026-07-27 16:27:56\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":\"2026-07-27 16:30:03\",\"rolled_back_at\":null,\"applied_steps_count\":1}])",
+          "output": "{\"applied\":[\"20260727162756_init\",\"20260727163003_add_tags_and_version\"],\"pending\":[\"20260727170000_add_slug\"],\"failed\":[],\"missingLocally\":[],\"canDeploy\":true}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "First drop rows with <code>rolled_back_at</code>; the rest are either finished (applied) or not (failed).|||Trước hết bỏ các dòng có <code>rolled_back_at</code>; phần còn lại hoặc đã xong (applied) hoặc chưa (failed).",
+        "A rolled-back attempt plus a later successful attempt of the same name ⇒ applied, not failed.|||Một lần thử đã rollback cộng một lần thử sau thành công cùng tên ⇒ applied, không phải failed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function migrateStatus(files, history) {\n  // Write your solution here\n  const applied = history.map((r) => r.migration_name);\n  return { applied, pending: files.filter((f) => !applied.includes(f)), failed: [], missingLocally: [], canDeploy: true };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function migrateStatus(files, history) {\n  // a row is applied when it finished and was not rolled back; a FAILED row has neither\n  const live = history.filter((r) => r.rolled_back_at == null);\n  const applied = live.filter((r) => r.finished_at != null).map((r) => r.migration_name);\n  const failed = live.filter((r) => r.finished_at == null).map((r) => r.migration_name);\n  const known = new Set(files);\n  const pending = files.filter((f) => !applied.includes(f) && !failed.includes(f));\n  const missingLocally = [...new Set(applied)].filter((m) => !known.has(m));     // in the database, not in the repo\n  const result = { applied, pending, failed, missingLocally, canDeploy: failed.length === 0 };\n  if (failed.length) result.error = 'P3009';      // one failed row blocks EVERY migration, including the innocent ones\n  return result;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is all migrate status and migrate deploy know: rows of a history table. A row without finished_at is a migration that started and did not finish — Prisma cannot know how much of it ran, so it refuses to compute anything after it (P3009) until a human says what happened.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là tất cả những gì migrate status và migrate deploy biết: các dòng của một bảng lịch sử. Dòng không có finished_at là migration đã bắt đầu mà chưa xong — Prisma không biết nó đã chạy bao nhiêu, nên từ chối tính tiếp (P3009) cho tới khi con người nói chuyện gì đã xảy ra.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "add_slug is pending",
+              "vi": "add_slug đang chờ"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"2026-07-27 16:27:56\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":\"2026-07-27 16:30:03\",\"rolled_back_at\":null,\"applied_steps_count\":1}])",
+            "mongDoi": {
+              "applied": [
+                "20260727162756_init",
+                "20260727163003_add_tags_and_version"
+              ],
+              "pending": [
+                "20260727170000_add_slug"
+              ],
+              "failed": [],
+              "missingLocally": [],
+              "canDeploy": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "add_slug failed ⇒ P3009",
+              "vi": "add_slug hỏng ⇒ P3009"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"2026-07-27 16:27:56\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":\"2026-07-27 16:30:03\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727170000_add_slug\",\"finished_at\":null,\"rolled_back_at\":null,\"applied_steps_count\":0}])",
+            "mongDoi": {
+              "applied": [
+                "20260727162756_init",
+                "20260727163003_add_tags_and_version"
+              ],
+              "pending": [],
+              "failed": [
+                "20260727170000_add_slug"
+              ],
+              "missingLocally": [],
+              "canDeploy": false,
+              "error": "P3009"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Rolled back, then applied again (the lesson’s audit trail)",
+              "vi": "Rollback rồi áp dụng lại (dấu vết kiểm toán của bài)"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"16:27:56\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":\"16:30:03\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727170000_add_slug\",\"finished_at\":null,\"rolled_back_at\":\"16:40:00\",\"applied_steps_count\":0},{\"migration_name\":\"20260727170000_add_slug\",\"finished_at\":\"16:41:10\",\"rolled_back_at\":null,\"applied_steps_count\":1}])",
+            "mongDoi": {
+              "applied": [
+                "20260727162756_init",
+                "20260727163003_add_tags_and_version",
+                "20260727170000_add_slug"
+              ],
+              "pending": [],
+              "failed": [],
+              "missingLocally": [],
+              "canDeploy": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\",\"20260801090000_add_index\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"x\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":null,\"rolled_back_at\":null,\"applied_steps_count\":0},{\"migration_name\":\"20260720000000_hotfix_from_laptop\",\"finished_at\":\"y\",\"rolled_back_at\":null,\"applied_steps_count\":1}])",
+            "mongDoi": {
+              "applied": [
+                "20260727162756_init",
+                "20260720000000_hotfix_from_laptop"
+              ],
+              "pending": [
+                "20260727170000_add_slug",
+                "20260801090000_add_index"
+              ],
+              "failed": [
+                "20260727163003_add_tags_and_version"
+              ],
+              "missingLocally": [
+                "20260720000000_hotfix_from_laptop"
+              ],
+              "canDeploy": false,
+              "error": "P3009"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\",\"20260727170000_add_slug\"], [])",
+            "mongDoi": {
+              "applied": [],
+              "pending": [
+                "20260727162756_init",
+                "20260727163003_add_tags_and_version",
+                "20260727170000_add_slug"
+              ],
+              "failed": [],
+              "missingLocally": [],
+              "canDeploy": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "migrateStatus([\"20260727162756_init\",\"20260727163003_add_tags_and_version\"], [{\"migration_name\":\"20260727162756_init\",\"finished_at\":\"a\",\"rolled_back_at\":null,\"applied_steps_count\":1},{\"migration_name\":\"20260727163003_add_tags_and_version\",\"finished_at\":null,\"rolled_back_at\":\"b\",\"applied_steps_count\":0}])",
+            "mongDoi": {
+              "applied": [
+                "20260727162756_init"
+              ],
+              "pending": [
+                "20260727163003_add_tags_and_version"
+              ],
+              "failed": [],
+              "missingLocally": [],
+              "canDeploy": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a rolled-back row as failed: after an honest <code>resolve --rolled-back</code> you would still be blocked.|||Coi dòng đã rollback là hỏng: sau một lần <code>resolve --rolled-back</code> thật thà bạn vẫn bị chặn."
+        },
+        {
+          "loi": "Thinking status compares columns — it reads exactly this table and nothing else, which is why drift by psql is invisible to it.|||Nghĩ status so sánh các cột — nó đọc đúng bảng này và không gì khác, nên lệch do psql là vô hình với nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "_prisma_migrations",
+          "vi": "bảng lịch sử migration"
+        },
+        {
+          "en": "rolled back",
+          "vi": "đã hoàn tác"
+        }
+      ]
+    },
+    {
+      "title": "7.2 · 5 — Write lintMigration(sql, rowsIn): flag the statements that fail or lose data on production",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "migrations",
+        "code review",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Read it in code review the way you read any other change — an ALTER TABLE … NOT NULL on a big table is a lock; a DROP COLUMN is data you will never get back.” Automate the review. <code>lintMigration(sql, rowsIn)</code> gets a <code>migration.sql</code> text and <code>rowsIn</code> = <code>{ tableName: rowCount }</code> of production. Remove <code>--</code> comments, split on <code>;</code>, number the non-empty statements from 1, and report <code>{ statement, level, code, table, column }</code> in order (names without quotes):</p>\n<ul><li><code>ALTER TABLE t ADD COLUMN c … NOT NULL</code> with no <code>DEFAULT</code>, on a table with rows ⇒ <code>error</code>, <code>NOT_NULL_WITHOUT_DEFAULT</code>.</li>\n<li><code>ALTER TABLE t ALTER COLUMN c SET NOT NULL</code> on a table with rows, when no earlier statement in the file was <code>UPDATE t SET c …</code> ⇒ <code>error</code>, <code>TIGHTEN_BEFORE_BACKFILL</code>.</li>\n<li><code>ALTER TABLE t DROP COLUMN c</code> ⇒ <code>warning</code>, <code>DROP_COLUMN</code>; <code>ALTER TABLE t RENAME COLUMN c …</code> ⇒ <code>warning</code>, <code>RENAME_COLUMN</code> (old code still reading <code>c</code> breaks — add, copy, then drop); <code>DROP TABLE [IF EXISTS] t</code> ⇒ <code>warning</code>, <code>DROP_TABLE</code>, <code>column: null</code>.</li></ul>\n<p>Keywords are case-insensitive; identifiers may or may not be quoted. Tables missing from <code>rowsIn</code> have 0 rows. Only the FIRST <code>SET</code> column of an UPDATE counts as backfilled.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Statements are numbered after comments are removed and empty parts dropped.</li>\n  <li>Return an empty array for a clean migration.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Đọc nó khi review như mọi thay đổi khác — một ALTER TABLE … NOT NULL trên bảng lớn là một khoá; một DROP COLUMN là dữ liệu bạn không bao giờ lấy lại được.\" Hãy tự động hoá việc review. <code>lintMigration(sql, rowsIn)</code> nhận chữ của <code>migration.sql</code> và <code>rowsIn</code> = <code>{ tênBảng: sốDòng }</code> của production. Bỏ chú thích <code>--</code>, tách theo <code>;</code>, đánh số các câu không rỗng từ 1, và báo <code>{ statement, level, code, table, column }</code> theo thứ tự (tên không có ngoặc kép):</p>\n<ul><li><code>ALTER TABLE t ADD COLUMN c … NOT NULL</code> không có <code>DEFAULT</code>, trên bảng có dữ liệu ⇒ <code>error</code>, <code>NOT_NULL_WITHOUT_DEFAULT</code>.</li>\n<li><code>ALTER TABLE t ALTER COLUMN c SET NOT NULL</code> trên bảng có dữ liệu, khi trước đó trong tệp không có câu <code>UPDATE t SET c …</code> ⇒ <code>error</code>, <code>TIGHTEN_BEFORE_BACKFILL</code>.</li>\n<li><code>ALTER TABLE t DROP COLUMN c</code> ⇒ <code>warning</code>, <code>DROP_COLUMN</code>; <code>ALTER TABLE t RENAME COLUMN c …</code> ⇒ <code>warning</code>, <code>RENAME_COLUMN</code> (code cũ còn đọc <code>c</code> sẽ hỏng — thêm, chép, rồi mới bỏ); <code>DROP TABLE [IF EXISTS] t</code> ⇒ <code>warning</code>, <code>DROP_TABLE</code>, <code>column: null</code>.</li></ul>\n<p>Từ khoá không phân biệt hoa thường; định danh có thể có hoặc không có ngoặc kép. Bảng không có trong <code>rowsIn</code> coi như 0 dòng. Chỉ cột ĐẦU TIÊN sau <code>SET</code> của UPDATE được tính là đã điền.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đánh số câu sau khi bỏ chú thích và bỏ phần rỗng.</li>\n  <li>Migration sạch thì trả mảng rỗng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lintMigration(\"-- prisma/migrations/20260727170000_add_slug/migration.sql — generated by migrate dev\\nALTER TABLE \\\"Note\\\" ADD COLUMN \\\"slug\\\" TEXT NOT NULL;\\nCREATE UNIQUE INDEX \\\"Note_slug_key\\\" ON \\\"Note\\\"(\\\"slug\\\");\\n\", {\"Note\":751000})",
+          "output": "[{\"statement\":1,\"level\":\"error\",\"code\":\"NOT_NULL_WITHOUT_DEFAULT\",\"table\":\"Note\",\"column\":\"slug\"}]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise first: <code>sql.split(\"\\n\").map(l => l.replace(/--.*$/, \"\")).join(\"\\n\").split(\";\").map(s => s.trim()).filter(Boolean)</code>.|||Chuẩn hoá trước: <code>sql.split(\"\\n\").map(l => l.replace(/--.*$/, \"\")).join(\"\\n\").split(\";\").map(s => s.trim()).filter(Boolean)</code>.",
+        "One regex per rule, e.g. <code>/^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+ADD\\s+COLUMN\\s+(\"?\\w+\"?)\\s+(.*)$/is</code>; strip quotes with <code>.replace(/\"/g, \"\")</code>. Remember UPDATEs in a Set of <code>\"table.column\"</code>.|||Mỗi luật một regex, ví dụ <code>/^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+ADD\\s+COLUMN\\s+(\"?\\w+\"?)\\s+(.*)$/is</code>; bỏ ngoặc kép bằng <code>.replace(/\"/g, \"\")</code>. Nhớ các UPDATE trong một Set <code>\"bảng.cột\"</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function lintMigration(sql, rowsIn) {\n  // Write your solution here\n  const out = [];\n  sql.split(';').forEach((s, i) => {\n    if (/NOT NULL/.test(s)) out.push({ statement: i + 1, level: 'error', code: 'NOT_NULL_WITHOUT_DEFAULT', table: 'Note', column: 'slug' });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function lintMigration(sql, rowsIn) {\n  const out = [];\n  const name = (s) => s.replace(/\"/g, '');\n  // split into statements, dropping -- comments and blank parts\n  const stmts = sql.split('\\n').map((l) => l.replace(/--.*$/, '')).join('\\n').split(';').map((s) => s.trim()).filter(Boolean);\n  const backfilled = new Set();                                   // \"table.column\" values set by an UPDATE earlier in this file\n  stmts.forEach((s, i) => {\n    const n = i + 1;\n    let m;\n    if ((m = /^UPDATE\\s+(\"?\\w+\"?)\\s+SET\\s+(\"?\\w+\"?)/i.exec(s))) backfilled.add(name(m[1]) + '.' + name(m[2]));\n    if ((m = /^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+ADD\\s+COLUMN\\s+(\"?\\w+\"?)\\s+(.*)$/is.exec(s))) {\n      const table = name(m[1]), column = name(m[2]), rest = m[3];\n      if (/NOT\\s+NULL/i.test(rest) && !/DEFAULT/i.test(rest) && (rowsIn[table] || 0) > 0) out.push({ statement: n, level: 'error', code: 'NOT_NULL_WITHOUT_DEFAULT', table, column });\n    }\n    if ((m = /^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+ALTER\\s+COLUMN\\s+(\"?\\w+\"?)\\s+SET\\s+NOT\\s+NULL/i.exec(s))) {\n      const table = name(m[1]), column = name(m[2]);\n      if ((rowsIn[table] || 0) > 0 && !backfilled.has(table + '.' + column)) out.push({ statement: n, level: 'error', code: 'TIGHTEN_BEFORE_BACKFILL', table, column });\n    }\n    if ((m = /^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+DROP\\s+COLUMN\\s+(\"?\\w+\"?)/i.exec(s))) out.push({ statement: n, level: 'warning', code: 'DROP_COLUMN', table: name(m[1]), column: name(m[2]) });\n    if ((m = /^ALTER\\s+TABLE\\s+(\"?\\w+\"?)\\s+RENAME\\s+COLUMN\\s+(\"?\\w+\"?)/i.exec(s))) out.push({ statement: n, level: 'warning', code: 'RENAME_COLUMN', table: name(m[1]), column: name(m[2]) });\n    if ((m = /^DROP\\s+TABLE\\s+(?:IF\\s+EXISTS\\s+)?(\"?\\w+\"?)/i.exec(s))) out.push({ statement: n, level: 'warning', code: 'DROP_TABLE', table: name(m[1]), column: null });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two errors are the two ways the lesson’s add_slug could fail on production: a NOT NULL column with nothing to fill it, or a tightening that runs before the backfill. The warnings are the irreversible ones — they are not wrong, but a human must decide them deliberately. A check like this in CI catches them before migrate deploy turns them into P3018.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai lỗi chính là hai cách add_slug của bài có thể hỏng trên production: cột NOT NULL không có gì để điền, hoặc siết chặt chạy trước khi điền. Các cảnh báo là thứ không đảo ngược được — chúng không sai, nhưng con người phải quyết định có chủ ý. Phép kiểm này trong CI bắt chúng trước khi migrate deploy biến chúng thành P3018.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The generated add_slug on a table with rows",
+              "vi": "add_slug sinh tự động trên bảng có dữ liệu"
+            },
+            "goi": "lintMigration(\"-- prisma/migrations/20260727170000_add_slug/migration.sql — generated by migrate dev\\nALTER TABLE \\\"Note\\\" ADD COLUMN \\\"slug\\\" TEXT NOT NULL;\\nCREATE UNIQUE INDEX \\\"Note_slug_key\\\" ON \\\"Note\\\"(\\\"slug\\\");\\n\", {\"Note\":751000})",
+            "mongDoi": [
+              {
+                "statement": 1,
+                "level": "error",
+                "code": "NOT_NULL_WITHOUT_DEFAULT",
+                "table": "Note",
+                "column": "slug"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The three-step version is clean",
+              "vi": "Bản ba bước sạch"
+            },
+            "goi": "lintMigration(\"-- prisma/migrations/20260727170000_add_slug/migration.sql — the version that survives a table with rows\\nALTER TABLE \\\"Note\\\" ADD COLUMN \\\"slug\\\" TEXT;                        -- 1. nullable first: every existing row can take NULL\\nUPDATE \\\"Note\\\" SET \\\"slug\\\" = 'note-' || \\\"id\\\" WHERE \\\"slug\\\" IS NULL;  -- 2. backfill from something unique (the id)\\nALTER TABLE \\\"Note\\\" ALTER COLUMN \\\"slug\\\" SET NOT NULL;              -- 3. then tighten\\nCREATE UNIQUE INDEX \\\"Note_slug_key\\\" ON \\\"Note\\\"(\\\"slug\\\");            -- the @unique of the schema\\n\", {\"Note\":751000})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "NOT NULL DEFAULT 1 is safe",
+              "vi": "NOT NULL DEFAULT 1 là an toàn"
+            },
+            "goi": "lintMigration(\"-- prisma/migrations/20260727163003_add_tags_and_version/migration.sql\\n-- AlterTable: safe on a table with rows, because every existing row can take the default\\nALTER TABLE \\\"Note\\\" ADD COLUMN \\\"version\\\" INTEGER NOT NULL DEFAULT 1;\\n\\n-- CreateTable\\nCREATE TABLE \\\"Tag\\\" (\\n    \\\"id\\\" SERIAL NOT NULL,\\n    \\\"name\\\" VARCHAR(40) NOT NULL,\\n    CONSTRAINT \\\"Tag_pkey\\\" PRIMARY KEY (\\\"id\\\")\\n);\\n\\n-- CreateTable: a many-to-many relation IS a table with two foreign keys and a compound primary key\\nCREATE TABLE \\\"NoteTag\\\" (\\n    \\\"noteId\\\" INTEGER NOT NULL,\\n    \\\"tagId\\\" INTEGER NOT NULL,\\n    CONSTRAINT \\\"NoteTag_pkey\\\" PRIMARY KEY (\\\"noteId\\\", \\\"tagId\\\")\\n);\\n\\n-- CreateIndex\\nCREATE UNIQUE INDEX \\\"Tag_name_key\\\" ON \\\"Tag\\\"(\\\"name\\\");\\n\\n-- AddForeignKey: deleting a note (or a tag) removes its links, enforced by PostgreSQL\\nALTER TABLE \\\"NoteTag\\\" ADD CONSTRAINT \\\"NoteTag_noteId_fkey\\\" FOREIGN KEY (\\\"noteId\\\") REFERENCES \\\"Note\\\"(\\\"id\\\") ON DELETE CASCADE ON UPDATE CASCADE;\\nALTER TABLE \\\"NoteTag\\\" ADD CONSTRAINT \\\"NoteTag_tagId_fkey\\\" FOREIGN KEY (\\\"tagId\\\") REFERENCES \\\"Tag\\\"(\\\"id\\\") ON DELETE CASCADE ON UPDATE CASCADE;\\n\", {\"Note\":751000})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "lintMigration(\"alter table note add column slug text;\\nalter table note alter column slug set not null; -- forgot the backfill\\nALTER TABLE \\\"Note\\\" DROP COLUMN \\\"hotfix_col\\\";\\nDROP TABLE IF EXISTS \\\"OldTag\\\";\\n\", {\"note\":12})",
+            "mongDoi": [
+              {
+                "statement": 2,
+                "level": "error",
+                "code": "TIGHTEN_BEFORE_BACKFILL",
+                "table": "note",
+                "column": "slug"
+              },
+              {
+                "statement": 3,
+                "level": "warning",
+                "code": "DROP_COLUMN",
+                "table": "Note",
+                "column": "hotfix_col"
+              },
+              {
+                "statement": 4,
+                "level": "warning",
+                "code": "DROP_TABLE",
+                "table": "OldTag",
+                "column": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Empty table: no error for NOT NULL; rename still warned",
+              "vi": "Bảng rỗng: không lỗi NOT NULL; đổi tên vẫn cảnh báo"
+            },
+            "goi": "lintMigration(\"ALTER TABLE \\\"User\\\" ADD COLUMN \\\"tokenVersion\\\" INTEGER NOT NULL;\\nALTER TABLE \\\"User\\\" RENAME COLUMN \\\"name\\\" TO \\\"fullName\\\";\\n\\n;\", {\"Note\":5})",
+            "mongDoi": [
+              {
+                "statement": 2,
+                "level": "warning",
+                "code": "RENAME_COLUMN",
+                "table": "User",
+                "column": "name"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lintMigration(\"UPDATE \\\"Note\\\" SET \\\"body\\\" = '', \\\"slug\\\" = 'x';\\nALTER TABLE \\\"Note\\\" ALTER COLUMN \\\"slug\\\" SET NOT NULL;\\nALTER TABLE \\\"Note\\\" ALTER COLUMN \\\"body\\\" SET NOT NULL;\", {\"Note\":3})",
+            "mongDoi": [
+              {
+                "statement": 2,
+                "level": "error",
+                "code": "TIGHTEN_BEFORE_BACKFILL",
+                "table": "Note",
+                "column": "slug"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Flagging NOT NULL with a DEFAULT — <code>ADD COLUMN \"version\" INTEGER NOT NULL DEFAULT 1</code> is the safe pattern the lesson uses.|||Báo lỗi NOT NULL có DEFAULT — <code>ADD COLUMN \"version\" INTEGER NOT NULL DEFAULT 1</code> là mẫu an toàn bài dùng."
+        },
+        {
+          "loi": "Flagging an empty table: a NOT NULL column on a table with 0 rows cannot fail.|||Báo lỗi bảng rỗng: cột NOT NULL trên bảng 0 dòng không thể hỏng."
+        },
+        {
+          "loi": "Forgetting that the regex must be case-insensitive and tolerate missing quotes: hand-written migrations rarely look like generated ones.|||Quên regex phải không phân biệt hoa thường và chấp nhận thiếu ngoặc kép: migration viết tay hiếm khi giống migration sinh ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lint",
+          "vi": "soát lỗi tĩnh",
+          "giaiThich": "Kiểm code mà không chạy nó."
+        },
+        {
+          "en": "irreversible",
+          "vi": "không đảo ngược được"
+        }
+      ]
+    }
+  ]
+}

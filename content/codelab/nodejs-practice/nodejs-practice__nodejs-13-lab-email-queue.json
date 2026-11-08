@@ -1,0 +1,557 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-13-lab-email-queue",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-13-5-worker-chet-va-van-hanh"
+  },
+  "exercises": [
+    {
+      "title": "Lab 13 · 1 — The email worker: concurrency, retries that free the slot, unrecoverable",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 30,
+      "concepts": [
+        "worker",
+        "retries",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the worker loop of the Notes API’s email queue as <code>drainQueue(jobs, handler, { concurrency, attempts, backoff })</code> — what BullMQ’s Worker does for you, so you know what you configure.</p>\n<ul>\n<li><code>jobs</code> is the wait list <code>[{ id, data }]</code>. Run <code>handler(job)</code> for jobs from the FRONT of the list, never more than <code>concurrency</code> at a time; a slot is reused as soon as it frees up.</li>\n<li>Success ⇒ the id goes to <code>completed</code>.</li>\n<li>Failure ⇒ count it on the job. If the error is an <code>UnrecoverableError</code> (check <code>err.name</code>), or the job has failed <code>attempts</code> times (default 1), it goes to <code>failed</code> as <code>{ id, reason: err.message, attemptsMade }</code>. Otherwise it goes back to the END of the wait list after a backoff delay (<code>{ type: 'exponential', delay }</code> ⇒ <code>delay × 2^(failures − 1)</code>; <code>'fixed'</code> ⇒ <code>delay</code>; none ⇒ 0). <b>A job waiting for its retry does not hold a slot.</b></li>\n<li>Resolve when nothing is waiting, running or scheduled, to <code>{ completed, failed, peak }</code> — <code>completed</code> and <code>failed</code> sorted by numeric id, <code>peak</code> = the highest number of handlers running at once.</li>\n</ul>\n<p>The fixture: 100 sign-ups, user 13 was deleted, user 42’s address hard-bounces, and the SMTP server takes 5 connections.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never more than concurrency handlers at once.</li>\n  <li>Retries wait with a timer OUTSIDE the slots, then rejoin the end of the wait list.</li>\n  <li>UnrecoverableError fails at once; other errors use the attempts.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết vòng lặp worker của hàng đợi email Notes API thành <code>drainQueue(jobs, handler, { concurrency, attempts, backoff })</code> — việc mà Worker của BullMQ làm hộ bạn, để bạn hiểu mình đang cấu hình cái gì.</p>\n<ul>\n<li><code>jobs</code> là danh sách chờ <code>[{ id, data }]</code>. Chạy <code>handler(job)</code> cho các job ở ĐẦU danh sách, không bao giờ quá <code>concurrency</code> cái cùng lúc; chỗ trống được dùng lại ngay khi có.</li>\n<li>Thành công ⇒ id vào <code>completed</code>.</li>\n<li>Hỏng ⇒ đếm lần hỏng trên job. Nếu lỗi là <code>UnrecoverableError</code> (kiểm <code>err.name</code>), hoặc job đã hỏng đủ <code>attempts</code> lần (mặc định 1), nó vào <code>failed</code> dạng <code>{ id, reason: err.message, attemptsMade }</code>. Ngược lại nó quay về CUỐI danh sách chờ sau một khoảng backoff (<code>{ type: 'exponential', delay }</code> ⇒ <code>delay × 2^(số lần hỏng − 1)</code>; <code>'fixed'</code> ⇒ <code>delay</code>; không có ⇒ 0). <b>Job đang chờ thử lại không giữ chỗ.</b></li>\n<li>Resolve khi không còn gì chờ, đang chạy hay đã hẹn, ra <code>{ completed, failed, peak }</code> — <code>completed</code> và <code>failed</code> sắp theo id dạng số, <code>peak</code> = số handler chạy cùng lúc nhiều nhất.</li>\n</ul>\n<p>Dữ liệu thử: 100 lượt đăng ký, user 13 đã bị xoá, địa chỉ của user 42 dội cứng, và máy chủ SMTP nhận 5 kết nối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ quá concurrency handler cùng lúc.</li>\n  <li>Lần thử lại chờ bằng hẹn giờ BÊN NGOÀI các chỗ, rồi quay lại cuối danh sách chờ.</li>\n  <li>UnrecoverableError hỏng ngay; lỗi khác dùng hết số lần thử.</li>\n</ul>",
+      "inputSpec": "jobs — [{ id, data: { userId } }] · handler — async (job) => any · { concurrency, attempts, backoff }",
+      "outputSpec": "Promise<{ completed: string[], failed: { id, reason, attemptsMade }[], peak: number }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });\nawait drainQueue(signups, welcome, opts(5)).then((r) => [r.completed.length, r.failed, r.peak, smtp.sent.length, smtp.rejected, smtp.peak])",
+          "output": "[98,[{\"id\":\"13\",\"reason\":\"user no longer exists\",\"attemptsMade\":1},{\"id\":\"42\",\"reason\":\"550 mailbox unavailable\",\"attemptsMade\":5}],5,98,0,5]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Return new Promise((done) => { … }) with a pump(): while (active < concurrency && wait.length) start the next job; if (!active && !wait.length && !scheduled) done(result).|||Trả new Promise((done) => { … }) với một hàm pump(): while (active < concurrency && wait.length) khởi job kế; if (!active && !wait.length && !scheduled) done(kết quả).",
+        "In the failure branch of a retryable job: scheduled++; setTimeout(() => { scheduled--; wait.push(job); pump(); }, delay). In finally: active--; pump().|||Ở nhánh hỏng của job còn thử lại được: scheduled++; setTimeout(() => { scheduled--; wait.push(job); pump(); }, delay). Trong finally: active--; pump().",
+        "Keep the failure count on a copy of the job (made), not in a Map keyed by position — positions change when jobs rejoin the list.|||Giữ số lần hỏng trên một bản sao của job (made), không phải trong Map theo vị trí — vị trí thay đổi khi job quay lại danh sách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The worker loop: concurrency, attempts + backoff, UnrecoverableError. */\nasync function drainQueue(jobs, handler, { concurrency = 1, attempts = 1, backoff } = {}) {\n  // Write your solution here — sequential, no retries\n  const completed = [], failed = [];\n  for (const job of jobs) {\n    try { await handler(job); completed.push(job.id); }\n    catch (err) { failed.push({ id: job.id, reason: err.message, attemptsMade: 1 }); }\n  }\n  return { completed, failed, peak: 1 };\n}\n"
+        },
+        {
+          "name": "fake-email-lab.js",
+          "language": "javascript",
+          "code": "// fake-email-lab.js — PROVIDED (loaded before answer.js).\n// smtp: accepts 5 concurrent connections, 200 ms per message, \"421 Too many concurrent connections\" beyond that.\n//   await smtp.send(to) · smtp.sent · smtp.rejected · smtp.peak\n// users: a tiny table; welcome(job) is the job handler of the lab:\n//   - the user is gone      ⇒ throws UnrecoverableError('user no longer exists')   (never retry)\n//   - the address bounces   ⇒ throws Error('550 mailbox unavailable')             (retried, fails every time)\n//   - otherwise sends through smtp (a 421 throws Error('421 …') — worth a retry)\nclass UnrecoverableError extends Error { constructor(m) { super(m); this.name = 'UnrecoverableError'; } }\nconst smtp = { max: 5, ms: 200, open: 0, peak: 0, sent: [], rejected: 0,\n  send(to) {\n    if (smtp.open >= smtp.max) { smtp.rejected++; return Promise.reject(new Error('421 Too many concurrent connections')); }\n    smtp.open++; smtp.peak = Math.max(smtp.peak, smtp.open);\n    return new Promise((ok) => setTimeout(() => { smtp.open--; smtp.sent.push(to); ok(); }, smtp.ms));\n  } };\nconst users = new Map();\nfor (let i = 1; i <= 100; i++) users.set(i, { id: i, email: 'u' + i + '@x.vn' });\nusers.delete(13);                                  // deleted account\nusers.get(42).email = 'bounce@nowhere.invalid';    // hard bounce\nasync function welcome(job) {\n  await new Promise((ok) => setTimeout(ok, 2));    // read the user (the job carries the id only)\n  const u = users.get(job.data.userId);\n  if (!u) throw new UnrecoverableError('user no longer exists');\n  if (u.email.endsWith('.invalid')) throw new Error('550 mailbox unavailable');\n  await smtp.send(u.email);\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The worker loop: concurrency, attempts + backoff (without holding a slot), UnrecoverableError. */\nfunction drainQueue(jobs, handler, { concurrency = 1, attempts = 1, backoff } = {}) {\n  const wait = jobs.map((j) => ({ ...j, made: 0 }));       // the wait list — a copy, with a failure counter\n  const completed = [], failed = [];\n  let active = 0, scheduled = 0, peak = 0;\n  const delayFor = (made) => (!backoff ? 0 : backoff.type === 'exponential' ? backoff.delay * 2 ** (made - 1) : backoff.delay);\n  const byId = (a, b) => Number(a.id ?? a) - Number(b.id ?? b);\n\n  return new Promise((done) => {\n    function pump() {\n      while (active < concurrency && wait.length) run(wait.shift());     // reuse every free slot at once\n      if (!active && !wait.length && !scheduled) {\n        done({ completed: completed.sort(byId), failed: failed.sort(byId), peak });\n      }\n    }\n    async function run(job) {\n      active++; peak = Math.max(peak, active);\n      try {\n        await handler(job);\n        completed.push(job.id);\n      } catch (err) {\n        job.made++;\n        const hopeless = err && err.name === 'UnrecoverableError';      // logic failure: retrying cannot help\n        if (hopeless || job.made >= attempts) {\n          failed.push({ id: job.id, reason: err.message, attemptsMade: job.made });\n        } else {\n          scheduled++;                                                   // like BullMQ's delayed set:\n          setTimeout(() => { scheduled--; wait.push(job); pump(); }, delayFor(job.made));   // no slot held while waiting\n        }\n      } finally {\n        active--;\n        pump();\n      }\n    }\n    pump();\n  });\n}\n"
+        },
+        {
+          "name": "fake-email-lab.js",
+          "language": "javascript",
+          "code": "// fake-email-lab.js — PROVIDED (loaded before answer.js).\n// smtp: accepts 5 concurrent connections, 200 ms per message, \"421 Too many concurrent connections\" beyond that.\n//   await smtp.send(to) · smtp.sent · smtp.rejected · smtp.peak\n// users: a tiny table; welcome(job) is the job handler of the lab:\n//   - the user is gone      ⇒ throws UnrecoverableError('user no longer exists')   (never retry)\n//   - the address bounces   ⇒ throws Error('550 mailbox unavailable')             (retried, fails every time)\n//   - otherwise sends through smtp (a 421 throws Error('421 …') — worth a retry)\nclass UnrecoverableError extends Error { constructor(m) { super(m); this.name = 'UnrecoverableError'; } }\nconst smtp = { max: 5, ms: 200, open: 0, peak: 0, sent: [], rejected: 0,\n  send(to) {\n    if (smtp.open >= smtp.max) { smtp.rejected++; return Promise.reject(new Error('421 Too many concurrent connections')); }\n    smtp.open++; smtp.peak = Math.max(smtp.peak, smtp.open);\n    return new Promise((ok) => setTimeout(() => { smtp.open--; smtp.sent.push(to); ok(); }, smtp.ms));\n  } };\nconst users = new Map();\nfor (let i = 1; i <= 100; i++) users.set(i, { id: i, email: 'u' + i + '@x.vn' });\nusers.delete(13);                                  // deleted account\nusers.get(42).email = 'bounce@nowhere.invalid';    // hard bounce\nasync function welcome(job) {\n  await new Promise((ok) => setTimeout(ok, 2));    // read the user (the job carries the id only)\n  const u = users.get(job.data.userId);\n  if (!u) throw new UnrecoverableError('user no longer exists');\n  if (u.email.endsWith('.invalid')) throw new Error('550 mailbox unavailable');\n  await smtp.send(u.email);\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is BullMQ’s worker in miniature: concurrency bounds the handlers in flight, a failed job is moved to the delayed set (here, a timer) so it does not hold a slot, it comes back as a normal waiting job when its backoff expires, and an UnrecoverableError skips straight to failed. With concurrency 5 the SMTP limit is never exceeded; with 8 the server answers 421 and the retries absorb it — the same 98 emails arrive either way, while the deleted account fails once and the bounce exhausts its attempts.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là worker của BullMQ thu nhỏ: concurrency chặn số handler đang chạy, job hỏng được chuyển vào tập delayed (ở đây là một hẹn giờ) nên không giữ chỗ, nó quay lại thành job chờ bình thường khi hết backoff, và UnrecoverableError đi thẳng tới failed. Với concurrency 5 giới hạn SMTP không bao giờ bị vượt; với 8 máy chủ trả 421 và các lần thử lại hấp thụ nó — cùng 98 email tới nơi ở cả hai cách, trong khi tài khoản đã xoá hỏng một lần và địa chỉ dội dùng hết số lần thử.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-email-lab.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Concurrency 5: 98 sent, 13 fails once (unrecoverable), 42 fails 5 times",
+              "vi": "Concurrency 5: gửi 98, user 13 hỏng một lần (không cứu được), user 42 hỏng 5 lần"
+            },
+            "goi": "await drainQueue(signups, welcome, opts(5)).then((r) => [r.completed.length, r.failed, r.peak, smtp.sent.length, smtp.rejected, smtp.peak])",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": [
+              98,
+              [
+                {
+                  "id": "13",
+                  "reason": "user no longer exists",
+                  "attemptsMade": 1
+                },
+                {
+                  "id": "42",
+                  "reason": "550 mailbox unavailable",
+                  "attemptsMade": 5
+                }
+              ],
+              5,
+              98,
+              0,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Concurrency 8 against SMTP 5: 421s are retried, every email still arrives",
+              "vi": "Concurrency 8 với SMTP 5: lỗi 421 được thử lại, mọi email vẫn tới"
+            },
+            "goi": "await drainQueue(signups.slice(0, 20), welcome, opts(8)).then((r) => [r.completed.length, r.failed.map((f) => f.id), r.peak, smtp.sent.length, smtp.rejected > 0, smtp.peak])",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": [
+              19,
+              [
+                "13"
+              ],
+              8,
+              19,
+              true,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Default attempts 1: no retry",
+              "vi": "attempts mặc định 1: không thử lại"
+            },
+            "goi": "await drainQueue([{ id: '1', data: { userId: 42 } }], welcome, {}).then((r) => r.failed)",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": [
+              {
+                "id": "1",
+                "reason": "550 mailbox unavailable",
+                "attemptsMade": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Exponential waits 200 / 400 / 800 between attempts",
+              "vi": "Khoảng chờ cấp số nhân 200 / 400 / 800 giữa các lần thử"
+            },
+            "goi": "await (async () => { const t0 = Date.now(); let n = 0; const flaky = async () => { await sleep(10); if (++n <= 3) throw new Error('timeout'); }; const r = await drainQueue([{ id: '7', data: {} }], flaky, { concurrency: 1, attempts: 5, backoff: { type: 'exponential', delay: 200 } }); return [r.completed, r.failed, Date.now() - t0]; })()",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": [
+              [
+                "7"
+              ],
+              [],
+              1440
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A job waiting for its retry does not block the others",
+              "vi": "Job đang chờ thử lại không chặn các job khác"
+            },
+            "goi": "await (async () => { const t0 = Date.now(); const slowFail = async (j) => { await sleep(10); if (j.id === 'bad') throw new Error('timeout'); await sleep(90); }; const jobs = [{ id: 'bad', data: {} }, ...Array.from({ length: 4 }, (_, i) => ({ id: String(i + 1), data: {} }))]; const r = await drainQueue(jobs, slowFail, { concurrency: 1, attempts: 3, backoff: { type: 'fixed', delay: 1000 } }); return [r.completed, r.failed, Date.now() - t0 < 2500]; })()",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": [
+              [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              [
+                {
+                  "id": "bad",
+                  "reason": "timeout",
+                  "attemptsMade": 3
+                }
+              ],
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await drainQueue([], welcome, opts(3))",
+            "chuanBi": "const signups = Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1), data: { userId: i + 1 } }));\nconst opts = (concurrency) => ({ concurrency, attempts: 5, backoff: { type: 'exponential', delay: 100 } });",
+            "mongDoi": {
+              "completed": [],
+              "failed": [],
+              "peak": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "await sleep(backoff) inside the handler slot: five failing jobs occupy all five slots while they wait, and the healthy jobs behind them stall.|||await sleep(backoff) ngay trong chỗ của handler: năm job hỏng chiếm cả năm chỗ trong lúc chờ, và các job khoẻ phía sau bị kẹt."
+        },
+        {
+          "loi": "Retrying the deleted user five times: a logic failure fails identically and burns the queue’s capacity.|||Thử lại user đã xoá năm lần: lỗi logic hỏng y hệt nhau và đốt sức chứa của hàng đợi."
+        },
+        {
+          "loi": "Resolving when the wait list is empty although retries are still scheduled: the bounce and the 421s are reported as never having run.|||Resolve khi danh sách chờ rỗng dù còn lần thử lại đang hẹn: lần dội và các lỗi 421 bị báo như chưa từng chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exponential backoff",
+          "vi": "lùi thời gian theo cấp số nhân",
+          "giaiThich": "khoảng chờ giữa các lần thử gấp đôi mỗi lần"
+        },
+        {
+          "en": "delayed set",
+          "vi": "tập hẹn giờ",
+          "giaiThich": "nơi job chờ thử lại — không chiếm chỗ của worker"
+        },
+        {
+          "en": "UnrecoverableError",
+          "vi": "lỗi không cứu được",
+          "giaiThich": "hỏng ngay, không thử lại"
+        }
+      ]
+    },
+    {
+      "title": "Lab 13 · 2 — Watch the queue: health endpoint and trend alerts",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "monitoring",
+        "alerting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Queues fail silently — that is their characteristic failure mode. Write two functions.</p>\n<p><b>1.</b> <code>queueHealth(queue)</code> — the lesson’s <code>GET /health/queues</code>: <code>await queue.getJobCounts('waiting', 'active', 'failed', 'delayed')</code> plus <code>oldestWaitingAgeMs</code> = <code>Date.now() - oldest.timestamp</code> for the oldest waiting job (<code>queue.getWaiting(0, 0)</code>), or 0 when nothing waits. Ask for both in parallel.</p>\n<p><b>2.</b> <code>queueAlerts(samples, maxOldestMs = 600000)</code> — <code>samples</code> are health snapshots in time order, <code>{ waiting, failed, stalled, oldestWaitingAgeMs }</code>, where <code>stalled</code> is the running total of stalled events. Return, in this order:</p>\n<ul><li><code>'waiting-climbing'</code> — <code>waiting</code> strictly increased across the last 4 samples (a TREND, not an absolute number);</li><li><code>'failed-climbing'</code> — the same rule for <code>failed</code> (one failure is routine, a steady rise is an incident);</li><li><code>'stalled'</code> — the last sample’s <code>stalled</code> is higher than the previous one (this should be zero);</li><li><code>'stuck'</code> — the last sample’s <code>oldestWaitingAgeMs</code> is above <code>maxOldestMs</code> (a short queue can still be stuck).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>queueHealth: the two queries in parallel (Promise.all).</li>\n  <li>Trend rules need at least 4 samples; the stalled rule needs 2.</li>\n  <li>Alerts in the order given, no duplicates.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàng đợi hỏng một cách câm lặng — đó là kiểu hỏng đặc trưng của chúng. Viết hai hàm.</p>\n<p><b>1.</b> <code>queueHealth(queue)</code> — <code>GET /health/queues</code> của bài: <code>await queue.getJobCounts('waiting', 'active', 'failed', 'delayed')</code> cộng <code>oldestWaitingAgeMs</code> = <code>Date.now() - oldest.timestamp</code> của job chờ lâu nhất (<code>queue.getWaiting(0, 0)</code>), hoặc 0 khi không có gì chờ. Hỏi cả hai song song.</p>\n<p><b>2.</b> <code>queueAlerts(samples, maxOldestMs = 600000)</code> — <code>samples</code> là các ảnh chụp sức khoẻ theo thứ tự thời gian, <code>{ waiting, failed, stalled, oldestWaitingAgeMs }</code>, trong đó <code>stalled</code> là tổng cộng dồn số sự kiện treo. Trả về, theo thứ tự:</p>\n<ul><li><code>'waiting-climbing'</code> — <code>waiting</code> tăng hẳn qua 4 mẫu cuối (một XU HƯỚNG, không phải một con số tuyệt đối);</li><li><code>'failed-climbing'</code> — cùng luật cho <code>failed</code> (một lần hỏng là chuyện thường, tăng đều là sự cố);</li><li><code>'stalled'</code> — <code>stalled</code> của mẫu cuối lớn hơn mẫu trước đó (số này lẽ ra phải bằng 0);</li><li><code>'stuck'</code> — <code>oldestWaitingAgeMs</code> của mẫu cuối lớn hơn <code>maxOldestMs</code> (hàng đợi ngắn vẫn có thể kẹt).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>queueHealth: hai truy vấn chạy song song (Promise.all).</li>\n  <li>Luật xu hướng cần ít nhất 4 mẫu; luật treo cần 2.</li>\n  <li>Cảnh báo đúng thứ tự đã nêu, không trùng.</li>\n</ul>",
+      "inputSpec": "queue — fake-monitor.js · samples — snapshots, oldest first|||queue — fake-monitor.js · samples — ảnh chụp, cũ nhất trước",
+      "outputSpec": "queueHealth → Promise<{ waiting, active, failed, delayed, oldestWaitingAgeMs }> · queueAlerts → string[]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });\nawait queueHealth(makeMonitoredQueue({ waiting: 12, active: 5, failed: 3, delayed: 1 }, Date.now() - 40 * 60000))",
+          "output": "{\"waiting\":12,\"active\":5,\"failed\":3,\"delayed\":1,\"oldestWaitingAgeMs\":2400001}",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const [counts, [oldest]] = await Promise.all([queue.getJobCounts(…), queue.getWaiting(0, 0)]);",
+        "const rising = (k) => samples.length >= 4 && samples.slice(-4).every((s, i, a) => i === 0 || s[k] > a[i - 1][k]);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function queueHealth(queue) {\n  // Write your solution here\n  const counts = await queue.getJobCounts('waiting', 'active', 'failed', 'delayed');\n  return { ...counts, oldestWaitingAgeMs: 0 };\n}\n\nfunction queueAlerts(samples, maxOldestMs = 600000) {\n  const last = samples[samples.length - 1];\n  const alerts = [];\n  if (last.waiting > 10000) alerts.push('waiting-climbing');\n  if (last.failed > 0) alerts.push('failed-climbing');\n  return alerts;\n}\n"
+        },
+        {
+          "name": "fake-monitor.js",
+          "language": "javascript",
+          "code": "// fake-monitor.js — PROVIDED (loaded before answer.js). A queue you can ask about itself (one round trip each):\n//   await queue.getJobCounts('waiting', 'active', 'failed', 'delayed') → { waiting, active, failed, delayed }\n//   await queue.getWaiting(0, 0) → [oldest waiting job] or []   (job.timestamp = when it was added, ms)\nfunction makeMonitoredQueue(counts, oldestTimestamp) {\n  return {\n    getJobCounts(...names) { return new Promise((ok) => setTimeout(() => ok(Object.fromEntries(names.map((n) => [n, counts[n] || 0]))), 1)); },\n    getWaiting(start, end) { return new Promise((ok) => setTimeout(() => ok(oldestTimestamp == null ? [] : [{ id: '1', timestamp: oldestTimestamp }]), 1)); },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** GET /health/queues — counts + the age of the oldest waiting job (two queries, in parallel). */\nasync function queueHealth(queue) {\n  const [counts, [oldest]] = await Promise.all([\n    queue.getJobCounts('waiting', 'active', 'failed', 'delayed'),\n    queue.getWaiting(0, 0),\n  ]);\n  return { ...counts, oldestWaitingAgeMs: oldest ? Date.now() - oldest.timestamp : 0 };\n}\n\n/** Alert on TRENDS and AGES, not on absolute numbers. */\nfunction queueAlerts(samples, maxOldestMs = 600000) {\n  const alerts = [];\n  const rising = (k) => samples.length >= 4 && samples.slice(-4).every((s, i, a) => i === 0 || s[k] > a[i - 1][k]);\n  const last = samples[samples.length - 1];\n  const prev = samples[samples.length - 2];\n  if (rising('waiting')) alerts.push('waiting-climbing');                     // arriving faster than leaving\n  if (rising('failed')) alerts.push('failed-climbing');                       // systematic, not one-off\n  if (prev && last.stalled > prev.stalled) alerts.push('stalled');            // workers dying / loop blocked\n  if (last && last.oldestWaitingAgeMs > maxOldestMs) alerts.push('stuck');    // short can still be stuck\n  return alerts;\n}\n"
+        },
+        {
+          "name": "fake-monitor.js",
+          "language": "javascript",
+          "code": "// fake-monitor.js — PROVIDED (loaded before answer.js). A queue you can ask about itself (one round trip each):\n//   await queue.getJobCounts('waiting', 'active', 'failed', 'delayed') → { waiting, active, failed, delayed }\n//   await queue.getWaiting(0, 0) → [oldest waiting job] or []   (job.timestamp = when it was added, ms)\nfunction makeMonitoredQueue(counts, oldestTimestamp) {\n  return {\n    getJobCounts(...names) { return new Promise((ok) => setTimeout(() => ok(Object.fromEntries(names.map((n) => [n, counts[n] || 0]))), 1)); },\n    getWaiting(start, end) { return new Promise((ok) => setTimeout(() => ok(oldestTimestamp == null ? [] : [{ id: '1', timestamp: oldestTimestamp }]), 1)); },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The numbers to watch, from the lesson: waiting climbing (work arrives faster than it leaves), failed climbing (something is systematically broken), stalled events (workers die or block the loop — should be zero) and the age of the oldest job (“the oldest job has waited 40 minutes” says more than “12 jobs are waiting”). Trends and ages catch what absolute thresholds miss.</p>",
+      "solutionExplanationHtmlVi": "<p>Những con số cần nhìn, theo bài: waiting tăng (việc tới nhanh hơn việc đi), failed tăng (có gì đó hỏng có hệ thống), sự kiện treo (worker chết hoặc chặn vòng lặp — phải bằng 0) và tuổi của job lâu nhất (\"job lâu nhất đã chờ 40 phút\" nói nhiều hơn \"12 job đang chờ\"). Xu hướng và tuổi bắt được những gì ngưỡng tuyệt đối bỏ sót.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-monitor.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "12 waiting, the oldest for 40 minutes",
+              "vi": "12 job chờ, job lâu nhất đã chờ 40 phút"
+            },
+            "goi": "await queueHealth(makeMonitoredQueue({ waiting: 12, active: 5, failed: 3, delayed: 1 }, Date.now() - 40 * 60000))",
+            "chuanBi": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });",
+            "mongDoi": {
+              "waiting": 12,
+              "active": 5,
+              "failed": 3,
+              "delayed": 1,
+              "oldestWaitingAgeMs": 2400001
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nothing waits → age 0; both queries in parallel (1 ms, not 2)",
+              "vi": "Không gì chờ → tuổi 0; hai truy vấn song song (1 ms, không phải 2)"
+            },
+            "goi": "[await queueHealth(makeMonitoredQueue({ active: 2 }, null)), await (async () => { const t0 = Date.now(); await queueHealth(makeMonitoredQueue({}, null)); return Date.now() - t0; })()]",
+            "chuanBi": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });",
+            "mongDoi": [
+              {
+                "waiting": 0,
+                "active": 2,
+                "failed": 0,
+                "delayed": 0,
+                "oldestWaitingAgeMs": 0
+              },
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A rising trend alerts; a big backlog that drains does not",
+              "vi": "Xu hướng tăng thì báo; tồn đọng lớn đang rút thì không"
+            },
+            "goi": "[queueAlerts([S(100, 0, 0, 1), S(400, 0, 0, 1), S(900, 0, 0, 2), S(1500, 0, 0, 2)]), queueAlerts([S(50000, 0, 0, 1), S(40000, 0, 0, 1), S(30000, 0, 0, 1), S(20000, 1, 0, 1)])]",
+            "chuanBi": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });",
+            "mongDoi": [
+              [
+                "waiting-climbing"
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[queueAlerts([S(12, 3, 0, 1), S(12, 3, 2, 45)]), queueAlerts([S(1, 1, 0, 0), S(2, 2, 0, 0), S(3, 3, 0, 0)])]",
+            "chuanBi": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });",
+            "mongDoi": [
+              [
+                "stalled",
+                "stuck"
+              ],
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[queueAlerts([S(1, 0, 0, 0), S(2, 1, 0, 0), S(2, 2, 0, 0), S(3, 3, 0, 0), S(4, 4, 0, 11)], 10 * 60000), queueAlerts([S(0, 0, 0, 0)])]",
+            "chuanBi": "const S = (waiting, failed, stalled, oldestMin) => ({ waiting, failed, stalled, oldestWaitingAgeMs: oldestMin * 60000 });",
+            "mongDoi": [
+              [
+                "failed-climbing",
+                "stuck"
+              ],
+              []
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Alerting on waiting > 10,000: a queue draining a big backlog pages you, and a stuck queue of 12 jobs never does.|||Cảnh báo khi waiting > 10.000: hàng đợi đang rút một tồn đọng lớn thì réo bạn, còn hàng đợi kẹt 12 job thì không bao giờ."
+        },
+        {
+          "loi": "Alerting on failed > 0: one transient failure a day becomes a permanent page, and everyone learns to ignore it.|||Cảnh báo khi failed > 0: một lần hỏng thoáng qua mỗi ngày thành cảnh báo thường trực, và ai cũng học cách lờ nó."
+        },
+        {
+          "loi": "Two awaits one after another in the health endpoint: twice the latency for an endpoint a monitor calls every few seconds.|||Hai await nối tiếp trong endpoint sức khoẻ: gấp đôi độ trễ cho một endpoint bị hệ giám sát gọi vài giây một lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trend alert",
+          "vi": "cảnh báo theo xu hướng",
+          "giaiThich": "báo khi một số tăng đều, không khi nó vượt một mốc cố định"
+        },
+        {
+          "en": "oldest job age",
+          "vi": "tuổi job lâu nhất",
+          "giaiThich": "job chờ lâu nhất đã chờ bao lâu"
+        }
+      ]
+    },
+    {
+      "title": "Lab 13 · 3 — Audit a queue before it goes to production",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A teammate opens a pull request that moves the Notes API’s emails to BullMQ. Check each line against the lesson’s production checklist (dedicated noeviction Redis, separate worker process, attempts + backoff + idempotent, SIGTERM closes the worker, retention, alerts) and the traps of 13.3–13.4.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một đồng đội mở pull request chuyển email của Notes API sang BullMQ. Soát từng dòng theo danh sách kiểm tra production của bài (Redis riêng noeviction, worker ở tiến trình riêng, attempts + backoff + luỹ đẳng, SIGTERM đóng worker, lưu giữ, cảnh báo) và các bẫy của 13.3–13.4.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Go through the checklist: Redis policy, process, retries, shutdown, retention, alerts.|||Đi qua danh sách kiểm tra: chính sách Redis, tiến trình, thử lại, tắt, lưu giữ, cảnh báo.",
+        "Then the traps: jobId format, payload content.|||Rồi tới các bẫy: định dạng jobId, nội dung payload."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 13 · 3 — Audit a queue before it goes to production\n\nAnswer in the answer panel (no code needed).\n\n1. Line of the PR → OK or violationDòng của PR → ổn hay vi phạm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 13 · 3 — Audit a queue before it goes to production — answer key\n\n1. Line of the PR → OK or violationDòng của PR → ổn hay vi phạm\n   - r1.v: Violation\n   - r2.v: Violation\n   - r3.v: OK\n   - r4.v: Violation\n   - r5.v: OK\n   - r6.v: Violation\n   - r7.v: OK\n   - r8.v: Violation\n   - r9.v: OK\n   Violations: a queue on an allkeys-lru Redis loses jobs silently (18,118 of 20,000 in the measurement); a worker in the web process shares its event loop; exiting on SIGTERM abandons running jobs to the stalled mechanism; an absolute waiting threshold misses trends, failures and a stuck short queue; a colon in a custom jobId throws. OK: attempts + backoff with an idempotent handler, retention with failures kept longer, a grace period longer than the longest job, ids-only payloads.VI: Vi phạm: hàng đợi trên Redis allkeys-lru mất job lặng lẽ (18.118 trên 20.000 trong phép đo); worker trong tiến trình web dùng chung event loop; thoát ngay khi SIGTERM bỏ mặc job đang chạy cho cơ chế treo; ngưỡng waiting tuyệt đối bỏ sót xu hướng, lỗi và một hàng đợi ngắn bị kẹt; dấu hai chấm trong jobId tự đặt làm ném lỗi. Ổn: attempts + backoff với handler luỹ đẳng, lưu giữ với job hỏng giữ lâu hơn, thời gian ân hạn dài hơn job dài nhất, payload chỉ có id.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Violations: a queue on an allkeys-lru Redis loses jobs silently (18,118 of 20,000 in the measurement); a worker in the web process shares its event loop; exiting on SIGTERM abandons running jobs to the stalled mechanism; an absolute waiting threshold misses trends, failures and a stuck short queue; a colon in a custom jobId throws. OK: attempts + backoff with an idempotent handler, retention with failures kept longer, a grace period longer than the longest job, ids-only payloads.</p><p><i>VI: Vi phạm: hàng đợi trên Redis allkeys-lru mất job lặng lẽ (18.118 trên 20.000 trong phép đo); worker trong tiến trình web dùng chung event loop; thoát ngay khi SIGTERM bỏ mặc job đang chạy cho cơ chế treo; ngưỡng waiting tuyệt đối bỏ sót xu hướng, lỗi và một hàng đợi ngắn bị kẹt; dấu hai chấm trong jobId tự đặt làm ném lỗi. Ổn: attempts + backoff với handler luỹ đẳng, lưu giữ với job hỏng giữ lâu hơn, thời gian ân hạn dài hơn job dài nhất, payload chỉ có id.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Line of the PR → OK or violation</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng của PR → ổn hay vi phạm</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "In the pull request"
+              },
+              {
+                "ma": "v",
+                "ten": "Verdict",
+                "luaChon": [
+                  "OK",
+                  "Violation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "connection: the existing cache Redis (maxmemory-policy allkeys-lru), to avoid a second container"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "new Worker('email', …) is created in server.js, right after app.listen(3000)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "defaultJobOptions: { attempts: 5, backoff: { type: 'exponential', delay: 1000 } }, and the handler records sent emails under a unique (userId, kind) key"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "process.on('SIGTERM', () => process.exit(0))"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 * 24 * 3600 }"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "The only alert: page when waiting > 10,000"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "stop_grace_period: 90s; the longest email job takes about 5 s"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "queue.add('invoice', data, { jobId: 'invoice:' + orderId })"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "job.data = { userId } and the worker reads the user from the database"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "Violation",
+              "r2.v": "Violation",
+              "r3.v": "OK",
+              "r4.v": "Violation",
+              "r5.v": "OK",
+              "r6.v": "Violation",
+              "r7.v": "OK",
+              "r8.v": "Violation",
+              "r9.v": "OK"
+            },
+            "giaiThich": "<p>Violations: a queue on an allkeys-lru Redis loses jobs silently (18,118 of 20,000 in the measurement); a worker in the web process shares its event loop; exiting on SIGTERM abandons running jobs to the stalled mechanism; an absolute waiting threshold misses trends, failures and a stuck short queue; a colon in a custom jobId throws. OK: attempts + backoff with an idempotent handler, retention with failures kept longer, a grace period longer than the longest job, ids-only payloads.</p><p><i>VI: Vi phạm: hàng đợi trên Redis allkeys-lru mất job lặng lẽ (18.118 trên 20.000 trong phép đo); worker trong tiến trình web dùng chung event loop; thoát ngay khi SIGTERM bỏ mặc job đang chạy cho cơ chế treo; ngưỡng waiting tuyệt đối bỏ sót xu hướng, lỗi và một hàng đợi ngắn bị kẹt; dấu hai chấm trong jobId tự đặt làm ném lỗi. Ổn: attempts + backoff với handler luỹ đẳng, lưu giữ với job hỏng giữ lâu hơn, thời gian ân hạn dài hơn job dài nhất, payload chỉ có id.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Accepting the shared cache Redis “because it is only emails”.|||Chấp nhận Redis cache dùng chung \"vì chỉ là email thôi\"."
+        },
+        {
+          "loi": "Thinking process.exit(0) on SIGTERM is a graceful shutdown.|||Tưởng process.exit(0) khi SIGTERM là tắt êm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "production checklist",
+          "vi": "danh sách kiểm tra production",
+          "giaiThich": "Redis riêng noeviction · worker riêng · attempts + backoff + luỹ đẳng · SIGTERM · dọn dẹp · cảnh báo"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,790 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-16-1-do-truoc-khi-doan",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-16-1-do-truoc-khi-doan"
+  },
+  "exercises": [
+    {
+      "title": "What the profile said, and what everyone guessed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "performance",
+        "profiling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 16.1: reading a CPU profile, the 3.2% regex, and the trap that leaves you with no profile.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 16.1: đọc CPU profile, regex 3,2%, và cái bẫy làm bạn không có profile nào.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Self time is time in the function itself, not in what it calls.|||Self time là thời gian trong chính hàm, không tính hàm nó gọi.",
+        "A profile is written by V8 when the process exits normally.|||Profile do V8 ghi khi tiến trình thoát bình thường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What the profile said, and what everyone guessed\n\nAnswer in the answer panel (no code needed).\n\n1. Most people would rewrite slugify’s two regexes. What share of CPU did they take in the profile?Đa số sẽ viết lại hai regex của slugify. Trong profile chúng chiếm bao nhiêu CPU?\n2. The profile’s (idle) line was 0.9%. What does that tell you?Dòng (idle) của profile là 0,9%. Điều đó nói gì?\n3. You ran node --cpu-prof, drove load with autocannon, then stopped the server with kill -9. The ./prof folder is empty. Why?Bạn chạy node --cpu-prof, tạo tải bằng autocannon, rồi dừng server bằng kill -9. Thư mục ./prof trống. Vì sao?\n4. Which are rules for honest benchmark numbers in this lesson? (choose all that apply)Những luật nào giúp số đo benchmark trung thực trong bài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What the profile said, and what everyone guessed — answer key\n\n1. Most people would rewrite slugify’s two regexes. What share of CPU did they take in the profile?Đa số sẽ viết lại hai regex của slugify. Trong profile chúng chiếm bao nhiêu CPU?\n   Answer: a) 3.2% — a perfect rewrite buys at most 3.2%\n   The real costs were building 500 objects (renderNote 21.7%), hashing them (crypto 20.5%) and serialising ~470 KB (stringify 16.2%), on every request, for data that never changes.VI: Chi phí thật là dựng 500 object (renderNote 21,7%), băm chúng (crypto 20,5%) và tuần tự hoá ~470 KB (stringify 16,2%), ở mọi request, cho dữ liệu không bao giờ đổi.\n\n2. The profile’s (idle) line was 0.9%. What does that tell you?Dòng (idle) của profile là 0,9%. Điều đó nói gì?\n   Answer: a) The route is CPU-bound: optimising the code (not adding machines) pays\n   Under load, a CPU that is almost never idle is doing work you wrote. Lesson 16.4 uses the same line to decide whether cluster can help.VI: Dưới tải, một CPU gần như không bao giờ rảnh là đang làm việc bạn viết ra. Bài 16.4 dùng đúng dòng này để quyết định cluster có giúp được không.\n\n3. You ran node --cpu-prof, drove load with autocannon, then stopped the server with kill -9. The ./prof folder is empty. Why?Bạn chạy node --cpu-prof, tạo tải bằng autocannon, rồi dừng server bằng kill -9. Thư mục ./prof trống. Vì sao?\n   Answer: d) --cpu-prof writes the file only on a normal exit; SIGKILL ends the process first\n   Handle SIGTERM, close the server, call process.exit(0), and send SIGTERM. No error, no warning otherwise — it looks exactly like “profiling does not work”.VI: Bắt SIGTERM, đóng server, gọi process.exit(0), và gửi SIGTERM. Không thì không lỗi, không cảnh báo — trông y như “profile không chạy”.\n\n4. Which are rules for honest benchmark numbers in this lesson? (choose all that apply)Những luật nào giúp số đo benchmark trung thực trong bài? (chọn mọi câu đúng)\n   Answer: a) Compare p97.5, not the average + b) Warm up first and discard the first seconds + c) Change one variable at a time\n   Fix exactly one thing per lap: fix two at once and you cannot tell which worked. The first few hundred requests run before V8 has compiled the hot code.VI: Mỗi vòng sửa đúng một thứ: sửa hai cái cùng lúc thì không biết cái nào có tác dụng. Vài trăm request đầu chạy trước khi V8 biên dịch xong mã nóng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 3.2% — a perfect rewrite buys at most 3.2%</p><p>The real costs were building 500 objects (renderNote 21.7%), hashing them (crypto 20.5%) and serialising ~470 KB (stringify 16.2%), on every request, for data that never changes.</p><p><i>VI: Chi phí thật là dựng 500 object (renderNote 21,7%), băm chúng (crypto 20,5%) và tuần tự hoá ~470 KB (stringify 16,2%), ở mọi request, cho dữ liệu không bao giờ đổi.</i></p></li><li><p><b>a)</b> The route is CPU-bound: optimising the code (not adding machines) pays</p><p>Under load, a CPU that is almost never idle is doing work you wrote. Lesson 16.4 uses the same line to decide whether cluster can help.</p><p><i>VI: Dưới tải, một CPU gần như không bao giờ rảnh là đang làm việc bạn viết ra. Bài 16.4 dùng đúng dòng này để quyết định cluster có giúp được không.</i></p></li><li><p><b>d)</b> --cpu-prof writes the file only on a normal exit; SIGKILL ends the process first</p><p>Handle SIGTERM, close the server, call process.exit(0), and send SIGTERM. No error, no warning otherwise — it looks exactly like “profiling does not work”.</p><p><i>VI: Bắt SIGTERM, đóng server, gọi process.exit(0), và gửi SIGTERM. Không thì không lỗi, không cảnh báo — trông y như “profile không chạy”.</i></p></li><li><p><b>a)</b> Compare p97.5, not the average + <b>b)</b> Warm up first and discard the first seconds + <b>c)</b> Change one variable at a time</p><p>Fix exactly one thing per lap: fix two at once and you cannot tell which worked. The first few hundred requests run before V8 has compiled the hot code.</p><p><i>VI: Mỗi vòng sửa đúng một thứ: sửa hai cái cùng lúc thì không biết cái nào có tác dụng. Vài trăm request đầu chạy trước khi V8 biên dịch xong mã nóng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Most people would rewrite slugify’s two regexes. What share of CPU did they take in the profile?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đa số sẽ viết lại hai regex của slugify. Trong profile chúng chiếm bao nhiêu CPU?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3.2% — a perfect rewrite buys at most 3.2%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "16.2% — the same as JSON serialisation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0.9% — less than the idle time of the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "21.7% — the biggest line, so rewriting them was right"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The real costs were building 500 objects (renderNote 21.7%), hashing them (crypto 20.5%) and serialising ~470 KB (stringify 16.2%), on every request, for data that never changes.</p><p><i>VI: Chi phí thật là dựng 500 object (renderNote 21,7%), băm chúng (crypto 20,5%) và tuần tự hoá ~470 KB (stringify 16,2%), ở mọi request, cho dữ liệu không bao giờ đổi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The profile’s (idle) line was 0.9%. What does that tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng (idle) của profile là 0,9%. Điều đó nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The route is CPU-bound: optimising the code (not adding machines) pays"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The route is I/O-bound: the CPU is waiting for the database most of the time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The profiler was started too late and missed most of the samples"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server was idle during the run, so the profile is not valid"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Under load, a CPU that is almost never idle is doing work you wrote. Lesson 16.4 uses the same line to decide whether cluster can help.</p><p><i>VI: Dưới tải, một CPU gần như không bao giờ rảnh là đang làm việc bạn viết ra. Bài 16.4 dùng đúng dòng này để quyết định cluster có giúp được không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>You ran node --cpu-prof, drove load with autocannon, then stopped the server with kill -9. The ./prof folder is empty. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn chạy node --cpu-prof, tạo tải bằng autocannon, rồi dừng server bằng kill -9. Thư mục ./prof trống. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The profile is kept in memory until you call v8.writeHeapSnapshot()"
+              },
+              {
+                "ma": "b",
+                "noiDung": "autocannon disables the V8 profiler while it is generating load"
+              },
+              {
+                "ma": "c",
+                "noiDung": "--cpu-prof needs Chrome DevTools to be open, otherwise it records nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "--cpu-prof writes the file only on a normal exit; SIGKILL ends the process first"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Handle SIGTERM, close the server, call process.exit(0), and send SIGTERM. No error, no warning otherwise — it looks exactly like “profiling does not work”.</p><p><i>VI: Bắt SIGTERM, đóng server, gọi process.exit(0), và gửi SIGTERM. Không thì không lỗi, không cảnh báo — trông y như “profile không chạy”.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which are rules for honest benchmark numbers in this lesson? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những luật nào giúp số đo benchmark trung thực trong bài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Compare p97.5, not the average"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Warm up first and discard the first seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Change one variable at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fix the top two lines together to save one measurement"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Fix exactly one thing per lap: fix two at once and you cannot tell which worked. The first few hundred requests run before V8 has compiled the hot code.</p><p><i>VI: Mỗi vòng sửa đúng một thứ: sửa hai cái cùng lúc thì không biết cái nào có tác dụng. Vài trăm request đầu chạy trước khi V8 biên dịch xong mã nóng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Optimising the line you suspect instead of the line the profile shows.|||Tối ưu dòng bạn nghi thay vì dòng profile chỉ ra."
+        },
+        {
+          "loi": "Profiling an idle server: the profile is nothing but (idle).|||Profile một server rảnh: profile toàn là (idle)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CPU profile",
+          "vi": "hồ sơ CPU",
+          "giaiThich": "samples of which function runs, about every 1 ms"
+        },
+        {
+          "en": "self time",
+          "vi": "thời gian tự thân"
+        },
+        {
+          "en": "CPU-bound",
+          "vi": "bị giới hạn bởi CPU"
+        }
+      ]
+    },
+    {
+      "title": "The five-step loop, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Order the loop that took the route from 276 to 3,395 req/s.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp vòng lặp đã đưa route từ 276 lên 3.395 req/s.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Measurement comes before and after every change.|||Đo đứng trước và sau mọi thay đổi.",
+        "The last step starts the next lap.|||Bước cuối mở ra vòng tiếp theo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The five-step loop, in order\n\nAnswer in the answer panel (no code needed).\n\n1. One lap of “measure before you guess”.Một vòng “đo trước khi đoán”.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The five-step loop, in order — answer key\n\n1. One lap of “measure before you guess”.Một vòng “đo trước khi đoán”.\n   Answer: m5) Measure a baseline with autocannon (req/s and p97.5)  →  m3) Take a CPU profile under load  →  m4) Fix exactly one thing: the top line of the table  →  m1) Measure again, and revert if nothing moved  →  m2) Profile again: the bottleneck has moved\n   Without a baseline you can prove nothing; more complex code that is no faster is a net loss; after each fix the old table no longer holds.VI: Không có mốc thì không chứng minh được gì; mã phức tạp hơn mà không nhanh hơn là lỗ; sau mỗi lần sửa, bảng cũ không còn đúng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Without a baseline you can prove nothing; more complex code that is no faster is a net loss; after each fix the old table no longer holds.</p><p><i>VI: Không có mốc thì không chứng minh được gì; mã phức tạp hơn mà không nhanh hơn là lỗ; sau mỗi lần sửa, bảng cũ không còn đúng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>One lap of “measure before you guess”.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một vòng “đo trước khi đoán”.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Measure again, and revert if nothing moved"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Profile again: the bottleneck has moved"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Take a CPU profile under load"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Fix exactly one thing: the top line of the table"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Measure a baseline with autocannon (req/s and p97.5)"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m3",
+              "m4",
+              "m1",
+              "m2"
+            ],
+            "giaiThich": "<p>Without a baseline you can prove nothing; more complex code that is no faster is a net loss; after each fix the old table no longer holds.</p><p><i>VI: Không có mốc thì không chứng minh được gì; mã phức tạp hơn mà không nhanh hơn là lỗ; sau mỗi lần sửa, bảng cũ không còn đúng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Profiling before you have a baseline number.|||Profile trước khi có con số mốc."
+        },
+        {
+          "loi": "Keeping a change that did not move the numbers.|||Giữ lại thay đổi không làm số đo nhúc nhích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "mốc so sánh"
+        }
+      ]
+    },
+    {
+      "title": "topSelf(profile, n): read a .cpuprofile the way the lesson’s table does",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "profiling",
+        "Map",
+        "sorting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A <code>.cpuprofile</code> written by <code>node --cpu-prof</code> has <code>nodes</code>: <code>{ id, callFrame: { functionName, url }, hitCount }</code>, where <code>hitCount</code> is how many samples (~1 ms each) caught that node running its own code. The same function appears in several nodes (one per call path). Write <code>topSelf(profile, n)</code> returning the <code>n</code> functions with the most self samples as <code>{ name, pct }</code>: add up <code>hitCount</code> per function name (an empty name is <code>\"(anonymous)\"</code>), <code>pct</code> = share of all samples × 100 rounded to 1 decimal, sorted by samples descending (ties by name, A→Z).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tệp <code>.cpuprofile</code> do <code>node --cpu-prof</code> ghi có <code>nodes</code>: <code>{ id, callFrame: { functionName, url }, hitCount }</code>, trong đó <code>hitCount</code> là số lần lấy mẫu (~1 ms mỗi lần) bắt gặp nút đó đang chạy mã của chính nó. Cùng một hàm xuất hiện ở nhiều nút (mỗi đường gọi một nút). Viết <code>topSelf(profile, n)</code> trả về <code>n</code> hàm có nhiều mẫu tự thân nhất dạng <code>{ name, pct }</code>: cộng <code>hitCount</code> theo tên hàm (tên rỗng là <code>\"(anonymous)\"</code>), <code>pct</code> = tỉ lệ trên tổng số mẫu × 100 làm tròn 1 chữ số, sắp theo số mẫu giảm dần (hoà thì theo tên, A→Z).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "topSelf({\"nodes\":[{\"id\":1,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":2,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":600},{\"id\":3,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":380},{\"id\":4,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":618},{\"id\":5,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":336},{\"id\":6,\"callFrame\":{\"functionName\":\"slugify\",\"url\":\"\"},\"hitCount\":170},{\"id\":7,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":76},{\"id\":8,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":46},{\"id\":9,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":227},{\"id\":10,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":245},{\"id\":11,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":34},{\"id\":12,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":120},{\"id\":13,\"callFrame\":{\"functionName\":\"digest\",\"url\":\"\"},\"hitCount\":160},{\"id\":14,\"callFrame\":{\"functionName\":\"createHash\",\"url\":\"\"},\"hitCount\":98}]}, 5)",
+          "output": "[{\"name\":\"renderNote\",\"pct\":26.6},{\"name\":\"update\",\"pct\":20.1},{\"name\":\"stringify\",\"pct\":19.9},{\"name\":\"(garbage collector)\",\"pct\":10.8},{\"name\":\"slugify\",\"pct\":5.5}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use a Map from name to total hits, and count the grand total in the same loop.|||Dùng Map từ tên tới tổng số mẫu, và đếm tổng chung trong cùng vòng lặp.",
+        "Sort with (a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1).|||Sắp bằng (a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the top-n self-time lines of a CPU profile */\nfunction topSelf(profile, n) {\n  // Write your solution here\n  const total = profile.nodes.reduce((s, x) => s + x.hitCount, 0);\n  return profile.nodes\n    .slice()\n    .sort((a, b) => b.hitCount - a.hitCount)\n    .slice(0, n)\n    .map((x) => ({ name: x.callFrame.functionName, pct: Number((100 * x.hitCount / total).toFixed(1)) }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction topSelf(profile, n) {\n  // Một hàm có thể xuất hiện ở NHIỀU nút (mỗi đường gọi một nút) ⇒ cộng hitCount theo tên hàm.\n  const hits = new Map();\n  let total = 0;\n  for (const node of profile.nodes) {\n    const name = node.callFrame.functionName || '(anonymous)';\n    hits.set(name, (hits.get(name) || 0) + node.hitCount);\n    total += node.hitCount;\n  }\n  return [...hits]\n    .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))          // nhiều mẫu nhất trước; hoà thì theo tên\n    .slice(0, n)\n    .map(([name, h]) => ({ name, pct: Number(((100 * h) / total).toFixed(1)) }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the table the lesson printed: renderNote at the top, then crypto’s update, stringify, the garbage collector, slugify — and the two regex replace lines far down. Summing per function is what turns 3,813 samples into a decision.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là bảng bài học đã in: renderNote ở đầu, rồi update của crypto, stringify, bộ gom rác, slugify — còn hai dòng replace của regex nằm tít dưới. Cộng theo hàm là thứ biến 3.813 mẫu thành một quyết định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The original route, top 5",
+              "vi": "Route ban đầu, top 5"
+            },
+            "goi": "topSelf({\"nodes\":[{\"id\":1,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":2,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":600},{\"id\":3,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":380},{\"id\":4,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":618},{\"id\":5,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":336},{\"id\":6,\"callFrame\":{\"functionName\":\"slugify\",\"url\":\"\"},\"hitCount\":170},{\"id\":7,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":76},{\"id\":8,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":46},{\"id\":9,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":227},{\"id\":10,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":245},{\"id\":11,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":34},{\"id\":12,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":120},{\"id\":13,\"callFrame\":{\"functionName\":\"digest\",\"url\":\"\"},\"hitCount\":160},{\"id\":14,\"callFrame\":{\"functionName\":\"createHash\",\"url\":\"\"},\"hitCount\":98}]}, 5)",
+            "mongDoi": [
+              {
+                "name": "renderNote",
+                "pct": 26.6
+              },
+              {
+                "name": "update",
+                "pct": 20.1
+              },
+              {
+                "name": "stringify",
+                "pct": 19.9
+              },
+              {
+                "name": "(garbage collector)",
+                "pct": 10.8
+              },
+              {
+                "name": "slugify",
+                "pct": 5.5
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Fewer functions than n",
+              "vi": "Ít hàm hơn n"
+            },
+            "goi": "topSelf({\"nodes\":[{\"id\":1,\"callFrame\":{\"functionName\":\"a\",\"url\":\"\"},\"hitCount\":3},{\"id\":2,\"callFrame\":{\"functionName\":\"b\",\"url\":\"\"},\"hitCount\":1}]}, 5)",
+            "mongDoi": [
+              {
+                "name": "a",
+                "pct": 75
+              },
+              {
+                "name": "b",
+                "pct": 25
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "topSelf({\"nodes\":[{\"id\":1,\"callFrame\":{\"functionName\":\"(root)\",\"url\":\"\"},\"hitCount\":0},{\"id\":2,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":600},{\"id\":3,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":380},{\"id\":4,\"callFrame\":{\"functionName\":\"stringify\",\"url\":\"\"},\"hitCount\":618},{\"id\":5,\"callFrame\":{\"functionName\":\"(garbage collector)\",\"url\":\"\"},\"hitCount\":336},{\"id\":6,\"callFrame\":{\"functionName\":\"slugify\",\"url\":\"\"},\"hitCount\":170},{\"id\":7,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":76},{\"id\":8,\"callFrame\":{\"functionName\":\"replace\",\"url\":\"\"},\"hitCount\":46},{\"id\":9,\"callFrame\":{\"functionName\":\"renderNote\",\"url\":\"\"},\"hitCount\":227},{\"id\":10,\"callFrame\":{\"functionName\":\"update\",\"url\":\"\"},\"hitCount\":245},{\"id\":11,\"callFrame\":{\"functionName\":\"(idle)\",\"url\":\"\"},\"hitCount\":34},{\"id\":12,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":120},{\"id\":13,\"callFrame\":{\"functionName\":\"digest\",\"url\":\"\"},\"hitCount\":160},{\"id\":14,\"callFrame\":{\"functionName\":\"createHash\",\"url\":\"\"},\"hitCount\":98}]}, 12)",
+            "mongDoi": [
+              {
+                "name": "renderNote",
+                "pct": 26.6
+              },
+              {
+                "name": "update",
+                "pct": 20.1
+              },
+              {
+                "name": "stringify",
+                "pct": 19.9
+              },
+              {
+                "name": "(garbage collector)",
+                "pct": 10.8
+              },
+              {
+                "name": "slugify",
+                "pct": 5.5
+              },
+              {
+                "name": "digest",
+                "pct": 5.1
+              },
+              {
+                "name": "replace",
+                "pct": 3.9
+              },
+              {
+                "name": "(anonymous)",
+                "pct": 3.9
+              },
+              {
+                "name": "createHash",
+                "pct": 3.2
+              },
+              {
+                "name": "(idle)",
+                "pct": 1.1
+              },
+              {
+                "name": "(root)",
+                "pct": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "topSelf({\"nodes\":[{\"id\":1,\"callFrame\":{\"functionName\":\"zeta\",\"url\":\"\"},\"hitCount\":5},{\"id\":2,\"callFrame\":{\"functionName\":\"\",\"url\":\"\"},\"hitCount\":5},{\"id\":3,\"callFrame\":{\"functionName\":\"alpha\",\"url\":\"\"},\"hitCount\":5},{\"id\":4,\"callFrame\":{\"functionName\":\"zeta\",\"url\":\"\"},\"hitCount\":0}]}, 3)",
+            "mongDoi": [
+              {
+                "name": "(anonymous)",
+                "pct": 33.3
+              },
+              {
+                "name": "alpha",
+                "pct": 33.3
+              },
+              {
+                "name": "zeta",
+                "pct": 33.3
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading node by node: renderNote then looks like two medium lines instead of the biggest one.|||Đọc từng nút: renderNote khi đó trông như hai dòng vừa thay vì dòng lớn nhất."
+        },
+        {
+          "loi": "Confusing self time with total time: (root) contains everything but runs nothing itself.|||Nhầm self time với total time: (root) chứa mọi thứ nhưng tự nó không chạy gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sample",
+          "vi": "mẫu",
+          "giaiThich": "one snapshot of which function is running"
+        },
+        {
+          "en": "call path",
+          "vi": "đường gọi"
+        }
+      ]
+    },
+    {
+      "title": "makeListRoute(notes, renderNote, fields): do it once, serialise once, send less",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "performance",
+        "Express",
+        "closures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Apply the three fixes of the lesson to <code>GET /notes</code>. <code>makeListRoute(notes, renderNote, fields)</code> is called <b>once at startup</b> and returns the Express handler <code>(req, res)</code>. The data is static, so: call <code>renderNote</code> once per note at startup (never per request); keep only the properties named in <code>fields</code> (in that order) of each rendered note; build the response string <code>JSON.stringify({ items })</code> once; and in the handler just <code>res.type(\"json\")</code> then <code>res.send(BODY)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>renderNote runs notes.length times in total, however many requests arrive.</li>\n  <li>The handler sends a string, not an object.</li>\n</ul>",
+      "problemHtmlVi": "<p>Áp ba cách sửa của bài cho <code>GET /notes</code>. <code>makeListRoute(notes, renderNote, fields)</code> được gọi <b>một lần lúc khởi động</b> và trả về handler Express <code>(req, res)</code>. Dữ liệu tĩnh nên: gọi <code>renderNote</code> một lần cho mỗi ghi chú lúc khởi động (không bao giờ ở mỗi request); với mỗi ghi chú đã render chỉ giữ các thuộc tính có tên trong <code>fields</code> (theo đúng thứ tự đó); dựng chuỗi response <code>JSON.stringify({ items })</code> một lần; còn handler chỉ <code>res.type(\"json\")</code> rồi <code>res.send(BODY)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>renderNote chạy tổng cộng notes.length lần, dù có bao nhiêu request.</li>\n  <li>Handler gửi một chuỗi, không phải object.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ type: res.headers[\"content-type\"], isString: typeof res.body === \"string\", body: JSON.parse(res.body) })",
+          "output": "{\"type\":\"json\",\"isString\":true,\"body\":{\"items\":[{\"id\":1,\"title\":\"Hello Node\",\"slug\":\"hello-node\",\"excerpt\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"id\":2,\"title\":\"Streams & back-pressure\",\"slug\":\"streams-back-pressure\",\"excerpt\":\"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\"}]}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Everything that does not depend on req goes OUTSIDE the returned function.|||Mọi thứ không phụ thuộc req nằm NGOÀI hàm được trả về.",
+        "Object.fromEntries(fields.map((f) => [f, n[f]])) keeps the chosen fields in order.|||Object.fromEntries(fields.map((f) => [f, n[f]])) giữ các trường đã chọn theo thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** GET /notes, made fast */\nfunction makeListRoute(notes, renderNote, fields) {\n  return (req, res) => {\n    // Write your solution here\n    res.json({ items: notes.map(renderNote) });\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction makeListRoute(notes, renderNote, fields) {\n  // Bước 1 — làm MỘT lần: renderNote (băm sha256, dựng excerpt…) chạy lúc khởi động, không ở mỗi request.\n  const rendered = notes.map(renderNote);\n  // Bước 3 — gửi ÍT hơn: chỉ các trường màn hình danh sách dùng.\n  const slim = rendered.map((n) => Object.fromEntries(fields.map((f) => [f, n[f]])));\n  // Bước 2 — tuần tự hoá MỘT lần: dữ liệu không đổi thì JSON của nó cũng không đổi.\n  const BODY = JSON.stringify({ items: slim });\n  return (req, res) => {\n    res.type('json');\n    res.send(BODY);\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>276 → 641 req/s (precompute), → 1,206 (pre-serialise), → 3,395 (send only the fields used): 12.3× with no library changed. Each step is a general principle: do it once, and the cheapest byte is the one you do not send. If the data can change, the same idea becomes a cache with a TTL (chapter 12).</p>",
+      "solutionExplanationHtmlVi": "<p>276 → 641 req/s (tính trước), → 1.206 (tuần tự hoá trước), → 3.395 (chỉ gửi trường dùng tới): 12,3 lần mà không đổi thư viện nào. Mỗi bước là một nguyên tắc chung: làm một lần, và byte rẻ nhất là byte không gửi. Nếu dữ liệu có thể đổi, cùng ý tưởng đó thành cache có TTL (chương 12).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One request: string body with only the list fields",
+              "vi": "Một request: body là chuỗi, chỉ có trường của danh sách"
+            },
+            "goi": "({ type: res.headers[\"content-type\"], isString: typeof res.body === \"string\", body: JSON.parse(res.body) })",
+            "chuanBi": "let renders = 0; const renderNote = (n) => { renders++; return { ...n, slug: n.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), excerpt: n.body.slice(0, 100), etag: 'sha256-' + n.id }; }; const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const mk = () => { const r = mkRes(); r.type = (t) => { r.headers['content-type'] = t; return r; }; return r; }; const h = makeListRoute([{\"id\":1,\"title\":\"Hello Node\",\"body\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"id\":2,\"title\":\"Streams & back-pressure\",\"body\":\"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\"}], renderNote, ['id', 'title', 'slug', 'excerpt']); const res = mk(); h({}, res);",
+            "mongDoi": {
+              "type": "json",
+              "isString": true,
+              "body": {
+                "items": [
+                  {
+                    "id": 1,
+                    "title": "Hello Node",
+                    "slug": "hello-node",
+                    "excerpt": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  },
+                  {
+                    "id": 2,
+                    "title": "Streams & back-pressure",
+                    "slug": "streams-back-pressure",
+                    "excerpt": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "100 requests: how many renders?",
+              "vi": "100 request: render bao nhiêu lần?"
+            },
+            "goi": "renders",
+            "chuanBi": "let renders = 0; const renderNote = (n) => { renders++; return { ...n, slug: n.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), excerpt: n.body.slice(0, 100), etag: 'sha256-' + n.id }; }; const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const mk = () => { const r = mkRes(); r.type = (t) => { r.headers['content-type'] = t; return r; }; return r; }; const h = makeListRoute([{\"id\":1,\"title\":\"Hello Node\",\"body\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"id\":2,\"title\":\"Streams & back-pressure\",\"body\":\"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\"}], renderNote, ['id', 'title']); for (let i = 0; i < 100; i++) h({}, mk());",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[res.body, renders]",
+            "chuanBi": "let renders = 0; const renderNote = (n) => { renders++; return { ...n, slug: n.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), excerpt: n.body.slice(0, 100), etag: 'sha256-' + n.id }; }; const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const mk = () => { const r = mkRes(); r.type = (t) => { r.headers['content-type'] = t; return r; }; return r; }; const h = makeListRoute([], renderNote, ['id']); const res = mk(); h({}, res);",
+            "mongDoi": [
+              "{\"items\":[]}",
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[a.body === b.body, a.body, renders]",
+            "chuanBi": "let renders = 0; const renderNote = (n) => { renders++; return { ...n, slug: n.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), excerpt: n.body.slice(0, 100), etag: 'sha256-' + n.id }; }; const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const mk = () => { const r = mkRes(); r.type = (t) => { r.headers['content-type'] = t; return r; }; return r; }; const h = makeListRoute([{\"id\":1,\"title\":\"Hello Node\",\"body\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},{\"id\":2,\"title\":\"Streams & back-pressure\",\"body\":\"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\"}], renderNote, ['slug', 'id']); const a = mk(); const b = mk(); h({}, a); h({}, b);",
+            "mongDoi": [
+              true,
+              "{\"items\":[{\"slug\":\"hello-node\",\"id\":1},{\"slug\":\"streams-back-pressure\",\"id\":2}]}",
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling res.json(rendered) in the handler: JSON.stringify runs again on every request (16.2% of the profile).|||Gọi res.json(rendered) trong handler: JSON.stringify chạy lại ở mọi request (16,2% của profile)."
+        },
+        {
+          "loi": "Shipping the full body and etag the list never shows: 471,698 B per response instead of 145,119 B.|||Gửi cả body và etag mà danh sách không bao giờ hiện: 471.698 B mỗi response thay vì 145.119 B."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "precompute",
+          "vi": "tính trước"
+        },
+        {
+          "en": "pre-serialise",
+          "vi": "tuần tự hoá trước"
+        },
+        {
+          "en": "payload",
+          "vi": "phần thân dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "compareRuns(baseline, candidate): did the change really move the number?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 14,
+      "points": 30,
+      "concepts": [
+        "benchmarking",
+        "statistics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Step 4 of the loop: measure again, and revert if nothing moved. Each argument is the req/s of several runs (the lesson uses 5). Write <code>compareRuns(baseline, candidate)</code> returning <code>{ baseline, candidate, speedup, verdict, keep }</code>: the <b>median</b> of each side (for an even count, the mean of the two middle values); <code>speedup</code> = candidate median ÷ baseline median rounded to 2 decimals; <code>verdict</code> = <code>\"faster\"</code> if every candidate run beats every baseline run, <code>\"slower\"</code> if every candidate run is below every baseline run, otherwise <code>\"noise\"</code> (the ranges overlap); <code>keep</code> is true only for <code>\"faster\"</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước 4 của vòng lặp: đo lại, và hoàn tác nếu không có gì nhúc nhích. Mỗi đối số là req/s của nhiều lượt chạy (bài dùng 5). Viết <code>compareRuns(baseline, candidate)</code> trả về <code>{ baseline, candidate, speedup, verdict, keep }</code>: <b>trung vị</b> của mỗi bên (số lượt chẵn thì lấy trung bình hai giá trị giữa); <code>speedup</code> = trung vị bản mới ÷ trung vị mốc làm tròn 2 chữ số; <code>verdict</code> = <code>\"faster\"</code> nếu mọi lượt bản mới đều hơn mọi lượt mốc, <code>\"slower\"</code> nếu mọi lượt bản mới đều thấp hơn mọi lượt mốc, không thì <code>\"noise\"</code> (hai khoảng chồng nhau); <code>keep</code> chỉ true khi <code>\"faster\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "compareRuns([271,276,280,268,279], [630,641,652,619,644])",
+          "output": "{\"baseline\":276,\"candidate\":641,\"speedup\":2.32,\"verdict\":\"faster\",\"keep\":true}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sort a copy numerically; the middle index is length >> 1.|||Sắp một bản sao theo số; chỉ số giữa là length >> 1.",
+        "“Every candidate beats every baseline” is Math.min(...candidate) > Math.max(...baseline).|||“Mọi lượt mới hơn mọi lượt mốc” là Math.min(...candidate) > Math.max(...baseline)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** compare two sets of benchmark runs */\nfunction compareRuns(baseline, candidate) {\n  // Write your solution here\n  const avg = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;\n  const b = avg(baseline), c = avg(candidate);\n  const verdict = c > b ? 'faster' : 'slower';\n  return { baseline: b, candidate: c, speedup: Number((c / b).toFixed(2)), verdict, keep: verdict === 'faster' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction compareRuns(baseline, candidate) {\n  // Trung vị của 5 lượt — một lượt đơn lẻ trên máy bận có thể lệch rất xa.\n  const median = (xs) => { const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };\n  const mb = median(baseline);\n  const mc = median(candidate);\n  let verdict = 'noise';                                        // hai khoảng chồng nhau ⇒ chưa chứng minh được gì\n  if (Math.min(...candidate) > Math.max(...baseline)) verdict = 'faster';\n  else if (Math.max(...candidate) < Math.min(...baseline)) verdict = 'slower';\n  return { baseline: mb, candidate: mc, speedup: Number((mc / mb).toFixed(2)), verdict, keep: verdict === 'faster' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A change that is not provably faster is a net loss: more complex code, same speed. The lesson’s four steps each moved the whole range (276 → 641 → 1,206 → 3,395); a serialiser swap that “gained” 3.5% had overlapping rounds (1,298–1,512 vs 1,455–1,609) and was noise.</p>",
+      "solutionExplanationHtmlVi": "<p>Một thay đổi không chứng minh được là nhanh hơn là lỗ: mã phức tạp hơn, tốc độ như cũ. Bốn bước của bài đều đẩy cả khoảng lên (276 → 641 → 1.206 → 3.395); lần đổi bộ tuần tự hoá “được” 3,5% có các vòng chồng nhau (1.298–1.512 so với 1.455–1.609) và là nhiễu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Precompute renderNote: 276 → 641",
+              "vi": "Tính trước renderNote: 276 → 641"
+            },
+            "goi": "compareRuns([271,276,280,268,279], [630,641,652,619,644])",
+            "mongDoi": {
+              "baseline": 276,
+              "candidate": 641,
+              "speedup": 2.32,
+              "verdict": "faster",
+              "keep": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "The serialiser swap of 16.6",
+              "vi": "Lần đổi bộ tuần tự hoá ở 16.6"
+            },
+            "goi": "compareRuns([1470,1298,1512,1401,1488], [1522,1455,1609,1501,1530])",
+            "mongDoi": {
+              "baseline": 1470,
+              "candidate": 1522,
+              "speedup": 1.04,
+              "verdict": "noise",
+              "keep": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "compareRuns([3560,3540,3601,3577], [1086,1101,1079,1093])",
+            "mongDoi": {
+              "baseline": 3568.5,
+              "candidate": 1089.5,
+              "speedup": 0.31,
+              "verdict": "slower",
+              "keep": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "compareRuns([100,100,100], [100,101,99])",
+            "mongDoi": {
+              "baseline": 100,
+              "candidate": 100,
+              "speedup": 1,
+              "verdict": "noise",
+              "keep": false
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing averages or single runs: one lucky run on a busy laptop decides the merge.|||So trung bình hay một lượt đơn: một lượt may mắn trên laptop bận quyết định việc merge."
+        },
+        {
+          "loi": "Keeping a change because its median is 3% higher while the ranges overlap — lesson 16.6’s +3.5% was exactly that.|||Giữ thay đổi vì trung vị cao hơn 3% trong khi hai khoảng chồng nhau — +3,5% của bài 16.6 chính là như vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "median",
+          "vi": "trung vị"
+        },
+        {
+          "en": "noise",
+          "vi": "nhiễu",
+          "giaiThich": "a difference smaller than run-to-run variation"
+        }
+      ]
+    }
+  ]
+}

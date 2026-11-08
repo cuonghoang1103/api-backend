@@ -1,0 +1,573 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-2-lab-giu-loop-thong",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-2-5-worker-threads"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2.1 — Incident review: diagnose, then pick the cure",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Five real-looking incidents from a Notes API in production. For each, choose the <b>diagnosis</b> (what chapter 2 calls it) and the <b>cure</b> the chapter recommends. Both cells of a row must be right.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm sự cố trông như thật của Notes API trên production. Với mỗi sự cố, chọn CHẨN ĐOÁN (chương 2 gọi nó là gì) và CÁCH CHỮA chương khuyên. Cả hai ô của một hàng phải đúng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First question for every incident: is the heartbeat (event-loop lag) high or normal?|||Câu hỏi đầu cho mọi sự cố: nhịp tim (độ trễ event loop) cao hay bình thường?",
+        "High lag + everything frozen = blocking. Normal lag + only fs/crypto slow = pool. No lag number at all because nothing runs = starvation.|||Trễ cao + mọi thứ đông cứng = chặn. Trễ bình thường + chỉ fs/crypto chậm = nhóm luồng. Không đo được gì vì không gì chạy = bỏ đói."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2.1 — Incident review: diagnose, then pick the cure\n\nAnswer in the answer panel (no code needed).\n\n1. Diagnosis and cure for each incident.Chẩn đoán và cách chữa cho từng sự cố.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2.1 — Incident review: diagnose, then pick the cure — answer key\n\n1. Diagnosis and cure for each incident.Chẩn đoán và cách chữa cho từng sự cố.\n   - r1.chan: CPU work blocks the main thread\n   - r1.chua: move it to a worker thread or a queue\n   - r2.chan: libuv thread pool exhausted\n   - r2.chua: fewer concurrent pool jobs (or a pool size up to the core count)\n   - r3.chan: nextTick / microtask starvation\n   - r3.chua: yield with setImmediate instead\n   - r4.chan: in-memory state split across processes\n   - r4.chua: move the state to a shared store (Redis)\n   - r5.chan: timing-dependent ordering\n   - r5.chua: express the order with await\n   Read the symptom that separates them. Everything stops and the heartbeat is late ⇒ the JS thread is busy computing (2.4) ⇒ worker/queue (2.5). Only pool-backed calls (fs, crypto) slow down while the heartbeat is fine ⇒ the 4-thread pool is full (2.4). 100% CPU, no I/O, no error ⇒ a priority queue that never empties (2.3) ⇒ setImmediate yields. Counts multiplied by the number of processes ⇒ per-process memory (2.5) ⇒ shared store. Works fast, fails slow ⇒ ordering by timer (2.2) ⇒ await.VI: Đọc triệu chứng phân biệt chúng. Mọi thứ dừng và nhịp tim trễ ⇒ luồng JS bận tính (2.4) ⇒ worker/hàng đợi (2.5). Chỉ lời gọi dùng nhóm luồng (fs, crypto) chậm trong khi nhịp tim ổn ⇒ nhóm 4 luồng đầy (2.4). CPU 100%, không I/O, không lỗi ⇒ hàng ưu tiên không bao giờ rỗng (2.3) ⇒ nhường bằng setImmediate. Số đếm nhân theo số process ⇒ bộ nhớ riêng từng process (2.5) ⇒ store chung. Nhanh thì chạy, chậm thì hỏng ⇒ sắp thứ tự bằng hẹn giờ (2.2) ⇒ await.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Read the symptom that separates them. Everything stops and the heartbeat is late ⇒ the JS thread is busy computing (2.4) ⇒ worker/queue (2.5). Only pool-backed calls (fs, crypto) slow down while the heartbeat is fine ⇒ the 4-thread pool is full (2.4). 100% CPU, no I/O, no error ⇒ a priority queue that never empties (2.3) ⇒ setImmediate yields. Counts multiplied by the number of processes ⇒ per-process memory (2.5) ⇒ shared store. Works fast, fails slow ⇒ ordering by timer (2.2) ⇒ await.</p><p><i>VI: Đọc triệu chứng phân biệt chúng. Mọi thứ dừng và nhịp tim trễ ⇒ luồng JS bận tính (2.4) ⇒ worker/hàng đợi (2.5). Chỉ lời gọi dùng nhóm luồng (fs, crypto) chậm trong khi nhịp tim ổn ⇒ nhóm 4 luồng đầy (2.4). CPU 100%, không I/O, không lỗi ⇒ hàng ưu tiên không bao giờ rỗng (2.3) ⇒ nhường bằng setImmediate. Số đếm nhân theo số process ⇒ bộ nhớ riêng từng process (2.5) ⇒ store chung. Nhanh thì chạy, chậm thì hỏng ⇒ sắp thứ tự bằng hẹn giờ (2.2) ⇒ await.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "i1",
+            "de": "<p>Diagnosis and cure for each incident.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chẩn đoán và cách chữa cho từng sự cố.</i></p>",
+            "cot": [
+              {
+                "ma": "su",
+                "ten": "Incident|||Sự cố"
+              },
+              {
+                "ma": "chan",
+                "ten": "Diagnosis|||Chẩn đoán",
+                "luaChon": [
+                  "CPU work blocks the main thread",
+                  "libuv thread pool exhausted",
+                  "nextTick / microtask starvation",
+                  "in-memory state split across processes",
+                  "timing-dependent ordering"
+                ]
+              },
+              {
+                "ma": "chua",
+                "ten": "Cure|||Cách chữa",
+                "luaChon": [
+                  "move it to a worker thread or a queue",
+                  "fewer concurrent pool jobs (or a pool size up to the core count)",
+                  "yield with setImmediate instead",
+                  "move the state to a shared store (Redis)",
+                  "express the order with await"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "su": "GET /export builds a 40 MB PDF in pure JS; during exports every endpoint, even /health, stops answering; heartbeat 3 s late"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "su": "Login (async bcrypt, 12 rounds) under load: unrelated avatar fs.readFile calls go from 2 ms to 400 ms; heartbeat lag stays at 1 ms"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "su": "A \"fast path\" re-queues itself with process.nextTick until a list is processed; the process uses 100% CPU and accepts no connections, no error logged"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "su": "After moving to 4 cluster processes, users can post 4× more comments per minute than the limit allows"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "su": "On the laptop the server works; on the busy VPS the first requests after a deploy fail with \"no database connection\" — listen() is called from a setTimeout of 100 ms"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.chan": "CPU work blocks the main thread",
+              "r1.chua": "move it to a worker thread or a queue",
+              "r2.chan": "libuv thread pool exhausted",
+              "r2.chua": "fewer concurrent pool jobs (or a pool size up to the core count)",
+              "r3.chan": "nextTick / microtask starvation",
+              "r3.chua": "yield with setImmediate instead",
+              "r4.chan": "in-memory state split across processes",
+              "r4.chua": "move the state to a shared store (Redis)",
+              "r5.chan": "timing-dependent ordering",
+              "r5.chua": "express the order with await"
+            },
+            "giaiThich": "<p>Read the symptom that separates them. Everything stops and the heartbeat is late ⇒ the JS thread is busy computing (2.4) ⇒ worker/queue (2.5). Only pool-backed calls (fs, crypto) slow down while the heartbeat is fine ⇒ the 4-thread pool is full (2.4). 100% CPU, no I/O, no error ⇒ a priority queue that never empties (2.3) ⇒ setImmediate yields. Counts multiplied by the number of processes ⇒ per-process memory (2.5) ⇒ shared store. Works fast, fails slow ⇒ ordering by timer (2.2) ⇒ await.</p><p><i>VI: Đọc triệu chứng phân biệt chúng. Mọi thứ dừng và nhịp tim trễ ⇒ luồng JS bận tính (2.4) ⇒ worker/hàng đợi (2.5). Chỉ lời gọi dùng nhóm luồng (fs, crypto) chậm trong khi nhịp tim ổn ⇒ nhóm 4 luồng đầy (2.4). CPU 100%, không I/O, không lỗi ⇒ hàng ưu tiên không bao giờ rỗng (2.3) ⇒ nhường bằng setImmediate. Số đếm nhân theo số process ⇒ bộ nhớ riêng từng process (2.5) ⇒ store chung. Nhanh thì chạy, chậm thì hỏng ⇒ sắp thứ tự bằng hẹn giờ (2.2) ⇒ await.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Answering \"cluster\" for a blocking endpoint — it only spreads the freeze.|||Trả lời \"cluster\" cho endpoint chặn — chỉ rải sự đông cứng ra."
+        },
+        {
+          "loi": "Confusing pool exhaustion with blocking: the JS thread is free there, so the heartbeat looks healthy.|||Nhầm cạn nhóm luồng với chặn: ở đó luồng JS rảnh nên nhịp tim trông khoẻ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event-loop lag",
+          "vi": "độ trễ event loop",
+          "giaiThich": "How late callbacks fire; the number that says \"the main thread is busy\"."
+        },
+        {
+          "en": "load shedding",
+          "vi": "cắt tải",
+          "giaiThich": "Refusing some requests quickly (503) so the process can recover instead of queueing forever."
+        },
+        {
+          "en": "202 Accepted",
+          "vi": "202 Accepted",
+          "giaiThich": "The request was accepted; the work happens later — poll a status URL."
+        },
+        {
+          "en": "decide and delegate",
+          "vi": "quyết định rồi giao việc",
+          "giaiThich": "A request validates, stores and hands heavy work elsewhere instead of computing it."
+        },
+        {
+          "en": "thread pool exhaustion",
+          "vi": "cạn nhóm luồng",
+          "giaiThich": "All 4 libuv threads busy: fs/dns/crypto calls queue although the JS thread is free."
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.2 — Shed load when the loop is lagging",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "load shedding",
+        "event-loop lag",
+        "middleware factory"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>When the loop is already late, accepting more requests only makes the queue longer (lesson 2.4: the 200th user waits ten minutes). Write the middleware factory <code>shedWhenLagging({ getLagMs, maxLagMs, retryAfterS })</code>:</p>\n<ul><li><code>getLagMs()</code> returns the current event-loop lag in ms (in production: the p99 of <code>monitorEventLoopDelay</code> minus its resolution).</li>\n<li>If the lag is <b>above</b> <code>maxLagMs</code> ⇒ answer immediately: status <b>503</b>, header <code>Retry-After</code> = <code>String(retryAfterS)</code>, body <code>{ error: 'overloaded', lagMs }</code> (the measured value, rounded to a whole number). Do not call <code>next</code>.</li>\n<li>Otherwise call <code>next()</code>.</li>\n<li>Never shed <code>GET /health</code> (the load balancer must keep seeing the process) — it always goes to <code>next()</code>.</li>\n<li>Count what you did: the middleware function has a property <code>stats = { passed, shed }</code>.</li></ul><pre>const shed = shedWhenLagging({ getLagMs: () =&gt; 640.4, maxLagMs: 200, retryAfterS: 5 });\nshed({ method: 'GET', path: '/notes' }, res, next);   // 503, Retry-After: '5', { error: 'overloaded', lagMs: 640 }\nshed.stats;                                            // { passed: 0, shed: 1 }</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>503 + Retry-After + body when lag &gt; max; otherwise <code>next()</code>.</li>\n  <li><code>GET /health</code> is never shed.</li>\n  <li>Read the lag on every request (it changes); keep <code>stats</code> per middleware instance.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi vòng lặp đã trễ, nhận thêm request chỉ làm hàng dài thêm. Viết factory middleware shedWhenLagging({ getLagMs, maxLagMs, retryAfterS }): lag LỚN HƠN maxLagMs ⇒ trả ngay 503, header Retry-After = String(retryAfterS), body { error: 'overloaded', lagMs } (làm tròn), không gọi next; ngược lại next(). Không bao giờ cắt GET /health. Đếm vào thuộc tính stats = { passed, shed } của hàm middleware.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>503 + Retry-After + body khi lag > max; ngược lại next().</li>\n  <li>GET /health không bao giờ bị cắt.</li>\n  <li>Đọc lag ở mỗi request (nó thay đổi); stats riêng cho từng middleware.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shedWhenLagging({ getLagMs: () => 640.4, maxLagMs: 200, retryAfterS: 5 })({ method: 'GET', path: '/notes' }, res, next)",
+          "output": "status 503 · Retry-After \"5\" · {\"error\":\"overloaded\",\"lagMs\":640}",
+          "explanation": "next is not called.|||Không gọi next."
+        }
+      ],
+      "hintsJson": [
+        "Create the arrow first, attach the counters, return it: <code>const mw = (req, res, next) =&gt; {…}; mw.stats = { passed: 0, shed: 0 }; return mw;</code>|||Tạo arrow trước, gắn bộ đếm, rồi trả: const mw = (req, res, next) => {…}; mw.stats = { passed: 0, shed: 0 }; return mw;",
+        "Inside: health check first, then <code>const lag = getLagMs();</code>, then the comparison.|||Bên trong: kiểm health trước, rồi const lag = getLagMs();, rồi so sánh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function shedWhenLagging({ getLagMs, maxLagMs, retryAfterS }) {\n  const lag = getLagMs();\n  return (req, res, next) => {\n    if (lag >= maxLagMs) {\n      res.status(503).json({ error: 'overloaded' });\n    }\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Refuse cheaply while the loop is late, instead of queueing more work behind it.\nfunction shedWhenLagging({ getLagMs, maxLagMs, retryAfterS }) {\n  const mw = (req, res, next) => {\n    // the load balancer must always see the process: never shed the health check\n    if (req.method === 'GET' && req.path === '/health') {\n      mw.stats.passed += 1;\n      return next();\n    }\n    const lag = getLagMs(); // read NOW: the lag changes from request to request\n    if (lag > maxLagMs) {\n      mw.stats.shed += 1;\n      return res\n        .status(503)\n        .set('Retry-After', String(retryAfterS))\n        .json({ error: 'overloaded', lagMs: Math.round(lag) });\n    }\n    mw.stats.passed += 1;\n    next();\n  };\n  mw.stats = { passed: 0, shed: 0 }; // per middleware instance (closure-free counters on the function)\n  return mw;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Load shedding is the backend version of \"fail fast\": a cheap 503 with Retry-After costs microseconds, while accepting the request would add it to a queue behind seconds of blocked work. The factory closes over the configuration and the counters (lesson 1.2), reads the lag at request time so it reacts as the loop recovers, and exempts the health check so the orchestrator does not kill a process that is merely busy.</p>",
+      "solutionExplanationHtmlVi": "<p>Cắt tải là \"hỏng nhanh\" của backend: một 503 rẻ kèm Retry-After tốn vài micro giây, còn nhận request là nhét nó vào hàng sau vài giây việc bị chặn. Factory giữ cấu hình và bộ đếm trong closure (bài 1.2), đọc lag lúc có request để phản ứng khi vòng lặp hồi lại, và chừa health check để bộ điều phối không giết một process chỉ đang bận.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "high lag ⇒ 503 + Retry-After, next not called",
+              "vi": "lag cao ⇒ 503 + Retry-After, không next"
+            },
+            "goi": "[res.statusCode, res.headers, res.body, next.calls, shed.stats]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst shed = shedWhenLagging({ getLagMs: () => 640.4, maxLagMs: 200, retryAfterS: 5 }); const res = mkRes(); const next = mkNext(); shed({ method: 'GET', path: '/notes' }, res, next);",
+            "mongDoi": [
+              503,
+              {
+                "retry-after": "5"
+              },
+              {
+                "error": "overloaded",
+                "lagMs": 640
+              },
+              [],
+              {
+                "passed": 0,
+                "shed": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "normal lag ⇒ next()",
+              "vi": "lag bình thường ⇒ next()"
+            },
+            "goi": "[next.calls, res.sent, shed.stats]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst shed = shedWhenLagging({ getLagMs: () => 3, maxLagMs: 200, retryAfterS: 5 }); const res = mkRes(); const next = mkNext(); shed({ method: 'POST', path: '/notes' }, res, next);",
+            "mongDoi": [
+              [
+                "next()"
+              ],
+              0,
+              {
+                "passed": 1,
+                "shed": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "GET /health is never shed",
+              "vi": "GET /health không bao giờ bị cắt"
+            },
+            "goi": "[next.calls, res.sent]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst shed = shedWhenLagging({ getLagMs: () => 5000, maxLagMs: 200, retryAfterS: 5 }); const res = mkRes(); const next = mkNext(); shed({ method: 'GET', path: '/health' }, res, next);",
+            "mongDoi": [
+              [
+                "next()"
+              ],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[out, shed.stats]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nlet lag = 10; const shed = shedWhenLagging({ getLagMs: () => lag, maxLagMs: 100, retryAfterS: 2 }); const out = []; for (const l of [10, 100, 100.4, 250, 99]) { lag = l; const res = mkRes(); const next = mkNext(); shed({ method: 'GET', path: '/notes/1' }, res, next); out.push(next.calls.length ? 'next' : res.statusCode + ':' + res.headers['retry-after'] + ':' + res.body.lagMs); }",
+            "mongDoi": [
+              [
+                "next",
+                "next",
+                "503:2:100",
+                "503:2:250",
+                "next"
+              ],
+              {
+                "passed": 3,
+                "shed": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[a.stats, b.stats]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst a = shedWhenLagging({ getLagMs: () => 999, maxLagMs: 1, retryAfterS: 1 }); const b = shedWhenLagging({ getLagMs: () => 0, maxLagMs: 1, retryAfterS: 1 }); a({ method: 'GET', path: '/x' }, mkRes(), mkNext()); b({ method: 'GET', path: '/x' }, mkRes(), mkNext()); a({ method: 'POST', path: '/health' }, mkRes(), mkNext());",
+            "mongDoi": [
+              {
+                "passed": 0,
+                "shed": 2
+              },
+              {
+                "passed": 1,
+                "shed": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reading the lag once when the factory runs — the middleware then sheds forever or never.|||Đọc lag một lần lúc factory chạy — middleware khi đó cắt mãi hoặc không bao giờ cắt."
+        },
+        {
+          "loi": "Shedding <code>/health</code> — the load balancer marks the process dead and sends its traffic to the other processes, which are just as loaded.|||Cắt cả /health — bộ cân bằng tải đánh dấu process chết và dồn lưu lượng sang các process khác, vốn cũng đang quá tải."
+        },
+        {
+          "loi": "<code>&gt;=</code> instead of <code>&gt;</code> — exactly at the threshold the request should still pass.|||>= thay vì > — đúng ngưỡng thì request vẫn phải qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event-loop lag",
+          "vi": "độ trễ event loop",
+          "giaiThich": "How late callbacks fire; the number that says \"the main thread is busy\"."
+        },
+        {
+          "en": "load shedding",
+          "vi": "cắt tải",
+          "giaiThich": "Refusing some requests quickly (503) so the process can recover instead of queueing forever."
+        },
+        {
+          "en": "202 Accepted",
+          "vi": "202 Accepted",
+          "giaiThich": "The request was accepted; the work happens later — poll a status URL."
+        },
+        {
+          "en": "decide and delegate",
+          "vi": "quyết định rồi giao việc",
+          "giaiThich": "A request validates, stores and hands heavy work elsewhere instead of computing it."
+        },
+        {
+          "en": "thread pool exhaustion",
+          "vi": "cạn nhóm luồng",
+          "giaiThich": "All 4 libuv threads busy: fs/dns/crypto calls queue although the JS thread is free."
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.3 — Decide and delegate: thumbnails without blocking the request",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "202 Accepted",
+        "fire-and-forget with error ownership",
+        "worker pool"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"On this site, video and image processing never happens inside a request. The upload endpoint stores the file and returns immediately; the heavy work runs elsewhere.\" Build that endpoint pair. <code>createThumbnailApi({ store, pool })</code> returns two async handlers:</p>\n<ul>\n<li><code>upload(req, res)</code>: <code>req.body.file</code> missing ⇒ <b>400</b> <code>{ error: 'file is required' }</code>. Otherwise <code>const id = await store.save(req.body.file)</code>, record the job as <code>'queued'</code>, hand it to the pool <b>without awaiting it</b> — <code>pool.run(id)</code> resolves when the thumbnail is made, rejects if it fails — and answer <b>202</b> <code>{ id, status: 'queued' }</code> right away.</li>\n<li>When the pool job starts it is <code>'processing'</code> (the pool calls the optional <code>onStart</code> you pass as a second argument: <code>pool.run(id, () =&gt; …)</code>); when it resolves ⇒ <code>'done'</code> with <code>thumbUrl</code> set to the resolved value; when it rejects ⇒ <code>'failed'</code> with <code>error</code> = the message. A failed thumbnail must never become an unhandled rejection.</li>\n<li><code>status(req, res)</code>: <code>req.params.id</code> unknown ⇒ <b>404</b> <code>{ error: 'not found' }</code>; otherwise 200 with the job: <code>{ id, status }</code> plus <code>thumbUrl</code> or <code>error</code> when present.</li>\n</ul><pre>await api.upload({ body: { file: 'cat.png' } }, res);   // 202 { id: 'f1', status: 'queued' }  — after ~20 ms (the save)\n// the thumbnail takes 2 000 ms in the pool…\nawait api.status({ params: { id: 'f1' } }, res);       // 200 { id: 'f1', status: 'processing' }\n// …later\nawait api.status({ params: { id: 'f1' } }, res);       // 200 { id: 'f1', status: 'done', thumbUrl: '/thumbs/f1.webp' }</pre><p>The tests give you a real pool of size 2 (the one from lesson 2.5) whose fake worker takes 2 000 ms per thumbnail and fails for files named <code>broken.png</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>upload</code> answers 202 after the save — it never waits for the thumbnail.</li>\n  <li>Job status moves queued → processing → done | failed; failures are caught.</li>\n  <li>400 for a missing file, 404 for an unknown id; each request answered exactly once.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Trên web này, xử lý ảnh/video không bao giờ diễn ra trong request. Endpoint upload lưu tệp và trả về ngay; việc nặng chạy ở nơi khác.\" Dựng cặp endpoint đó: upload — thiếu file ⇒ 400; ngược lại await store.save, ghi việc 'queued', giao cho pool KHÔNG await, trả 202 { id, status: 'queued' } ngay. Việc bắt đầu ⇒ 'processing' (onStart); resolve ⇒ 'done' kèm thumbUrl; reject ⇒ 'failed' kèm error; không bao giờ để thành unhandled rejection. status — id lạ ⇒ 404, ngược lại 200 với việc đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>upload trả 202 sau khi lưu — không bao giờ chờ thumbnail.</li>\n  <li>Trạng thái đi queued → processing → done | failed; lỗi được bắt.</li>\n  <li>400 khi thiếu tệp, 404 khi id lạ; mỗi request trả lời đúng một lần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await api.upload({ body: { file: 'cat.png' } }, res)",
+          "output": "status 202 · {\"id\":\"f1\",\"status\":\"queued\"} after 20 ms",
+          "explanation": "The starter answers after 2 020 ms.|||Code khởi đầu trả lời sau 2 020 ms."
+        }
+      ],
+      "hintsJson": [
+        "Keep <code>const jobs = new Map();</code> in the factory (closure). A job is a plain object you update in place: <code>{ id, status }</code>.|||Giữ const jobs = new Map(); trong factory (closure). Mỗi việc là object bạn cập nhật tại chỗ: { id, status }.",
+        "Fire and forget, but with an owner for the error: <code>pool.run(id, () =&gt; { job.status = 'processing'; }).then((url) =&gt; {…}, (err) =&gt; {…});</code> — no <code>await</code> in front.|||Bắn rồi quên, nhưng lỗi có chủ: pool.run(id, onStart).then(onDone, onFail); — không có await phía trước.",
+        "For <code>status</code>, copy the job into the response (<code>{ ...job }</code>) so the client never holds your live object.|||Với status, chép việc vào response ({ ...job }) để client không giữ object đang sống của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createThumbnailApi({ store, pool }) {\n  const jobs = new Map();\n  return {\n    async upload(req, res) {\n      const id = await store.save(req.body.file);\n      jobs.set(id, { id, status: 'queued' });\n      const url = await pool.run(id);\n      jobs.set(id, { id, status: 'done', thumbUrl: url });\n      res.status(202).json(jobs.get(id));\n    },\n    async status(req, res) {\n      res.json(jobs.get(req.params.id));\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// \"A request should decide and delegate, not compute.\"\nfunction createThumbnailApi({ store, pool }) {\n  const jobs = new Map(); // id -> { id, status, thumbUrl?, error? }  (private to this API)\n\n  return {\n    async upload(req, res) {\n      const file = req.body && req.body.file;\n      if (!file) return res.status(400).json({ error: 'file is required' });\n\n      const id = await store.save(file);          // cheap and must succeed: await it\n      const job = { id, status: 'queued' };\n      jobs.set(id, job);\n\n      // heavy work: hand it to the bounded pool and DO NOT await it…\n      pool.run(id, () => { job.status = 'processing'; })\n        .then(\n          (thumbUrl) => { job.status = 'done'; job.thumbUrl = thumbUrl; },\n          // …but give the error an owner, so a broken file never becomes an unhandled rejection\n          (err) => { job.status = 'failed'; job.error = err.message; },\n        );\n\n      return res.status(202).json({ id, status: 'queued' }); // answered after the save only\n    },\n\n    async status(req, res) {\n      const job = jobs.get(req.params.id);\n      if (!job) return res.status(404).json({ error: 'not found' });\n      return res.status(200).json({ ...job });     // a copy, not our live object\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The request does the cheap, must-succeed part (validate, store) and returns <b>202</b> with an id; the expensive part goes to a bounded pool that runs at its own pace. Because <code>pool.run</code> is not awaited, the handler finishes in the time of one save — but the Promise still has an owner: the rejection handler records <code>failed</code>, so no error escapes. The status object is updated as the job moves, and <code>status</code> returns a copy, which is the polling half of the pattern. In chapter 13 the in-memory Map becomes a real queue that survives restarts.</p>",
+      "solutionExplanationHtmlVi": "<p>Request làm phần rẻ và bắt buộc thành công (kiểm, lưu) rồi trả 202 kèm id; phần đắt giao cho một nhóm có giới hạn chạy theo nhịp của nó. Vì không await pool.run, handler xong trong thời gian một lần lưu — nhưng Promise vẫn có chủ: hàm xử lý reject ghi failed nên không lỗi nào thoát ra. Object trạng thái cập nhật theo việc, và status trả bản sao — nửa \"hỏi trạng thái\" của mẫu. Ở chương 13, Map trong RAM thành hàng đợi thật sống qua khởi động lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "upload answers 202 after the save (~20 ms), not after the thumbnail",
+              "vi": "upload trả 202 sau khi lưu (~20 ms)"
+            },
+            "goi": "[res.statusCode, res.body, Date.now() - t]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(2); const res = mkRes(); const t = Date.now(); await api.upload({ body: { file: 'cat.png' } }, res);",
+            "mongDoi": [
+              202,
+              {
+                "id": "f1",
+                "status": "queued"
+              },
+              20
+            ]
+          },
+          {
+            "moTa": {
+              "en": "status: processing, then done with thumbUrl",
+              "vi": "status: processing rồi done kèm thumbUrl"
+            },
+            "goi": "[r1.body, r2.statusCode, r2.body]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(2); await api.upload({ body: { file: 'cat.png' } }, mkRes()); await sleep(100); const r1 = mkRes(); await api.status({ params: { id: 'f1' } }, r1); await sleep(2000); const r2 = mkRes(); await api.status({ params: { id: 'f1' } }, r2);",
+            "mongDoi": [
+              {
+                "id": "f1",
+                "status": "processing"
+              },
+              200,
+              {
+                "id": "f1",
+                "status": "done",
+                "thumbUrl": "/thumbs/f1.webp"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "400 for a missing file, 404 for an unknown id",
+              "vi": "400 khi thiếu tệp, 404 khi id lạ"
+            },
+            "goi": "[a.statusCode, a.body, b.statusCode, b.body]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(2); const a = mkRes(); await api.upload({ body: {} }, a); const b = mkRes(); await api.status({ params: { id: \"nope\" } }, b);",
+            "mongDoi": [
+              400,
+              {
+                "error": "file is required"
+              },
+              404,
+              {
+                "error": "not found"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "a broken file ends as failed, no unhandled rejection",
+              "vi": "tệp hỏng thành failed, không unhandled rejection"
+            },
+            "goi": "r.body",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(1); await api.upload({ body: { file: 'broken.png' } }, mkRes()); await sleep(2500); const r = mkRes(); await api.status({ params: { id: 'f1' } }, r);",
+            "mongDoi": {
+              "id": "f1",
+              "status": "failed",
+              "error": "cannot decode f1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[s, r3.body]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(2); for (const f of ['a.png', 'b.png', 'c.png']) await api.upload({ body: { file: f } }, mkRes()); await sleep(500); const s = []; for (const id of ['f1', 'f2', 'f3']) { const r = mkRes(); await api.status({ params: { id } }, r); s.push(r.body.status); } await sleep(4000); const r3 = mkRes(); await api.status({ params: { id: 'f3' } }, r3);",
+            "mongDoi": [
+              [
+                "processing",
+                "processing",
+                "queued"
+              ],
+              {
+                "id": "f3",
+                "status": "done",
+                "thumbUrl": "/thumbs/f3.webp"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[r.sent, s2.body.status]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; };\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkStore = () => { let n = 0; return { save: (file) => new Promise((ok) => setTimeout(() => ok('f' + ++n), 20)) }; };\nconst mkPool = (size, ms = 2000) => { let running = 0; const q = []; const files = {};\n  const pump = () => { while (running < size && q.length) { const it = q.shift(); running++; if (it.onStart) it.onStart();\n    setTimeout(() => { running--; files[it.id] === 'broken.png' ? it.ko(new Error('cannot decode ' + it.id)) : it.ok('/thumbs/' + it.id + '.webp'); pump(); }, ms); } };\n  return { files, run: (id, onStart) => new Promise((ok, ko) => { q.push({ id, onStart, ok, ko }); pump(); }) }; };\nconst mkApi = (size) => { const store = mkStore(); const pool = mkPool(size); const save = store.save; store.save = (f) => save(f).then((id) => { pool.files[id] = f; return id; }); return createThumbnailApi({ store, pool }); };\nconst api = mkApi(2); const r = mkRes(); await api.upload({ body: { file: 'x.png' } }, r); const s = mkRes(); await api.status({ params: { id: 'f1' } }, s); s.body.status = 'hacked'; const s2 = mkRes(); await api.status({ params: { id: 'f1' } }, s2);",
+            "mongDoi": [
+              1,
+              "processing"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<code>await pool.run(id)</code> inside <code>upload</code> (the starter) — the user waits 2 s and the request holds a connection for the whole job: computing inside the request with extra steps.|||await pool.run(id) trong upload (code khởi đầu) — người dùng chờ 2 s, request giữ kết nối suốt việc: vẫn là tính toán trong request."
+        },
+        {
+          "loi": "Calling <code>pool.run(id)</code> with no <code>.catch</code>/second <code>then</code> argument — a broken file becomes an unhandled rejection, which ends the process in Node 22 (lesson 1.4).|||Gọi pool.run(id) không có .catch — tệp hỏng thành unhandled rejection, làm process thoát ở Node 22 (bài 1.4)."
+        },
+        {
+          "loi": "Answering 202 before <code>store.save</code> finished — the id may not exist yet when the client polls.|||Trả 202 trước khi store.save xong — client hỏi trạng thái có thể chưa có id."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event-loop lag",
+          "vi": "độ trễ event loop",
+          "giaiThich": "How late callbacks fire; the number that says \"the main thread is busy\"."
+        },
+        {
+          "en": "load shedding",
+          "vi": "cắt tải",
+          "giaiThich": "Refusing some requests quickly (503) so the process can recover instead of queueing forever."
+        },
+        {
+          "en": "202 Accepted",
+          "vi": "202 Accepted",
+          "giaiThich": "The request was accepted; the work happens later — poll a status URL."
+        },
+        {
+          "en": "decide and delegate",
+          "vi": "quyết định rồi giao việc",
+          "giaiThich": "A request validates, stores and hands heavy work elsewhere instead of computing it."
+        },
+        {
+          "en": "thread pool exhaustion",
+          "vi": "cạn nhóm luồng",
+          "giaiThich": "All 4 libuv threads busy: fs/dns/crypto calls queue although the JS thread is free."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,774 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-14-3-supertest",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-14-3-supertest"
+  },
+  "exercises": [
+    {
+      "title": "14.3 · What the HTTP layer can and cannot prove",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HTTP tests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Status codes are a contract (chapter 6). A contract nobody re-checks is a comment. These questions are about making it executable.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã trạng thái là một hợp đồng (chương 6). Hợp đồng không ai kiểm lại chỉ là một dòng chú thích. Các câu này nói về việc biến nó thành thứ chạy được.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Where do the rules live — in the router, or below it?|||Luật nằm ở đâu — trong router, hay bên dưới?",
+        "Answer vs effect.|||Câu trả lời so với tác dụng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.3 · What the HTTP layer can and cannot prove\n\nAnswer in the answer panel (no code needed).\n\n1. Why split src/app.mjs (createApp) from src/server.mjs (listen)?Vì sao tách src/app.mjs (createApp) khỏi src/server.mjs (listen)?\n2. Every HTTP test uses createApp({ service: fakeService }) because it is fast. What does the 409 test then prove?Mọi test HTTP dùng createApp({ service: fakeService }) vì nhanh. Khi đó test 409 chứng minh được gì?\n3. The IDOR regression test asserts 404 AND reads the row back to check the title did not change. Why the second assertion?Test hồi quy IDOR khẳng định 404 VÀ đọc lại dòng để kiểm tiêu đề không đổi. Vì sao cần khẳng định thứ hai?\n4. Why not expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?Vì sao không viết expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?\n5. const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — what is wrong?const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — sai ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.3 · What the HTTP layer can and cannot prove — answer key\n\n1. Why split src/app.mjs (createApp) from src/server.mjs (listen)?Vì sao tách src/app.mjs (createApp) khỏi src/server.mjs (listen)?\n   Answer: c) A file that calls listen() at import time cannot be imported by a test; the factory also takes its dependencies as arguments\n   One test file can run the whole app against a fake service, another against a real database — without a single environment variable.VI: Một tệp test chạy cả app với service giả, tệp khác với CSDL thật — không cần biến môi trường nào.\n\n2. Every HTTP test uses createApp({ service: fakeService }) because it is fast. What does the 409 test then prove?Mọi test HTTP dùng createApp({ service: fakeService }) vì nhanh. Khi đó test 409 chứng minh được gì?\n   Answer: c) Only that Express forwards a 409 — nothing about your rules\n   The rules you care about (duplicates, ownership, validation) live below the route. Wire the real service and a real DB for rule tests; a fake only for cases you cannot produce, like “the DB is down ⇒ 503”.VI: Các luật bạn quan tâm (trùng, chủ sở hữu, kiểm hợp lệ) nằm dưới route. Nối service thật và CSDL thật cho test luật; chỉ dùng đồ giả cho ca không tạo được, như \"CSDL sập ⇒ 503\".\n\n3. The IDOR regression test asserts 404 AND reads the row back to check the title did not change. Why the second assertion?Test hồi quy IDOR khẳng định 404 VÀ đọc lại dòng để kiểm tiêu đề không đổi. Vì sao cần khẳng định thứ hai?\n   Answer: a) A future refactor could answer 404 and still perform the update — assert the effect, not only the answer\n   The real IDOR found while writing chapter 11 (commit a8e998e): authentication once at the handshake, no authorization per event. Authentication once, authorization every time.VI: IDOR thật tìm thấy khi viết chương 11 (commit a8e998e): xác thực một lần lúc bắt tay, không phân quyền ở từng sự kiện. Xác thực một lần, phân quyền mọi lần.\n\n4. Why not expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?Vì sao không viết expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?\n   Answer: c) It breaks on the next migration, not on a broken rule\n   toMatchObject({ slug: 'ghi-chu-dau-tien' }) states the rule; a whole-body snapshot states everything, including what nobody promised.VI: toMatchObject({ slug: 'ghi-chu-dau-tien' }) nói lên luật; so cả body thì nói mọi thứ, kể cả thứ không ai hứa.\n\n5. const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — what is wrong?const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — sai ở đâu?\n   Answer: b) res is the unawaited request, not the response\n   Await every supertest call — an un-awaited one produces exactly the silent green test of 14.2.VI: Await mọi lời gọi supertest — cái thiếu await sinh ra đúng loại test xanh câm của 14.2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A file that calls listen() at import time cannot be imported by a test; the factory also takes its dependencies as arguments</p><p>One test file can run the whole app against a fake service, another against a real database — without a single environment variable.</p><p><i>VI: Một tệp test chạy cả app với service giả, tệp khác với CSDL thật — không cần biến môi trường nào.</i></p></li><li><p><b>c)</b> Only that Express forwards a 409 — nothing about your rules</p><p>The rules you care about (duplicates, ownership, validation) live below the route. Wire the real service and a real DB for rule tests; a fake only for cases you cannot produce, like “the DB is down ⇒ 503”.</p><p><i>VI: Các luật bạn quan tâm (trùng, chủ sở hữu, kiểm hợp lệ) nằm dưới route. Nối service thật và CSDL thật cho test luật; chỉ dùng đồ giả cho ca không tạo được, như \"CSDL sập ⇒ 503\".</i></p></li><li><p><b>a)</b> A future refactor could answer 404 and still perform the update — assert the effect, not only the answer</p><p>The real IDOR found while writing chapter 11 (commit a8e998e): authentication once at the handshake, no authorization per event. Authentication once, authorization every time.</p><p><i>VI: IDOR thật tìm thấy khi viết chương 11 (commit a8e998e): xác thực một lần lúc bắt tay, không phân quyền ở từng sự kiện. Xác thực một lần, phân quyền mọi lần.</i></p></li><li><p><b>c)</b> It breaks on the next migration, not on a broken rule</p><p>toMatchObject({ slug: 'ghi-chu-dau-tien' }) states the rule; a whole-body snapshot states everything, including what nobody promised.</p><p><i>VI: toMatchObject({ slug: 'ghi-chu-dau-tien' }) nói lên luật; so cả body thì nói mọi thứ, kể cả thứ không ai hứa.</i></p></li><li><p><b>b)</b> res is the unawaited request, not the response</p><p>Await every supertest call — an un-awaited one produces exactly the silent green test of 14.2.</p><p><i>VI: Await mọi lời gọi supertest — cái thiếu await sinh ra đúng loại test xanh câm của 14.2.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why split src/app.mjs (createApp) from src/server.mjs (listen)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao tách src/app.mjs (createApp) khỏi src/server.mjs (listen)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "listen() is slower when called from a module that also defines routes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express refuses to start two servers in one process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A file that calls listen() at import time cannot be imported by a test; the factory also takes its dependencies as arguments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "supertest only accepts apps exported as default"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One test file can run the whole app against a fake service, another against a real database — without a single environment variable.</p><p><i>VI: Một tệp test chạy cả app với service giả, tệp khác với CSDL thật — không cần biến môi trường nào.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Every HTTP test uses createApp({ service: fakeService }) because it is fast. What does the 409 test then prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi test HTTP dùng createApp({ service: fakeService }) vì nhanh. Khi đó test 409 chứng minh được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That the whole stack works, because the router is real"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing, because a fake service cannot throw"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only that Express forwards a 409 — nothing about your rules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That duplicate slugs are rejected by the database constraint"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The rules you care about (duplicates, ownership, validation) live below the route. Wire the real service and a real DB for rule tests; a fake only for cases you cannot produce, like “the DB is down ⇒ 503”.</p><p><i>VI: Các luật bạn quan tâm (trùng, chủ sở hữu, kiểm hợp lệ) nằm dưới route. Nối service thật và CSDL thật cho test luật; chỉ dùng đồ giả cho ca không tạo được, như \"CSDL sập ⇒ 503\".</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The IDOR regression test asserts 404 AND reads the row back to check the title did not change. Why the second assertion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Test hồi quy IDOR khẳng định 404 VÀ đọc lại dòng để kiểm tiêu đề không đổi. Vì sao cần khẳng định thứ hai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A future refactor could answer 404 and still perform the update — assert the effect, not only the answer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To measure that the database is faster than the HTTP layer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because a 404 alone does not prove the route exists"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because supertest may return a cached 404"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The real IDOR found while writing chapter 11 (commit a8e998e): authentication once at the handshake, no authorization per event. Authentication once, authorization every time.</p><p><i>VI: IDOR thật tìm thấy khi viết chương 11 (commit a8e998e): xác thực một lần lúc bắt tay, không phân quyền ở từng sự kiện. Xác thực một lần, phân quyền mọi lần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why not expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao không viết expect(res.body).toEqual({ id, title, slug, body, authorId, createdAt, … })?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "toEqual cannot compare objects coming from JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because ids are random in a test database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It breaks on the next migration, not on a broken rule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It makes the test 10× slower"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>toMatchObject({ slug: 'ghi-chu-dau-tien' }) states the rule; a whole-body snapshot states everything, including what nobody promised.</p><p><i>VI: toMatchObject({ slug: 'ghi-chu-dau-tien' }) nói lên luật; so cả body thì nói mọi thứ, kể cả thứ không ai hứa.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — what is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>const res = request(app).post('/notes').send(x); expect(res.status).toBe(201) — sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — supertest is synchronous"
+              },
+              {
+                "ma": "b",
+                "noiDung": "res is the unawaited request, not the response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "request() needs a URL, not an app"
+              },
+              {
+                "ma": "d",
+                "noiDung": "post() must come after send()"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Await every supertest call — an un-awaited one produces exactly the silent green test of 14.2.</p><p><i>VI: Await mọi lời gọi supertest — cái thiếu await sinh ra đúng loại test xanh câm của 14.2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mocking the service in every route test and believing the rules are covered.|||Giả service trong mọi test route rồi tin rằng các luật đã được phủ."
+        },
+        {
+          "loi": "Checking only the status of a refused write.|||Chỉ kiểm mã trạng thái của một lần ghi bị từ chối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "app factory",
+          "vi": "hàm dựng app",
+          "giaiThich": "createApp({ service, auth }) trả app mà không listen"
+        },
+        {
+          "en": "IDOR",
+          "vi": "tham chiếu đối tượng trực tiếp không an toàn",
+          "giaiThich": "đoán id của người khác và đọc/sửa được tài nguyên của họ"
+        },
+        {
+          "en": "regression test",
+          "vi": "test hồi quy",
+          "giaiThich": "ghim một lỗi đã sửa để nó không quay lại"
+        }
+      ]
+    },
+    {
+      "title": "14.3 · Assemble the app in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Express"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Put the pieces of createApp({ service, auth }) in the order they must be registered. An HTTP test exists precisely to catch these assembly mistakes, which no unit test can see.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các mảnh của createApp({ service, auth }) theo thứ tự phải đăng ký. Test HTTP tồn tại chính là để bắt các lỗi lắp ráp này, thứ không unit test nào thấy được.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What does each step need from the steps before it?|||Mỗi bước cần gì từ các bước trước nó?",
+        "Errors flow forward: their handler must come after whatever throws.|||Lỗi chảy về phía trước: bộ xử lý của chúng phải đứng sau thứ ném ra lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.3 · Assemble the app in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. Registration order inside createAppThứ tự đăng ký bên trong createApp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.3 · Assemble the app in the right order — answer key\n\n1. Registration order inside createAppThứ tự đăng ký bên trong createApp\n   Answer: m5) const app = express()  →  m1) app.use(express.json()) — without it req.body is undefined and every create looks like a validation error  →  m4) app.use((req, res, next) => { req.user = auth(req); next(); })  →  m2) app.post('/notes', …) and app.patch('/notes/:id', …)  →  m3) app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message })) — four arguments, LAST  →  m6) return app — and only server.mjs calls listen()\n   Body parsing before anything reads the body, identity before the routes that need it, routes, then the error handler last (Express recognises it by its four parameters and only reaches it after the routes). None of the twelve unit tests of 14.2 would notice a missing express.json(), an error handler registered first, or a route mounted at /note.VI: Phân tích body trước mọi thứ đọc body, danh tính trước các route cần nó, các route, rồi bộ xử lý lỗi cuối cùng (Express nhận ra nó nhờ bốn tham số và chỉ tới nó sau các route). Không unit test nào trong mười hai cái của 14.2 nhận ra được express.json() bị thiếu, bộ xử lý lỗi đăng ký trước, hay route gắn ở /note.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Body parsing before anything reads the body, identity before the routes that need it, routes, then the error handler last (Express recognises it by its four parameters and only reaches it after the routes). None of the twelve unit tests of 14.2 would notice a missing express.json(), an error handler registered first, or a route mounted at /note.</p><p><i>VI: Phân tích body trước mọi thứ đọc body, danh tính trước các route cần nó, các route, rồi bộ xử lý lỗi cuối cùng (Express nhận ra nó nhờ bốn tham số và chỉ tới nó sau các route). Không unit test nào trong mười hai cái của 14.2 nhận ra được express.json() bị thiếu, bộ xử lý lỗi đăng ký trước, hay route gắn ở /note.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Registration order inside createApp</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự đăng ký bên trong createApp</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "app.use(express.json()) — without it req.body is undefined and every create looks like a validation error"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "app.post('/notes', …) and app.patch('/notes/:id', …)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message })) — four arguments, LAST"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "app.use((req, res, next) => { req.user = auth(req); next(); })"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "const app = express()"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "return app — and only server.mjs calls listen()"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m1",
+              "m4",
+              "m2",
+              "m3",
+              "m6"
+            ],
+            "giaiThich": "<p>Body parsing before anything reads the body, identity before the routes that need it, routes, then the error handler last (Express recognises it by its four parameters and only reaches it after the routes). None of the twelve unit tests of 14.2 would notice a missing express.json(), an error handler registered first, or a route mounted at /note.</p><p><i>VI: Phân tích body trước mọi thứ đọc body, danh tính trước các route cần nó, các route, rồi bộ xử lý lỗi cuối cùng (Express nhận ra nó nhờ bốn tham số và chỉ tới nó sau các route). Không unit test nào trong mười hai cái của 14.2 nhận ra được express.json() bị thiếu, bộ xử lý lỗi đăng ký trước, hay route gắn ở /note.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "The error handler first: errors from the routes never reach it and Express answers its default HTML 500.|||Bộ xử lý lỗi đứng đầu: lỗi của route không bao giờ tới nó và Express trả trang HTML 500 mặc định."
+        },
+        {
+          "loi": "listen() inside createApp: importing the app in a test starts a server on a real port.|||listen() bên trong createApp: import app trong test là khởi một server trên cổng thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error-handling middleware",
+          "vi": "middleware xử lý lỗi",
+          "giaiThich": "(err, req, res, next) — bốn tham số, đăng ký sau cùng"
+        }
+      ]
+    },
+    {
+      "title": "14.3 · Make the HTTP contract executable",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "HTTP tests",
+        "contract",
+        "IDOR"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p>The Notes API’s HTTP layer is <code>createApp({ service, auth })</code> in <code>src/app.js</code>, wired here to the REAL service and an in-memory repository that has the real table’s unique constraint. <code>src/mini-http.js</code> gives you <code>request(app)</code> with the supertest API (<code>await request(app).post('/notes').set('x-user-id', '7').send({ title })</code> → <code>{ status, body }</code>). The contract:</p><ul><li>no <code>x-user-id</code> ⇒ <code>401</code>;</li><li>an empty or over-long title ⇒ <code>422</code> with <code>body.fields[0].path === 'title'</code>;</li><li><code>POST /notes</code> ⇒ <code>201</code> with the slug; a duplicate title ⇒ <code>409</code>;</li><li><code>GET</code> / <code>PATCH /notes/:id</code> of somebody else’s note ⇒ <code>404</code> — and the note is NOT changed (read it back as its owner).</li></ul><p>Write <code>src/app.test.js</code> that kills all 7 mutants.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>5</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>7</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n  <li>Build a fresh app in beforeEach so tests do not see each other’s notes.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tầng HTTP của Notes API là <code>createApp({ service, auth })</code> trong <code>src/app.js</code>, ở đây nối với service THẬT và một repository trong bộ nhớ có ràng buộc duy nhất như bảng thật. <code>src/mini-http.js</code> cho bạn <code>request(app)</code> với API của supertest (<code>await request(app).post('/notes').set('x-user-id', '7').send({ title })</code> → <code>{ status, body }</code>). Hợp đồng:</p><ul><li>không có <code>x-user-id</code> ⇒ <code>401</code>;</li><li>tiêu đề rỗng hoặc quá dài ⇒ <code>422</code> với <code>body.fields[0].path === 'title'</code>;</li><li><code>POST /notes</code> ⇒ <code>201</code> kèm slug; tiêu đề trùng ⇒ <code>409</code>;</li><li><code>GET</code> / <code>PATCH /notes/:id</code> ghi chú của người khác ⇒ <code>404</code> — và ghi chú KHÔNG bị đổi (đọc lại dưới tên chủ của nó).</li></ul><p>Viết <code>src/app.test.js</code> diệt cả 7 đột biến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>5</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>7</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n  <li>Dựng app mới trong beforeEach để các test không thấy ghi chú của nhau.</li>\n</ul>",
+      "inputSpec": "src/app.test.js — import { request } from './mini-http.js' and createApp, headerAuth from './app.js'.|||src/app.test.js — import { request } từ './mini-http.js' và createApp, headerAuth từ './app.js'.",
+      "outputSpec": "Green on the correct app; red on each mutant.|||Xanh với app đúng; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: the service updates the note, THEN answers 404|||Đột biến: service cập nhật ghi chú, RỒI mới trả 404",
+          "output": "Killed by: after the 404 for user 8, GET /notes/:id as user 7 → expect(res.body.title).toBe('Cua an')|||Bị diệt bởi: sau 404 cho user 8, GET /notes/:id dưới user 7 → expect(res.body.title).toBe('Cua an')",
+          "explanation": "A status-only test passes on this mutant: the answer is right and the data is wrong.|||Test chỉ kiểm mã trạng thái qua được đột biến này: câu trả lời đúng mà dữ liệu sai."
+        }
+      ],
+      "hintsJson": [
+        "Setup: let app; beforeEach(() => { app = createApp({ service: createNotesService(createMemoryRepo()), auth: headerAuth }); });|||Chuẩn bị: let app; beforeEach(() => { app = createApp({ service: createNotesService(createMemoryRepo()), auth: headerAuth }); });",
+        "For the 422 contract assert the SHAPE too: expect(res.body.fields[0].path).toBe('title').|||Với hợp đồng 422 hãy khẳng định cả HÌNH DẠNG: expect(res.body.fields[0].path).toBe('title').",
+        "The IDOR test: user 7 creates; user 8 PATCHes → 404; user 7 GETs → the title is still the original.|||Test IDOR: user 7 tạo; user 8 PATCH → 404; user 7 GET → tiêu đề vẫn là bản gốc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/app.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, beforeEach } from 'vitest';\nimport { request } from './mini-http.js';\nimport { createApp, headerAuth } from './app.js';\nimport { createNotesService } from './notes.service.js';\nimport { createMemoryRepo } from './notes.repo.js';\n\nlet app;\nbeforeEach(() => { app = createApp({ service: createNotesService(createMemoryRepo()), auth: headerAuth }); });\n\n// Five tests, all green — and most mutants survive them.\ndescribe('POST /notes', () => {\n  it('creates a note', async () => {\n    const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Ghi chu dau tien' });\n    expect(res.status).toBe(201);\n  });\n\n  it('refuses an anonymous request', async () => {\n    const res = await request(app).post('/notes').send({ title: 'Hi' });\n    expect(res.status).not.toBe(201);\n  });\n\n  it('refuses an empty title', async () => {\n    const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: '' });\n    expect(res.status).not.toBe(201);\n  });\n\n  it('refuses a duplicate', async () => {\n    await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Trung slug' });\n    const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Trung slug' });\n    expect(res.status).not.toBe(201);\n  });\n});\n\ndescribe('PATCH /notes/:id', () => {\n  it('refuses somebody else', async () => {\n    const created = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Cua an' });\n    const res = await request(app).patch('/notes/' + created.body.id).set('x-user-id', '8').send({ title: 'hack' });\n    expect(res.status).not.toBe(200);\n  });\n});\n"
+        },
+        {
+          "name": "src/app.js",
+          "language": "javascript",
+          "code": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+        },
+        {
+          "name": "src/mini-http.js",
+          "language": "javascript",
+          "code": "/**\n * mini-http.js — a tiny Express look-alike plus a supertest look-alike, so the HTTP layer can be tested\n * inside the browser grader (no sockets). Same shapes as the real thing:\n *   const app = express(); app.use(json()); app.post('/notes', mw, handler); app.use((err, req, res, next) => …)\n *   const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Hi' });  // res.status, res.body\n */\nexport function json() {\n  return (req, res, next) => {\n    if (req.rawBody != null && /application\\/json/.test(req.headers['content-type'] || '')) {\n      try { req.body = JSON.parse(req.rawBody); } catch (e) { return next(Object.assign(new Error('BAD_JSON'), { status: 400 })); }\n    }\n    next();\n  };\n}\n\nfunction match(pattern, path) {\n  const a = pattern.split('/'), b = path.split('/');\n  if (a.length !== b.length) return null;\n  const params = {};\n  for (let i = 0; i < a.length; i++) {\n    if (a[i].startsWith(':')) params[a[i].slice(1)] = decodeURIComponent(b[i]);\n    else if (a[i] !== b[i]) return null;\n  }\n  return params;\n}\n\nfunction makeRes(done) {\n  const res = { statusCode: 200, headers: {}, body: undefined };\n  res.status = (s) => { res.statusCode = s; return res; };\n  res.set = (k, v) => { res.headers[String(k).toLowerCase()] = String(v); return res; };\n  res.json = (b) => { res.body = JSON.parse(JSON.stringify(b)); res.headers['content-type'] = 'application/json'; done(); return res; };\n  res.send = (b) => { res.body = b; done(); return res; };\n  return res;\n}\n\nexport function express() {\n  const stack = [];\n  const route = (method) => (path, ...fns) => { for (const fn of fns) stack.push({ method, path, fn }); return app; };\n  const app = {\n    use(fn) { stack.push({ fn }); return app; },\n    get: route('GET'), post: route('POST'), patch: route('PATCH'), delete: route('DELETE'),\n    handle(req) {\n      return new Promise((resolve) => {\n        const res = makeRes(() => resolve(res));\n        let i = 0;\n        const next = (err) => {\n          while (i < stack.length) {\n            const layer = stack[i++];\n            if (layer.method) {\n              if (layer.method !== req.method) continue;\n              const params = match(layer.path, req.path);\n              if (!params) continue;\n              req.params = params;\n            }\n            const isErrorHandler = layer.fn.length === 4;\n            if (err ? !isErrorHandler : isErrorHandler) continue;\n            try {\n              const r = err ? layer.fn(err, req, res, next) : layer.fn(req, res, next);\n              if (r && typeof r.then === 'function') r.then(undefined, next);   // async handlers: a rejection is next(err)\n            } catch (e) { next(e); }\n            return;\n          }\n          if (err) res.status(500).send('Internal Server Error');\n          else res.status(404).send('Cannot ' + req.method + ' ' + req.path);\n        };\n        next();\n      });\n    },\n  };\n  return app;\n}\n\nexport function request(app) {\n  const make = (method) => (path) => {\n    const req = { method, path, headers: {}, rawBody: null, body: undefined, params: {} };\n    const chain = {\n      set(k, v) { req.headers[String(k).toLowerCase()] = String(v); return chain; },\n      send(body) { req.rawBody = JSON.stringify(body); req.headers['content-type'] = 'application/json'; return chain; },\n      then(ok, no) { return app.handle(req).then((res) => ({ status: res.statusCode, body: res.body, headers: res.headers })).then(ok, no); },\n    };\n    return chain;\n  };\n  return { get: make('GET'), post: make('POST'), patch: make('PATCH'), delete: make('DELETE') };\n}\n"
+        },
+        {
+          "name": "src/notes.service.js",
+          "language": "javascript",
+          "code": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\nexport function createNotesService(repo) {\n  const own = async (actor, id) => {\n    const note = await repo.findById(id);\n    if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);   // 404, never 403\n    return note;\n  };\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n    get: (actor, id) => own(actor, id),\n    async update(actor, id, patch) {\n      const note = await own(actor, id);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/notes.repo.js",
+          "language": "javascript",
+          "code": "/** An in-memory repository WITH the unique constraint of the real table (notes_slug_key ⇒ 409). */\nexport function createMemoryRepo() {\n  const rows = new Map();\n  let last = 0;\n  const copy = (n) => (n ? { ...n } : null);\n  return {\n    async findById(id) { return copy(rows.get(id)); },\n    async insert(n) {\n      if ([...rows.values()].some((r) => r.slug === n.slug)) throw Object.assign(new Error('SLUG_TAKEN'), { status: 409 });\n      const row = { id: ++last, ...n };\n      rows.set(row.id, row);\n      return copy(row);\n    },\n    async update(id, patch) { const r = rows.get(id); if (!r) return null; Object.assign(r, patch); return copy(r); },\n  };\n}\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/app.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, beforeEach } from 'vitest';\nimport { request } from './mini-http.js';\nimport { createApp, headerAuth } from './app.js';\nimport { createNotesService } from './notes.service.js';\nimport { createMemoryRepo } from './notes.repo.js';\n\nlet app;\n// a fresh app (and a fresh table) for every test — no test sees another one's notes\nbeforeEach(() => { app = createApp({ service: createNotesService(createMemoryRepo()), auth: headerAuth }); });\nconst as = (id) => ({ post: (p, b) => request(app).post(p).set('x-user-id', String(id)).send(b), patch: (p, b) => request(app).patch(p).set('x-user-id', String(id)).send(b), get: (p) => request(app).get(p).set('x-user-id', String(id)) });\n\ndescribe('POST /notes', () => {\n  // kills \"mounted at /note\" and \"body parser missing\" — and asserts the field the contract promises\n  it('201 with the slug derived from the title', async () => {\n    const res = await as(7).post('/notes', { title: 'Ghi chu dau tien' });\n    expect(res.status).toBe(201);\n    expect(res.body).toMatchObject({ slug: 'ghi-chu-dau-tien', authorId: 7 });\n  });\n\n  // the exact status — kills \"403 for anonymous\"\n  it('401 without a user', async () => {\n    const res = await request(app).post('/notes').send({ title: 'Hi' });\n    expect(res.status).toBe(401);\n  });\n\n  // the shape of the error is contract too — kills \"fields: []\" and \"empty title accepted\"\n  it('422 with the failing field named', async () => {\n    const res = await as(7).post('/notes', { title: '' });\n    expect(res.status).toBe(422);\n    expect(res.body.fields[0].path).toBe('title');\n  });\n\n  it('422 for a title longer than 200 characters', async () => {\n    const res = await as(7).post('/notes', { title: 'x'.repeat(201) });\n    expect(res.status).toBe(422);\n  });\n\n  // kills \"every error becomes 500\"\n  it('409 on a duplicate slug', async () => {\n    expect((await as(7).post('/notes', { title: 'Trung slug' })).status).toBe(201);\n    expect((await as(7).post('/notes', { title: 'Trung slug' })).status).toBe(409);\n  });\n});\n\ndescribe('another user’s note', () => {\n  it('GET answers 404, not 403', async () => {\n    const created = await as(7).post('/notes', { title: 'Rieng tu' });\n    expect((await as(8).get('/notes/' + created.body.id)).status).toBe(404);\n  });\n\n  // the test that pays for the whole file: the ANSWER and the EFFECT\n  it('PATCH answers 404 and the note is not changed', async () => {\n    const created = await as(7).post('/notes', { title: 'Cua an' });\n    const res = await as(8).patch('/notes/' + created.body.id, { title: 'hack' });\n    expect(res.status).toBe(404);\n    const back = await as(7).get('/notes/' + created.body.id);\n    expect(back.body.title).toBe('Cua an');\n  });\n});\n"
+        },
+        {
+          "name": "src/app.js",
+          "language": "javascript",
+          "code": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+        },
+        {
+          "name": "src/mini-http.js",
+          "language": "javascript",
+          "code": "/**\n * mini-http.js — a tiny Express look-alike plus a supertest look-alike, so the HTTP layer can be tested\n * inside the browser grader (no sockets). Same shapes as the real thing:\n *   const app = express(); app.use(json()); app.post('/notes', mw, handler); app.use((err, req, res, next) => …)\n *   const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Hi' });  // res.status, res.body\n */\nexport function json() {\n  return (req, res, next) => {\n    if (req.rawBody != null && /application\\/json/.test(req.headers['content-type'] || '')) {\n      try { req.body = JSON.parse(req.rawBody); } catch (e) { return next(Object.assign(new Error('BAD_JSON'), { status: 400 })); }\n    }\n    next();\n  };\n}\n\nfunction match(pattern, path) {\n  const a = pattern.split('/'), b = path.split('/');\n  if (a.length !== b.length) return null;\n  const params = {};\n  for (let i = 0; i < a.length; i++) {\n    if (a[i].startsWith(':')) params[a[i].slice(1)] = decodeURIComponent(b[i]);\n    else if (a[i] !== b[i]) return null;\n  }\n  return params;\n}\n\nfunction makeRes(done) {\n  const res = { statusCode: 200, headers: {}, body: undefined };\n  res.status = (s) => { res.statusCode = s; return res; };\n  res.set = (k, v) => { res.headers[String(k).toLowerCase()] = String(v); return res; };\n  res.json = (b) => { res.body = JSON.parse(JSON.stringify(b)); res.headers['content-type'] = 'application/json'; done(); return res; };\n  res.send = (b) => { res.body = b; done(); return res; };\n  return res;\n}\n\nexport function express() {\n  const stack = [];\n  const route = (method) => (path, ...fns) => { for (const fn of fns) stack.push({ method, path, fn }); return app; };\n  const app = {\n    use(fn) { stack.push({ fn }); return app; },\n    get: route('GET'), post: route('POST'), patch: route('PATCH'), delete: route('DELETE'),\n    handle(req) {\n      return new Promise((resolve) => {\n        const res = makeRes(() => resolve(res));\n        let i = 0;\n        const next = (err) => {\n          while (i < stack.length) {\n            const layer = stack[i++];\n            if (layer.method) {\n              if (layer.method !== req.method) continue;\n              const params = match(layer.path, req.path);\n              if (!params) continue;\n              req.params = params;\n            }\n            const isErrorHandler = layer.fn.length === 4;\n            if (err ? !isErrorHandler : isErrorHandler) continue;\n            try {\n              const r = err ? layer.fn(err, req, res, next) : layer.fn(req, res, next);\n              if (r && typeof r.then === 'function') r.then(undefined, next);   // async handlers: a rejection is next(err)\n            } catch (e) { next(e); }\n            return;\n          }\n          if (err) res.status(500).send('Internal Server Error');\n          else res.status(404).send('Cannot ' + req.method + ' ' + req.path);\n        };\n        next();\n      });\n    },\n  };\n  return app;\n}\n\nexport function request(app) {\n  const make = (method) => (path) => {\n    const req = { method, path, headers: {}, rawBody: null, body: undefined, params: {} };\n    const chain = {\n      set(k, v) { req.headers[String(k).toLowerCase()] = String(v); return chain; },\n      send(body) { req.rawBody = JSON.stringify(body); req.headers['content-type'] = 'application/json'; return chain; },\n      then(ok, no) { return app.handle(req).then((res) => ({ status: res.statusCode, body: res.body, headers: res.headers })).then(ok, no); },\n    };\n    return chain;\n  };\n  return { get: make('GET'), post: make('POST'), patch: make('PATCH'), delete: make('DELETE') };\n}\n"
+        },
+        {
+          "name": "src/notes.service.js",
+          "language": "javascript",
+          "code": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\nexport function createNotesService(repo) {\n  const own = async (actor, id) => {\n    const note = await repo.findById(id);\n    if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);   // 404, never 403\n    return note;\n  };\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n    get: (actor, id) => own(actor, id),\n    async update(actor, id, patch) {\n      const note = await own(actor, id);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/notes.repo.js",
+          "language": "javascript",
+          "code": "/** An in-memory repository WITH the unique constraint of the real table (notes_slug_key ⇒ 409). */\nexport function createMemoryRepo() {\n  const rows = new Map();\n  let last = 0;\n  const copy = (n) => (n ? { ...n } : null);\n  return {\n    async findById(id) { return copy(rows.get(id)); },\n    async insert(n) {\n      if ([...rows.values()].some((r) => r.slug === n.slug)) throw Object.assign(new Error('SLUG_TAKEN'), { status: 409 });\n      const row = { id: ++last, ...n };\n      rows.set(row.id, row);\n      return copy(row);\n    },\n    async update(id, patch) { const r = rows.get(id); if (!r) return null; Object.assign(r, patch); return copy(r); },\n  };\n}\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each mutant is a real assembly or contract bug: 403 for anonymous, a 422 without the field name, a route mounted at /note, an error handler that flattens everything to 500, a missing body parser, and the IDOR that answers 404 but writes anyway. Only tests through the HTTP layer see them, and only exact assertions (the status, the field path, the row read back) kill them. This is the level that would have caught commit a8e998e: authentication once, authorization every time.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi đột biến là một lỗi lắp ráp hoặc hợp đồng có thật: 403 cho người vô danh, 422 không có tên trường, route gắn ở /note, bộ xử lý lỗi dẹp mọi thứ thành 500, thiếu bộ phân tích body, và IDOR trả 404 mà vẫn ghi. Chỉ test qua tầng HTTP mới thấy chúng, và chỉ khẳng định chính xác (mã, đường dẫn trường, dòng đọc lại) mới diệt được. Đây là tầng lẽ ra đã bắt được commit a8e998e: xác thực một lần, phân quyền mọi lần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n",
+          "src/mini-http.js": "/**\n * mini-http.js — a tiny Express look-alike plus a supertest look-alike, so the HTTP layer can be tested\n * inside the browser grader (no sockets). Same shapes as the real thing:\n *   const app = express(); app.use(json()); app.post('/notes', mw, handler); app.use((err, req, res, next) => …)\n *   const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Hi' });  // res.status, res.body\n */\nexport function json() {\n  return (req, res, next) => {\n    if (req.rawBody != null && /application\\/json/.test(req.headers['content-type'] || '')) {\n      try { req.body = JSON.parse(req.rawBody); } catch (e) { return next(Object.assign(new Error('BAD_JSON'), { status: 400 })); }\n    }\n    next();\n  };\n}\n\nfunction match(pattern, path) {\n  const a = pattern.split('/'), b = path.split('/');\n  if (a.length !== b.length) return null;\n  const params = {};\n  for (let i = 0; i < a.length; i++) {\n    if (a[i].startsWith(':')) params[a[i].slice(1)] = decodeURIComponent(b[i]);\n    else if (a[i] !== b[i]) return null;\n  }\n  return params;\n}\n\nfunction makeRes(done) {\n  const res = { statusCode: 200, headers: {}, body: undefined };\n  res.status = (s) => { res.statusCode = s; return res; };\n  res.set = (k, v) => { res.headers[String(k).toLowerCase()] = String(v); return res; };\n  res.json = (b) => { res.body = JSON.parse(JSON.stringify(b)); res.headers['content-type'] = 'application/json'; done(); return res; };\n  res.send = (b) => { res.body = b; done(); return res; };\n  return res;\n}\n\nexport function express() {\n  const stack = [];\n  const route = (method) => (path, ...fns) => { for (const fn of fns) stack.push({ method, path, fn }); return app; };\n  const app = {\n    use(fn) { stack.push({ fn }); return app; },\n    get: route('GET'), post: route('POST'), patch: route('PATCH'), delete: route('DELETE'),\n    handle(req) {\n      return new Promise((resolve) => {\n        const res = makeRes(() => resolve(res));\n        let i = 0;\n        const next = (err) => {\n          while (i < stack.length) {\n            const layer = stack[i++];\n            if (layer.method) {\n              if (layer.method !== req.method) continue;\n              const params = match(layer.path, req.path);\n              if (!params) continue;\n              req.params = params;\n            }\n            const isErrorHandler = layer.fn.length === 4;\n            if (err ? !isErrorHandler : isErrorHandler) continue;\n            try {\n              const r = err ? layer.fn(err, req, res, next) : layer.fn(req, res, next);\n              if (r && typeof r.then === 'function') r.then(undefined, next);   // async handlers: a rejection is next(err)\n            } catch (e) { next(e); }\n            return;\n          }\n          if (err) res.status(500).send('Internal Server Error');\n          else res.status(404).send('Cannot ' + req.method + ' ' + req.path);\n        };\n        next();\n      });\n    },\n  };\n  return app;\n}\n\nexport function request(app) {\n  const make = (method) => (path) => {\n    const req = { method, path, headers: {}, rawBody: null, body: undefined, params: {} };\n    const chain = {\n      set(k, v) { req.headers[String(k).toLowerCase()] = String(v); return chain; },\n      send(body) { req.rawBody = JSON.stringify(body); req.headers['content-type'] = 'application/json'; return chain; },\n      then(ok, no) { return app.handle(req).then((res) => ({ status: res.statusCode, body: res.body, headers: res.headers })).then(ok, no); },\n    };\n    return chain;\n  };\n  return { get: make('GET'), post: make('POST'), patch: make('PATCH'), delete: make('DELETE') };\n}\n",
+          "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\nexport function createNotesService(repo) {\n  const own = async (actor, id) => {\n    const note = await repo.findById(id);\n    if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);   // 404, never 403\n    return note;\n  };\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n    get: (actor, id) => own(actor, id),\n    async update(actor, id, patch) {\n      const note = await own(actor, id);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n",
+          "src/notes.repo.js": "/** An in-memory repository WITH the unique constraint of the real table (notes_slug_key ⇒ 409). */\nexport function createMemoryRepo() {\n  const rows = new Map();\n  let last = 0;\n  const copy = (n) => (n ? { ...n } : null);\n  return {\n    async findById(id) { return copy(rows.get(id)); },\n    async insert(n) {\n      if ([...rows.values()].some((r) => r.slug === n.slug)) throw Object.assign(new Error('SLUG_TAKEN'), { status: 409 });\n      const row = { id: ++last, ...n };\n      rows.set(row.id, row);\n      return copy(row);\n    },\n    async update(id, patch) { const r = rows.get(id); if (!r) return null; Object.assign(r, patch); return copy(r); },\n  };\n}\n",
+          "src/slug.js": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        },
+        "toiThieuTest": 5,
+        "timeoutMs": 4000,
+        "tepTest": "src/app.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 5 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: anonymous gets 403",
+            "goiY": "no x-user-id must be exactly 401 · thiếu x-user-id phải đúng 401",
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(403).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: 422 without the field name",
+            "goiY": "assert the shape: res.body.fields[0].path === 'title' · khẳng định hình dạng lỗi",
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: route mounted at /note",
+            "goiY": "a valid POST /notes must be 201 · POST /notes hợp lệ phải 201",
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/note', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: every error becomes 500",
+            "goiY": "a duplicate title must be 409 · tiêu đề trùng phải là 409",
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: body parser missing",
+            "goiY": "a valid create must be 201 — without the parser req.body is undefined · tạo hợp lệ phải 201",
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.trim() === '' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: PATCH writes first, answers 404 after",
+            "goiY": "after the 404, read the note back as its owner: the title must be unchanged · sau 404, đọc lại dưới tên chủ: tiêu đề không đổi",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\nexport function createNotesService(repo) {\n  const own = async (actor, id) => {\n    const note = await repo.findById(id);\n    if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);   // 404, never 403\n    return note;\n  };\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n    get: (actor, id) => own(actor, id),\n    async update(actor, id, patch) {\n      const raw = await repo.findById(id); if (raw) await repo.update(id, { title: patch.title ?? raw.title }); const note = await own(actor, id);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M7: empty title reaches the service (400 instead of 422)",
+            "goiY": "an empty title must be 422 at the edge, not 400 from the service · tiêu đề rỗng phải 422 ngay ở cửa",
+            "an": true,
+            "ma": {
+              "src/app.js": "import { express, json } from './mini-http.js';\n\n/** Tests and the dev server identify the user with a header; production uses the JWT middleware of chapter 8. */\nexport const headerAuth = (req) => (req.headers['x-user-id'] ? { id: Number(req.headers['x-user-id']) } : null);\n\n/** Assembles the app — never listens. server.js is the only file that calls listen(). */\nexport function createApp({ service, auth }) {\n  const app = express();\n  app.use(json());\n  app.use((req, res, next) => { req.user = auth(req); next(); });\n\n  const requireUser = (req, res, next) => (req.user ? next() : res.status(401).json({ error: 'UNAUTHENTICATED' }));\n  const validate = (req, res, next) => {\n    const t = req.body && req.body.title;\n    if (typeof t !== 'string' || t.length > 200) {\n      return res.status(422).json({ error: 'VALIDATION', fields: [{ path: 'title', message: 'title must be 1–200 characters' }] });\n    }\n    next();\n  };\n\n  app.post('/notes', requireUser, validate, async (req, res) => { res.status(201).json(await service.create(req.user, req.body)); });\n  app.get('/notes/:id', requireUser, async (req, res) => { res.json(await service.get(req.user, Number(req.params.id))); });\n  app.patch('/notes/:id', requireUser, validate, async (req, res) => { res.json(await service.update(req.user, Number(req.params.id), req.body)); });\n\n  app.use((err, req, res, _next) => res.status(err.status ?? 500).json({ error: err.message }));\n  return app;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "const res = request(app).post(…) without await: res.status is undefined and the expect compares nothing useful.|||const res = request(app).post(…) thiếu await: res.status là undefined và expect chẳng so được gì hữu ích."
+        },
+        {
+          "loi": "expect(res.status).not.toBe(201) for the anonymous case: a 403, a 404 and a 500 all pass. Assert the exact contract: 401.|||expect(res.status).not.toBe(201) cho ca vô danh: 403, 404 hay 500 đều qua. Khẳng định đúng hợp đồng: 401."
+        },
+        {
+          "loi": "One shared app for all tests: the duplicate-title test passes or fails depending on test order.|||Một app dùng chung cho mọi test: test tiêu đề trùng xanh hay đỏ tuỳ thứ tự chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "contract assertion",
+          "vi": "khẳng định hợp đồng",
+          "giaiThich": "mã + các trường mà endpoint hứa"
+        },
+        {
+          "en": "IDOR",
+          "vi": "IDOR",
+          "giaiThich": "đọc/sửa tài nguyên của người khác bằng cách đoán id"
+        }
+      ]
+    },
+    {
+      "title": "14.3 · One error handler, one contract",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "error handling",
+        "contract"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The 409 test of 14.4 answered 500 four times out of five because a PostgreSQL error carried a code but no status. Write the error side of the contract in one place:</p><ul><li><code>toHttpError(err)</code> → <code>{ status, body }</code>:<ul><li>an error with a numeric <code>status</code> (4xx/5xx) ⇒ that status, <code>{ error: err.message }</code>;</li><li>a validation error (<code>err.name === 'ZodError'</code>, with <code>err.issues = [{ path: ['title'], message }]</code>) ⇒ <code>422</code>, <code>{ error: 'VALIDATION', fields: [{ path: 'title', message }] }</code> (path joined with <code>'.'</code>);</li><li>a PostgreSQL unique violation (<code>err.code === '23505'</code>) ⇒ <code>409 { error: 'CONFLICT' }</code>;</li><li>anything else ⇒ <code>500 { error: 'INTERNAL' }</code> — never leak the message of an unexpected error.</li></ul></li><li><code>errorHandler(err, req, res, next)</code> — Express error middleware (four parameters): <code>res.status(status).json(body)</code>, and <code>console.error('unhandled', err.message)</code> for a 500 only.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>errorHandler has exactly four parameters (Express recognises error middleware by its arity).</li>\n  <li>Only 500s are logged; their message never reaches the client.</li>\n  <li>A status outside 400–599 is not trusted (treated as unexpected).</li>\n</ul>",
+      "problemHtmlVi": "<p>Test 409 của 14.4 trả 500 bốn lần trên năm vì lỗi PostgreSQL mang mã nhưng không có status. Viết phía lỗi của hợp đồng ở một chỗ:</p><ul><li><code>toHttpError(err)</code> → <code>{ status, body }</code>:<ul><li>lỗi có <code>status</code> dạng số (4xx/5xx) ⇒ đúng status đó, <code>{ error: err.message }</code>;</li><li>lỗi kiểm hợp lệ (<code>err.name === 'ZodError'</code>, với <code>err.issues = [{ path: ['title'], message }]</code>) ⇒ <code>422</code>, <code>{ error: 'VALIDATION', fields: [{ path: 'title', message }] }</code> (path nối bằng <code>'.'</code>);</li><li>vi phạm khoá duy nhất của PostgreSQL (<code>err.code === '23505'</code>) ⇒ <code>409 { error: 'CONFLICT' }</code>;</li><li>mọi thứ khác ⇒ <code>500 { error: 'INTERNAL' }</code> — không bao giờ để lộ thông điệp của lỗi ngoài dự kiến.</li></ul></li><li><code>errorHandler(err, req, res, next)</code> — middleware lỗi của Express (bốn tham số): <code>res.status(status).json(body)</code>, và <code>console.error('unhandled', err.message)</code> chỉ với 500.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>errorHandler có đúng bốn tham số (Express nhận ra middleware lỗi nhờ số tham số).</li>\n  <li>Chỉ lỗi 500 được ghi log; thông điệp của chúng không bao giờ tới client.</li>\n  <li>Status ngoài 400–599 không được tin (coi như ngoài dự kiến).</li>\n</ul>",
+      "inputSpec": "err — any thrown value · (err, req, res, next) from fake-http.js|||err — giá trị bị ném bất kỳ · (err, req, res, next) trong fake-http.js",
+      "outputSpec": "toHttpError → { status, body } · errorHandler → void",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });\n[toHttpError(Object.assign(new Error('NOT_FOUND'), { status: 404 })), toHttpError(zod([{ path: ['title'], message: 'Required' }]))]",
+          "output": "[{\"status\":404,\"body\":{\"error\":\"NOT_FOUND\"}},{\"status\":422,\"body\":{\"error\":\"VALIDATION\",\"fields\":[{\"path\":\"title\",\"message\":\"Required\"}]}}]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check in order: Number.isInteger(err.status) && 400 <= status <= 599 → ZodError → code 23505 → 500.|||Kiểm theo thứ tự: Number.isInteger(err.status) && 400 <= status <= 599 → ZodError → code 23505 → 500.",
+        "fields: err.issues.map((i) => ({ path: i.path.join('.'), message: i.message }))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function toHttpError(err) {\n  // Write your solution here\n  return { status: err.status ?? 500, body: { error: err.message } };\n}\n\nfunction errorHandler(err, req, res, next) {\n  const { status, body } = toHttpError(err);\n  res.status(status).json(body);\n}\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The ONE place where internal errors become the HTTP contract. */\nfunction toHttpError(err) {\n  const e = err && typeof err === 'object' ? err : {};\n  if (Number.isInteger(e.status) && e.status >= 400 && e.status <= 599) {\n    return { status: e.status, body: { error: e.message } };            // our own errors carry a status\n  }\n  if (e.name === 'ZodError' && Array.isArray(e.issues)) {               // validation: name the failing fields\n    return { status: 422, body: { error: 'VALIDATION', fields: e.issues.map((i) => ({ path: i.path.join('.'), message: i.message })) } };\n  }\n  if (e.code === '23505') return { status: 409, body: { error: 'CONFLICT' } };   // the constraint is the rule\n  return { status: 500, body: { error: 'INTERNAL' } };                  // never leak an unexpected message\n}\n\n/** Express error middleware — FOUR parameters, registered last. */\nfunction errorHandler(err, req, res, next) {\n  const { status, body } = toHttpError(err);\n  if (status === 500) console.error('unhandled', err && err.message);  // for you, not for the client\n  res.status(status).json(body);\n}\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One translation table from internal errors to the HTTP contract makes every route consistent: the shape of a 422 is part of the contract (the HTTP test asserts fields[0].path), a driver code becomes the status the client understands, and unexpected errors are logged for you and opaque to the client.</p>",
+      "solutionExplanationHtmlVi": "<p>Một bảng dịch duy nhất từ lỗi nội bộ sang hợp đồng HTTP làm mọi route nhất quán: hình dạng của 422 là một phần hợp đồng (test HTTP khẳng định fields[0].path), mã của driver thành mã trạng thái client hiểu, và lỗi ngoài dự kiến được ghi log cho bạn mà đóng kín với client.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Own error with a status; a validation error names the field",
+              "vi": "Lỗi của mình có status; lỗi kiểm hợp lệ nêu tên trường"
+            },
+            "goi": "[toHttpError(Object.assign(new Error('NOT_FOUND'), { status: 404 })), toHttpError(zod([{ path: ['title'], message: 'Required' }]))]",
+            "chuanBi": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });",
+            "mongDoi": [
+              {
+                "status": 404,
+                "body": {
+                  "error": "NOT_FOUND"
+                }
+              },
+              {
+                "status": 422,
+                "body": {
+                  "error": "VALIDATION",
+                  "fields": [
+                    {
+                      "path": "title",
+                      "message": "Required"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "23505 → 409 CONFLICT, nothing leaked, nothing logged",
+              "vi": "23505 → 409 CONFLICT, không lộ gì, không ghi log"
+            },
+            "goi": "[run(pg('23505', 'duplicate key value violates unique constraint \"notes_slug_key\"')), __log]",
+            "chuanBi": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });",
+            "mongDoi": [
+              [
+                409,
+                {
+                  "error": "CONFLICT"
+                }
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Unexpected → 500 INTERNAL, logged; four parameters",
+              "vi": "Ngoài dự kiến → 500 INTERNAL, có ghi log; bốn tham số"
+            },
+            "goi": "[run(new TypeError(\"Cannot read properties of undefined (reading 'id')\")), __log, errorHandler.length]",
+            "chuanBi": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });",
+            "mongDoi": [
+              [
+                500,
+                {
+                  "error": "INTERNAL"
+                }
+              ],
+              [
+                "unhandled Cannot read properties of undefined (reading 'id')"
+              ],
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[toHttpError(zod([{ path: ['tags', 0], message: 'Too long' }, { path: ['title'], message: 'Required' }])), toHttpError(Object.assign(new Error('weird'), { status: 200 })), toHttpError(Object.assign(new Error('teapot'), { status: '418' }))]",
+            "chuanBi": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });",
+            "mongDoi": [
+              {
+                "status": 422,
+                "body": {
+                  "error": "VALIDATION",
+                  "fields": [
+                    {
+                      "path": "tags.0",
+                      "message": "Too long"
+                    },
+                    {
+                      "path": "title",
+                      "message": "Required"
+                    }
+                  ]
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "INTERNAL"
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "INTERNAL"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[run(null), run('boom'), run(pg('22001', 'value too long for type character varying(200)'))]",
+            "chuanBi": "const run = (err) => { const res = mkRes(); errorHandler(err, mkReq(), res, mkNext()); return [res.statusCode, res.body]; };\nconst zod = (issues) => Object.assign(new Error('validation'), { name: 'ZodError', issues });\nconst pg = (code, message) => Object.assign(new Error(message), { code });",
+            "mongDoi": [
+              [
+                500,
+                {
+                  "error": "INTERNAL"
+                }
+              ],
+              [
+                500,
+                {
+                  "error": "INTERNAL"
+                }
+              ],
+              [
+                500,
+                {
+                  "error": "INTERNAL"
+                }
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "res.status(err.status ?? 500).json({ error: err.message }) for everything: a 23505 becomes a 500 that says “duplicate key value violates unique constraint notes_slug_key” — wrong code AND a schema leak.|||res.status(err.status ?? 500).json({ error: err.message }) cho mọi thứ: một lỗi 23505 thành 500 nói \"duplicate key value violates unique constraint notes_slug_key\" — sai mã VÀ lộ lược đồ."
+        },
+        {
+          "loi": "An error handler with three parameters: Express treats it as a normal middleware and never sends errors to it.|||Bộ xử lý lỗi có ba tham số: Express coi nó là middleware thường và không bao giờ gửi lỗi tới nó."
+        },
+        {
+          "loi": "throw null / throw \"x\": err.message on a non-object throws inside the error handler itself.|||throw null / throw \"x\": err.message trên thứ không phải object làm ném lỗi ngay trong bộ xử lý lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error middleware",
+          "vi": "middleware lỗi",
+          "giaiThich": "bốn tham số (err, req, res, next)"
+        },
+        {
+          "en": "23505",
+          "vi": "unique_violation",
+          "giaiThich": "mã PostgreSQL khi vi phạm khoá duy nhất"
+        }
+      ]
+    }
+  ]
+}

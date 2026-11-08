@@ -1,0 +1,497 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-lab-kien-truc",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-lab-kien-truc"
+  },
+  "exercises": [
+    {
+      "title": "Lab 18 · 1 — The architecture review meeting",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Your Notes API: 12 route files (5 call Prisma directly), notes.service ⇄ email.service, stats.service runs raw SQL on notes, two developers, 95% of request time in the database.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Notes API của bạn: 12 tệp route (5 tệp gọi Prisma trực tiếp), notes.service ⇄ email.service, stats.service chạy SQL thô trên bảng notes, hai lập trình viên, 95% thời gian request nằm ở CSDL.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask where an “everywhere” rule can be forgotten.|||Hỏi một luật “ở mọi nơi” có thể bị quên ở đâu.",
+        "Bring numbers to the split discussion.|||Mang con số tới cuộc bàn về tách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 18 · 1 — The architecture review meeting\n\nAnswer in the answer panel (no code needed).\n\n1. Product asks for soft-delete: deleted notes must disappear everywhere. What is the risk, and the first move?Sản phẩm yêu cầu soft-delete: ghi chú đã xoá phải biến mất ở mọi nơi. Rủi ro là gì, và bước đầu tiên?\n2. A colleague proposes splitting auth, notes and search into three services “so it scales”. Your answer with numbers?Một đồng nghiệp đề xuất tách auth, notes và search thành ba dịch vụ “để mở rộng”. Câu trả lời bằng số của bạn?\n3. Which items go into the review’s written record? (choose all that apply)Những gì đi vào biên bản của buổi review? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 18 · 1 — The architecture review meeting — answer key\n\n1. Product asks for soft-delete: deleted notes must disappear everywhere. What is the risk, and the first move?Sản phẩm yêu cầu soft-delete: ghi chú đã xoá phải biến mất ở mọi nơi. Rủi ro là gì, và bước đầu tiên?\n   Answer: d) Up to 5 route files plus stats’ raw SQL can miss the filter (an IDOR-shaped leak); route them through the notes service first\n   The cost of skipping the layer arrives exactly on the day a rule must apply everywhere. Measure first (which files), then make the service the only way in.VI: Cái giá của việc bỏ tầng đến đúng vào ngày một luật phải áp ở mọi nơi. Đo trước (tệp nào), rồi biến service thành lối vào duy nhất.\n\n2. A colleague proposes splitting auth, notes and search into three services “so it scales”. Your answer with numbers?Một đồng nghiệp đề xuất tách auth, notes và search thành ba dịch vụ “để mở rộng”. Câu trả lời bằng số của bạn?\n   Answer: b) No: none of the three signals holds, and each call would cost ~0.072 ms instead of 2 ns\n   Do a modular monolith (facades + table owners) instead; change your mind on a measured pain: a different scaling profile, a different cadence, or a separate team.VI: Hãy làm khối nguyên mô-đun (facade + chủ bảng); đổi ý khi có một nỗi đau đo được: khác cấu hình mở rộng, khác nhịp phát hành, hoặc một nhóm riêng.\n\n3. Which items go into the review’s written record? (choose all that apply)Những gì đi vào biên bản của buổi review? (chọn mọi câu đúng)\n   Answer: a) “Revisit when: a second process appears” next to the in-memory cache + b) An ADR for “modular monolith, not services”, with what we now cannot do + d) The list of the 5 route files that skip the service, as debt with its cost\n   Records live next to the code and say why; debt is listed by what it makes expensive. A line-count rule applied without judgement creates pointless refactoring (the seed file of 18.2).VI: Biên bản nằm cạnh mã và nói vì sao; nợ được liệt kê theo thứ nó làm đắt lên. Luật đếm dòng áp dụng không suy xét sinh ra tái cấu trúc vô ích (tệp seed của 18.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Up to 5 route files plus stats’ raw SQL can miss the filter (an IDOR-shaped leak); route them through the notes service first</p><p>The cost of skipping the layer arrives exactly on the day a rule must apply everywhere. Measure first (which files), then make the service the only way in.</p><p><i>VI: Cái giá của việc bỏ tầng đến đúng vào ngày một luật phải áp ở mọi nơi. Đo trước (tệp nào), rồi biến service thành lối vào duy nhất.</i></p></li><li><p><b>b)</b> No: none of the three signals holds, and each call would cost ~0.072 ms instead of 2 ns</p><p>Do a modular monolith (facades + table owners) instead; change your mind on a measured pain: a different scaling profile, a different cadence, or a separate team.</p><p><i>VI: Hãy làm khối nguyên mô-đun (facade + chủ bảng); đổi ý khi có một nỗi đau đo được: khác cấu hình mở rộng, khác nhịp phát hành, hoặc một nhóm riêng.</i></p></li><li><p><b>a)</b> “Revisit when: a second process appears” next to the in-memory cache + <b>b)</b> An ADR for “modular monolith, not services”, with what we now cannot do + <b>d)</b> The list of the 5 route files that skip the service, as debt with its cost</p><p>Records live next to the code and say why; debt is listed by what it makes expensive. A line-count rule applied without judgement creates pointless refactoring (the seed file of 18.2).</p><p><i>VI: Biên bản nằm cạnh mã và nói vì sao; nợ được liệt kê theo thứ nó làm đắt lên. Luật đếm dòng áp dụng không suy xét sinh ra tái cấu trúc vô ích (tệp seed của 18.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Product asks for soft-delete: deleted notes must disappear everywhere. What is the risk, and the first move?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm yêu cầu soft-delete: ghi chú đã xoá phải biến mất ở mọi nơi. Rủi ro là gì, và bước đầu tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Prisma middleware will apply it everywhere, so only the schema must change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None: deleted notes are rarely requested, so a missed filter is harmless"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Soft-delete needs a separate service, so split notes out of the monolith first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Up to 5 route files plus stats’ raw SQL can miss the filter (an IDOR-shaped leak); route them through the notes service first"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The cost of skipping the layer arrives exactly on the day a rule must apply everywhere. Measure first (which files), then make the service the only way in.</p><p><i>VI: Cái giá của việc bỏ tầng đến đúng vào ngày một luật phải áp ở mọi nơi. Đo trước (tệp nào), rồi biến service thành lối vào duy nhất.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A colleague proposes splitting auth, notes and search into three services “so it scales”. Your answer with numbers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đồng nghiệp đề xuất tách auth, notes và search thành ba dịch vụ “để mở rộng”. Câu trả lời bằng số của bạn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes: three services triple the throughput of an I/O-bound API like this one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No: none of the three signals holds, and each call would cost ~0.072 ms instead of 2 ns"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes, but only if each of the three services gets its own database from day one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No, because Node.js cannot run more than one service on the same machine"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Do a modular monolith (facades + table owners) instead; change your mind on a measured pain: a different scaling profile, a different cadence, or a separate team.</p><p><i>VI: Hãy làm khối nguyên mô-đun (facade + chủ bảng); đổi ý khi có một nỗi đau đo được: khác cấu hình mở rộng, khác nhịp phát hành, hoặc một nhóm riêng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which items go into the review’s written record? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những gì đi vào biên bản của buổi review? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Revisit when: a second process appears” next to the in-memory cache"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An ADR for “modular monolith, not services”, with what we now cannot do"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A rule that every file must be under 300 lines"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The list of the 5 route files that skip the service, as debt with its cost"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Records live next to the code and say why; debt is listed by what it makes expensive. A line-count rule applied without judgement creates pointless refactoring (the seed file of 18.2).</p><p><i>VI: Biên bản nằm cạnh mã và nói vì sao; nợ được liệt kê theo thứ nó làm đắt lên. Luật đếm dòng áp dụng không suy xét sinh ra tái cấu trúc vô ích (tệp seed của 18.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Splitting to fix coupling inside one codebase.|||Tách để chữa ghép nối bên trong một codebase."
+        },
+        {
+          "loi": "Leaving decisions in a chat thread.|||Để quyết định nằm trong một luồng chat."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "architecture review",
+          "vi": "review kiến trúc"
+        }
+      ]
+    },
+    {
+      "title": "Lab 18 · 2 — architectureReport(files): measure the Notes API like chapter 18 measured the website",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "architecture",
+        "measurement",
+        "graphs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One report that combines 18.1–18.3. <code>files</code> are <code>{ path, lines, imports, tables }</code>: <code>imports</code> are paths of other files of the repo, <code>tables</code> the tables the file queries directly. Routes are under <code>src/routes/</code>, services under <code>src/services/</code>. Return:</p><ul><li><code>routes</code> — number of route files;</li><li><code>routesSkippingService</code> — sorted paths of route files that query a table but import no service;</li><li><code>ratio</code> — service lines ÷ route lines, 1 decimal (<code>null</code> if no route lines);</li><li><code>topHub</code> — the file with the most distinct importers (ties by path A→Z) as <code>{ path, fanIn, fanOut }</code> (self-imports ignored; fan-out = distinct imports), or <code>null</code> if nothing is imported;</li><li><code>cycles</code> — sorted <code>\"a &lt;-&gt; b\"</code> for every pair importing each other (smaller path first);</li><li><code>mostSharedTable</code> — <code>{ table, places }</code> for the table queried by the most files (ties by name A→Z), or <code>null</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một báo cáo gộp 18.1–18.3. <code>files</code> là <code>{ path, lines, imports, tables }</code>: <code>imports</code> là đường dẫn các tệp khác của repo, <code>tables</code> là các bảng tệp truy vấn trực tiếp. Route nằm dưới <code>src/routes/</code>, service dưới <code>src/services/</code>. Trả về:</p><ul><li><code>routes</code> — số tệp route;</li><li><code>routesSkippingService</code> — đường dẫn (đã sắp) các tệp route truy vấn bảng mà không import service nào;</li><li><code>ratio</code> — số dòng service ÷ số dòng route, 1 chữ số (<code>null</code> nếu không có dòng route);</li><li><code>topHub</code> — tệp có nhiều nơi import khác nhau nhất (hoà theo path A→Z) dạng <code>{ path, fanIn, fanOut }</code> (bỏ tự-import; fan-out = số import khác nhau), hoặc <code>null</code> nếu không gì được import;</li><li><code>cycles</code> — <code>\"a &lt;-&gt; b\"</code> (đã sắp) cho mọi cặp import lẫn nhau (path nhỏ trước);</li><li><code>mostSharedTable</code> — <code>{ table, places }</code> cho bảng được nhiều tệp truy vấn nhất (hoà theo tên A→Z), hoặc <code>null</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "architectureReport([{\"path\":\"src/routes/notes.routes.ts\",\"lines\":160,\"imports\":[\"src/services/notes.service.ts\",\"src/middleware/auth.ts\"],\"tables\":[]},{\"path\":\"src/routes/categories.routes.ts\",\"lines\":40,\"imports\":[],\"tables\":[\"category\"]},{\"path\":\"src/routes/admin.routes.ts\",\"lines\":520,\"imports\":[\"src/middleware/auth.ts\"],\"tables\":[\"user\",\"note\"]},{\"path\":\"src/routes/stats.routes.ts\",\"lines\":90,\"imports\":[\"src/services/stats.service.ts\"],\"tables\":[]},{\"path\":\"src/services/notes.service.ts\",\"lines\":600,\"imports\":[\"src/services/email.service.ts\",\"src/services/pro.service.ts\"],\"tables\":[\"note\",\"user\"]},{\"path\":\"src/services/email.service.ts\",\"lines\":220,\"imports\":[\"src/services/notes.service.ts\"],\"tables\":[]},{\"path\":\"src/services/stats.service.ts\",\"lines\":180,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"note\"]},{\"path\":\"src/services/pro.service.ts\",\"lines\":120,\"imports\":[],\"tables\":[\"subscription\"]},{\"path\":\"src/middleware/auth.ts\",\"lines\":80,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"user\"]}])",
+          "output": "{\"routes\":4,\"routesSkippingService\":[\"src/routes/admin.routes.ts\",\"src/routes/categories.routes.ts\"],\"ratio\":1.4,\"topHub\":{\"path\":\"src/services/pro.service.ts\",\"fanIn\":3,\"fanOut\":0},\"cycles\":[\"src/services/email.service.ts <-> src/services/notes.service.ts\"],\"mostSharedTable\":{\"table\":\"note\",\"places\":3}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reuse your pieces: layerReport (18.1), hubs and mutualPairs (18.3), hiddenCoupling’s counting (18.3).|||Dùng lại các mảnh của bạn: layerReport (18.1), hubs và mutualPairs (18.3), phần đếm của hiddenCoupling (18.3).",
+        "Build fan-in only over files that exist in the list; count each importer once.|||Chỉ dựng fan-in trên các tệp có trong danh sách; mỗi nơi import đếm một lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** chapter 18 in one report */\nfunction architectureReport(files) {\n  // Write your solution here\n  const routes = files.filter((f) => f.path.includes('routes'));\n  return { routes: routes.length, routesSkippingService: [], ratio: null, topHub: null, cycles: [], mostSharedTable: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction architectureReport(files) {\n  // files: [{ path, lines, imports: [paths of other files], tables: [tables it queries directly] }]\n  const isRoute = (p) => p.startsWith('src/routes/');\n  const isService = (p) => p.startsWith('src/services/');\n  const usesDb = (f) => f.tables.length > 0;\n  const routes = files.filter((f) => isRoute(f.path));\n  const services = files.filter((f) => isService(f.path));\n  const sum = (xs) => xs.reduce((s, f) => s + f.lines, 0);\n  // 18.1 — route chạm CSDL mà không đi qua service nào\n  const skipping = routes.filter((f) => usesDb(f) && !f.imports.some(isService)).map((f) => f.path).sort();\n  // 18.3 — hub theo fan-in, kèm fan-out\n  const fanIn = new Map(files.map((f) => [f.path, new Set()]));\n  for (const f of files) for (const t of f.imports) if (fanIn.has(t) && t !== f.path) fanIn.get(t).add(f.path);\n  const hub = [...fanIn].map(([p, s]) => ({ path: p, fanIn: s.size, fanOut: new Set(files.find((f) => f.path === p).imports.filter((t) => t !== p)).size }))\n    .sort((a, b) => b.fanIn - a.fanIn || (a.path < b.path ? -1 : 1))[0] || null;\n  // 18.3 — cặp import lẫn nhau\n  const imp = new Set(files.flatMap((f) => f.imports.map((t) => `${f.path}|${t}`)));\n  const cycles = [...new Set(files.flatMap((f) => f.imports.filter((t) => t !== f.path && imp.has(`${t}|${f.path}`)).map((t) => (f.path < t ? `${f.path} <-> ${t}` : `${t} <-> ${f.path}`))))].sort();\n  // 18.3 — bảng bị truy vấn từ nhiều chỗ nhất (ghép nối ẩn)\n  const byTable = {};\n  for (const f of files) for (const t of new Set(f.tables)) byTable[t] = (byTable[t] || 0) + 1;\n  const shared = Object.entries(byTable).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0] || null;\n  return {\n    routes: routes.length,\n    routesSkippingService: skipping,\n    ratio: sum(routes) ? Number((sum(services) / sum(routes)).toFixed(1)) : null,\n    topHub: hub && hub.fanIn > 0 ? hub : null,\n    cycles,\n    mostSharedTable: shared ? { table: shared[0], places: shared[1] } : null,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the sample: two routes reach the database with no service (admin and categories), pro.service is the healthy hub (3 importers, 0 imports), notes ⇄ email is the one cycle, and the note/user tables are each queried from three places. Each line of the report is a decision for the review of Lab 18 · 1 — and the cycle is what Lab 18 · 3 removes.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên mẫu: hai route chạm CSDL mà không qua service (admin và categories), pro.service là hub lành (3 nơi import, 0 import), notes ⇄ email là vòng duy nhất, và bảng note/user mỗi bảng bị truy vấn từ ba chỗ. Mỗi dòng của báo cáo là một quyết định cho buổi review ở Lab 18 · 1 — và vòng chính là thứ Lab 18 · 3 gỡ bỏ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The Notes API of the lab",
+              "vi": "Notes API của lab"
+            },
+            "goi": "architectureReport([{\"path\":\"src/routes/notes.routes.ts\",\"lines\":160,\"imports\":[\"src/services/notes.service.ts\",\"src/middleware/auth.ts\"],\"tables\":[]},{\"path\":\"src/routes/categories.routes.ts\",\"lines\":40,\"imports\":[],\"tables\":[\"category\"]},{\"path\":\"src/routes/admin.routes.ts\",\"lines\":520,\"imports\":[\"src/middleware/auth.ts\"],\"tables\":[\"user\",\"note\"]},{\"path\":\"src/routes/stats.routes.ts\",\"lines\":90,\"imports\":[\"src/services/stats.service.ts\"],\"tables\":[]},{\"path\":\"src/services/notes.service.ts\",\"lines\":600,\"imports\":[\"src/services/email.service.ts\",\"src/services/pro.service.ts\"],\"tables\":[\"note\",\"user\"]},{\"path\":\"src/services/email.service.ts\",\"lines\":220,\"imports\":[\"src/services/notes.service.ts\"],\"tables\":[]},{\"path\":\"src/services/stats.service.ts\",\"lines\":180,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"note\"]},{\"path\":\"src/services/pro.service.ts\",\"lines\":120,\"imports\":[],\"tables\":[\"subscription\"]},{\"path\":\"src/middleware/auth.ts\",\"lines\":80,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"user\"]}])",
+            "mongDoi": {
+              "routes": 4,
+              "routesSkippingService": [
+                "src/routes/admin.routes.ts",
+                "src/routes/categories.routes.ts"
+              ],
+              "ratio": 1.4,
+              "topHub": {
+                "path": "src/services/pro.service.ts",
+                "fanIn": 3,
+                "fanOut": 0
+              },
+              "cycles": [
+                "src/services/email.service.ts <-> src/services/notes.service.ts"
+              ],
+              "mostSharedTable": {
+                "table": "note",
+                "places": 3
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "A clean two-file feature",
+              "vi": "Một tính năng hai tệp sạch sẽ"
+            },
+            "goi": "architectureReport([{\"path\":\"src/routes/a.routes.ts\",\"lines\":10,\"imports\":[\"src/services/a.service.ts\"],\"tables\":[]},{\"path\":\"src/services/a.service.ts\",\"lines\":25,\"imports\":[],\"tables\":[\"a\"]}])",
+            "mongDoi": {
+              "routes": 1,
+              "routesSkippingService": [],
+              "ratio": 2.5,
+              "topHub": {
+                "path": "src/services/a.service.ts",
+                "fanIn": 1,
+                "fanOut": 0
+              },
+              "cycles": [],
+              "mostSharedTable": {
+                "table": "a",
+                "places": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "architectureReport([{\"path\":\"src/routes/notes.routes.ts\",\"lines\":160,\"imports\":[\"src/services/notes.service.ts\",\"src/middleware/auth.ts\"],\"tables\":[]},{\"path\":\"src/routes/categories.routes.ts\",\"lines\":40,\"imports\":[],\"tables\":[\"category\"]},{\"path\":\"src/routes/admin.routes.ts\",\"lines\":520,\"imports\":[\"src/middleware/auth.ts\"],\"tables\":[\"user\",\"note\"]},{\"path\":\"src/routes/stats.routes.ts\",\"lines\":90,\"imports\":[\"src/services/stats.service.ts\"],\"tables\":[]},{\"path\":\"src/services/notes.service.ts\",\"lines\":600,\"imports\":[\"src/services/email.service.ts\",\"src/services/pro.service.ts\"],\"tables\":[\"note\",\"user\"]},{\"path\":\"src/services/email.service.ts\",\"lines\":220,\"imports\":[\"src/services/notes.service.ts\"],\"tables\":[]},{\"path\":\"src/services/stats.service.ts\",\"lines\":180,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"note\"]},{\"path\":\"src/services/pro.service.ts\",\"lines\":120,\"imports\":[],\"tables\":[\"subscription\"]},{\"path\":\"src/middleware/auth.ts\",\"lines\":80,\"imports\":[\"src/services/pro.service.ts\"],\"tables\":[\"user\"]},{\"path\":\"src/routes/search.routes.ts\",\"lines\":70,\"imports\":[\"src/routes/search.routes.ts\"],\"tables\":[\"note\"]},{\"path\":\"src/services/x.service.ts\",\"lines\":10,\"imports\":[\"src/services/y.service.ts\"],\"tables\":[]},{\"path\":\"src/services/y.service.ts\",\"lines\":10,\"imports\":[\"src/services/x.service.ts\"],\"tables\":[]}])",
+            "mongDoi": {
+              "routes": 5,
+              "routesSkippingService": [
+                "src/routes/admin.routes.ts",
+                "src/routes/categories.routes.ts",
+                "src/routes/search.routes.ts"
+              ],
+              "ratio": 1.3,
+              "topHub": {
+                "path": "src/services/pro.service.ts",
+                "fanIn": 3,
+                "fanOut": 0
+              },
+              "cycles": [
+                "src/services/email.service.ts <-> src/services/notes.service.ts",
+                "src/services/x.service.ts <-> src/services/y.service.ts"
+              ],
+              "mostSharedTable": {
+                "table": "note",
+                "places": 4
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "architectureReport([])",
+            "mongDoi": {
+              "routes": 0,
+              "routesSkippingService": [],
+              "ratio": null,
+              "topHub": null,
+              "cycles": [],
+              "mostSharedTable": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting middleware/auth.ts as a route that skips the service: it is middleware, outside src/routes/.|||Tính middleware/auth.ts là route bỏ qua service: nó là middleware, nằm ngoài src/routes/."
+        },
+        {
+          "loi": "Reporting the biggest file as the hub: size is not fan-in.|||Báo tệp to nhất là hub: kích thước không phải fan-in."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fitness function",
+          "vi": "hàm kiểm kiến trúc",
+          "giaiThich": "an automated check that an architecture rule still holds"
+        }
+      ]
+    },
+    {
+      "title": "Lab 18 · 3 — createBus + createNotesModule + createEmailSubscriber: break notes ⇄ email with an event",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "events",
+        "decoupling",
+        "architecture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>notes.service imports email.service to send “note shared” mails, and email.service imports notes.service to put the title in the template. Break the cycle without splitting anything. Write:</p><ul><li><code>createBus()</code> → <code>{ on(type, fn), async publish(type, payload), errors }</code>: handlers run in registration order and are awaited one by one; a handler that throws or rejects does not stop the others or the publisher — push <code>\"&lt;type&gt;: &lt;message&gt;\"</code> into <code>errors</code>;</li><li><code>createNotesModule({ repo, bus })</code> → <code>{ async share(user, noteId, to) }</code>: <code>await repo.get(noteId)</code>; missing ⇒ throw an Error with message <code>\"NOTE_NOT_FOUND\"</code>; not the author (<code>authorId !== user.id</code>) ⇒ <code>\"FORBIDDEN\"</code>; else <code>await repo.addShare(noteId, to)</code>, publish <code>\"note.shared\"</code> with <code>{ noteId, title, to, by: user.name }</code>, return <code>{ noteId, to }</code>;</li><li><code>createEmailSubscriber(bus, send)</code> — on <code>\"note.shared\"</code> call <code>send(to, \"&lt;by&gt; shared a note with you\", \"\\\"&lt;title&gt;\\\" — open it in Notes.\")</code>.</li></ul><p>The notes code must not call <code>send</code>, and the email code must not call <code>repo</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The event carries the data the subscriber needs (the title): the subscriber never reads the notes table.</li>\n  <li>A failing email must not fail the share.</li>\n</ul>",
+      "problemHtmlVi": "<p>notes.service import email.service để gửi thư “đã chia sẻ ghi chú”, còn email.service import notes.service để đưa tiêu đề vào mẫu thư. Hãy phá vòng mà không tách gì ra. Viết:</p><ul><li><code>createBus()</code> → <code>{ on(type, fn), async publish(type, payload), errors }</code>: các handler chạy theo thứ tự đăng ký và được await lần lượt; handler ném lỗi hay reject không làm dừng các handler khác hay bên phát — đẩy <code>\"&lt;type&gt;: &lt;message&gt;\"</code> vào <code>errors</code>;</li><li><code>createNotesModule({ repo, bus })</code> → <code>{ async share(user, noteId, to) }</code>: <code>await repo.get(noteId)</code>; không có ⇒ ném Error với message <code>\"NOTE_NOT_FOUND\"</code>; không phải tác giả (<code>authorId !== user.id</code>) ⇒ <code>\"FORBIDDEN\"</code>; không thì <code>await repo.addShare(noteId, to)</code>, phát <code>\"note.shared\"</code> với <code>{ noteId, title, to, by: user.name }</code>, trả <code>{ noteId, to }</code>;</li><li><code>createEmailSubscriber(bus, send)</code> — khi có <code>\"note.shared\"</code> gọi <code>send(to, \"&lt;by&gt; shared a note with you\", \"\\\"&lt;title&gt;\\\" — open it in Notes.\")</code>.</li></ul><p>Mã notes không được gọi <code>send</code>, mã email không được gọi <code>repo</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sự kiện mang dữ liệu bên nghe cần (tiêu đề): bên nghe không bao giờ đọc bảng notes.</li>\n  <li>Thư gửi lỗi không được làm hỏng lần chia sẻ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(async () => { const r = await mod.share(an, 1, \"binh@example.com\"); return { r, shares, sent }; })()",
+          "output": "{\"r\":{\"noteId\":1,\"to\":\"binh@example.com\"},\"shares\":[[1,\"binh@example.com\"]],\"sent\":[{\"to\":\"binh@example.com\",\"subject\":\"An shared a note with you\",\"body\":\"\\\"Streams & back-pressure\\\" — open it in Notes.\"}]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The bus is a Map from type to an array of handlers; publish loops with try/await/catch.|||Bus là một Map từ loại sự kiện tới mảng handler; publish lặp với try/await/catch.",
+        "Ownership is checked in the notes service before anything is written or published.|||Quyền sở hữu được kiểm trong service notes trước khi ghi hay phát bất cứ gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** notes and email, still coupled */\nfunction createBus() {\n  const handlers = {};\n  return { on(t, fn) { handlers[t] = fn; }, async publish(t, p) { if (handlers[t]) await handlers[t](p); }, errors: [] };\n}\nfunction createNotesModule({ repo, bus }) {\n  return {\n    async share(user, noteId, to) {\n      // Write your solution here\n      await repo.addShare(noteId, to);\n      await bus.publish('note.shared', { noteId, to });\n      return { noteId, to };\n    },\n  };\n}\nfunction createEmailSubscriber(bus, send) {\n  bus.on('note.shared', async (e) => send(e.to, 'A note was shared with you', 'Open it in Notes.'));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createBus() {\n  // Bus sự kiện trong tiến trình: bên phát không biết ai nghe; lỗi của một bên nghe không làm hỏng bên phát.\n  const handlers = new Map();\n  const errors = [];\n  return {\n    on(type, fn) { (handlers.get(type) || handlers.set(type, []).get(type)).push(fn); },\n    async publish(type, payload) {\n      for (const fn of handlers.get(type) || []) {\n        try { await fn(payload); } catch (e) { errors.push(`${type}: ${e.message}`); }\n      }\n    },\n    errors,\n  };\n}\n\nfunction createNotesModule({ repo, bus }) {\n  // Facade của module notes: KHÔNG import email. Nó phát một SỰ KIỆN mang dữ liệu cần thiết (title) — sự thật, không phải mệnh lệnh.\n  return {\n    async share(user, noteId, to) {\n      const note = await repo.get(noteId);\n      if (!note) { const e = new Error('NOTE_NOT_FOUND'); e.status = 404; throw e; }\n      if (note.authorId !== user.id) { const e = new Error('FORBIDDEN'); e.status = 403; throw e; }   // quyền sở hữu, kiểm ở service\n      await repo.addShare(noteId, to);\n      await bus.publish('note.shared', { noteId, title: note.title, to, by: user.name });\n      return { noteId, to };\n    },\n  };\n}\n\nfunction createEmailSubscriber(bus, send) {\n  // Email chỉ biết hình dạng sự kiện — không import notes ⇒ vòng notes ⇄ email biến mất.\n  bus.on('note.shared', (e) => send(e.to, `${e.by} shared a note with you`, `\"${e.title}\" — open it in Notes.`));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>“A note was shared” is a fact; who cares about it (email, notifications, analytics) is not the note module’s business. notes now imports nothing of email and email nothing of notes — two independent modules meeting through a shape. Chapter 13’s queue makes the same boundary durable across a crash or a second process.</p>",
+      "solutionExplanationHtmlVi": "<p>“Một ghi chú đã được chia sẻ” là một sự thật; ai quan tâm tới nó (email, thông báo, phân tích) không phải việc của module notes. notes giờ không import gì của email và email không import gì của notes — hai module độc lập gặp nhau qua một hình dạng. Hàng đợi của chương 13 làm ranh giới đó bền qua cả khi sập hay có tiến trình thứ hai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An shares her note with Bình",
+              "vi": "An chia sẻ ghi chú với Bình"
+            },
+            "goi": "await (async () => { const r = await mod.share(an, 1, \"binh@example.com\"); return { r, shares, sent }; })()",
+            "chuanBi": "const notes = new Map([[1, { id: 1, authorId: 7, title: 'Streams & back-pressure' }]]); const shares = [];\n  const repo = { get: async (id) => notes.get(id) || null, addShare: async (id, to) => { shares.push([id, to]); } };\n  const sent = []; const bus = createBus(); createEmailSubscriber(bus, async (to, subject, body) => { sent.push({ to, subject, body }); });\n  const mod = createNotesModule({ repo, bus }); const an = { id: 7, name: 'An' };",
+            "mongDoi": {
+              "r": {
+                "noteId": 1,
+                "to": "binh@example.com"
+              },
+              "shares": [
+                [
+                  1,
+                  "binh@example.com"
+                ]
+              ],
+              "sent": [
+                {
+                  "to": "binh@example.com",
+                  "subject": "An shared a note with you",
+                  "body": "\"Streams & back-pressure\" — open it in Notes."
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Not the author; a missing note",
+              "vi": "Không phải tác giả; ghi chú không tồn tại"
+            },
+            "goi": "await (async () => { const errs = []; for (const [u, id] of [[{ id: 8, name: \"Binh\" }, 1], [an, 99]]) { try { await mod.share(u, id, \"x@example.com\"); } catch (e) { errs.push(e.message); } } return { errs, shares, sent }; })()",
+            "chuanBi": "const notes = new Map([[1, { id: 1, authorId: 7, title: 'Streams & back-pressure' }]]); const shares = [];\n  const repo = { get: async (id) => notes.get(id) || null, addShare: async (id, to) => { shares.push([id, to]); } };\n  const sent = []; const bus = createBus(); createEmailSubscriber(bus, async (to, subject, body) => { sent.push({ to, subject, body }); });\n  const mod = createNotesModule({ repo, bus }); const an = { id: 7, name: 'An' };",
+            "mongDoi": {
+              "errs": [
+                "FORBIDDEN",
+                "NOTE_NOT_FOUND"
+              ],
+              "shares": [],
+              "sent": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "await (async () => { const r = await mod.share(an, 1, \"chi@example.com\"); return { r, sent: sent.length, seen, errors: bus.errors }; })()",
+            "chuanBi": "const notes = new Map([[1, { id: 1, authorId: 7, title: 'Streams & back-pressure' }]]); const shares = [];\n  const repo = { get: async (id) => notes.get(id) || null, addShare: async (id, to) => { shares.push([id, to]); } };\n  const sent = []; const bus = createBus(); createEmailSubscriber(bus, async (to, subject, body) => { sent.push({ to, subject, body }); });\n  const mod = createNotesModule({ repo, bus }); const an = { id: 7, name: 'An' }; bus.on('note.shared', async () => { throw new Error('SMTP down'); }); const seen = []; bus.on('note.shared', (e) => seen.push(e.noteId));",
+            "mongDoi": {
+              "r": {
+                "noteId": 1,
+                "to": "chi@example.com"
+              },
+              "sent": 1,
+              "seen": [
+                1
+              ],
+              "errors": [
+                "note.shared: SMTP down"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { await bus.publish(\"a\", {}); await bus.publish(\"none\", {}); return order; })()",
+            "chuanBi": "const bus = createBus(); const order = []; bus.on(\"a\", async () => { await new Promise((r) => setTimeout(r, 10)); order.push(1); }); bus.on(\"a\", () => order.push(2)); bus.on(\"b\", () => order.push(3));",
+            "mongDoi": [
+              1,
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "A “thin” event with only noteId: the email subscriber must then query notes — the cycle is back, hidden in the database.|||Sự kiện “mỏng” chỉ có noteId: bên email khi đó phải truy vấn notes — vòng quay lại, trốn trong CSDL."
+        },
+        {
+          "loi": "Letting a subscriber error bubble up: the SMTP provider being down now breaks sharing.|||Để lỗi của bên nghe nổi lên: nhà cung cấp SMTP sập là chia sẻ hỏng theo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event bus",
+          "vi": "bus sự kiện"
+        },
+        {
+          "en": "publisher / subscriber",
+          "vi": "bên phát / bên nghe"
+        },
+        {
+          "en": "fat event",
+          "vi": "sự kiện “dày”",
+          "giaiThich": "carries the data subscribers need"
+        }
+      ]
+    }
+  ]
+}

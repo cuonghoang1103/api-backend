@@ -1,0 +1,1180 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-9-3-dau-vao-doc-hai",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-9-3-dau-vao-doc-hai"
+  },
+  "exercises": [
+    {
+      "title": "Four requests that look completely normal",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "ReDoS",
+        "prototype pollution",
+        "SSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>ReDoS, prototype pollution, body limits and SSRF: none needs a password or a stolen token. Answer from the lesson’s measurements (the timings in question 1 were re-measured on Node 22.23).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request và SSRF: không cái nào cần mật khẩu hay token bị trộm. Trả lời theo số đo của bài (thời gian ở câu 1 đo lại trên Node 22.23).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ReDoS: look for a quantifier on a group that already ends with a quantifier over the same characters.|||ReDoS: tìm lượng từ trên một nhóm vốn đã kết thúc bằng lượng từ trên cùng loại ký tự.",
+        "SSRF and body limits: the request that hurts you is a VALID one — ask what the server does next, not whether the input is well-formed.|||SSRF và giới hạn thân: request làm hại bạn là request HỢP LỆ — hỏi máy chủ làm gì tiếp theo, đừng hỏi input có đúng dạng không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Four requests that look completely normal\n\nAnswer in the answer panel (no code needed).\n\n1. Which of these regexes can freeze the event loop on a short crafted input? (choose all)Regex nào có thể làm đứng event loop với một input ngắn được dựng sẵn? (chọn mọi câu đúng)\n2. A teammate proposes \"a 50 ms timeout on the regex\" against ReDoS. What does the lesson say?Đồng đội đề xuất \"đặt timeout 50 ms cho regex\" để chống ReDoS. Bài nói gì?\n3. Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')) — what is it?Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')) là gì?\n4. express.json() with no options receives a 200 KB body. What happens?express.json() không tuỳ chọn nhận thân 200 KB. Chuyện gì xảy ra?\n5. The route checks https: and an allow-listed host, then calls fetch(url). The attacker’s allowed host answers 302 to http://127.0.0.1:4404/admin/config. Result?Route kiểm https: và host trong danh sách trắng rồi gọi fetch(url). Host được phép của kẻ tấn công trả 302 về http://127.0.0.1:4404/admin/config. Kết quả?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Four requests that look completely normal — answer key\n\n1. Which of these regexes can freeze the event loop on a short crafted input? (choose all)Regex nào có thể làm đứng event loop với một input ngắn được dựng sẵn? (chọn mọi câu đúng)\n   Answer: c) /^(a+)+$/ + d) /^([\\s\\S]*?)(\\s+)+$/ — 24 spaces and an \"x\" took 1.2 s + e) /^(a|aa)+$/ — 32 a’s and a \"!\" took 282 ms\n   A quantifier wrapping a group that already has one — (a+)+, (\\s+)+ — or alternatives that match the same text — (a|aa)+ — backtrack exponentially when the match must fail. A single character class with one quantifier is linear.VI: Một lượng từ bọc nhóm đã có lượng từ — (a+)+, (\\s+)+ — hoặc các nhánh khớp cùng chữ — (a|aa)+ — quay lui theo hàm mũ khi phải khớp thất bại. Một lớp ký tự với một lượng từ là tuyến tính.\n\n2. A teammate proposes \"a 50 ms timeout on the regex\" against ReDoS. What does the lesson say?Đồng đội đề xuất \"đặt timeout 50 ms cho regex\" để chống ReDoS. Bài nói gì?\n   Answer: c) It cannot work: JavaScript is single-threaded and nothing can interrupt a running RegExp — cap the length first\n   The timer callback cannot run while the regex holds the loop. Validate max length (zod .max(200)) before any regex touches the value; the only real timeout is a worker thread.VI: Callback của hẹn giờ không chạy được khi regex đang giữ vòng lặp. Kiểm độ dài tối đa (zod .max(200)) trước khi regex đụng vào giá trị; timeout thật duy nhất là một worker thread.\n\n3. Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')) — what is it?Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')) là gì?\n   Answer: a) [\"__proto__\"] — JSON.parse makes it a real own key, ready for a merge helper to walk into\n   Verified on Node 22: JSON.parse creates an own property named \"__proto__\" (an object LITERAL would set the prototype instead). The hole is the recursive merge that then does target[\"__proto__\"] — which is Object.prototype.VI: Kiểm trên Node 22: JSON.parse tạo thuộc tính riêng tên \"__proto__\" (object LITERAL thì lại đặt nguyên mẫu). Lỗ hổng là hàm merge đệ quy sau đó làm target[\"__proto__\"] — chính là Object.prototype.\n\n4. express.json() with no options receives a 200 KB body. What happens?express.json() không tuỳ chọn nhận thân 200 KB. Chuyện gì xảy ra?\n   Answer: c) 413 with type entity.too.large and limit 102400 — the default is 100kb\n   Measured: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Raising it to 20mb globally cost +139 MB RSS for ONE 11.3 MB request.VI: Đo được: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Nâng toàn cục lên 20mb tốn +139 MB RSS cho MỘT request 11,3 MB.\n\n5. The route checks https: and an allow-listed host, then calls fetch(url). The attacker’s allowed host answers 302 to http://127.0.0.1:4404/admin/config. Result?Route kiểm https: và host trong danh sách trắng rồi gọi fetch(url). Host được phép của kẻ tấn công trả 302 về http://127.0.0.1:4404/admin/config. Kết quả?\n   Answer: b) 200 with DATABASE_URL and R2_SECRET: fetch followed the redirect and only the first URL was checked\n   fetch follows redirects by default. Use redirect: 'manual' and re-validate every hop — or better, do not take URLs at all.VI: fetch mặc định đi theo chuyển hướng. Dùng redirect: 'manual' và kiểm lại từng bước — hay tốt hơn, đừng nhận URL.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> <code>/^(a+)+$/</code> + <b>d)</b> <code>/^([\\s\\S]*?)(\\s+)+$/</code> — 24 spaces and an \"x\" took 1.2 s + <b>e)</b> <code>/^(a|aa)+$/</code> — 32 a’s and a \"!\" took 282 ms</p><p>A quantifier wrapping a group that already has one — (a+)+, (\\s+)+ — or alternatives that match the same text — (a|aa)+ — backtrack exponentially when the match must fail. A single character class with one quantifier is linear.</p><p><i>VI: Một lượng từ bọc nhóm đã có lượng từ — (a+)+, (\\s+)+ — hoặc các nhánh khớp cùng chữ — (a|aa)+ — quay lui theo hàm mũ khi phải khớp thất bại. Một lớp ký tự với một lượng từ là tuyến tính.</i></p></li><li><p><b>c)</b> It cannot work: JavaScript is single-threaded and nothing can interrupt a running RegExp — cap the length first</p><p>The timer callback cannot run while the regex holds the loop. Validate max length (zod .max(200)) before any regex touches the value; the only real timeout is a worker thread.</p><p><i>VI: Callback của hẹn giờ không chạy được khi regex đang giữ vòng lặp. Kiểm độ dài tối đa (zod .max(200)) trước khi regex đụng vào giá trị; timeout thật duy nhất là một worker thread.</i></p></li><li><p><b>a)</b> <code>[\"__proto__\"]</code> — JSON.parse makes it a real own key, ready for a merge helper to walk into</p><p>Verified on Node 22: JSON.parse creates an own property named \"__proto__\" (an object LITERAL would set the prototype instead). The hole is the recursive merge that then does target[\"__proto__\"] — which is Object.prototype.</p><p><i>VI: Kiểm trên Node 22: JSON.parse tạo thuộc tính riêng tên \"__proto__\" (object LITERAL thì lại đặt nguyên mẫu). Lỗ hổng là hàm merge đệ quy sau đó làm target[\"__proto__\"] — chính là Object.prototype.</i></p></li><li><p><b>c)</b> 413 with type entity.too.large and limit 102400 — the default is 100kb</p><p>Measured: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Raising it to 20mb globally cost +139 MB RSS for ONE 11.3 MB request.</p><p><i>VI: Đo được: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Nâng toàn cục lên 20mb tốn +139 MB RSS cho MỘT request 11,3 MB.</i></p></li><li><p><b>b)</b> 200 with DATABASE_URL and R2_SECRET: fetch followed the redirect and only the first URL was checked</p><p>fetch follows redirects by default. Use redirect: 'manual' and re-validate every hop — or better, do not take URLs at all.</p><p><i>VI: fetch mặc định đi theo chuyển hướng. Dùng redirect: 'manual' và kiểm lại từng bước — hay tốt hơn, đừng nhận URL.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "<p>Which of these regexes can freeze the event loop on a short crafted input? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Regex nào có thể làm đứng event loop với một input ngắn được dựng sẵn? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>/^[a-z0-9-]+$/</code> — 100,000 chars took 0.4 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>/^\\d{1,5}$/</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>/^(a+)+$/</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>/^([\\s\\S]*?)(\\s+)+$/</code> — 24 spaces and an \"x\" took 1.2 s"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>/^(a|aa)+$/</code> — 32 a’s and a \"!\" took 282 ms"
+              }
+            ],
+            "dapAn": [
+              [
+                "c",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>A quantifier wrapping a group that already has one — (a+)+, (\\s+)+ — or alternatives that match the same text — (a|aa)+ — backtrack exponentially when the match must fail. A single character class with one quantifier is linear.</p><p><i>VI: Một lượng từ bọc nhóm đã có lượng từ — (a+)+, (\\s+)+ — hoặc các nhánh khớp cùng chữ — (a|aa)+ — quay lui theo hàm mũ khi phải khớp thất bại. Một lớp ký tự với một lượng từ là tuyến tính.</i></p>"
+          },
+          {
+            "ma": "r2",
+            "de": "<p>A teammate proposes \"a 50 ms timeout on the regex\" against ReDoS. What does the lesson say?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồng đội đề xuất \"đặt timeout 50 ms cho regex\" để chống ReDoS. Bài nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is the recommended fix; capping the length only moves the problem"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It works with express.json({ timeout: 50 }), which aborts slow parsing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot work: JavaScript is single-threaded and nothing can interrupt a running RegExp — cap the length first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It works if you wrap the test in a Promise with setTimeout and reject after 50 ms"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The timer callback cannot run while the regex holds the loop. Validate max length (zod .max(200)) before any regex touches the value; the only real timeout is a worker thread.</p><p><i>VI: Callback của hẹn giờ không chạy được khi regex đang giữ vòng lặp. Kiểm độ dài tối đa (zod .max(200)) trước khi regex đụng vào giá trị; timeout thật duy nhất là một worker thread.</i></p>"
+          },
+          {
+            "ma": "r3",
+            "de": "<p><code>Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}'))</code> — what is it?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>Object.keys(JSON.parse('{\"__proto__\":{\"isAdmin\":true}}'))</code> là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>[\"__proto__\"]</code> — JSON.parse makes it a real own key, ready for a merge helper to walk into"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It throws a SyntaxError because __proto__ is a reserved key in JSON"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>[]</code> — JSON.parse treats __proto__ specially and sets the prototype instead"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>[\"isAdmin\"]</code> — the nested object is flattened into the result"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Verified on Node 22: JSON.parse creates an own property named \"__proto__\" (an object LITERAL would set the prototype instead). The hole is the recursive merge that then does target[\"__proto__\"] — which is Object.prototype.</p><p><i>VI: Kiểm trên Node 22: JSON.parse tạo thuộc tính riêng tên \"__proto__\" (object LITERAL thì lại đặt nguyên mẫu). Lỗ hổng là hàm merge đệ quy sau đó làm target[\"__proto__\"] — chính là Object.prototype.</i></p>"
+          },
+          {
+            "ma": "r4",
+            "de": "<p><code>express.json()</code> with no options receives a 200 KB body. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>express.json()</code> không tuỳ chọn nhận thân 200 KB. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200: the default limit is 1mb, so 200 KB is parsed normally"
+              },
+              {
+                "ma": "b",
+                "noiDung": "400: express.json rejects bodies larger than the Content-Length header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "413 with type entity.too.large and limit 102400 — the default is 100kb"
+              },
+              {
+                "ma": "d",
+                "noiDung": "500: the parser throws and the default error handler prints the stack"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Measured: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Raising it to 20mb globally cost +139 MB RSS for ONE 11.3 MB request.</p><p><i>VI: Đo được: 90KB → 200, 200KB → 413 {\"type\":\"entity.too.large\",\"limit\":102400}. Nâng toàn cục lên 20mb tốn +139 MB RSS cho MỘT request 11,3 MB.</i></p>"
+          },
+          {
+            "ma": "r5",
+            "de": "<p>The route checks <code>https:</code> and an allow-listed host, then calls <code>fetch(url)</code>. The attacker’s allowed host answers 302 to <code>http://127.0.0.1:4404/admin/config</code>. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Route kiểm <code>https:</code> và host trong danh sách trắng rồi gọi <code>fetch(url)</code>. Host được phép của kẻ tấn công trả 302 về <code>http://127.0.0.1:4404/admin/config</code>. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fetch failed: undici does not allow requests to 127.0.0.1 from a server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 with DATABASE_URL and R2_SECRET: fetch followed the redirect and only the first URL was checked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "400: the allow-list check runs again automatically on every hop"
+              },
+              {
+                "ma": "d",
+                "noiDung": "400: fetch refuses redirects from https to plain http by default"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>fetch follows redirects by default. Use redirect: 'manual' and re-validate every hop — or better, do not take URLs at all.</p><p><i>VI: fetch mặc định đi theo chuyển hướng. Dùng redirect: 'manual' và kiểm lại từng bước — hay tốt hơn, đừng nhận URL.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a timeout can stop a running regex.|||Tin rằng timeout chặn được regex đang chạy."
+        },
+        {
+          "loi": "Thinking JSON.parse \"cleans\" input of __proto__.|||Nghĩ rằng JSON.parse \"làm sạch\" __proto__ khỏi input."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "catastrophic backtracking",
+          "vi": "quay lui thảm hoạ",
+          "giaiThich": "thời gian tăng theo hàm mũ khi khớp thất bại"
+        },
+        {
+          "en": "prototype pollution",
+          "vi": "ô nhiễm nguyên mẫu",
+          "giaiThich": "sửa Object.prototype ⇒ mọi object kế thừa"
+        },
+        {
+          "en": "SSRF",
+          "vi": "giả mạo request phía máy chủ",
+          "giaiThich": "máy chủ của bạn đi lấy URL nội bộ thay kẻ tấn công"
+        }
+      ]
+    },
+    {
+      "title": "Fix the deep merge before everyone becomes admin",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "prototype pollution",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s <code>merge(target, src)</code> made <code>({}).isAdmin === true</code> for every object in the process, from one JSON key. Write <code>safeMerge(target, src)</code>:</p>\n<ul><li>for every own key of <code>src</code>: skip <code>__proto__</code>, <code>constructor</code> and <code>prototype</code>;</li>\n<li>a plain-object value is merged recursively into <code>target[k]</code> (start from <code>{}</code> if <code>target</code> has no own plain object there);</li>\n<li>arrays are copied (<code>slice()</code>), other values assigned;</li>\n<li>return <code>target</code> (it is modified in place).</li></ul>\n<p>The tests merge objects that come from <code>JSON.parse</code> — exactly like <code>req.body</code> — and then look at a brand-new <code>{}</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm <code>merge(target, src)</code> trong bài khiến <code>({}).isAdmin === true</code> với mọi object trong tiến trình, chỉ từ một khoá JSON. Viết <code>safeMerge(target, src)</code>:</p>\n<ul><li>với mỗi khoá riêng của <code>src</code>: bỏ qua <code>__proto__</code>, <code>constructor</code> và <code>prototype</code>;</li>\n<li>giá trị là object thường thì trộn đệ quy vào <code>target[k]</code> (bắt đầu từ <code>{}</code> nếu <code>target</code> không có object thường riêng ở đó);</li>\n<li>mảng thì chép (<code>slice()</code>), giá trị khác thì gán;</li>\n<li>trả về <code>target</code> (bị sửa tại chỗ).</li></ul>\n<p>Bộ kiểm trộn các object đến từ <code>JSON.parse</code> — đúng như <code>req.body</code> — rồi nhìn vào một <code>{}</code> mới tinh.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const user = { name: 'An' }; safeMerge(user, JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')); return [user, ({}).isAdmin === undefined]; })()",
+          "output": "[{\"name\":\"An\"},true]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Start from the lesson’s merge and add one line: <code>if (k === \"__proto__\" || …) continue;</code>.|||Bắt đầu từ merge của bài và thêm một dòng: <code>if (k === \"__proto__\" || …) continue;</code>.",
+        "<code>constructor</code> matters too: <code>target.constructor</code> is the <code>Object</code> function, and its <code>.prototype</code> is the same Object.prototype.|||<code>constructor</code> cũng quan trọng: <code>target.constructor</code> là hàm <code>Object</code>, và <code>.prototype</code> của nó cũng chính là Object.prototype.",
+        "<code>target[k] ??= {}</code> reads INHERITED properties — use <code>hasOwnProperty</code> to decide whether to reuse the slot.|||<code>target[k] ??= {}</code> đọc cả thuộc tính KẾ THỪA — dùng <code>hasOwnProperty</code> để quyết có dùng lại ô đó không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Deep-merge src into target without ever touching Object.prototype. */\nfunction safeMerge(target, src) {\n  // Write your solution here (this is the lesson's vulnerable merge)\n  for (const k of Object.keys(src)) {\n    if (typeof src[k] === 'object' && src[k] !== null) { target[k] ??= {}; safeMerge(target[k], src[k]); }\n    else target[k] = src[k];\n  }\n  return target;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction safeMerge(target, src) {\n  // These three keys are how a merge reaches Object.prototype:\n  //   target['__proto__']            IS Object.prototype\n  //   target['constructor'].prototype IS Object.prototype\n  const DANGEROUS = new Set(['__proto__', 'constructor', 'prototype']);\n  for (const k of Object.keys(src)) {\n    if (DANGEROUS.has(k)) continue;                       // skip — never walk into them\n    const v = src[k];\n    if (typeof v === 'object' && v !== null && !Array.isArray(v)) {\n      // Only recurse into an own plain-object slot; anything else is replaced by a fresh object.\n      const cur = Object.prototype.hasOwnProperty.call(target, k) ? target[k] : undefined;\n      target[k] = safeMerge(typeof cur === 'object' && cur !== null && !Array.isArray(cur) ? cur : {}, v);\n    } else {\n      target[k] = Array.isArray(v) ? v.slice() : v;       // arrays and primitives are copied, not merged\n    }\n  }\n  return target;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pollution happens when a recursive copy follows a key that resolves to a SHARED object. <code>__proto__</code> and <code>constructor.prototype</code> both lead to Object.prototype, so skipping those names (at every level, because the function recurses) closes the path. Reusing only OWN plain-object slots means even an inherited property can never become the merge target. Validating with a schema first (zod drops unknown keys) and using <code>Map</code> / <code>Object.create(null)</code> for user-keyed data are the stronger layers the lesson lists.</p>",
+      "solutionExplanationHtmlVi": "<p>Ô nhiễm xảy ra khi một phép chép đệ quy đi theo một khoá dẫn tới object DÙNG CHUNG. <code>__proto__</code> và <code>constructor.prototype</code> đều dẫn tới Object.prototype, nên bỏ qua các tên đó (ở mọi tầng, vì hàm đệ quy) là đóng đường. Chỉ dùng lại ô object thường RIÊNG nghĩa là thuộc tính kế thừa không bao giờ thành đích trộn. Kiểm bằng schema trước (zod bỏ khoá lạ) và dùng <code>Map</code> / <code>Object.create(null)</code> cho dữ liệu khoá do người dùng đặt là các lớp mạnh hơn mà bài liệt kê.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s payload does not reach Object.prototype",
+              "vi": "Payload của bài không chạm tới Object.prototype"
+            },
+            "goi": "(() => { const user = { name: 'An' }; safeMerge(user, JSON.parse('{\"__proto__\":{\"isAdmin\":true}}')); return [user, ({}).isAdmin === undefined]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "name": "An"
+              },
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A normal deep merge still works",
+              "vi": "Trộn sâu bình thường vẫn chạy"
+            },
+            "goi": "safeMerge({ name: 'An', prefs: { theme: 'light', size: 14 } }, JSON.parse('{\"prefs\":{\"theme\":\"dark\"},\"tags\":[\"a\",\"b\"]}'))",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "name": "An",
+              "prefs": {
+                "theme": "dark",
+                "size": 14
+              },
+              "tags": [
+                "a",
+                "b"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "constructor.prototype is blocked too",
+              "vi": "constructor.prototype cũng bị chặn"
+            },
+            "goi": "(() => { safeMerge({}, JSON.parse('{\"constructor\":{\"prototype\":{\"isAdmin\":true}}}')); return ({}).isAdmin === undefined; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const r = safeMerge({ a: 1 }, JSON.parse('{\"settings\":{\"__proto__\":{\"role\":\"admin\"},\"lang\":\"vi\"}}')); return [r, ({}).role === undefined, r.settings.role === undefined]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "a": 1,
+                "settings": {
+                  "lang": "vi"
+                }
+              },
+              true,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const t = { list: [1] }; const src = JSON.parse('{\"list\":[2,3],\"n\":null,\"deep\":{\"x\":{\"y\":1}}}'); const r = safeMerge(t, src); src.list.push(9); return r; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "list": [
+                2,
+                3
+              ],
+              "n": null,
+              "deep": {
+                "x": {
+                  "y": 1
+                }
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const r = safeMerge({}, JSON.parse('{\"toString\":{\"x\":1}}')); return [Object.keys(r), typeof ({}).toString, r.toString]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              [
+                "toString"
+              ],
+              "function",
+              {
+                "x": 1
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blocking only <code>__proto__</code>: <code>{\"constructor\":{\"prototype\":{\"isAdmin\":true}}}</code> pollutes just the same.|||Chỉ chặn <code>__proto__</code>: <code>{\"constructor\":{\"prototype\":{\"isAdmin\":true}}}</code> vẫn làm ô nhiễm y như vậy."
+        },
+        {
+          "loi": "Checking only the top level: the dangerous key can be nested, <code>{\"settings\":{\"__proto__\":{…}}}</code>.|||Chỉ kiểm tầng ngoài: khoá nguy hiểm có thể nằm sâu, <code>{\"settings\":{\"__proto__\":{…}}}</code>."
+        },
+        {
+          "loi": "Thinking Express’s query parser is the hole — the lesson measured both parsers clean; the hole is the helper you wrote afterwards.|||Nghĩ parser query của Express là lỗ hổng — bài đo cả hai parser đều sạch; lỗ hổng là helper bạn viết sau đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "own property",
+          "vi": "thuộc tính riêng",
+          "giaiThich": "nằm trên chính object, không kế thừa"
+        },
+        {
+          "en": "Object.prototype",
+          "vi": "nguyên mẫu gốc",
+          "giaiThich": "mọi object thường kế thừa từ đây"
+        }
+      ]
+    },
+    {
+      "title": "Validate a note: cap first, then check, then strip",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "validation",
+        "ReDoS",
+        "mass assignment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s rules for input: <b>cap the length before any regex</b>, prefer linear built-ins (<code>trim</code>, not <code>/^([\\s\\S]*?)(\\s+)+$/</code>), <b>bound arrays</b>, and let the schema <b>drop unknown keys</b> (zod’s <code>.object()</code>). Write <code>validateNote(body)</code> for <code>POST /notes</code>:</p>\n<ul><li><code>body</code> must be a plain object, else <code>{ ok:false, errors:[{ path:'body', code:'INVALID' }] }</code>;</li>\n<li><code>title</code>: not a string → <code>REQUIRED</code>; longer than 200 (raw length) → <code>TOO_LONG</code>; empty after <code>trim()</code> → <code>TOO_SHORT</code>; the value kept is the trimmed one;</li>\n<li><code>tags</code>: optional (default <code>[]</code>); not an array → <code>path:'tags', INVALID</code>; more than 20 → <code>TOO_MANY</code>; each item must be a string of 1–30 chars matching <code>/^[a-z0-9-]+$/</code>, else <code>path:'tags.&lt;i&gt;', INVALID</code>;</li>\n<li>collect errors in that order (title, then tags); with errors return <code>{ ok:false, errors }</code>, otherwise <code>{ ok:true, value:{ title, tags } }</code> — a NEW object with only those two keys.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật của bài với đầu vào: <b>chặn độ dài trước mọi regex</b>, ưu tiên hàm có sẵn tuyến tính (<code>trim</code>, không phải <code>/^([\\s\\S]*?)(\\s+)+$/</code>), <b>giới hạn mảng</b>, và để schema <b>bỏ khoá lạ</b> (<code>.object()</code> của zod). Viết <code>validateNote(body)</code> cho <code>POST /notes</code>:</p>\n<ul><li><code>body</code> phải là object thường, không thì <code>{ ok:false, errors:[{ path:'body', code:'INVALID' }] }</code>;</li>\n<li><code>title</code>: không phải chuỗi → <code>REQUIRED</code>; dài hơn 200 (độ dài gốc) → <code>TOO_LONG</code>; rỗng sau <code>trim()</code> → <code>TOO_SHORT</code>; giá trị giữ lại là bản đã trim;</li>\n<li><code>tags</code>: tuỳ chọn (mặc định <code>[]</code>); không phải mảng → <code>path:'tags', INVALID</code>; hơn 20 phần tử → <code>TOO_MANY</code>; mỗi phần tử phải là chuỗi 1–30 ký tự khớp <code>/^[a-z0-9-]+$/</code>, không thì <code>path:'tags.&lt;i&gt;', INVALID</code>;</li>\n<li>gom lỗi theo thứ tự đó (title rồi tags); có lỗi trả <code>{ ok:false, errors }</code>, không thì <code>{ ok:true, value:{ title, tags } }</code> — object MỚI chỉ có hai khoá đó.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "validateNote({ title: '  Buy milk  ', tags: ['home', 'todo-1'] })",
+          "output": "{\"ok\":true,\"value\":{\"title\":\"Buy milk\",\"tags\":[\"home\",\"todo-1\"]}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check <code>body.title.length &gt; 200</code> before calling anything on the string.|||Kiểm <code>body.title.length &gt; 200</code> trước khi gọi bất cứ thứ gì trên chuỗi.",
+        "Return <code>{ title, tags }</code> built from your own variables — never <code>{ ...body }</code>.|||Trả <code>{ title, tags }</code> dựng từ biến của bạn — không bao giờ <code>{ ...body }</code>.",
+        "One test has a title with 30 spaces in the middle: the starter’s regex trim freezes the grader on it, <code>trim()</code> does not.|||Một ca có title với 30 dấu cách ở giữa: regex trim của code khởi đầu làm máy chấm đứng hình, <code>trim()</code> thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Validate the body of POST /notes. */\nfunction validateNote(body) {\n  // Write your solution here\n  const errors = [];\n  const title = String(body.title || '').replace(/^([\\s\\S]*?)(\\s+)+$/, '$1'); // \"trim trailing spaces\"\n  if (!title) errors.push({ path: 'title', code: 'REQUIRED' });\n  if (errors.length) return { ok: false, errors };\n  return { ok: true, value: { ...body, title } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction validateNote(body) {\n  if (typeof body !== 'object' || body === null || Array.isArray(body)) return { ok: false, errors: [{ path: 'body', code: 'INVALID' }] };\n  const errors = [];\n  // title: cap the LENGTH before anything else touches it; trim with a linear built-in, not a \"clever\" regex.\n  let title;\n  if (typeof body.title !== 'string') errors.push({ path: 'title', code: 'REQUIRED' });\n  else if (body.title.length > 200) errors.push({ path: 'title', code: 'TOO_LONG' });\n  else {\n    title = body.title.trim();\n    if (!title.length) errors.push({ path: 'title', code: 'TOO_SHORT' });\n  }\n  // tags: optional, but bound the array (count) as well as each item (length) — a small body can still hold 5,000 items.\n  let tags = [];\n  if (body.tags !== undefined) {\n    if (!Array.isArray(body.tags)) errors.push({ path: 'tags', code: 'INVALID' });\n    else if (body.tags.length > 20) errors.push({ path: 'tags', code: 'TOO_MANY' });\n    else {\n      body.tags.forEach((t, i) => {\n        if (typeof t !== 'string' || t.length < 1 || t.length > 30) errors.push({ path: 'tags.' + i, code: 'INVALID' });\n        else if (!/^[a-z0-9-]+$/.test(t)) errors.push({ path: 'tags.' + i, code: 'INVALID' });   // runs only on ≤ 30 chars\n      });\n      tags = body.tags.slice();\n    }\n  }\n  if (errors.length) return { ok: false, errors };\n  // Build a NEW object with only the known keys: isAdmin, __proto__, ownerId… never reach the service.\n  return { ok: true, value: { title, tags } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exponential growth on a bounded input is a bounded cost, so the length cap must come first. <code>trim()</code> is linear and replaces the \"trim trailing whitespace\" regex that the lesson timed at 4.3 s for 28 spaces. Building the output from validated variables is what zod’s strip mode does: unknown keys — <code>__proto__</code>, <code>isAdmin</code> — simply do not exist in <code>value</code>, so no later merge or <code>create()</code> can see them.</p>",
+      "solutionExplanationHtmlVi": "<p>Tăng theo hàm mũ trên input bị chặn là chi phí bị chặn, nên giới hạn độ dài phải đi trước. <code>trim()</code> tuyến tính và thay được regex \"cắt khoảng trắng cuối\" mà bài đo mất 4,3 s với 28 dấu cách. Dựng output từ các biến đã kiểm là điều chế độ strip của zod làm: khoá lạ — <code>__proto__</code>, <code>isAdmin</code> — đơn giản không tồn tại trong <code>value</code>, nên không merge hay <code>create()</code> nào sau đó thấy chúng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A valid note: title trimmed",
+              "vi": "Ghi chú hợp lệ: title được trim"
+            },
+            "goi": "validateNote({ title: '  Buy milk  ', tags: ['home', 'todo-1'] })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "title": "Buy milk",
+                "tags": [
+                  "home",
+                  "todo-1"
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Unknown keys are dropped",
+              "vi": "Khoá lạ bị bỏ"
+            },
+            "goi": "validateNote(JSON.parse('{\"title\":\"Hi\",\"isAdmin\":true,\"ownerId\":1,\"__proto__\":{\"x\":1}}'))",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "title": "Hi",
+                "tags": []
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Too long + tags not an array",
+              "vi": "Quá dài + tags không phải mảng"
+            },
+            "goi": "validateNote({ title: 'x'.repeat(201), tags: 'home' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "path": "title",
+                  "code": "TOO_LONG"
+                },
+                {
+                  "path": "tags",
+                  "code": "INVALID"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "30 spaces in the middle (the ReDoS trap)",
+              "vi": "30 dấu cách ở giữa (bẫy ReDoS)"
+            },
+            "goi": "validateNote({ title: 'Meeting' + ' '.repeat(30) + 'notes' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "title": "Meeting                              notes",
+                "tags": []
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[validateNote(null), validateNote([]), validateNote({ title: '   ' }), validateNote({ tags: [] })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "body",
+                    "code": "INVALID"
+                  }
+                ]
+              },
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "body",
+                    "code": "INVALID"
+                  }
+                ]
+              },
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "title",
+                    "code": "TOO_SHORT"
+                  }
+                ]
+              },
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "title",
+                    "code": "REQUIRED"
+                  }
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[validateNote({ title: 'a', tags: Array.from({ length: 21 }, (_, i) => 't' + i) }), validateNote({ title: 'a', tags: ['ok', 'Bad Tag', '', 'x'.repeat(31), 7] })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "tags",
+                    "code": "TOO_MANY"
+                  }
+                ]
+              },
+              {
+                "ok": false,
+                "errors": [
+                  {
+                    "path": "tags.1",
+                    "code": "INVALID"
+                  },
+                  {
+                    "path": "tags.2",
+                    "code": "INVALID"
+                  },
+                  {
+                    "path": "tags.3",
+                    "code": "INVALID"
+                  },
+                  {
+                    "path": "tags.4",
+                    "code": "INVALID"
+                  }
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(() => { const r = validateNote(JSON.parse('{\"title\":\"' + ' '.repeat(150) + 'x\",\"tags\":[\"a\"],\"role\":\"admin\"}')); return [r.ok, Object.keys(r.value), r.value.title]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              [
+                "title",
+                "tags"
+              ],
+              "x"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running the regex first and the length check second: the length check never runs if the regex never ends.|||Chạy regex trước rồi mới kiểm độ dài: phép kiểm độ dài không bao giờ chạy nếu regex không bao giờ dừng."
+        },
+        {
+          "loi": "Returning <code>{ ...body, title }</code>: <code>isAdmin</code> and <code>ownerId</code> from the client reach the database.|||Trả <code>{ ...body, title }</code>: <code>isAdmin</code> và <code>ownerId</code> của client đi thẳng vào CSDL."
+        },
+        {
+          "loi": "Capping bytes but not array length — 90 KB under the limit can still be 5,000 tags.|||Chặn byte mà không chặn độ dài mảng — 90 KB dưới giới hạn vẫn có thể là 5.000 tag."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "strip unknown keys",
+          "vi": "bỏ khoá lạ",
+          "giaiThich": "chỉ giữ trường có trong schema"
+        },
+        {
+          "en": "bounded input",
+          "vi": "đầu vào bị chặn",
+          "giaiThich": "có độ dài tối đa ⇒ chi phí tối đa"
+        }
+      ]
+    },
+    {
+      "title": "A body limit per route, not one global weapon",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "body limits",
+        "middleware"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One 11.3 MB request cost +139 MB RSS once the global limit was raised to 20mb. The lesson’s rule: <b>set the limit per route</b>. Write two functions:</p>\n<ul><li><code>parseLimit(limit)</code>: a non-negative number is returned as bytes (floored); a string like <code>'100kb'</code>, <code>'1.5mb'</code>, <code>'10 MB'</code>, <code>'512b'</code> uses 1kb = 1024 (so <code>'100kb'</code> → <code>102400</code>); anything else throws <code>TypeError</code>.</li>\n<li><code>jsonLimit(limit)</code> → middleware <code>(req, res, next)</code>:\n<ul><li>if <code>content-type</code> does not start with <code>application/json</code> → <code>next()</code> untouched;</li>\n<li>if <code>content-length</code> is present and larger than the limit, <b>or</b> <code>req.rawBody</code> (the body text that arrived; ASCII in the tests, so length = bytes) is longer than the limit → <code>413</code> <code>{ type:'entity.too.large', message:'request entity too large', limit }</code>, no <code>next()</code>;</li>\n<li>otherwise <code>req.body = JSON.parse(rawBody)</code> (empty body → <code>{}</code>) and <code>next()</code>; invalid JSON → <code>400 { type:'entity.parse.failed', message:'invalid JSON' }</code>.</li></ul></li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một request 11,3 MB tốn +139 MB RSS sau khi giới hạn toàn cục được nâng lên 20mb. Luật của bài: <b>đặt giới hạn theo route</b>. Viết hai hàm:</p>\n<ul><li><code>parseLimit(limit)</code>: số không âm thì trả về số byte (làm tròn xuống); chuỗi như <code>'100kb'</code>, <code>'1.5mb'</code>, <code>'10 MB'</code>, <code>'512b'</code> dùng 1kb = 1024 (nên <code>'100kb'</code> → <code>102400</code>); còn lại ném <code>TypeError</code>.</li>\n<li><code>jsonLimit(limit)</code> → middleware <code>(req, res, next)</code>:\n<ul><li>nếu <code>content-type</code> không bắt đầu bằng <code>application/json</code> → <code>next()</code>, không đụng gì;</li>\n<li>nếu có <code>content-length</code> lớn hơn giới hạn, <b>hoặc</b> <code>req.rawBody</code> (chữ của thân request đã tới; ASCII trong bộ kiểm nên độ dài = byte) dài hơn giới hạn → <code>413</code> <code>{ type:'entity.too.large', message:'request entity too large', limit }</code>, không <code>next()</code>;</li>\n<li>còn lại <code>req.body = JSON.parse(rawBody)</code> (thân rỗng → <code>{}</code>) rồi <code>next()</code>; JSON hỏng → <code>400 { type:'entity.parse.failed', message:'invalid JSON' }</code>.</li></ul></li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[parseLimit('100kb'), parseLimit('1.5mb'), parseLimit('10 MB'), parseLimit(2048)]",
+          "output": "[102400,1572864,10485760,2048]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regex like <code>/^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)$/i</code> plus a unit table does parseLimit.|||Một regex như <code>/^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)$/i</code> cộng bảng đơn vị là đủ cho parseLimit.",
+        "Call parseLimit OUTSIDE the returned function, so a typo in the limit throws when the route is mounted.|||Gọi parseLimit BÊN NGOÀI hàm trả về, để gõ sai giới hạn thì ném lỗi ngay lúc gắn route.",
+        "Two size checks: the declared Content-Length (cheap, before reading) and the real body (the header can lie or be missing).|||Hai phép kiểm cỡ: Content-Length khai báo (rẻ, trước khi đọc) và thân thật (header có thể nói dối hoặc không có)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** '100kb' -> 102400 */\nfunction parseLimit(limit) {\n  // Write your solution here\n  return parseInt(limit) * 1000;\n}\n\n/** JSON body parser with a size limit. */\nfunction jsonLimit(limit) {\n  const max = parseLimit(limit);\n  return function json(req, res, next) {\n    if (Number(req.headers['content-length']) > max) return res.status(413).json({ type: 'entity.too.large' });\n    req.body = JSON.parse(req.rawBody || '{}');\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseLimit(limit) {\n  if (typeof limit === 'number' && Number.isFinite(limit) && limit >= 0) return Math.floor(limit);\n  const m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)$/i.exec(String(limit).trim());\n  if (!m) throw new TypeError('invalid limit: ' + limit);\n  const unit = { b: 1, kb: 1024, mb: 1024 ** 2, gb: 1024 ** 3 }[m[2].toLowerCase()];  // like the \"bytes\" package: 1kb = 1024\n  return Math.floor(Number(m[1]) * unit);\n}\n\nfunction jsonLimit(limit) {\n  const max = parseLimit(limit);                       // parse ONCE, when the route is mounted — a bad limit fails at boot\n  const tooLarge = (res) => res.status(413).json({ type: 'entity.too.large', message: 'request entity too large', limit: max });\n  return function json(req, res, next) {\n    // Only JSON is ours: multipart uploads must reach multer untouched (chapter 10).\n    if (!String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) return next();\n    const declared = req.headers['content-length'];\n    // 1) Cheap rejection from the declared size, before reading anything.\n    if (declared !== undefined && Number(declared) > max) return tooLarge(res);\n    // 2) The declared size is a hint the client controls (and chunked bodies have none): check what really arrived.\n    const raw = req.rawBody === undefined ? '' : String(req.rawBody);\n    if (raw.length > max) return tooLarge(res);\n    try {\n      req.body = raw.length ? JSON.parse(raw) : {};\n    } catch {\n      return res.status(400).json({ type: 'entity.parse.failed', message: 'invalid JSON' });\n    }\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A limit is a memory budget per request: parse the configuration once, reject on the declared size before reading, and still check the real size because the header is client-controlled. Mounting <code>jsonLimit('100kb')</code> globally and a larger one only on the route that needs it is the lesson’s \"limit per route\" — the one big endpoint no longer hands every other endpoint the same weapon.</p>",
+      "solutionExplanationHtmlVi": "<p>Giới hạn là ngân sách bộ nhớ cho mỗi request: phân tích cấu hình một lần, từ chối theo cỡ khai báo trước khi đọc, và vẫn kiểm cỡ thật vì header do client kiểm soát. Gắn <code>jsonLimit('100kb')</code> toàn cục và một giới hạn lớn hơn chỉ ở route cần là \"giới hạn theo route\" của bài — một endpoint lớn không còn trao cho mọi endpoint khác cùng một vũ khí.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "parseLimit units",
+              "vi": "Đơn vị của parseLimit"
+            },
+            "goi": "[parseLimit('100kb'), parseLimit('1.5mb'), parseLimit('10 MB'), parseLimit(2048)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              102400,
+              1572864,
+              10485760,
+              2048
+            ]
+          },
+          {
+            "moTa": {
+              "en": "200 KB declared → 413 (as measured)",
+              "vi": "Khai 200 KB → 413 (như đã đo)"
+            },
+            "goi": "await runMw(jsonLimit('100kb'), { headers: { 'content-type': 'application/json', 'content-length': String(200 * 1024) }, rawBody: '' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 413,
+              "headers": {
+                "content-type": "application/json; charset=utf-8"
+              },
+              "body": {
+                "type": "entity.too.large",
+                "message": "request entity too large",
+                "limit": 102400
+              },
+              "ended": true,
+              "next": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "A small body is parsed",
+              "vi": "Thân nhỏ được phân tích"
+            },
+            "goi": "await (async () => { const req = { headers: { 'content-type': 'application/json; charset=utf-8', 'content-length': '13' }, rawBody: '{\"title\":\"a\"}' }; const r = await runMw(jsonLimit('100kb'), req); return [r.next, req.body]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              [
+                "next"
+              ],
+              {
+                "title": "a"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Chunked body (no Content-Length) larger than the limit",
+              "vi": "Thân chunked (không Content-Length) lớn hơn giới hạn"
+            },
+            "goi": "await runMw(jsonLimit('1kb'), { headers: { 'content-type': 'application/json' }, rawBody: '{\"x\":\"' + 'a'.repeat(2000) + '\"}' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 413,
+              "headers": {
+                "content-type": "application/json; charset=utf-8"
+              },
+              "body": {
+                "type": "entity.too.large",
+                "message": "request entity too large",
+                "limit": 1024
+              },
+              "ended": true,
+              "next": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Content-Length lies",
+              "vi": "Content-Length nói dối"
+            },
+            "goi": "await runMw(jsonLimit('1kb'), { headers: { 'content-type': 'application/json', 'content-length': '10' }, rawBody: '{\"x\":\"' + 'a'.repeat(2000) + '\"}' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 413,
+              "headers": {
+                "content-type": "application/json; charset=utf-8"
+              },
+              "body": {
+                "type": "entity.too.large",
+                "message": "request entity too large",
+                "limit": 1024
+              },
+              "ended": true,
+              "next": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[(await runMw(jsonLimit('10b'), { headers: { 'content-type': 'multipart/form-data; boundary=x', 'content-length': '7183298' } })).next, await runMw(jsonLimit('1kb'), { headers: { 'content-type': 'application/json' }, rawBody: '{bad' })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              [
+                "next"
+              ],
+              {
+                "status": 400,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "type": "entity.parse.failed",
+                  "message": "invalid JSON"
+                },
+                "ended": true,
+                "next": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[(() => { try { parseLimit('lots'); return 'no throw'; } catch (e) { return e.name; } })(), (() => { try { jsonLimit('20 megs'); return 'no throw'; } catch (e) { return e.name; } })(), parseLimit('512b'), parseLimit(' 2KB ')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "TypeError",
+              "TypeError",
+              512,
+              2048
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting Content-Length alone: a chunked request has none and a client can send a small number with a big body.|||Chỉ tin Content-Length: request chunked không có, và client có thể khai số nhỏ với thân lớn."
+        },
+        {
+          "loi": "1kb = 1000: express.json’s 100kb limit is 102,400 bytes (measured: limit 102400).|||1kb = 1000: giới hạn 100kb của express.json là 102.400 byte (đo được: limit 102400)."
+        },
+        {
+          "loi": "Parsing multipart as JSON — this middleware must step aside for uploads.|||Phân tích multipart như JSON — middleware này phải tránh đường cho upload."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "413 Payload Too Large",
+          "vi": "thân quá lớn",
+          "giaiThich": "mã trả khi vượt giới hạn"
+        },
+        {
+          "en": "RSS",
+          "vi": "bộ nhớ thường trú",
+          "giaiThich": "RAM tiến trình đang giữ"
+        }
+      ]
+    },
+    {
+      "title": "A link-preview fetch that one 302 cannot walk around",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "SSRF",
+        "redirects",
+        "allow-list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s <code>/preview-checked</code> checked <code>https:</code> and an allow-list, and still returned <code>DATABASE_URL</code>: the allowed host answered <b>302</b> to <code>http://127.0.0.1:4404/admin/config</code> and <code>fetch</code> followed it. Write <code>async safeFetch(rawUrl, allowHosts, maxRedirects = 3)</code>:</p>\n<ul><li>parse with <code>new URL</code> (failure → <code>{ ok:false, error:'BAD_URL' }</code>); protocol must be <code>https:</code> (else <code>HTTPS_ONLY</code>); <code>hostname</code> must be in <code>allowHosts</code> (else <code>HOST_NOT_ALLOWED</code>);</li>\n<li>call <code>fetch(url, { redirect: 'manual' })</code>; on 301/302/303/307/308 resolve <code>Location</code> against the current URL and <b>validate it again</b> before fetching; after <code>maxRedirects</code> redirects return <code>TOO_MANY_REDIRECTS</code>;</li>\n<li>any other status → <code>{ ok:true, status, url, body }</code> with the final URL (<code>url.href</code>) and <code>await res.text()</code>.</li></ul>\n<p>The grader’s <code>fetch</code> is fake (it never follows redirects by itself and it records every call in <code>__fetchDaGoi</code>), so the tests can check that the internal address was <b>never requested</b>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the result objects exactly as specified; never throw for a bad URL.</li>\n  <li>Pass <code>{ redirect: 'manual' }</code> to every fetch call.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>/preview-checked</code> trong bài đã kiểm <code>https:</code> và danh sách trắng mà vẫn trả <code>DATABASE_URL</code>: host được phép trả <b>302</b> về <code>http://127.0.0.1:4404/admin/config</code> và <code>fetch</code> đi theo. Viết <code>async safeFetch(rawUrl, allowHosts, maxRedirects = 3)</code>:</p>\n<ul><li>phân tích bằng <code>new URL</code> (lỗi → <code>{ ok:false, error:'BAD_URL' }</code>); giao thức phải là <code>https:</code> (không thì <code>HTTPS_ONLY</code>); <code>hostname</code> phải có trong <code>allowHosts</code> (không thì <code>HOST_NOT_ALLOWED</code>);</li>\n<li>gọi <code>fetch(url, { redirect: 'manual' })</code>; gặp 301/302/303/307/308 thì giải <code>Location</code> theo URL hiện tại và <b>kiểm lại</b> trước khi fetch; quá <code>maxRedirects</code> lần chuyển hướng trả <code>TOO_MANY_REDIRECTS</code>;</li>\n<li>mã khác → <code>{ ok:true, status, url, body }</code> với URL cuối (<code>url.href</code>) và <code>await res.text()</code>.</li></ul>\n<p><code>fetch</code> của máy chấm là giả (không tự đi theo chuyển hướng và ghi mọi lời gọi vào <code>__fetchDaGoi</code>), nên bộ kiểm xem được địa chỉ nội bộ <b>chưa từng bị gọi</b>.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả đúng các object kết quả như đề; không ném lỗi với URL hỏng.</li>\n  <li>Truyền <code>{ redirect: 'manual' }</code> vào mọi lời gọi fetch.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await safeFetch('https://media.cuongthai.com/cat.png', ['media.cuongthai.com', 'i.giphy.com'])",
+          "output": "{\"ok\":true,\"status\":200,\"url\":\"https://media.cuongthai.com/cat.png\",\"body\":\"PNG…\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Put the three checks in a loop: validate → fetch → if 3xx, set the next URL and loop again.|||Đặt ba phép kiểm trong một vòng lặp: kiểm → fetch → nếu 3xx thì đặt URL kế tiếp và lặp lại.",
+        "<code>new URL(location, currentUrl)</code> handles both absolute and relative <code>Location</code> headers.|||<code>new URL(location, currentUrl)</code> xử lý được cả <code>Location</code> tuyệt đối lẫn tương đối.",
+        "Count hops: the request after the 3rd redirect must not be made.|||Đếm số bước: request sau lần chuyển hướng thứ 3 không được gửi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Fetch a user-supplied URL for a link preview, safely. */\nasync function safeFetch(rawUrl, allowHosts, maxRedirects = 3) {\n  // Write your solution here\n  const u = new URL(rawUrl);\n  if (u.protocol !== 'https:') return { ok: false, error: 'HTTPS_ONLY' };\n  if (!allowHosts.includes(u.hostname)) return { ok: false, error: 'HOST_NOT_ALLOWED' };\n  const r = await fetch(u.href);\n  return { ok: true, status: r.status, url: u.href, body: await r.text() };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nasync function safeFetch(rawUrl, allowHosts, maxRedirects = 3) {\n  const allow = new Set(allowHosts);\n  let current = rawUrl;\n  for (let hop = 0; ; hop++) {\n    let u;\n    try { u = new URL(current); } catch { return { ok: false, error: 'BAD_URL' }; }  // parse, never regex: 127.1, 2130706433…\n    if (u.protocol !== 'https:') return { ok: false, error: 'HTTPS_ONLY' };\n    if (!allow.has(u.hostname)) return { ok: false, error: 'HOST_NOT_ALLOWED' };\n    // redirect: 'manual' — we see the 3xx ourselves instead of fetch silently following it past our checks.\n    const r = await fetch(u.href, { redirect: 'manual' });\n    if ([301, 302, 303, 307, 308].includes(r.status)) {\n      if (hop >= maxRedirects) return { ok: false, error: 'TOO_MANY_REDIRECTS' };\n      const loc = r.headers.get('location');\n      if (!loc) return { ok: false, error: 'BAD_URL' };\n      current = new URL(loc, u).href;   // a relative Location resolves against the hop that sent it — then RE-VALIDATED\n      continue;\n    }\n    return { ok: true, status: r.status, url: u.href, body: await r.text() };\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every URL the server is about to contact must pass the same check, and with automatic redirects the server contacts URLs your code never saw. <code>redirect: 'manual'</code> turns each hop back into a URL you validate, so the internal address is refused before any request is made. Parsing with <code>new URL</code> and comparing <code>hostname</code> to an allow-list defeats every spelling trick at once. (On a real server you would also resolve DNS and refuse private IPs; better still, take an id and build the URL yourself, as the GIPHY proxy does.)</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi URL máy chủ sắp liên lạc đều phải qua cùng một phép kiểm, mà với chuyển hướng tự động thì máy chủ liên lạc những URL mã của bạn chưa từng thấy. <code>redirect: 'manual'</code> biến mỗi bước thành một URL bạn kiểm, nên địa chỉ nội bộ bị từ chối trước khi có request nào. Phân tích bằng <code>new URL</code> và so <code>hostname</code> với danh sách trắng đánh bại mọi mẹo viết địa chỉ một lúc. (Trên máy chủ thật còn phải phân giải DNS và từ chối IP nội bộ; tốt hơn nữa, nhận id rồi tự dựng URL như proxy GIPHY.)</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An allowed image",
+              "vi": "Một ảnh được phép"
+            },
+            "goi": "await safeFetch('https://media.cuongthai.com/cat.png', ['media.cuongthai.com', 'i.giphy.com'])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": true,
+              "status": 200,
+              "url": "https://media.cuongthai.com/cat.png",
+              "body": "PNG…"
+            },
+            "fetchGia": {
+              "https://media.cuongthai.com/cat.png": {
+                "text": "PNG…"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "The internal URL itself",
+              "vi": "Chính URL nội bộ"
+            },
+            "goi": "await safeFetch('http://127.0.0.1:4404/admin/config', ['media.cuongthai.com'])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "ok": false,
+              "error": "HTTPS_ONLY"
+            }
+          },
+          {
+            "moTa": {
+              "en": "The 302 bypass: internal URL never requested",
+              "vi": "Đường vòng 302: URL nội bộ không bao giờ bị gọi"
+            },
+            "goi": "[await safeFetch('https://media.cuongthai.com/cat.png', ['media.cuongthai.com']), __fetchDaGoi.map((c) => c.url)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "error": "HTTPS_ONLY"
+              },
+              [
+                "https://media.cuongthai.com/cat.png"
+              ]
+            ],
+            "fetchGia": {
+              "https://media.cuongthai.com/cat.png": {
+                "status": 302,
+                "headers": {
+                  "location": "http://127.0.0.1:4404/admin/config"
+                }
+              },
+              "http://127.0.0.1:4404/admin/config": {
+                "json": {
+                  "DATABASE_URL": "postgres://prod:sieu-mat@db:5432/app"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await safeFetch('https://media.cuongthai.com/cat.png', ['media.cuongthai.com']), __fetchDaGoi.length]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": true,
+                "status": 200,
+                "url": "https://media.cuongthai.com/v2/cat.png",
+                "body": "moved ok"
+              },
+              2
+            ],
+            "fetchGia": {
+              "https://media.cuongthai.com/cat.png": {
+                "status": 301,
+                "headers": {
+                  "location": "/v2/cat.png"
+                }
+              },
+              "https://media.cuongthai.com/v2/cat.png": {
+                "text": "moved ok"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await safeFetch('https://i.giphy.com/a', ['i.giphy.com']), __fetchDaGoi.length]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "error": "TOO_MANY_REDIRECTS"
+              },
+              4
+            ],
+            "fetchGia": {
+              "https://i.giphy.com/a": {
+                "status": 302,
+                "headers": {
+                  "location": "https://i.giphy.com/b"
+                }
+              },
+              "https://i.giphy.com/b": {
+                "status": 307,
+                "headers": {
+                  "location": "https://i.giphy.com/c"
+                }
+              },
+              "https://i.giphy.com/c": {
+                "status": 302,
+                "headers": {
+                  "location": "https://i.giphy.com/d"
+                }
+              },
+              "https://i.giphy.com/d": {
+                "status": 302,
+                "headers": {
+                  "location": "https://i.giphy.com/e"
+                }
+              },
+              "https://i.giphy.com/e": {
+                "text": "too far"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await safeFetch('not a url', ['x']), await safeFetch('https://127.1/x', ['media.cuongthai.com']), await safeFetch('https://media.cuongthai.com.evil.example/x', ['media.cuongthai.com']), await safeFetch('file:///etc/hostname', ['media.cuongthai.com']), __fetchDaGoi.length]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "error": "BAD_URL"
+              },
+              {
+                "ok": false,
+                "error": "HOST_NOT_ALLOWED"
+              },
+              {
+                "ok": false,
+                "error": "HOST_NOT_ALLOWED"
+              },
+              {
+                "ok": false,
+                "error": "HTTPS_ONLY"
+              },
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[await safeFetch('https://media.cuongthai.com/cat.png', ['media.cuongthai.com']), __fetchDaGoi.map((c) => c.url)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "error": "HOST_NOT_ALLOWED"
+              },
+              [
+                "https://media.cuongthai.com/cat.png"
+              ]
+            ],
+            "fetchGia": {
+              "https://media.cuongthai.com/cat.png": {
+                "status": 302,
+                "headers": {
+                  "location": "https://metadata.evil.example/latest"
+                }
+              }
+            },
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "khop": "redirect\\s*:\\s*['\"]manual['\"]",
+            "moTa": {
+              "en": "fetch is called with redirect: 'manual'",
+              "vi": "fetch được gọi với redirect: 'manual'"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Validating only the first URL: the 302 goes wherever the attacker wants (this is the measured bypass).|||Chỉ kiểm URL đầu: 302 dẫn đi bất cứ đâu kẻ tấn công muốn (đây là đường vòng đã đo)."
+        },
+        {
+          "loi": "A string check like <code>url.includes(\"cuongthai.com\")</code>: <code>https://cuongthai.com.evil.example/</code> passes.|||Kiểm chuỗi kiểu <code>url.includes(\"cuongthai.com\")</code>: <code>https://cuongthai.com.evil.example/</code> lọt qua."
+        },
+        {
+          "loi": "Blocking \"127.0.0.1\" by text: <code>127.1</code>, <code>2130706433</code> and <code>0x7f.0.0.1</code> all parse to it — an allow-list does not care.|||Chặn chữ \"127.0.0.1\": <code>127.1</code>, <code>2130706433</code> và <code>0x7f.0.0.1</code> đều ra địa chỉ đó — danh sách trắng thì không cần quan tâm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "redirect: manual",
+          "vi": "tự xử lý chuyển hướng",
+          "giaiThich": "fetch trả 3xx thay vì tự đi theo"
+        },
+        {
+          "en": "Location",
+          "vi": "header đích chuyển hướng",
+          "giaiThich": "URL tiếp theo trong phản hồi 3xx"
+        }
+      ]
+    }
+  ]
+}

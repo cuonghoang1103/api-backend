@@ -1,0 +1,1227 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-8-2-jwt-access-refresh",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-8-2-jwt-access-refresh"
+  },
+  "exercises": [
+    {
+      "title": "8.2 · 1 — What a JWT guarantees, and the one thing it cannot do",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "JWT",
+        "refresh tokens"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 8.2 in one sentence: you cannot take a JWT back. Six questions on what follows from it.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 8.2 trong một câu: bạn không thể thu hồi một JWT. Sáu câu hỏi về những gì suy ra từ đó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate integrity (signature) from confidentiality (nobody can do it here) and revocability (needs state).|||Tách toàn vẹn (chữ ký) khỏi bảo mật (ở đây không ai làm được) và khả năng thu hồi (cần trạng thái).",
+        "Ask who decides each thing: the server or the token.|||Hỏi ai quyết định từng thứ: server hay token."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.2 · 1 — What a JWT guarantees, and the one thing it cannot do\n\nAnswer in the answer panel (no code needed).\n\n1. Anyone holding an access token runs Buffer.from(payload, \"base64url\"). What do they see?Ai đang giữ access token chạy Buffer.from(payload, \"base64url\"). Họ thấy gì?\n2. Your auth middleware calls jwt.decode(token) to read the role. What do you have?Middleware xác thực của bạn gọi jwt.decode(token) để đọc role. Bạn có gì?\n3. A hand-rolled verifier reads alg from the token header and accepts \"none\". The fix?Một bộ kiểm tự viết đọc alg từ header của token và chấp nhận \"none\". Cách sửa?\n4. A user is fired at 09:00; their access token expires at 09:13. Verification never touches the database. What happens until 09:13?Một người bị cho nghỉ lúc 09:00; access token hết hạn lúc 09:13. Việc kiểm không bao giờ chạm CSDL. Chuyện gì xảy ra tới 09:13?\n5. Why is plain SHA-256 fine for storing refresh tokens when lesson 8.1 forbade it for passwords?Vì sao SHA-256 thường là đủ để lưu refresh token, trong khi bài 8.1 cấm dùng cho mật khẩu?\n6. A refresh token that was already used is presented again. Why revoke the WHOLE family, not just that row?Một refresh token đã dùng được trình lại lần nữa. Vì sao thu hồi CẢ HỌ, không chỉ dòng đó?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.2 · 1 — What a JWT guarantees, and the one thing it cannot do — answer key\n\n1. Anyone holding an access token runs Buffer.from(payload, \"base64url\"). What do they see?Ai đang giữ access token chạy Buffer.from(payload, \"base64url\"). Họ thấy gì?\n   Answer: d) Every claim in clear text — base64url is an encoding, not encryption\n   A signature guarantees integrity, never confidentiality. Nothing in a payload you would not print on the user’s screen.VI: Chữ ký đảm bảo toàn vẹn, không bao giờ bảo mật. Không đưa vào payload thứ bạn không dám in lên màn hình người dùng.\n\n2. Your auth middleware calls jwt.decode(token) to read the role. What do you have?Middleware xác thực của bạn gọi jwt.decode(token) để đọc role. Bạn có gì?\n   Answer: d) No authentication at all\n   Grep for decode in the server’s auth path today.VI: Hôm nay hãy grep decode trong đường xác thực của server.\n\n3. A hand-rolled verifier reads alg from the token header and accepts \"none\". The fix?Một bộ kiểm tự viết đọc alg từ header của token và chấp nhận \"none\". Cách sửa?\n   Answer: a) The server pins the algorithm: algorithms: [\"HS256\"]\n   The same mistake enables algorithm confusion: an HS256 token signed with a PUBLIC key accepted by a server that expects RS256.VI: Cùng lỗi đó mở đường cho nhầm thuật toán: token HS256 ký bằng khoá CÔNG KHAI được server mong RS256 chấp nhận.\n\n4. A user is fired at 09:00; their access token expires at 09:13. Verification never touches the database. What happens until 09:13?Một người bị cho nghỉ lúc 09:00; access token hết hạn lúc 09:13. Việc kiểm không bao giờ chạm CSDL. Chuyện gì xảy ra tới 09:13?\n   Answer: a) The token keeps verifying\n   15-minute access (26,113 verifies/s, no DB) + 30-day refresh stored in the database, revocable in one UPDATE.VI: Access 15 phút (26.113 lần kiểm/s, không CSDL) + refresh 30 ngày lưu trong CSDL, thu hồi bằng một UPDATE.\n\n5. Why is plain SHA-256 fine for storing refresh tokens when lesson 8.1 forbade it for passwords?Vì sao SHA-256 thường là đủ để lưu refresh token, trong khi bài 8.1 cấm dùng cho mật khẩu?\n   Answer: d) The token is 256 random bits — there is nothing to guess, so a one-way function is all you need\n   Slowness protects human-chosen, guessable values. A leaked table of token hashes logs nobody in.VI: Độ chậm bảo vệ giá trị do người chọn, đoán được. Bảng hash token bị rò không cho ai đăng nhập.\n\n6. A refresh token that was already used is presented again. Why revoke the WHOLE family, not just that row?Một refresh token đã dùng được trình lại lần nữa. Vì sao thu hồi CẢ HỌ, không chỉ dòng đó?\n   Answer: c) You cannot tell the thief from the user; only the user has the password\n   The victim’s cost is one extra login; the thief gets nothing.VI: Cái giá của nạn nhân là đăng nhập lại một lần; kẻ trộm không được gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Every claim in clear text — base64url is an encoding, not encryption</p><p>A signature guarantees integrity, never confidentiality. Nothing in a payload you would not print on the user’s screen.</p><p><i>VI: Chữ ký đảm bảo toàn vẹn, không bao giờ bảo mật. Không đưa vào payload thứ bạn không dám in lên màn hình người dùng.</i></p></li><li><p><b>d)</b> No authentication at all</p><p>Grep for decode in the server’s auth path today.</p><p><i>VI: Hôm nay hãy grep decode trong đường xác thực của server.</i></p></li><li><p><b>a)</b> The server pins the algorithm: algorithms: [\"HS256\"]</p><p>The same mistake enables algorithm confusion: an HS256 token signed with a PUBLIC key accepted by a server that expects RS256.</p><p><i>VI: Cùng lỗi đó mở đường cho nhầm thuật toán: token HS256 ký bằng khoá CÔNG KHAI được server mong RS256 chấp nhận.</i></p></li><li><p><b>a)</b> The token keeps verifying</p><p>15-minute access (26,113 verifies/s, no DB) + 30-day refresh stored in the database, revocable in one UPDATE.</p><p><i>VI: Access 15 phút (26.113 lần kiểm/s, không CSDL) + refresh 30 ngày lưu trong CSDL, thu hồi bằng một UPDATE.</i></p></li><li><p><b>d)</b> The token is 256 random bits — there is nothing to guess, so a one-way function is all you need</p><p>Slowness protects human-chosen, guessable values. A leaked table of token hashes logs nobody in.</p><p><i>VI: Độ chậm bảo vệ giá trị do người chọn, đoán được. Bảng hash token bị rò không cho ai đăng nhập.</i></p></li><li><p><b>c)</b> You cannot tell the thief from the user; only the user has the password</p><p>The victim’s cost is one extra login; the thief gets nothing.</p><p><i>VI: Cái giá của nạn nhân là đăng nhập lại một lần; kẻ trộm không được gì.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Anyone holding an access token runs <code>Buffer.from(payload, \"base64url\")</code>. What do they see?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai đang giữ access token chạy <code>Buffer.from(payload, \"base64url\")</code>. Họ thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the sub claim"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing without the secret"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Random bytes, because the payload is encrypted with the secret"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every claim in clear text — base64url is an encoding, not encryption"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A signature guarantees integrity, never confidentiality. Nothing in a payload you would not print on the user’s screen.</p><p><i>VI: Chữ ký đảm bảo toàn vẹn, không bao giờ bảo mật. Không đưa vào payload thứ bạn không dám in lên màn hình người dùng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Your auth middleware calls <code>jwt.decode(token)</code> to read the role. What do you have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Middleware xác thực của bạn gọi <code>jwt.decode(token)</code> để đọc role. Bạn có gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Authentication without expiry checks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Encryption of the role"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Authentication, but slower than verify"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No authentication at all"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Grep for decode in the server’s auth path today.</p><p><i>VI: Hôm nay hãy grep decode trong đường xác thực của server.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A hand-rolled verifier reads <code>alg</code> from the token header and accepts <code>\"none\"</code>. The fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bộ kiểm tự viết đọc <code>alg</code> từ header của token và chấp nhận <code>\"none\"</code>. Cách sửa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server pins the algorithm: algorithms: [\"HS256\"]"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reject every token longer than 228 characters"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Base64-decode the header twice before reading it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Lower-case the alg value before comparing it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The same mistake enables algorithm confusion: an HS256 token signed with a PUBLIC key accepted by a server that expects RS256.</p><p><i>VI: Cùng lỗi đó mở đường cho nhầm thuật toán: token HS256 ký bằng khoá CÔNG KHAI được server mong RS256 chấp nhận.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A user is fired at 09:00; their access token expires at 09:13. Verification never touches the database. What happens until 09:13?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một người bị cho nghỉ lúc 09:00; access token hết hạn lúc 09:13. Việc kiểm không bao giờ chạm CSDL. Chuyện gì xảy ra tới 09:13?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The token keeps verifying"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The client is logged out by the browser"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It stops at 09:00 because the signature changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL rejects the token"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>15-minute access (26,113 verifies/s, no DB) + 30-day refresh stored in the database, revocable in one UPDATE.</p><p><i>VI: Access 15 phút (26.113 lần kiểm/s, không CSDL) + refresh 30 ngày lưu trong CSDL, thu hồi bằng một UPDATE.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is plain SHA-256 fine for storing refresh tokens when lesson 8.1 forbade it for passwords?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao SHA-256 thường là đủ để lưu refresh token, trong khi bài 8.1 cấm dùng cho mật khẩu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SHA-256 is slow enough for tokens"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Refresh tokens expire, so they do not need protection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Refresh tokens are encrypted by the browser"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The token is 256 random bits — there is nothing to guess, so a one-way function is all you need"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Slowness protects human-chosen, guessable values. A leaked table of token hashes logs nobody in.</p><p><i>VI: Độ chậm bảo vệ giá trị do người chọn, đoán được. Bảng hash token bị rò không cho ai đăng nhập.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A refresh token that was already used is presented again. Why revoke the WHOLE family, not just that row?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một refresh token đã dùng được trình lại lần nữa. Vì sao thu hồi CẢ HỌ, không chỉ dòng đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Prisma cannot update a single row inside a transaction"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The access token must always be rotated at the same time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "You cannot tell the thief from the user; only the user has the password"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Revoking a whole family saves space in the sessions table"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The victim’s cost is one extra login; the thief gets nothing.</p><p><i>VI: Cái giá của nạn nhân là đăng nhập lại một lần; kẻ trộm không được gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting phone numbers or other users’ ids into the payload.|||Đưa số điện thoại hay id của người khác vào payload."
+        },
+        {
+          "loi": "Long-lived access tokens to avoid building refresh.|||Access token sống lâu để khỏi phải làm refresh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "access token",
+          "vi": "token truy cập",
+          "giaiThich": "Ngắn hạn, không trạng thái."
+        },
+        {
+          "en": "refresh token",
+          "vi": "token làm mới",
+          "giaiThich": "Dài hạn, lưu trong CSDL, thu hồi được."
+        },
+        {
+          "en": "claim",
+          "vi": "claim",
+          "giaiThich": "Một mục trong payload: sub, exp…"
+        }
+      ]
+    },
+    {
+      "title": "8.2 · 2 — Write readClaims(token, nowSec): everything in a JWT is readable",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "JWT",
+        "base64url"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Base64url is an encoding, not encryption.” Write what the lesson did with <code>Buffer.from(x, 'base64url')</code>, without Buffer (the grader has none — <code>unb64url(text)</code> → bytes or <code>null</code> and <code>fromUtf8(bytes)</code> are in <code>helpers.js</code>). <code>readClaims(token, nowSec)</code> returns <code>{ header, payload, expiresInSec }</code>:</p>\n<ul><li>Split on <code>.</code>; anything that is not exactly 3 parts ⇒ <code>null</code>.</li>\n<li>Decode part 1 (header) and part 2 (payload) from base64url, then UTF-8, then JSON. If either fails ⇒ <code>null</code>.</li>\n<li><code>expiresInSec = payload.exp − nowSec</code> when <code>exp</code> is a number, else <code>null</code>.</li></ul>\n<p>Do <b>not</b> look at the signature: this is the client-side <code>decode</code>. Exercise 3 is the server-side <code>verify</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never throw — return null for anything malformed.</li>\n  <li>Do not use the signature part.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Base64url là mã hoá dạng biểu diễn, không phải mã hoá bí mật.\" Viết lại việc bài làm với <code>Buffer.from(x, 'base64url')</code>, không dùng Buffer (máy chấm không có — <code>unb64url(text)</code> → mảng byte hoặc <code>null</code> và <code>fromUtf8(bytes)</code> nằm trong <code>helpers.js</code>). <code>readClaims(token, nowSec)</code> trả <code>{ header, payload, expiresInSec }</code>:</p>\n<ul><li>Tách theo <code>.</code>; không đúng 3 phần ⇒ <code>null</code>.</li>\n<li>Giải phần 1 (header) và phần 2 (payload) từ base64url, rồi UTF-8, rồi JSON. Hỏng một trong hai ⇒ <code>null</code>.</li>\n<li><code>expiresInSec = payload.exp − nowSec</code> khi <code>exp</code> là số, không thì <code>null</code>.</li></ul>\n<p><b>Không</b> xét chữ ký: đây là <code>decode</code> phía client. Bài 3 là <code>verify</code> phía server.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ ném lỗi — trả null cho mọi thứ sai dạng.</li>\n  <li>Không dùng phần chữ ký.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readClaims(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", 1785172500)",
+          "output": "{\"header\":{\"alg\":\"HS256\",\"typ\":\"JWT\"},\"payload\":{\"sub\":\"1\",\"role\":\"USER\",\"tv\":0,\"iat\":1785172416,\"exp\":1785173316,\"aud\":\"cuongthai-web\",\"iss\":\"cuongthai-api\"},\"expiresInSec\":816}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const dec = (p) => { const b = unb64url(p); if (!b) return null; try { return JSON.parse(fromUtf8(b)); } catch { return null; } };</code>",
+        "A valid JSON that is not an object (like <code>5</code>) is still a header you cannot use — treat falsy results as failure.|||JSON hợp lệ mà không phải object (như <code>5</code>) vẫn là header không dùng được — coi kết quả falsy là hỏng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readClaims(token, nowSec) {\n  // Write your solution here\n  const [h, p] = token.split('.');\n  return { header: JSON.parse(atob(h)), payload: JSON.parse(atob(p)), expiresInSec: null };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readClaims(token, nowSec) {\n  // decoding is NOT verifying: this is for a client showing \"logged in as…\", never for server auth\n  const parts = String(token).split('.');\n  if (parts.length !== 3) return null;\n  const dec = (p) => { const bytes = unb64url(p); if (!bytes) return null; try { return JSON.parse(fromUtf8(bytes)); } catch { return null; } };\n  const header = dec(parts[0]);\n  const payload = dec(parts[1]);\n  if (!header || !payload) return null;\n  return { header, payload, expiresInSec: typeof payload.exp === 'number' ? payload.exp - nowSec : null };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The first two parts of a JWT are just base64url-encoded JSON; the signature only proves nobody changed them. So reading claims needs no secret at all — which is why the payload must never hold anything confidential, and why reading is never the same as trusting.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai phần đầu của JWT chỉ là JSON mã hoá base64url; chữ ký chỉ chứng minh không ai đổi chúng. Nên đọc claim chẳng cần bí mật gì — vì vậy payload không bao giờ được chứa thứ cần giấu, và đọc được không bao giờ đồng nghĩa với tin được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s token, 84 s after iat",
+              "vi": "Token của bài, 84 s sau iat"
+            },
+            "goi": "readClaims(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", 1785172500)",
+            "mongDoi": {
+              "header": {
+                "alg": "HS256",
+                "typ": "JWT"
+              },
+              "payload": {
+                "sub": "1",
+                "role": "USER",
+                "tv": 0,
+                "iat": 1785172416,
+                "exp": 1785173316,
+                "aud": "cuongthai-web",
+                "iss": "cuongthai-api"
+              },
+              "expiresInSec": 816
+            }
+          },
+          {
+            "moTa": {
+              "en": "An edited token decodes just as happily",
+              "vi": "Token bị sửa vẫn giải ra vui vẻ"
+            },
+            "goi": "readClaims(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidHYiOjAsImlhdCI6MTc4NTE3MjQxNiwiZXhwIjoxNzg1MTczMzE2LCJhdWQiOiJjdW9uZ3RoYWktd2ViIiwiaXNzIjoiY3Vvbmd0aGFpLWFwaSJ9.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", 1785172500)",
+            "mongDoi": {
+              "header": {
+                "alg": "HS256",
+                "typ": "JWT"
+              },
+              "payload": {
+                "sub": "1",
+                "role": "ADMIN",
+                "tv": 0,
+                "iat": 1785172416,
+                "exp": 1785173316,
+                "aud": "cuongthai-web",
+                "iss": "cuongthai-api"
+              },
+              "expiresInSec": 816
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[readClaims('abc', 0), readClaims('a.b', 0), readClaims('%%%.e30.x', 0), readClaims(b64url(utf8('not json')) + '.e30.x', 0)]",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "readClaims(\"eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIn0.\", 1785172500)",
+            "mongDoi": {
+              "header": {
+                "alg": "none",
+                "typ": "JWT"
+              },
+              "payload": {
+                "sub": "1",
+                "role": "ADMIN"
+              },
+              "expiresInSec": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "readClaims(b64url(utf8('{\"alg\":\"HS256\"}')) + '.' + b64url(utf8('{\"name\":\"Bình 🔑\",\"exp\":\"soon\"}')) + '.sig', 10)",
+            "mongDoi": {
+              "header": {
+                "alg": "HS256"
+              },
+              "payload": {
+                "name": "Bình 🔑",
+                "exp": "soon"
+              },
+              "expiresInSec": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <code>atob</code>: it expects standard base64 with padding, not base64url (<code>-</code>, <code>_</code>, no <code>=</code>).|||Dùng <code>atob</code>: nó chờ base64 chuẩn có đệm, không phải base64url (<code>-</code>, <code>_</code>, không <code>=</code>)."
+        },
+        {
+          "loi": "Believing the decoded role: the edited token in the checks says ADMIN, and decode happily reads it.|||Tin role đã giải: token bị sửa trong các kiểm ghi ADMIN, và decode vui vẻ đọc ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "base64url",
+          "vi": "base64url",
+          "giaiThich": "Base64 an toàn cho URL: - _ và không có =."
+        },
+        {
+          "en": "decode vs verify",
+          "vi": "giải mã vs kiểm chứng"
+        }
+      ]
+    },
+    {
+      "title": "8.2 · 3 — Write verifyHS256(token, secret, opts): pin the algorithm, check the signature, expiry, audience, issuer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "JWT",
+        "HMAC",
+        "algorithm confusion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s hand-rolled verifier handed out ADMIN twice in eleven lines, because it trusted <code>header.alg</code>. Write one that does not. The tokens in the checks were signed for real with <code>node:crypto</code> (HS256). <code>helpers.js</code> gives you <code>utf8</code>, <code>fromUtf8</code>, <code>b64url</code>, <code>unb64url</code>, <code>hmacSha256(keyBytes, msgBytes)</code> and the two error classes of jsonwebtoken: <code>JsonWebTokenError(message)</code>, <code>TokenExpiredError(message, expiredAt)</code>.</p>\n<p><code>verifyHS256(token, secret, { algorithms, issuer, audience, nowSec })</code> returns the payload or throws, checking <b>in this order</b>:</p>\n<ol><li>not 3 parts ⇒ <code>JsonWebTokenError(\"jwt malformed\")</code>; header or payload not decodable JSON ⇒ <code>\"invalid token\"</code>;</li>\n<li><code>header.alg</code> must be in <code>opts.algorithms</code> <b>and</b> be <code>\"HS256\"</code> (the only one this function implements) ⇒ else <code>\"invalid algorithm\"</code>;</li>\n<li>signature = <code>b64url(hmacSha256(utf8(secret), utf8(part0 + \".\" + part1)))</code> must equal part 3 ⇒ else <code>\"invalid signature\"</code>;</li>\n<li><code>nowSec &gt;= payload.exp</code> ⇒ <code>TokenExpiredError(\"jwt expired\", &lt;exp as ISO string&gt;)</code>;</li>\n<li><code>payload.aud !== opts.audience</code> ⇒ <code>\"jwt audience invalid. expected: &lt;opts.audience&gt;\"</code>; <code>payload.iss !== opts.issuer</code> ⇒ <code>\"jwt issuer invalid. expected: &lt;opts.issuer&gt;\"</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>The header never chooses the algorithm.</li>\n  <li>Check the signature before trusting ANY claim (exp, aud, iss, role).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ kiểm tự viết của bài đã trao quyền ADMIN hai lần trong mười một dòng, vì nó tin <code>header.alg</code>. Hãy viết một bộ không tin. Các token trong kiểm được ký thật bằng <code>node:crypto</code> (HS256). <code>helpers.js</code> cho sẵn <code>utf8</code>, <code>fromUtf8</code>, <code>b64url</code>, <code>unb64url</code>, <code>hmacSha256(keyBytes, msgBytes)</code> và hai lớp lỗi của jsonwebtoken: <code>JsonWebTokenError(message)</code>, <code>TokenExpiredError(message, expiredAt)</code>.</p>\n<p><code>verifyHS256(token, secret, { algorithms, issuer, audience, nowSec })</code> trả payload hoặc ném lỗi, kiểm <b>theo thứ tự này</b>:</p>\n<ol><li>không đủ 3 phần ⇒ <code>JsonWebTokenError(\"jwt malformed\")</code>; header hay payload không giải ra JSON ⇒ <code>\"invalid token\"</code>;</li>\n<li><code>header.alg</code> phải nằm trong <code>opts.algorithms</code> <b>và</b> là <code>\"HS256\"</code> (thuật toán duy nhất hàm này cài) ⇒ không thì <code>\"invalid algorithm\"</code>;</li>\n<li>chữ ký = <code>b64url(hmacSha256(utf8(secret), utf8(part0 + \".\" + part1)))</code> phải bằng phần 3 ⇒ không thì <code>\"invalid signature\"</code>;</li>\n<li><code>nowSec &gt;= payload.exp</code> ⇒ <code>TokenExpiredError(\"jwt expired\", &lt;exp dạng chuỗi ISO&gt;)</code>;</li>\n<li><code>payload.aud !== opts.audience</code> ⇒ <code>\"jwt audience invalid. expected: &lt;opts.audience&gt;\"</code>; <code>payload.iss !== opts.issuer</code> ⇒ <code>\"jwt issuer invalid. expected: &lt;opts.issuer&gt;\"</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Header không bao giờ được chọn thuật toán.</li>\n  <li>Kiểm chữ ký trước khi tin BẤT KỲ claim nào (exp, aud, iss, role).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\")",
+          "output": "{\"ok\":{\"sub\":\"1\",\"role\":\"USER\",\"tv\":0,\"iat\":1785172416,\"exp\":1785173316,\"aud\":\"cuongthai-web\",\"iss\":\"cuongthai-api\"}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Recompute the signature over the ORIGINAL text of the first two parts — not over re-serialised JSON.|||Tính lại chữ ký trên CHỮ GỐC của hai phần đầu — không phải JSON đã tuần tự hoá lại.",
+        "<code>new Date(exp * 1000).toISOString()</code> for expiredAt.|||<code>new Date(exp * 1000).toISOString()</code> cho expiredAt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function verifyHS256(token, secret, opts) {\n  // Write your solution here — this is the lesson's naive verifier\n  const [h, p, s] = token.split('.');\n  const header = JSON.parse(fromUtf8(unb64url(h)));\n  const payload = JSON.parse(fromUtf8(unb64url(p)));\n  if (header.alg === 'none') return payload;\n  return payload;\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n\n// provided — the error classes of jsonwebtoken 9\nclass JsonWebTokenError extends Error { constructor(message) { super(message); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(message, expiredAt) { super(message); this.name = 'TokenExpiredError'; this.expiredAt = expiredAt; } }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function verifyHS256(token, secret, opts) {\n  const parts = String(token).split('.');\n  if (parts.length !== 3) throw new JsonWebTokenError('jwt malformed');\n  const json = (p) => { const b = unb64url(p); if (!b) return null; try { return JSON.parse(fromUtf8(b)); } catch { return null; } };\n  const header = json(parts[0]);\n  const payload = json(parts[1]);\n  if (!header || !payload) throw new JsonWebTokenError('invalid token');\n  // 1) the SERVER decides the algorithm — the header never gets a vote (\"none\", RS256… are refused here)\n  if (!opts.algorithms.includes(header.alg) || header.alg !== 'HS256') throw new JsonWebTokenError('invalid algorithm');\n  // 2) the signature covers header.payload EXACTLY: one changed byte and it does not match\n  const expected = b64url(hmacSha256(utf8(secret), utf8(parts[0] + '.' + parts[1])));\n  if (expected !== parts[2]) throw new JsonWebTokenError('invalid signature');\n  // 3) expiry — the only revocation mechanism a stateless token has\n  if (typeof payload.exp === 'number' && opts.nowSec >= payload.exp) throw new TokenExpiredError('jwt expired', new Date(payload.exp * 1000).toISOString());\n  // 4) a valid token minted for ANOTHER app or by ANOTHER issuer is still not ours\n  if (opts.audience !== undefined && payload.aud !== opts.audience) throw new JsonWebTokenError('jwt audience invalid. expected: ' + opts.audience);\n  if (opts.issuer !== undefined && payload.iss !== opts.issuer) throw new JsonWebTokenError('jwt issuer invalid. expected: ' + opts.issuer);\n  return payload;\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n\n// provided — the error classes of jsonwebtoken 9\nclass JsonWebTokenError extends Error { constructor(message) { super(message); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(message, expiredAt) { super(message); this.name = 'TokenExpiredError'; this.expiredAt = expiredAt; } }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every check here is a promise the SERVER makes, configured on the server: which algorithm (so alg: none and algorithm confusion are impossible), which key (so an edited payload or another key’s signature fails), how long (exp), and for whom (aud/iss — so a valid token of another app is still refused). The order matters too: nothing from the payload is believed before the signature matched.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi phép kiểm ở đây là lời hứa của SERVER, cấu hình trên server: thuật toán nào (nên alg: none và nhầm thuật toán là bất khả), khoá nào (nên payload bị sửa hay chữ ký bằng khoá khác đều hỏng), bao lâu (exp), và cho ai (aud/iss — nên token hợp lệ của app khác vẫn bị từ chối). Thứ tự cũng quan trọng: không tin gì trong payload trước khi chữ ký khớp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A valid token ⇒ the payload",
+              "vi": "Token hợp lệ ⇒ payload"
+            },
+            "goi": "tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\")",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": {
+              "ok": {
+                "sub": "1",
+                "role": "USER",
+                "tv": 0,
+                "iat": 1785172416,
+                "exp": 1785173316,
+                "aud": "cuongthai-web",
+                "iss": "cuongthai-api"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Attack 1: payload edited to ADMIN ⇒ invalid signature",
+              "vi": "Tấn công 1: sửa payload thành ADMIN ⇒ invalid signature"
+            },
+            "goi": "tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidHYiOjAsImlhdCI6MTc4NTE3MjQxNiwiZXhwIjoxNzg1MTczMzE2LCJhdWQiOiJjdW9uZ3RoYWktd2ViIiwiaXNzIjoiY3Vvbmd0aGFpLWFwaSJ9.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\")",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": {
+              "thrown": "JsonWebTokenError",
+              "message": "invalid signature"
+            }
+          },
+          {
+            "moTa": {
+              "en": "alg: none ⇒ invalid algorithm",
+              "vi": "alg: none ⇒ invalid algorithm"
+            },
+            "goi": "tryIt(\"eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIn0.\")",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": {
+              "thrown": "JsonWebTokenError",
+              "message": "invalid algorithm"
+            }
+          },
+          {
+            "moTa": {
+              "en": "At exp ⇒ jwt expired",
+              "vi": "Đúng lúc exp ⇒ jwt expired"
+            },
+            "goi": "tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", { ...OPTS, nowSec: 1785173316 })",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": {
+              "thrown": "TokenExpiredError",
+              "message": "jwt expired",
+              "expiredAt": "2026-07-27T17:28:36.000Z"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Other key; header says RS256; server allows only RS256",
+              "vi": "Khoá khác; header ghi RS256; server chỉ cho RS256"
+            },
+            "goi": "[tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidHYiOjAsImlhdCI6MTc4NTE3MjQxNiwiZXhwIjoxNzg1MTczMzE2LCJhdWQiOiJjdW9uZ3RoYWktd2ViIiwiaXNzIjoiY3Vvbmd0aGFpLWFwaSJ9.z-oGE23hRwXJ_NKJEc8Yt0QlUMcW2XW9VMH-e7svN8Y\"), tryIt(\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidHYiOjAsImlhdCI6MTc4NTE3MjQxNiwiZXhwIjoxNzg1MTczMzE2LCJhdWQiOiJjdW9uZ3RoYWktd2ViIiwiaXNzIjoiY3Vvbmd0aGFpLWFwaSJ9.XOY-0ezWtVFrdGPCLH_x5yblVbbq5f6G4wj3QGZznsw\"), tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", { ...OPTS, algorithms: ['RS256'] })]",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": [
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "invalid signature"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "invalid algorithm"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "invalid algorithm"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImFwcC1raGFjIiwiaXNzIjoiY3Vvbmd0aGFpLWFwaSJ9.bVwYDjC_JSBbr4cVXeTt2YTQ0z0CGl-fvkvNdJyo_k0\"), tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJzb21lb25lLWVsc2UifQ.XB07CONk-ct4QCMkS6DJusYMFGC4SiVYNjYikqHyxhY\"), tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzI0MTd9.bqzc56M9FT7xEQClpij96TbDNlPhCa-jlMIj7dtVTj0\", { algorithms: ['HS256'], nowSec: 1785172418 })]",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": [
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "jwt audience invalid. expected: cuongthai-web"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "jwt issuer invalid. expected: cuongthai-api"
+              },
+              {
+                "thrown": "TokenExpiredError",
+                "message": "jwt expired",
+                "expiredAt": "2026-07-27T17:13:37.000Z"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[tryIt('abc'), tryIt('a.b.c.d'), tryIt('%%.e30.x'), tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.cASC_AI6Bm2QBd_BNyPorYbGF7ukPUJK33nXeVLosCc\", OPTS, 'wrong-secret')]",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": [
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "jwt malformed"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "jwt malformed"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "invalid token"
+              },
+              {
+                "thrown": "JsonWebTokenError",
+                "message": "invalid signature"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "tryIt(\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IlVTRVIiLCJ0diI6MCwiaWF0IjoxNzg1MTcyNDE2LCJleHAiOjE3ODUxNzMzMTYsImF1ZCI6ImN1b25ndGhhaS13ZWIiLCJpc3MiOiJjdW9uZ3RoYWktYXBpIn0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\")",
+            "chuanBi": "const SECRET = \"lab-secret-0f9c2e7a4b1d8e6f3a5c7b9d2e4f6a8c\"; const OPTS = {\"algorithms\":[\"HS256\"],\"issuer\":\"cuongthai-api\",\"audience\":\"cuongthai-web\",\"nowSec\":1785172500};\nconst tryIt = (t, o = OPTS, s = SECRET) => { try { return { ok: verifyHS256(t, s, o) }; } catch (e) { return { thrown: e.name, message: e.message, ...(e.expiredAt ? { expiredAt: e.expiredAt } : {}) }; } };",
+            "mongDoi": {
+              "thrown": "JsonWebTokenError",
+              "message": "invalid signature"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>if (header.alg === \"none\") return payload</code> — hole 1 of the lesson’s verifier.|||<code>if (header.alg === \"none\") return payload</code> — lỗ thứ nhất của bộ kiểm trong bài."
+        },
+        {
+          "loi": "Checking exp before the signature: an attacker learns nothing from it, but you have already trusted an unverified claim.|||Kiểm exp trước chữ ký: kẻ tấn công không học được gì, nhưng bạn đã tin một claim chưa kiểm."
+        },
+        {
+          "loi": "Signing <code>JSON.stringify(payload)</code> instead of the received text: any token with different key order or spacing fails.|||Ký <code>JSON.stringify(payload)</code> thay vì chữ nhận được: token nào khác thứ tự khoá hay khoảng trắng đều hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HMAC",
+          "vi": "HMAC",
+          "giaiThich": "Mã xác thực thông điệp dùng khoá bí mật."
+        },
+        {
+          "en": "audience",
+          "vi": "đối tượng nhận",
+          "giaiThich": "aud: token dành cho app nào."
+        },
+        {
+          "en": "issuer",
+          "vi": "bên phát hành",
+          "giaiThich": "iss: ai ký token."
+        }
+      ]
+    },
+    {
+      "title": "8.2 · 4 — Write issueSession() and refresh(): rotation, and reuse that burns the whole family",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "refresh tokens",
+        "rotation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The design of lesson 8.2, on an in-memory table <code>db.sessions</code> of rows <code>{ userId, familyId, tokenHash, expiresAt, usedAt, revokedAt }</code> (times in ms). <code>deps = { newRefreshToken(), newFamilyId(), signAccess(userId), now() }</code>. <code>helpers.js</code> has <code>utf8</code>, <code>sha256</code>, <code>hex</code> and <code>AppError</code>.</p>\n<ul><li><code>issueSession(db, userId, deps, familyId = deps.newFamilyId())</code> — login (new family) or rotation (existing family): push a row with <code>tokenHash = hex(sha256(utf8(refreshToken)))</code> (never the token itself), <code>expiresAt = now + 30 days</code>, <code>usedAt</code> and <code>revokedAt</code> null; return <code>{ accessToken: signAccess(userId), refreshToken }</code>.</li>\n<li><code>refresh(db, presented, deps)</code>: find the row by the hash of <code>presented</code> — none ⇒ <code>AppError(401, 'REFRESH_INVALID')</code>. If it is already <b>used or revoked</b> ⇒ set <code>revokedAt = now</code> on every not-yet-revoked row of its family and throw <code>AppError(401, 'REFRESH_REUSE_DETECTED', 'Refresh token reuse detected — revoked the whole family (N sessions)')</code>. If <code>expiresAt &lt;= now</code> ⇒ <code>REFRESH_EXPIRED</code>. Otherwise mark it <code>usedAt = now</code> and issue a new pair in the <b>same</b> family.</li></ul>\n<p>The first check replays the lesson’s run: rotate, replay the old token (2 sessions revoked), then the victim’s new token (0 sessions — already burned).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never store the refresh token itself.</li>\n  <li>Reuse ⇒ revoke the family, then refuse.</li>\n  <li>Rotation keeps the familyId.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thiết kế của bài 8.2, trên bảng trong bộ nhớ <code>db.sessions</code> gồm các dòng <code>{ userId, familyId, tokenHash, expiresAt, usedAt, revokedAt }</code> (thời gian tính bằng ms). <code>deps = { newRefreshToken(), newFamilyId(), signAccess(userId), now() }</code>. <code>helpers.js</code> có <code>utf8</code>, <code>sha256</code>, <code>hex</code> và <code>AppError</code>.</p>\n<ul><li><code>issueSession(db, userId, deps, familyId = deps.newFamilyId())</code> — đăng nhập (họ mới) hay xoay vòng (họ có sẵn): thêm một dòng với <code>tokenHash = hex(sha256(utf8(refreshToken)))</code> (không bao giờ là chính token), <code>expiresAt = now + 30 ngày</code>, <code>usedAt</code> và <code>revokedAt</code> null; trả <code>{ accessToken: signAccess(userId), refreshToken }</code>.</li>\n<li><code>refresh(db, presented, deps)</code>: tìm dòng theo hash của <code>presented</code> — không có ⇒ <code>AppError(401, 'REFRESH_INVALID')</code>. Nếu đã <b>dùng hoặc bị thu hồi</b> ⇒ đặt <code>revokedAt = now</code> cho mọi dòng chưa bị thu hồi của họ đó và ném <code>AppError(401, 'REFRESH_REUSE_DETECTED', 'Refresh token reuse detected — revoked the whole family (N sessions)')</code>. Nếu <code>expiresAt &lt;= now</code> ⇒ <code>REFRESH_EXPIRED</code>. Còn lại đánh dấu <code>usedAt = now</code> và cấp cặp mới trong <b>cùng</b> họ.</li></ul>\n<p>Kiểm đầu tiên diễn lại lần chạy của bài: xoay vòng, dùng lại token cũ (thu hồi 2 phiên), rồi token mới của nạn nhân (0 phiên — đã bị đốt).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ lưu chính refresh token.</li>\n  <li>Dùng lại ⇒ thu hồi cả họ, rồi từ chối.</li>\n  <li>Xoay vòng giữ nguyên familyId.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const db = { sessions: [] }; issueSession(db, 1, deps); const login = issueSession(db, 1, deps); tick(1000); const rotated = refresh(db, login.refreshToken, deps); tick(1000);\n  const thief = caught(() => refresh(db, login.refreshToken, deps)); const victim = caught(() => refresh(db, rotated.refreshToken, deps));\n  return { rotatedDiffers: rotated.refreshToken !== login.refreshToken, thief, victim, table: table(db) }; })()",
+          "output": "{\"rotatedDiffers\":true,\"thief\":{\"thrown\":\"AppError\",\"status\":401,\"code\":\"REFRESH_REUSE_DETECTED\",\"message\":\"Refresh token reuse detected — revoked the whole family (2 sessions)\"},\"victim\":{\"thrown\":\"AppError\",\"status\":401,\"code\":\"REFRESH_REUSE_DETECTED\",\"message\":\"Refresh token reuse detected — revoked the whole family (0 sessions)\"},\"table\":[[\"fam-1\",\"83ad164c4161\",\"-\",\"-\"],[\"fam-2\",\"a890847af178\",\"used\",\"revoked\"],[\"fam-2\",\"cb15a49cec87\",\"-\",\"revoked\"]]}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Login calls <code>issueSession(db, userId, deps)</code>; refresh calls it with <code>s.familyId</code> — that two-line difference is the whole rotation mechanism.|||Đăng nhập gọi <code>issueSession(db, userId, deps)</code>; refresh gọi với <code>s.familyId</code> — khác biệt hai dòng đó là toàn bộ cơ chế xoay vòng.",
+        "Check used/revoked BEFORE expiry: a stolen, replayed token must still burn the family even if it is old.|||Kiểm đã dùng/bị thu hồi TRƯỚC hạn: token bị trộm đem dùng lại vẫn phải đốt cả họ dù nó đã cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function issueSession(db, userId, deps, familyId = deps.newFamilyId()) {\n  // Write your solution here\n  const refresh = deps.newRefreshToken();\n  db.sessions.push({ userId, familyId, tokenHash: refresh, expiresAt: deps.now() + 30 * 86400000, usedAt: null, revokedAt: null });\n  return { accessToken: deps.signAccess(userId), refreshToken: refresh };\n}\nfunction refresh(db, presented, deps) {\n  const s = db.sessions.find((x) => x.tokenHash === presented);\n  if (!s) throw new AppError(401, 'REFRESH_INVALID', 'Unknown refresh token');\n  return issueSession(db, s.userId, deps);\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n\n// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function issueSession(db, userId, deps, familyId = deps.newFamilyId()) {\n  const refresh = deps.newRefreshToken();                       // 256 random bits — NOT a JWT\n  db.sessions.push({\n    userId, familyId,\n    tokenHash: hex(sha256(utf8(refresh))),                     // store only the hash: a leaked table logs nobody in\n    expiresAt: deps.now() + 30 * 86400000, usedAt: null, revokedAt: null,\n  });\n  return { accessToken: deps.signAccess(userId), refreshToken: refresh };\n}\n\nfunction refresh(db, presented, deps) {\n  const s = db.sessions.find((x) => x.tokenHash === hex(sha256(utf8(String(presented)))));\n  if (!s) throw new AppError(401, 'REFRESH_INVALID', 'Unknown refresh token');\n  if (s.usedAt || s.revokedAt) {\n    // a used token presented again cannot happen honestly: two parties hold the chain — burn the whole family\n    let n = 0;\n    for (const x of db.sessions) if (x.familyId === s.familyId && !x.revokedAt) { x.revokedAt = deps.now(); n++; }\n    throw new AppError(401, 'REFRESH_REUSE_DETECTED', 'Refresh token reuse detected — revoked the whole family (' + n + ' sessions)');\n  }\n  if (s.expiresAt <= deps.now()) throw new AppError(401, 'REFRESH_EXPIRED', 'Refresh token expired');\n  s.usedAt = deps.now();                                         // single-use\n  return issueSession(db, s.userId, deps, s.familyId);          // same family: the chain continues\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n\n// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Single-use tokens turn theft into an observable event: in honest operation a used token is never presented again, so when it is, two parties hold the chain. You cannot tell which one is the thief, so you burn the family; the real user logs in with a password the thief does not have. Storing only SHA-256 hashes means the table itself is useless to whoever steals it.</p>",
+      "solutionExplanationHtmlVi": "<p>Token dùng một lần biến vụ trộm thành sự kiện quan sát được: vận hành lương thiện thì token đã dùng không bao giờ được trình lại, nên khi nó xuất hiện, có hai bên đang giữ chuỗi. Không biết ai là kẻ trộm, nên đốt cả họ; người dùng thật đăng nhập bằng mật khẩu mà kẻ trộm không có. Chỉ lưu hash SHA-256 nghĩa là chính cái bảng vô dụng với kẻ lấy được nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s run: rotate, reuse, victim",
+              "vi": "Lần chạy của bài: xoay vòng, dùng lại, nạn nhân"
+            },
+            "goi": "(() => { const db = { sessions: [] }; issueSession(db, 1, deps); const login = issueSession(db, 1, deps); tick(1000); const rotated = refresh(db, login.refreshToken, deps); tick(1000);\n  const thief = caught(() => refresh(db, login.refreshToken, deps)); const victim = caught(() => refresh(db, rotated.refreshToken, deps));\n  return { rotatedDiffers: rotated.refreshToken !== login.refreshToken, thief, victim, table: table(db) }; })()",
+            "chuanBi": "let tokN = 0, famN = 0, clock = 1785172416000;\nconst deps = { newRefreshToken: () => 'rt-' + (++tokN) + '-' + 'x'.repeat(39), newFamilyId: () => 'fam-' + (++famN), signAccess: (userId) => 'access-for-' + userId + '-at-' + clock, now: () => clock };\nconst tick = (ms) => { clock += ms; };\nconst table = (db) => db.sessions.map((s) => [s.familyId, s.tokenHash.slice(0, 12), s.usedAt ? 'used' : '-', s.revokedAt ? 'revoked' : '-']);\nconst caught = (f) => { try { return f(); } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'REFRESH_REUSE_DETECTED' ? { message: e.message } : {}) }; } };",
+            "mongDoi": {
+              "rotatedDiffers": true,
+              "thief": {
+                "thrown": "AppError",
+                "status": 401,
+                "code": "REFRESH_REUSE_DETECTED",
+                "message": "Refresh token reuse detected — revoked the whole family (2 sessions)"
+              },
+              "victim": {
+                "thrown": "AppError",
+                "status": 401,
+                "code": "REFRESH_REUSE_DETECTED",
+                "message": "Refresh token reuse detected — revoked the whole family (0 sessions)"
+              },
+              "table": [
+                [
+                  "fam-1",
+                  "83ad164c4161",
+                  "-",
+                  "-"
+                ],
+                [
+                  "fam-2",
+                  "a890847af178",
+                  "used",
+                  "revoked"
+                ],
+                [
+                  "fam-2",
+                  "cb15a49cec87",
+                  "-",
+                  "revoked"
+                ]
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Only the hash is stored",
+              "vi": "Chỉ lưu hash"
+            },
+            "goi": "(() => { const db = { sessions: [] }; const s = issueSession(db, 7, deps); return [s, db.sessions[0].tokenHash === s.refreshToken, db.sessions[0].tokenHash.length, db.sessions[0].familyId]; })()",
+            "chuanBi": "let tokN = 0, famN = 0, clock = 1785172416000;\nconst deps = { newRefreshToken: () => 'rt-' + (++tokN) + '-' + 'x'.repeat(39), newFamilyId: () => 'fam-' + (++famN), signAccess: (userId) => 'access-for-' + userId + '-at-' + clock, now: () => clock };\nconst tick = (ms) => { clock += ms; };\nconst table = (db) => db.sessions.map((s) => [s.familyId, s.tokenHash.slice(0, 12), s.usedAt ? 'used' : '-', s.revokedAt ? 'revoked' : '-']);\nconst caught = (f) => { try { return f(); } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'REFRESH_REUSE_DETECTED' ? { message: e.message } : {}) }; } };",
+            "mongDoi": [
+              {
+                "accessToken": "access-for-7-at-1785172416000",
+                "refreshToken": "rt-1-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              },
+              false,
+              64,
+              "fam-1"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(() => { const db = { sessions: [] }; const a = issueSession(db, 1, deps); const b = refresh(db, a.refreshToken, deps); const c = refresh(db, b.refreshToken, deps); return [db.sessions.map((s) => s.familyId), c.accessToken, table(db)]; })()",
+            "chuanBi": "let tokN = 0, famN = 0, clock = 1785172416000;\nconst deps = { newRefreshToken: () => 'rt-' + (++tokN) + '-' + 'x'.repeat(39), newFamilyId: () => 'fam-' + (++famN), signAccess: (userId) => 'access-for-' + userId + '-at-' + clock, now: () => clock };\nconst tick = (ms) => { clock += ms; };\nconst table = (db) => db.sessions.map((s) => [s.familyId, s.tokenHash.slice(0, 12), s.usedAt ? 'used' : '-', s.revokedAt ? 'revoked' : '-']);\nconst caught = (f) => { try { return f(); } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'REFRESH_REUSE_DETECTED' ? { message: e.message } : {}) }; } };",
+            "mongDoi": [
+              [
+                "fam-1",
+                "fam-1",
+                "fam-1"
+              ],
+              "access-for-1-at-1785172416000",
+              [
+                [
+                  "fam-1",
+                  "83ad164c4161",
+                  "used",
+                  "-"
+                ],
+                [
+                  "fam-1",
+                  "a890847af178",
+                  "used",
+                  "-"
+                ],
+                [
+                  "fam-1",
+                  "cb15a49cec87",
+                  "-",
+                  "-"
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const db = { sessions: [] }; const a = issueSession(db, 1, deps); tick(30 * 86400000); const r = caught(() => refresh(db, a.refreshToken, deps)); return [r, caught(() => refresh(db, 'never-issued', deps))]; })()",
+            "chuanBi": "let tokN = 0, famN = 0, clock = 1785172416000;\nconst deps = { newRefreshToken: () => 'rt-' + (++tokN) + '-' + 'x'.repeat(39), newFamilyId: () => 'fam-' + (++famN), signAccess: (userId) => 'access-for-' + userId + '-at-' + clock, now: () => clock };\nconst tick = (ms) => { clock += ms; };\nconst table = (db) => db.sessions.map((s) => [s.familyId, s.tokenHash.slice(0, 12), s.usedAt ? 'used' : '-', s.revokedAt ? 'revoked' : '-']);\nconst caught = (f) => { try { return f(); } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'REFRESH_REUSE_DETECTED' ? { message: e.message } : {}) }; } };",
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "status": 401,
+                "code": "REFRESH_EXPIRED"
+              },
+              {
+                "thrown": "AppError",
+                "status": 401,
+                "code": "REFRESH_INVALID"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Burning one family leaves the other device logged in",
+              "vi": "Đốt một họ để thiết bị kia vẫn đăng nhập"
+            },
+            "goi": "(() => { const db = { sessions: [] }; const phone = issueSession(db, 1, deps); const laptop = issueSession(db, 1, deps); const p2 = refresh(db, phone.refreshToken, deps); caught(() => refresh(db, phone.refreshToken, deps)); return [caught(() => refresh(db, laptop.refreshToken, deps)).accessToken, table(db)]; })()",
+            "chuanBi": "let tokN = 0, famN = 0, clock = 1785172416000;\nconst deps = { newRefreshToken: () => 'rt-' + (++tokN) + '-' + 'x'.repeat(39), newFamilyId: () => 'fam-' + (++famN), signAccess: (userId) => 'access-for-' + userId + '-at-' + clock, now: () => clock };\nconst tick = (ms) => { clock += ms; };\nconst table = (db) => db.sessions.map((s) => [s.familyId, s.tokenHash.slice(0, 12), s.usedAt ? 'used' : '-', s.revokedAt ? 'revoked' : '-']);\nconst caught = (f) => { try { return f(); } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'REFRESH_REUSE_DETECTED' ? { message: e.message } : {}) }; } };",
+            "mongDoi": [
+              "access-for-1-at-1785172416000",
+              [
+                [
+                  "fam-1",
+                  "83ad164c4161",
+                  "used",
+                  "revoked"
+                ],
+                [
+                  "fam-2",
+                  "a890847af178",
+                  "used",
+                  "-"
+                ],
+                [
+                  "fam-1",
+                  "cb15a49cec87",
+                  "-",
+                  "revoked"
+                ],
+                [
+                  "fam-2",
+                  "530b07374369",
+                  "-",
+                  "-"
+                ]
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Making refresh tokens JWTs: a signed token you cannot revoke is the problem you were escaping.|||Làm refresh token thành JWT: token có chữ ký mà không thu hồi được chính là vấn đề bạn đang thoát ra."
+        },
+        {
+          "loi": "Revoking only the replayed row: the thief’s copy of the NEW token keeps working.|||Chỉ thu hồi dòng bị dùng lại: bản sao token MỚI của kẻ trộm vẫn chạy."
+        },
+        {
+          "loi": "Allowing a used token to refresh again (“it is still within 30 days”): theft becomes undetectable.|||Cho token đã dùng làm mới lần nữa (\"vẫn trong 30 ngày\"): trộm trở nên không phát hiện được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "token family",
+          "vi": "họ token",
+          "giaiThich": "Chuỗi xoay vòng của MỘT lần đăng nhập."
+        },
+        {
+          "en": "reuse detection",
+          "vi": "phát hiện dùng lại"
+        },
+        {
+          "en": "rotation",
+          "vi": "xoay vòng"
+        }
+      ]
+    },
+    {
+      "title": "8.2 · 5 — Write createApi(base): on a 401, refresh once, retry once — never loop",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "refresh tokens",
+        "fetch",
+        "promises"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The July 2026 incident: the access token died after a day, the cookie lived a week, and no working refresh route existed — so for six days of seven the user saw a logged-in interface where every button failed. The client half of the fix is one interceptor. Write <code>createApi(base)</code> returning <code>{ request(path, init) }</code> that uses the global <code>fetch</code> (the grader’s fake):</p>\n<ul><li><code>fetch(base + path, init)</code>. Anything but 401 ⇒ return the response as is. A 401 on a path starting with <code>/auth/</code> ⇒ return it as is (no refresh for login/refresh themselves).</li>\n<li>Otherwise call <code>POST base + \"/auth/refresh\"</code> <b>once</b>; if it is not ok ⇒ throw <code>new AppError(401, 'LOGGED_OUT', …)</code> (<code>AppError</code> is in helpers).</li>\n<li>If it is ok ⇒ retry the original request <b>once</b> and return that response, whatever its status.</li>\n<li>Several requests that get 401 while a refresh is already in flight must <b>share</b> it — one refresh call, not one per request.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>At most one refresh in flight.</li>\n  <li>At most one retry per request.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự cố tháng 7/2026: access token chết sau một ngày, cookie sống một tuần, và không có route làm mới nào chạy được — nên sáu ngày trên bảy người dùng thấy giao diện đã đăng nhập mà nút nào cũng hỏng. Nửa phía client của cách sửa là một interceptor. Viết <code>createApi(base)</code> trả <code>{ request(path, init) }</code> dùng <code>fetch</code> toàn cục (fetch GIẢ của máy chấm):</p>\n<ul><li><code>fetch(base + path, init)</code>. Khác 401 ⇒ trả nguyên phản hồi. 401 trên đường dẫn bắt đầu bằng <code>/auth/</code> ⇒ trả nguyên (không làm mới cho chính login/refresh).</li>\n<li>Còn lại gọi <code>POST base + \"/auth/refresh\"</code> <b>một lần</b>; không ok ⇒ ném <code>new AppError(401, 'LOGGED_OUT', …)</code> (<code>AppError</code> có trong helpers).</li>\n<li>Ok ⇒ thử lại request gốc <b>một lần</b> và trả phản hồi đó, mã gì cũng vậy.</li>\n<li>Nhiều request cùng nhận 401 khi đã có một lần làm mới đang chạy phải <b>dùng chung</b> nó — một lần gọi refresh, không phải mỗi request một lần.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tối đa một lần làm mới đang chạy.</li>\n  <li>Mỗi request tối đa thử lại một lần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await caught(api.request('/notes')), calls()]",
+          "output": "[200,[\"GET /notes\",\"POST /auth/refresh\",\"GET /notes\"]]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep <code>let refreshing = null</code>; the first 401 sets it to the refresh promise, everyone else awaits the same one; clear it in <code>finally</code>.|||Giữ <code>let refreshing = null</code>; 401 đầu tiên gán nó bằng promise làm mới, mọi người khác await cùng cái đó; xoá nó trong <code>finally</code>.",
+        "“Once” matters: without it, an expired refresh token produces an infinite retry loop.|||\"Một lần\" quan trọng: thiếu nó, refresh token hết hạn tạo vòng thử lại vô hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createApi(base) {\n  async function request(path, init = {}) {\n    // Write your solution here\n    let res = await fetch(base + path, init);\n    while (res.status === 401) {\n      await fetch(base + '/auth/refresh', { method: 'POST' });\n      res = await fetch(base + path, init);\n    }\n    return res;\n  }\n  return { request };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createApi(base) {\n  let refreshing = null;                                   // one refresh in flight, shared by every 401 that arrives meanwhile\n  async function refreshOnce() {\n    if (!refreshing) {\n      refreshing = fetch(base + '/auth/refresh', { method: 'POST' })\n        .then((r) => r.ok)\n        .finally(() => { refreshing = null; });\n    }\n    return refreshing;\n  }\n  async function request(path, init = {}) {\n    const res = await fetch(base + path, init);\n    if (res.status !== 401 || path.startsWith('/auth/')) return res;      // never refresh for the auth routes themselves\n    const ok = await refreshOnce();\n    if (!ok) throw new AppError(401, 'LOGGED_OUT', 'Session expired, please log in again');\n    return fetch(base + path, init);                                        // retry ONCE; a second 401 is returned as is\n  }\n  return { request };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The interceptor turns a dying session into a self-healing one: the 401 triggers exactly one refresh, the request is replayed once, and a failed refresh is a real logout. Sharing the in-flight refresh is not an optimisation — with single-use refresh tokens, two parallel refreshes look exactly like theft to the server.</p>",
+      "solutionExplanationHtmlVi": "<p>Interceptor biến một phiên đang chết thành phiên tự lành: 401 kích hoạt đúng một lần làm mới, request được phát lại một lần, và làm mới hỏng là đăng xuất thật. Dùng chung lần làm mới đang chạy không phải tối ưu — với refresh token dùng một lần, hai lần làm mới song song trông y như vụ trộm trong mắt server.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "moTa": {
+              "en": "401 ⇒ refresh ⇒ retry ⇒ 200",
+              "vi": "401 ⇒ làm mới ⇒ thử lại ⇒ 200"
+            },
+            "goi": "[await caught(api.request('/notes')), calls()]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "GET http://api.test/api/v1/notes": [
+                {
+                  "status": 401,
+                  "json": {
+                    "error": {
+                      "code": "TOKEN_EXPIRED"
+                    }
+                  }
+                },
+                {
+                  "status": 200,
+                  "json": {
+                    "items": []
+                  }
+                }
+              ],
+              "POST http://api.test/api/v1/auth/refresh": {
+                "status": 200,
+                "json": {
+                  "ok": true
+                }
+              }
+            },
+            "mongDoi": [
+              200,
+              [
+                "GET /notes",
+                "POST /auth/refresh",
+                "GET /notes"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Refresh fails ⇒ LOGGED_OUT, no loop",
+              "vi": "Làm mới hỏng ⇒ LOGGED_OUT, không lặp"
+            },
+            "goi": "[await caught(api.request('/notes')), calls()]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "GET http://api.test/api/v1/notes": {
+                "status": 401,
+                "json": {}
+              },
+              "POST http://api.test/api/v1/auth/refresh": {
+                "status": 401,
+                "json": {}
+              }
+            },
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "code": "LOGGED_OUT"
+              },
+              [
+                "GET /notes",
+                "POST /auth/refresh"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A 401 from /auth/* is returned as is",
+              "vi": "401 từ /auth/* được trả nguyên"
+            },
+            "goi": "[await caught(api.request('/auth/login', { method: 'POST' })), calls()]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "POST http://api.test/api/v1/auth/login": {
+                "status": 401,
+                "json": {}
+              }
+            },
+            "mongDoi": [
+              401,
+              [
+                "POST /auth/login"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Three parallel 401s share ONE refresh",
+              "vi": "Ba 401 song song dùng chung MỘT lần làm mới"
+            },
+            "goi": "[await Promise.all(['/notes', '/notes/1', '/me'].map((p) => caught(api.request(p)))), calls().filter((c) => c.includes('refresh')).length]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "GET http://api.test/api/v1/notes": [
+                {
+                  "status": 401,
+                  "json": {}
+                },
+                {
+                  "status": 200,
+                  "json": {}
+                }
+              ],
+              "GET http://api.test/api/v1/notes/1": [
+                {
+                  "status": 401,
+                  "json": {}
+                },
+                {
+                  "status": 200,
+                  "json": {}
+                }
+              ],
+              "GET http://api.test/api/v1/me": [
+                {
+                  "status": 401,
+                  "json": {}
+                },
+                {
+                  "status": 200,
+                  "json": {}
+                }
+              ],
+              "POST http://api.test/api/v1/auth/refresh": {
+                "status": 200,
+                "json": {},
+                "treMs": 100
+              }
+            },
+            "mongDoi": [
+              [
+                200,
+                200,
+                200
+              ],
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Retry still 401 ⇒ returned once, not looped",
+              "vi": "Thử lại vẫn 401 ⇒ trả về một lần, không lặp"
+            },
+            "goi": "[await caught(api.request('/notes')), calls()]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "GET http://api.test/api/v1/notes": {
+                "status": 401,
+                "json": {}
+              },
+              "POST http://api.test/api/v1/auth/refresh": {
+                "status": 200,
+                "json": {}
+              }
+            },
+            "mongDoi": [
+              401,
+              [
+                "GET /notes",
+                "POST /auth/refresh",
+                "GET /notes"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await caught(api.request('/notes')), await caught(api.request('/notes')), calls()]",
+            "chuanBi": "const api = createApi('http://api.test/api/v1');\nconst calls = () => __fetchDaGoi.map((c) => c.method + ' ' + c.url.replace('http://api.test/api/v1', ''));\nconst caught = async (p) => { try { const r = await p; return r.status; } catch (e) { return { thrown: e.name, code: e.code }; } };",
+            "fetchGia": {
+              "GET http://api.test/api/v1/notes": [
+                {
+                  "status": 200,
+                  "json": {}
+                },
+                {
+                  "status": 403,
+                  "json": {}
+                }
+              ]
+            },
+            "mongDoi": [
+              200,
+              403,
+              [
+                "GET /notes",
+                "GET /notes"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Retrying in a loop until it is not 401 — an expired refresh token hammers your auth endpoint forever.|||Thử lại trong vòng lặp tới khi hết 401 — refresh token hết hạn đập vào endpoint xác thực mãi mãi."
+        },
+        {
+          "loi": "Refreshing on a 401 from /auth/login: wrong password ⇒ refresh ⇒ 401 ⇒ …|||Làm mới khi /auth/login trả 401: sai mật khẩu ⇒ làm mới ⇒ 401 ⇒ …"
+        },
+        {
+          "loi": "Five parallel requests ⇒ five refreshes: with rotation, four of them present an already-used token and burn the family (exercise 4).|||Năm request song song ⇒ năm lần làm mới: với xoay vòng, bốn lần trình token đã dùng và đốt cả họ (bài 4)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interceptor",
+          "vi": "bộ chặn",
+          "giaiThich": "Lớp bọc mọi request của client."
+        },
+        {
+          "en": "in flight",
+          "vi": "đang chạy"
+        }
+      ]
+    }
+  ]
+}

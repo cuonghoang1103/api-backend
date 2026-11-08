@@ -1,0 +1,1261 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-9-1-header-csp-cors",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-9-1-header-csp-cors"
+  },
+  "exercises": [
+    {
+      "title": "Read helmet’s headers: which one stops what",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "security headers",
+        "helmet"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One line, <code>app.use(helmet())</code>, added 12 response headers and removed 1 in the lesson’s measurement. Five of them matter. For each question pick the header (or the statement) that matches what the lesson measured.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một dòng <code>app.use(helmet())</code> thêm 12 header phản hồi và bỏ 1 trong phép đo của bài. Năm cái thật sự quan trọng. Mỗi câu chọn header (hoặc nhận định) khớp với điều bài đã đo.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read each header name literally: transport, content-type options, frame options…|||Đọc tên header theo nghĩa đen: transport, content-type options, frame options…",
+        "The lesson’s table \"The five that actually matter\" has one line per header — match the attack to the line.|||Bảng \"Năm cái thật sự quan trọng\" trong bài có một dòng mỗi header — ghép đòn tấn công với dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read helmet’s headers: which one stops what\n\nAnswer in the answer panel (no code needed).\n\n1. A user on café Wi-Fi types http://cuongthai.com. Which header makes the browser go straight to HTTPS, so the first plain request is never sent?Người dùng ở Wi-Fi quán cà phê gõ http://cuongthai.com. Header nào khiến trình duyệt đi thẳng HTTPS, không bao giờ gửi request thường đầu tiên?\n2. An uploaded .txt file contains HTML. Which header stops the browser from deciding it \"looks like HTML\" and running it?Một file .txt tải lên chứa HTML. Header nào ngăn trình duyệt tự cho là nó \"trông giống HTML\" rồi chạy?\n3. Your real \"Delete account\" page is loaded inside an invisible iframe on an attacker’s site, with a fake button on top. Which pair stops this clickjacking?Trang \"Xoá tài khoản\" thật bị nhúng trong iframe trong suốt trên site kẻ tấn công, với nút giả đè lên. Cặp nào chặn clickjacking này?\n4. helmet sends x-xss-protection: 0. A teammate wants to \"fix\" it to 1. What is right?helmet gửi x-xss-protection: 0. Đồng đội muốn \"sửa\" thành 1. Điều nào đúng?\n5. A stored XSS payload is already sitting in your database. Which header is the only one of the five that can still stop it from doing damage?Một payload XSS đã nằm sẵn trong cơ sở dữ liệu. Header nào là cái duy nhất trong năm cái vẫn có thể chặn nó gây hại?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read helmet’s headers: which one stops what — answer key\n\n1. A user on café Wi-Fi types http://cuongthai.com. Which header makes the browser go straight to HTTPS, so the first plain request is never sent?Người dùng ở Wi-Fi quán cà phê gõ http://cuongthai.com. Header nào khiến trình duyệt đi thẳng HTTPS, không bao giờ gửi request thường đầu tiên?\n   Answer: b) strict-transport-security: max-age=31536000; includeSubDomains\n   HSTS tells the browser \"for the next 31,536,000 seconds never talk to this host over plain HTTP\". upgrade-insecure-requests only rewrites sub-resources of a page that already loaded.VI: HSTS bảo trình duyệt \"31.536.000 giây tới đừng bao giờ nói chuyện với host này qua HTTP thường\". upgrade-insecure-requests chỉ viết lại tài nguyên con của một trang đã tải.\n\n2. An uploaded .txt file contains HTML. Which header stops the browser from deciding it \"looks like HTML\" and running it?Một file .txt tải lên chứa HTML. Header nào ngăn trình duyệt tự cho là nó \"trông giống HTML\" rồi chạy?\n   Answer: b) x-content-type-options: nosniff\n   nosniff = \"believe my Content-Type, do not guess\". It is the header that keeps a text upload a text upload.VI: nosniff = \"hãy tin Content-Type của tôi, đừng đoán\". Nó giữ cho file chữ tải lên vẫn chỉ là chữ.\n\n3. Your real \"Delete account\" page is loaded inside an invisible iframe on an attacker’s site, with a fake button on top. Which pair stops this clickjacking?Trang \"Xoá tài khoản\" thật bị nhúng trong iframe trong suốt trên site kẻ tấn công, với nút giả đè lên. Cặp nào chặn clickjacking này?\n   Answer: a) x-frame-options: SAMEORIGIN, or the CSP directive frame-ancestors 'self'\n   Both answer \"who may put my page in a frame\". frame-ancestors is the modern CSP form of X-Frame-Options.VI: Cả hai trả lời \"ai được nhúng trang tôi vào khung\". frame-ancestors là dạng CSP hiện đại của X-Frame-Options.\n\n4. helmet sends x-xss-protection: 0. A teammate wants to \"fix\" it to 1. What is right?helmet gửi x-xss-protection: 0. Đồng đội muốn \"sửa\" thành 1. Điều nào đúng?\n   Answer: a) Keep 0: the old XSS auditor was itself exploitable and is gone from modern browsers\n   The legacy auditor was a heuristic that attackers could abuse; 0 is the correct modern value. Setting 1 because it \"sounds protective\" is a step backwards.VI: Bộ kiểm cũ là một phỏng đoán từng bị lợi dụng; 0 là giá trị đúng thời nay. Đặt 1 vì \"nghe có vẻ bảo vệ\" là bước lùi.\n\n5. A stored XSS payload is already sitting in your database. Which header is the only one of the five that can still stop it from doing damage?Một payload XSS đã nằm sẵn trong cơ sở dữ liệu. Header nào là cái duy nhất trong năm cái vẫn có thể chặn nó gây hại?\n   Answer: d) content-security-policy (script-src decides whether the injected script may run)\n   The others make one specific attack harder. CSP changes what an injected script is allowed to do — script-src blocks it, connect-src blocks sending stolen data out.VI: Những cái khác làm một đòn cụ thể khó hơn. CSP thay đổi việc script bị chèn được làm gì — script-src chặn nó chạy, connect-src chặn gửi dữ liệu ra ngoài.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> strict-transport-security: max-age=31536000; includeSubDomains</p><p>HSTS tells the browser \"for the next 31,536,000 seconds never talk to this host over plain HTTP\". upgrade-insecure-requests only rewrites sub-resources of a page that already loaded.</p><p><i>VI: HSTS bảo trình duyệt \"31.536.000 giây tới đừng bao giờ nói chuyện với host này qua HTTP thường\". upgrade-insecure-requests chỉ viết lại tài nguyên con của một trang đã tải.</i></p></li><li><p><b>b)</b> x-content-type-options: nosniff</p><p>nosniff = \"believe my Content-Type, do not guess\". It is the header that keeps a text upload a text upload.</p><p><i>VI: nosniff = \"hãy tin Content-Type của tôi, đừng đoán\". Nó giữ cho file chữ tải lên vẫn chỉ là chữ.</i></p></li><li><p><b>a)</b> x-frame-options: SAMEORIGIN, or the CSP directive frame-ancestors 'self'</p><p>Both answer \"who may put my page in a frame\". frame-ancestors is the modern CSP form of X-Frame-Options.</p><p><i>VI: Cả hai trả lời \"ai được nhúng trang tôi vào khung\". frame-ancestors là dạng CSP hiện đại của X-Frame-Options.</i></p></li><li><p><b>a)</b> Keep 0: the old XSS auditor was itself exploitable and is gone from modern browsers</p><p>The legacy auditor was a heuristic that attackers could abuse; 0 is the correct modern value. Setting 1 because it \"sounds protective\" is a step backwards.</p><p><i>VI: Bộ kiểm cũ là một phỏng đoán từng bị lợi dụng; 0 là giá trị đúng thời nay. Đặt 1 vì \"nghe có vẻ bảo vệ\" là bước lùi.</i></p></li><li><p><b>d)</b> content-security-policy (script-src decides whether the injected script may run)</p><p>The others make one specific attack harder. CSP changes what an injected script is allowed to do — script-src blocks it, connect-src blocks sending stolen data out.</p><p><i>VI: Những cái khác làm một đòn cụ thể khó hơn. CSP thay đổi việc script bị chèn được làm gì — script-src chặn nó chạy, connect-src chặn gửi dữ liệu ra ngoài.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "h1",
+            "de": "<p>A user on café Wi-Fi types <code>http://cuongthai.com</code>. Which header makes the browser go straight to HTTPS, so the first plain request is never sent?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng ở Wi-Fi quán cà phê gõ <code>http://cuongthai.com</code>. Header nào khiến trình duyệt đi thẳng HTTPS, không bao giờ gửi request thường đầu tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "upgrade-insecure-requests inside the Content-Security-Policy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "strict-transport-security: max-age=31536000; includeSubDomains"
+              },
+              {
+                "ma": "c",
+                "noiDung": "x-dns-prefetch-control: off"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cross-origin-opener-policy: same-origin"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>HSTS tells the browser \"for the next 31,536,000 seconds never talk to this host over plain HTTP\". upgrade-insecure-requests only rewrites sub-resources of a page that already loaded.</p><p><i>VI: HSTS bảo trình duyệt \"31.536.000 giây tới đừng bao giờ nói chuyện với host này qua HTTP thường\". upgrade-insecure-requests chỉ viết lại tài nguyên con của một trang đã tải.</i></p>"
+          },
+          {
+            "ma": "h2",
+            "de": "<p>An uploaded <code>.txt</code> file contains HTML. Which header stops the browser from deciding it \"looks like HTML\" and running it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một file <code>.txt</code> tải lên chứa HTML. Header nào ngăn trình duyệt tự cho là nó \"trông giống HTML\" rồi chạy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "x-download-options: noopen"
+              },
+              {
+                "ma": "b",
+                "noiDung": "x-content-type-options: nosniff"
+              },
+              {
+                "ma": "c",
+                "noiDung": "referrer-policy: no-referrer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "x-permitted-cross-domain-policies: none"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>nosniff = \"believe my Content-Type, do not guess\". It is the header that keeps a text upload a text upload.</p><p><i>VI: nosniff = \"hãy tin Content-Type của tôi, đừng đoán\". Nó giữ cho file chữ tải lên vẫn chỉ là chữ.</i></p>"
+          },
+          {
+            "ma": "h3",
+            "de": "<p>Your real \"Delete account\" page is loaded inside an invisible iframe on an attacker’s site, with a fake button on top. Which pair stops this clickjacking?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang \"Xoá tài khoản\" thật bị nhúng trong iframe trong suốt trên site kẻ tấn công, với nút giả đè lên. Cặp nào chặn clickjacking này?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "x-frame-options: SAMEORIGIN, or the CSP directive frame-ancestors 'self'"
+              },
+              {
+                "ma": "b",
+                "noiDung": "x-xss-protection: 1, or script-src-attr 'none'"
+              },
+              {
+                "ma": "c",
+                "noiDung": "strict-transport-security, or upgrade-insecure-requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cross-origin-resource-policy: same-origin, or img-src 'self'"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Both answer \"who may put my page in a frame\". frame-ancestors is the modern CSP form of X-Frame-Options.</p><p><i>VI: Cả hai trả lời \"ai được nhúng trang tôi vào khung\". frame-ancestors là dạng CSP hiện đại của X-Frame-Options.</i></p>"
+          },
+          {
+            "ma": "h4",
+            "de": "<p>helmet sends <code>x-xss-protection: 0</code>. A teammate wants to \"fix\" it to 1. What is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>helmet gửi <code>x-xss-protection: 0</code>. Đồng đội muốn \"sửa\" thành 1. Điều nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keep 0: the old XSS auditor was itself exploitable and is gone from modern browsers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Set 1; mode=block: it is the only header that stops stored XSS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Set 1: it re-enables the browser’s XSS filter, which helmet forgot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Remove the header: modern browsers reject responses that contain it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The legacy auditor was a heuristic that attackers could abuse; 0 is the correct modern value. Setting 1 because it \"sounds protective\" is a step backwards.</p><p><i>VI: Bộ kiểm cũ là một phỏng đoán từng bị lợi dụng; 0 là giá trị đúng thời nay. Đặt 1 vì \"nghe có vẻ bảo vệ\" là bước lùi.</i></p>"
+          },
+          {
+            "ma": "h5",
+            "de": "<p>A stored XSS payload is already sitting in your database. Which header is the only one of the five that can still stop it from doing damage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một payload XSS đã nằm sẵn trong cơ sở dữ liệu. Header nào là cái duy nhất trong năm cái vẫn có thể chặn nó gây hại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "referrer-policy (the script cannot read the page URL any more)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "strict-transport-security (the payload cannot travel over HTTP)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "x-content-type-options (the page is no longer sniffed as HTML)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "content-security-policy (script-src decides whether the injected script may run)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The others make one specific attack harder. CSP changes what an injected script is allowed to do — script-src blocks it, connect-src blocks sending stolen data out.</p><p><i>VI: Những cái khác làm một đòn cụ thể khó hơn. CSP thay đổi việc script bị chèn được làm gì — script-src chặn nó chạy, connect-src chặn gửi dữ liệu ra ngoài.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking upgrade-insecure-requests replaces HSTS — it only rewrites sub-resources of a page that already arrived.|||Tưởng upgrade-insecure-requests thay được HSTS — nó chỉ viết lại tài nguyên con của trang đã tới."
+        },
+        {
+          "loi": "\"Fixing\" x-xss-protection to 1 because it sounds protective.|||\"Sửa\" x-xss-protection thành 1 vì nghe có vẻ bảo vệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HSTS",
+          "vi": "Strict-Transport-Security",
+          "giaiThich": "ép trình duyệt chỉ dùng HTTPS với host này"
+        },
+        {
+          "en": "clickjacking",
+          "vi": "tấn công nhúng khung",
+          "giaiThich": "trang thật trong iframe trong suốt, nút giả đè lên"
+        },
+        {
+          "en": "sniffing",
+          "vi": "đoán kiểu nội dung",
+          "giaiThich": "trình duyệt tự đoán kiểu thay vì tin Content-Type"
+        }
+      ]
+    },
+    {
+      "title": "Write helmet’s baseline by hand",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "middleware",
+        "security headers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A bare Express 5 app answers with <code>x-powered-by: Express</code> and no protective headers at all. Write the middleware <code>securityHeaders(req, res, next)</code> that does by hand the part of <code>helmet()</code> the lesson says matters:</p>\n<ul><li>remove <code>X-Powered-By</code>;</li>\n<li>set <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code>, <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>, <code>Referrer-Policy: no-referrer</code>, <code>X-XSS-Protection: 0</code> (exactly these values — the ones helmet puts on the wire);</li>\n<li>call <code>next()</code> exactly once, and never send a response.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use res.removeHeader / res.setHeader (header names are case-insensitive; the fake res stores them lower-case).</li>\n  <li>Call next() once; do not call res.json / res.send / res.end.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một app Express 5 trần trả về <code>x-powered-by: Express</code> và không có header bảo vệ nào. Viết middleware <code>securityHeaders(req, res, next)</code> làm bằng tay phần của <code>helmet()</code> mà bài nói là quan trọng:</p>\n<ul><li>bỏ <code>X-Powered-By</code>;</li>\n<li>đặt <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code>, <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>, <code>Referrer-Policy: no-referrer</code>, <code>X-XSS-Protection: 0</code> (đúng các giá trị này — giá trị helmet gửi đi);</li>\n<li>gọi <code>next()</code> đúng một lần, và không bao giờ gửi phản hồi.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng res.removeHeader / res.setHeader (tên header không phân biệt hoa thường; res giả lưu chữ thường).</li>\n  <li>Gọi next() một lần; không gọi res.json / res.send / res.end.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await runMw(securityHeaders, { method: \"GET\", url: \"/\" })",
+          "output": "{\"status\":200,\"headers\":{\"strict-transport-security\":\"max-age=31536000; includeSubDomains\",\"x-content-type-options\":\"nosniff\",\"x-frame-options\":\"SAMEORIGIN\",\"referrer-policy\":\"no-referrer\",\"x-xss-protection\":\"0\"},\"body\":null,\"ended\":false,\"next\":[\"next\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The fake res already has <code>x-powered-by</code> set in some tests — removing it is a separate call from setting the others.|||Trong vài ca, res giả đã có sẵn <code>x-powered-by</code> — bỏ nó là một lời gọi riêng, khác với đặt các header kia.",
+        "Copy the values from the lesson’s helmet dump; <code>X-XSS-Protection</code> is <code>0</code>, not <code>1; mode=block</code>.|||Chép giá trị từ bản in helmet trong bài; <code>X-XSS-Protection</code> là <code>0</code>, không phải <code>1; mode=block</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Set the security-header baseline, then hand over to the next middleware. */\nfunction securityHeaders(req, res, next) {\n  // Write your solution here\n  res.setHeader('X-Frame-Options', 'SAMEORIGIN');\n  next();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction securityHeaders(req, res, next) {\n  // 1) Cheapest win: stop advertising the framework (x-powered-by: Express tells scanners which CVEs to try).\n  res.removeHeader('X-Powered-By');\n  // 2) The five headers the lesson says actually matter, with the exact values helmet sends.\n  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'); // HTTPS only, for a year\n  res.setHeader('X-Content-Type-Options', 'nosniff');                                // believe my Content-Type\n  res.setHeader('X-Frame-Options', 'SAMEORIGIN');                                    // no clickjacking frames\n  res.setHeader('Referrer-Policy', 'no-referrer');                                   // no ?token=… leaking in Referer\n  res.setHeader('X-XSS-Protection', '0');                                            // the legacy auditor stays OFF\n  // 3) A middleware that sets headers must hand over to the next one exactly once — it never ends the response.\n  next();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A security-header middleware only decorates the response: it removes the framework banner, adds the five headers with the exact values helmet measured, and passes control on with <code>next()</code>. Because it runs before the routes, every response — including errors from later middleware that still go through it — carries the headers.</p>",
+      "solutionExplanationHtmlVi": "<p>Middleware header bảo mật chỉ trang trí phản hồi: bỏ dòng quảng cáo framework, thêm năm header với đúng giá trị helmet đã đo, rồi chuyển quyền bằng <code>next()</code>. Vì nó chạy trước các route nên mọi phản hồi đi qua nó đều mang các header này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET / on a fresh response",
+              "vi": "GET / với phản hồi mới"
+            },
+            "goi": "await runMw(securityHeaders, { method: \"GET\", url: \"/\" })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "x-content-type-options": "nosniff",
+                "x-frame-options": "SAMEORIGIN",
+                "referrer-policy": "no-referrer",
+                "x-xss-protection": "0"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "x-powered-by: Express is removed",
+              "vi": "x-powered-by: Express bị bỏ"
+            },
+            "goi": "(await runMw(securityHeaders, { method: \"GET\", url: \"/notes\" }, res)).headers[\"x-powered-by\"] === undefined",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\nconst res = makeRes(); res.setHeader(\"X-Powered-By\", \"Express\");",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "next() is called exactly once",
+              "vi": "next() được gọi đúng một lần"
+            },
+            "goi": "(await runMw(securityHeaders, { method: \"POST\", url: \"/notes\" })).next",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "next"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await runMw(securityHeaders, { method: \"GET\", url: \"/feed\" }, res)",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\nconst res = makeRes(); res.setHeader(\"X-Powered-By\", \"Express\"); res.setHeader(\"Content-Type\", \"text/html\");",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "content-type": "text/html",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "x-content-type-options": "nosniff",
+                "x-frame-options": "SAMEORIGIN",
+                "referrer-policy": "no-referrer",
+                "x-xss-protection": "0"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const r = makeRes(); let n = 0; securityHeaders({ headers: {} }, r, () => n++); return [n, r.ended, Object.keys(r.headers).sort()]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              1,
+              false,
+              [
+                "referrer-policy",
+                "strict-transport-security",
+                "x-content-type-options",
+                "x-frame-options",
+                "x-xss-protection"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting next(): every request after this middleware hangs until the client times out.|||Quên next(): mọi request sau middleware này treo tới khi client hết giờ."
+        },
+        {
+          "loi": "Setting X-XSS-Protection to 1 because it \"sounds safer\".|||Đặt X-XSS-Protection thành 1 vì \"nghe an toàn hơn\"."
+        },
+        {
+          "loi": "Leaving x-powered-by: Express in place — the cheapest win in the whole chapter.|||Để nguyên x-powered-by: Express — cái lợi rẻ nhất cả chương."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware",
+          "vi": "phần mềm trung gian",
+          "giaiThich": "hàm (req, res, next) chạy trước route"
+        },
+        {
+          "en": "x-powered-by",
+          "vi": "dòng quảng cáo framework",
+          "giaiThich": "nói cho máy quét biết bạn dùng Express"
+        }
+      ]
+    },
+    {
+      "title": "Read a CSP one directive at a time",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "CSP",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson reads <code>cuongthai.com</code>’s real policy \"one directive at a time\". Write <code>parseCsp(header)</code> that turns a <code>Content-Security-Policy</code> value into an object <code>{ directive: [sources…] }</code>:</p>\n<ul><li>directives are separated by <code>;</code>; inside one, tokens are separated by any whitespace (spaces, tabs, new lines);</li>\n<li>the directive name is lower-cased; sources are kept exactly as written (<code>'self'</code>, <code>https://*.giphy.com</code>, <code>data:</code>);</li>\n<li>a directive without sources (<code>upgrade-insecure-requests</code>) maps to <code>[]</code>; empty pieces are skipped;</li>\n<li>if a directive appears twice, the <b>first</b> one wins — browsers ignore the repeat.</li></ul>\n<p>Example: <code>parseCsp(\"default-src 'self'; img-src 'self' data:\")</code> → <code>{ \"default-src\": [\"'self'\"], \"img-src\": [\"'self'\", \"data:\"] }</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài đọc chính sách thật của <code>cuongthai.com</code> \"từng chỉ thị một\". Viết <code>parseCsp(header)</code> biến giá trị <code>Content-Security-Policy</code> thành object <code>{ chỉ_thị: [nguồn…] }</code>:</p>\n<ul><li>các chỉ thị cách nhau bằng <code>;</code>; trong một chỉ thị, các từ cách nhau bằng khoảng trắng bất kỳ (dấu cách, tab, xuống dòng);</li>\n<li>tên chỉ thị viết thường; nguồn giữ nguyên như viết (<code>'self'</code>, <code>https://*.giphy.com</code>, <code>data:</code>);</li>\n<li>chỉ thị không có nguồn (<code>upgrade-insecure-requests</code>) ứng với <code>[]</code>; mẩu rỗng bị bỏ qua;</li>\n<li>chỉ thị xuất hiện hai lần thì cái <b>đầu tiên</b> thắng — trình duyệt bỏ qua cái lặp.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseCsp(\"default-src 'self'; img-src 'self' data:\")",
+          "output": "{\"default-src\":[\"'self'\"],\"img-src\":[\"'self'\",\"data:\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on <code>;</code> first, then split each piece on <code>/\\s+/</code> after trimming.|||Tách theo <code>;</code> trước, rồi cắt khoảng trắng hai đầu và tách mỗi mẩu theo <code>/\\s+/</code>.",
+        "Before writing <code>policy[name]</code>, check whether the name is already there — and skip it if so.|||Trước khi ghi <code>policy[name]</code>, kiểm xem tên đã có chưa — có rồi thì bỏ qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Parse a Content-Security-Policy header into { directive: [sources] }. */\nfunction parseCsp(header) {\n  // Write your solution here\n  const policy = {};\n  for (const part of header.split(';')) {\n    const tokens = part.split(' ');\n    policy[tokens[0]] = tokens.slice(1);\n  }\n  return policy;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseCsp(header) {\n  const policy = {};\n  // Directives are separated by \";\" — the real header has no spaces after it, the pretty-printed one has newlines.\n  for (const part of String(header).split(';')) {\n    const tokens = part.trim().split(/\\s+/).filter(Boolean);\n    if (!tokens.length) continue;                    // empty piece: \"a;;b\" or a trailing \";\"\n    const name = tokens[0].toLowerCase();            // directive names are case-insensitive\n    if (Object.prototype.hasOwnProperty.call(policy, name)) continue; // CSP spec: the FIRST occurrence wins\n    policy[name] = tokens.slice(1);                  // sources keep their case: 'self' and URLs are compared as written\n  }\n  return policy;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Parsing is the step before any judgement: once the policy is a map, \"where may scripts come from?\" is <code>policy[\"script-src\"] ?? policy[\"default-src\"]</code>. Trimming and splitting on any whitespace survives pretty-printed headers; skipping repeats copies the browser rule, so your reading of the policy is the one that is enforced.</p>",
+      "solutionExplanationHtmlVi": "<p>Phân tích là bước trước mọi phán đoán: khi chính sách thành một bảng, \"script được tải từ đâu?\" là <code>policy[\"script-src\"] ?? policy[\"default-src\"]</code>. Cắt và tách theo mọi khoảng trắng chịu được header in đẹp; bỏ qua cái lặp đúng luật trình duyệt, nên cách bạn đọc chính sách là cách nó được áp dụng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two directives",
+              "vi": "Hai chỉ thị"
+            },
+            "goi": "parseCsp(\"default-src 'self'; img-src 'self' data:\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "default-src": [
+                "'self'"
+              ],
+              "img-src": [
+                "'self'",
+                "data:"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "helmet’s default policy (as measured)",
+              "vi": "Chính sách mặc định của helmet (như đã đo)"
+            },
+            "goi": "parseCsp(\"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "default-src": [
+                "'self'"
+              ],
+              "base-uri": [
+                "'self'"
+              ],
+              "font-src": [
+                "'self'",
+                "https:",
+                "data:"
+              ],
+              "form-action": [
+                "'self'"
+              ],
+              "frame-ancestors": [
+                "'self'"
+              ],
+              "img-src": [
+                "'self'",
+                "data:"
+              ],
+              "object-src": [
+                "'none'"
+              ],
+              "script-src": [
+                "'self'"
+              ],
+              "script-src-attr": [
+                "'none'"
+              ],
+              "style-src": [
+                "'self'",
+                "https:",
+                "'unsafe-inline'"
+              ],
+              "upgrade-insecure-requests": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "cuongthai.com’s pretty-printed img-src",
+              "vi": "img-src in đẹp của cuongthai.com"
+            },
+            "goi": "parseCsp(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\")[\"img-src\"]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "'self'",
+              "data:",
+              "blob:",
+              "https://media.cuongthai.com",
+              "https://*.giphy.com"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseCsp(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "default-src": [
+                "'self'"
+              ],
+              "script-src": [
+                "'self'",
+                "'unsafe-inline'",
+                "'unsafe-eval'",
+                "https://challenges.cloudflare.com",
+                "https://www.youtube.com"
+              ],
+              "style-src": [
+                "'self'",
+                "'unsafe-inline'"
+              ],
+              "img-src": [
+                "'self'",
+                "data:",
+                "blob:",
+                "https://media.cuongthai.com",
+                "https://*.giphy.com"
+              ],
+              "connect-src": [
+                "'self'",
+                "wss://cuongthai.com",
+                "https://api.cuongthai.com",
+                "https://*.sentry.io"
+              ],
+              "object-src": [
+                "'none'"
+              ],
+              "base-uri": [
+                "'self'"
+              ],
+              "form-action": [
+                "'self'"
+              ],
+              "frame-ancestors": [
+                "'self'"
+              ],
+              "upgrade-insecure-requests": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseCsp(\"script-src 'self'; SCRIPT-SRC https://evil.example; ;object-src 'none';\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "script-src": [
+                "'self'"
+              ],
+              "object-src": [
+                "'none'"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "Object.keys(parseCsp(\"upgrade-insecure-requests;  ;\\tframe-ancestors\\t'none'\"))",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "upgrade-insecure-requests",
+              "frame-ancestors"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting on a single space: the real header has new lines and double spaces between sources, so you get empty-string sources.|||Tách theo một dấu cách: header thật có xuống dòng và hai dấu cách giữa các nguồn, nên sinh ra nguồn rỗng."
+        },
+        {
+          "loi": "Letting the LAST duplicate win (a plain assignment) — the browser enforces the first.|||Để cái LẶP cuối thắng (gán thẳng) — trình duyệt áp dụng cái đầu."
+        },
+        {
+          "loi": "Lower-casing the sources too: hosts are fine, but you should not rewrite what the policy says.|||Viết thường cả nguồn: host thì không sao, nhưng đừng viết lại điều chính sách nói."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "directive",
+          "vi": "chỉ thị",
+          "giaiThich": "một mệnh đề của CSP, vd script-src"
+        },
+        {
+          "en": "source expression",
+          "vi": "biểu thức nguồn",
+          "giaiThich": "'self', https:, https://*.giphy.com…"
+        }
+      ]
+    },
+    {
+      "title": "An allow-list CORS middleware that does not lie",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "CORS",
+        "Vary",
+        "preflight"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson probed four <code>cors()</code> configurations with <code>Origin: https://evil.example</code>. Write <code>makeCors({ origins, credentials, maxAge })</code> that returns a middleware behaving like the <b>allow-list</b> one (block 4 of the measurement):</p>\n<ul><li>always add <code>Vary: Origin</code> (use <code>res.vary('Origin')</code>) — the answer depends on the origin;</li>\n<li>if <code>req.headers.origin</code> is in <code>origins</code>: set <code>Access-Control-Allow-Origin</code> to that exact origin, and <code>Access-Control-Allow-Credentials: true</code> when <code>credentials</code> is true. Otherwise set neither — never <code>*</code>, never reflect;</li>\n<li>a <b>preflight</b> (<code>OPTIONS</code> with an <code>access-control-request-method</code> header) is answered here: <code>Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE</code>, <code>Access-Control-Max-Age</code> if <code>maxAge</code> is given, status <b>204</b> and <code>end()</code> — even for a rejected origin;</li>\n<li>any other request calls <code>next()</code> — also from a rejected origin (CORS is not authorisation).</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Header names in req.headers are lower-case (as in Node).</li>\n  <li>Return a NEW middleware from makeCors; do not keep per-request state outside it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài thăm dò bốn cấu hình <code>cors()</code> với <code>Origin: https://evil.example</code>. Viết <code>makeCors({ origins, credentials, maxAge })</code> trả về middleware cư xử như cấu hình <b>danh sách trắng</b> (khối 4 của phép đo):</p>\n<ul><li>luôn thêm <code>Vary: Origin</code> (dùng <code>res.vary('Origin')</code>) — câu trả lời phụ thuộc origin;</li>\n<li>nếu <code>req.headers.origin</code> có trong <code>origins</code>: đặt <code>Access-Control-Allow-Origin</code> đúng bằng origin đó, và <code>Access-Control-Allow-Credentials: true</code> khi <code>credentials</code> là true. Ngược lại không đặt cái nào — không bao giờ <code>*</code>, không bao giờ phản chiếu;</li>\n<li><b>preflight</b> (<code>OPTIONS</code> có header <code>access-control-request-method</code>) được trả lời tại đây: <code>Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE</code>, <code>Access-Control-Max-Age</code> nếu có <code>maxAge</code>, mã <b>204</b> và <code>end()</code> — kể cả với origin bị từ chối;</li>\n<li>mọi request khác gọi <code>next()</code> — kể cả từ origin bị từ chối (CORS không phải phân quyền).</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên header trong req.headers viết thường (như Node).</li>\n  <li>makeCors trả về một middleware MỚI; không giữ trạng thái theo request ở ngoài.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"], credentials: true }), { method: \"GET\", headers: { origin: \"https://cuongthai.com\" } })",
+          "output": "{\"status\":200,\"headers\":{\"vary\":\"Origin\",\"access-control-allow-origin\":\"https://cuongthai.com\",\"access-control-allow-credentials\":\"true\"},\"body\":null,\"ended\":false,\"next\":[\"next\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build a <code>Set</code> of the allowed origins once, outside the returned function.|||Dựng một <code>Set</code> các origin được phép một lần, bên ngoài hàm trả về.",
+        "Decide in this order: Vary → allowed? → preflight? (answer 204) → otherwise next().|||Quyết theo thứ tự: Vary → được phép? → preflight? (trả 204) → còn lại next().",
+        "A request with no Origin header (curl, server-to-server) is not an error: no ACAO, just next().|||Request không có header Origin (curl, máy chủ gọi máy chủ) không phải lỗi: không ACAO, chỉ next()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Return a CORS middleware with an explicit allow-list. */\nfunction makeCors({ origins, credentials = false, maxAge }) {\n  // Write your solution here\n  return function cors(req, res, next) {\n    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');\n    if (credentials) res.setHeader('Access-Control-Allow-Credentials', 'true');\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction makeCors({ origins, credentials = false, maxAge }) {\n  const allowed = new Set(origins);                 // an explicit allow-list — never \"reflect whatever asked\"\n  return function cors(req, res, next) {\n    const origin = req.headers.origin;\n    // The answer depends on Origin ⇒ every cache in front must key on it. Without this, a CDN can hand\n    // cuongthai.com's answer to evil.example (or the other way round).\n    res.vary('Origin');\n    const ok = origin !== undefined && allowed.has(origin);\n    if (ok) {\n      res.setHeader('Access-Control-Allow-Origin', origin);            // echo ONLY an origin we listed\n      if (credentials) res.setHeader('Access-Control-Allow-Credentials', 'true');\n    }\n    const preflight = req.method === 'OPTIONS' && req.headers['access-control-request-method'] !== undefined;\n    if (preflight) {\n      res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');\n      if (maxAge !== undefined) res.setHeader('Access-Control-Max-Age', String(maxAge));\n      // A rejected origin still gets 204, just without ACAO: the BROWSER is the one that blocks, not us.\n      return res.status(204).end();\n    }\n    // Not a preflight: CORS never stops the request — it only decides who may READ the answer.\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CORS is a statement to the browser about who may read the answer, so the middleware only ever adds headers — except for the preflight, which exists only to be answered. Echoing an origin is safe only after matching it against a fixed list; <code>Vary: Origin</code> makes caches store one copy per origin. The POST from evil.example still reaches next(): that is the lesson’s point that CORS is not authorisation — authentication and CSRF defences are.</p>",
+      "solutionExplanationHtmlVi": "<p>CORS là lời tuyên bố với trình duyệt về việc ai được đọc câu trả lời, nên middleware chỉ thêm header — trừ preflight, thứ chỉ tồn tại để được trả lời. Phản chiếu origin chỉ an toàn sau khi khớp với một danh sách cố định; <code>Vary: Origin</code> khiến cache lưu một bản cho mỗi origin. POST từ evil.example vẫn tới next(): đó là ý của bài — CORS không phải phân quyền; xác thực và chống CSRF mới là.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET from the listed origin",
+              "vi": "GET từ origin được liệt kê"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"], credentials: true }), { method: \"GET\", headers: { origin: \"https://cuongthai.com\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "vary": "Origin",
+                "access-control-allow-origin": "https://cuongthai.com",
+                "access-control-allow-credentials": "true"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "GET from evil.example: no ACAO, still next()",
+              "vi": "GET từ evil.example: không ACAO, vẫn next()"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"], credentials: true }), { method: \"GET\", headers: { origin: \"https://evil.example\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "vary": "Origin"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Preflight from a rejected origin: 204 without ACAO",
+              "vi": "Preflight từ origin bị từ chối: 204 không ACAO"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"], credentials: true, maxAge: 86400 }), { method: \"OPTIONS\", headers: { origin: \"https://evil.example\", \"access-control-request-method\": \"POST\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 204,
+              "headers": {
+                "vary": "Origin",
+                "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+                "access-control-max-age": "86400"
+              },
+              "body": null,
+              "ended": true,
+              "next": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\", \"https://www.cuongthai.com\"], credentials: true, maxAge: 86400 }), { method: \"OPTIONS\", headers: { origin: \"https://www.cuongthai.com\", \"access-control-request-method\": \"DELETE\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 204,
+              "headers": {
+                "vary": "Origin",
+                "access-control-allow-origin": "https://www.cuongthai.com",
+                "access-control-allow-credentials": "true",
+                "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+                "access-control-max-age": "86400"
+              },
+              "body": null,
+              "ended": true,
+              "next": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"] }), { method: \"POST\", headers: {} })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "vary": "Origin"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"] }), { method: \"GET\", headers: { origin: \"https://cuongthai.com\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "vary": "Origin",
+                "access-control-allow-origin": "https://cuongthai.com"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "OPTIONS without access-control-request-method is not a preflight",
+              "vi": "OPTIONS không có access-control-request-method không phải preflight"
+            },
+            "goi": "await runMw(makeCors({ origins: [\"https://cuongthai.com\"], credentials: true }), { method: \"OPTIONS\", headers: { origin: \"https://cuongthai.com\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "vary": "Origin",
+                "access-control-allow-origin": "https://cuongthai.com",
+                "access-control-allow-credentials": "true"
+              },
+              "body": null,
+              "ended": false,
+              "next": [
+                "next"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>origin: true</code> thinking — echoing <code>req.headers.origin</code> back: with credentials that hands your authenticated API to every website.|||Kiểu nghĩ <code>origin: true</code> — phản chiếu <code>req.headers.origin</code>: kèm credentials là trao API đã đăng nhập cho mọi website."
+        },
+        {
+          "loi": "Answering a rejected origin with 403: the measured package answers 204 without ACAO; the browser is the component that blocks.|||Trả 403 cho origin bị từ chối: gói thật trả 204 không ACAO; trình duyệt mới là bên chặn."
+        },
+        {
+          "loi": "Forgetting Vary: Origin in a hand-rolled CORS — the bug only shows up behind a cache, in production.|||Quên Vary: Origin khi tự viết CORS — lỗi chỉ lộ ra sau một cache, trên production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "preflight",
+          "vi": "request thăm dò",
+          "giaiThich": "OPTIONS trình duyệt gửi trước request \"không đơn giản\""
+        },
+        {
+          "en": "ACAO",
+          "vi": "Access-Control-Allow-Origin",
+          "giaiThich": "origin nào được đọc phản hồi"
+        },
+        {
+          "en": "allow-list",
+          "vi": "danh sách trắng",
+          "giaiThich": "chỉ những giá trị được liệt kê mới được nhận"
+        }
+      ]
+    },
+    {
+      "title": "CORS: four configurations, one money transfer",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CORS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Answer from the lesson’s measurements: the four <code>cors()</code> configurations probed with <code>Origin: https://evil.example</code>, the POST /transfer on a server with no CORS at all, and the <code>Vary</code> header.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả lời theo số đo của bài: bốn cấu hình <code>cors()</code> thăm dò với <code>Origin: https://evil.example</code>, POST /transfer trên máy chủ không cấu hình CORS, và header <code>Vary</code>.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CORS is enforced by the browser on READING a response — keep asking \"did the request still run?\".|||CORS do trình duyệt áp khi ĐỌC phản hồi — luôn hỏi \"request có vẫn chạy không?\".",
+        "The four measured blocks: none · reflect · * · allow-list. Match each question to a block.|||Bốn khối đo: không cấu hình · phản chiếu · * · danh sách trắng. Ghép mỗi câu với một khối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CORS: four configurations, one money transfer\n\nAnswer in the answer panel (no code needed).\n\n1. A server has NO CORS configuration. A page on evil.example sends POST /transfer with the user’s cookie. The balance was 1000 before. What did the lesson measure?Máy chủ KHÔNG cấu hình CORS. Một trang trên evil.example gửi POST /transfer kèm cookie người dùng. Số dư trước là 1000. Bài đo được gì?\n2. cors({ origin: true, credentials: true }) passes every local test. Why is it the most common CORS mistake?cors({ origin: true, credentials: true }) qua mọi test ở máy. Vì sao nó là lỗi CORS phổ biến nhất?\n3. cors({ origin: '*', credentials: true }) sends ACAO=* and ACAC=true. What happens in the browser?cors({ origin: '*', credentials: true }) gửi ACAO=* và ACAC=true. Trình duyệt làm gì?\n4. With an allow-list, a rejected origin sends a preflight. What status did it get?Với danh sách trắng, một origin bị từ chối gửi preflight. Nó nhận mã nào?\n5. Which statements about Vary: Origin are true? (choose all)Nhận định nào về Vary: Origin là đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CORS: four configurations, one money transfer — answer key\n\n1. A server has NO CORS configuration. A page on evil.example sends POST /transfer with the user’s cookie. The balance was 1000 before. What did the lesson measure?Máy chủ KHÔNG cấu hình CORS. Một trang trên evil.example gửi POST /transfer kèm cookie người dùng. Số dư trước là 1000. Bài đo được gì?\n   Answer: a) The request ran and the balance became 900: CORS only stops the page from reading the answer\n   CORS is a browser rule about reading responses. The request still arrived and changed state; authentication + a CSRF defence (lesson 8.4) are what protect the endpoint.VI: CORS là luật của trình duyệt về việc đọc phản hồi. Request vẫn tới và đổi trạng thái; xác thực + chống CSRF (bài 8.4) mới bảo vệ endpoint.\n\n2. cors({ origin: true, credentials: true }) passes every local test. Why is it the most common CORS mistake?cors({ origin: true, credentials: true }) qua mọi test ở máy. Vì sao nó là lỗi CORS phổ biến nhất?\n   Answer: c) It reflects any origin, so every website may make authenticated requests AND read the answers\n   Measured: ACAO=https://evil.example, ACAC=true. Reflecting plus credentials gives any page the user has open your whole authenticated API.VI: Đo được: ACAO=https://evil.example, ACAC=true. Phản chiếu cộng credentials trao cho mọi trang người dùng đang mở toàn bộ API đã đăng nhập.\n\n3. cors({ origin: '*', credentials: true }) sends ACAO=* and ACAC=true. What happens in the browser?cors({ origin: '*', credentials: true }) gửi ACAO=* và ACAC=true. Trình duyệt làm gì?\n   Answer: a) It refuses the response: * together with credentials is forbidden by the spec\n   The server thinks it is permissive, the browser reports a \"CORS error\" that no amount of adding origins fixes.VI: Máy chủ tưởng mình dễ dãi, trình duyệt báo \"lỗi CORS\" mà thêm bao nhiêu origin cũng không hết.\n\n4. With an allow-list, a rejected origin sends a preflight. What status did it get?Với danh sách trắng, một origin bị từ chối gửi preflight. Nó nhận mã nào?\n   Answer: d) 204, with no Access-Control-Allow-Origin — the browser is the one that blocks\n   Do not go looking for a 403 that will never come: the server answered fine, without the permission header.VI: Đừng đi tìm một mã 403 không bao giờ tới: máy chủ trả lời bình thường, chỉ thiếu header cho phép.\n\n5. Which statements about Vary: Origin are true? (choose all)Nhận định nào về Vary: Origin là đúng? (chọn mọi câu đúng)\n   Answer: a) Without it, a cache in front can serve one origin’s CORS answer to another origin + c) The cors package sets it for you; hand-rolled middleware usually does not + e) The bug it prevents usually appears only in production, behind nginx or a CDN\n   Vary lists the request headers that change the response, so caches key on them. It does not change what the browser sends and it is no substitute for the allow-list.VI: Vary liệt kê các header của request làm đổi phản hồi, để cache dùng chúng làm khoá. Nó không đổi điều trình duyệt gửi và không thay được danh sách trắng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The request ran and the balance became 900: CORS only stops the page from reading the answer</p><p>CORS is a browser rule about reading responses. The request still arrived and changed state; authentication + a CSRF defence (lesson 8.4) are what protect the endpoint.</p><p><i>VI: CORS là luật của trình duyệt về việc đọc phản hồi. Request vẫn tới và đổi trạng thái; xác thực + chống CSRF (bài 8.4) mới bảo vệ endpoint.</i></p></li><li><p><b>c)</b> It reflects any origin, so every website may make authenticated requests AND read the answers</p><p>Measured: ACAO=https://evil.example, ACAC=true. Reflecting plus credentials gives any page the user has open your whole authenticated API.</p><p><i>VI: Đo được: ACAO=https://evil.example, ACAC=true. Phản chiếu cộng credentials trao cho mọi trang người dùng đang mở toàn bộ API đã đăng nhập.</i></p></li><li><p><b>a)</b> It refuses the response: * together with credentials is forbidden by the spec</p><p>The server thinks it is permissive, the browser reports a \"CORS error\" that no amount of adding origins fixes.</p><p><i>VI: Máy chủ tưởng mình dễ dãi, trình duyệt báo \"lỗi CORS\" mà thêm bao nhiêu origin cũng không hết.</i></p></li><li><p><b>d)</b> 204, with no Access-Control-Allow-Origin — the browser is the one that blocks</p><p>Do not go looking for a 403 that will never come: the server answered fine, without the permission header.</p><p><i>VI: Đừng đi tìm một mã 403 không bao giờ tới: máy chủ trả lời bình thường, chỉ thiếu header cho phép.</i></p></li><li><p><b>a)</b> Without it, a cache in front can serve one origin’s CORS answer to another origin + <b>c)</b> The cors package sets it for you; hand-rolled middleware usually does not + <b>e)</b> The bug it prevents usually appears only in production, behind nginx or a CDN</p><p>Vary lists the request headers that change the response, so caches key on them. It does not change what the browser sends and it is no substitute for the allow-list.</p><p><i>VI: Vary liệt kê các header của request làm đổi phản hồi, để cache dùng chúng làm khoá. Nó không đổi điều trình duyệt gửi và không thay được danh sách trắng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A server has NO CORS configuration. A page on evil.example sends <code>POST /transfer</code> with the user’s cookie. The balance was 1000 before. What did the lesson measure?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chủ KHÔNG cấu hình CORS. Một trang trên evil.example gửi <code>POST /transfer</code> kèm cookie người dùng. Số dư trước là 1000. Bài đo được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The request ran and the balance became 900: CORS only stops the page from reading the answer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The request was sent but the cookie was stripped, so the transfer failed with 401"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server answered 403 because the Origin header did not match its host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The browser blocked the request before sending it, so the balance stayed 1000"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>CORS is a browser rule about reading responses. The request still arrived and changed state; authentication + a CSRF defence (lesson 8.4) are what protect the endpoint.</p><p><i>VI: CORS là luật của trình duyệt về việc đọc phản hồi. Request vẫn tới và đổi trạng thái; xác thực + chống CSRF (bài 8.4) mới bảo vệ endpoint.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><code>cors({ origin: true, credentials: true })</code> passes every local test. Why is it the most common CORS mistake?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>cors({ origin: true, credentials: true })</code> qua mọi test ở máy. Vì sao nó là lỗi CORS phổ biến nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It turns CORS off completely, so browsers fall back to the same-origin policy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It sends ACAO: * which browsers silently accept together with cookies"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It reflects any origin, so every website may make authenticated requests AND read the answers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It answers every preflight with 403, which only shows up in production"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Measured: ACAO=https://evil.example, ACAC=true. Reflecting plus credentials gives any page the user has open your whole authenticated API.</p><p><i>VI: Đo được: ACAO=https://evil.example, ACAC=true. Phản chiếu cộng credentials trao cho mọi trang người dùng đang mở toàn bộ API đã đăng nhập.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>cors({ origin: '*', credentials: true })</code> sends ACAO=* and ACAC=true. What happens in the browser?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>cors({ origin: '*', credentials: true })</code> gửi ACAO=* và ACAC=true. Trình duyệt làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It refuses the response: * together with credentials is forbidden by the spec"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It retries the request without cookies and accepts the second answer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It downgrades the request to a no-cors request and shows an opaque body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It accepts it and sends cookies to every origin, the most permissive setting"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The server thinks it is permissive, the browser reports a \"CORS error\" that no amount of adding origins fixes.</p><p><i>VI: Máy chủ tưởng mình dễ dãi, trình duyệt báo \"lỗi CORS\" mà thêm bao nhiêu origin cũng không hết.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>With an allow-list, a rejected origin sends a preflight. What status did it get?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với danh sách trắng, một origin bị từ chối gửi preflight. Nó nhận mã nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "404, because the OPTIONS route is not mounted for that origin"
+              },
+              {
+                "ma": "b",
+                "noiDung": "403 Forbidden, with a JSON body explaining the origin is not allowed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "400, because the Origin header failed validation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "204, with no Access-Control-Allow-Origin — the browser is the one that blocks"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Do not go looking for a 403 that will never come: the server answered fine, without the permission header.</p><p><i>VI: Đừng đi tìm một mã 403 không bao giờ tới: máy chủ trả lời bình thường, chỉ thiếu header cho phép.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statements about <code>Vary: Origin</code> are true? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhận định nào về <code>Vary: Origin</code> là đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Without it, a cache in front can serve one origin’s CORS answer to another origin"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It tells the browser to send the Origin header on same-origin requests too"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The cors package sets it for you; hand-rolled middleware usually does not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It replaces the need for an allow-list when credentials are used"
+              },
+              {
+                "ma": "e",
+                "noiDung": "The bug it prevents usually appears only in production, behind nginx or a CDN"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Vary lists the request headers that change the response, so caches key on them. It does not change what the browser sends and it is no substitute for the allow-list.</p><p><i>VI: Vary liệt kê các header của request làm đổi phản hồi, để cache dùng chúng làm khoá. Nó không đổi điều trình duyệt gửi và không thay được danh sách trắng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"That endpoint is safe because of CORS\" — curl, scripts and other servers ignore CORS entirely.|||\"Endpoint đó an toàn nhờ CORS\" — curl, script và máy chủ khác bỏ qua CORS hoàn toàn."
+        },
+        {
+          "loi": "Expecting a 403 for a rejected origin and debugging the server for hours.|||Chờ mã 403 cho origin bị từ chối rồi gỡ lỗi máy chủ hàng giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Same-Origin Policy",
+          "vi": "chính sách cùng nguồn",
+          "giaiThich": "luật trình duyệt mà CORS nới lỏng có chọn lọc"
+        },
+        {
+          "en": "credentials",
+          "vi": "thông tin xác thực",
+          "giaiThich": "cookie / Authorization đi kèm request"
+        }
+      ]
+    },
+    {
+      "title": "Would this CSP let it load?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "CSP",
+        "URL parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson explains that a course cover hosted on a CDN that is not in <code>img-src</code> \"silently fails to render\". Write <code>cspAllows(header, kind, url, pageOrigin)</code> → <code>true</code>/<code>false</code>: may the page at <code>pageOrigin</code> load <code>url</code> as a <code>kind</code> (<code>\"script\"</code>, <code>\"img\"</code>, <code>\"connect\"</code>, <code>\"style\"</code>…) under this policy?</p>\n<ul><li>parse like the previous exercise (first occurrence of a directive wins);</li>\n<li>use <code>&lt;kind&gt;-src</code>; if it is missing use <code>default-src</code>; if both are missing the load is allowed;</li>\n<li>resolve <code>url</code> against <code>pageOrigin</code> (<code>new URL(url, pageOrigin)</code>) — <code>/app.js</code> is same-origin;</li>\n<li>sources (case-insensitive): <code>'none'</code> matches nothing · <code>'self'</code> matches the page’s origin · a scheme like <code>https:</code> / <code>data:</code> / <code>blob:</code> / <code>wss:</code> matches that protocol · <code>https://host</code> matches that protocol + exact host · <code>https://*.host</code> matches subdomains of host (not host itself) · other quoted keywords (<code>'unsafe-inline'</code>…) never match a URL. Ignore ports and paths in sources.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài giải thích rằng ảnh bìa khoá học đặt trên CDN không có trong <code>img-src</code> sẽ \"âm thầm không hiện\". Viết <code>cspAllows(header, kind, url, pageOrigin)</code> → <code>true</code>/<code>false</code>: trang ở <code>pageOrigin</code> có được tải <code>url</code> dưới dạng <code>kind</code> (<code>\"script\"</code>, <code>\"img\"</code>, <code>\"connect\"</code>, <code>\"style\"</code>…) theo chính sách này không?</p>\n<ul><li>phân tích như bài trước (lần xuất hiện đầu của chỉ thị thắng);</li>\n<li>dùng <code>&lt;kind&gt;-src</code>; thiếu thì dùng <code>default-src</code>; thiếu cả hai thì được tải;</li>\n<li>giải <code>url</code> theo <code>pageOrigin</code> (<code>new URL(url, pageOrigin)</code>) — <code>/app.js</code> là cùng nguồn;</li>\n<li>nguồn (không phân biệt hoa thường): <code>'none'</code> không khớp gì · <code>'self'</code> khớp origin của trang · scheme như <code>https:</code> / <code>data:</code> / <code>blob:</code> / <code>wss:</code> khớp giao thức đó · <code>https://host</code> khớp giao thức + đúng host · <code>https://*.host</code> khớp tên miền con của host (không gồm chính host) · từ khoá trong nháy khác (<code>'unsafe-inline'</code>…) không bao giờ khớp một URL. Bỏ qua cổng và đường dẫn trong nguồn.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://media.cuongthai.com/images/course-covers/nodejs.png\", \"https://cuongthai.com\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reuse your parser, then <code>const sources = policy[kind + \"-src\"] ?? policy[\"default-src\"]</code>.|||Dùng lại bộ phân tích, rồi <code>const sources = policy[kind + \"-src\"] ?? policy[\"default-src\"]</code>.",
+        "<code>new URL(...)</code> gives you <code>.origin</code>, <code>.protocol</code> (with the colon) and <code>.hostname</code> — compare those, not raw strings.|||<code>new URL(...)</code> cho bạn <code>.origin</code>, <code>.protocol</code> (có dấu hai chấm) và <code>.hostname</code> — so những thứ đó, đừng so chuỗi thô.",
+        "For <code>*.giphy.com</code> test <code>hostname.endsWith(\".giphy.com\")</code> — the leading dot is what stops <code>evilgiphy.com</code>.|||Với <code>*.giphy.com</code> kiểm <code>hostname.endsWith(\".giphy.com\")</code> — dấu chấm đầu là thứ chặn <code>evilgiphy.com</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** May the page at pageOrigin load url as a <kind> under this CSP? */\nfunction cspAllows(header, kind, url, pageOrigin) {\n  // Write your solution here\n  const d = header.split(';').find((p) => p.trim().startsWith(kind + '-src'));\n  if (!d) return true;\n  return d.includes(new URL(url, pageOrigin).hostname) || d.includes(\"'self'\");\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cspAllows(header, kind, url, pageOrigin) {\n  // --- 1) parse (same rules as parseCsp: split on \";\", any whitespace, first occurrence wins) ---\n  const policy = {};\n  for (const part of String(header).split(';')) {\n    const t = part.trim().split(/\\s+/).filter(Boolean);\n    if (t.length && !Object.prototype.hasOwnProperty.call(policy, t[0].toLowerCase())) policy[t[0].toLowerCase()] = t.slice(1);\n  }\n  // --- 2) pick the directive: \"<kind>-src\", falling back to default-src. No directive at all ⇒ allowed. ---\n  const sources = policy[kind + '-src'] ?? policy['default-src'];\n  if (!sources) return true;\n  const target = new URL(url, pageOrigin);       // resolves \"/app.js\" against the page\n  const page = new URL(pageOrigin);\n  // --- 3) a URL is allowed if ANY source matches it ---\n  return sources.some((s) => {\n    const src = s.toLowerCase();\n    if (src === \"'none'\") return false;\n    if (src === \"'self'\") return target.origin === page.origin;\n    if (/^[a-z][a-z0-9+.-]*:$/.test(src)) return target.protocol === src;   // scheme source: https:  data:  blob:\n    if (src.startsWith(\"'\")) return false;            // 'unsafe-inline', nonces… say nothing about a URL\n    const m = /^([a-z][a-z0-9+.-]*):\\/\\/(\\*\\.)?([^/:]+)$/.exec(src);\n    if (!m) return false;\n    if (target.protocol !== m[1] + ':') return false;\n    if (m[2]) return target.hostname.endsWith('.' + m[3]);   // *.giphy.com: a SUBdomain, not giphy.com itself\n    return target.hostname === m[3];\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The browser’s question is always \"which directive governs this load, and does any of its sources match?\". Falling back to default-src is what makes <code>default-src 'self'</code> a safe base. Matching on parsed URL parts instead of substrings is the same lesson as SSRF in 9.3: strings that look like your host are not your host. A source list is OR-ed, so one match is enough and <code>'none'</code> contributes nothing.</p>",
+      "solutionExplanationHtmlVi": "<p>Câu hỏi của trình duyệt luôn là \"chỉ thị nào quản lần tải này, và có nguồn nào khớp không?\". Dự phòng về default-src là thứ khiến <code>default-src 'self'</code> thành nền an toàn. So theo các phần của URL đã phân tích thay vì chuỗi con là cùng bài học với SSRF ở 9.3: chuỗi trông giống host của bạn không phải host của bạn. Danh sách nguồn là phép HOẶC, một nguồn khớp là đủ, còn <code>'none'</code> không góp gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Course cover from media.cuongthai.com",
+              "vi": "Ảnh bìa từ media.cuongthai.com"
+            },
+            "goi": "cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://media.cuongthai.com/images/course-covers/nodejs.png\", \"https://cuongthai.com\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Cover on an unlisted CDN",
+              "vi": "Ảnh bìa trên CDN không được liệt kê"
+            },
+            "goi": "cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://cdn.icons.example/node.svg\", \"https://cuongthai.com\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "helmet: same-origin script",
+              "vi": "helmet: script cùng nguồn"
+            },
+            "goi": "cspAllows(\"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests\", \"script\", \"/app.js\", \"https://cuongthai.com\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "helmet has no connect-src: falls back to default-src",
+              "vi": "helmet không có connect-src: dự phòng về default-src"
+            },
+            "goi": "cspAllows(\"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests\", \"connect\", \"https://evil.example/steal\", \"https://cuongthai.com\")",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://i.giphy.com/x.gif\", \"https://cuongthai.com\"), cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://giphy.com/x.gif\", \"https://cuongthai.com\"), cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"img\", \"https://evilgiphy.com/x.gif\", \"https://cuongthai.com\")]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"connect\", \"wss://cuongthai.com/socket.io/\", \"https://cuongthai.com\"), cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"connect\", \"https://api.cuongthai.com.evil.example/x\", \"https://cuongthai.com\"), cspAllows(\"default-src 'self';\\n script-src  'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com;\\n style-src   'self' 'unsafe-inline';\\n img-src     'self' data: blob: https://media.cuongthai.com https://*.giphy.com;\\n connect-src 'self' wss://cuongthai.com https://api.cuongthai.com https://*.sentry.io;\\n object-src  'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';\\n upgrade-insecure-requests\", \"object\", \"/x.swf\", \"https://cuongthai.com\")]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[cspAllows(\"img-src 'self' DATA:\", \"img\", \"data:image/png;base64,AAAA\", \"https://cuongthai.com\"), cspAllows(\"script-src 'unsafe-inline'\", \"script\", \"/a.js\", \"https://cuongthai.com\"), cspAllows(\"style-src 'self'\", \"img\", \"https://x.example/a.png\", \"https://cuongthai.com\")]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              false,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "[cspAllows(\"default-src 'none'; script-src 'self'; script-src https://evil.example\", \"script\", \"https://evil.example/x.js\", \"https://cuongthai.com\"), cspAllows(\"default-src 'none'\", \"font\", \"/f.woff2\", \"https://cuongthai.com\")]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              false,
+              false
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking <code>url.includes(host)</code>: <code>https://media.cuongthai.com.evil.example/x.png</code> contains the host and is not it.|||Kiểm <code>url.includes(host)</code>: <code>https://media.cuongthai.com.evil.example/x.png</code> chứa host mà không phải host."
+        },
+        {
+          "loi": "Forgetting the default-src fallback: a policy without img-src still restricts images.|||Quên dự phòng default-src: chính sách không có img-src vẫn giới hạn ảnh."
+        },
+        {
+          "loi": "Treating <code>'unsafe-inline'</code> as \"anything goes\" — it is about inline code, not about which URLs may load.|||Coi <code>'unsafe-inline'</code> là \"gì cũng được\" — nó nói về mã nội tuyến, không nói URL nào được tải."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fallback",
+          "vi": "dự phòng",
+          "giaiThich": "default-src dùng khi thiếu chỉ thị riêng"
+        },
+        {
+          "en": "scheme source",
+          "vi": "nguồn theo giao thức",
+          "giaiThich": "https:, data:, blob: — khớp mọi URL cùng giao thức"
+        }
+      ]
+    }
+  ]
+}

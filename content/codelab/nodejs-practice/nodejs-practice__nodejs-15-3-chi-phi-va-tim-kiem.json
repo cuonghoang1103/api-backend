@@ -1,0 +1,881 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-3-chi-phi-va-tim-kiem",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-3-chi-phi-va-tim-kiem"
+  },
+  "exercises": [
+    {
+      "title": "What a log line costs, and what a percentile cannot see",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "logging",
+        "percentiles",
+        "sampling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 15.3: compression, grep vs jq, the blind p95, sampling and levels, rotation.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 15.3: nén, grep vs jq, p95 mù, lấy mẫu và cấp độ, xoay vòng log.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One bad request in 250,000 is the 99.9996th percentile.|||Một request tệ trên 250.000 là bách phân vị 99,9996.",
+        "Ask of each sampling scheme: is a kept request still complete?|||Hỏi mỗi cách lấy mẫu: request được giữ có còn trọn vẹn không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a log line costs, and what a percentile cannot see\n\nAnswer in the answer panel (no code needed).\n\n1. /api/v1/feed has p95 = 114.2 ms, like every other route, and max = 8,241 ms. What does the p95 tell you about that 8-second request?/api/v1/feed có p95 = 114,2 ms như mọi route khác, và max = 8.241 ms. p95 cho bạn biết gì về request 8 giây đó?\n2. Sampling 1% with Math.random() < 0.01 per LINE kept the same number of bytes as hashing the request id. Why is it still worse?Lấy mẫu 1% bằng Math.random() < 0.01 cho mỗi DÒNG giữ số byte bằng cách băm request id. Vì sao vẫn tệ hơn?\n3. Which log level fits “refresh token expired, the client got 401 and logged in again”?Cấp độ log nào hợp với “refresh token hết hạn, client nhận 401 rồi đăng nhập lại”?\n4. A container printed 100,000 lines with --log-opt max-size=1m --log-opt max-file=2. What did docker logs show?Một container in 100.000 dòng với --log-opt max-size=1m --log-opt max-file=2. docker logs hiện gì?\n5. Which statements match the lesson’s numbers? (choose all that apply)Những câu nào khớp số liệu của bài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a log line costs, and what a percentile cannot see — answer key\n\n1. /api/v1/feed has p95 = 114.2 ms, like every other route, and max = 8,241 ms. What does the p95 tell you about that 8-second request?/api/v1/feed có p95 = 114,2 ms như mọi route khác, và max = 8.241 ms. p95 cho bạn biết gì về request 8 giây đó?\n   Answer: b) Nothing: one request in 250,000 is far beyond the 95th percentile, by design\n   Percentiles are designed to hide outliers — that makes them stable, and blind. Alert on percentiles, investigate with max.VI: Bách phân vị được thiết kế để giấu ngoại lệ — nhờ thế mà ổn định, và mù. Cảnh báo theo bách phân vị, điều tra bằng max.\n\n2. Sampling 1% with Math.random() < 0.01 per LINE kept the same number of bytes as hashing the request id. Why is it still worse?Lấy mẫu 1% bằng Math.random() < 0.01 cho mỗi DÒNG giữ số byte bằng cách băm request id. Vì sao vẫn tệ hơn?\n   Answer: b) It keeps scattered fragments of every request, so no kept request is a complete story\n   Hash a value identical on every line of the request and in every process — the request id — so a request is entirely in or entirely out.VI: Băm một giá trị giống nhau trên mọi dòng của request và ở mọi tiến trình — request id — để một request hoặc vào trọn hoặc ra trọn.\n\n3. Which log level fits “refresh token expired, the client got 401 and logged in again”?Cấp độ log nào hợp với “refresh token hết hạn, client nhận 401 rồi đăng nhập lại”?\n   Answer: a) Not error: it is routine, handled, and nobody has to act on it\n   error means someone has to act. An error nobody acts on trains everyone to ignore errors; within a month a real outage scrolls past unnoticed.VI: error nghĩa là có người phải hành động. Một error không ai xử lý dạy mọi người lờ error đi; trong một tháng, sự cố thật trôi qua không ai thấy.\n\n4. A container printed 100,000 lines with --log-opt max-size=1m --log-opt max-file=2. What did docker logs show?Một container in 100.000 dòng với --log-opt max-size=1m --log-opt max-file=2. docker logs hiện gì?\n   Answer: c) Only 12,492 lines (87,509 → 100,000); the rest rotated away silently\n   Rotation protects the disk; shipping the logs elsewhere protects history. You need both.VI: Xoay vòng bảo vệ ổ đĩa; chuyển log đi nơi khác bảo vệ lịch sử. Cần cả hai.\n\n5. Which statements match the lesson’s numbers? (choose all that apply)Những câu nào khớp số liệu của bài? (chọn mọi câu đúng)\n   Answer: a) The fattest line (pino-http default, 642 B) compressed best, 18.3× + b) grep -F found the request id in 1.66 s, jq needed 3.06 s + c) Retention can be shortened later and it also applies to old data\n   Structure costs about 21% (121 B → 147 B). Never estimate the bill from raw size; grep cuts, jq decides; retention is the knob you can turn later.VI: Cấu trúc tốn khoảng 21% (121 B → 147 B). Đừng ước hoá đơn từ kích thước thô; grep để lọc, jq để quyết; thời hạn lưu là núm vặn chỉnh được về sau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Nothing: one request in 250,000 is far beyond the 95th percentile, by design</p><p>Percentiles are designed to hide outliers — that makes them stable, and blind. Alert on percentiles, investigate with max.</p><p><i>VI: Bách phân vị được thiết kế để giấu ngoại lệ — nhờ thế mà ổn định, và mù. Cảnh báo theo bách phân vị, điều tra bằng max.</i></p></li><li><p><b>b)</b> It keeps scattered fragments of every request, so no kept request is a complete story</p><p>Hash a value identical on every line of the request and in every process — the request id — so a request is entirely in or entirely out.</p><p><i>VI: Băm một giá trị giống nhau trên mọi dòng của request và ở mọi tiến trình — request id — để một request hoặc vào trọn hoặc ra trọn.</i></p></li><li><p><b>a)</b> Not error: it is routine, handled, and nobody has to act on it</p><p>error means someone has to act. An error nobody acts on trains everyone to ignore errors; within a month a real outage scrolls past unnoticed.</p><p><i>VI: error nghĩa là có người phải hành động. Một error không ai xử lý dạy mọi người lờ error đi; trong một tháng, sự cố thật trôi qua không ai thấy.</i></p></li><li><p><b>c)</b> Only 12,492 lines (87,509 → 100,000); the rest rotated away silently</p><p>Rotation protects the disk; shipping the logs elsewhere protects history. You need both.</p><p><i>VI: Xoay vòng bảo vệ ổ đĩa; chuyển log đi nơi khác bảo vệ lịch sử. Cần cả hai.</i></p></li><li><p><b>a)</b> The fattest line (pino-http default, 642 B) compressed best, 18.3× + <b>b)</b> grep -F found the request id in 1.66 s, jq needed 3.06 s + <b>c)</b> Retention can be shortened later and it also applies to old data</p><p>Structure costs about 21% (121 B → 147 B). Never estimate the bill from raw size; grep cuts, jq decides; retention is the knob you can turn later.</p><p><i>VI: Cấu trúc tốn khoảng 21% (121 B → 147 B). Đừng ước hoá đơn từ kích thước thô; grep để lọc, jq để quyết; thời hạn lưu là núm vặn chỉnh được về sau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>/api/v1/feed has p95 = 114.2 ms, like every other route, and max = 8,241 ms. What does the p95 tell you about that 8-second request?</p><p style=\"opacity:.75;font-size:.92em\"><i>/api/v1/feed có p95 = 114,2 ms như mọi route khác, và max = 8.241 ms. p95 cho bạn biết gì về request 8 giây đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That it was caused by the network, because the server-side p95 stayed healthy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: one request in 250,000 is far beyond the 95th percentile, by design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That the route is broken, because p95 and max must be within 10× of each other"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That it never happened, because a real outlier always moves the p95 a little"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Percentiles are designed to hide outliers — that makes them stable, and blind. Alert on percentiles, investigate with max.</p><p><i>VI: Bách phân vị được thiết kế để giấu ngoại lệ — nhờ thế mà ổn định, và mù. Cảnh báo theo bách phân vị, điều tra bằng max.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Sampling 1% with Math.random() < 0.01 per LINE kept the same number of bytes as hashing the request id. Why is it still worse?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lấy mẫu 1% bằng Math.random() < 0.01 cho mỗi DÒNG giữ số byte bằng cách băm request id. Vì sao vẫn tệ hơn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Math.random() is slow, so it costs more CPU than the logging it saves"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It keeps scattered fragments of every request, so no kept request is a complete story"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It drops every 5xx line, because errors are rarer than one in a hundred"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Two lines of the same request always get the same random number in Node"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hash a value identical on every line of the request and in every process — the request id — so a request is entirely in or entirely out.</p><p><i>VI: Băm một giá trị giống nhau trên mọi dòng của request và ở mọi tiến trình — request id — để một request hoặc vào trọn hoặc ra trọn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which log level fits “refresh token expired, the client got 401 and logged in again”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cấp độ log nào hợp với “refresh token hết hạn, client nhận 401 rồi đăng nhập lại”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Not error: it is routine, handled, and nobody has to act on it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "error: security events must always be at the highest level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fatal: authentication problems should wake the on-call engineer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "error: every 4xx response is an error by definition of HTTP"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>error means someone has to act. An error nobody acts on trains everyone to ignore errors; within a month a real outage scrolls past unnoticed.</p><p><i>VI: error nghĩa là có người phải hành động. Một error không ai xử lý dạy mọi người lờ error đi; trong một tháng, sự cố thật trôi qua không ai thấy.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A container printed 100,000 lines with --log-opt max-size=1m --log-opt max-file=2. What did docker logs show?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một container in 100.000 dòng với --log-opt max-size=1m --log-opt max-file=2. docker logs hiện gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An error “log file full”, and the container stopped writing to stdout"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The first 12,492 lines; newer lines are dropped once the cap is reached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only 12,492 lines (87,509 → 100,000); the rest rotated away silently"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All 100,000 lines, because docker logs reads from the image layer"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rotation protects the disk; shipping the logs elsewhere protects history. You need both.</p><p><i>VI: Xoay vòng bảo vệ ổ đĩa; chuyển log đi nơi khác bảo vệ lịch sử. Cần cả hai.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statements match the lesson’s numbers? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào khớp số liệu của bài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The fattest line (pino-http default, 642 B) compressed best, 18.3×"
+              },
+              {
+                "ma": "b",
+                "noiDung": "grep -F found the request id in 1.66 s, jq needed 3.06 s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Retention can be shortened later and it also applies to old data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Compact JSON costs about 5× the bytes of the plain string line"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Structure costs about 21% (121 B → 147 B). Never estimate the bill from raw size; grep cuts, jq decides; retention is the knob you can turn later.</p><p><i>VI: Cấu trúc tốn khoảng 21% (121 B → 147 B). Đừng ước hoá đơn từ kích thước thô; grep để lọc, jq để quyết; thời hạn lưu là núm vặn chỉnh được về sau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding “everything is fine” from a healthy p95 alone.|||Kết luận “mọi thứ ổn” chỉ từ một p95 khoẻ."
+        },
+        {
+          "loi": "Raising the level to warn to log less — and losing the info lines around the error.|||Nâng cấp độ lên warn để log ít đi — và mất các dòng info quanh lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "retention",
+          "vi": "thời hạn lưu"
+        },
+        {
+          "en": "sampling",
+          "vi": "lấy mẫu",
+          "giaiThich": "keep only part of the normal traffic"
+        },
+        {
+          "en": "rotation",
+          "vi": "xoay vòng log",
+          "giaiThich": "cap the file size, drop the oldest"
+        }
+      ]
+    },
+    {
+      "title": "logBill(bytesPerLine, rps, retentionDays, replicas): the multiplier nobody budgets for",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "logging",
+        "capacity planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The cost of a log line is <b>bytes per line × traffic × retention × replicas</b>. Write <code>logBill(bytesPerLine, rps, retentionDays, replicas)</code> (one line per request) returning <code>{ perDayGB, storedTB }</code>: raw (uncompressed) GB per day, and the TB kept in the store after <code>retentionDays</code> with <code>replicas</code> copies. Use decimal units (1 GB = 10<sup>9</sup> B, 1 TB = 10<sup>12</sup> B) and round each to 2 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giá của một dòng log là <b>byte mỗi dòng × lưu lượng × thời hạn lưu × số bản sao</b>. Viết <code>logBill(bytesPerLine, rps, retentionDays, replicas)</code> (mỗi request một dòng) trả về <code>{ perDayGB, storedTB }</code>: GB thô (chưa nén) mỗi ngày, và số TB nằm trong kho sau <code>retentionDays</code> ngày với <code>replicas</code> bản sao. Dùng đơn vị thập phân (1 GB = 10<sup>9</sup> B, 1 TB = 10<sup>12</sup> B) và làm tròn mỗi số tới 2 chữ số thập phân.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "logBill(247, 300, 30, 2)",
+          "output": "{\"perDayGB\":6.4,\"storedTB\":0.38}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A day has 86,400 seconds.|||Một ngày có 86.400 giây.",
+        "Math.round(x * 100) / 100 rounds to two decimals.|||Math.round(x * 100) / 100 làm tròn hai chữ số thập phân."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** raw GB per day and TB stored */\nfunction logBill(bytesPerLine, rps, retentionDays, replicas) {\n  // Write your solution here\n  const perDay = bytesPerLine * rps * 86400;\n  return { perDayGB: perDay / 1e9, storedTB: perDay * retentionDays / 1e12 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction logBill(bytesPerLine, rps, retentionDays, replicas) {\n  // Byte mỗi dòng × request/giây × 86.400 giây = byte mỗi ngày; GB/TB thập phân (10^9 / 10^12) như bài học.\n  const perDay = bytesPerLine * rps * 86400;\n  const round2 = (x) => Math.round(x * 100) / 100;\n  return {\n    perDayGB: round2(perDay / 1e9),\n    storedTB: round2((perDay * retentionDays * replicas) / 1e12),   // trước khi nén\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>486 B × 1,000 req/s × 86,400 s ≈ 42 GB a day before compression: the pino-http default is a decision with a price. The bill arrives months after the field was added, so do this arithmetic while you are still deciding.</p>",
+      "solutionExplanationHtmlVi": "<p>486 B × 1.000 req/s × 86.400 s ≈ 42 GB mỗi ngày trước khi nén: mặc định của pino-http là một quyết định có giá. Hoá đơn tới vài tháng sau khi thêm trường, nên hãy làm phép tính này lúc còn đang quyết định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s exercise: 247 B, 300 req/s, 30 days, 2 replicas",
+              "vi": "Bài tập của bài: 247 B, 300 req/s, 30 ngày, 2 bản sao"
+            },
+            "goi": "logBill(247, 300, 30, 2)",
+            "mongDoi": {
+              "perDayGB": 6.4,
+              "storedTB": 0.38
+            }
+          },
+          {
+            "moTa": {
+              "en": "pino-http default at 1,000 req/s",
+              "vi": "Mặc định pino-http ở 1.000 req/s"
+            },
+            "goi": "logBill(486, 1000, 1, 1)",
+            "mongDoi": {
+              "perDayGB": 41.99,
+              "storedTB": 0.04
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "logBill(121, 1000, 90, 3)",
+            "mongDoi": {
+              "perDayGB": 10.45,
+              "storedTB": 2.82
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "logBill(642, 50, 7, 1)",
+            "mongDoi": {
+              "perDayGB": 2.77,
+              "storedTB": 0.02
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the replicas: a 3-replica store keeps every byte three times.|||Quên số bản sao: kho 3 bản sao giữ mỗi byte ba lần."
+        },
+        {
+          "loi": "Using 1024-based units while the lesson (and most invoices) count in powers of ten.|||Dùng đơn vị cơ số 1024 trong khi bài (và đa số hoá đơn) tính theo luỹ thừa 10."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replica",
+          "vi": "bản sao"
+        },
+        {
+          "en": "raw size",
+          "vi": "kích thước thô",
+          "giaiThich": "before compression"
+        }
+      ]
+    },
+    {
+      "title": "slowRequests(lines, ms): “every request slower than 1000 ms” as a question, not a regex",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "logging",
+        "JSON"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><code>lines</code> are raw lines of a log file. Most are JSON records <code>{ time, requestId, url, status, durationMs }</code>; a few are old plain-text lines or broken JSON. Return the <code>requestId</code> of every JSON record whose <code>durationMs</code> is a <b>number strictly greater</b> than <code>ms</code>, in file order. Skip any line that is not valid JSON, and records whose <code>durationMs</code> is not a number.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>lines</code> là các dòng thô của một file log. Đa số là bản ghi JSON <code>{ time, requestId, url, status, durationMs }</code>; vài dòng là chữ thuần kiểu cũ hoặc JSON hỏng. Trả về <code>requestId</code> của mọi bản ghi JSON có <code>durationMs</code> là <b>số lớn hơn hẳn</b> <code>ms</code>, theo thứ tự trong file. Bỏ qua dòng không phải JSON hợp lệ, và bản ghi có <code>durationMs</code> không phải số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "slowRequests([\"{\\\"time\\\":\\\"02:14:07.101\\\",\\\"requestId\\\":\\\"r1\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":200,\\\"durationMs\\\":114}\",\"{\\\"time\\\":\\\"02:14:07.140\\\",\\\"requestId\\\":\\\"r2\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":500,\\\"durationMs\\\":8241}\",\"GET /api/v1/notes 200 duration=1234ms\",\"{\\\"time\\\":\\\"02:14:07.190\\\",\\\"requestId\\\":\\\"r3\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1000}\",\"{\\\"time\\\":\\\"02:14:07.230\\\",\\\"requestId\\\":\\\"r4\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1001}\"], 1000)",
+          "output": "[\"r2\",\"r4\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Wrap JSON.parse in try/catch and continue on failure.|||Bọc JSON.parse trong try/catch và bỏ qua khi lỗi.",
+        "Check typeof r.durationMs === \"number\" before comparing — \"1500\" > 1000 is true in JavaScript.|||Kiểm typeof r.durationMs === \"number\" trước khi so — \"1500\" > 1000 là true trong JavaScript."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** request ids slower than ms */\nfunction slowRequests(lines, ms) {\n  // Write your solution here\n  const ids = [];\n  for (const line of lines) {\n    const m = /\"durationMs\":(\\d{4,})/.exec(line);\n    if (m) ids.push(JSON.parse(line).requestId);\n  }\n  return ids;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction slowRequests(lines, ms) {\n  // Mỗi dòng là một bản ghi JSON — hỏi bằng KIỂU DỮ LIỆU, không bằng regex trên chữ.\n  const ids = [];\n  for (const line of lines) {\n    let r;\n    try { r = JSON.parse(line); } catch { continue; }       // dòng hỏng / chữ thuần: bỏ qua, đừng làm chết cả lượt tìm\n    if (r && typeof r.durationMs === 'number' && r.durationMs > ms) ids.push(r.requestId);\n  }\n  return ids;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With text, “slower than 1000 ms” cannot really be expressed; with JSON it is .durationMs > 1000, a typed number compared as a number. That question is what the ~21% extra bytes of structure buy.</p>",
+      "solutionExplanationHtmlVi": "<p>Với chữ thuần, “chậm hơn 1000 ms” gần như không diễn đạt được; với JSON nó là .durationMs > 1000, một số có kiểu được so như số. Câu hỏi đó là thứ ~21% byte thêm của cấu trúc mua được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Mixed lines, threshold 1000 ms",
+              "vi": "Dòng trộn lẫn, ngưỡng 1000 ms"
+            },
+            "goi": "slowRequests([\"{\\\"time\\\":\\\"02:14:07.101\\\",\\\"requestId\\\":\\\"r1\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":200,\\\"durationMs\\\":114}\",\"{\\\"time\\\":\\\"02:14:07.140\\\",\\\"requestId\\\":\\\"r2\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":500,\\\"durationMs\\\":8241}\",\"GET /api/v1/notes 200 duration=1234ms\",\"{\\\"time\\\":\\\"02:14:07.190\\\",\\\"requestId\\\":\\\"r3\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1000}\",\"{\\\"time\\\":\\\"02:14:07.230\\\",\\\"requestId\\\":\\\"r4\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1001}\"], 1000)",
+            "mongDoi": [
+              "r2",
+              "r4"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Threshold 100 ms",
+              "vi": "Ngưỡng 100 ms"
+            },
+            "goi": "slowRequests([\"{\\\"time\\\":\\\"02:14:07.101\\\",\\\"requestId\\\":\\\"r1\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":200,\\\"durationMs\\\":114}\",\"{\\\"time\\\":\\\"02:14:07.140\\\",\\\"requestId\\\":\\\"r2\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":500,\\\"durationMs\\\":8241}\",\"GET /api/v1/notes 200 duration=1234ms\",\"{\\\"time\\\":\\\"02:14:07.190\\\",\\\"requestId\\\":\\\"r3\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1000}\",\"{\\\"time\\\":\\\"02:14:07.230\\\",\\\"requestId\\\":\\\"r4\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1001}\"], 100)",
+            "mongDoi": [
+              "r1",
+              "r2",
+              "r3",
+              "r4"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "slowRequests([\"{\\\"time\\\":\\\"02:14:07.101\\\",\\\"requestId\\\":\\\"r1\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":200,\\\"durationMs\\\":114}\",\"{\\\"time\\\":\\\"02:14:07.140\\\",\\\"requestId\\\":\\\"r2\\\",\\\"url\\\":\\\"/api/v1/feed\\\",\\\"status\\\":500,\\\"durationMs\\\":8241}\",\"GET /api/v1/notes 200 duration=1234ms\",\"{\\\"time\\\":\\\"02:14:07.190\\\",\\\"requestId\\\":\\\"r3\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1000}\",\"{\\\"time\\\":\\\"02:14:07.230\\\",\\\"requestId\\\":\\\"r4\\\",\\\"url\\\":\\\"/api/v1/notes\\\",\\\"status\\\":200,\\\"durationMs\\\":1001}\",\"{\\\"requestId\\\":\\\"r5\\\",\\\"durationMs\\\":\\\"1500\\\"}\",\"{\\\"requestId\\\":\\\"r6\\\",\",\"{\\\"requestId\\\":\\\"r7\\\",\\\"durationMs\\\":15000}\"], 1000)",
+            "mongDoi": [
+              "r2",
+              "r4",
+              "r7"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "slowRequests([], 1000)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "slowRequests([\"{\\\"requestId\\\":\\\"q\\\",\\\"durationMs\\\":999}\",\"{\\\"requestId\\\":\\\"w\\\",\\\"durationMs\\\":12345}\"], 999)",
+            "mongDoi": [
+              "w"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A regex for “a number above 1000” (\\d{4,}) also matches exactly 1000 and breaks the day the field is renamed or reformatted.|||Regex cho “số lớn hơn 1000” (\\d{4,}) khớp cả đúng 1000 và vỡ vào ngày trường bị đổi tên hay đổi định dạng."
+        },
+        {
+          "loi": "Letting one broken line throw and abort the whole search.|||Để một dòng hỏng ném lỗi làm hỏng cả lượt tìm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "typed field",
+          "vi": "trường có kiểu"
+        },
+        {
+          "en": "JSON lines",
+          "vi": "JSON lines",
+          "giaiThich": "one JSON object per line"
+        }
+      ]
+    },
+    {
+      "title": "routeStats(records): n, p50, p95 and max per URL — the log file as a database",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "percentiles",
+        "grouping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Because every line is a typed record, one jq expression grouped a million lines by URL. Do the same: <code>records</code> are <code>{ requestId, url, durationMs }</code>. Return an object keyed by <code>url</code> with <code>{ n, p50, p95, max }</code>. Use the <b>nearest-rank</b> percentile: sort the durations ascending (as numbers); p<sub>k</sub> is the element at position <code>ceil(k/100 × n)</code> counting from 1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vì mỗi dòng là một bản ghi có kiểu, một biểu thức jq đã nhóm một triệu dòng theo URL. Hãy làm y vậy: <code>records</code> là <code>{ requestId, url, durationMs }</code>. Trả về object khoá theo <code>url</code> với <code>{ n, p50, p95, max }</code>. Dùng bách phân vị <b>hạng gần nhất</b>: sắp thời lượng tăng dần (theo số); p<sub>k</sub> là phần tử ở vị trí <code>ceil(k/100 × n)</code> tính từ 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "routeStats([{\"requestId\":\"/api/v1/feed#0\",\"url\":\"/api/v1/feed\",\"durationMs\":90},{\"requestId\":\"/api/v1/feed#1\",\"url\":\"/api/v1/feed\",\"durationMs\":95},{\"requestId\":\"/api/v1/feed#2\",\"url\":\"/api/v1/feed\",\"durationMs\":100},{\"requestId\":\"/api/v1/feed#3\",\"url\":\"/api/v1/feed\",\"durationMs\":101},{\"requestId\":\"/api/v1/feed#4\",\"url\":\"/api/v1/feed\",\"durationMs\":102},{\"requestId\":\"/api/v1/feed#5\",\"url\":\"/api/v1/feed\",\"durationMs\":104},{\"requestId\":\"/api/v1/feed#6\",\"url\":\"/api/v1/feed\",\"durationMs\":105},{\"requestId\":\"/api/v1/feed#7\",\"url\":\"/api/v1/feed\",\"durationMs\":107},{\"requestId\":\"/api/v1/feed#8\",\"url\":\"/api/v1/feed\",\"durationMs\":108},{\"requestId\":\"/api/v1/feed#9\",\"url\":\"/api/v1/feed\",\"durationMs\":110},{\"requestId\":\"/api/v1/feed#10\",\"url\":\"/api/v1/feed\",\"durationMs\":111},{\"requestId\":\"/api/v1/feed#11\",\"url\":\"/api/v1/feed\",\"durationMs\":112},{\"requestId\":\"/api/v1/feed#12\",\"url\":\"/api/v1/feed\",\"durationMs\":113},{\"requestId\":\"/api/v1/feed#13\",\"url\":\"/api/v1/feed\",\"durationMs\":114},{\"requestId\":\"/api/v1/feed#14\",\"url\":\"/api/v1/feed\",\"durationMs\":114},{\"requestId\":\"/api/v1/feed#15\",\"url\":\"/api/v1/feed\",\"durationMs\":115},{\"requestId\":\"/api/v1/feed#16\",\"url\":\"/api/v1/feed\",\"durationMs\":117},{\"requestId\":\"/api/v1/feed#17\",\"url\":\"/api/v1/feed\",\"durationMs\":120},{\"requestId\":\"/api/v1/feed#18\",\"url\":\"/api/v1/feed\",\"durationMs\":8241},{\"requestId\":\"/api/v1/feed#19\",\"url\":\"/api/v1/feed\",\"durationMs\":99}])",
+          "output": "{\"/api/v1/feed\":{\"n\":20,\"p50\":108,\"p95\":120,\"max\":8241}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Group first: (groups[url] ||= []).push(durationMs).|||Nhóm trước: (groups[url] ||= []).push(durationMs).",
+        "Index in a 0-based array: Math.ceil(k / 100 * n) - 1. Sort with (a, b) => a - b.|||Chỉ số trong mảng đếm từ 0: Math.ceil(k / 100 * n) - 1. Sắp bằng (a, b) => a - b."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** per-URL n, p50, p95, max */\nfunction routeStats(records) {\n  // Write your solution here\n  const out = {};\n  for (const r of records) {\n    const g = out[r.url] || (out[r.url] = { n: 0, p50: 0, p95: 0, max: 0, sum: 0 });\n    g.n++; g.sum += r.durationMs; g.max = Math.max(g.max, r.durationMs);\n  }\n  for (const g of Object.values(out)) { g.p50 = g.p95 = g.sum / g.n; delete g.sum; }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction routeStats(records) {\n  // Nhóm theo url, rồi tính n, p50, p95, max — bách phân vị theo \"hạng gần nhất\": sắp tăng, lấy phần tử thứ ceil(p·n).\n  const groups = {};\n  for (const r of records) (groups[r.url] ||= []).push(r.durationMs);\n  const out = {};\n  for (const [url, ds] of Object.entries(groups)) {\n    const s = [...ds].sort((a, b) => a - b);                      // so SỐ — sort() mặc định so chữ: 1000 < 200\n    const pct = (p) => s[Math.ceil((p / 100) * s.length) - 1];\n    out[url] = { n: s.length, p50: pct(50), p95: pct(95), max: s[s.length - 1] };\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Run it on the feed sample: p95 is 120 ms while max is 8,241 ms. The percentile is stable precisely because it ignores the tail, so it can alert you, but only max (and the log line behind it) can tell you a user waited eight seconds.</p>",
+      "solutionExplanationHtmlVi": "<p>Chạy trên mẫu feed: p95 là 120 ms trong khi max là 8.241 ms. Bách phân vị ổn định chính vì nó bỏ qua phần đuôi, nên nó cảnh báo được, nhưng chỉ max (và dòng log đằng sau) mới cho biết một người dùng đã chờ tám giây.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "20 feed requests, one of 8,241 ms",
+              "vi": "20 request feed, một cái 8.241 ms"
+            },
+            "goi": "routeStats([{\"requestId\":\"/api/v1/feed#0\",\"url\":\"/api/v1/feed\",\"durationMs\":90},{\"requestId\":\"/api/v1/feed#1\",\"url\":\"/api/v1/feed\",\"durationMs\":95},{\"requestId\":\"/api/v1/feed#2\",\"url\":\"/api/v1/feed\",\"durationMs\":100},{\"requestId\":\"/api/v1/feed#3\",\"url\":\"/api/v1/feed\",\"durationMs\":101},{\"requestId\":\"/api/v1/feed#4\",\"url\":\"/api/v1/feed\",\"durationMs\":102},{\"requestId\":\"/api/v1/feed#5\",\"url\":\"/api/v1/feed\",\"durationMs\":104},{\"requestId\":\"/api/v1/feed#6\",\"url\":\"/api/v1/feed\",\"durationMs\":105},{\"requestId\":\"/api/v1/feed#7\",\"url\":\"/api/v1/feed\",\"durationMs\":107},{\"requestId\":\"/api/v1/feed#8\",\"url\":\"/api/v1/feed\",\"durationMs\":108},{\"requestId\":\"/api/v1/feed#9\",\"url\":\"/api/v1/feed\",\"durationMs\":110},{\"requestId\":\"/api/v1/feed#10\",\"url\":\"/api/v1/feed\",\"durationMs\":111},{\"requestId\":\"/api/v1/feed#11\",\"url\":\"/api/v1/feed\",\"durationMs\":112},{\"requestId\":\"/api/v1/feed#12\",\"url\":\"/api/v1/feed\",\"durationMs\":113},{\"requestId\":\"/api/v1/feed#13\",\"url\":\"/api/v1/feed\",\"durationMs\":114},{\"requestId\":\"/api/v1/feed#14\",\"url\":\"/api/v1/feed\",\"durationMs\":114},{\"requestId\":\"/api/v1/feed#15\",\"url\":\"/api/v1/feed\",\"durationMs\":115},{\"requestId\":\"/api/v1/feed#16\",\"url\":\"/api/v1/feed\",\"durationMs\":117},{\"requestId\":\"/api/v1/feed#17\",\"url\":\"/api/v1/feed\",\"durationMs\":120},{\"requestId\":\"/api/v1/feed#18\",\"url\":\"/api/v1/feed\",\"durationMs\":8241},{\"requestId\":\"/api/v1/feed#19\",\"url\":\"/api/v1/feed\",\"durationMs\":99}])",
+            "mongDoi": {
+              "/api/v1/feed": {
+                "n": 20,
+                "p50": 108,
+                "p95": 120,
+                "max": 8241
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Three requests, unsorted input",
+              "vi": "Ba request, đầu vào chưa sắp"
+            },
+            "goi": "routeStats([{\"requestId\":\"/api/v1/notes#0\",\"url\":\"/api/v1/notes\",\"durationMs\":30},{\"requestId\":\"/api/v1/notes#1\",\"url\":\"/api/v1/notes\",\"durationMs\":10},{\"requestId\":\"/api/v1/notes#2\",\"url\":\"/api/v1/notes\",\"durationMs\":20}])",
+            "mongDoi": {
+              "/api/v1/notes": {
+                "n": 3,
+                "p50": 20,
+                "p95": 30,
+                "max": 30
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "routeStats([{\"requestId\":\"/a#0\",\"url\":\"/a\",\"durationMs\":5},{\"requestId\":\"/b#0\",\"url\":\"/b\",\"durationMs\":1000},{\"requestId\":\"/b#1\",\"url\":\"/b\",\"durationMs\":200},{\"requestId\":\"/b#2\",\"url\":\"/b\",\"durationMs\":30},{\"requestId\":\"/b#3\",\"url\":\"/b\",\"durationMs\":4}])",
+            "mongDoi": {
+              "/a": {
+                "n": 1,
+                "p50": 5,
+                "p95": 5,
+                "max": 5
+              },
+              "/b": {
+                "n": 4,
+                "p50": 30,
+                "p95": 1000,
+                "max": 1000
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "routeStats([])",
+            "mongDoi": {},
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "routeStats([{\"requestId\":\"/c#0\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#1\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#2\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#3\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#4\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#5\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#6\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#7\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#8\",\"url\":\"/c\",\"durationMs\":7},{\"requestId\":\"/c#9\",\"url\":\"/c\",\"durationMs\":900}])",
+            "mongDoi": {
+              "/c": {
+                "n": 10,
+                "p50": 7,
+                "p95": 900,
+                "max": 900
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using .sort() without a comparator: it sorts as strings, so 8241 comes before 90.|||Dùng .sort() không có hàm so sánh: nó sắp như chuỗi, nên 8241 đứng trước 90."
+        },
+        {
+          "loi": "Reporting the average: one 8,241 ms request drags the mean up while p95 stays put — two different lies.|||Báo cáo trung bình: một request 8.241 ms kéo trung bình lên trong khi p95 đứng yên — hai kiểu nói dối khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "p50 / median",
+          "vi": "trung vị",
+          "giaiThich": "half the requests were faster"
+        },
+        {
+          "en": "p95",
+          "vi": "bách phân vị 95",
+          "giaiThich": "95% of requests were faster than this"
+        },
+        {
+          "en": "nearest rank",
+          "vi": "hạng gần nhất"
+        }
+      ]
+    },
+    {
+      "title": "sampleLogs(records, rate): keep every incident, 1% of the rest, whole requests only",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "sampling",
+        "hashing",
+        "logging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Implement the sampler of the lesson. For each record <code>{ requestId, time, msg, status, durationMs }</code> compute the hash of <code>requestId</code> exactly as the lesson does:</p><pre>let h = 0;\nfor (let i = 0; i &lt; s.length; i++) h = (h * 31 + s.charCodeAt(i)) &gt;&gt;&gt; 0;\nconst sampled = (h % 10000) &lt; rate * 10000;</pre><p>Keep the record if <code>status &gt;= 500</code>, or <code>durationMs &gt; 1000</code>, or <code>sampled</code>. Return the kept records in their original order. Every line of a request must get the same decision.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cài đặt bộ lấy mẫu của bài. Với mỗi bản ghi <code>{ requestId, time, msg, status, durationMs }</code> tính hàm băm của <code>requestId</code> đúng như bài:</p><pre>let h = 0;\nfor (let i = 0; i &lt; s.length; i++) h = (h * 31 + s.charCodeAt(i)) &gt;&gt;&gt; 0;\nconst sampled = (h % 10000) &lt; rate * 10000;</pre><p>Giữ bản ghi nếu <code>status &gt;= 500</code>, hoặc <code>durationMs &gt; 1000</code>, hoặc <code>sampled</code>. Trả về các bản ghi được giữ theo thứ tự ban đầu. Mọi dòng của một request phải nhận cùng một quyết định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sampleLogs([{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 0.3)",
+          "output": "[{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The >>> 0 keeps h an unsigned 32-bit integer; without it h becomes a huge float and % gives different answers.|||>>> 0 giữ h là số nguyên 32 bit không dấu; thiếu nó h thành số thực khổng lồ và % cho kết quả khác.",
+        "Hash r.requestId — not r.time, not a line counter, not Math.random().|||Băm r.requestId — không phải r.time, không phải bộ đếm dòng, không phải Math.random()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** keep incidents + a sample of normal requests */\nfunction sampleLogs(records, rate) {\n  // Write your solution here\n  return records.filter((r) => {\n    let h = 0;\n    const s = r.time;\n    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;\n    return r.status >= 500 || (h % 10000) < rate * 10000;\n  });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sampleLogs(records, rate) {\n  // Giữ MỌI thứ bất thường (5xx, > 1000 ms) + một tỉ lệ `rate` của phần còn lại, chọn theo BĂM REQUEST ID\n  // ⇒ mọi dòng của một request cùng một quyết định, ở mọi tiến trình (đúng hàm băm của bài).\n  const keep = [];\n  for (const r of records) {\n    let h = 0;\n    const s = r.requestId;\n    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;\n    const sampled = h % 10000 < rate * 10000;\n    if (r.status >= 500 || r.durationMs > 1000 || sampled) keep.push(r);\n  }\n  return keep;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the lesson’s million lines this kept 1.00% of the bytes (100× smaller) and still kept 1/1 of the 5xx and 1/1 of the slow requests. The request id from 15.2 is what makes it possible: one id, two jobs — correlation and sampling.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên một triệu dòng của bài, cách này giữ 1,00% dung lượng (nhỏ hơn 100 lần) mà vẫn giữ 1/1 lỗi 5xx và 1/1 request chậm. Request id của bài 15.2 làm điều đó khả thi: một id, hai việc — nối dòng và lấy mẫu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "8 requests × 3 lines, rate 30%",
+              "vi": "8 request × 3 dòng, tỉ lệ 30%"
+            },
+            "goi": "sampleLogs([{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 0.3)",
+            "mongDoi": [
+              {
+                "requestId": "mJumRwAigpAO",
+                "time": "02:14:00.100",
+                "msg": "received",
+                "status": 200,
+                "durationMs": 40
+              },
+              {
+                "requestId": "mJumRwAigpAO",
+                "time": "02:14:00.107",
+                "msg": "query",
+                "status": 200,
+                "durationMs": 40
+              },
+              {
+                "requestId": "mJumRwAigpAO",
+                "time": "02:14:00.114",
+                "msg": "reply",
+                "status": 200,
+                "durationMs": 40
+              },
+              {
+                "requestId": "jM3OZ73RMcKa",
+                "time": "02:14:03.100",
+                "msg": "received",
+                "status": 500,
+                "durationMs": 43
+              },
+              {
+                "requestId": "jM3OZ73RMcKa",
+                "time": "02:14:03.107",
+                "msg": "query",
+                "status": 500,
+                "durationMs": 43
+              },
+              {
+                "requestId": "jM3OZ73RMcKa",
+                "time": "02:14:03.114",
+                "msg": "reply",
+                "status": 500,
+                "durationMs": 43
+              },
+              {
+                "requestId": "a1b2c3d4",
+                "time": "02:14:04.100",
+                "msg": "received",
+                "status": 200,
+                "durationMs": 44
+              },
+              {
+                "requestId": "a1b2c3d4",
+                "time": "02:14:04.107",
+                "msg": "query",
+                "status": 200,
+                "durationMs": 44
+              },
+              {
+                "requestId": "a1b2c3d4",
+                "time": "02:14:04.114",
+                "msg": "reply",
+                "status": 200,
+                "durationMs": 44
+              },
+              {
+                "requestId": "zzzz0001",
+                "time": "02:14:05.100",
+                "msg": "received",
+                "status": 200,
+                "durationMs": 1800
+              },
+              {
+                "requestId": "zzzz0001",
+                "time": "02:14:05.107",
+                "msg": "query",
+                "status": 200,
+                "durationMs": 1800
+              },
+              {
+                "requestId": "zzzz0001",
+                "time": "02:14:05.114",
+                "msg": "reply",
+                "status": 200,
+                "durationMs": 1800
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "rate 0: only the incidents survive",
+              "vi": "tỉ lệ 0: chỉ còn sự cố"
+            },
+            "goi": "sampleLogs([{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 0).map((r) => r.requestId + \":\" + r.msg)",
+            "mongDoi": [
+              "jM3OZ73RMcKa:received",
+              "jM3OZ73RMcKa:query",
+              "jM3OZ73RMcKa:reply",
+              "zzzz0001:received",
+              "zzzz0001:query",
+              "zzzz0001:reply"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Every kept request is complete",
+              "vi": "Mọi request được giữ đều trọn vẹn"
+            },
+            "goi": "(() => { const k = sampleLogs([{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 0.5); const per = {}; for (const r of k) per[r.requestId] = (per[r.requestId] || 0) + 1; return Object.values(per).every((n) => n === 3); })()",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sampleLogs([{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"mJumRwAigpAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"f360ef6b\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4a4c9b4c\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"jM3OZ73RMcKa\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"a1b2c3d4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"zzzz0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"q9w8e7r6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"n0t3s-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 1).length",
+            "mongDoi": 24,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sampleLogs([{\"requestId\":\"MJUMRWAIGPAO\",\"time\":\"02:14:00.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":40},{\"requestId\":\"MJUMRWAIGPAO\",\"time\":\"02:14:00.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":40},{\"requestId\":\"MJUMRWAIGPAO\",\"time\":\"02:14:00.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":40},{\"requestId\":\"F360EF6B\",\"time\":\"02:14:01.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":41},{\"requestId\":\"F360EF6B\",\"time\":\"02:14:01.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":41},{\"requestId\":\"F360EF6B\",\"time\":\"02:14:01.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":41},{\"requestId\":\"4A4C9B4C\",\"time\":\"02:14:02.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4A4C9B4C\",\"time\":\"02:14:02.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":42},{\"requestId\":\"4A4C9B4C\",\"time\":\"02:14:02.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":42},{\"requestId\":\"JM3OZ73RMCKA\",\"time\":\"02:14:03.100\",\"msg\":\"received\",\"status\":500,\"durationMs\":43},{\"requestId\":\"JM3OZ73RMCKA\",\"time\":\"02:14:03.107\",\"msg\":\"query\",\"status\":500,\"durationMs\":43},{\"requestId\":\"JM3OZ73RMCKA\",\"time\":\"02:14:03.114\",\"msg\":\"reply\",\"status\":500,\"durationMs\":43},{\"requestId\":\"A1B2C3D4\",\"time\":\"02:14:04.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":44},{\"requestId\":\"A1B2C3D4\",\"time\":\"02:14:04.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":44},{\"requestId\":\"A1B2C3D4\",\"time\":\"02:14:04.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":44},{\"requestId\":\"ZZZZ0001\",\"time\":\"02:14:05.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"ZZZZ0001\",\"time\":\"02:14:05.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"ZZZZ0001\",\"time\":\"02:14:05.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":1800},{\"requestId\":\"Q9W8E7R6\",\"time\":\"02:14:06.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":46},{\"requestId\":\"Q9W8E7R6\",\"time\":\"02:14:06.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":46},{\"requestId\":\"Q9W8E7R6\",\"time\":\"02:14:06.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":46},{\"requestId\":\"N0T3S-42\",\"time\":\"02:14:07.100\",\"msg\":\"received\",\"status\":200,\"durationMs\":47},{\"requestId\":\"N0T3S-42\",\"time\":\"02:14:07.107\",\"msg\":\"query\",\"status\":200,\"durationMs\":47},{\"requestId\":\"N0T3S-42\",\"time\":\"02:14:07.114\",\"msg\":\"reply\",\"status\":200,\"durationMs\":47}], 0.3).map((r) => r.requestId)",
+            "mongDoi": [
+              "JM3OZ73RMCKA",
+              "JM3OZ73RMCKA",
+              "JM3OZ73RMCKA",
+              "ZZZZ0001",
+              "ZZZZ0001",
+              "ZZZZ0001",
+              "Q9W8E7R6",
+              "Q9W8E7R6",
+              "Q9W8E7R6",
+              "N0T3S-42",
+              "N0T3S-42",
+              "N0T3S-42"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hashing the timestamp: each line has a different one, so you are back to orphan fragments.|||Băm dấu thời gian: mỗi dòng một giá trị, nên lại quay về các mảnh vụn mồ côi."
+        },
+        {
+          "loi": "Sampling errors too: the one 500 of the night is exactly the line you must never drop.|||Lấy mẫu cả lỗi: một lỗi 500 duy nhất trong đêm chính là dòng không bao giờ được bỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deterministic",
+          "vi": "tất định",
+          "giaiThich": "the same input always gives the same decision"
+        },
+        {
+          "en": "head sampling",
+          "vi": "lấy mẫu từ đầu",
+          "giaiThich": "decide per request, before looking at its lines"
+        }
+      ]
+    }
+  ]
+}

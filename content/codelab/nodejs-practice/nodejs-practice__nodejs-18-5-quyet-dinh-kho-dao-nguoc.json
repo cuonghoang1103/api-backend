@@ -1,0 +1,764 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-5-quyet-dinh-kho-dao-nguoc",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-5-quyet-dinh-kho-dao-nguoc"
+  },
+  "exercises": [
+    {
+      "title": "One-way or two-way door?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "decisions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Decide fast on two-way doors; decide slowly, and write down why, on one-way doors (lesson 18.5).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết nhanh với cửa hai chiều; quyết chậm, và ghi lại vì sao, với cửa một chiều (bài 18.5).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: if this is wrong, what does undoing it cost?|||Hỏi: nếu sai thì hoàn tác tốn bao nhiêu?",
+        "Anything that writes data or that clients depend on is suspect.|||Thứ gì ghi dữ liệu hoặc client phụ thuộc vào đều đáng nghi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One-way or two-way door?\n\nAnswer in the answer panel (no code needed).\n\n1. Your Notes API is about to launchNotes API của bạn sắp ra mắt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One-way or two-way door? — answer key\n\n1. Your Notes API is about to launchNotes API của bạn sắp ra mắt\n   - r1.d: two-way\n   - r2.d: one-way\n   - r3.d: two-way\n   - r4.d: one-way\n   - r5.d: one-way\n   - r6.d: two-way\n   - r7.d: one-way\n   - r8.d: two-way\n   Code can be rolled back in seconds (17.6); data written in the wrong shape stays written. Ids in URLs leak volumes and invite IDOR, and switching kills old links; timestamp without a zone corrupts data you cannot un-corrupt; a public contract can only be versioned; changing the auth model logs everyone out.VI: Mã quay lui trong vài giây (17.6); dữ liệu ghi sai hình dạng thì vẫn nằm đó. Id trong URL lộ quy mô và mời gọi IDOR, đổi đi thì chết link cũ; timestamp không múi giờ làm hỏng dữ liệu mà không sửa lại được; hợp đồng công khai chỉ có thể thêm phiên bản; đổi mô hình xác thực làm mọi người bị đăng xuất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code can be rolled back in seconds (17.6); data written in the wrong shape stays written. Ids in URLs leak volumes and invite IDOR, and switching kills old links; timestamp without a zone corrupts data you cannot un-corrupt; a public contract can only be versioned; changing the auth model logs everyone out.</p><p><i>VI: Mã quay lui trong vài giây (17.6); dữ liệu ghi sai hình dạng thì vẫn nằm đó. Id trong URL lộ quy mô và mời gọi IDOR, đổi đi thì chết link cũ; timestamp không múi giờ làm hỏng dữ liệu mà không sửa lại được; hợp đồng công khai chỉ có thể thêm phiên bản; đổi mô hình xác thực làm mọi người bị đăng xuất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Your Notes API is about to launch</p><p style=\"opacity:.75;font-size:.92em\"><i>Notes API của bạn sắp ra mắt</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Decision"
+              },
+              {
+                "ma": "d",
+                "ten": "Door",
+                "luaChon": [
+                  "one-way",
+                  "two-way"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "The logging library (pino or console wrapper)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Sequential note ids in public URLs (/notes/1842)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The connection pool size"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Storing created_at as timestamp (no time zone)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "The JSON shape of GET /notes once mobile clients use it"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "The compression level of the middleware"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "How access tokens are signed and verified (the auth model)"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "Folder names inside src/services"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "two-way",
+              "r2.d": "one-way",
+              "r3.d": "two-way",
+              "r4.d": "one-way",
+              "r5.d": "one-way",
+              "r6.d": "two-way",
+              "r7.d": "one-way",
+              "r8.d": "two-way"
+            },
+            "giaiThich": "<p>Code can be rolled back in seconds (17.6); data written in the wrong shape stays written. Ids in URLs leak volumes and invite IDOR, and switching kills old links; timestamp without a zone corrupts data you cannot un-corrupt; a public contract can only be versioned; changing the auth model logs everyone out.</p><p><i>VI: Mã quay lui trong vài giây (17.6); dữ liệu ghi sai hình dạng thì vẫn nằm đó. Id trong URL lộ quy mô và mời gọi IDOR, đổi đi thì chết link cũ; timestamp không múi giờ làm hỏng dữ liệu mà không sửa lại được; hợp đồng công khai chỉ có thể thêm phiên bản; đổi mô hình xác thực làm mọi người bị đăng xuất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Weeks on the ORM debate, five minutes on the URL id.|||Hàng tuần tranh luận ORM, năm phút cho id trong URL."
+        },
+        {
+          "loi": "Treating the pool size as a one-way door.|||Coi kích thước pool là cửa một chiều."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one-way door",
+          "vi": "cửa một chiều",
+          "giaiThich": "months to reverse"
+        },
+        {
+          "en": "two-way door",
+          "vi": "cửa hai chiều",
+          "giaiThich": "reversible in an afternoon"
+        }
+      ]
+    },
+    {
+      "title": "checkDecisionComment(text): decision, cost, mitigation — and the missing “Revisit when”",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "documentation",
+        "decisions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Code already says what; six months later the question is always why. A decision comment needs four labelled parts: <code>Why:</code>, <code>Cost:</code>, <code>Mitigation:</code>, <code>Revisit when:</code>. Write <code>checkDecisionComment(text)</code>: strip leading comment markers from each line (<code>//</code>, <code>/*</code>, <code>*</code>, <code>*/</code>, <code>#</code>, plus one following space), then a part is present when some line starts with its label followed by <code>:</code> (case-insensitive) <b>and</b> has text after the colon. Return <code>{ why, cost, mitigation, revisit, missing }</code> — four booleans and the labels that are missing, in the order above.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã đã nói cái gì; sáu tháng sau câu hỏi luôn là vì sao. Chú thích quyết định cần bốn phần có nhãn: <code>Why:</code>, <code>Cost:</code>, <code>Mitigation:</code>, <code>Revisit when:</code>. Viết <code>checkDecisionComment(text)</code>: bỏ ký hiệu chú thích ở đầu mỗi dòng (<code>//</code>, <code>/*</code>, <code>*</code>, <code>*/</code>, <code>#</code>, cộng một dấu cách theo sau), rồi một phần được coi là có khi có dòng bắt đầu bằng nhãn của nó kèm <code>:</code> (không phân biệt hoa thường) <b>và</b> có chữ sau dấu hai chấm. Trả về <code>{ why, cost, mitigation, revisit, missing }</code> — bốn boolean và các nhãn còn thiếu, theo thứ tự trên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkDecisionComment(\"/**\\n * Why: no BullMQ — one process, and BullMQ adds 50 MB of dependencies.\\n * Cost: if the process crashes mid-job, in-flight jobs are lost.\\n * Mitigation: jobs are idempotent, documents carry embeddingStatus, a recovery scan finds stuck ones.\\n */\")",
+          "output": "{\"why\":true,\"cost\":true,\"mitigation\":true,\"revisit\":false,\"missing\":[\"Revisit when\"]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise each line first with one replace, then use startsWith on the lower-cased line.|||Chuẩn hoá mỗi dòng trước bằng một lần replace, rồi dùng startsWith trên dòng viết thường.",
+        "“Revisit when:” is two words — compare the whole label.|||“Revisit when:” là hai từ — so cả nhãn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** does the comment record why, the cost, the mitigation and when to revisit? */\nfunction checkDecisionComment(text) {\n  // Write your solution here\n  const t = text.toLowerCase();\n  const has = { why: t.includes('why'), cost: t.includes('cost'), mitigation: t.includes('mitigation'), revisit: t.includes('revisit') };\n  return { ...has, missing: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkDecisionComment(text) {\n  // Bốn phần của một chú thích tốt: quyết định (Why), cái giá chấp nhận (Cost), biện pháp giảm (Mitigation), và khi nào xem lại.\n  const LABELS = [['why', 'Why'], ['cost', 'Cost'], ['mitigation', 'Mitigation'], ['revisit', 'Revisit when']];\n  const lines = text.split('\\n').map((l) => l.replace(/^\\s*(\\/\\/+|\\/\\*+|\\*+\\/?|#)\\s?/, '').trim());\n  const has = {};\n  for (const [key, label] of LABELS) {\n    const line = lines.find((l) => l.toLowerCase().startsWith(label.toLowerCase() + ':'));\n    has[key] = !!line && line.slice(label.length + 1).trim().length > 0;    // nhãn có mà để trống = coi như thiếu\n  }\n  return { ...has, missing: LABELS.filter(([k]) => !has[k]).map(([, l]) => l) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The website’s embedding-queue comment gets three things right and misses the fourth. Without “Revisit when: a second process appears, or losing a job stops being acceptable”, a deliberate trade-off looks exactly like an oversight — and 18.4 already named that trigger.</p>",
+      "solutionExplanationHtmlVi": "<p>Chú thích hàng đợi embedding của website làm đúng ba thứ và thiếu thứ tư. Thiếu “Revisit when: a second process appears, or losing a job stops being acceptable”, một đánh đổi có chủ ý trông y hệt một sơ suất — và 18.4 đã gọi tên đúng điều kiện đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The embedding queue comment",
+              "vi": "Chú thích hàng đợi embedding"
+            },
+            "goi": "checkDecisionComment(\"/**\\n * Why: no BullMQ — one process, and BullMQ adds 50 MB of dependencies.\\n * Cost: if the process crashes mid-job, in-flight jobs are lost.\\n * Mitigation: jobs are idempotent, documents carry embeddingStatus, a recovery scan finds stuck ones.\\n */\")",
+            "mongDoi": {
+              "why": true,
+              "cost": true,
+              "mitigation": true,
+              "revisit": false,
+              "missing": [
+                "Revisit when"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "With the fourth line",
+              "vi": "Có dòng thứ tư"
+            },
+            "goi": "checkDecisionComment(\"/**\\n * Why: no BullMQ — one process, and BullMQ adds 50 MB of dependencies.\\n * Cost: if the process crashes mid-job, in-flight jobs are lost.\\n * Mitigation: jobs are idempotent, documents carry embeddingStatus, a recovery scan finds stuck ones.\\n * Revisit when: a second process appears, or losing a job stops being acceptable.\\n */\")",
+            "mongDoi": {
+              "why": true,
+              "cost": true,
+              "mitigation": true,
+              "revisit": true,
+              "missing": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkDecisionComment(\"// why: cache /notes in memory, not Redis\\n// COST: copies diverge with 2 processes\\n// revisit when:\\n// We accepted the cost: stale reads for 10 s\")",
+            "mongDoi": {
+              "why": true,
+              "cost": true,
+              "mitigation": false,
+              "revisit": false,
+              "missing": [
+                "Mitigation",
+                "Revisit when"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkDecisionComment(\"# Mitigation: TTL 10 s\\n# Revisit when: a second container appears\")",
+            "mongDoi": {
+              "why": false,
+              "cost": false,
+              "mitigation": true,
+              "revisit": true,
+              "missing": [
+                "Why",
+                "Cost"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A label with nothing after it counts as written: “Revisit when:” left empty tells the next person nothing.|||Nhãn không có gì phía sau mà vẫn tính là đã viết: “Revisit when:” để trống không nói gì với người sau."
+        },
+        {
+          "loi": "Searching anywhere in the line: “the cost: none” inside a sentence is not a labelled part.|||Tìm ở bất kỳ đâu trong dòng: “the cost: none” giữa câu không phải một phần có nhãn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi"
+        },
+        {
+          "en": "revisit trigger",
+          "vi": "điều kiện xem lại"
+        }
+      ]
+    },
+    {
+      "title": "What technical debt is — and what it is not",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "architecture",
+        "technical debt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the second half of lesson 18.5.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về nửa sau của bài 18.5.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What future change does it make expensive?|||Nó làm thay đổi nào trong tương lai trở nên đắt?",
+        "Was it right when it was made?|||Lúc đưa ra nó có đúng không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What technical debt is — and what it is not\n\nAnswer in the answer panel (no code needed).\n\n1. The 6,113-line seed file and the 50 route files that skip the service. Which is debt?Tệp seed 6.113 dòng và 50 tệp route bỏ qua service. Cái nào là nợ?\n2. Class “dark” for the global theme was right with one theming system; later it switched on every Tailwind dark: style inside Notes. Which kind of debt?Class “dark” cho theme toàn cục đúng khi chỉ có một hệ theme; về sau nó bật mọi style dark: của Tailwind trong Notes. Đây là loại nợ nào?\n3. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What technical debt is — and what it is not — answer key\n\n1. The 6,113-line seed file and the 50 route files that skip the service. Which is debt?Tệp seed 6.113 dòng và 50 tệp route bỏ qua service. Cái nào là nợ?\n   Answer: a) The 50 routes: a rule that must apply everywhere now costs fifty edits\n   Debt is a decision that makes future change more expensive, not code you dislike. Ugly code nobody touches that blocks nothing is not debt — leave it alone.VI: Nợ là một quyết định làm thay đổi tương lai đắt hơn, không phải mã bạn không thích. Mã xấu không ai đụng tới và không chặn gì thì không phải nợ — để yên.\n\n2. Class “dark” for the global theme was right with one theming system; later it switched on every Tailwind dark: style inside Notes. Which kind of debt?Class “dark” cho theme toàn cục đúng khi chỉ có một hệ theme; về sau nó bật mọi style dark: của Tailwind trong Notes. Đây là loại nợ nào?\n   Answer: a) Rot: a decision that was right in circumstances that changed\n   The global class is now theme-dark. Each of the three debts the project paid (GIPHY key, dark class, schema drift → P3009) was a reasonable local decision that became expensive at a distance.VI: Class toàn cục nay là theme-dark. Mỗi khoản nợ dự án đã trả (khoá GIPHY, class dark, lược đồ trôi → P3009) đều là một quyết định cục bộ hợp lý trở nên đắt đỏ ở xa.\n\n3. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: a) A decision record is only useful where decisions are made, next to the code + b) The most dangerous debt is the one that works: a subtly wrong schema serves every request for a year + c) The project’s CLAUDE.md keeps 21 known-error rows and 9 NEVER rules — every rule is a scar\n   The useful question is never “is this good code?” but “what does this make expensive?”. Spend your slow thinking on the schema.VI: Câu hỏi hữu ích không bao giờ là “mã này có tốt không?” mà là “nó làm cái gì trở nên đắt?”. Dành suy nghĩ chậm cho lược đồ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The 50 routes: a rule that must apply everywhere now costs fifty edits</p><p>Debt is a decision that makes future change more expensive, not code you dislike. Ugly code nobody touches that blocks nothing is not debt — leave it alone.</p><p><i>VI: Nợ là một quyết định làm thay đổi tương lai đắt hơn, không phải mã bạn không thích. Mã xấu không ai đụng tới và không chặn gì thì không phải nợ — để yên.</i></p></li><li><p><b>a)</b> Rot: a decision that was right in circumstances that changed</p><p>The global class is now theme-dark. Each of the three debts the project paid (GIPHY key, dark class, schema drift → P3009) was a reasonable local decision that became expensive at a distance.</p><p><i>VI: Class toàn cục nay là theme-dark. Mỗi khoản nợ dự án đã trả (khoá GIPHY, class dark, lược đồ trôi → P3009) đều là một quyết định cục bộ hợp lý trở nên đắt đỏ ở xa.</i></p></li><li><p><b>a)</b> A decision record is only useful where decisions are made, next to the code + <b>b)</b> The most dangerous debt is the one that works: a subtly wrong schema serves every request for a year + <b>c)</b> The project’s CLAUDE.md keeps 21 known-error rows and 9 NEVER rules — every rule is a scar</p><p>The useful question is never “is this good code?” but “what does this make expensive?”. Spend your slow thinking on the schema.</p><p><i>VI: Câu hỏi hữu ích không bao giờ là “mã này có tốt không?” mà là “nó làm cái gì trở nên đắt?”. Dành suy nghĩ chậm cho lược đồ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The 6,113-line seed file and the 50 route files that skip the service. Which is debt?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tệp seed 6.113 dòng và 50 tệp route bỏ qua service. Cái nào là nợ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The 50 routes: a rule that must apply everywhere now costs fifty edits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The seed: a 6,113-line file is debt by definition, whatever it holds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both, because both would fail a simple 500-line rule in review"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither, because both of them work correctly in production today"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Debt is a decision that makes future change more expensive, not code you dislike. Ugly code nobody touches that blocks nothing is not debt — leave it alone.</p><p><i>VI: Nợ là một quyết định làm thay đổi tương lai đắt hơn, không phải mã bạn không thích. Mã xấu không ai đụng tới và không chặn gì thì không phải nợ — để yên.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Class “dark” for the global theme was right with one theming system; later it switched on every Tailwind dark: style inside Notes. Which kind of debt?</p><p style=\"opacity:.75;font-size:.92em\"><i>Class “dark” cho theme toàn cục đúng khi chỉ có một hệ theme; về sau nó bật mọi style dark: của Tailwind trong Notes. Đây là loại nợ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rot: a decision that was right in circumstances that changed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accidental: only now do you see how it should have been done"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Not debt: it was a CSS bug, not a decision"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Deliberate: shipped knowing it had to be fixed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The global class is now theme-dark. Each of the three debts the project paid (GIPHY key, dark class, schema drift → P3009) was a reasonable local decision that became expensive at a distance.</p><p><i>VI: Class toàn cục nay là theme-dark. Mỗi khoản nợ dự án đã trả (khoá GIPHY, class dark, lược đồ trôi → P3009) đều là một quyết định cục bộ hợp lý trở nên đắt đỏ ở xa.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A decision record is only useful where decisions are made, next to the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The most dangerous debt is the one that works: a subtly wrong schema serves every request for a year"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The project’s CLAUDE.md keeps 21 known-error rows and 9 NEVER rules — every rule is a scar"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Debt should be measured by counting lines that fail a style guide"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The useful question is never “is this good code?” but “what does this make expensive?”. Spend your slow thinking on the schema.</p><p><i>VI: Câu hỏi hữu ích không bao giờ là “mã này có tốt không?” mà là “nó làm cái gì trở nên đắt?”. Dành suy nghĩ chậm cho lược đồ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every long or ugly file debt.|||Gọi mọi tệp dài hay xấu là nợ."
+        },
+        {
+          "loi": "Keeping decisions in a wiki nobody reads.|||Giữ quyết định trong một wiki không ai đọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "technical debt",
+          "vi": "nợ kỹ thuật"
+        },
+        {
+          "en": "rot",
+          "vi": "mục ruỗng",
+          "giaiThich": "a right decision whose circumstances changed"
+        }
+      ]
+    },
+    {
+      "title": "adrLint(markdown): four headings, and “what we now CANNOT do”",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "ADR",
+        "documentation",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>An ADR (Architecture Decision Record) has four <code>## </code> headings in this order: <code>Context</code>, <code>Options</code>, <code>Decision</code>, <code>Consequences</code>. Write <code>adrLint(md)</code> returning the problems, in this order:</p><ol><li><code>\"MISSING &lt;heading&gt;\"</code> for each required heading that is absent (in the order above);</li><li><code>\"WRONG ORDER\"</code> if the required headings that are present do not appear in that order;</li><li><code>\"ONE OPTION\"</code> if the Options section has fewer than 2 list items (lines starting with <code>-</code> or <code>*</code>);</li><li><code>\"NO TRADE-OFF\"</code> if the Consequences section does not contain “cannot”, “can't”, “can no longer” or “no longer” (case-insensitive).</li></ol><p>Other headings are allowed and ignored.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một ADR (bản ghi quyết định kiến trúc) có bốn tiêu đề <code>## </code> theo thứ tự: <code>Context</code>, <code>Options</code>, <code>Decision</code>, <code>Consequences</code>. Viết <code>adrLint(md)</code> trả về các vấn đề, theo thứ tự:</p><ol><li><code>\"MISSING &lt;tiêu đề&gt;\"</code> cho mỗi tiêu đề bắt buộc bị thiếu (theo thứ tự trên);</li><li><code>\"WRONG ORDER\"</code> nếu các tiêu đề bắt buộc có mặt không xuất hiện đúng thứ tự đó;</li><li><code>\"ONE OPTION\"</code> nếu mục Options có ít hơn 2 mục danh sách (dòng bắt đầu bằng <code>-</code> hoặc <code>*</code>);</li><li><code>\"NO TRADE-OFF\"</code> nếu mục Consequences không chứa “cannot”, “can't”, “can no longer” hay “no longer” (không phân biệt hoa thường).</li></ol><p>Tiêu đề khác được phép và bị bỏ qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "adrLint(\"# ADR 7 — Cache /notes in process memory\\n## Context\\np95 of GET /notes is 900 ms; one container, one process.\\n## Options\\n- Redis cache (chapter 12)\\n- In-process Map with a cap and a 10 s TTL\\n## Decision\\nIn-process Map, max 1,000 entries, TTL 10 s.\\n## Consequences\\nWe cannot run a second process without the copies diverging; stale reads for up to 10 s.\")",
+          "output": "[]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Walk the lines once: a ## line starts a new section; other lines go into the current section’s body.|||Duyệt các dòng một lần: dòng ## mở mục mới; dòng khác vào thân mục hiện tại.",
+        "Order check: the present required headings, in document order, must equal WANT filtered to those present.|||Kiểm thứ tự: các tiêu đề bắt buộc có mặt, theo thứ tự tài liệu, phải bằng WANT đã lọc còn những cái có mặt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** lint an ADR */\nfunction adrLint(md) {\n  // Write your solution here\n  const problems = [];\n  for (const h of ['Context', 'Options', 'Decision', 'Consequences']) if (!md.includes(h)) problems.push('MISSING ' + h);\n  return problems;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction adrLint(md) {\n  // ADR bốn mục, đúng thứ tự: Context · Options · Decision · Consequences (và phải nói điều GIỜ KHÔNG làm được).\n  const WANT = ['Context', 'Options', 'Decision', 'Consequences'];\n  const heads = [];\n  const body = {};\n  let cur = null;\n  for (const line of md.split('\\n')) {\n    const m = /^##\\s+(.+?)\\s*$/.exec(line);\n    if (m) { cur = m[1]; heads.push(cur); body[cur] = []; continue; }\n    if (cur) body[cur].push(line);\n  }\n  const problems = [];\n  for (const h of WANT) if (!heads.includes(h)) problems.push(`MISSING ${h}`);\n  const present = heads.filter((h) => WANT.includes(h));\n  if (present.join() !== WANT.filter((h) => heads.includes(h)).join()) problems.push('WRONG ORDER');\n  if (body.Options && body.Options.filter((l) => /^\\s*[-*]\\s+\\S/.test(l)).length < 2) problems.push('ONE OPTION');\n  if (body.Consequences && !/\\b(cannot|can't|can no longer|no longer)\\b/i.test(body.Consequences.join(' '))) problems.push('NO TRADE-OFF');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>About ten minutes each, kept in the repository next to the code it explains. The point is not the document: “Consequences: we cannot run a second process” is the line that will stop someone setting WORKERS=4 next year.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoảng mười phút mỗi bản, để trong repo cạnh mã nó giải thích. Mục đích không phải là văn bản: “Consequences: we cannot run a second process” là dòng sẽ ngăn ai đó đặt WORKERS=4 vào năm sau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A complete ADR",
+              "vi": "Một ADR đầy đủ"
+            },
+            "goi": "adrLint(\"# ADR 7 — Cache /notes in process memory\\n## Context\\np95 of GET /notes is 900 ms; one container, one process.\\n## Options\\n- Redis cache (chapter 12)\\n- In-process Map with a cap and a 10 s TTL\\n## Decision\\nIn-process Map, max 1,000 entries, TTL 10 s.\\n## Consequences\\nWe cannot run a second process without the copies diverging; stale reads for up to 10 s.\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "One option, benefits only",
+              "vi": "Một phương án, chỉ có lợi ích"
+            },
+            "goi": "adrLint(\"# ADR 7 — Cache /notes in process memory\\n## Context\\np95 of GET /notes is 900 ms; one container, one process.\\n## Options\\n- In-process Map with a cap and a 10 s TTL\\n## Decision\\nIn-process Map, max 1,000 entries, TTL 10 s.\\n## Consequences\\np95 drops to 40 ms.\")",
+            "mongDoi": [
+              "ONE OPTION",
+              "NO TRADE-OFF"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "adrLint(\"## Decision\\nUse Redis.\\n## Context\\nslow\\n## Notes\\nOptions were discussed\\n## Consequences\\nWe can no longer deploy without Redis.\")",
+            "mongDoi": [
+              "MISSING Options",
+              "WRONG ORDER"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "adrLint(\"\")",
+            "mongDoi": [
+              "MISSING Context",
+              "MISSING Options",
+              "MISSING Decision",
+              "MISSING Consequences"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A one-option ADR: it records a decision nobody compared with anything.|||ADR một phương án: nó ghi lại một quyết định không ai đem so với thứ gì."
+        },
+        {
+          "loi": "Consequences that only list benefits: writing what you can no longer do is what makes people notice a one-way door before walking through it.|||Hệ quả chỉ liệt kê lợi ích: viết ra điều không còn làm được mới khiến người ta nhận ra cửa một chiều trước khi bước qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ADR",
+          "vi": "ADR",
+          "giaiThich": "Architecture Decision Record"
+        }
+      ]
+    },
+    {
+      "title": "classifySql(sql): which statements of a migration are one-way doors?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "migrations",
+        "decisions",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Split <code>sql</code> on <code>;</code>, trim each statement, collapse runs of whitespace to one space and drop empty ones. Classify each, checking in this order (case-insensitive), as <code>{ sql, door, why }</code>:</p><ol><li><code>DROP TABLE</code> / <code>DROP SCHEMA</code> / <code>DROP DATABASE</code> at the start, or <code>DROP COLUMN</code> anywhere → <code>\"one-way\"</code>, <code>\"drops data\"</code>;</li><li><code>RENAME</code> → <code>\"one-way\"</code>, <code>\"breaks every reader of the old name\"</code>;</li><li><code>ALTER COLUMN x TYPE</code> / <code>ALTER COLUMN x SET DATA TYPE</code> → <code>\"one-way\"</code>, <code>\"rewrites stored values\"</code>;</li><li><code>UPDATE</code> or <code>DELETE</code> with no <code>WHERE</code> → <code>\"one-way\"</code>, <code>\"rewrites every row\"</code>;</li><li>a <code>timestamp</code> type that is not <code>timestamptz</code> / <code>timestamp with time zone</code> → <code>\"one-way\"</code>, <code>\"stores time without a zone\"</code>;</li><li>anything else (incl. <code>DROP INDEX</code>: an index holds no data and can be rebuilt) → <code>\"two-way\"</code>, <code>\"reversible\"</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tách <code>sql</code> theo <code>;</code>, cắt khoảng trắng từng câu, gộp các dãy khoảng trắng thành một dấu cách và bỏ câu rỗng. Phân loại từng câu, xét theo thứ tự (không phân biệt hoa thường), dạng <code>{ sql, door, why }</code>:</p><ol><li><code>DROP TABLE</code> / <code>DROP SCHEMA</code> / <code>DROP DATABASE</code> ở đầu, hoặc <code>DROP COLUMN</code> ở bất kỳ đâu → <code>\"one-way\"</code>, <code>\"drops data\"</code>;</li><li><code>RENAME</code> → <code>\"one-way\"</code>, <code>\"breaks every reader of the old name\"</code>;</li><li><code>ALTER COLUMN x TYPE</code> / <code>ALTER COLUMN x SET DATA TYPE</code> → <code>\"one-way\"</code>, <code>\"rewrites stored values\"</code>;</li><li><code>UPDATE</code> hoặc <code>DELETE</code> không có <code>WHERE</code> → <code>\"one-way\"</code>, <code>\"rewrites every row\"</code>;</li><li>kiểu <code>timestamp</code> không phải <code>timestamptz</code> / <code>timestamp with time zone</code> → <code>\"one-way\"</code>, <code>\"stores time without a zone\"</code>;</li><li>còn lại (kể cả <code>DROP INDEX</code>: index không chứa dữ liệu và dựng lại được) → <code>\"two-way\"</code>, <code>\"reversible\"</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "classifySql(\"CREATE TABLE note_shares (id serial PRIMARY KEY, note_id int NOT NULL, created_at timestamptz NOT NULL DEFAULT now());\\nCREATE INDEX note_shares_note_idx ON note_shares(note_id);\")",
+          "output": "[{\"sql\":\"CREATE TABLE note_shares (id serial PRIMARY KEY, note_id int NOT NULL, created_at timestamptz NOT NULL DEFAULT now())\",\"door\":\"two-way\",\"why\":\"reversible\"},{\"sql\":\"CREATE INDEX note_shares_note_idx ON note_shares(note_id)\",\"door\":\"two-way\",\"why\":\"reversible\"}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise first: s.trim().replace(/\\s+/g, \" \").|||Chuẩn hoá trước: s.trim().replace(/\\s+/g, \" \").",
+        "For the time rule, a negative lookahead keeps “timestamp with time zone” and “timestamptz” out.|||Với luật thời gian, lookahead phủ định loại “timestamp with time zone” và “timestamptz”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** one-way or two-way, statement by statement */\nfunction classifySql(sql) {\n  // Write your solution here\n  return sql.split(';').map((s) => s.trim()).filter(Boolean).map((s) => ({ sql: s, door: /DROP/i.test(s) ? 'one-way' : 'two-way', why: /DROP/i.test(s) ? 'drops data' : 'reversible' }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction classifySql(sql) {\n  // Mỗi câu: cửa hai chiều (hoàn tác được) hay một chiều (dữ liệu sống lâu hơn mã).\n  return sql.split(';').map((s) => s.trim().replace(/\\s+/g, ' ')).filter(Boolean).map((s) => {\n    let door = 'two-way';\n    let why = 'reversible';\n    if (/^DROP (TABLE|SCHEMA|DATABASE)\\b|\\bDROP COLUMN\\b/i.test(s)) { door = 'one-way'; why = 'drops data'; }\n    else if (/\\bRENAME\\b/i.test(s)) { door = 'one-way'; why = 'breaks every reader of the old name'; }\n    else if (/\\bALTER COLUMN \\S+ (SET DATA )?TYPE\\b/i.test(s)) { door = 'one-way'; why = 'rewrites stored values'; }\n    else if (/^(UPDATE|DELETE)\\b/i.test(s) && !/\\bWHERE\\b/i.test(s)) { door = 'one-way'; why = 'rewrites every row'; }\n    else if (/\\btimestamp\\b(?!\\s*with time zone)/i.test(s)) { door = 'one-way'; why = 'stores time without a zone'; }\n    return { sql: s, door, why };\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Data outlives code: this backend has 243 migrations and 608 models, each migration a door already walked through. Two-way statements can be undone by the next migration; one-way ones need the slow thinking (and the ADR) before they run.</p>",
+      "solutionExplanationHtmlVi": "<p>Dữ liệu sống lâu hơn mã: backend này có 243 migration và 608 model, mỗi migration là một cánh cửa đã bước qua. Câu hai chiều có thể hoàn tác bằng migration sau; câu một chiều cần suy nghĩ chậm (và một ADR) trước khi chạy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A new table and an index",
+              "vi": "Một bảng mới và một index"
+            },
+            "goi": "classifySql(\"CREATE TABLE note_shares (id serial PRIMARY KEY, note_id int NOT NULL, created_at timestamptz NOT NULL DEFAULT now());\\nCREATE INDEX note_shares_note_idx ON note_shares(note_id);\")",
+            "mongDoi": [
+              {
+                "sql": "CREATE TABLE note_shares (id serial PRIMARY KEY, note_id int NOT NULL, created_at timestamptz NOT NULL DEFAULT now())",
+                "door": "two-way",
+                "why": "reversible"
+              },
+              {
+                "sql": "CREATE INDEX note_shares_note_idx ON note_shares(note_id)",
+                "door": "two-way",
+                "why": "reversible"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A time type and a drop",
+              "vi": "Một kiểu thời gian và một lệnh xoá"
+            },
+            "goi": "classifySql(\"ALTER TABLE notes ADD COLUMN published_at timestamp;\\nALTER TABLE notes DROP COLUMN legacy_slug;\")",
+            "mongDoi": [
+              {
+                "sql": "ALTER TABLE notes ADD COLUMN published_at timestamp",
+                "door": "one-way",
+                "why": "stores time without a zone"
+              },
+              {
+                "sql": "ALTER TABLE notes DROP COLUMN legacy_slug",
+                "door": "one-way",
+                "why": "drops data"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "classifySql(\"alter table notes   rename column body to content;\\nALTER TABLE notes ALTER COLUMN views TYPE bigint;\\nUPDATE notes SET status = 'draft';\\nUPDATE notes SET status = 'draft' WHERE status IS NULL;\\nDELETE FROM sessions;\\nALTER TABLE events ADD COLUMN at timestamp with time zone;;\")",
+            "mongDoi": [
+              {
+                "sql": "alter table notes rename column body to content",
+                "door": "one-way",
+                "why": "breaks every reader of the old name"
+              },
+              {
+                "sql": "ALTER TABLE notes ALTER COLUMN views TYPE bigint",
+                "door": "one-way",
+                "why": "rewrites stored values"
+              },
+              {
+                "sql": "UPDATE notes SET status = 'draft'",
+                "door": "one-way",
+                "why": "rewrites every row"
+              },
+              {
+                "sql": "UPDATE notes SET status = 'draft' WHERE status IS NULL",
+                "door": "two-way",
+                "why": "reversible"
+              },
+              {
+                "sql": "DELETE FROM sessions",
+                "door": "one-way",
+                "why": "rewrites every row"
+              },
+              {
+                "sql": "ALTER TABLE events ADD COLUMN at timestamp with time zone",
+                "door": "two-way",
+                "why": "reversible"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "classifySql(\"DROP INDEX IF EXISTS old_idx;\")",
+            "mongDoi": [
+              {
+                "sql": "DROP INDEX IF EXISTS old_idx",
+                "door": "two-way",
+                "why": "reversible"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating timestamp as harmless because the app “always uses UTC”: the day one server or one client does not, the stored values are ambiguous forever.|||Coi timestamp là vô hại vì app “luôn dùng UTC”: ngày một server hay một client không như vậy, giá trị đã lưu mơ hồ mãi mãi."
+        },
+        {
+          "loi": "Missing the backfill without WHERE: it is not schema, but it rewrites every row and cannot be rolled back by code.|||Bỏ sót lệnh backfill không có WHERE: nó không phải lược đồ, nhưng ghi đè mọi dòng và không quay lui được bằng mã."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "timestamptz",
+          "vi": "timestamptz",
+          "giaiThich": "timestamp with time zone: an absolute instant"
+        },
+        {
+          "en": "backfill",
+          "vi": "điền dữ liệu cũ"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,885 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-3-pid-1-tat-em",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-3-pid-1-tat-em"
+  },
+  "exercises": [
+    {
+      "title": "Who is PID 1, and who hears SIGTERM",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Docker",
+        "signals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 17.3 (node:22-slim, docker stop, Docker Desktop 29.8.0).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 17.3 (node:22-slim, docker stop, Docker Desktop 29.8.0).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SIGTERM goes to exactly one process: PID 1.|||SIGTERM chỉ tới đúng một tiến trình: PID 1.",
+        "A shell does not forward signals to its children.|||Shell không chuyển tín hiệu cho tiến trình con."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Who is PID 1, and who hears SIGTERM\n\nAnswer in the answer panel (no code needed).\n\n1. CMD node src/index.js (shell form, no brackets), then docker stop. Measured: 3.15 s, exit 137, nothing in the log after READY. Why?CMD node src/index.js (dạng shell, không ngoặc), rồi docker stop. Đo được: 3,15 s, exit 137, log không có gì sau READY. Vì sao?\n2. Docker’s “default” grace period: the docs say 10 s, the written lesson measured 1.26 s, this video measured 3.14 s. The lesson’s conclusion?“Mặc định” thời gian ân hạn của Docker: tài liệu nói 10 s, bài viết đo 1,26 s, video này đo 3,14 s. Kết luận của bài?\n3. An entrypoint script runs a migration and then node dist/index.js. Docker stop -t 5: killed after 5.21 s, exit 137. The one-word fix?Một script entrypoint chạy migration rồi node dist/index.js. docker stop -t 5: bị giết sau 5,21 s, exit 137. Sửa bằng một chữ?\n4. Which statements about health checks are true? (choose all that apply)Những câu nào về health check là đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Who is PID 1, and who hears SIGTERM — answer key\n\n1. CMD node src/index.js (shell form, no brackets), then docker stop. Measured: 3.15 s, exit 137, nothing in the log after READY. Why?CMD node src/index.js (dạng shell, không ngoặc), rồi docker stop. Đo được: 3,15 s, exit 137, log không có gì sau READY. Vì sao?\n   Answer: a) /bin/sh is PID 1 and does not forward the signal; Docker sends SIGKILL when the grace ends\n   Only the exec form [\"node\", \"src/index.js\"] puts Node at PID 1: it printed SIGTERM received, closed, exit 0 after 0.13 s. With npm start, npm dies at once and takes Node down (exit 1).VI: Chỉ dạng exec [\"node\", \"src/index.js\"] đặt Node ở PID 1: nó in SIGTERM received, closed, exit 0 sau 0,13 s. Với npm start, npm chết ngay và kéo Node theo (exit 1).\n\n2. Docker’s “default” grace period: the docs say 10 s, the written lesson measured 1.26 s, this video measured 3.14 s. The lesson’s conclusion?“Mặc định” thời gian ân hạn của Docker: tài liệu nói 10 s, bài viết đo 1,26 s, video này đo 3,14 s. Kết luận của bài?\n   Answer: a) Set it explicitly (stop_grace_period / docker stop -t), longer than the slowest request\n   A 5-second request stopped 1 s in was lost with the default (killed at ~3.16 s, exit 137) and answered with -t 10. The grace is a ceiling, not a wait: a healthy app exits as soon as it is done.VI: Request 5 giây bị stop sau 1 s bị mất với mặc định (bị giết ở ~3,16 s, exit 137) và được trả lời với -t 10. Ân hạn là trần, không phải thời gian chờ: app khoẻ thoát ngay khi xong.\n\n3. An entrypoint script runs a migration and then node dist/index.js. Docker stop -t 5: killed after 5.21 s, exit 137. The one-word fix?Một script entrypoint chạy migration rồi node dist/index.js. docker stop -t 5: bị giết sau 5,21 s, exit 137. Sửa bằng một chữ?\n   Answer: d) exec node dist/index.js — the shell is replaced by Node, which becomes PID 1\n   With exec: SIGTERM received, closed, exit 0 after 0.23 s. Alternative: docker run --init (tini at PID 1 forwards signals and reaps zombies).VI: Có exec: SIGTERM received, closed, exit 0 sau 0,23 s. Cách khác: docker run --init (tini ở PID 1 chuyển tín hiệu và dọn zombie).\n\n4. Which statements about health checks are true? (choose all that apply)Những câu nào về health check là đúng? (chọn mọi câu đúng)\n   Answer: a) slim images have no curl, so check with node -e and require(\"http\") + b) Plain Docker does not restart an unhealthy container (restart count stays 0) + d) Without --start-period a 12-second boot was marked unhealthy at 6 s\n   The URL must be a liveness one that does not touch the database (chapter 15), or one DB blip marks every container unhealthy at once. Restart policies react to the process exiting, not to health.VI: URL phải là liveness không đụng CSDL (chương 15), không thì một lần CSDL trục trặc đánh dấu mọi container unhealthy cùng lúc. Chính sách restart phản ứng với tiến trình thoát, không phải với health.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> /bin/sh is PID 1 and does not forward the signal; Docker sends SIGKILL when the grace ends</p><p>Only the exec form [\"node\", \"src/index.js\"] puts Node at PID 1: it printed SIGTERM received, closed, exit 0 after 0.13 s. With npm start, npm dies at once and takes Node down (exit 1).</p><p><i>VI: Chỉ dạng exec [\"node\", \"src/index.js\"] đặt Node ở PID 1: nó in SIGTERM received, closed, exit 0 sau 0,13 s. Với npm start, npm chết ngay và kéo Node theo (exit 1).</i></p></li><li><p><b>a)</b> Set it explicitly (stop_grace_period / docker stop -t), longer than the slowest request</p><p>A 5-second request stopped 1 s in was lost with the default (killed at ~3.16 s, exit 137) and answered with -t 10. The grace is a ceiling, not a wait: a healthy app exits as soon as it is done.</p><p><i>VI: Request 5 giây bị stop sau 1 s bị mất với mặc định (bị giết ở ~3,16 s, exit 137) và được trả lời với -t 10. Ân hạn là trần, không phải thời gian chờ: app khoẻ thoát ngay khi xong.</i></p></li><li><p><b>d)</b> exec node dist/index.js — the shell is replaced by Node, which becomes PID 1</p><p>With exec: SIGTERM received, closed, exit 0 after 0.23 s. Alternative: docker run --init (tini at PID 1 forwards signals and reaps zombies).</p><p><i>VI: Có exec: SIGTERM received, closed, exit 0 sau 0,23 s. Cách khác: docker run --init (tini ở PID 1 chuyển tín hiệu và dọn zombie).</i></p></li><li><p><b>a)</b> slim images have no curl, so check with node -e and require(\"http\") + <b>b)</b> Plain Docker does not restart an unhealthy container (restart count stays 0) + <b>d)</b> Without --start-period a 12-second boot was marked unhealthy at 6 s</p><p>The URL must be a liveness one that does not touch the database (chapter 15), or one DB blip marks every container unhealthy at once. Restart policies react to the process exiting, not to health.</p><p><i>VI: URL phải là liveness không đụng CSDL (chương 15), không thì một lần CSDL trục trặc đánh dấu mọi container unhealthy cùng lúc. Chính sách restart phản ứng với tiến trình thoát, không phải với health.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>CMD node src/index.js (shell form, no brackets), then docker stop. Measured: 3.15 s, exit 137, nothing in the log after READY. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>CMD node src/index.js (dạng shell, không ngoặc), rồi docker stop. Đo được: 3,15 s, exit 137, log không có gì sau READY. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/bin/sh is PID 1 and does not forward the signal; Docker sends SIGKILL when the grace ends"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The shell form starts Node twice, and the second copy holds the port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "docker stop always waits the full grace period before signalling"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Node ignores SIGTERM unless it runs with --init, so it waits for SIGKILL"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Only the exec form [\"node\", \"src/index.js\"] puts Node at PID 1: it printed SIGTERM received, closed, exit 0 after 0.13 s. With npm start, npm dies at once and takes Node down (exit 1).</p><p><i>VI: Chỉ dạng exec [\"node\", \"src/index.js\"] đặt Node ở PID 1: nó in SIGTERM received, closed, exit 0 sau 0,13 s. Với npm start, npm chết ngay và kéo Node theo (exit 1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Docker’s “default” grace period: the docs say 10 s, the written lesson measured 1.26 s, this video measured 3.14 s. The lesson’s conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>“Mặc định” thời gian ân hạn của Docker: tài liệu nói 10 s, bài viết đo 1,26 s, video này đo 3,14 s. Kết luận của bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Set it explicitly (stop_grace_period / docker stop -t), longer than the slowest request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Trust the documentation: 10 s is enough for any web request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use -t 0, so that deploys are as fast as possible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Avoid long requests, because the grace period cannot be changed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A 5-second request stopped 1 s in was lost with the default (killed at ~3.16 s, exit 137) and answered with -t 10. The grace is a ceiling, not a wait: a healthy app exits as soon as it is done.</p><p><i>VI: Request 5 giây bị stop sau 1 s bị mất với mặc định (bị giết ở ~3,16 s, exit 137) và được trả lời với -t 10. Ân hạn là trần, không phải thời gian chờ: app khoẻ thoát ngay khi xong.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An entrypoint script runs a migration and then node dist/index.js. Docker stop -t 5: killed after 5.21 s, exit 137. The one-word fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một script entrypoint chạy migration rồi node dist/index.js. docker stop -t 5: bị giết sau 5,21 s, exit 137. Sửa bằng một chữ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "sudo node dist/index.js — root processes always receive signals"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nohup node dist/index.js — Node keeps running after the shell exits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "node dist/index.js & — Node runs in the background and the shell waits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "exec node dist/index.js — the shell is replaced by Node, which becomes PID 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>With exec: SIGTERM received, closed, exit 0 after 0.23 s. Alternative: docker run --init (tini at PID 1 forwards signals and reaps zombies).</p><p><i>VI: Có exec: SIGTERM received, closed, exit 0 sau 0,23 s. Cách khác: docker run --init (tini ở PID 1 chuyển tín hiệu và dọn zombie).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statements about health checks are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào về health check là đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "slim images have no curl, so check with node -e and require(\"http\")"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Plain Docker does not restart an unhealthy container (restart count stays 0)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A HEALTHCHECK that runs SELECT 1 is the right liveness check"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Without --start-period a 12-second boot was marked unhealthy at 6 s"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The URL must be a liveness one that does not touch the database (chapter 15), or one DB blip marks every container unhealthy at once. Restart policies react to the process exiting, not to health.</p><p><i>VI: URL phải là liveness không đụng CSDL (chương 15), không thì một lần CSDL trục trặc đánh dấu mọi container unhealthy cùng lúc. Chính sách restart phản ứng với tiến trình thoát, không phải với health.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CMD [\"npm\", \"start\"]: the handler is in the code and never runs.|||CMD [\"npm\", \"start\"]: handler có trong mã mà không bao giờ chạy."
+        },
+        {
+          "loi": "Inheriting the grace period instead of setting it.|||Thừa hưởng thời gian ân hạn thay vì tự đặt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PID 1",
+          "vi": "PID 1",
+          "giaiThich": "the first process of the container; receives docker stop’s SIGTERM"
+        },
+        {
+          "en": "exec form",
+          "vi": "dạng exec",
+          "giaiThich": "CMD [\"node\", \"x.js\"]"
+        },
+        {
+          "en": "grace period",
+          "vi": "thời gian ân hạn"
+        },
+        {
+          "en": "zombie",
+          "vi": "tiến trình zombie",
+          "giaiThich": "finished but never reaped"
+        }
+      ]
+    },
+    {
+      "title": "exitReason(code): read the number in the deploy log",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "signals",
+        "exit codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>An exit code above 128 means “killed by signal <code>code − 128</code>”. Write <code>exitReason(code)</code> returning <code>{ signal, meaning }</code>:</p><ul><li><code>0</code> → <code>{ signal: null, meaning: \"clean exit\" }</code>;</li><li><code>137</code> → <code>{ signal: \"SIGKILL\", meaning: \"killed: grace period ran out, or the OOM killer\" }</code>;</li><li><code>143</code> → <code>{ signal: \"SIGTERM\", meaning: \"terminated by SIGTERM with no handler\" }</code>;</li><li><code>134</code> → <code>{ signal: \"SIGABRT\", meaning: \"aborted: e.g. JavaScript heap out of memory\" }</code>;</li><li>other codes above 128 → <code>{ signal: &lt;name&gt;, meaning: \"killed by a signal\" }</code> using 1 SIGHUP, 2 SIGINT, 6 SIGABRT, 9 SIGKILL, 15 SIGTERM, else <code>\"signal &lt;n&gt;\"</code>;</li><li>anything else → <code>{ signal: null, meaning: \"the program exited with an error\" }</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã thoát trên 128 nghĩa là “bị giết bởi tín hiệu số <code>code − 128</code>”. Viết <code>exitReason(code)</code> trả về <code>{ signal, meaning }</code>:</p><ul><li><code>0</code> → <code>{ signal: null, meaning: \"clean exit\" }</code>;</li><li><code>137</code> → <code>{ signal: \"SIGKILL\", meaning: \"killed: grace period ran out, or the OOM killer\" }</code>;</li><li><code>143</code> → <code>{ signal: \"SIGTERM\", meaning: \"terminated by SIGTERM with no handler\" }</code>;</li><li><code>134</code> → <code>{ signal: \"SIGABRT\", meaning: \"aborted: e.g. JavaScript heap out of memory\" }</code>;</li><li>mã khác trên 128 → <code>{ signal: &lt;tên&gt;, meaning: \"killed by a signal\" }</code> theo 1 SIGHUP, 2 SIGINT, 6 SIGABRT, 9 SIGKILL, 15 SIGTERM, còn lại <code>\"signal &lt;n&gt;\"</code>;</li><li>còn lại → <code>{ signal: null, meaning: \"the program exited with an error\" }</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[exitReason(0), exitReason(137)]",
+          "output": "[{\"signal\":null,\"meaning\":\"clean exit\"},{\"signal\":\"SIGKILL\",\"meaning\":\"killed: grace period ran out, or the OOM killer\"}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "137 = 128 + 9, 143 = 128 + 15, 134 = 128 + 6.",
+        "Check the special codes first, then the general “> 128” rule.|||Xét các mã đặc biệt trước, rồi tới luật chung “> 128”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what does this exit code mean? */\nfunction exitReason(code) {\n  // Write your solution here\n  if (code === 0) return { signal: null, meaning: 'clean exit' };\n  return { signal: null, meaning: 'the program exited with an error' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction exitReason(code) {\n  // > 128 nghĩa là tiến trình chết vì tín hiệu số (code − 128).\n  const SIG = { 1: 'SIGHUP', 2: 'SIGINT', 6: 'SIGABRT', 9: 'SIGKILL', 15: 'SIGTERM' };\n  if (code === 0) return { signal: null, meaning: 'clean exit' };\n  if (code === 137) return { signal: 'SIGKILL', meaning: 'killed: grace period ran out, or the OOM killer' };\n  if (code === 143) return { signal: 'SIGTERM', meaning: 'terminated by SIGTERM with no handler' };\n  if (code === 134) return { signal: 'SIGABRT', meaning: 'aborted: e.g. JavaScript heap out of memory' };\n  if (code > 128) return { signal: SIG[code - 128] || `signal ${code - 128}`, meaning: 'killed by a signal' };\n  return { signal: null, meaning: 'the program exited with an error' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>When you see 137 in a deploy log it is one of two things: the grace period ran out (this lesson) or the out-of-memory killer (16.5). The number points to the chapter to reopen.</p>",
+      "solutionExplanationHtmlVi": "<p>Thấy 137 trong log deploy thì là một trong hai: hết ân hạn (bài này) hoặc trình diệt hết bộ nhớ (16.5). Con số chỉ ra chương cần mở lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Exec form vs shell form",
+              "vi": "Dạng exec và dạng shell"
+            },
+            "goi": "[exitReason(0), exitReason(137)]",
+            "mongDoi": [
+              {
+                "signal": null,
+                "meaning": "clean exit"
+              },
+              {
+                "signal": "SIGKILL",
+                "meaning": "killed: grace period ran out, or the OOM killer"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "npm start: npm died on SIGTERM",
+              "vi": "npm start: npm chết vì SIGTERM"
+            },
+            "goi": "exitReason(1)",
+            "mongDoi": {
+              "signal": null,
+              "meaning": "the program exited with an error"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[exitReason(143), exitReason(134)]",
+            "mongDoi": [
+              {
+                "signal": "SIGTERM",
+                "meaning": "terminated by SIGTERM with no handler"
+              },
+              {
+                "signal": "SIGABRT",
+                "meaning": "aborted: e.g. JavaScript heap out of memory"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[exitReason(130), exitReason(129), exitReason(140), exitReason(2)]",
+            "mongDoi": [
+              {
+                "signal": "SIGINT",
+                "meaning": "killed by a signal"
+              },
+              {
+                "signal": "SIGHUP",
+                "meaning": "killed by a signal"
+              },
+              {
+                "signal": "signal 12",
+                "meaning": "killed by a signal"
+              },
+              {
+                "signal": null,
+                "meaning": "the program exited with an error"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading 137 as “the app crashed”: the app may have been fine — Docker killed it when the grace ran out.|||Đọc 137 là “app bị sập”: app có thể vẫn ổn — Docker giết nó khi hết ân hạn."
+        },
+        {
+          "loi": "Reading 1 as a signal: codes up to 128 are the program’s own exit status (npm prints “npm error signal SIGTERM” and exits 1).|||Đọc 1 là tín hiệu: mã tới 128 là trạng thái thoát của chính chương trình (npm in “npm error signal SIGTERM” rồi thoát 1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SIGTERM",
+          "vi": "SIGTERM",
+          "giaiThich": "polite stop; can be caught"
+        },
+        {
+          "en": "SIGKILL",
+          "vi": "SIGKILL",
+          "giaiThich": "cannot be caught; ends the process at once"
+        }
+      ]
+    },
+    {
+      "title": "pid1(dockerfile, scripts, opts): will your SIGTERM handler ever run?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "Docker",
+        "signals",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Decide who is PID 1 from the last <code>ENTRYPOINT</code> and <code>CMD</code> of a Dockerfile. Exec form is a JSON array; shell form <code>CMD x y</code> means <code>[\"/bin/sh\", \"-c\", \"x y\"]</code>. With an exec-form <code>ENTRYPOINT</code>, the exec-form <code>CMD</code> is appended to it. Return <code>{ pid1, forwardsSignals, nodeGetsSigterm }</code> from the first program (its file name):</p><ul><li><code>opts.init</code> (docker run --init) or <code>tini</code> / <code>dumb-init</code> → that init, <code>true, true</code> (<code>\"tini\"</code> for --init);</li><li><code>node</code> → <code>\"node\", false, true</code>; <code>npm</code> → <code>\"npm\", false, false</code>;</li><li><code>sh</code>/<code>bash</code> running a script file from <code>scripts</code> whose last command (ignoring blanks and <code>#</code>) starts with <code>exec node</code> (or <code>exec /path/node</code>) → <code>\"node\", false, true</code>; any other <code>sh</code>/<code>bash</code> (incl. <code>-c</code>) → <code>\"sh\", false, false</code>;</li><li>anything else → <code>&lt;name&gt;, false, false</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xác định ai là PID 1 từ <code>ENTRYPOINT</code> và <code>CMD</code> cuối cùng của Dockerfile. Dạng exec là mảng JSON; dạng shell <code>CMD x y</code> nghĩa là <code>[\"/bin/sh\", \"-c\", \"x y\"]</code>. Khi <code>ENTRYPOINT</code> dạng exec, <code>CMD</code> dạng exec được nối vào sau. Trả về <code>{ pid1, forwardsSignals, nodeGetsSigterm }</code> theo chương trình đầu tiên (tên tệp của nó):</p><ul><li><code>opts.init</code> (docker run --init) hoặc <code>tini</code> / <code>dumb-init</code> → init đó, <code>true, true</code> (<code>\"tini\"</code> cho --init);</li><li><code>node</code> → <code>\"node\", false, true</code>; <code>npm</code> → <code>\"npm\", false, false</code>;</li><li><code>sh</code>/<code>bash</code> chạy một tệp script trong <code>scripts</code> mà lệnh cuối (bỏ dòng trống và <code>#</code>) bắt đầu bằng <code>exec node</code> (hoặc <code>exec /đường/dẫn/node</code>) → <code>\"node\", false, true</code>; mọi <code>sh</code>/<code>bash</code> khác (kể cả <code>-c</code>) → <code>\"sh\", false, false</code>;</li><li>còn lại → <code>&lt;tên&gt;, false, false</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[pid1(\"FROM node:22-slim\\nCMD [\\\"npm\\\", \\\"start\\\"]\"), pid1(\"FROM node:22-slim\\nCMD node src/index.js\"), pid1(\"FROM node:22-slim\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\")]",
+          "output": "[{\"pid1\":\"npm\",\"forwardsSignals\":false,\"nodeGetsSigterm\":false},{\"pid1\":\"sh\",\"forwardsSignals\":false,\"nodeGetsSigterm\":false},{\"pid1\":\"node\",\"forwardsSignals\":false,\"nodeGetsSigterm\":true}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise both forms to an argv array first; then only argv[0] (and the script for sh) matters.|||Chuẩn hoá cả hai dạng thành mảng argv trước; khi đó chỉ argv[0] (và script với sh) là quan trọng.",
+        "\"/usr/bin/tini\".split(\"/\").pop() is \"tini\".|||\"/usr/bin/tini\".split(\"/\").pop() là \"tini\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** who is PID 1? */\nfunction pid1(dockerfile, scripts = {}, { init = false } = {}) {\n  // Write your solution here\n  const cmd = dockerfile.split('\\n').filter((l) => /^CMD/i.test(l.trim())).pop() || '';\n  const uses = cmd.includes('node');\n  return { pid1: uses ? 'node' : 'sh', forwardsSignals: false, nodeGetsSigterm: uses };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pid1(dockerfile, scripts = {}, { init = false } = {}) {\n  const lines = dockerfile.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n  const last = (kw) => lines.filter((l) => new RegExp(`^${kw}\\\\s`, 'i').test(l)).pop();\n  const parse = (l) => {\n    if (!l) return null;\n    const body = l.replace(/^\\S+\\s+/, '');\n    return body.startsWith('[') ? { exec: true, argv: JSON.parse(body) } : { exec: false, argv: ['/bin/sh', '-c', body] };   // dạng shell ⇒ sh -c\n  };\n  if (init) return { pid1: 'tini', forwardsSignals: true, nodeGetsSigterm: true };   // --init: tini ở PID 1\n  const ep = parse(last('ENTRYPOINT'));\n  const cmd = parse(last('CMD'));\n  const argv = ep ? [...ep.argv, ...(ep.exec && cmd ? cmd.argv : [])] : cmd ? cmd.argv : [];\n  const prog = (argv[0] || '').split('/').pop();\n  if (prog === 'tini' || prog === 'dumb-init') return { pid1: prog, forwardsSignals: true, nodeGetsSigterm: true };\n  if (prog === 'node') return { pid1: 'node', forwardsSignals: false, nodeGetsSigterm: true };\n  if (prog === 'npm') return { pid1: 'npm', forwardsSignals: false, nodeGetsSigterm: false };\n  if (prog === 'sh' || prog === 'bash') {\n    // sh script.sh: nếu dòng lệnh thật cuối của script là \"exec node …\" thì Node THAY shell và thành PID 1\n    const file = argv[1] === '-c' ? null : argv[1];\n    const body = file ? scripts[file] || scripts[file.replace(/^\\.\\//, '')] || '' : '';\n    const lastCmd = body.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).pop() || '';\n    if (/^exec\\s+(\\S*\\/)?node\\b/.test(lastCmd)) return { pid1: 'node', forwardsSignals: false, nodeGetsSigterm: true };\n    return { pid1: 'sh', forwardsSignals: false, nodeGetsSigterm: false };\n  }\n  return { pid1: prog || null, forwardsSignals: false, nodeGetsSigterm: false };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The handler in the code is necessary, not sufficient: the signal must reach it. The website gets it right — ENTRYPOINT tini, then a script that fixes upload-folder permissions and ends with exec \"$@\" — so Node gets SIGTERM and zombies are reaped.</p>",
+      "solutionExplanationHtmlVi": "<p>Handler trong mã là cần, chưa đủ: tín hiệu phải tới được nó. Website làm đúng — ENTRYPOINT tini, rồi một script sửa quyền thư mục upload và kết thúc bằng exec \"$@\" — nên Node nhận SIGTERM và zombie được dọn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The three ways to write CMD",
+              "vi": "Ba cách viết CMD"
+            },
+            "goi": "[pid1(\"FROM node:22-slim\\nCMD [\\\"npm\\\", \\\"start\\\"]\"), pid1(\"FROM node:22-slim\\nCMD node src/index.js\"), pid1(\"FROM node:22-slim\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\")]",
+            "mongDoi": [
+              {
+                "pid1": "npm",
+                "forwardsSignals": false,
+                "nodeGetsSigterm": false
+              },
+              {
+                "pid1": "sh",
+                "forwardsSignals": false,
+                "nodeGetsSigterm": false
+              },
+              {
+                "pid1": "node",
+                "forwardsSignals": false,
+                "nodeGetsSigterm": true
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A start script without exec",
+              "vi": "Script khởi động thiếu exec"
+            },
+            "goi": "pid1(\"FROM node:22-slim\\nCOPY start.sh ./\\nCMD [\\\"sh\\\", \\\"start.sh\\\"]\", { \"start.sh\": \"#!/bin/sh\\nnpx prisma migrate deploy\\nnode dist/index.js\\n\" })",
+            "mongDoi": {
+              "pid1": "sh",
+              "forwardsSignals": false,
+              "nodeGetsSigterm": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pid1(\"FROM node:22-slim\\nCMD [\\\"sh\\\", \\\"./start.sh\\\"]\", { \"start.sh\": \"npx prisma migrate deploy\\nexec node dist/index.js\\n# end\\n\" })",
+            "mongDoi": {
+              "pid1": "node",
+              "forwardsSignals": false,
+              "nodeGetsSigterm": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pid1(\"FROM node:22-slim\\nENTRYPOINT [\\\"/usr/bin/tini\\\", \\\"--\\\", \\\"/docker-entrypoint.sh\\\"]\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": {
+              "pid1": "tini",
+              "forwardsSignals": true,
+              "nodeGetsSigterm": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[pid1(\"FROM node:22-slim\\nCMD npm run start:prod\"), pid1(\"FROM node:22-slim\\nCMD [\\\"npm\\\", \\\"start\\\"]\", {}, { init: true })]",
+            "mongDoi": [
+              {
+                "pid1": "sh",
+                "forwardsSignals": false,
+                "nodeGetsSigterm": false
+              },
+              {
+                "pid1": "tini",
+                "forwardsSignals": true,
+                "nodeGetsSigterm": true
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pid1(\"FROM node:22-slim\\nENTRYPOINT [\\\"node\\\"]\\nCMD [\\\"dist/index.js\\\"]\")",
+            "mongDoi": {
+              "pid1": "node",
+              "forwardsSignals": false,
+              "nodeGetsSigterm": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating any line that mentions node as “Node is PID 1”: CMD npm run start:prod runs node too, three processes down.|||Coi mọi dòng nhắc tới node là “Node là PID 1”: CMD npm run start:prod cũng chạy node, nhưng ở ba tầng bên dưới."
+        },
+        {
+          "loi": "Forgetting that the last command of the script needs exec: without it sh stays PID 1.|||Quên rằng lệnh cuối của script cần exec: thiếu nó sh vẫn là PID 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ENTRYPOINT",
+          "vi": "ENTRYPOINT"
+        },
+        {
+          "en": "exec (shell)",
+          "vi": "exec (shell)",
+          "giaiThich": "replace the shell process instead of starting a child"
+        },
+        {
+          "en": "tini",
+          "vi": "tini",
+          "giaiThich": "a tiny init: forwards signals, reaps zombies"
+        }
+      ]
+    },
+    {
+      "title": "installShutdown(deps, forceMs): the five-step handler, testable without Docker",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "graceful shutdown",
+        "dependency injection",
+        "async"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the SIGTERM handler of the sample app with its dependencies injected, so it can be tested without a container. <code>installShutdown({ server, pool, exit, log, setTimer }, forceMs)</code> returns <code>onSigterm()</code>, which:</p><ol><li>on a second call does nothing;</li><li>logs <code>\"SIGTERM received\"</code>;</li><li>starts a force-exit timer with <code>setTimer(fn, forceMs)</code> that logs <code>\"forced exit\"</code> and calls <code>exit(1)</code>;</li><li>calls <code>server.close(cb)</code> — it stops accepting and calls <code>cb</code> once the last in-flight request is done; in <code>cb</code>: <code>await pool.end()</code>, cancel the timer with <code>clearTimeout</code>, log <code>\"closed\"</code>, <code>exit(0)</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết handler SIGTERM của app mẫu với các phụ thuộc được tiêm vào, để kiểm thử được mà không cần container. <code>installShutdown({ server, pool, exit, log, setTimer }, forceMs)</code> trả về <code>onSigterm()</code>, hàm này:</p><ol><li>ở lần gọi thứ hai thì không làm gì;</li><li>ghi log <code>\"SIGTERM received\"</code>;</li><li>bật hẹn giờ ép thoát bằng <code>setTimer(fn, forceMs)</code>, khi chạy thì ghi <code>\"forced exit\"</code> và gọi <code>exit(1)</code>;</li><li>gọi <code>server.close(cb)</code> — nó thôi nhận kết nối và gọi <code>cb</code> khi request đang chạy cuối cùng xong; trong <code>cb</code>: <code>await pool.end()</code>, huỷ hẹn giờ bằng <code>clearTimeout</code>, ghi <code>\"closed\"</code>, <code>exit(0)</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "events",
+          "output": "[\"SIGTERM received\",\"accepting=false\",\"pool.end\",\"closed\",\"exit 0\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a stopping flag in the closure of installShutdown.|||Giữ một cờ stopping trong closure của installShutdown.",
+        "The timer must be cleared on the clean path, or it fires later and exits with 1.|||Hẹn giờ phải được huỷ ở đường thoát sạch, không thì nó chạy về sau và thoát với 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** SIGTERM handler */\nfunction installShutdown({ server, pool, exit, log, setTimer }, forceMs) {\n  return function onSigterm() {\n    // Write your solution here\n    log('SIGTERM received');\n    server.close(() => {});\n    exit(0);\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction installShutdown({ server, pool, exit, log, setTimer }, forceMs) {\n  let stopping = false;\n  return function onSigterm() {\n    if (stopping) return;                                   // SIGTERM thứ hai: đang tắt rồi, không làm lại\n    stopping = true;\n    log('SIGTERM received');\n    const timer = setTimer(() => { log('forced exit'); exit(1); }, forceMs);   // trần cho trường hợp kẹt\n    server.close(async () => {                              // 1) thôi nhận kết nối mới; callback chạy khi request cuối xong\n      await pool.end();                                     // 2) đóng pool DB (và worker hàng đợi…)\n      clearTimeout(timer);\n      log('closed');\n      exit(0);                                              // 3) thoát TRƯỚC khi Docker hết ân hạn\n    });\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1) SIGTERM reaches PID 1, which must be Node; (2) server.close() stops accepting; (3) in-flight requests finish; (4) close the pool and queue workers, returning half-done jobs; (5) exit(0) before the grace runs out. Set stop_grace_period above both the slowest request and this forceMs.</p>",
+      "solutionExplanationHtmlVi": "<p>(1) SIGTERM tới PID 1, phải là Node; (2) server.close() thôi nhận kết nối; (3) request đang chạy hoàn tất; (4) đóng pool và worker hàng đợi, trả job dở về hàng; (5) exit(0) trước khi hết ân hạn. Đặt stop_grace_period lớn hơn cả request chậm nhất lẫn forceMs này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two in-flight requests, then a clean exit",
+              "vi": "Hai request đang chạy, rồi thoát sạch"
+            },
+            "goi": "events",
+            "chuanBi": "const events = []; let inflight = 2; let closeCb = null; let accepting = true;\n  const server = { close(cb) { accepting = false; closeCb = cb; if (inflight === 0) cb(); }, finishOne() { inflight--; if (inflight === 0 && closeCb) closeCb(); } };\n  const pool = { end: async () => { events.push('pool.end'); } };\n  const log = (m) => events.push(m); const exit = (c) => events.push('exit ' + c);\n  const setTimer = (fn, ms) => setTimeout(fn, ms); const on = installShutdown({ server, pool, exit, log, setTimer }, 1000); on(); events.push('accepting=' + accepting); server.finishOne(); server.finishOne(); await new Promise((r) => setTimeout(r, 30));",
+            "mongDoi": [
+              "SIGTERM received",
+              "accepting=false",
+              "pool.end",
+              "closed",
+              "exit 0"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One request is stuck: the timer forces the exit",
+              "vi": "Một request bị kẹt: hẹn giờ ép thoát"
+            },
+            "goi": "events",
+            "chuanBi": "const events = []; let inflight = 2; let closeCb = null; let accepting = true;\n  const server = { close(cb) { accepting = false; closeCb = cb; if (inflight === 0) cb(); }, finishOne() { inflight--; if (inflight === 0 && closeCb) closeCb(); } };\n  const pool = { end: async () => { events.push('pool.end'); } };\n  const log = (m) => events.push(m); const exit = (c) => events.push('exit ' + c);\n  const setTimer = (fn, ms) => setTimeout(fn, ms); const on = installShutdown({ server, pool, exit, log, setTimer }, 40); on(); server.finishOne(); await new Promise((r) => setTimeout(r, 80));",
+            "mongDoi": [
+              "SIGTERM received",
+              "forced exit",
+              "exit 1"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "events",
+            "chuanBi": "const events = []; let inflight = 2; let closeCb = null; let accepting = true;\n  const server = { close(cb) { accepting = false; closeCb = cb; if (inflight === 0) cb(); }, finishOne() { inflight--; if (inflight === 0 && closeCb) closeCb(); } };\n  const pool = { end: async () => { events.push('pool.end'); } };\n  const log = (m) => events.push(m); const exit = (c) => events.push('exit ' + c);\n  const setTimer = (fn, ms) => setTimeout(fn, ms); const on = installShutdown({ server, pool, exit, log, setTimer }, 50); on(); on(); server.finishOne(); server.finishOne(); await new Promise((r) => setTimeout(r, 100));",
+            "mongDoi": [
+              "SIGTERM received",
+              "pool.end",
+              "closed",
+              "exit 0"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "events",
+            "chuanBi": "const events = []; let inflight = 2; let closeCb = null; let accepting = true;\n  const server = { close(cb) { accepting = false; closeCb = cb; if (inflight === 0) cb(); }, finishOne() { inflight--; if (inflight === 0 && closeCb) closeCb(); } };\n  const pool = { end: async () => { events.push('pool.end'); } };\n  const log = (m) => events.push(m); const exit = (c) => events.push('exit ' + c);\n  const setTimer = (fn, ms) => setTimeout(fn, ms); inflight = 0; const on = installShutdown({ server, pool, exit, log, setTimer }, 50); on(); await new Promise((r) => setTimeout(r, 100));",
+            "mongDoi": [
+              "SIGTERM received",
+              "pool.end",
+              "closed",
+              "exit 0"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling exit(0) right after server.close(): in-flight requests are cut — the exact loss the handler exists to prevent.|||Gọi exit(0) ngay sau server.close(): request đang chạy bị cắt — đúng thứ mất mát handler sinh ra để chặn."
+        },
+        {
+          "loi": "No force-exit timer: one stuck request keeps the process alive until SIGKILL, so the deploy always takes the full grace.|||Không có hẹn giờ ép thoát: một request kẹt giữ tiến trình sống tới SIGKILL, nên mỗi lần deploy đều tốn trọn ân hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "server.close()",
+          "vi": "server.close()",
+          "giaiThich": "stop accepting; callback when connections end"
+        },
+        {
+          "en": "pool.end()",
+          "vi": "pool.end()"
+        }
+      ]
+    },
+    {
+      "title": "graceOutcome(scenario): which in-flight requests survive the deploy?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "graceful shutdown",
+        "signals",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Model one <code>docker stop</code>. <code>requests = [{ id, start, duration }]</code> in seconds; SIGTERM goes to PID 1 at <code>stopAt</code>; Docker sends SIGKILL at <code>stopAt + graceSec</code>. Requests that ended by <code>stopAt</code> are always answered. Then it depends on <code>pid1</code>:</p><ul><li><code>\"npm\"</code> — npm dies at once and takes Node down: exit <code>1</code> at <code>stopAt</code>; every other request is lost;</li><li><code>\"sh\"</code> — the shell does not forward the signal, Node never hears it and keeps serving (new requests too) until SIGKILL: exit <code>137</code> at the kill time; requests that end by then are answered, the rest lost;</li><li><code>\"node\"</code> — the app stops accepting (requests starting after <code>stopAt</code> are <b>refused</b>) and drains the in-flight ones; it exits <code>0</code> when the last one ends — unless that is later than the SIGKILL or its own force-exit timer (<code>stopAt + forceExitSec</code>, default never); whichever comes first: SIGKILL ⇒ 137, the app’s timer ⇒ 1. In-flight requests that end by the exit are answered.</li></ul><p>Return <code>{ answered, lost, refused, exitAt, exitCode }</code> (ids in input order; <code>exitAt</code> rounded to 2 decimals).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình hoá một lần <code>docker stop</code>. <code>requests = [{ id, start, duration }]</code> tính bằng giây; SIGTERM tới PID 1 lúc <code>stopAt</code>; Docker gửi SIGKILL lúc <code>stopAt + graceSec</code>. Request đã xong trước <code>stopAt</code> luôn được trả lời. Phần còn lại tuỳ <code>pid1</code>:</p><ul><li><code>\"npm\"</code> — npm chết ngay và kéo Node theo: exit <code>1</code> lúc <code>stopAt</code>; mọi request khác bị mất;</li><li><code>\"sh\"</code> — shell không chuyển tín hiệu, Node không bao giờ nghe thấy và vẫn phục vụ (cả request mới) tới khi SIGKILL: exit <code>137</code> lúc giết; request xong trước lúc đó được trả lời, còn lại mất;</li><li><code>\"node\"</code> — app thôi nhận (request bắt đầu sau <code>stopAt</code> bị <b>từ chối</b>) và xả các request đang chạy; nó thoát <code>0</code> khi cái cuối xong — trừ khi thời điểm đó muộn hơn SIGKILL hoặc hẹn giờ ép thoát của chính nó (<code>stopAt + forceExitSec</code>, mặc định không bao giờ); cái nào tới trước: SIGKILL ⇒ 137, hẹn giờ của app ⇒ 1. Request đang chạy mà xong trước lúc thoát được trả lời.</li></ul><p>Trả về <code>{ answered, lost, refused, exitAt, exitCode }</code> (id theo thứ tự đầu vào; <code>exitAt</code> làm tròn 2 chữ số).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "graceOutcome({ requests: [{ id: \"slow\", start: 0, duration: 3 }], stopAt: 1, graceSec: 3.14, pid1: \"node\" })",
+          "output": "{\"answered\":[\"slow\"],\"lost\":[],\"refused\":[],\"exitAt\":3,\"exitCode\":0}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split the requests into three groups by comparing start and end with stopAt, then handle the three pid1 cases separately.|||Chia request thành ba nhóm bằng cách so start và end với stopAt, rồi xử lý riêng ba trường hợp pid1.",
+        "The drained time is the latest end among the in-flight requests (or stopAt when there are none); compare it with min(killAt, forcedAt).|||Thời điểm xả xong là end muộn nhất trong các request đang chạy (hoặc stopAt nếu không có); so nó với min(killAt, forcedAt)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what does one docker stop cost? */\nfunction graceOutcome({ requests, stopAt, graceSec, pid1, forceExitSec = Infinity }) {\n  // Write your solution here\n  const done = requests.filter((r) => r.start + r.duration <= stopAt).map((r) => r.id);\n  const lost = requests.filter((r) => r.start + r.duration > stopAt).map((r) => r.id);\n  return { answered: done, lost, refused: [], exitAt: stopAt, exitCode: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction graceOutcome({ requests, stopAt, graceSec, pid1, forceExitSec = Infinity }) {\n  // requests: [{ id, start, duration }] (giây). docker stop gửi SIGTERM lúc stopAt cho PID 1; SIGKILL lúc stopAt + graceSec.\n  const killAt = stopAt + graceSec;\n  const end = (r) => r.start + r.duration;\n  const before = requests.filter((r) => end(r) <= stopAt);\n  const inflight = requests.filter((r) => r.start <= stopAt && end(r) > stopAt);\n  const after = requests.filter((r) => r.start > stopAt);\n  let exitAt;\n  let exitCode;\n  let served;                                              // các request được phục vụ tới cùng\n  if (pid1 === 'npm') {                                    // npm chết ngay và kéo Node theo: cắt mọi thứ\n    exitAt = stopAt; exitCode = 1; served = [];\n  } else if (pid1 === 'sh') {                              // sh không chuyển tín hiệu: Node không biết gì, vẫn nhận request, tới khi bị SIGKILL\n    exitAt = killAt; exitCode = 137; served = [...inflight, ...after].filter((r) => end(r) <= killAt);\n  } else {                                                 // Node ở PID 1: server.close() — thôi nhận request mới, xả request đang chạy\n    const drained = inflight.length ? Math.max(...inflight.map(end)) : stopAt;\n    const forced = stopAt + forceExitSec;\n    if (drained <= Math.min(killAt, forced)) { exitAt = drained; exitCode = 0; }\n    else if (forced < killAt) { exitAt = forced; exitCode = 1; }\n    else { exitAt = killAt; exitCode = 137; }\n    served = inflight.filter((r) => end(r) <= exitAt);\n  }\n  const ok = new Set([...before, ...served].map((r) => r.id));\n  const refused = pid1 === 'node' ? after.map((r) => r.id) : [];\n  return {\n    answered: requests.filter((r) => ok.has(r.id)).map((r) => r.id),\n    lost: requests.filter((r) => !ok.has(r.id) && !refused.includes(r.id)).map((r) => r.id),\n    refused,\n    exitAt: Number(exitAt.toFixed(2)),\n    exitCode,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the measured table: exec form, one 3-second request, stop 1 s in — -t 0 kills it (exit 137), the default and -t 10 answer it and the process exits by itself after ~2.1 s. A 5-second request with the default ~3.14 s is lost; with -t 10 it is answered. With npm at PID 1 the client got curl exit 52 — the connection cut mid-request.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là bảng đã đo: dạng exec, một request 3 giây, stop sau 1 s — -t 0 giết nó (exit 137), mặc định và -t 10 trả lời được và tiến trình tự thoát sau ~2,1 s. Request 5 giây với mặc định ~3,14 s bị mất; với -t 10 được trả lời. Với npm ở PID 1 client nhận curl exit 52 — kết nối bị cắt giữa chừng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Exec form, a 3 s request, default grace",
+              "vi": "Dạng exec, request 3 s, ân hạn mặc định"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"slow\", start: 0, duration: 3 }], stopAt: 1, graceSec: 3.14, pid1: \"node\" })",
+            "mongDoi": {
+              "answered": [
+                "slow"
+              ],
+              "lost": [],
+              "refused": [],
+              "exitAt": 3,
+              "exitCode": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "A 5 s request, default grace",
+              "vi": "Request 5 s, ân hạn mặc định"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"slow\", start: 0, duration: 5 }], stopAt: 1, graceSec: 3.14, pid1: \"node\" })",
+            "mongDoi": {
+              "answered": [],
+              "lost": [
+                "slow"
+              ],
+              "refused": [],
+              "exitAt": 4.14,
+              "exitCode": 137
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"a\", start: 0, duration: 0.5 }, { id: \"b\", start: 0.8, duration: 3 }, { id: \"c\", start: 1.5, duration: 0.1 }], stopAt: 1, graceSec: 5, pid1: \"sh\" })",
+            "mongDoi": {
+              "answered": [
+                "a",
+                "b",
+                "c"
+              ],
+              "lost": [],
+              "refused": [],
+              "exitAt": 6,
+              "exitCode": 137
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"up\", start: 0, duration: 40 }, { id: \"q\", start: 0.9, duration: 0.2 }], stopAt: 1, graceSec: 60, pid1: \"node\", forceExitSec: 30 })",
+            "mongDoi": {
+              "answered": [
+                "q"
+              ],
+              "lost": [
+                "up"
+              ],
+              "refused": [],
+              "exitAt": 31,
+              "exitCode": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"x\", start: 0, duration: 0.2 }], stopAt: 1, graceSec: 0, pid1: \"node\" })",
+            "mongDoi": {
+              "answered": [
+                "x"
+              ],
+              "lost": [],
+              "refused": [],
+              "exitAt": 1,
+              "exitCode": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"up\", start: 0, duration: 40 }], stopAt: 1, graceSec: 10, pid1: \"node\", forceExitSec: 30 })",
+            "mongDoi": {
+              "answered": [],
+              "lost": [
+                "up"
+              ],
+              "refused": [],
+              "exitAt": 11,
+              "exitCode": 137
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "graceOutcome({ requests: [{ id: \"slow\", start: 0, duration: 3 }, { id: \"done\", start: 0, duration: 0.4 }], stopAt: 1, graceSec: 5, pid1: \"npm\" })",
+            "mongDoi": {
+              "answered": [
+                "done"
+              ],
+              "lost": [
+                "slow"
+              ],
+              "refused": [],
+              "exitAt": 1,
+              "exitCode": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A force-exit timer longer than the grace period (the website: 30 s in the app, Docker default ~3–10 s): Docker kills first and the timer never matters.|||Bộ hẹn giờ ép thoát dài hơn ân hạn (website: 30 s trong app, Docker mặc định ~3–10 s): Docker giết trước và hẹn giờ không có tác dụng."
+        },
+        {
+          "loi": "Thinking a long grace slows every deploy: a healthy app exits as soon as it has drained.|||Nghĩ ân hạn dài làm chậm mọi lần deploy: app khoẻ thoát ngay khi xả xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "drain",
+          "vi": "xả dần",
+          "giaiThich": "finish in-flight requests, accept no new ones"
+        },
+        {
+          "en": "force-exit timer",
+          "vi": "hẹn giờ ép thoát"
+        },
+        {
+          "en": "in-flight request",
+          "vi": "request đang xử lý"
+        }
+      ]
+    }
+  ]
+}

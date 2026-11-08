@@ -1,0 +1,697 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "nodejs-practice",
+  "name": "Node.js — Luyện từng bài, chấm ngay trong trình duyệt",
+  "language": "javascript",
+  "color": "#15803d",
+  "docsUrl": "https://nodejs.org/docs/latest-v22.x/api/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá Node.js (từ số 0 tới production): mỗi bài học một bộ đề dễ → khó, mỗi chương một Lab. Máy chấm chạy ngay trong trình duyệt: middleware, handler, service viết dạng hàm thuần với req/res, kho dữ liệu, đồng hồ và Redis GIẢ — đúng cách Chương 14 dạy kiểm thử.",
+  "modules": [
+    {
+      "slug": "nodejs-0-0-start-here-1",
+      "name": "0.0 Start here (1/2): what a backend is",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Client or server: who must do this job? · One request–response pair, step by step · Why JavaScript on the server, and what you need to start · The server re-checks: validate a new note"
+    },
+    {
+      "slug": "nodejs-0-0-start-here-2",
+      "name": "0.0 Start here (2/2): how this course is built",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: The six stages, in order · Visible on screen, or only in a measurement? · The rules this course is built on · Measure, do not guess: write timeIt"
+    },
+    {
+      "slug": "nodejs-0-1-gioi-thieu",
+      "name": "0.1 About this course & the full roadmap",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: What Node.js is, who made it, what it replaced · Which chapter teaches it? · Stage 1 and Stage 2, chapter by chapter · Reading a backend course the right way"
+    },
+    {
+      "slug": "nodejs-0-2-cach-hoc",
+      "name": "0.2 How to study this course",
+      "level": "ADVANCED",
+      "description": "4 đề: The five-step loop, in order · Which rule would have saved you? · Break it on purpose: which error will you see? · Read the error, all of it: parse a Node crash report"
+    },
+    {
+      "slug": "nodejs-0-3-cai-dat",
+      "name": "0.3 Setting up your environment",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Pick the right version, the right tool · Install Node 22 with nvm, in order · Command → what it tells you · Laptop, CI and server must agree: read \"engines\""
+    },
+    {
+      "slug": "nodejs-0-4-du-an",
+      "name": "0.4 The project we build together",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Which folder does this code belong in? · Read the project's package.json · Git from lesson one, and the .env that must never be committed · What will Git commit? A tiny .gitignore matcher"
+    },
+    {
+      "slug": "nodejs-1-1-bien-pham-vi",
+      "name": "1.1 Variables & scope: var, let, const",
+      "level": "ADVANCED",
+      "description": "5 đề: Predict it: var, let and const around a block · The lesson puzzle: write the output, line by line · Fix the silent bug: save every note, not the last one three times · const or let? Pick the declaration a reviewer expects · deepFreeze: lock a config object for real"
+    },
+    {
+      "slug": "nodejs-1-2-ham-closure-this",
+      "name": "1.2 Functions, closures and this",
+      "level": "ADVANCED",
+      "description": "5 đề: createCounter: two counters that never share a number · requireRole(role): the middleware factory every Express app has · Predict this: method, arrow, detached, bind · Lost this: register controller methods without breaking them · createRateLimiter: private counters with a time window"
+    },
+    {
+      "slug": "nodejs-1-3-object-tham-chieu",
+      "name": "1.3 Objects, arrays and references",
+      "level": "ADVANCED",
+      "description": "5 đề: Predict it: copies, defaults and fallbacks · toPublicUser: strip secrets without touching the original · readPagination: ?? not || (and a 0 that must survive) · updateNote: merge changes without mutating the stored note · cloneForCache: a deep copy that keeps Dates and Maps"
+    },
+    {
+      "slug": "nodejs-1-4-bat-dong-bo",
+      "name": "1.4 Async: callbacks, Promises, async/await",
+      "level": "ADVANCED",
+      "description": "6 đề: Mistake 1: the forgotten await · From callbacks to Promises: write promisify · Mistake 2: load the dashboard in parallel (900 ms → 300 ms) · Mistake 3: notify everyone, some may fail (allSettled) · The forEach(async …) trap: save notes in order, and really wait · Mistake 4: asyncHandler — give every async error an owner"
+    },
+    {
+      "slug": "nodejs-1-5-module",
+      "name": "1.5 Modules: CommonJS vs ES Modules",
+      "level": "ADVANCED",
+      "description": "5 đề: CJS or ESM? Decide the mode of each file (Node 22) · Read the module error, name the fix · Split the in-memory notes store into an ES module · Convert a CommonJS pair to ES Modules · detectModuleType: implement Node 22's decision rules"
+    },
+    {
+      "slug": "nodejs-1-lab-notes-service",
+      "name": "Lab 1 — A Notes service in plain JavaScript",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 1.1 — createNoteService: closures, copies and awaits in one service · Lab 1.3 — Ship the list endpoint logic as ES modules · Lab 1.2 — importNotes: batches, timeouts and partial failure"
+    },
+    {
+      "slug": "nodejs-2-1-runtime-la-gi",
+      "name": "2.1 What Node.js actually is",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Which part of the box does the job? · \"Single-threaded\" — precisely · Where the request actually goes · Waiting is free: serve 50 requests with one thread"
+    },
+    {
+      "slug": "nodejs-2-2-event-loop",
+      "name": "2.2 The event loop, phase by phase",
+      "level": "ADVANCED",
+      "description": "5 đề: The six phases, in order · Which phase runs this callback? · Inside an I/O callback: write the exact order · Predictable or not? Timers, immediates and the ES module trap · Do not trust the scheduler: boot the API with await"
+    },
+    {
+      "slug": "nodejs-2-3-microtask",
+      "name": "2.3 nextTick, microtasks and starvation",
+      "level": "ADVANCED",
+      "description": "5 đề: The priority order · When to reach for which queue · Nested queues: predict the exact output · Starvation: which code freezes the server? · Build the queue simulator (matches real Node 22)"
+    },
+    {
+      "slug": "nodejs-2-4-chan-event-loop",
+      "name": "2.4 Blocking the loop: measured",
+      "level": "ADVANCED",
+      "description": "5 đề: Blocks, waits, or queues on the pool? · Read the heartbeat: compute event-loop lag · Two waves: simulate libuv's thread pool · Measuring in production: numbers that fool people · ReDoS: a tag validator that cannot freeze the loop"
+    },
+    {
+      "slug": "nodejs-2-5-worker-threads",
+      "name": "2.5 Getting heavy work off the loop",
+      "level": "ADVANCED",
+      "description": "5 đề: Pick the cure: worker, chunks, cluster or queue · The price of each cure · Cure 2: count words in slices and let the loop breathe · Four processes, one counter: a limiter that survives cluster · A small worker pool, not one worker per request"
+    },
+    {
+      "slug": "nodejs-2-lab-giu-loop-thong",
+      "name": "Lab 2 — Keep the event loop free",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 2.1 — Incident review: diagnose, then pick the cure · Lab 2.2 — Shed load when the loop is lagging · Lab 2.3 — Decide and delegate: thumbnails without blocking the request"
+    },
+    {
+      "slug": "nodejs-3-1-path-fs",
+      "name": "3.1 path and fs",
+      "level": "ADVANCED",
+      "description": "5 đề: 3.1 · path and fs: predict before you run · 3.1 · Take a path apart like path.parse · 3.1 · Write path.join yourself · 3.1 · Read a note without checking first · 3.1 · Stop path traversal with resolve + startsWith"
+    },
+    {
+      "slug": "nodejs-3-2-buffer",
+      "name": "3.2 Buffers: binary data",
+      "level": "ADVANCED",
+      "description": "5 đề: 3.2 · Characters are not bytes · 3.2 · Count UTF-8 bytes like Buffer.byteLength · 3.2 · Encode to UTF-8 and print the hex · 3.2 · Truncate to N bytes without breaking a letter · 3.2 · A StringDecoder that waits for the rest of a letter"
+    },
+    {
+      "slug": "nodejs-3-3-stream",
+      "name": "3.3 Streams: the 348 MB experiment",
+      "level": "ADVANCED",
+      "description": "6 đề: 3.3 · The 348 MB experiment, read carefully · 3.3 · Backpressure, step by step · 3.3 · Count lines chunk by chunk · 3.3 · Split lines that cross chunk boundaries (readline by hand) · 3.3 · A transform stage for pipeline(): grep ERROR lines · 3.3 · Respect backpressure in your own write loop"
+    },
+    {
+      "slug": "nodejs-3-4-eventemitter",
+      "name": "3.4 EventEmitter",
+      "level": "ADVANCED",
+      "description": "5 đề: 3.4 · EventEmitter: predict the output · 3.4 · Subscribe and unsubscribe without leaking · 3.4 · Build a MiniEmitter: on, emit, listenerCount · 3.4 · Add once() and off() to the MiniEmitter · 3.4 · The error event and the 11-listener warning"
+    },
+    {
+      "slug": "nodejs-3-5-http-server",
+      "name": "3.5 An HTTP server with no framework",
+      "level": "ADVANCED",
+      "description": "5 đề: 3.5 · What the raw http module makes you do · 3.5 · Route by hand: method, path, :id and the query · 3.5 · Collect a JSON body from the request stream · 3.5 · sendJson: status, Content-Type and the real Content-Length · 3.5 · The whole raw Notes server, crash-proof"
+    },
+    {
+      "slug": "nodejs-3-lab-file-server",
+      "name": "Lab 3 — A file server with core modules only",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 3 · 1 — Which lesson does each line come from? · Lab 3 · 2 — GET /files/:name with no framework · Lab 3 · 3 — Receive an upload: byte limit + backpressure"
+    },
+    {
+      "slug": "nodejs-4-1-package-json",
+      "name": "4.1 package.json and npm scripts",
+      "level": "ADVANCED",
+      "description": "5 đề: 4.1 · dependencies or devDependencies? · 4.1 · Turn the scripts block into the commands a newcomer types · 4.1 · Find the imports that will crash after deploy · 4.1 · Review a package.json like the lesson does · 4.1 · What does npm run really execute? (pre/post hooks)"
+    },
+    {
+      "slug": "nodejs-4-2-semver-lockfile",
+      "name": "4.2 Semver and the lockfile",
+      "level": "ADVANCED",
+      "description": "6 đề: 4.2 · What does each range really allow? · 4.2 · The lockfile rules · 4.2 · Sort versions as numbers, not text · 4.2 · satisfies(version, range) for ^, ~ and exact · 4.2 · Reproduce npm view \"express@^4.18.0\" version · 4.2 · npm ci vs npm install: who gets which version?"
+    },
+    {
+      "slug": "nodejs-4-3-bao-mat-npm",
+      "name": "4.3 Supply chain safety",
+      "level": "ADVANCED",
+      "description": "5 đề: 4.3 · Supply chain: what the lesson measured · 4.3 · Count the tree you really installed · 4.3 · Which packages run code at install time? · 4.3 · Flag names one keystroke away from a famous package · 4.3 · Rebuild the summary npm audit prints"
+    },
+    {
+      "slug": "nodejs-4-lab-dependency-review",
+      "name": "Lab 4 — A dependency review bot for pull requests",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 4 · 1 — Review this pull request · Lab 4 · 2 — npm outdated: Current, Wanted, Latest · Lab 4 · 3 — The dependency review bot"
+    },
+    {
+      "slug": "nodejs-5-1-tu-http-toi-express",
+      "name": "5.1 From raw http to Express",
+      "level": "ADVANCED",
+      "description": "5 đề: 5.1 · What Express put on the wire · 5.1 · Your first Express app: four responses · 5.1 · Fix the week-one bug: a response without return · 5.1 · Rewrite the raw server of 3.5 in Express · 5.1 · Express is a thin layer: build res.json on raw http"
+    },
+    {
+      "slug": "nodejs-5-2-dinh-tuyen",
+      "name": "5.2 Routing: params, query and Router",
+      "level": "ADVANCED",
+      "description": "5 đề: 5.2 · Routes are an ordered list · 5.2 · Match a path pattern the way Express 5 does · 5.2 · Read the query string defensively · 5.2 · One router per resource, and mergeParams for nesting · 5.2 · Find routes that can never be reached"
+    },
+    {
+      "slug": "nodejs-5-3-middleware",
+      "name": "5.3 Middleware: the chain every request walks",
+      "level": "ADVANCED",
+      "description": "5 đề: 5.3 · Position in the file is the whole API · 5.3 · Guards: requireAdmin and a requireRole factory · 5.3 · A request logger with real timings · 5.3 · Write express.json() yourself · 5.3 · Build the chain runner Express is made of"
+    },
+    {
+      "slug": "nodejs-5-4-xu-ly-loi",
+      "name": "5.4 Centralised error handling",
+      "level": "ADVANCED",
+      "description": "6 đề: 5.4 · How an error reaches the handler (or does not) · 5.4 · AppError and a JSON 404 · 5.4 · The full error handler: one shape, no leaks · 5.4 · wrap(): make async errors reach the handler on Express 4 · 5.4 · The two errors that still kill the process: log, then exit · 5.4 · Wire it: request id, JSON 404 and the handler — in the right order"
+    },
+    {
+      "slug": "nodejs-5-5-notes-api",
+      "name": "5.5 Assembling the Notes API",
+      "level": "ADVANCED",
+      "description": "4 đề: 5.5 · Why the Notes API is split the way it is · 5.5 · notes.service: business rules with zero HTTP knowledge · 5.5 · notes.routes: HTTP in, status codes out · 5.5 · Graceful shutdown that actually finishes in time"
+    },
+    {
+      "slug": "nodejs-5-lab-notes-api",
+      "name": "Lab 5 — Notes API v2 with Express",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 5 · 1 — Review a broken app.js · Lab 5 · 2 — Notes API v2: tags, search, paging and one error contract · Lab 5 · 3 — Comments under notes: mergeParams, the right 404, cascading delete"
+    },
+    {
+      "slug": "nodejs-6-1-tai-nguyen-phuong-thuc",
+      "name": "6.1 Resources, methods and what REST actually means",
+      "level": "ADVANCED",
+      "description": "5 đề: 6.1 · 1 — Safe or idempotent? Classify the methods · 6.1 · 2 — Nouns, not verbs: what HTTP and Express really do · 6.1 · 3 — Write restRoute(op): turn an operation into a REST endpoint · 6.1 · 4 — Write applyUpdate(method, stored, body): PUT replaces, PATCH merges · 6.1 · 5 — Write createNotesApi(): idempotency you can test, HEAD and OPTIONS for free, 404 not 405"
+    },
+    {
+      "slug": "nodejs-6-2-ma-trang-thai",
+      "name": "6.2 Status codes and response shape",
+      "level": "ADVANCED",
+      "description": "5 đề: 6.2 · 1 — Pick the status code from what happened · 6.2 · 2 — Write sendCreated and sendDeleted: 201 done properly, 204 that is really empty · 6.2 · 3 — Write errorHandler(err, req, res, next): one error shape for every 4xx and 5xx · 6.2 · 4 — Write toApi(row): the field conventions worth fixing early · 6.2 · 5 — Write register(req, res, users): 400, 422, 409 and 201 from one handler"
+    },
+    {
+      "slug": "nodejs-6-3-validate-schema",
+      "name": "6.3 Validation with a schema",
+      "level": "ADVANCED",
+      "description": "5 đề: 6.3 · 1 — What a schema really does at the edge · 6.3 · 2 — Write toFieldErrors(issues) and validationBody(issues): the 422 the lesson prints · 6.3 · 3 — Write parseCreateNote(input): the CreateNote schema by hand, with zod’s exact messages · 6.3 · 4 — Write parseListQuery(query): strings in, numbers out, limit capped · 6.3 · 5 — Write validate(schemas): the middleware that makes every route start clean"
+    },
+    {
+      "slug": "nodejs-6-4-phan-trang",
+      "name": "6.4 Pagination, filtering and sorting",
+      "level": "ADVANCED",
+      "description": "5 đề: 6.4 · 1 — Offset, cursor and the cost nobody sees · 6.4 · 2 — Write offsetPlan(query): page/limit → SQL, with the cap and the real cost · 6.4 · 3 — Reproduce offset drift: pageByOffset, pageByCursor and scroll() · 6.4 · 4 — Write orderByClause(query): sorting from the query string without SQL injection · 6.4 · 5 — Write feedPage(rows, query): an opaque (createdAt, id) cursor with hasMore and no count"
+    },
+    {
+      "slug": "nodejs-6-5-hop-dong-api",
+      "name": "6.5 The API contract: versions, ETag, idempotency",
+      "level": "ADVANCED",
+      "description": "5 đề: 6.5 · 1 — Breaking or safe? Changes to a contract you do not control · 6.5 · 2 — Write createNoteResource(store): ETag on GET, If-Match on PATCH, 412 and 428 · 6.5 · 3 — Write createPaymentsRoute(charge): the Idempotency-Key that prevents the double charge · 6.5 · 4 — Guard the race: two retries with the same key arrive at the same instant · 6.5 · 5 — Write breakingChanges(before, after): catch what code review does not"
+    },
+    {
+      "slug": "nodejs-6-lab-notes-contract",
+      "name": "Lab 6 — Notes API v2: a contract a mobile app can rely on",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 6 · 1 — Review the pull request before it becomes a contract · Lab 6 · 2 — Build createNotesV2(): the whole chapter-6 contract in one handler · Lab 6 · 3 — Build createNotesClient(): retries that cannot double-create, and a 412 handed to the human"
+    },
+    {
+      "slug": "nodejs-7-1-ket-noi-va-pool",
+      "name": "7.1 Why a database, and what one connection really costs",
+      "level": "ADVANCED",
+      "description": "5 đề: 7.1 · 1 — What a connection costs, and who pays for it · 7.1 · 2 — Write connectionBudget(cfg): do the arithmetic nobody does until 2 a.m. · 7.1 · 3 — Write createLazyClient(connect): connect on the first query, exactly once · 7.1 · 4 — Write createPool({ max, connect }): reuse, queue, and measure the diminishing returns · 7.1 · 5 — Write createTimedPool(): give up after acquireTimeoutMs (P2024), never leak a slot"
+    },
+    {
+      "slug": "nodejs-7-2-luoc-do-va-migration",
+      "name": "7.2 The schema, and migrations that survive production",
+      "level": "ADVANCED",
+      "description": "5 đề: 7.2 · 1 — migrate dev, deploy, status, diff, resolve: which one, where, and why · 7.2 · 2 — Rewrite the add_slug migration so it survives a table that has rows · 7.2 · 3 — Write the add_tags_and_version migration by hand, the way Prisma generates it · 7.2 · 4 — Write migrateStatus(files, history): read _prisma_migrations like Prisma does · 7.2 · 5 — Write lintMigration(sql, rowsIn): flag the statements that fail or lose data on production"
+    },
+    {
+      "slug": "nodejs-7-3-crud-transaction",
+      "name": "7.3 CRUD, transactions, and swapping the Notes API onto PostgreSQL",
+      "level": "ADVANCED",
+      "description": "5 đề: 7.3 · 1 — CRUD calls and the two kinds of transaction · 7.3 · 2 — Write update() and remove(): translate P2025, and only P2025 · 7.3 · 3 — Write list(prisma, query): one page and its total from one $transaction · 7.3 · 4 — Write createNoteWithTag(): all-or-nothing with tx, and the slow call outside · 7.3 · 5 — Tag note 3 with work, db, reading in two statements that are safe to run twice"
+    },
+    {
+      "slug": "nodejs-7-4-quan-he-va-n-plus-1",
+      "name": "7.4 Relations, and the N+1 problem measured",
+      "level": "ADVANCED",
+      "description": "6 đề: 7.4 · 1 — include, select, some, _count — and how to spot N+1 in a review · 7.4 · 2 — Fix the N+1: write usersWithNotes(prisma) with two queries and a Map · 7.4 · 3 — Write noteCounts(prisma): counts per user without shipping a single note row · 7.4 · 4 — Write createLoader(batchFn): turn many await enrich(note) calls into one IN query · 7.4 · 5 — Translate notes: { some: { pinned: true } } into SQL · 7.4 · 6 — One query: notes and pinned notes per user, zeros included"
+    },
+    {
+      "slug": "nodejs-7-5-chi-muc-va-explain",
+      "name": "7.5 Indexes, and reading EXPLAIN ANALYZE",
+      "level": "INTERMEDIATE",
+      "description": "5 đề: 7.5 · 1 — Read EXPLAIN ANALYZE from the inside out · 7.5 · 2 — Four ways an index quietly does nothing · 7.5 · 3 — Create the index that removes the Sort: (authorId, createdAt DESC) · 7.5 · 4 — Make lower(slug) = … use an index (expression index) · 7.5 · 5 — Write readPlan(text): turn EXPLAIN ANALYZE output into numbers you can assert on"
+    },
+    {
+      "slug": "nodejs-7-6-hop-dong-api-voi-du-lieu-that",
+      "name": "7.6 Keeping the chapter-6 contract with a real database",
+      "level": "ADVANCED",
+      "description": "6 đề: 7.6 · 1 — Every chapter-6 promise, measured on 751,000 rows · 7.6 · 2 — Write the final list(): cursor, take + 1, omit body, no count · 7.6 · 3 — Write createNote(): unique violations become 409, read from Prisma 7’s real meta · 7.6 · 4 — Write updateNote(): the version column that stops the lost update · 7.6 · 5 — Write the sql`…` tag: values travel as parameters, never as SQL text · 7.6 · 6 — The next page after (createdAt, id) in SQL, ties included"
+    },
+    {
+      "slug": "nodejs-7-lab-notes-postgres",
+      "name": "Lab 7 — The Notes API on PostgreSQL, deployed safely",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 7 · 1 — The P3018 drill: put the recovery steps in the only safe order · Lab 7 · 2 — Build createNotesService(prisma): the whole chapter on one service · Lab 7 · 3 — One deploy file: the slug migration, the feed index, and the feed query"
+    },
+    {
+      "slug": "nodejs-8-1-mat-khau-va-bam",
+      "name": "8.1 Storing passwords: why almost every way is wrong",
+      "level": "ADVANCED",
+      "description": "6 đề: 8.1 · 1 — Why almost every way of storing passwords is wrong · 8.1 · 2 — Write auditLeak(rows, table): what an unsalted leak gives away for free · 8.1 · 3 — Write parseBcrypt(hash): read the algorithm, cost and salt out of the stored string · 8.1 · 4 — Write checkPassword(pw): length that matters, and bcrypt’s 72 bytes said out loud · 8.1 · 5 — Write login(): the same answer, in the same time, for every failure · 8.1 · 6 — Write loginAndUpgrade(): move users from bcrypt (or old argon2) without a password reset"
+    },
+    {
+      "slug": "nodejs-8-2-jwt-access-refresh",
+      "name": "8.2 JWT, refresh tokens and rotation",
+      "level": "ADVANCED",
+      "description": "5 đề: 8.2 · 1 — What a JWT guarantees, and the one thing it cannot do · 8.2 · 2 — Write readClaims(token, nowSec): everything in a JWT is readable · 8.2 · 3 — Write verifyHS256(token, secret, opts): pin the algorithm, check the signature, expiry, audience, issuer · 8.2 · 4 — Write issueSession() and refresh(): rotation, and reuse that burns the whole family · 8.2 · 5 — Write createApi(base): on a 401, refresh once, retry once — never loop"
+    },
+    {
+      "slug": "nodejs-8-3-requireauth-phan-quyen",
+      "name": "8.3 requireAuth, roles, and deleting AUTHOR_ID = 1",
+      "level": "ADVANCED",
+      "description": "6 đề: 8.3 · 1 — Who are you, may you, and is it yours? · 8.3 · 2 — Write readToken(req): Bearer header first, HttpOnly cookie as the fallback · 8.3 · 3 — Write makeRequireAuth(): six refusals, each with its own code · 8.3 · 4 — Write requireRole(...roles) and requirePermission(perm): 403, after authentication · 8.3 · 5 — Delete AUTHOR_ID = 1: write createNotesService(db) with actor first and one canTouch · 8.3 · 6 — Write auditRouter(stack): find the routes that mounting order left open"
+    },
+    {
+      "slug": "nodejs-8-4-cookie-csrf-thu-hoi",
+      "name": "8.4 Cookies, CSRF, revocation and rate limiting",
+      "level": "ADVANCED",
+      "description": "5 đề: 8.4 · 1 — What SameSite really does, as measured in Chromium 149 · 8.4 · 2 — Write serializeCookie() and clearCookie(): the flags, and a logout that really clears · 8.4 · 3 — Write csrfGuard({ allowedOrigins }): Origin check, then double-submit, compared in constant time · 8.4 · 4 — Write createLoginLimiter(): 5 per minute per IP + email, 429 with Retry-After, and an IP you can trust · 8.4 · 5 — Write logoutEverywhere(): revoke and bump in one transaction, and keep the caller logged in"
+    },
+    {
+      "slug": "nodejs-8-lab-auth-notes",
+      "name": "Lab 8 — Accounts for the Notes API: from password to private note",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 8 · 1 — Which layer says no, and with which status? · Lab 8 · 2 — Build createAuthApp(): register, login, refresh, log out everywhere, and notes that belong to someone · Lab 8 · 3 — Security review: one line, one hole"
+    },
+    {
+      "slug": "nodejs-9-1-header-csp-cors",
+      "name": "9.1 Security headers, CSP and CORS",
+      "level": "ADVANCED",
+      "description": "6 đề: Read helmet’s headers: which one stops what · Write helmet’s baseline by hand · Read a CSP one directive at a time · An allow-list CORS middleware that does not lie · CORS: four configurations, one money transfer · Would this CSP let it load?"
+    },
+    {
+      "slug": "nodejs-9-2-xss-va-sanitize",
+      "name": "9.2 XSS: escape, sanitize and the stored note",
+      "level": "ADVANCED",
+      "description": "5 đề: XSS: what the script can do, and what really stops it · Escape a note before it reaches the page · Embed server data in a page without breaking out of <script> · A link built from user data must not run code · Sanitize a parsed note with an allow-list"
+    },
+    {
+      "slug": "nodejs-9-3-dau-vao-doc-hai",
+      "name": "9.3 Hostile input: ReDoS, pollution, body limits, SSRF",
+      "level": "ADVANCED",
+      "description": "5 đề: Four requests that look completely normal · Fix the deep merge before everyone becomes admin · Validate a note: cap first, then check, then strip · A body limit per route, not one global weapon · A link-preview fetch that one 302 cannot walk around"
+    },
+    {
+      "slug": "nodejs-9-4-bi-mat-va-phu-thuoc",
+      "name": "9.4 Secrets, dependencies and error messages",
+      "level": "ADVANCED",
+      "description": "5 đề: Secrets: where they live and what a leak really costs · How long does a secret survive? · Compare API keys in constant time · An error handler that tells the user nothing useful to an attacker · A pre-commit secret scan with an exception that is tested both ways"
+    },
+    {
+      "slug": "nodejs-9-lab-harden-notes-api",
+      "name": "Lab 9 — Harden the Notes API",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 9 · 1 — Put the perimeter in the right order · Lab 9 · 2 — Build the middleware chain that makes order matter · Lab 9 · 3 — Harden the Notes API (one hole per lesson)"
+    },
+    {
+      "slug": "nodejs-10-1-nhan-file-multipart",
+      "name": "10.1 Receiving a file: multipart, base64, RAM",
+      "level": "ADVANCED",
+      "description": "5 đề: Three ways a file gets in, and what each costs · What base64 costs on a phone’s uplink · Read a multipart body before trusting a library · Turn MulterError into a 413, not a stack trace · Stream an upload to storage without holding it"
+    },
+    {
+      "slug": "nodejs-10-2-object-storage-presigned",
+      "name": "10.2 Object storage and presigned URLs",
+      "level": "ADVANCED",
+      "description": "5 đề: Object storage is not a filesystem; a presigned URL is not a policy · Build the key: family, owner, time, randomness — never the filename · Decode a presigned URL and say what it binds · The \"complete\" call: HeadObject, then decide · Be the storage server: verify a presigned request"
+    },
+    {
+      "slug": "nodejs-10-3-kiem-file-that",
+      "name": "10.3 Never trust the file: sniffing, polyglots, bombs",
+      "level": "ADVANCED",
+      "description": "5 đề: Five files that all claim to be images · Sniff the magic bytes · The first gate: refuse active content by type AND by name · Refuse the bomb from its header, before decoding · At most four decodes at once"
+    },
+    {
+      "slug": "nodejs-10-4-phuc-vu-media-cache",
+      "name": "10.4 Serving media: formats, caching, CDN",
+      "level": "ADVANCED",
+      "description": "5 đề: The read path: formats, cache headers and the CDN · Choose the headers to store with each object · Turn a stored key into a URL — and keep the blob: scar · If you must proxy media: 304 and Range, or seeking breaks · Delete the post — and its files, in the right order"
+    },
+    {
+      "slug": "nodejs-10-lab-upload-pipeline",
+      "name": "Lab 10 — The Notes upload pipeline",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 10 · 1 — The two upload paths, step by step · Lab 10 · 2 — Sign a video upload that cannot become HTML · Lab 10 · 3 — The image pipeline: refuse, sniff, count, decode, store the output"
+    },
+    {
+      "slug": "nodejs-11-1-websocket-co-ban",
+      "name": "11.1 From polling to WebSocket",
+      "level": "ADVANCED",
+      "description": "5 đề: Polling, SSE or WebSocket — and the handshake that starts it · Price an hour of polling against socket frames · Recognise a WebSocket handshake (and what nginx did to it) · Handle a frame: it is a Buffer, and you answer with a string · Reconnect after the laptop wakes up — with jittered backoff"
+    },
+    {
+      "slug": "nodejs-11-2-ws-vs-socketio-rooms",
+      "name": "11.2 ws vs Socket.IO: rooms and acks",
+      "level": "ADVANCED",
+      "description": "5 đề: Rooms, acks and what a broadcast really costs · Route each event to the smallest correct room · Build the rooms yourself: a named set of sockets · Answer thread:join with an ack the UI can react to · A per-socket cap on post:subscribe, and a presence audience"
+    },
+    {
+      "slug": "nodejs-11-3-xac-thuc-phan-quyen-socket",
+      "name": "11.3 Authenticate once, authorize every time",
+      "level": "ADVANCED",
+      "description": "5 đề: Authenticated is not authorized · Find the token on the handshake — and refuse the query string · The handshake middleware: verify, load, and re-check roleVersion · Fix the production hole: authorize thread:join and thread:typing · Catch up after a reconnect: the socket is the signal, REST is the truth"
+    },
+    {
+      "slug": "nodejs-11-4-scale-adapter-backpressure",
+      "name": "11.4 More than one process: adapters, sticky sessions, backpressure",
+      "level": "ADVANCED",
+      "description": "5 đề: The second process: what breaks, silently · Who receives it, and which transport survives the balancer · Make rooms cluster-wide with a pub/sub adapter · Drop frames for the slow client before it costs 192 MB · Presence that survives the second process (and a crash)"
+    },
+    {
+      "slug": "nodejs-11-lab-realtime-notes",
+      "name": "Lab 11 — Realtime Notes threads: server and client",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 11 · 1 — Design review of the realtime layer · Lab 11 · 2 — The server side: authenticate once, authorize every event · Lab 11 · 3 — The client that survives tunnels, lifts and deploys"
+    },
+    {
+      "slug": "nodejs-12-1-redis-co-ban",
+      "name": "12.1 Redis: round trips, pipelining, MGET, one shared client",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: 12.1 · Where the time goes: reading the measurements · 12.1 · Replace the GET loop with one MGET · 12.1 · Write 10,000 keys in pipelined chunks · 12.1 · getRedis(): one shared client, even under 20 first requests"
+    },
+    {
+      "slug": "nodejs-12-2-cache-aside",
+      "name": "12.2 Cache-aside, TTL, negative caching, single-flight",
+      "level": "ADVANCED",
+      "description": "5 đề: 12.2 · Cache-aside: when it wins, when it betrays you · 12.2 · Cache-aside in four lines — with a TTL · 12.2 · Cache the miss: negative caching for users · 12.2 · Stop the stampede: single-flight · 12.2 · Keep the deadline, spread the deadlines"
+    },
+    {
+      "slug": "nodejs-12-3-cau-truc-du-lieu",
+      "name": "12.3 Redis data structures: sorted sets, counters, bitmaps",
+      "level": "ADVANCED",
+      "description": "5 đề: 12.3 · The full menu: which structure answers which question · 12.3 · Memory: the cliff, the key overhead, the trade-offs · 12.3 · A leaderboard that answers “what rank am I?” · 12.3 · Quota counters with the period in the key · 12.3 · Daily active users with bitmaps"
+    },
+    {
+      "slug": "nodejs-12-4-nguyen-tu-rate-limit-lock",
+      "name": "12.4 Atomic rate limiting and safe distributed locks",
+      "level": "ADVANCED",
+      "description": "5 đề: 12.4 · Atomic or merely looks like it? · 12.4 · An atomic fixed-window limiter · 12.4 · Close the boundary hole: a sliding window · 12.4 · A token bucket that allows bursts · 12.4 · A lock you cannot release for someone else"
+    },
+    {
+      "slug": "nodejs-12-5-pubsub-streams",
+      "name": "12.5 Pub/Sub vs Streams: consumer groups, reclaim, reconnect",
+      "level": "ADVANCED",
+      "description": "5 đề: 12.5 · Decide by what may be lost · 12.5 · The traps that cost an afternoon each · 12.5 · A stream worker that never drops a job · 12.5 · Re-subscribe on reconnect without doubling the handler · 12.5 · Resume after a stream id: compare ids as numbers"
+    },
+    {
+      "slug": "nodejs-12-6-van-hanh-production",
+      "name": "12.6 Running Redis: SCAN, UNLINK, maxmemory, INFO",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: 12.6 · maxmemory: what happens when Redis fills up · 12.6 · The commands that freeze everything · 12.6 · Replace KEYS with a SCAN loop · 12.6 · Read INFO like an operator"
+    },
+    {
+      "slug": "nodejs-12-lab-notes-redis",
+      "name": "Lab 12 — The Redis layer of the Notes API",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 12 · 1 — The notes cache, all four betrayals handled · Lab 12 · 2 — Rate-limit middleware that fails open · Lab 12 · 3 — The nightly report runs once, on any number of processes"
+    },
+    {
+      "slug": "nodejs-13-1-vi-sao-hang-doi",
+      "name": "13.1 Why a queue: 202, bounded concurrency, outbox",
+      "level": "ADVANCED",
+      "description": "5 đề: 13.1 · What belongs on a queue, and what does not · 13.1 · Reading the 5-out-of-100 measurement · 13.1 · Move the welcome email out of the request · 13.1 · A worker pool that never asks for more than the downstream can give · 13.1 · The transactional outbox, step by step"
+    },
+    {
+      "slug": "nodejs-13-2-bullmq-co-ban",
+      "name": "13.2 BullMQ: what a job is, addBulk, concurrency, payloads",
+      "level": "INTERMEDIATE",
+      "description": "5 đề: 13.2 · Queue, Worker, Job — and the Redis underneath · 13.2 · Concurrency: predict the measurement · 13.2 · Open the box: a queue as a hash and three lists · 13.2 · Fan out 50,000 jobs with addBulk · 13.2 · Lint a job payload before it goes into Redis"
+    },
+    {
+      "slug": "nodejs-13-3-thu-lai-va-idempotent",
+      "name": "13.3 Retries, backoff, idempotent handlers, jobId",
+      "level": "ADVANCED",
+      "description": "5 đề: 13.3 · Retries: what BullMQ does, and what you must add · 13.3 · Compute the retry schedule · 13.3 · Run a job the way a worker does: attempts, backoff, unrecoverable · 13.3 · The charge that must not run three times · 13.3 · Five clicks on “Pay”, one invoice"
+    },
+    {
+      "slug": "nodejs-13-4-lich-trinh",
+      "name": "13.4 Scheduling: priority, shared limiter, cron in a time zone",
+      "level": "ADVANCED",
+      "description": "5 đề: 13.4 · When, in what order, how fast, how often · 13.4 · Which job runs next? · 13.4 · A limiter shared by every worker · 13.4 · 03:00 in Vietnam is 20:00 UTC · 13.4 · The nightly job only fans the work out"
+    },
+    {
+      "slug": "nodejs-13-5-worker-chet-va-van-hanh",
+      "name": "13.5 Stalled jobs, graceful shutdown, retention, add() timeouts",
+      "level": "ADVANCED",
+      "description": "5 đề: 13.5 · Killed, blocked, deployed: what survives? · 13.5 · A graceful shutdown, in order · 13.5 · The stalled-job check · 13.5 · removeOnComplete: { age, count } · 13.5 · When Redis is down, add() hangs: fail open or fail closed"
+    },
+    {
+      "slug": "nodejs-13-lab-email-queue",
+      "name": "Lab 13 — The Notes API email queue",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 13 · 1 — The email worker: concurrency, retries that free the slot, unrecoverable · Lab 13 · 2 — Watch the queue: health endpoint and trend alerts · Lab 13 · 3 — Audit a queue before it goes to production"
+    },
+    {
+      "slug": "nodejs-14-1-vi-sao-test",
+      "name": "14.1 Test levels, runners, and your first mutation-graded tests",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: 14.1 · Which level catches this bug most cheaply? · 14.1 · Choosing a runner with numbers · 14.1 · Your first tests: pin down slugify · 14.1 · Test what is expensive to get wrong: money"
+    },
+    {
+      "slug": "nodejs-14-2-unit-test",
+      "name": "14.2 Unit tests, test doubles, fake timers",
+      "level": "INTERMEDIATE",
+      "description": "5 đề: 14.2 · Four tests that pass while checking nothing · 14.2 · Build a spy · 14.2 · A fake repository that really works · 14.2 · Unit-test the Notes service with a fake repository · 14.2 · Time is a dependency: test 20 minutes in milliseconds"
+    },
+    {
+      "slug": "nodejs-14-3-supertest",
+      "name": "14.3 Testing the HTTP layer: app factory, contract, IDOR",
+      "level": "ADVANCED",
+      "description": "4 đề: 14.3 · What the HTTP layer can and cannot prove · 14.3 · Assemble the app in the right order · 14.3 · Make the HTTP contract executable · 14.3 · One error handler, one contract"
+    },
+    {
+      "slug": "nodejs-14-4-db-that",
+      "name": "14.4 Real-database tests: constraints, readiness, rollback isolation",
+      "level": "ADVANCED",
+      "description": "4 đề: 14.4 · What only a real database can tell you · 14.4 · Teach the repository the driver’s vocabulary · 14.4 · Wait for a real query, not for pg_isready · 14.4 · Isolate every test in a transaction that rolls back"
+    },
+    {
+      "slug": "nodejs-14-5-do-phu-flaky-ci",
+      "name": "14.5 Coverage vs mutation, flaky tests, CI gates",
+      "level": "ADVANCED",
+      "description": "4 đề: 14.5 · 100 % coverage, and the privilege escalation is still there · 14.5 · Flaky tests, retries, and what CI is for · 14.5 · What should block a merge? · 14.5 · Build a tiny mutation tester"
+    },
+    {
+      "slug": "nodejs-14-lab-notes-suite",
+      "name": "Lab 14 — Test suites for the code of chapters 12–13",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 14 · 1 — Write the test suite for the rate limiter of chapter 12 · Lab 14 · 2 — Pin down the retry loop of chapter 13 · Lab 14 · 3 — Review a test file before it is merged"
+    },
+    {
+      "slug": "nodejs-15-1-log-co-cau-truc",
+      "name": "15.1 Structured logs, buffering, redaction and levels",
+      "level": "ADVANCED",
+      "description": "5 đề: Three pillars, and what the 100,000-line benchmark really measured · worstLag(beats, interval): the heartbeat that caught the 371 ms freeze · redactUrl(url): the morgan :url override that keeps ?token= out of the access log · redact(obj, paths): pino-style redaction, including what *.password does NOT cover · createLogger(level, out): levels, lazy arguments and child loggers"
+    },
+    {
+      "slug": "nodejs-15-2-request-id",
+      "name": "15.2 Request id and AsyncLocalStorage",
+      "level": "ADVANCED",
+      "description": "5 đề: Correlation: what one id fixes, and what a global variable breaks · pickRequestId(inbound, gen): reuse the id you were given, at most 64 characters · requestId(gen): the middleware at position 1b of src/index.ts · auditGlobalId(events): count the lines a global variable gets wrong · createContext(): a hand-made AsyncLocalStorage (run, getStore, bind)"
+    },
+    {
+      "slug": "nodejs-15-3-chi-phi-va-tim-kiem",
+      "name": "15.3 Log cost, search, percentiles and sampling",
+      "level": "ADVANCED",
+      "description": "5 đề: What a log line costs, and what a percentile cannot see · logBill(bytesPerLine, rps, retentionDays, replicas): the multiplier nobody budgets for · slowRequests(lines, ms): “every request slower than 1000 ms” as a question, not a regex · routeStats(records): n, p50, p95 and max per URL — the log file as a database · sampleLogs(records, rate): keep every incident, 1% of the rest, whole requests only"
+    },
+    {
+      "slug": "nodejs-15-4-metrics-prometheus",
+      "name": "15.4 Metrics with prom-client: types, labels, histograms",
+      "level": "ADVANCED",
+      "description": "6 đề: Pick the instrument, and pick the labels you could write on paper · RED, pull, and who may read /metrics · labelsFor(req, res): the route template, never the raw URL · countSeries(requests, opts): why 300 URLs became thousands of series · createHistogram(edges): cumulative buckets, _sum and _count as /metrics prints them · globalQuantile(q, replicas): add the buckets of three containers, then interpolate like histogram_quantile"
+    },
+    {
+      "slug": "nodejs-15-5-opentelemetry-trace",
+      "name": "15.5 Tracing with OpenTelemetry: trees, shapes, traceparent",
+      "level": "ADVANCED",
+      "description": "5 đề: Spans, the three silent traps, and what sampling really saves · parseTraceparent(header): read the header that carries a trace between services · buildTree(spans): from the exporter’s flat list to the tree you can diagnose · findNPlusOne(spans, min): many short identical children — the shape is the diagnosis · selfTime(spans): find the gap with no child — time spent in your own code"
+    },
+    {
+      "slug": "nodejs-15-6-health-check-canh-bao",
+      "name": "15.6 Health checks and alerts",
+      "level": "ADVANCED",
+      "description": "5 đề: Liveness vs readiness, the cascade, and alerts people still trust · probeLoad(containers, probers, intervalSec, cacheSec): a readiness check is itself load · readyHandler(checks, ms): a readiness probe that fails cleanly when the database is stuck · makeCachedReady(ping, ttlMs, now): cache the readiness result, good or bad · alertFiring(samples, rule): a ratio, for a duration — and the outage where nothing errors"
+    },
+    {
+      "slug": "nodejs-15-lab-quan-sat",
+      "name": "Lab 15 — Observing the Notes API: access log, RED and alerts",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 15 · 1 — Walk the incident: /feed p95 from 120 ms to 900 ms at 14:05 · Lab 15 · 2 — accessLogger({ gen, now, out }): one structured line per request, id in, token out, probes skipped · Lab 15 · 3 — redReport(records, opts): Rate, Errors, Duration per route, and which alerts fire"
+    },
+    {
+      "slug": "nodejs-16-1-do-truoc-khi-doan",
+      "name": "16.1 Profile first: from 276 to 3,395 req/s",
+      "level": "ADVANCED",
+      "description": "5 đề: What the profile said, and what everyone guessed · The five-step loop, in order · topSelf(profile, n): read a .cpuprofile the way the lesson’s table does · makeListRoute(notes, renderNote, fields): do it once, serialise once, send less · compareRuns(baseline, candidate): did the change really move the number?"
+    },
+    {
+      "slug": "nodejs-16-2-nut-that-that-su",
+      "name": "16.2 Where the time really goes: the database and the pool",
+      "level": "ADVANCED",
+      "description": "5 đề: The database share, the pool curve, and a good plan that is not a fast query · littlesLaw({ concurrency, throughput, latencyMs }): give two, get the third · Where does the time sit? Four places, four different fixes · requestShares(samples, rps): time the parts, then compute the ceiling · queryTimed(pool, sql, params, now): time the wait and the work separately — and always release"
+    },
+    {
+      "slug": "nodejs-16-3-nen-va-duong-truyen",
+      "name": "16.3 Compression and keep-alive: trading CPU for bandwidth",
+      "level": "ADVANCED",
+      "description": "4 đề: The compression trade, who compresses, and the stream that stopped streaming · compressionTrade(bytes, compressedBytes, cpuMs, mbps): milliseconds on the wire vs milliseconds of CPU · chooseEncoding(req): the five-line compression policy as code · compareLevels(rows, budgetMs): which settings are never worth choosing, and which one fits the CPU budget"
+    },
+    {
+      "slug": "nodejs-16-4-cluster-mo-rong",
+      "name": "16.4 Cluster: what it multiplies and what it breaks",
+      "level": "ADVANCED",
+      "description": "5 đề: What cluster really multiplies · It worked in one process: what breaks in two, and the fix · memoryRateLimit(n, workers, limit): how a RAM rate limit becomes limit × N · clusterAdvice(idlePct, runs): the five-step test for “is cluster my answer?” · createLockStore(now) + runNightly(): one invoice run per night, however many workers"
+    },
+    {
+      "slug": "nodejs-16-5-ro-ri-bo-nho",
+      "name": "16.5 Memory leaks: the cache that never forgets",
+      "level": "ADVANCED",
+      "description": "5 đề: Plateau or leak, the warning not to silence, and the kill with no message · diagnoseCrash(stats): exit 134 or 137, heap or Buffers? · classifyRss(points): rises and plateaus, or rises with traffic? · createCache(max, { lru }): the one condition that fixes leak 1 — and FIFO vs real LRU · retainerPath(graph, target): walk from the GC roots to the leaking object"
+    },
+    {
+      "slug": "nodejs-16-6-toi-uu-vo-ich",
+      "name": "16.6 Optimisations that are not: Amdahl and when to stop",
+      "level": "ADVANCED",
+      "description": "5 đề: amdahl(sharePct, speedup): you can only save what the part costs · Where the real wins came from: put each change in its category · Exhibit A, and the three cases where micro-optimisation is right · optimisationLoop(startP95, targetP95, steps): keep what helped, revert what did not, stop at the finish line · triage(proposals): three questions before any optimisation"
+    },
+    {
+      "slug": "nodejs-16-lab-hieu-nang",
+      "name": "Lab 16 — Making GET /courses fast: plan from a profile, then cache safely",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 16 · 1 — GET /courses: 300 courses, computeRating per request, a 20 KB description nobody shows · Lab 16 · 2 — profileToPlan(profile, rps, proposals): from a .cpuprofile to a ranked plan with predicted req/s · Lab 16 · 3 — createTtlCache({ max, ttlMs, now }): a cap for memory, a TTL for freshness, one load per key"
+    },
+    {
+      "slug": "nodejs-17-1-anh-docker",
+      "name": "17.1 The image: what goes in, and what ships",
+      "level": "ADVANCED",
+      "description": "4 đề: What is really inside a 430 MB image · Pick the base image for the situation · lintDockerfile(text): find the four tutorial lines and three missing ones · finalStage(text): which stage ships, and do devDependencies reach the server?"
+    },
+    {
+      "slug": "nodejs-17-2-cache-tang",
+      "name": "17.2 Layer cache, build context and .dockerignore",
+      "level": "ADVANCED",
+      "description": "4 đề: The cache rule, the context, and four silent cache breakers · Five layers in the right order · contextFiles(files, dockerignore): what leaves your machine · rebuiltSteps(dockerfile, change): which steps re-run after a change?"
+    },
+    {
+      "slug": "nodejs-17-3-pid-1-tat-em",
+      "name": "17.3 PID 1, signals and graceful shutdown",
+      "level": "ADVANCED",
+      "description": "5 đề: Who is PID 1, and who hears SIGTERM · exitReason(code): read the number in the deploy log · pid1(dockerfile, scripts, opts): will your SIGTERM handler ever run? · installShutdown(deps, forceMs): the five-step handler, testable without Docker · graceOutcome(scenario): which in-flight requests survive the deploy?"
+    },
+    {
+      "slug": "nodejs-17-4-bi-mat-cau-hinh",
+      "name": "17.4 Secrets and configuration",
+      "level": "ADVANCED",
+      "description": "5 đề: Still there after you deleted it · Where does each value belong? · loadConfig(env, schema): die loudly at boot, with the missing names · findSecretLeaks(dockerfile): the three hiding places, and the builder exception · layerView(layers, secretRe): why rm in a later layer deletes nothing"
+    },
+    {
+      "slug": "nodejs-17-5-deploy-khong-gian-doan",
+      "name": "17.5 Zero-downtime deploys, measured",
+      "level": "ADVANCED",
+      "description": "5 đề: Where the hole is: the port, not the health of the container · Zero downtime, step by step — and the schema change a rolling deploy needs · Blue-green, rolling, canary, recreate · probeReport(probes): do not claim zero downtime, count it · checkDeployPlan(steps): review a deploy script against the five steps"
+    },
+    {
+      "slug": "nodejs-17-6-deploy-hong-quay-lui",
+      "name": "17.6 When the deploy lies: smoke tests and rollback",
+      "level": "ADVANCED",
+      "description": "6 đề: Healthy is a weaker claim than it sounds · The deploy failed: check in this order · routeVerdict(status): the five-second diagnosis · smokeTest(list, statusOf): fail the deploy on a 404 — and refuse routes that would cry wolf · runScript(steps, flags): what set -e and pipefail really change (checked with real bash) · rollbackSafety(migrations): is “start the previous image” safe?"
+    },
+    {
+      "slug": "nodejs-17-lab-trien-khai",
+      "name": "Lab 17 — Shipping the Notes API: review the Dockerfile, decide after the deploy",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 17 · 1 — One deploy, in the order the website runs it · Lab 17 · 2 — reviewDockerfile(text, scripts): one review that covers 17.1 to 17.4 · Lab 17 · 3 — afterDeploy(state): keep, roll back the image, or roll forward?"
+    },
+    {
+      "slug": "nodejs-18-1-tang-va-trach-nhiem",
+      "name": "18.1 Layers, and the files that skip one",
+      "level": "ADVANCED",
+      "description": "5 đề: What each layer is NOT allowed to know · Which layer owns this line? · layerReport(files): count whether the boundary holds · createNotesService(repo) + postNote(service): split a route that talks to the database · middlewareOrder(stack): order is architecture, not configuration"
+    },
+    {
+      "slug": "nodejs-18-2-to-chuc-ma-nguon",
+      "name": "18.2 Organising by feature, and what makes a file hard",
+      "level": "ADVANCED",
+      "description": "5 đề: By type or by feature, and what really makes a file hard · sizeBuckets(files, top): where by-type stopped paying · fileKind(source): count branches, not lines · reasonsToChange(commits, min): find the file that is three features sharing one house · isRealBoundary(edges, exportsOf, a, b): a boundary, or only a page break?"
+    },
+    {
+      "slug": "nodejs-18-3-ghep-noi-ranh-gioi",
+      "name": "18.3 Coupling: import graphs, cycles and shared tables",
+      "level": "ADVANCED",
+      "description": "5 đề: Healthy, painful, circular, hidden · hubs(edges, k): the most-imported modules, and whether they depend back · mutualPairs(edges): the 28 pairs that are one unit living in two files · hiddenCoupling(tableAccess, edges): the coupling the import graph cannot see · findCycles(edges): every import cycle, not just pairs"
+    },
+    {
+      "slug": "nodejs-18-4-monolith-hay-tach",
+      "name": "18.4 Monolith or services: deciding with numbers",
+      "level": "ADVANCED",
+      "description": "5 đề: What splitting buys, and the bill · boundaryCost(calls, inProcNs, httpMs, rps): a function call vs the same call over HTTP · Split, or not? The three signals that survive measurement · reconcile(state): find the “paid, but stock not reserved” orders · facadeViolations({ imports, queries, owners }): the lint rule of a modular monolith"
+    },
+    {
+      "slug": "nodejs-18-5-quyet-dinh-kho-dao-nguoc",
+      "name": "18.5 Decisions you cannot take back",
+      "level": "ADVANCED",
+      "description": "5 đề: One-way or two-way door? · checkDecisionComment(text): decision, cost, mitigation — and the missing “Revisit when” · What technical debt is — and what it is not · adrLint(markdown): four headings, and “what we now CANNOT do” · classifySql(sql): which statements of a migration are one-way doors?"
+    },
+    {
+      "slug": "nodejs-18-6-tong-ket-khoa-hoc",
+      "name": "18.6 Eighteen chapters, one system",
+      "level": "ADVANCED",
+      "description": "5 đề: One number per chapter, five ideas · What a real backend does before serving one request · After the course: what was left out, and the trap · bootCheck(logLines): which line is missing, and which chapter to reopen · productionChecklist(config): seven items before your first production deploy"
+    },
+    {
+      "slug": "nodejs-18-lab-kien-truc",
+      "name": "Lab 18 — Reviewing the Notes API architecture with numbers",
+      "level": "ADVANCED",
+      "description": "3 đề: Lab 18 · 1 — The architecture review meeting · Lab 18 · 2 — architectureReport(files): measure the Notes API like chapter 18 measured the website · Lab 18 · 3 — createBus + createNotesModule + createEmailSubscriber: break notes ⇄ email with an event"
+    }
+  ]
+}

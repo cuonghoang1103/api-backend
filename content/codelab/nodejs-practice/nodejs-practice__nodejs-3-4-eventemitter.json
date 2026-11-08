@@ -1,0 +1,875 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-3-4-eventemitter",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-3-4-eventemitter"
+  },
+  "exercises": [
+    {
+      "title": "3.4 · EventEmitter: predict the output",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "events"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the lesson’s NoteStore program and the four rules of an emitter. Each output was produced by running it with Node 22.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu về chương trình NoteStore của bài và bốn luật của emitter. Mọi output đều có được bằng cách chạy với Node 22.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Remember the lesson’s “three things worth noticing”.|||Nhớ “ba điều đáng để ý” của bài.",
+        "emit is just a for-loop over the listeners, called right now.|||emit chỉ là một vòng for qua các listener, gọi ngay lúc đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4 · EventEmitter: predict the output\n\nAnswer in the answer panel (no code needed).\n\n1. The lesson registers on('saved', log), on('saved', email), once('saved', …), then calls save('note-1') and save('note-2'). What is listenerCount('saved') at the end?Bài đăng ký on('saved', log), on('saved', email), once('saved', …), rồi gọi save('note-1') và save('note-2'). Cuối cùng listenerCount('saved') là bao nhiêu?\n2. console.log('before'); e.on('x', () => console.log('listener')); e.emit('x'); console.log('after'); prints…console.log('before'); e.on('x', () => console.log('listener')); e.emit('x'); console.log('after'); in ra…\n3. The first of two listeners throws. What happens when you call emit()?Listener đầu trong hai listener ném lỗi. Gọi emit() thì sao?\n4. new EventEmitter().emit('error', new Error('boom')) with no \"error\" listener…new EventEmitter().emit('error', new Error('boom')) khi không có listener \"error\"…\n5. You see MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]. The right fix is usually…Bạn thấy MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]. Cách sửa đúng thường là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4 · EventEmitter: predict the output — answer key\n\n1. The lesson registers on('saved', log), on('saved', email), once('saved', …), then calls save('note-1') and save('note-2'). What is listenerCount('saved') at the end?Bài đăng ký on('saved', log), on('saved', email), once('saved', …), rồi gọi save('note-1') và save('note-2'). Cuối cùng listenerCount('saved') là bao nhiêu?\n   Answer: a) 2 — the once listener removed itself after the first emit\n   once wraps your function and removes the wrapper the first time it fires: 3 → 2. The log shows “[once] only the first time” exactly once.VI: once bọc hàm của bạn và gỡ cái vỏ ngay lần đầu nó chạy: 3 → 2. Log cho thấy “[once] only the first time” đúng một lần.\n\n2. console.log('before'); e.on('x', () => console.log('listener')); e.emit('x'); console.log('after'); prints…console.log('before'); e.on('x', () => console.log('listener')); e.emit('x'); console.log('after'); in ra…\n   Answer: a) before, listener, after — emit is synchronous\n   emit() does not return until every listener has finished. A slow listener blocks the emitter — and the event loop. It is not a queue.VI: emit() không trả về cho tới khi mọi listener chạy xong. Listener chậm chặn emitter — và cả event loop. Nó không phải hàng đợi.\n\n3. The first of two listeners throws. What happens when you call emit()?Listener đầu trong hai listener ném lỗi. Gọi emit() thì sao?\n   Answer: b) The error propagates out of emit() to its caller; the second listener does not run\n   Listeners run inside emit(), so a throw unwinds through emit() into whoever called it — maybe a totally unrelated route that just saved a note.VI: Listener chạy bên trong emit(), nên một throw cuộn ngược qua emit() tới ai đã gọi nó — có khi là một route chẳng liên quan vừa lưu ghi chú.\n\n4. new EventEmitter().emit('error', new Error('boom')) with no \"error\" listener…new EventEmitter().emit('error', new Error('boom')) khi không có listener \"error\"…\n   Answer: c) throws that Error — unhandled, the process dies\n   \"error\" is the one special name. This is why an unhandled stream or socket error can kill your server: streams are emitters.VI: \"error\" là cái tên đặc biệt duy nhất. Đó là lý do lỗi stream hay socket không ai xử lý có thể giết server: stream là emitter.\n\n5. You see MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]. The right fix is usually…Bạn thấy MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]. Cách sửa đúng thường là…\n   Answer: c) Find where listeners are added without being removed, and use off() or once()\n   Eleven is Node guessing you forgot an off — usually inside a request handler, so every request adds one more and memory grows forever. Raising the limit hides the leak.VI: Mười một là Node đoán bạn quên off — thường trong request handler, nên mỗi request thêm một cái và bộ nhớ tăng mãi. Nâng giới hạn chỉ giấu vụ rò.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 2 — the once listener removed itself after the first emit</p><p>once wraps your function and removes the wrapper the first time it fires: 3 → 2. The log shows “[once] only the first time” exactly once.</p><p><i>VI: once bọc hàm của bạn và gỡ cái vỏ ngay lần đầu nó chạy: 3 → 2. Log cho thấy “[once] only the first time” đúng một lần.</i></p></li><li><p><b>a)</b> before, listener, after — emit is synchronous</p><p>emit() does not return until every listener has finished. A slow listener blocks the emitter — and the event loop. It is not a queue.</p><p><i>VI: emit() không trả về cho tới khi mọi listener chạy xong. Listener chậm chặn emitter — và cả event loop. Nó không phải hàng đợi.</i></p></li><li><p><b>b)</b> The error propagates out of emit() to its caller; the second listener does not run</p><p>Listeners run inside emit(), so a throw unwinds through emit() into whoever called it — maybe a totally unrelated route that just saved a note.</p><p><i>VI: Listener chạy bên trong emit(), nên một throw cuộn ngược qua emit() tới ai đã gọi nó — có khi là một route chẳng liên quan vừa lưu ghi chú.</i></p></li><li><p><b>c)</b> throws that Error — unhandled, the process dies</p><p>\"error\" is the one special name. This is why an unhandled stream or socket error can kill your server: streams are emitters.</p><p><i>VI: \"error\" là cái tên đặc biệt duy nhất. Đó là lý do lỗi stream hay socket không ai xử lý có thể giết server: stream là emitter.</i></p></li><li><p><b>c)</b> Find where listeners are added without being removed, and use off() or once()</p><p>Eleven is Node guessing you forgot an off — usually inside a request handler, so every request adds one more and memory grows forever. Raising the limit hides the leak.</p><p><i>VI: Mười một là Node đoán bạn quên off — thường trong request handler, nên mỗi request thêm một cái và bộ nhớ tăng mãi. Nâng giới hạn chỉ giấu vụ rò.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The lesson registers <code>on('saved', log)</code>, <code>on('saved', email)</code>, <code>once('saved', …)</code>, then calls <code>save('note-1')</code> and <code>save('note-2')</code>. What is <code>listenerCount('saved')</code> at the end?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài đăng ký <code>on('saved', log)</code>, <code>on('saved', email)</code>, <code>once('saved', …)</code>, rồi gọi <code>save('note-1')</code> và <code>save('note-2')</code>. Cuối cùng <code>listenerCount('saved')</code> là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2 — the once listener removed itself after the first emit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 — each emit removes the oldest listener"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0 — listeners are cleared after every emit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 — once only stops the listener from running again"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>once wraps your function and removes the wrapper the first time it fires: 3 → 2. The log shows “[once] only the first time” exactly once.</p><p><i>VI: once bọc hàm của bạn và gỡ cái vỏ ngay lần đầu nó chạy: 3 → 2. Log cho thấy “[once] only the first time” đúng một lần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><code>console.log('before'); e.on('x', () =&gt; console.log('listener')); e.emit('x'); console.log('after');</code> prints…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>console.log('before'); e.on('x', () =&gt; console.log('listener')); e.emit('x'); console.log('after');</code> in ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "before, listener, after — emit is synchronous"
+              },
+              {
+                "ma": "b",
+                "noiDung": "before, after, listener — emit queues the listener for the next tick"
+              },
+              {
+                "ma": "c",
+                "noiDung": "before, after — emit needs an await to run listeners"
+              },
+              {
+                "ma": "d",
+                "noiDung": "listener, before, after — listeners run when they are registered"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>emit() does not return until every listener has finished. A slow listener blocks the emitter — and the event loop. It is not a queue.</p><p><i>VI: emit() không trả về cho tới khi mọi listener chạy xong. Listener chậm chặn emitter — và cả event loop. Nó không phải hàng đợi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The first of two listeners throws. What happens when you call <code>emit()</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Listener đầu trong hai listener ném lỗi. Gọi <code>emit()</code> thì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The error is turned into an \"error\" event on the same emitter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The error propagates out of emit() to its caller; the second listener does not run"
+              },
+              {
+                "ma": "c",
+                "noiDung": "emit() returns false and the error is swallowed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Node catches it, logs it, and still runs the second listener"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Listeners run inside emit(), so a throw unwinds through emit() into whoever called it — maybe a totally unrelated route that just saved a note.</p><p><i>VI: Listener chạy bên trong emit(), nên một throw cuộn ngược qua emit() tới ai đã gọi nó — có khi là một route chẳng liên quan vừa lưu ghi chú.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p><code>new EventEmitter().emit('error', new Error('boom'))</code> with no \"error\" listener…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>new EventEmitter().emit('error', new Error('boom'))</code> khi không có listener \"error\"…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "prints a warning and continues"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is queued until someone adds an \"error\" listener"
+              },
+              {
+                "ma": "c",
+                "noiDung": "throws that Error — unhandled, the process dies"
+              },
+              {
+                "ma": "d",
+                "noiDung": "returns false, like any event nobody listens to"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>\"error\" is the one special name. This is why an unhandled stream or socket error can kill your server: streams are emitters.</p><p><i>VI: \"error\" là cái tên đặc biệt duy nhất. Đó là lý do lỗi stream hay socket không ai xử lý có thể giết server: stream là emitter.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>You see <code>MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]</code>. The right fix is usually…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn thấy <code>MaxListenersExceededWarning … 11 saved listeners added to [NoteStore]</code>. Cách sửa đúng thường là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Call setMaxListeners(100) so the warning goes away"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Create a new NoteStore for every request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Find where listeners are added without being removed, and use off() or once()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Switch to process.nextTick so the listeners run later"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Eleven is Node guessing you forgot an off — usually inside a request handler, so every request adds one more and memory grows forever. Raising the limit hides the leak.</p><p><i>VI: Mười một là Node đoán bạn quên off — thường trong request handler, nên mỗi request thêm một cái và bộ nhớ tăng mãi. Nâng giới hạn chỉ giấu vụ rò.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming emit() is asynchronous like a message queue.|||Tưởng emit() bất đồng bộ như hàng đợi tin nhắn."
+        },
+        {
+          "loi": "Silencing the max-listeners warning instead of finding the leak.|||Tắt cảnh báo max-listeners thay vì tìm chỗ rò."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "listener",
+          "vi": "hàm lắng nghe"
+        },
+        {
+          "en": "publish–subscribe",
+          "vi": "phát – đăng ký",
+          "giaiThich": "one side emits, any number of others react"
+        },
+        {
+          "en": "memory leak",
+          "vi": "rò bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "3.4 · Subscribe and unsubscribe without leaking",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "events",
+        "closures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson: <i>removal needs the SAME function reference — an inline arrow cannot be removed</i>. A request handler subscribes to the store’s <code>'saved'</code> event while it works and must clean up afterwards. Write <code>watchNotes(store, onSaved)</code>:</p><ul><li>subscribe to <code>'saved'</code> so every saved note is passed to <code>onSaved(note)</code>;</li><li>return a <code>stop()</code> function that removes <b>exactly that</b> listener (other listeners stay; calling <code>stop()</code> twice is harmless).</li></ul><p>A hidden test runs 20 “requests” (watch, then stop) and checks that <code>store.listenerCount('saved')</code> is back to where it started.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học: <i>gỡ listener cần ĐÚNG tham chiếu hàm đó — một arrow viết tại chỗ không gỡ được</i>. Một request handler đăng ký sự kiện <code>'saved'</code> của store trong lúc làm việc và phải dọn dẹp sau đó. Viết <code>watchNotes(store, onSaved)</code>:</p><ul><li>đăng ký <code>'saved'</code> sao cho mọi ghi chú được lưu đều được đưa vào <code>onSaved(note)</code>;</li><li>trả về hàm <code>stop()</code> gỡ <b>đúng</b> listener đó (listener khác giữ nguyên; gọi <code>stop()</code> hai lần không sao).</li></ul><p>Một kiểm ẩn chạy 20 “request” (watch rồi stop) và kiểm <code>store.listenerCount('saved')</code> trở về như lúc đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "store — an emitter with on/off/emit/listenerCount; onSaved — a function|||store — emitter có on/off/emit/listenerCount; onSaved — một hàm",
+      "outputSpec": "stop — a function|||stop — một hàm",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ got, listeners: store.listenerCount(\"saved\") })",
+          "output": "{\"got\":[\"note-1\"],\"listeners\":0}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Store the listener in a const before passing it to on().|||Cất listener vào một const trước khi đưa cho on().",
+        "stop() is a closure: it still sees that const after watchNotes returned.|||stop() là một closure: nó vẫn thấy const đó sau khi watchNotes đã trả về."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** subscribe onSaved to store's 'saved' event; return a stop() that removes it */\nfunction watchNotes(store, onSaved) {\n  // Write your solution here — this stop() can never remove anything\n  store.on('saved', (note) => onSaved(note));\n  return function stop() {\n    store.off('saved', (note) => onSaved(note));\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — one reference for on() and off()\nfunction watchNotes(store, onSaved) {\n  // keep ONE reference: the function you add is the function you remove later\n  const listener = (note) => onSaved(note);\n  store.on('saved', listener);\n  return function stop() {\n    store.off('saved', listener);\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>off() compares functions by identity (===). Two arrows with identical source are still two different objects. The pattern “subscribe returns its own unsubscribe” is the one React effects, RxJS and Socket.IO handlers all use for exactly this reason.</p>",
+      "solutionExplanationHtmlVi": "<p>off() so hàm theo danh tính (===). Hai arrow có mã giống hệt vẫn là hai đối tượng khác nhau. Mẫu “đăng ký trả về hàm huỷ của chính nó” là thứ React effect, RxJS và handler Socket.IO đều dùng vì đúng lý do này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Receives before stop, nothing after",
+              "vi": "Nhận trước khi stop, không nhận gì sau đó"
+            },
+            "goi": "({ got, listeners: store.listenerCount(\"saved\") })",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nconst store = __em({}); const got = []; const stop = watchNotes(store, (n) => got.push(n.name)); store.emit(\"saved\", { name: \"note-1\" }); stop(); store.emit(\"saved\", { name: \"note-2\" });",
+            "mongDoi": {
+              "got": [
+                "note-1"
+              ],
+              "listeners": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "stop() keeps the other listeners",
+              "vi": "stop() giữ listener khác"
+            },
+            "goi": "({ logs, listeners: store.listenerCount(\"saved\") })",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nconst store = __em({}); const logs = []; store.on(\"saved\", (n) => logs.push(\"log \" + n.name)); const stop = watchNotes(store, (n) => logs.push(\"watch \" + n.name)); stop(); store.emit(\"saved\", { name: \"a\" });",
+            "mongDoi": {
+              "logs": [
+                "log a"
+              ],
+              "listeners": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "20 requests leave 0 listeners",
+              "vi": "20 request không để lại listener nào"
+            },
+            "goi": "store.listenerCount(\"saved\")",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nconst store = __em({}); for (let i = 0; i < 20; i++) { const stop = watchNotes(store, () => {}); store.emit(\"saved\", { name: \"n\" + i }); stop(); }",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "({ got, listeners: store.listenerCount(\"saved\") })",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nconst store = __em({}); const got = []; const s1 = watchNotes(store, (n) => got.push(1)); const s2 = watchNotes(store, (n) => got.push(2)); s1(); s1(); store.emit(\"saved\", {});",
+            "mongDoi": {
+              "got": [
+                2
+              ],
+              "listeners": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "store.off(\"saved\", (n) => onSaved(n)) — a brand-new arrow, so nothing is removed and every request leaks one listener.|||store.off(\"saved\", (n) => onSaved(n)) — một arrow mới tinh, nên không gỡ được gì và mỗi request rò một listener."
+        },
+        {
+          "loi": "store.removeAllListeners(\"saved\") — also removes the listeners of everybody else.|||store.removeAllListeners(\"saved\") — gỡ luôn listener của mọi người khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reference",
+          "vi": "tham chiếu"
+        },
+        {
+          "en": "unsubscribe",
+          "vi": "huỷ đăng ký"
+        }
+      ]
+    },
+    {
+      "title": "3.4 · Build a MiniEmitter: on, emit, listenerCount",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "events",
+        "classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“It is the publish–subscribe pattern in its simplest possible form.” Prove it: write a <code>class MiniEmitter</code> with</p>\n<ul><li><code>on(name, fn)</code> — add a listener; returns <code>this</code> so calls can be chained;</li><li><code>emit(name, ...args)</code> — call every listener of <code>name</code> <b>synchronously, in registration order</b>, with the same arguments and with <code>this</code> = the emitter; return <code>true</code> if at least one listener was called, else <code>false</code>;</li><li><code>listenerCount(name)</code>.</li></ul><p>The tests subclass it like the lesson: <code>class NoteStore extends MiniEmitter { save(name) { this.emit('saved', { name }); } }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Listeners of different event names are independent.</li>\n  <li>Do not use setTimeout/Promise in emit — it is synchronous.</li>\n</ul>",
+      "problemHtmlVi": "<p>“Đó là mẫu publish–subscribe ở dạng đơn giản nhất.” Hãy chứng minh: viết <code>class MiniEmitter</code> có</p>\n<ul><li><code>on(name, fn)</code> — thêm listener; trả về <code>this</code> để gọi nối tiếp được;</li><li><code>emit(name, ...args)</code> — gọi mọi listener của <code>name</code> <b>đồng bộ, theo thứ tự đăng ký</b>, với cùng các đối số và <code>this</code> = emitter; trả <code>true</code> nếu có ít nhất một listener được gọi, ngược lại <code>false</code>;</li><li><code>listenerCount(name)</code>.</li></ul><p>Các kiểm kế thừa nó như bài: <code>class NoteStore extends MiniEmitter { save(name) { this.emit('saved', { name }); } }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Listener của các tên sự kiện khác nhau độc lập với nhau.</li>\n  <li>Không dùng setTimeout/Promise trong emit — nó đồng bộ.</li>\n</ul>",
+      "inputSpec": "event names (strings) and listener functions|||tên sự kiện (chuỗi) và hàm listener",
+      "outputSpec": "emit → boolean; on → the emitter|||emit → boolean; on → chính emitter",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "undefined",
+          "output": "[\"[log] saved: note-1\",\"[email] notify about: note-1\",\"listeners: 2\"]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One object (or Map) from event name to an array of functions.|||Một object (hoặc Map) từ tên sự kiện tới mảng hàm.",
+        "fn.apply(this, args) passes the arguments and sets this.|||fn.apply(this, args) truyền đối số và đặt this.",
+        "Loop over a copy (slice()) so a listener that adds another does not change this emit.|||Lặp trên một bản sao (slice()) để listener thêm listener khác không đổi lần emit này."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the publish–subscribe pattern in its simplest form */\nclass MiniEmitter {\n  constructor() {\n    this.listeners = {};\n  }\n  on(name, fn) {\n    // Write your solution here\n  }\n  emit(name, ...args) {\n    // Write your solution here\n    return false;\n  }\n  listenerCount(name) {\n    return 0;\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — a map of arrays and a synchronous loop\nclass MiniEmitter {\n  constructor() {\n    this.listeners = {};          // event name → array of functions, in registration order\n  }\n  on(name, fn) {\n    (this.listeners[name] = this.listeners[name] || []).push(fn);\n    return this;                  // allows store.on(…).on(…)\n  }\n  emit(name, ...args) {\n    const list = this.listeners[name] || [];\n    // synchronous: each listener runs NOW, in order, before emit returns\n    for (const fn of list.slice()) fn.apply(this, args);\n    return list.length > 0;       // true if at least one listener was called\n  }\n  listenerCount(name) {\n    return (this.listeners[name] || []).length;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The core of node:events really is this small: a map of arrays and a loop. The expected outputs are the lesson’s, produced with the real EventEmitter (listeners in order, emit returns false for an unknown name).</p>",
+      "solutionExplanationHtmlVi": "<p>Lõi của node:events thật sự nhỏ như vậy: một bảng các mảng và một vòng lặp. Output mong đợi là của bài, tạo bằng EventEmitter thật (listener theo thứ tự, emit trả false với tên không ai nghe).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s two listeners, in order",
+              "vi": "Hai listener của bài, đúng thứ tự"
+            },
+            "goi": "undefined",
+            "so": "console",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }\nconst store = new NoteStore(); store.on(\"saved\", (n) => console.log(\"[log] saved:\", n.name)); store.on(\"saved\", (n) => console.log(\"[email] notify about:\", n.name)); store.save(\"note-1\"); console.log(\"listeners:\", store.listenerCount(\"saved\"));",
+            "mongDoi": [
+              "[log] saved: note-1",
+              "[email] notify about: note-1",
+              "listeners: 2"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "emit is synchronous",
+              "vi": "emit đồng bộ"
+            },
+            "goi": "undefined",
+            "so": "console",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }\nconst e = new MiniEmitter(); console.log(\"before\"); e.on(\"x\", () => console.log(\"listener\")); e.emit(\"x\"); console.log(\"after\");",
+            "mongDoi": [
+              "before",
+              "listener",
+              "after"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Return values of emit and on",
+              "vi": "Giá trị trả về của emit và on"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const a = e.emit(\"nobody\"); e.on(\"x\", () => {}); return [a, e.emit(\"x\"), e.on(\"y\", () => {}) === e]; })()",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }",
+            "mongDoi": [
+              false,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; e.on(\"sum\", function (a, b, c) { got.push(a + b + c, this === e); }); e.emit(\"sum\", 1, 2, 3); return got; })()",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }",
+            "mongDoi": [
+              6,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; e.on(\"a\", () => got.push(\"a\")).on(\"b\", () => got.push(\"b\")); e.emit(\"b\"); e.emit(\"a\"); e.emit(\"b\"); return [got, e.listenerCount(\"a\"), e.listenerCount(\"zzz\")]; })()",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }",
+            "mongDoi": [
+              [
+                "b",
+                "a",
+                "b"
+              ],
+              1,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; e.on(\"z\", () => { got.push(\"z1\"); e.on(\"z\", () => got.push(\"added\")); }); e.emit(\"z\"); got.push(\"---\"); e.emit(\"z\"); return got; })()",
+            "chuanBi": "class NoteStore extends MiniEmitter { save(name) { this.emit(\"saved\", { name }); } }",
+            "mongDoi": [
+              "z1",
+              "---",
+              "z1",
+              "added"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running listeners with setTimeout “to be safe”: the lesson’s output order (before, listener, after) breaks.|||Chạy listener bằng setTimeout “cho chắc”: thứ tự output của bài (before, listener, after) hỏng."
+        },
+        {
+          "loi": "Returning nothing from on(), so store.on(a).on(b) throws.|||on() không trả gì, nên store.on(a).on(b) ném lỗi."
+        },
+        {
+          "loi": "emit returning true even when nobody listens.|||emit trả true kể cả khi không ai nghe."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chaining",
+          "vi": "gọi nối tiếp"
+        },
+        {
+          "en": "synchronous",
+          "vi": "đồng bộ"
+        }
+      ]
+    },
+    {
+      "title": "3.4 · Add once() and off() to the MiniEmitter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "events"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The starter is a working <code>MiniEmitter</code> (on, emit, listenerCount). Add:</p><ul><li><code>off(name, fn)</code> — remove one registration of <code>fn</code> (the most recent one if it was added twice); unknown functions are ignored; returns <code>this</code>;</li><li><code>once(name, fn)</code> — like on, but removed automatically the first time it fires; returns <code>this</code>. <code>off(name, fn)</code> with the <b>original</b> <code>fn</code> must also remove a pending once — Node does this by storing the original on the wrapper (<code>wrapper.listener = fn</code>).</li></ul><p>Node runs emit on a <b>snapshot</b> of the listener list: a listener removed during an emit is still called in that emit (checked on Node 22). Keep that behaviour.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Code khởi đầu là một <code>MiniEmitter</code> chạy được (on, emit, listenerCount). Thêm:</p><ul><li><code>off(name, fn)</code> — gỡ một lần đăng ký của <code>fn</code> (lần gần nhất nếu nó được thêm hai lần); hàm lạ thì bỏ qua; trả về <code>this</code>;</li><li><code>once(name, fn)</code> — như on, nhưng tự gỡ ngay lần đầu chạy; trả về <code>this</code>. <code>off(name, fn)</code> với <code>fn</code> <b>gốc</b> cũng phải gỡ được một once chưa chạy — Node làm vậy bằng cách cất hàm gốc trên vỏ bọc (<code>wrapper.listener = fn</code>).</li></ul><p>Node chạy emit trên một <b>bản chụp</b> danh sách listener: listener bị gỡ giữa lúc emit vẫn được gọi trong lần emit đó (đã kiểm trên Node 22). Giữ hành vi đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "event names and listener functions|||tên sự kiện và hàm listener",
+      "outputSpec": "the emitter (for chaining)|||chính emitter (để gọi nối tiếp)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const e = new MiniEmitter(); const got = []; e.on(\"saved\", () => got.push(\"log\")); e.once(\"saved\", () => got.push(\"once\")); e.emit(\"saved\"); e.emit(\"saved\"); return [got, e.listenerCount(\"saved\")]; })()",
+          "output": "[[\"log\",\"once\",\"log\"],1]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "once = on(wrapper) where wrapper first removes itself, then calls fn.|||once = on(wrapper) trong đó wrapper tự gỡ mình trước, rồi mới gọi fn.",
+        "In off, a list entry matches if it IS fn or its .listener is fn.|||Trong off, một phần tử khớp nếu nó LÀ fn hoặc .listener của nó là fn.",
+        "Search from the end and splice once — that removes the most recent registration only.|||Tìm từ cuối và splice một lần — chỉ gỡ lần đăng ký gần nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** on/emit work — add once() and off() */\nclass MiniEmitter {\n  constructor() { this.listeners = {}; }\n  on(name, fn) { (this.listeners[name] = this.listeners[name] || []).push(fn); return this; }\n  off(name, fn) {\n    // Write your solution here\n    return this;\n  }\n  once(name, fn) {\n    // Write your solution here\n    return this.on(name, fn);\n  }\n  emit(name, ...args) {\n    const list = this.listeners[name] || [];\n    for (const fn of list.slice()) fn.apply(this, args);\n    return list.length > 0;\n  }\n  listenerCount(name) { return (this.listeners[name] || []).length; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — once is a self-removing wrapper that remembers the original\nclass MiniEmitter {\n  constructor() { this.listeners = {}; }\n  on(name, fn) { (this.listeners[name] = this.listeners[name] || []).push(fn); return this; }\n  off(name, fn) {\n    const list = this.listeners[name] || [];\n    // remove the LAST registration of fn (or of a once-wrapper around fn), like node:events\n    for (let i = list.length - 1; i >= 0; i--) {\n      if (list[i] === fn || list[i].listener === fn) { list.splice(i, 1); break; }\n    }\n    return this;\n  }\n  once(name, fn) {\n    const emitter = this;\n    function wrapper(...args) {\n      emitter.off(name, wrapper);        // remove first, so a throw in fn still leaves it removed\n      return fn.apply(this, args);\n    }\n    wrapper.listener = fn;               // so off(name, fn) can find the wrapper\n    return this.on(name, wrapper);\n  }\n  emit(name, ...args) {\n    const list = this.listeners[name] || [];\n    for (const fn of list.slice()) fn.apply(this, args);   // a snapshot: removals during emit do not skip anyone\n    return list.length > 0;\n  }\n  listenerCount(name) { return (this.listeners[name] || []).length; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each expected value comes from replaying the same calls on Node’s EventEmitter: off removes the most recent copy, off(original) removes a once, removal during emit does not skip a listener. This is the machinery behind the lesson’s count dropping from 3 to 2.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi giá trị mong đợi có được bằng cách chạy lại cùng các lời gọi trên EventEmitter của Node: off gỡ bản gần nhất, off(gốc) gỡ được once, gỡ giữa lúc emit không bỏ sót listener. Đây là cơ chế đằng sau con số giảm từ 3 xuống 2 trong bài.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "once fires once: count 2 → 1",
+              "vi": "once chạy một lần: đếm 2 → 1"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; e.on(\"saved\", () => got.push(\"log\")); e.once(\"saved\", () => got.push(\"once\")); e.emit(\"saved\"); e.emit(\"saved\"); return [got, e.listenerCount(\"saved\")]; })()",
+            "mongDoi": [
+              [
+                "log",
+                "once",
+                "log"
+              ],
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "off with the same reference",
+              "vi": "off với cùng tham chiếu"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; const f = () => got.push(\"f\"); e.on(\"x\", f); e.off(\"x\", f); e.emit(\"x\"); return [got, e.listenerCount(\"x\")]; })()",
+            "mongDoi": [
+              [],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "off(original) removes a pending once",
+              "vi": "off(gốc) gỡ được once chưa chạy"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const f = () => {}; e.once(\"x\", f); e.off(\"x\", f); return [e.listenerCount(\"x\"), e.emit(\"x\")]; })()",
+            "mongDoi": [
+              0,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; const f = (v) => got.push(v); e.on(\"x\", f); e.on(\"x\", () => got.push(\"mid\")); e.on(\"x\", f); e.off(\"x\", f); e.emit(\"x\", 1); return got; })()",
+            "mongDoi": [
+              1,
+              "mid"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); const got = []; const b = () => got.push(\"b\"); e.on(\"y\", () => { got.push(\"a removes b\"); e.off(\"y\", b); }); e.on(\"y\", b); e.emit(\"y\"); got.push(\"---\"); e.emit(\"y\"); return got; })()",
+            "mongDoi": [
+              "a removes b",
+              "b",
+              "---",
+              "a removes b"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); let n = 0; e.once(\"boom\", () => { n++; throw new Error(\"x\"); }); try { e.emit(\"boom\"); } catch (err) {} try { e.emit(\"boom\"); } catch (err) {} return [n, e.listenerCount(\"boom\")]; })()",
+            "mongDoi": [
+              1,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(() => { const e = new MiniEmitter(); return [e.off(\"none\", () => {}) === e, e.once(\"a\", () => {}) === e, e.listenerCount(\"a\")]; })()",
+            "mongDoi": [
+              true,
+              true,
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "filter() in off: removes every copy of fn, not one.|||filter() trong off: gỡ mọi bản của fn, không phải một."
+        },
+        {
+          "loi": "once that calls fn and only then removes itself: if fn throws, the listener stays forever.|||once gọi fn rồi mới tự gỡ: nếu fn ném lỗi, listener ở lại mãi."
+        },
+        {
+          "loi": "off(name, fn) cannot find a once listener because the list holds the wrapper.|||off(name, fn) không tìm thấy listener once vì danh sách chứa vỏ bọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wrapper",
+          "vi": "hàm bọc"
+        },
+        {
+          "en": "snapshot",
+          "vi": "bản chụp"
+        }
+      ]
+    },
+    {
+      "title": "3.4 · The error event and the 11-listener warning",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "events",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two rules make <code>node:events</code> more than a map of arrays. Add both to the starter’s <code>SafeEmitter</code>:</p>\n<ol><li><b>The 'error' event is special.</b> <code>emit('error', err)</code> with no 'error' listener <b>throws</b> <code>err</code> (if it is not an Error, throw <code>new Error('Unhandled error. (' + JSON.stringify(value) + ')')</code>). With a listener it is an ordinary event.</li>\n<li><b>Eleven is a warning, not a limit.</b> When adding a listener makes the count of one event go <b>above</b> <code>maxListeners</code> (default 10; <code>setMaxListeners(n)</code> changes it, 0 = no limit), push this exact text to <code>this.warnings</code> — <b>once per event name</b> — and still add the listener:</li></ol>\n<pre>MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 saved listeners added to [NoteStore]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit</pre><p>The class name in brackets is <code>this.constructor.name</code>. That text is what Node 22 prints for 11 listeners on a NoteStore.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai luật khiến <code>node:events</code> hơn một bảng mảng. Thêm cả hai vào <code>SafeEmitter</code> của code khởi đầu:</p>\n<ol><li><b>Sự kiện 'error' đặc biệt.</b> <code>emit('error', err)</code> khi không có listener 'error' thì <b>ném</b> <code>err</code> (nếu nó không phải Error, ném <code>new Error('Unhandled error. (' + JSON.stringify(value) + ')')</code>). Có listener thì nó là sự kiện bình thường.</li>\n<li><b>Mười một là cảnh báo, không phải giới hạn.</b> Khi thêm listener làm số listener của một sự kiện vượt <b>quá</b> <code>maxListeners</code> (mặc định 10; <code>setMaxListeners(n)</code> đổi được, 0 = không giới hạn), đẩy đúng chuỗi này vào <code>this.warnings</code> — <b>mỗi tên sự kiện một lần</b> — và vẫn thêm listener:</li></ol>\n<pre>MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 saved listeners added to [NoteStore]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit</pre><p>Tên lớp trong ngoặc là <code>this.constructor.name</code>. Chuỗi đó là thứ Node 22 in ra cho 11 listener trên một NoteStore.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "calls to on / emit / setMaxListeners|||các lời gọi on / emit / setMaxListeners",
+      "outputSpec": "throws for unhandled errors; this.warnings collects the warnings|||ném với lỗi không ai xử lý; this.warnings gom các cảnh báo",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const s = new NoteStore(); for (let i = 0; i < 12; i++) s.on(\"saved\", () => {}); return [s.listenerCount(\"saved\"), s.warnings]; })()",
+          "output": "[12,[\"MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 saved listeners added to [NoteStore]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit\"]]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The error rule is one if at the top of emit: name === \"error\" and no listeners.|||Luật error là một câu if ở đầu emit: name === \"error\" và không có listener.",
+        "The warning is checked in on(), after push, with count > max — not >=.|||Cảnh báo kiểm trong on(), sau push, với count > max — không phải >=.",
+        "Keep a this.warned[name] flag so the 12th, 13th… listener do not warn again.|||Giữ cờ this.warned[name] để listener thứ 12, 13… không cảnh báo nữa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** on/emit work — add the 'error' rule and the max-listeners warning */\nclass SafeEmitter {\n  constructor() {\n    this.listeners = {};\n    this.maxListeners = 10;\n    this.warnings = [];\n  }\n  setMaxListeners(n) { this.maxListeners = n; return this; }\n  on(name, fn) {\n    (this.listeners[name] = this.listeners[name] || []).push(fn);\n    // Write your solution here (the warning)\n    return this;\n  }\n  emit(name, ...args) {\n    const list = this.listeners[name] || [];\n    // Write your solution here (the 'error' rule)\n    for (const fn of list.slice()) fn.apply(this, args);\n    return list.length > 0;\n  }\n  listenerCount(name) { return (this.listeners[name] || []).length; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — the two rules that make node:events special\nclass SafeEmitter {\n  constructor() {\n    this.listeners = {};\n    this.maxListeners = 10;\n    this.warned = {};             // one warning per event name, like Node\n    this.warnings = [];\n  }\n  setMaxListeners(n) { this.maxListeners = n; return this; }\n  on(name, fn) {\n    const list = (this.listeners[name] = this.listeners[name] || []);\n    list.push(fn);\n    // Node warns once, when the count first goes ABOVE the limit (the 11th listener by default)\n    if (this.maxListeners > 0 && list.length > this.maxListeners && !this.warned[name]) {\n      this.warned[name] = true;\n      this.warnings.push(`MaxListenersExceededWarning: Possible EventEmitter memory leak detected. ${list.length} ${name} listeners added to [${this.constructor.name}]. MaxListeners is ${this.maxListeners}. Use emitter.setMaxListeners() to increase limit`);\n    }\n    return this;\n  }\n  emit(name, ...args) {\n    const list = this.listeners[name] || [];\n    // 'error' with nobody listening is not ignored: it is thrown\n    if (name === 'error' && list.length === 0) {\n      throw args[0] instanceof Error ? args[0] : new Error(`Unhandled error. (${JSON.stringify(args[0])})`);\n    }\n    for (const fn of list.slice()) fn.apply(this, args);\n    return list.length > 0;\n  }\n  listenerCount(name) { return (this.listeners[name] || []).length; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both behaviours were measured on Node 22: 12 listeners give exactly one warning (“11 saved listeners…”), <code>setMaxListeners(2)</code> warns at the 3rd listener, separately for each event name, and an unhandled 'error' is thrown. Throwing is deliberate — an error nobody handles must not vanish; that is why every long-lived stream or socket needs an 'error' listener.</p>",
+      "solutionExplanationHtmlVi": "<p>Cả hai hành vi đã đo trên Node 22: 12 listener cho đúng một cảnh báo (“11 saved listeners…”), <code>setMaxListeners(2)</code> cảnh báo ở listener thứ 3, riêng cho từng tên sự kiện, và 'error' không ai xử lý thì bị ném. Ném là có chủ ý — lỗi không ai xử lý không được biến mất; vì thế mọi stream hay socket sống lâu đều cần một listener 'error'.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "12 listeners: added, one warning",
+              "vi": "12 listener: vẫn thêm, một cảnh báo"
+            },
+            "goi": "(() => { const s = new NoteStore(); for (let i = 0; i < 12; i++) s.on(\"saved\", () => {}); return [s.listenerCount(\"saved\"), s.warnings]; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": [
+              12,
+              [
+                "MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 saved listeners added to [NoteStore]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Unhandled \"error\" is thrown",
+              "vi": "\"error\" không ai xử lý bị ném"
+            },
+            "goi": "new SafeEmitter().emit(\"error\", new Error(\"boom\"))",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^boom$"
+            }
+          },
+          {
+            "moTa": {
+              "en": "With a listener it is a normal event",
+              "vi": "Có listener thì là sự kiện bình thường"
+            },
+            "goi": "(() => { const e = new SafeEmitter(); const got = []; e.on(\"error\", (err) => got.push(\"handled \" + err.message)); return [e.emit(\"error\", new Error(\"boom\")), got]; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": [
+              true,
+              [
+                "handled boom"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const s = new NoteStore(); s.setMaxListeners(2); for (let i = 0; i < 3; i++) { s.on(\"a\", () => {}); s.on(\"b\", () => {}); } return s.warnings; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": [
+              "MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 3 a listeners added to [NoteStore]. MaxListeners is 2. Use emitter.setMaxListeners() to increase limit",
+              "MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 3 b listeners added to [NoteStore]. MaxListeners is 2. Use emitter.setMaxListeners() to increase limit"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const s = new NoteStore(); for (let i = 0; i < 10; i++) s.on(\"x\", () => {}); return s.warnings.length; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const s = new SafeEmitter(); s.setMaxListeners(0); for (let i = 0; i < 50; i++) s.on(\"x\", () => {}); return [s.warnings.length, s.listenerCount(\"x\")]; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": [
+              0,
+              50
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "new SafeEmitter().emit(\"error\", \"plain string\")",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Unhandled error"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "(() => { const e = new SafeEmitter(); return [e.emit(\"nothing\"), e.emit(\"other\", 1)]; })()",
+            "chuanBi": "class NoteStore extends SafeEmitter {}",
+            "mongDoi": [
+              false,
+              false
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Refusing to add the 11th listener: Node only warns, the listener is still added.|||Từ chối thêm listener thứ 11: Node chỉ cảnh báo, listener vẫn được thêm."
+        },
+        {
+          "loi": "Warning at >= 10 (the 10th listener) instead of > 10.|||Cảnh báo ở >= 10 (listener thứ 10) thay vì > 10."
+        },
+        {
+          "loi": "Returning false for emit(\"error\") with no listener — the error disappears, exactly what the rule exists to prevent.|||Trả false cho emit(\"error\") khi không có listener — lỗi biến mất, đúng điều luật này sinh ra để ngăn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unhandled error",
+          "vi": "lỗi không được xử lý"
+        },
+        {
+          "en": "MaxListenersExceededWarning",
+          "vi": "cảnh báo vượt số listener tối đa"
+        }
+      ]
+    }
+  ]
+}

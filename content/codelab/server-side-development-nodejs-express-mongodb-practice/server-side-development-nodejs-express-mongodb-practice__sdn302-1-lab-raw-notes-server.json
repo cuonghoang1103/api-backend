@@ -1,0 +1,657 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-1-lab-raw-notes-server",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-1-2-http-server"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1 · warm-up — what the lab server does on one thread",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "event loop",
+        "http"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Before coding the lab: reason about the server you are going to build (Node 22, http module, fs.promises).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi viết lab: suy luận về server bạn sắp dựng (Node 22, module http, fs.promises).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start-up vs per request.|||Lúc khởi động vs mỗi request.",
+        "Waiting is not working.|||Chờ không phải là làm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 1 · warm-up — what the lab server does on one thread\n\nAnswer in the answer panel (no code needed).\n\n1. The server must load data/notes.json before answering. Where should await fs.promises.readFile happen?Server phải nạp data/notes.json trước khi trả lời. await fs.promises.readFile nên nằm ở đâu?\n2. Two POST requests arrive at the same time. The first is still receiving its body chunks. What happens to the second?Hai request POST đến cùng lúc. Cái đầu vẫn đang nhận các mẩu thân. Cái thứ hai ra sao?\n3. Which answers must the lab server write BY HAND because there is no Express? (choose all)Câu trả lời nào server lab phải tự viết TAY vì không có Express? (chọn hết)\n4. DELETE /api/notes (the list) — the path exists, the method does not. Which status?DELETE /api/notes (danh sách) — đường có, phương thức thì không. Mã nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 1 · warm-up — what the lab server does on one thread — answer key\n\n1. The server must load data/notes.json before answering. Where should await fs.promises.readFile happen?Server phải nạp data/notes.json trước khi trả lời. await fs.promises.readFile nên nằm ở đâu?\n   Answer: a) Once, in an async start-up function, before the server starts listening\n   Load once at start-up (non-blocking), then serve from memory; writes go back to the file asynchronously.VI: Nạp một lần lúc khởi động (không chặn), rồi phục vụ từ bộ nhớ; ghi lại tệp bất đồng bộ.\n\n2. Two POST requests arrive at the same time. The first is still receiving its body chunks. What happens to the second?Hai request POST đến cùng lúc. Cái đầu vẫn đang nhận các mẩu thân. Cái thứ hai ra sao?\n   Answer: c) It is served too: chunks of both requests are handled as they arrive, interleaved on the same thread\n   Receiving a body is I/O: while waiting for chunks the thread handles other events.VI: Nhận thân là I/O: trong lúc chờ mẩu, luồng xử lý các sự kiện khác.\n\n3. Which answers must the lab server write BY HAND because there is no Express? (choose all)Câu trả lời nào server lab phải tự viết TAY vì không có Express? (chọn hết)\n   Answer: a) Parsing /api/notes/2 into an id + b) Collecting and parsing the JSON body + c) The Content-Type: application/json header\n   The http module handles connections and transport; routing, parsing and headers are yours.VI: Module http lo kết nối và truyền tải; định tuyến, đọc thân và header là việc của bạn.\n\n4. DELETE /api/notes (the list) — the path exists, the method does not. Which status?DELETE /api/notes (danh sách) — đường có, phương thức thì không. Mã nào?\n   Answer: c) 405 with an Allow header listing the methods that exist\n   405 tells the client the resource exists and what it may do with it.VI: 405 cho client biết tài nguyên có tồn tại và được làm gì với nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Once, in an async start-up function, before the server starts listening</p><p>Load once at start-up (non-blocking), then serve from memory; writes go back to the file asynchronously.</p><p><i>VI: Nạp một lần lúc khởi động (không chặn), rồi phục vụ từ bộ nhớ; ghi lại tệp bất đồng bộ.</i></p></li><li><p><b>c)</b> It is served too: chunks of both requests are handled as they arrive, interleaved on the same thread</p><p>Receiving a body is I/O: while waiting for chunks the thread handles other events.</p><p><i>VI: Nhận thân là I/O: trong lúc chờ mẩu, luồng xử lý các sự kiện khác.</i></p></li><li><p><b>a)</b> Parsing <code>/api/notes/2</code> into an id + <b>b)</b> Collecting and parsing the JSON body + <b>c)</b> The <code>Content-Type: application/json</code> header</p><p>The http module handles connections and transport; routing, parsing and headers are yours.</p><p><i>VI: Module http lo kết nối và truyền tải; định tuyến, đọc thân và header là việc của bạn.</i></p></li><li><p><b>c)</b> 405 with an <code>Allow</code> header listing the methods that exist</p><p>405 tells the client the resource exists and what it may do with it.</p><p><i>VI: 405 cho client biết tài nguyên có tồn tại và được làm gì với nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "w1",
+            "de": "<p>The server must load <code>data/notes.json</code> before answering. Where should <code>await fs.promises.readFile</code> happen?</p><p style=\"opacity:.75;font-size:.92em\"><i>Server phải nạp <code>data/notes.json</code> trước khi trả lời. <code>await fs.promises.readFile</code> nên nằm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Once, in an async start-up function, before the server starts listening"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After listen, in a setTimeout of 1 second"
+              },
+              {
+                "ma": "c",
+                "noiDung": "With readFileSync at the top of every request, to be safe"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inside every request handler, before answering"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Load once at start-up (non-blocking), then serve from memory; writes go back to the file asynchronously.</p><p><i>VI: Nạp một lần lúc khởi động (không chặn), rồi phục vụ từ bộ nhớ; ghi lại tệp bất đồng bộ.</i></p>"
+          },
+          {
+            "ma": "w2",
+            "de": "<p>Two POST requests arrive at the same time. The first is still receiving its body chunks. What happens to the second?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai request POST đến cùng lúc. Cái đầu vẫn đang nhận các mẩu thân. Cái thứ hai ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Node rejects it with 503"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is queued by the operating system for 30 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is served too: chunks of both requests are handled as they arrive, interleaved on the same thread"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It waits until the first request has completely finished"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Receiving a body is I/O: while waiting for chunks the thread handles other events.</p><p><i>VI: Nhận thân là I/O: trong lúc chờ mẩu, luồng xử lý các sự kiện khác.</i></p>"
+          },
+          {
+            "ma": "w3",
+            "de": "<p>Which answers must the lab server write BY HAND because there is no Express? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu trả lời nào server lab phải tự viết TAY vì không có Express? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Parsing <code>/api/notes/2</code> into an id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Collecting and parsing the JSON body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The <code>Content-Type: application/json</code> header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Sending the bytes over the network"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Accepting TCP connections"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The http module handles connections and transport; routing, parsing and headers are yours.</p><p><i>VI: Module http lo kết nối và truyền tải; định tuyến, đọc thân và header là việc của bạn.</i></p>"
+          },
+          {
+            "ma": "w4",
+            "de": "<p><code>DELETE /api/notes</code> (the list) — the path exists, the method does not. Which status?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>DELETE /api/notes</code> (danh sách) — đường có, phương thức thì không. Mã nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "400 because the request is wrong"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 with an empty list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "405 with an <code>Allow</code> header listing the methods that exist"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404 because there is no DELETE route"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>405 tells the client the resource exists and what it may do with it.</p><p><i>VI: 405 cho client biết tài nguyên có tồn tại và được làm gì với nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reading the file in every request.|||Đọc tệp ở mỗi request."
+        },
+        {
+          "loi": "404 for a wrong method.|||404 cho sai phương thức."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "start-up",
+          "vi": "khởi động"
+        },
+        {
+          "en": "interleaved",
+          "vi": "xen kẽ"
+        }
+      ]
+    },
+    {
+      "title": "Lab 1 — Notes API with Node's http module only",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "http module",
+        "fs.promises",
+        "routing by hand"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<h1>Lab 1 — Notes API without a framework</h1>\n<p class=\"bi-phu\">Node.js 22 · http · fs.promises · 75 minutes · 10 marks</p>\n<h2>1. Overview</h2>\n<p>Write <code>async function createServer()</code> in <code>answer.js</code>: it loads the notes from <code>data/notes.json</code>, then returns an <code>http</code> server (do not call <code>listen</code>). The grader sends requests with <code>server.inject({ method, url, headers, body })</code>. Every answer is JSON with <code>Content-Type: application/json</code>.</p>\n<h3>Main features</h3>\n<ul>\n  <li>List, filter, read, create and delete notes</li>\n  <li>Notes persist in a JSON file</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Only <code>require('http')</code>, <code>require('fs')</code> (promises API) and <code>require('path')</code> — no Express.</li>\n  <li>No <code>readFileSync</code> / <code>writeFileSync</code>.</li>\n  <li>A missing <code>data/notes.json</code> means \"no notes yet\" (start with <code>[]</code>); any other read error must make <code>createServer()</code> reject.</li>\n  <li>Export: <code>module.exports = { createServer };</code></li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answer.js          ← your code\ndata/notes.json    ← the notes (array)\nlib/core.js, lib/http.js  ← provided</pre>\n<h2>3. Data model</h2>\n<p><b>Note</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>Number</td><td>unique, next id = biggest + 1</td></tr><tr><td><code>title</code></td><td>String</td><td>1–100 characters after trim</td></tr><tr><td><code>done</code></td><td>Boolean</td><td>default false</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>[\n  {\n    \"id\": 1,\n    \"title\": \"Read lesson 1.1\",\n    \"done\": true\n  },\n  {\n    \"id\": 2,\n    \"title\": \"Build the raw server\",\n    \"done\": false\n  },\n  {\n    \"id\": 3,\n    \"title\": \"Compare with Express\",\n    \"done\": false\n  }\n]</pre>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. List notes (+ ?done filter) <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>GET /api/notes</code> → 200 + all notes.</li>\n  <li><code>?done=true</code> / <code>?done=false</code> filters; any other value → 400 <code>{ \"error\": \"done must be true or false\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Read one note <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>GET /api/notes/:id</code> → 200 + the note.</li>\n  <li>id not a positive integer → 400 <code>{ \"error\": \"Invalid id\" }</code>; unknown → 404 <code>{ \"error\": \"Note not found\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Create a note (read the body, persist) <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>POST /api/notes</code>, Content-Type must start with <code>application/json</code> → else 415 <code>{ \"error\": \"Content-Type must be application/json\" }</code>.</li>\n  <li>Invalid JSON → 400 <code>{ \"error\": \"Invalid JSON\" }</code>; title missing / not 1–100 characters → 400 <code>{ \"error\": \"title must be 1-100 characters\" }</code>.</li>\n  <li>201 + <code>{ id, title, done: false }</code> + header <code>Location: /api/notes/&lt;id&gt;</code>; then the whole array is written to <code>data/notes.json</code> with <code>fs.promises.writeFile</code> (2-space JSON).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Delete a note <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>DELETE /api/notes/:id</code> → 204 (empty body) and the file is rewritten; 400 / 404 as in feature 2.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. 404 / 405 and JSON everywhere <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Other methods on <code>/api/notes</code> → 405 + <code>Allow: GET, POST</code>; on <code>/api/notes/:id</code> → 405 + <code>Allow: GET, DELETE</code>; body <code>{ \"error\": \"Method not allowed\" }</code>.</li>\n  <li>Any other path → 404 <code>{ \"error\": \"Not found\" }</code>.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>List notes (+ ?done filter)</td><td>2</td></tr><tr><td>2</td><td>Read one note</td><td>2</td></tr><tr><td>3</td><td>Create a note (read the body, persist)</td><td>3</td></tr><tr><td>4</td><td>Delete a note</td><td>1.5</td></tr><tr><td>5</td><td>404 / 405 and JSON everywhere</td><td>1.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>readFileSync / writeFileSync anywhere: −1.</li>\n  <li>A request that never gets an answer (missing <code>res.end</code>) loses the whole feature.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Submit <code>answer.js</code>. The grader seeds <code>data/notes.json</code> itself.</p>",
+      "problemHtmlVi": "<h1>Lab 1 — API Ghi chú không framework</h1>\n<p class=\"bi-phu\">Node.js 22 · http · fs.promises · 75 phút · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Viết <code>async function createServer()</code> trong <code>answer.js</code>: nó nạp ghi chú từ <code>data/notes.json</code>, rồi trả về một server <code>http</code> (không gọi <code>listen</code>). Máy chấm gửi request bằng <code>server.inject({ method, url, headers, body })</code>. Mọi câu trả lời là JSON với <code>Content-Type: application/json</code>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Liệt kê, lọc, đọc, tạo và xoá ghi chú</li>\n  <li>Ghi chú được lưu bền trong một tệp JSON</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ dùng <code>require('http')</code>, <code>require('fs')</code> (API promises) và <code>require('path')</code> — không Express.</li>\n  <li>Không <code>readFileSync</code> / <code>writeFileSync</code>.</li>\n  <li><code>data/notes.json</code> không có nghĩa là \"chưa có ghi chú\" (bắt đầu với <code>[]</code>); lỗi đọc khác thì <code>createServer()</code> phải reject.</li>\n  <li>Export: <code>module.exports = { createServer };</code></li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answer.js          ← your code\ndata/notes.json    ← the notes (array)\nlib/core.js, lib/http.js  ← provided</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Note</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>Number</td><td>duy nhất, id kế = lớn nhất + 1</td></tr><tr><td><code>title</code></td><td>String</td><td>1–100 ký tự sau trim</td></tr><tr><td><code>done</code></td><td>Boolean</td><td>mặc định false</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>[\n  {\n    \"id\": 1,\n    \"title\": \"Read lesson 1.1\",\n    \"done\": true\n  },\n  {\n    \"id\": 2,\n    \"title\": \"Build the raw server\",\n    \"done\": false\n  },\n  {\n    \"id\": 3,\n    \"title\": \"Compare with Express\",\n    \"done\": false\n  }\n]</pre>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Liệt kê ghi chú (+ lọc ?done) <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>GET /api/notes</code> → 200 + mọi ghi chú.</li>\n  <li><code>?done=true</code> / <code>?done=false</code> lọc; giá trị khác → 400 <code>{ \"error\": \"done must be true or false\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Đọc một ghi chú <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>GET /api/notes/:id</code> → 200 + ghi chú.</li>\n  <li>id không phải số nguyên dương → 400 <code>{ \"error\": \"Invalid id\" }</code>; không có → 404 <code>{ \"error\": \"Note not found\" }</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Tạo ghi chú (đọc thân, lưu bền) <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>POST /api/notes</code>, Content-Type phải bắt đầu bằng <code>application/json</code> → không thì 415 <code>{ \"error\": \"Content-Type must be application/json\" }</code>.</li>\n  <li>JSON hỏng → 400 <code>{ \"error\": \"Invalid JSON\" }</code>; thiếu title / không 1–100 ký tự → 400 <code>{ \"error\": \"title must be 1-100 characters\" }</code>.</li>\n  <li>201 + <code>{ id, title, done: false }</code> + header <code>Location: /api/notes/&lt;id&gt;</code>; rồi cả mảng được ghi vào <code>data/notes.json</code> bằng <code>fs.promises.writeFile</code> (JSON thụt 2 dấu cách).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Xoá ghi chú <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>DELETE /api/notes/:id</code> → 204 (thân rỗng) và tệp được ghi lại; 400 / 404 như chức năng 2.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. 404 / 405 và JSON ở mọi nơi <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Phương thức khác trên <code>/api/notes</code> → 405 + <code>Allow: GET, POST</code>; trên <code>/api/notes/:id</code> → 405 + <code>Allow: GET, DELETE</code>; thân <code>{ \"error\": \"Method not allowed\" }</code>.</li>\n  <li>Đường khác → 404 <code>{ \"error\": \"Not found\" }</code>.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Liệt kê ghi chú (+ lọc ?done)</td><td>2</td></tr><tr><td>2</td><td>Đọc một ghi chú</td><td>2</td></tr><tr><td>3</td><td>Tạo ghi chú (đọc thân, lưu bền)</td><td>3</td></tr><tr><td>4</td><td>Xoá ghi chú</td><td>1.5</td></tr><tr><td>5</td><td>404 / 405 và JSON ở mọi nơi</td><td>1.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Có readFileSync / writeFileSync: −1.</li>\n  <li>Request không bao giờ được trả lời (thiếu <code>res.end</code>) mất điểm cả chức năng.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Nộp <code>answer.js</code>. Máy chấm tự tạo <code>data/notes.json</code>.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Only <code>require('http')</code>, <code>require('fs')</code> (promises API) and <code>require('path')</code> — no Express.|||Chỉ dùng <code>require('http')</code>, <code>require('fs')</code> (API promises) và <code>require('path')</code> — không Express.\nNo <code>readFileSync</code> / <code>writeFileSync</code>.|||Không <code>readFileSync</code> / <code>writeFileSync</code>.\nA missing <code>data/notes.json</code> means \"no notes yet\" (start with <code>[]</code>); any other read error must make <code>createServer()</code> reject.|||<code>data/notes.json</code> không có nghĩa là \"chưa có ghi chú\" (bắt đầu với <code>[]</code>); lỗi đọc khác thì <code>createServer()</code> phải reject.\nExport: <code>module.exports = { createServer };</code>",
+      "examplesJson": [
+        {
+          "input": "await (await createServer()).inject({ url: '/api/notes?done=false' })",
+          "output": "200 [{\"id\":2,…},{\"id\":3,…}]",
+          "explanation": "Notes loaded from data/notes.json at start-up.|||Ghi chú được nạp từ data/notes.json lúc khởi động."
+        }
+      ],
+      "hintsJson": [
+        "Write <code>send(res, status, data, headers)</code> and <code>readBody(req)</code> (a Promise of the raw text) first.|||Viết <code>send(res, status, data, headers)</code> và <code>readBody(req)</code> (một Promise của chữ thô) trước tiên.",
+        "Route by <code>url.pathname</code>: list (<code>/api/notes</code>), one (<code>/^\\/api\\/notes\\/([^/]+)$/</code>), else 404; then check the method (405).|||Định tuyến theo <code>url.pathname</code>: danh sách (<code>/api/notes</code>), một cái (<code>/^\\/api\\/notes\\/([^/]+)$/</code>), còn lại 404; rồi mới kiểm phương thức (405)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst fs = require('fs');\n\nasync function createServer() {\n  const notes = JSON.parse(fs.readFileSync('data/notes.json', 'utf8'));\n  return http.createServer((req, res) => {\n    if (req.url === '/api/notes') {\n      res.writeHead(200, { 'Content-Type': 'application/json' });\n      res.end(JSON.stringify(notes));\n    }\n  });\n}\n\nmodule.exports = { createServer };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const http = require('http');\nconst fs = require('fs');\n\nconst FILE = 'data/notes.json';\n\nfunction send(res, status, data, headers = {}) {\n  res.writeHead(status, { 'Content-Type': 'application/json', ...headers });\n  res.end(data === undefined ? undefined : JSON.stringify(data));\n}\n\n// the body arrives in chunks: resolve with the whole text once it has ended\nfunction readBody(req) {\n  return new Promise((resolve, reject) => {\n    let raw = '';\n    req.on('data', (chunk) => { raw += chunk; });\n    req.on('end', () => resolve(raw));\n    req.on('error', reject);\n  });\n}\n\nasync function loadNotes() {\n  try {\n    return JSON.parse(await fs.promises.readFile(FILE, 'utf8'));     // non-blocking, once\n  } catch (err) {\n    if (err.code === 'ENOENT') return [];                           // no file yet = no notes yet\n    throw err;                                                      // anything else: fail start-up\n  }\n}\n\nasync function createServer() {\n  const notes = await loadNotes();\n  const save = () => fs.promises.writeFile(FILE, JSON.stringify(notes, null, 2));\n  const parseId = (s) => (/^[1-9]\\d*$/.test(s) ? Number(s) : null);\n\n  return http.createServer(async (req, res) => {\n    const url = new URL(req.url, 'http://localhost');\n    const one = url.pathname.match(/^\\/api\\/notes\\/([^/]+)$/);\n    const isList = url.pathname === '/api/notes';\n\n    if (!isList && !one) return send(res, 404, { error: 'Not found' });\n\n    if (isList) {\n      if (req.method === 'GET') {\n        const done = url.searchParams.get('done');\n        if (done === null) return send(res, 200, notes);\n        if (done !== 'true' && done !== 'false') return send(res, 400, { error: 'done must be true or false' });\n        return send(res, 200, notes.filter((n) => n.done === (done === 'true')));\n      }\n      if (req.method === 'POST') {\n        if (!(req.headers['content-type'] || '').startsWith('application/json')) {\n          return send(res, 415, { error: 'Content-Type must be application/json' });\n        }\n        let data;\n        try { data = JSON.parse(await readBody(req)); } catch { return send(res, 400, { error: 'Invalid JSON' }); }\n        const title = data && typeof data.title === 'string' ? data.title.trim() : '';\n        if (title.length < 1 || title.length > 100) return send(res, 400, { error: 'title must be 1-100 characters' });\n        const note = { id: notes.reduce((m, n) => Math.max(m, n.id), 0) + 1, title, done: false };\n        notes.push(note);\n        await save();                                               // persist without blocking\n        return send(res, 201, note, { Location: '/api/notes/' + note.id });\n      }\n      return send(res, 405, { error: 'Method not allowed' }, { Allow: 'GET, POST' });\n    }\n\n    // /api/notes/:id\n    if (req.method !== 'GET' && req.method !== 'DELETE') {\n      return send(res, 405, { error: 'Method not allowed' }, { Allow: 'GET, DELETE' });\n    }\n    const id = parseId(one[1]);\n    if (id === null) return send(res, 400, { error: 'Invalid id' });\n    const i = notes.findIndex((n) => n.id === id);\n    if (i < 0) return send(res, 404, { error: 'Note not found' });\n    if (req.method === 'GET') return send(res, 200, notes[i]);\n    notes.splice(i, 1);\n    await save();\n    res.writeHead(204);\n    res.end();\n  });\n}\n\nmodule.exports = { createServer };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/http.js",
+          "language": "javascript",
+          "code": "// lib/http.js — PROVIDED by the practice grader. An in-memory stand-in for Node's core `http` module:\n// http.createServer((req, res) => …), req.method / req.url / req.headers, the request body arriving in\n// CHUNKS ('data' events, then 'end' — or `for await (const chunk of req)`), res.statusCode, res.setHeader(),\n// res.writeHead(), res.write(), res.end(). Instead of a real port, the grader calls\n//   await server.inject({ method, url, headers, body })  ⇒  { status, headers, body (text) }.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(a){\"use strict\";var l=a.__modules,h=l.events,y=a.__STATUS||{200:\"OK\",201:\"Created\",204:\"No Content\",301:\"Moved Permanently\",302:\"Found\",400:\"Bad Request\",401:\"Unauthorized\",403:\"Forbidden\",404:\"Not Found\",405:\"Method Not Allowed\",413:\"Payload Too Large\",415:\"Unsupported Media Type\",500:\"Internal Server Error\"};function c(){var e=new Error(\"Cannot set headers after they are sent to the client\");return e.code=\"ERR_HTTP_HEADERS_SENT\",e}function f(e){h.call(this),e=e||{},this.method=String(e.method||\"GET\").toUpperCase(),this.url=e.url||\"/\",this.httpVersion=\"1.1\";var r={};Object.keys(e.headers||{}).forEach(function(u){r[u.toLowerCase()]=String(e.headers[u])});var t=e.body;if(t!=null&&typeof t!=\"string\"&&(t=JSON.stringify(t),r[\"content-type\"]||(r[\"content-type\"]=\"application/json\")),t&&(r[\"content-length\"]=String(t.length)),r.host||(r.host=\"localhost:3000\"),this.headers=r,this._chunks=[],t)for(var n=Math.max(1,Math.ceil(t.length/(e.chunkSize||8))),i=Math.ceil(t.length/Math.min(n,3)),s=0;s<t.length;s+=i)this._chunks.push(t.slice(s,s+i));this.socket={remoteAddress:e.ip||\"127.0.0.1\",encrypted:!1},this.connection=this.socket,this._flowing=!1}f.prototype=Object.create(h.prototype),f.prototype.on=f.prototype.addListener=function(e,r){return h.prototype.on.call(this,e,r),(e===\"data\"||e===\"end\")&&!this._flowing&&this._start(),this},f.prototype._start=function(){var e=this;this._flowing=!0;var r=this._chunks.slice(),t=0;(function n(){a.setTimeout(function(){t<r.length?(h.prototype.emit.call(e,\"data\",r[t++]),n()):h.prototype.emit.call(e,\"end\")},1)})()},f.prototype.setEncoding=function(){return this},f.prototype[Symbol.asyncIterator]=function(){var e=this,r=[],t=!1,n=null;return this.on(\"data\",function(i){if(n){var s=n;n=null,s({value:i,done:!1})}else r.push(i)}),this.on(\"end\",function(){if(t=!0,n){var i=n;n=null,i({value:void 0,done:!0})}}),{next:function(){return r.length?Promise.resolve({value:r.shift(),done:!1}):t?Promise.resolve({value:void 0,done:!0}):new Promise(function(i){n=i})}}};function o(e){h.call(this),this.statusCode=200,this.statusMessage=void 0,this._h={},this.headersSent=!1,this.writableEnded=!1,this.finished=!1,this._body=\"\",this._onFinish=e}o.prototype=Object.create(h.prototype),o.prototype.setHeader=function(e,r){if(this.headersSent)throw c();return this._h[String(e).toLowerCase()]=Array.isArray(r)?r.map(String):String(r),this},o.prototype.getHeader=function(e){return this._h[String(e).toLowerCase()]},o.prototype.getHeaders=function(){return Object.assign({},this._h)},o.prototype.hasHeader=function(e){return String(e).toLowerCase()in this._h},o.prototype.removeHeader=function(e){if(this.headersSent)throw c();delete this._h[String(e).toLowerCase()]},o.prototype.writeHead=function(e,r,t){if(this.headersSent)throw c();typeof r==\"object\"&&(t=r,r=void 0);var n=Number(e);if(!(n>=100&&n<=999)||Math.floor(n)!==n){var i=new RangeError(\"Invalid status code: \"+e);throw i.code=\"ERR_HTTP_INVALID_STATUS_CODE\",i}this.statusCode=n,r&&(this.statusMessage=r);var s=this;return Object.keys(t||{}).forEach(function(u){s._h[u.toLowerCase()]=String(t[u])}),this.headersSent=!0,this},o.prototype.write=function(e){if(this.writableEnded){var r=new Error(\"write after end\");throw r.code=\"ERR_STREAM_WRITE_AFTER_END\",r}if(typeof e!=\"string\"&&!(e&&e.__buffer)){var t=new TypeError('The \"chunk\" argument must be of type string or an instance of Buffer or Uint8Array. Received '+(e===null?\"null\":typeof e==\"object\"?\"an instance of \"+(Array.isArray(e)?\"Array\":\"Object\"):\"type \"+typeof e+\" (\"+String(e)+\")\"));throw t.code=\"ERR_INVALID_ARG_TYPE\",t}return this.headersSent=!0,this._body+=String(e),!0},o.prototype.end=function(e){return this.writableEnded?this:(e!=null&&this.write(e),this.headersSent=!0,this.writableEnded=!0,this.finished=!0,this.emit(\"finish\"),this._onFinish&&this._onFinish(this),this)};function p(e,r){typeof e==\"function\"&&(r=e);var t=new h;return r&&t.on(\"request\",r),t.listening=!1,t.listen=function(n,i,s){return typeof i==\"function\"&&(s=i),t.listening=!0,t._port=n,(a.__listening=a.__listening||[]).push(n),s&&a.setTimeout(s,0),t},t.close=function(n){return t.listening=!1,n&&n(),t},t.address=function(){return{port:t._port,address:\"::\",family:\"IPv6\"}},t.inject=function(n){return new Promise(function(i){var s=!1,u,v=new f(n),S=new o(function(d){s||(s=!0,a.clearTimeout(u),i({status:d.statusCode,headers:Object.assign({},d._h),body:d._body}))});u=a.setTimeout(function(){s||(s=!0,i({status:null,headers:{},body:void 0,timedOut:!0}))},n&&n.timeoutMs||3e4);try{t.emit(\"request\",v,S)}catch(d){s||(s=!0,a.clearTimeout(u),i({status:null,headers:{},body:void 0,crashed:(d.name||\"Error\")+\": \"+d.message}))}})},t}var _={createServer:p,STATUS_CODES:y,IncomingMessage:f,ServerResponse:o,METHODS:[\"DELETE\",\"GET\",\"HEAD\",\"OPTIONS\",\"PATCH\",\"POST\",\"PUT\"]};l.http=_,l.https={createServer:function(e,r){var t=p(r);return t.tls={key:!!(e&&e.key),cert:!!(e&&e.cert)},t}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lab rebuilds by hand everything Express gives you: an async start-up that loads state once, routing by path then method (which is how 404 and 405 differ), a body reader that collects chunks and parses once, and explicit headers on every answer. Persisting with <code>fs.promises.writeFile</code> keeps the event loop free while the disk works.</p>",
+      "solutionExplanationHtmlVi": "<p>Lab tự tay dựng lại mọi thứ Express cho bạn: khởi động bất đồng bộ nạp trạng thái một lần, định tuyến theo đường rồi theo phương thức (đó là chỗ 404 và 405 khác nhau), bộ đọc thân gom mẩu rồi parse một lần, và header tường minh ở mọi câu trả lời. Lưu bằng <code>fs.promises.writeFile</code> giữ event loop rảnh trong lúc đĩa làm việc.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET all notes and ?done=false",
+              "vi": "GET mọi ghi chú và ?done=false"
+            },
+            "goi": "[await go('GET', '/api/notes'), await go('GET', '/api/notes?done=false')]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 200,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": [
+                  {
+                    "id": 1,
+                    "title": "Read lesson 1.1",
+                    "done": true
+                  },
+                  {
+                    "id": 2,
+                    "title": "Build the raw server",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Compare with Express",
+                    "done": false
+                  }
+                ]
+              },
+              {
+                "status": 200,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": [
+                  {
+                    "id": 2,
+                    "title": "Build the raw server",
+                    "done": false
+                  },
+                  {
+                    "id": 3,
+                    "title": "Compare with Express",
+                    "done": false
+                  }
+                ]
+              }
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 2",
+              "vi": "Kiểm ẩn 2"
+            },
+            "goi": "await go('GET', '/api/notes?done=yes')",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": {
+              "status": 400,
+              "allow": null,
+              "location": null,
+              "json": true,
+              "body": {
+                "error": "done must be true or false"
+              }
+            },
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "GET one: 200 / 404",
+              "vi": "GET một: 200 / 404"
+            },
+            "goi": "[await go('GET', '/api/notes/2'), await go('GET', '/api/notes/9')]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 200,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "id": 2,
+                  "title": "Build the raw server",
+                  "done": false
+                }
+              },
+              {
+                "status": 404,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Note not found"
+                }
+              }
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "[await go('GET', '/api/notes/abc'), await go('GET', '/api/notes/0'), await go('GET', '/api/notes/1.5')]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Invalid id"
+                }
+              },
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Invalid id"
+                }
+              },
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Invalid id"
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "POST → 201 + Location, and the file is rewritten",
+              "vi": "POST → 201 + Location, và tệp được ghi lại"
+            },
+            "goi": "[await go('POST', '/api/notes', '{\"title\":\"  Write the lab  \"}'), file().length]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 201,
+                "allow": null,
+                "location": "/api/notes/4",
+                "json": true,
+                "body": {
+                  "id": 4,
+                  "title": "Write the lab",
+                  "done": false
+                }
+              },
+              4
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "400 Invalid JSON / 400 title / 415",
+              "vi": "400 Invalid JSON / 400 title / 415"
+            },
+            "goi": "[await go('POST', '/api/notes', '{\"title\": oops}'), await go('POST', '/api/notes', '{\"title\":\"\"}'), await go('POST', '/api/notes', 'title=x', 'application/x-www-form-urlencoded')]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Invalid JSON"
+                }
+              },
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "title must be 1-100 characters"
+                }
+              },
+              {
+                "status": 415,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Content-Type must be application/json"
+                }
+              }
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 7",
+              "vi": "Kiểm ẩn 7"
+            },
+            "goi": "[await go('POST', '/api/notes', JSON.stringify({ title: 'x'.repeat(101) })), (await go('POST', '/api/notes', '{\"title\":\"A\",\"done\":true,\"id\":1}')).body, file().map((n) => n.id)]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 400,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "title must be 1-100 characters"
+                }
+              },
+              {
+                "id": 4,
+                "title": "A",
+                "done": false
+              },
+              [
+                1,
+                2,
+                3,
+                4
+              ]
+            ],
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "DELETE → 204, then 404; the file no longer has it",
+              "vi": "DELETE → 204, rồi 404; tệp không còn nó"
+            },
+            "goi": "[await go('DELETE', '/api/notes/1'), await go('DELETE', '/api/notes/1'), file().map((n) => n.id)]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 204,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": null
+              },
+              {
+                "status": 404,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Note not found"
+                }
+              },
+              [
+                2,
+                3
+              ]
+            ],
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "405 with Allow, 404 for unknown paths",
+              "vi": "405 kèm Allow, 404 cho đường lạ"
+            },
+            "goi": "[await go('PUT', '/api/notes'), await go('PATCH', '/api/notes/1'), await go('GET', '/api/users')]",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              {
+                "status": 405,
+                "allow": "GET, POST",
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Method not allowed"
+                }
+              },
+              {
+                "status": 405,
+                "allow": "GET, DELETE",
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Method not allowed"
+                }
+              },
+              {
+                "status": 404,
+                "allow": null,
+                "location": null,
+                "json": true,
+                "body": {
+                  "error": "Not found"
+                }
+              }
+            ],
+            "nhom": "f5"
+          },
+          {
+            "moTa": {
+              "en": "No data file → start with []",
+              "vi": "Không có tệp dữ liệu → bắt đầu với []"
+            },
+            "goi": "(__disk.del('data/notes.json'), await (async () => { const s = await module.exports.createServer(); const r = await s.inject({ url: '/api/notes' }); return [r.status, r.body]; })())",
+            "chuanBi": "__disk.put('data/notes.json', \"[{\\\"id\\\":1,\\\"title\\\":\\\"Read lesson 1.1\\\",\\\"done\\\":true},{\\\"id\\\":2,\\\"title\\\":\\\"Build the raw server\\\",\\\"done\\\":false},{\\\"id\\\":3,\\\"title\\\":\\\"Compare with Express\\\",\\\"done\\\":false}]\", 30); const server = await module.exports.createServer();\nconst go = async (method, url, body, type = 'application/json') => { const r = await server.inject({ method, url, body, headers: body !== undefined && type ? { 'content-type': type } : {} }); return { status: r.status, allow: r.headers.allow || null, location: r.headers.location || null, json: /json/.test(r.headers['content-type'] || '') || r.status === 204, body: r.body ? JSON.parse(r.body) : null }; };\nconst file = () => JSON.parse(__disk.get('data/notes.json'));",
+            "mongDoi": [
+              200,
+              "[]"
+            ],
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "No readFileSync / writeFileSync",
+              "vi": "Không readFileSync / writeFileSync"
+            },
+            "khop": "(readFileSync|writeFileSync)",
+            "phuDinh": true,
+            "tep": "answer.js",
+            "nhom": "f3"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. List notes (+ ?done filter)",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Read one note",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Create a note (read the body, persist)",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Delete a note",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. 404 / 405 and JSON everywhere",
+            "diem": 1.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reading the notes file in every request, or with readFileSync.|||Đọc tệp ghi chú ở mỗi request, hoặc bằng readFileSync."
+        },
+        {
+          "loi": "Parsing the body in a <code>data</code> handler instead of <code>end</code>.|||Parse thân trong handler <code>data</code> thay vì <code>end</code>."
+        },
+        {
+          "loi": "Forgetting <code>Allow</code> on 405, or the <code>Location</code> header on 201.|||Quên <code>Allow</code> khi 405, hoặc header <code>Location</code> khi 201."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "start-up state",
+          "vi": "trạng thái nạp lúc khởi động"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền"
+        }
+      ]
+    }
+  ]
+}

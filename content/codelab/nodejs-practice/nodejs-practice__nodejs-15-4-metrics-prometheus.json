@@ -1,0 +1,965 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-4-metrics-prometheus",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-4-metrics-prometheus"
+  },
+  "exercises": [
+    {
+      "title": "Pick the instrument, and pick the labels you could write on paper",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "metrics",
+        "Prometheus"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two tables from lesson 15.4: which prom-client type fits each measurement, and which values may become a label.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai bảng của bài 15.4: loại prom-client nào hợp với từng phép đo, và giá trị nào được làm nhãn.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does it only go up, move both ways, or need percentiles?|||Hỏi: nó chỉ tăng, lên xuống, hay cần bách phân vị?",
+        "For labels ask: could I list every possible value today?|||Với nhãn hỏi: hôm nay tôi liệt kê được mọi giá trị có thể không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the instrument, and pick the labels you could write on paper\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the instrument type for each measurementChọn loại công cụ cho từng phép đo\n2. May this value be a metric label?Giá trị này có được làm nhãn metric không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the instrument, and pick the labels you could write on paper — answer key\n\n1. Choose the instrument type for each measurementChọn loại công cụ cho từng phép đo\n   - r1.t: counter\n   - r2.t: counter\n   - r3.t: gauge\n   - r4.t: gauge\n   - r5.t: histogram\n   - r6.t: counter\n   Counter only goes up (use rate()); gauge moves freely but should be READ from the system, never kept by hand with inc/dec pairs that drift; histogram buckets are counters, so they add up across containers — a summary computes percentiles inside one process and cannot, which is why the lesson says avoid it.VI: Counter chỉ tăng (dùng rate()); gauge lên xuống tự do nhưng nên ĐỌC từ hệ thống, đừng tự giữ bằng cặp inc/dec dễ trôi; bucket của histogram là counter nên cộng được giữa các container — summary tính bách phân vị trong một tiến trình và không cộng được, nên bài bảo tránh nó.\n\n2. May this value be a metric label?Giá trị này có được làm nhãn metric không?\n   - r1.ok: yes\n   - r2.ok: yes\n   - r3.ok: no\n   - r4.ok: yes\n   - r5.ok: no\n   - r6.ok: no\n   - r7.ok: yes\n   A label value must come from a set you could write down on paper. Every distinct value is a new time series kept for the whole process lifetime: 100,000 user ids took RSS to 1,494 MB and a scrape to 1,473 ms. error_message is the sneaky one: it looks bounded until a message contains an id.VI: Giá trị nhãn phải thuộc một tập bạn viết ra được trên giấy. Mỗi giá trị khác nhau là một chuỗi thời gian mới giữ suốt đời tiến trình: 100.000 user id đẩy RSS lên 1.494 MB và một lần scrape mất 1.473 ms. error_message là cái lừa nhất: trông hữu hạn cho tới khi thông điệp chứa một id.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Counter only goes up (use rate()); gauge moves freely but should be READ from the system, never kept by hand with inc/dec pairs that drift; histogram buckets are counters, so they add up across containers — a summary computes percentiles inside one process and cannot, which is why the lesson says avoid it.</p><p><i>VI: Counter chỉ tăng (dùng rate()); gauge lên xuống tự do nhưng nên ĐỌC từ hệ thống, đừng tự giữ bằng cặp inc/dec dễ trôi; bucket của histogram là counter nên cộng được giữa các container — summary tính bách phân vị trong một tiến trình và không cộng được, nên bài bảo tránh nó.</i></p><p>A label value must come from a set you could write down on paper. Every distinct value is a new time series kept for the whole process lifetime: 100,000 user ids took RSS to 1,494 MB and a scrape to 1,473 ms. error_message is the sneaky one: it looks bounded until a message contains an id.</p><p><i>VI: Giá trị nhãn phải thuộc một tập bạn viết ra được trên giấy. Mỗi giá trị khác nhau là một chuỗi thời gian mới giữ suốt đời tiến trình: 100.000 user id đẩy RSS lên 1.494 MB và một lần scrape mất 1.473 ms. error_message là cái lừa nhất: trông hữu hạn cho tới khi thông điệp chứa một id.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the instrument type for each measurement</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn loại công cụ cho từng phép đo</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Measurement"
+              },
+              {
+                "ma": "t",
+                "ten": "Type",
+                "luaChon": [
+                  "counter",
+                  "gauge",
+                  "histogram",
+                  "summary"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Total HTTP requests served (rate() gives req/s)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Bytes sent to clients since the process started"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "pool.waitingCount, read live from the pool at every scrape"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Heap memory in use right now"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Request duration, so Prometheus can compute p95 across 3 replicas"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Requests that finished (finished.inc() in finally) — in-flight = started − finished"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "counter",
+              "r2.t": "counter",
+              "r3.t": "gauge",
+              "r4.t": "gauge",
+              "r5.t": "histogram",
+              "r6.t": "counter"
+            },
+            "giaiThich": "<p>Counter only goes up (use rate()); gauge moves freely but should be READ from the system, never kept by hand with inc/dec pairs that drift; histogram buckets are counters, so they add up across containers — a summary computes percentiles inside one process and cannot, which is why the lesson says avoid it.</p><p><i>VI: Counter chỉ tăng (dùng rate()); gauge lên xuống tự do nhưng nên ĐỌC từ hệ thống, đừng tự giữ bằng cặp inc/dec dễ trôi; bucket của histogram là counter nên cộng được giữa các container — summary tính bách phân vị trong một tiến trình và không cộng được, nên bài bảo tránh nó.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>May this value be a metric label?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị này có được làm nhãn metric không?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Label value"
+              },
+              {
+                "ma": "ok",
+                "ten": "Label?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "HTTP method (GET, POST, …)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Route template /notes/:id"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "req.originalUrl (/notes/1842)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Status code (200, 404, 500)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "user_id"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "err.message (“note 8412 not found”)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "err.code ?? \"UNKNOWN\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ok": "yes",
+              "r2.ok": "yes",
+              "r3.ok": "no",
+              "r4.ok": "yes",
+              "r5.ok": "no",
+              "r6.ok": "no",
+              "r7.ok": "yes"
+            },
+            "giaiThich": "<p>A label value must come from a set you could write down on paper. Every distinct value is a new time series kept for the whole process lifetime: 100,000 user ids took RSS to 1,494 MB and a scrape to 1,473 ms. error_message is the sneaky one: it looks bounded until a message contains an id.</p><p><i>VI: Giá trị nhãn phải thuộc một tập bạn viết ra được trên giấy. Mỗi giá trị khác nhau là một chuỗi thời gian mới giữ suốt đời tiến trình: 100.000 user id đẩy RSS lên 1.494 MB và một lần scrape mất 1.473 ms. error_message là cái lừa nhất: trông hữu hạn cho tới khi thông điệp chứa một id.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A hand-managed gauge (inc on start, dec on finish): the first error path that skips dec() makes it wrong forever.|||Gauge tự quản (inc lúc bắt đầu, dec lúc xong): đường lỗi đầu tiên bỏ qua dec() làm nó sai mãi mãi."
+        },
+        {
+          "loi": "Labelling by raw URL “just for one route”: 300 distinct notes became 4,268 series.|||Gắn nhãn bằng URL thô “chỉ cho một route”: 300 ghi chú khác nhau thành 4.268 chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "time series",
+          "vi": "chuỗi thời gian",
+          "giaiThich": "one metric name + one exact set of label values"
+        },
+        {
+          "en": "cardinality",
+          "vi": "số giá trị khác nhau",
+          "giaiThich": "how many distinct label combinations exist"
+        },
+        {
+          "en": "scrape",
+          "vi": "lần thu thập",
+          "giaiThich": "Prometheus fetching /metrics"
+        }
+      ]
+    },
+    {
+      "title": "RED, pull, and who may read /metrics",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "metrics",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the rest of lesson 15.4.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về phần còn lại của bài 15.4.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The price of metrics is the number of series.|||Giá của metric là số chuỗi thời gian.",
+        "A trace or a log may carry ids; a metric label may not.|||Trace hay log được mang id; nhãn metric thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RED, pull, and who may read /metrics\n\nAnswer in the answer panel (no code needed).\n\n1. What does RED stand for, and which one is most worth alerting on?RED là viết tắt của gì, và cái nào đáng cảnh báo nhất?\n2. What decides how much Prometheus has to store for your app?Điều gì quyết định Prometheus phải lưu bao nhiêu cho app của bạn?\n3. Where should /metrics be served?/metrics nên được phục vụ ở đâu?\n4. Product asks “which users hit the 500s yesterday?”. Which pillars can answer? (choose all that apply)Sản phẩm hỏi “hôm qua những người dùng nào gặp lỗi 500?”. Trụ cột nào trả lời được? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RED, pull, and who may read /metrics — answer key\n\n1. What does RED stand for, and which one is most worth alerting on?RED là viết tắt của gì, và cái nào đáng cảnh báo nhất?\n   Answer: d) Rate, Errors, Duration — the error ratio (5xx / total)\n   rate(http_requests_total[5m]), the same with status=~\"5..\", and histogram_quantile(0.95, …): three metrics, one middleware, every route.VI: rate(http_requests_total[5m]), cái đó với status=~\"5..\", và histogram_quantile(0.95, …): ba metric, một middleware, mọi route.\n\n2. What decides how much Prometheus has to store for your app?Điều gì quyết định Prometheus phải lưu bao nhiêu cho app của bạn?\n   Answer: d) The number of distinct series (label combinations), not the traffic\n   A counter incremented ten million times is the same 8 bytes as one incremented twice. The bill is decided when you design the labels.VI: Một counter tăng mười triệu lần vẫn là 8 byte như counter tăng hai lần. Hoá đơn được quyết định khi bạn thiết kế nhãn.\n\n3. Where should /metrics be served?/metrics nên được phục vụ ở đâu?\n   Answer: d) A second Express app on a second port bound to the private network\n   Measured: public :4950/metrics → 404, private :4956/metrics → 200. Route names alone map your attack surface. Second best: deny at nginx; last resort: a bearer token.VI: Đo được: :4950/metrics công khai → 404, :4956/metrics riêng → 200. Chỉ tên route thôi đã vẽ ra bề mặt tấn công. Phương án hai: chặn ở nginx; cuối cùng: bearer token.\n\n4. Product asks “which users hit the 500s yesterday?”. Which pillars can answer? (choose all that apply)Sản phẩm hỏi “hôm qua những người dùng nào gặp lỗi 500?”. Trụ cột nào trả lời được? (chọn mọi câu đúng)\n   Answer: b) The logs (any field, searched with grep) + d) The traces (user.id as a span attribute)\n   “How many?” is a metric question; “which ones?” is a log or trace question. Spans have no cardinality limit because each one is stored once and thrown away.VI: “Bao nhiêu?” là câu hỏi cho metric; “những ai?” là câu hỏi cho log hoặc trace. Span không có giới hạn cardinality vì mỗi span lưu một lần rồi bỏ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Rate, Errors, Duration — the error ratio (5xx / total)</p><p>rate(http_requests_total[5m]), the same with status=~\"5..\", and histogram_quantile(0.95, …): three metrics, one middleware, every route.</p><p><i>VI: rate(http_requests_total[5m]), cái đó với status=~\"5..\", và histogram_quantile(0.95, …): ba metric, một middleware, mọi route.</i></p></li><li><p><b>d)</b> The number of distinct series (label combinations), not the traffic</p><p>A counter incremented ten million times is the same 8 bytes as one incremented twice. The bill is decided when you design the labels.</p><p><i>VI: Một counter tăng mười triệu lần vẫn là 8 byte như counter tăng hai lần. Hoá đơn được quyết định khi bạn thiết kế nhãn.</i></p></li><li><p><b>d)</b> A second Express app on a second port bound to the private network</p><p>Measured: public :4950/metrics → 404, private :4956/metrics → 200. Route names alone map your attack surface. Second best: deny at nginx; last resort: a bearer token.</p><p><i>VI: Đo được: :4950/metrics công khai → 404, :4956/metrics riêng → 200. Chỉ tên route thôi đã vẽ ra bề mặt tấn công. Phương án hai: chặn ở nginx; cuối cùng: bearer token.</i></p></li><li><p><b>b)</b> The logs (any field, searched with grep) + <b>d)</b> The traces (user.id as a span attribute)</p><p>“How many?” is a metric question; “which ones?” is a log or trace question. Spans have no cardinality limit because each one is stored once and thrown away.</p><p><i>VI: “Bao nhiêu?” là câu hỏi cho metric; “những ai?” là câu hỏi cho log hoặc trace. Span không có giới hạn cardinality vì mỗi span lưu một lần rồi bỏ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does RED stand for, and which one is most worth alerting on?</p><p style=\"opacity:.75;font-size:.92em\"><i>RED là viết tắt của gì, và cái nào đáng cảnh báo nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Retries, Errors, Duration — the number of retries"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Requests, Events, Delay — the raw number of requests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rate, Events, Disk — the free disk space on the host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rate, Errors, Duration — the error ratio (5xx / total)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>rate(http_requests_total[5m]), the same with status=~\"5..\", and histogram_quantile(0.95, …): three metrics, one middleware, every route.</p><p><i>VI: rate(http_requests_total[5m]), cái đó với status=~\"5..\", và histogram_quantile(0.95, …): ba metric, một middleware, mọi route.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What decides how much Prometheus has to store for your app?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì quyết định Prometheus phải lưu bao nhiêu cho app của bạn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The scrape interval only, since each scrape stores a new copy of the app"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The number of requests per second, since every request is stored"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The size of each response body, since histograms keep the bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The number of distinct series (label combinations), not the traffic"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A counter incremented ten million times is the same 8 bytes as one incremented twice. The bill is decided when you design the labels.</p><p><i>VI: Một counter tăng mười triệu lần vẫn là 8 byte như counter tăng hai lần. Hoá đơn được quyết định khi bạn thiết kế nhãn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Where should /metrics be served?</p><p style=\"opacity:.75;font-size:.92em\"><i>/metrics nên được phục vụ ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The public API port, because Prometheus needs to reach it from anywhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The public port behind a robots.txt rule so search engines skip it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The frontend container, so the backend does not pay for building it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A second Express app on a second port bound to the private network"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured: public :4950/metrics → 404, private :4956/metrics → 200. Route names alone map your attack surface. Second best: deny at nginx; last resort: a bearer token.</p><p><i>VI: Đo được: :4950/metrics công khai → 404, :4956/metrics riêng → 200. Chỉ tên route thôi đã vẽ ra bề mặt tấn công. Phương án hai: chặn ở nginx; cuối cùng: bearer token.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Product asks “which users hit the 500s yesterday?”. Which pillars can answer? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm hỏi “hôm qua những người dùng nào gặp lỗi 500?”. Trụ cột nào trả lời được? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The event-loop lag metric of collectDefaultMetrics"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The logs (any field, searched with grep)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A user_id label on http_requests_total"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The traces (user.id as a span attribute)"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>“How many?” is a metric question; “which ones?” is a log or trace question. Spans have no cardinality limit because each one is stored once and thrown away.</p><p><i>VI: “Bao nhiêu?” là câu hỏi cho metric; “những ai?” là câu hỏi cho log hoặc trace. Span không có giới hạn cardinality vì mỗi span lưu một lần rồi bỏ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting /metrics on the public internet “because nothing is sensitive”.|||Để /metrics trên internet công khai “vì chẳng có gì nhạy cảm”."
+        },
+        {
+          "loi": "Answering a “which users” question with a metric label.|||Trả lời câu “những ai” bằng nhãn metric."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RED",
+          "vi": "RED",
+          "giaiThich": "Rate, Errors, Duration"
+        },
+        {
+          "en": "pull model",
+          "vi": "mô hình kéo",
+          "giaiThich": "Prometheus fetches, the app does not push"
+        }
+      ]
+    },
+    {
+      "title": "labelsFor(req, res): the route template, never the raw URL",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "metrics",
+        "Express routing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the label function of the metrics middleware, called inside <code>res.on(\"finish\")</code>. Return <code>{ method, route, status }</code>: <code>method</code> is <code>req.method</code>; <code>route</code> is <code>req.baseUrl + req.route.path</code> (e.g. <code>/api/v1/notes/:id</code>) when Express matched a route; when no route matched (<code>req.route</code> is undefined, e.g. a 404) it is the constant <code>\"(unmatched)\"</code>; <code>status</code> is <code>res.statusCode</code> as a <b>string</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hàm nhãn của middleware metric, được gọi trong <code>res.on(\"finish\")</code>. Trả về <code>{ method, route, status }</code>: <code>method</code> là <code>req.method</code>; <code>route</code> là <code>req.baseUrl + req.route.path</code> (vd <code>/api/v1/notes/:id</code>) khi Express khớp được route; khi không khớp route nào (<code>req.route</code> là undefined, vd 404) thì là hằng <code>\"(unmatched)\"</code>; <code>status</code> là <code>res.statusCode</code> dạng <b>chuỗi</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "labelsFor({\"method\":\"GET\",\"baseUrl\":\"/api/v1/notes\",\"route\":{\"path\":\"/:id\"},\"originalUrl\":\"/api/v1/notes/1842\"}, {\"statusCode\":200})",
+          "output": "{\"method\":\"GET\",\"route\":\"/api/v1/notes/:id\",\"status\":\"200\"}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "req.route only exists after routing — that is why the lesson reads it on finish.|||req.route chỉ có sau khi định tuyến — vì thế bài đọc nó lúc finish.",
+        "String(res.statusCode) turns 404 into \"404\".|||String(res.statusCode) biến 404 thành \"404\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** labels for http_requests_total */\nfunction labelsFor(req, res) {\n  // Write your solution here\n  return { method: req.method, route: req.originalUrl, status: res.statusCode };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction labelsFor(req, res) {\n  // Đọc TRONG res.on('finish'): lúc đó Express đã định tuyến xong nên req.route có mẫu '/:id'.\n  // Không khớp route nào (404) ⇒ một hằng số, TUYỆT ĐỐI không lùi về URL thô (mỗi URL một chuỗi thời gian).\n  const route = req.route ? req.baseUrl + req.route.path : '(unmatched)';\n  return { method: req.method, route, status: String(res.statusCode) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The single most important line of the lesson: the template /notes/:id gave 100 series and 9,807 B of /metrics for 300 notes; the raw URL gave 4,268 series and 390,366 B — 40× bigger with the same traffic.</p>",
+      "solutionExplanationHtmlVi": "<p>Dòng quan trọng nhất của bài: mẫu /notes/:id cho 100 chuỗi và 9.807 B /metrics với 300 ghi chú; URL thô cho 4.268 chuỗi và 390.366 B — lớn gấp 40 lần với cùng lưu lượng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /api/v1/notes/1842",
+              "vi": "GET /api/v1/notes/1842"
+            },
+            "goi": "labelsFor({\"method\":\"GET\",\"baseUrl\":\"/api/v1/notes\",\"route\":{\"path\":\"/:id\"},\"originalUrl\":\"/api/v1/notes/1842\"}, {\"statusCode\":200})",
+            "mongDoi": {
+              "method": "GET",
+              "route": "/api/v1/notes/:id",
+              "status": "200"
+            }
+          },
+          {
+            "moTa": {
+              "en": "A scanner hits a path that does not exist",
+              "vi": "Máy quét gọi một đường không tồn tại"
+            },
+            "goi": "labelsFor({\"method\":\"GET\",\"baseUrl\":\"\",\"originalUrl\":\"/wp-login.php\"}, {\"statusCode\":404})",
+            "mongDoi": {
+              "method": "GET",
+              "route": "(unmatched)",
+              "status": "404"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "labelsFor({\"method\":\"POST\",\"baseUrl\":\"/api/v1/notes\",\"route\":{\"path\":\"/:id/share\"},\"originalUrl\":\"/api/v1/notes/7/share?x=1\"}, {\"statusCode\":500})",
+            "mongDoi": {
+              "method": "POST",
+              "route": "/api/v1/notes/:id/share",
+              "status": "500"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "labelsFor({\"method\":\"DELETE\",\"baseUrl\":\"\",\"route\":{\"path\":\"/health/live\"},\"originalUrl\":\"/health/live\"}, {\"statusCode\":204})",
+            "mongDoi": {
+              "method": "DELETE",
+              "route": "/health/live",
+              "status": "204"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Falling back to req.originalUrl when there is no route: every scanner probing random paths creates a new series.|||Lùi về req.originalUrl khi không có route: mỗi máy quét dò đường ngẫu nhiên tạo một chuỗi mới."
+        },
+        {
+          "loi": "Reading the label before routing (like the Sentry middleware the lesson found): req.route is empty, so the tag becomes the raw URL.|||Đọc nhãn trước khi định tuyến (như middleware Sentry bài học phát hiện): req.route rỗng nên tag thành URL thô."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route template",
+          "vi": "mẫu route",
+          "giaiThich": "/notes/:id — the same for every note"
+        },
+        {
+          "en": "req.baseUrl",
+          "vi": "req.baseUrl",
+          "giaiThich": "the path where the router is mounted"
+        }
+      ]
+    },
+    {
+      "title": "countSeries(requests, opts): why 300 URLs became thousands of series",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "metrics",
+        "cardinality",
+        "Set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Predict how many time series a counter <code>http_requests_total</code> and a histogram <code>http_request_duration_seconds</code> create. <code>requests</code> are observed requests (objects with fields such as <code>method, route, url, status, userId</code>); <code>opts = { counterLabels, histogramLabels, edges }</code> name the label fields of each metric and the histogram bucket edges. A counter has one series per distinct combination of its label values. A histogram has, per distinct combination, one bucket series per edge, one for <code>+Inf</code>, plus <code>_sum</code> and <code>_count</code>. Return <code>{ counter, histogram, total }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự đoán một counter <code>http_requests_total</code> và một histogram <code>http_request_duration_seconds</code> tạo ra bao nhiêu chuỗi thời gian. <code>requests</code> là các request quan sát được (object có các trường như <code>method, route, url, status, userId</code>); <code>opts = { counterLabels, histogramLabels, edges }</code> nêu tên các trường nhãn của mỗi metric và các cạnh bucket. Counter có một chuỗi cho mỗi tổ hợp giá trị nhãn khác nhau. Histogram có, cho mỗi tổ hợp khác nhau, một chuỗi bucket cho mỗi cạnh, một cho <code>+Inf</code>, cộng <code>_sum</code> và <code>_count</code>. Trả về <code>{ counter, histogram, total }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "countSeries([{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/1\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/2\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/3\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/4\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/5\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/6\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/7\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/8\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/9\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/10\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/11\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/12\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/13\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/14\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/15\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/16\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/17\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/18\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/19\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/20\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/21\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/22\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/23\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/24\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/25\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/26\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/27\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/28\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/29\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/30\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/31\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/32\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/33\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/34\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/35\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/36\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/37\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/38\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/39\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/40\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/41\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/42\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/43\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/44\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/45\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/46\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/47\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/48\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/49\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/50\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/51\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/52\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/53\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/54\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/55\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/56\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/57\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/58\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/59\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/60\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/61\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/62\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/63\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/64\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/65\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/66\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/67\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/68\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/69\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/70\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/71\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/72\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/73\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/74\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/75\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/76\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/77\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/78\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/79\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/80\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/81\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/82\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/83\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/84\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/85\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/86\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/87\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/88\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/89\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/90\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/91\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/92\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/93\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/94\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/95\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/96\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/97\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/98\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/99\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/100\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/101\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/102\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/103\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/104\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/105\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/106\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/107\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/108\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/109\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/110\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/111\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/112\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/113\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/114\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/115\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/116\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/117\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/118\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/119\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/120\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/121\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/122\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/123\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/124\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/125\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/126\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/127\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/128\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/129\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/130\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/131\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/132\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/133\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/134\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/135\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/136\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/137\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/138\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/139\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/140\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/141\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/142\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/143\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/144\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/145\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/146\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/147\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/148\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/149\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/150\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/151\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/152\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/153\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/154\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/155\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/156\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/157\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/158\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/159\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/160\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/161\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/162\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/163\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/164\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/165\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/166\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/167\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/168\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/169\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/170\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/171\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/172\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/173\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/174\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/175\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/176\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/177\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/178\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/179\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/180\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/181\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/182\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/183\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/184\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/185\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/186\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/187\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/188\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/189\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/190\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/191\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/192\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/193\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/194\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/195\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/196\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/197\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/198\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/199\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/200\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/201\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/202\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/203\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/204\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/205\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/206\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/207\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/208\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/209\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/210\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/211\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/212\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/213\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/214\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/215\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/216\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/217\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/218\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/219\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/220\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/221\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/222\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/223\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/224\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/225\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/226\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/227\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/228\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/229\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/230\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/231\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/232\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/233\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/234\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/235\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/236\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/237\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/238\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/239\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/240\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/241\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/242\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/243\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/244\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/245\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/246\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/247\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/248\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/249\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/250\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/251\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/252\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/253\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/254\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/255\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/256\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/257\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/258\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/259\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/260\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/261\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/262\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/263\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/264\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/265\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/266\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/267\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/268\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/269\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/270\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/271\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/272\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/273\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/274\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/275\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/276\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/277\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/278\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/279\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/280\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/281\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/282\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/283\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/284\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/285\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/286\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/287\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/288\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/289\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/290\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/291\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/292\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/293\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/294\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/295\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/296\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/297\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/298\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/299\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/300\",\"status\":200}], {\"counterLabels\":[\"method\",\"route\",\"status\"],\"histogramLabels\":[\"method\",\"route\",\"status\"],\"edges\":[0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5]})",
+          "output": "{\"counter\":1,\"histogram\":13,\"total\":14}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build a key per request from the label values (JSON.stringify of an array works) and count distinct keys with a Set.|||Dựng một khoá cho mỗi request từ giá trị nhãn (JSON.stringify một mảng là được) và đếm khoá khác nhau bằng Set.",
+        "Per histogram combination: edges.length + 1 + 2 series. With 10 edges that is 13, so one new route value costs 14 series in total.|||Mỗi tổ hợp histogram: edges.length + 1 + 2 chuỗi. Với 10 cạnh là 13, nên một giá trị route mới tốn tổng cộng 14 chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** how many series will these labels create? */\nfunction countSeries(requests, opts) {\n  // Write your solution here\n  const counter = requests.length;\n  const histogram = requests.length * opts.edges.length;\n  return { counter, histogram, total: counter + histogram };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction countSeries(requests, opts) {\n  // Một tổ hợp giá trị nhãn = một chuỗi. Histogram: mỗi tổ hợp có (số cạnh + 1) bucket (+Inf) + _sum + _count.\n  const key = (r, labels) => JSON.stringify(labels.map((l) => r[l]));\n  const c = new Set(requests.map((r) => key(r, opts.counterLabels)));\n  const h = new Set(requests.map((r) => key(r, opts.histogramLabels)));\n  const counter = requests.length ? c.size : 0;\n  const histogram = (requests.length ? h.size : 0) * (opts.edges.length + 1 + 2);\n  return { counter, histogram, total: counter + histogram };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>300 requests to one template: 1 + 13 = 14 series. The same 300 by raw URL: 300 × 14 = 4,200. A user_id label on the counter only still made one counter series per user. Series never go away while the process lives — that is how 100,000 user ids reached 1,494 MB.</p>",
+      "solutionExplanationHtmlVi": "<p>300 request tới một mẫu: 1 + 13 = 14 chuỗi. Cùng 300 request theo URL thô: 300 × 14 = 4.200. Nhãn user_id chỉ trên counter vẫn tạo một chuỗi counter cho mỗi người dùng. Chuỗi không bao giờ mất khi tiến trình còn sống — đó là cách 100.000 user id lên tới 1.494 MB.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "300 notes, template label",
+              "vi": "300 ghi chú, nhãn theo mẫu"
+            },
+            "goi": "countSeries([{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/1\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/2\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/3\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/4\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/5\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/6\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/7\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/8\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/9\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/10\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/11\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/12\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/13\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/14\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/15\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/16\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/17\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/18\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/19\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/20\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/21\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/22\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/23\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/24\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/25\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/26\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/27\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/28\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/29\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/30\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/31\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/32\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/33\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/34\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/35\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/36\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/37\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/38\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/39\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/40\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/41\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/42\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/43\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/44\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/45\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/46\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/47\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/48\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/49\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/50\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/51\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/52\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/53\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/54\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/55\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/56\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/57\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/58\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/59\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/60\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/61\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/62\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/63\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/64\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/65\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/66\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/67\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/68\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/69\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/70\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/71\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/72\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/73\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/74\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/75\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/76\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/77\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/78\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/79\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/80\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/81\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/82\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/83\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/84\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/85\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/86\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/87\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/88\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/89\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/90\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/91\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/92\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/93\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/94\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/95\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/96\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/97\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/98\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/99\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/100\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/101\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/102\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/103\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/104\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/105\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/106\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/107\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/108\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/109\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/110\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/111\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/112\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/113\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/114\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/115\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/116\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/117\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/118\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/119\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/120\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/121\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/122\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/123\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/124\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/125\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/126\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/127\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/128\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/129\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/130\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/131\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/132\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/133\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/134\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/135\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/136\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/137\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/138\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/139\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/140\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/141\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/142\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/143\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/144\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/145\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/146\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/147\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/148\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/149\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/150\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/151\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/152\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/153\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/154\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/155\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/156\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/157\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/158\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/159\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/160\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/161\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/162\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/163\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/164\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/165\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/166\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/167\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/168\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/169\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/170\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/171\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/172\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/173\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/174\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/175\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/176\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/177\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/178\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/179\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/180\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/181\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/182\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/183\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/184\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/185\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/186\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/187\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/188\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/189\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/190\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/191\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/192\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/193\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/194\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/195\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/196\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/197\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/198\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/199\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/200\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/201\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/202\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/203\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/204\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/205\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/206\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/207\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/208\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/209\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/210\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/211\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/212\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/213\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/214\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/215\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/216\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/217\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/218\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/219\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/220\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/221\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/222\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/223\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/224\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/225\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/226\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/227\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/228\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/229\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/230\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/231\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/232\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/233\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/234\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/235\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/236\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/237\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/238\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/239\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/240\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/241\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/242\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/243\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/244\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/245\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/246\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/247\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/248\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/249\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/250\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/251\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/252\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/253\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/254\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/255\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/256\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/257\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/258\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/259\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/260\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/261\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/262\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/263\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/264\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/265\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/266\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/267\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/268\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/269\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/270\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/271\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/272\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/273\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/274\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/275\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/276\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/277\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/278\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/279\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/280\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/281\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/282\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/283\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/284\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/285\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/286\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/287\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/288\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/289\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/290\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/291\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/292\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/293\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/294\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/295\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/296\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/297\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/298\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/299\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/300\",\"status\":200}], {\"counterLabels\":[\"method\",\"route\",\"status\"],\"histogramLabels\":[\"method\",\"route\",\"status\"],\"edges\":[0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5]})",
+            "mongDoi": {
+              "counter": 1,
+              "histogram": 13,
+              "total": 14
+            }
+          },
+          {
+            "moTa": {
+              "en": "300 notes, raw URL label",
+              "vi": "300 ghi chú, nhãn URL thô"
+            },
+            "goi": "countSeries([{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/1\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/2\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/3\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/4\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/5\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/6\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/7\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/8\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/9\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/10\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/11\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/12\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/13\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/14\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/15\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/16\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/17\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/18\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/19\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/20\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/21\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/22\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/23\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/24\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/25\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/26\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/27\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/28\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/29\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/30\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/31\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/32\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/33\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/34\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/35\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/36\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/37\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/38\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/39\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/40\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/41\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/42\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/43\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/44\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/45\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/46\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/47\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/48\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/49\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/50\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/51\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/52\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/53\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/54\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/55\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/56\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/57\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/58\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/59\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/60\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/61\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/62\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/63\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/64\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/65\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/66\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/67\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/68\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/69\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/70\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/71\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/72\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/73\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/74\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/75\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/76\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/77\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/78\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/79\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/80\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/81\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/82\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/83\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/84\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/85\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/86\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/87\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/88\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/89\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/90\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/91\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/92\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/93\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/94\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/95\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/96\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/97\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/98\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/99\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/100\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/101\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/102\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/103\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/104\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/105\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/106\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/107\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/108\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/109\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/110\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/111\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/112\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/113\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/114\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/115\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/116\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/117\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/118\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/119\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/120\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/121\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/122\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/123\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/124\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/125\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/126\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/127\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/128\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/129\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/130\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/131\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/132\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/133\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/134\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/135\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/136\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/137\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/138\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/139\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/140\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/141\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/142\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/143\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/144\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/145\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/146\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/147\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/148\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/149\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/150\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/151\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/152\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/153\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/154\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/155\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/156\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/157\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/158\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/159\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/160\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/161\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/162\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/163\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/164\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/165\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/166\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/167\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/168\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/169\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/170\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/171\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/172\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/173\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/174\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/175\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/176\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/177\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/178\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/179\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/180\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/181\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/182\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/183\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/184\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/185\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/186\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/187\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/188\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/189\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/190\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/191\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/192\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/193\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/194\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/195\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/196\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/197\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/198\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/199\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/200\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/201\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/202\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/203\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/204\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/205\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/206\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/207\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/208\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/209\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/210\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/211\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/212\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/213\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/214\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/215\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/216\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/217\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/218\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/219\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/220\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/221\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/222\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/223\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/224\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/225\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/226\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/227\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/228\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/229\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/230\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/231\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/232\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/233\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/234\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/235\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/236\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/237\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/238\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/239\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/240\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/241\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/242\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/243\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/244\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/245\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/246\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/247\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/248\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/249\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/250\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/251\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/252\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/253\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/254\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/255\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/256\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/257\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/258\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/259\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/260\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/261\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/262\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/263\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/264\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/265\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/266\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/267\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/268\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/269\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/270\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/271\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/272\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/273\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/274\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/275\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/276\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/277\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/278\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/279\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/280\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/281\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/282\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/283\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/284\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/285\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/286\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/287\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/288\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/289\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/290\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/291\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/292\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/293\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/294\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/295\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/296\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/297\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/298\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/299\",\"status\":200},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"url\":\"/notes/300\",\"status\":200}], {\"counterLabels\":[\"method\",\"url\",\"status\"],\"histogramLabels\":[\"method\",\"url\",\"status\"],\"edges\":[0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5]})",
+            "mongDoi": {
+              "counter": 300,
+              "histogram": 3900,
+              "total": 4200
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "countSeries([{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u0\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u1\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u2\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u3\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u4\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u5\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u6\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u7\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u8\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u9\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u10\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u11\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u12\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u13\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u14\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u15\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u16\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u17\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u18\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u19\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u20\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u21\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u22\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u23\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u24\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u25\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u26\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u27\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u28\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u29\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u30\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u31\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u32\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u33\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u34\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u35\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u36\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u37\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u38\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u39\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u40\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u41\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u42\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u43\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u44\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u45\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u46\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u47\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u48\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u49\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u50\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u51\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u52\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u53\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u54\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u55\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u56\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u57\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u58\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u59\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u60\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u61\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u62\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u63\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u64\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u65\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u66\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u67\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u68\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u69\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u70\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u71\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u72\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u73\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u74\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u75\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u76\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u77\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u78\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u79\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u80\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u81\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u82\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u83\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u84\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u85\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u86\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u87\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u88\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u89\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u90\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u91\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u92\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u93\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u94\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u95\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u96\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u97\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u98\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u99\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u100\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u101\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u102\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u103\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u104\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u105\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u106\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u107\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u108\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u109\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u110\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u111\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u112\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u113\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u114\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u115\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u116\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u117\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u118\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u119\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u120\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u121\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u122\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u123\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u124\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u125\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u126\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u127\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u128\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u129\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u130\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u131\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u132\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u133\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u134\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u135\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u136\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u137\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u138\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u139\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u140\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u141\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u142\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u143\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u144\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u145\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u146\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u147\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u148\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u149\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u0\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u1\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u2\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u3\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u4\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u5\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u6\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u7\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u8\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u9\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u10\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u11\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u12\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u13\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u14\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u15\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u16\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u17\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u18\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u19\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u20\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u21\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u22\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u23\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u24\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u25\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u26\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u27\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u28\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u29\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u30\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u31\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u32\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u33\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u34\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u35\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u36\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u37\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u38\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u39\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u40\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u41\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u42\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u43\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u44\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u45\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u46\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u47\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u48\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u49\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u50\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u51\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u52\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u53\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u54\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u55\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u56\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u57\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u58\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u59\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u60\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u61\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u62\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u63\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u64\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u65\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u66\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u67\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u68\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u69\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u70\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u71\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u72\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u73\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u74\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u75\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u76\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u77\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u78\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u79\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u80\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u81\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u82\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u83\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u84\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u85\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u86\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u87\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u88\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u89\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u90\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u91\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u92\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u93\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u94\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u95\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u96\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u97\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u98\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u99\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u100\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u101\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u102\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u103\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u104\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u105\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u106\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u107\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u108\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u109\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u110\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u111\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u112\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u113\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u114\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u115\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u116\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u117\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u118\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u119\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u120\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u121\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u122\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u123\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u124\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u125\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u126\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u127\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u128\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u129\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u130\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u131\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u132\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u133\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u134\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u135\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u136\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u137\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u138\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u139\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u140\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u141\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u142\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u143\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u144\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u145\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u146\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u147\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u148\"},{\"method\":\"GET\",\"route\":\"/notes/:id\",\"status\":200,\"userId\":\"u149\"}], {\"counterLabels\":[\"method\",\"route\",\"status\",\"userId\"],\"histogramLabels\":[\"method\",\"route\",\"status\"],\"edges\":[0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5]})",
+            "mongDoi": {
+              "counter": 150,
+              "histogram": 13,
+              "total": 163
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countSeries([{\"method\":\"GET\",\"route\":\"/a\",\"status\":200},{\"method\":\"GET\",\"route\":\"/a\",\"status\":500},{\"method\":\"POST\",\"route\":\"/a\",\"status\":200},{\"method\":\"GET\",\"route\":\"/a\",\"status\":200}], {\"counterLabels\":[\"method\",\"route\",\"status\"],\"histogramLabels\":[\"route\"],\"edges\":[0.1,0.3,1]})",
+            "mongDoi": {
+              "counter": 3,
+              "histogram": 6,
+              "total": 9
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "countSeries([], {\"counterLabels\":[\"method\"],\"histogramLabels\":[\"method\"],\"edges\":[0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5]})",
+            "mongDoi": {
+              "counter": 0,
+              "histogram": 0,
+              "total": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting requests instead of distinct label combinations: traffic does not create series, distinct values do.|||Đếm request thay vì tổ hợp nhãn khác nhau: lưu lượng không tạo chuỗi, giá trị khác nhau mới tạo."
+        },
+        {
+          "loi": "Forgetting +Inf, _sum and _count: the histogram is the amplifier.|||Quên +Inf, _sum và _count: histogram chính là bộ khuếch đại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bucket",
+          "vi": "ngăn",
+          "giaiThich": "a counter of observations ≤ an edge"
+        },
+        {
+          "en": "label combination",
+          "vi": "tổ hợp nhãn"
+        }
+      ]
+    },
+    {
+      "title": "createHistogram(edges): cumulative buckets, _sum and _count as /metrics prints them",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "metrics",
+        "histograms",
+        "closures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A histogram is not a percentile calculator, it is a row of <b>cumulative</b> counters. Write <code>createHistogram(edges)</code> (edges ascending, in seconds) returning <code>{ observe(v), render(name) }</code>. <code>render</code> returns the exposition lines, in this order:</p><pre>&lt;name&gt;_bucket{le=\"&lt;edge&gt;\"} &lt;observations ≤ edge&gt;   (one per edge)\n&lt;name&gt;_bucket{le=\"+Inf\"} &lt;all observations&gt;\n&lt;name&gt;_sum &lt;sum of values, Number(sum.toFixed(6))&gt;\n&lt;name&gt;_count &lt;all observations&gt;</pre><p>An observation equal to an edge belongs to that bucket (<code>le</code> = less or equal). Print an edge with JavaScript’s default number-to-string (<code>0.005</code>, <code>1</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Histogram không phải máy tính bách phân vị, nó là một hàng counter <b>cộng dồn</b>. Viết <code>createHistogram(edges)</code> (các cạnh tăng dần, đơn vị giây) trả về <code>{ observe(v), render(name) }</code>. <code>render</code> trả về các dòng xuất, theo thứ tự:</p><pre>&lt;name&gt;_bucket{le=\"&lt;cạnh&gt;\"} &lt;số quan sát ≤ cạnh&gt;   (mỗi cạnh một dòng)\n&lt;name&gt;_bucket{le=\"+Inf\"} &lt;mọi quan sát&gt;\n&lt;name&gt;_sum &lt;tổng giá trị, Number(sum.toFixed(6))&gt;\n&lt;name&gt;_count &lt;mọi quan sát&gt;</pre><p>Quan sát bằng đúng một cạnh thuộc bucket đó (<code>le</code> = nhỏ hơn hoặc bằng). In cạnh bằng cách đổi số sang chuỗi mặc định của JavaScript (<code>0.005</code>, <code>1</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "h.render(\"http_request_duration_seconds\")",
+          "output": "[\"http_request_duration_seconds_bucket{le=\\\"0.005\\\"} 2\",\"http_request_duration_seconds_bucket{le=\\\"0.01\\\"} 4\",\"http_request_duration_seconds_bucket{le=\\\"0.025\\\"} 5\",\"http_request_duration_seconds_bucket{le=\\\"+Inf\\\"} 5\",\"http_request_duration_seconds_sum 0.044\",\"http_request_duration_seconds_count 5\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Cumulative means one observation increments EVERY bucket whose edge is ≥ the value, not just the first one.|||Cộng dồn nghĩa là một quan sát tăng MỌI bucket có cạnh ≥ giá trị, không chỉ bucket đầu tiên.",
+        "The +Inf line is always equal to _count; sum ÷ count is the average.|||Dòng +Inf luôn bằng _count; sum ÷ count là trung bình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** a prom-client style histogram */\nfunction createHistogram(edges) {\n  // Write your solution here\n  const counts = edges.map(() => 0);\n  let sum = 0, count = 0;\n  return {\n    observe(v) {\n      const i = edges.findIndex((e) => v < e);\n      if (i >= 0) counts[i]++;\n      sum += v; count++;\n    },\n    render(name) {\n      return [...edges.map((e, i) => name + '_bucket{le=\"' + e + '\"} ' + counts[i]), name + '_sum ' + sum, name + '_count ' + count];\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createHistogram(edges) {\n  // Histogram KHÔNG giữ từng giá trị: nó là một hàng counter, mỗi cạnh một cái, cộng dồn (v ≤ cạnh).\n  const counts = edges.map(() => 0);\n  let sum = 0;\n  let count = 0;\n  return {\n    observe(v) {\n      for (let i = 0; i < edges.length; i++) if (v <= edges[i]) counts[i]++;   // cộng dồn: v vào MỌI bucket có cạnh ≥ v\n      sum += v;\n      count++;\n    },\n    render(name) {\n      const lines = edges.map((e, i) => `${name}_bucket{le=\"${e}\"} ${counts[i]}`);\n      lines.push(`${name}_bucket{le=\"+Inf\"} ${count}`);              // +Inf luôn bằng _count\n      lines.push(`${name}_sum ${Number(sum.toFixed(6))}`);\n      lines.push(`${name}_count ${count}`);\n      return lines;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>After 300 requests the lesson read 193 ≤ 5 ms, 297 ≤ 10 ms, 300 ≤ 25 ms, _sum 1.207…, _count 300. There is no percentile in the output: Prometheus computes it later from these counters, so its precision is only as good as your edges — put one exactly at your SLO.</p>",
+      "solutionExplanationHtmlVi": "<p>Sau 300 request bài đọc được 193 ≤ 5 ms, 297 ≤ 10 ms, 300 ≤ 25 ms, _sum 1,207…, _count 300. Không có bách phân vị nào trong output: Prometheus tính sau từ các counter này, nên độ chính xác chỉ bằng các cạnh bạn chọn — hãy đặt một cạnh đúng ở SLO.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Five requests, one exactly on an edge",
+              "vi": "Năm request, một cái đúng bằng cạnh"
+            },
+            "goi": "h.render(\"http_request_duration_seconds\")",
+            "chuanBi": "const h = createHistogram([0.005, 0.01, 0.025]); for (const v of [0.003, 0.004, 0.007, 0.01, 0.02]) h.observe(v);",
+            "mongDoi": [
+              "http_request_duration_seconds_bucket{le=\"0.005\"} 2",
+              "http_request_duration_seconds_bucket{le=\"0.01\"} 4",
+              "http_request_duration_seconds_bucket{le=\"0.025\"} 5",
+              "http_request_duration_seconds_bucket{le=\"+Inf\"} 5",
+              "http_request_duration_seconds_sum 0.044",
+              "http_request_duration_seconds_count 5"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No observations yet",
+              "vi": "Chưa có quan sát nào"
+            },
+            "goi": "h.render(\"d\")",
+            "chuanBi": "const h = createHistogram([0.1, 0.3, 1]);",
+            "mongDoi": [
+              "d_bucket{le=\"0.1\"} 0",
+              "d_bucket{le=\"0.3\"} 0",
+              "d_bucket{le=\"1\"} 0",
+              "d_bucket{le=\"+Inf\"} 0",
+              "d_sum 0",
+              "d_count 0"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "h.render(\"http_request_duration_seconds\")",
+            "chuanBi": "const h = createHistogram([0.005, 0.01, 0.025]); for (let i = 0; i < 193; i++) h.observe(0.004); for (let i = 0; i < 104; i++) h.observe(0.006); for (let i = 0; i < 3; i++) h.observe(0.02);",
+            "mongDoi": [
+              "http_request_duration_seconds_bucket{le=\"0.005\"} 193",
+              "http_request_duration_seconds_bucket{le=\"0.01\"} 297",
+              "http_request_duration_seconds_bucket{le=\"0.025\"} 300",
+              "http_request_duration_seconds_bucket{le=\"+Inf\"} 300",
+              "http_request_duration_seconds_sum 1.456",
+              "http_request_duration_seconds_count 300"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "h.render(\"x\")",
+            "chuanBi": "const h = createHistogram([0.1, 0.3, 1]); [5, 0.3, 0.05, 2.5].forEach((v) => h.observe(v));",
+            "mongDoi": [
+              "x_bucket{le=\"0.1\"} 1",
+              "x_bucket{le=\"0.3\"} 2",
+              "x_bucket{le=\"1\"} 2",
+              "x_bucket{le=\"+Inf\"} 4",
+              "x_sum 7.85",
+              "x_count 4"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Non-cumulative buckets (each value in one bucket only): Prometheus’ histogram_quantile then computes nonsense.|||Bucket không cộng dồn (mỗi giá trị chỉ vào một bucket): histogram_quantile của Prometheus sẽ tính ra vô nghĩa."
+        },
+        {
+          "loi": "Using < instead of <=: a request of exactly 10 ms falls into the 25 ms bucket.|||Dùng < thay vì <=: một request đúng 10 ms rơi vào bucket 25 ms."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cumulative",
+          "vi": "cộng dồn"
+        },
+        {
+          "en": "exposition format",
+          "vi": "định dạng xuất",
+          "giaiThich": "the text Prometheus scrapes"
+        },
+        {
+          "en": "SLO",
+          "vi": "mục tiêu dịch vụ",
+          "giaiThich": "e.g. 95% under 300 ms"
+        }
+      ]
+    },
+    {
+      "title": "globalQuantile(q, replicas): add the buckets of three containers, then interpolate like histogram_quantile",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "metrics",
+        "percentiles",
+        "interpolation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Histogram buckets are counters, so they add up across containers — the whole reason to avoid a Summary. Each replica gives its cumulative buckets as <code>[[le, count], …]</code>, the last one with <code>le = \"+Inf\"</code>; all replicas have the same edges. Write <code>globalQuantile(q, replicas)</code>:</p><ol><li>sum the counts of each <code>le</code> across replicas;</li><li><code>total</code> = the <code>+Inf</code> count; if 0 return <code>null</code>;</li><li><code>rank = q × total</code>; find the first bucket whose count ≥ rank;</li><li>if that is the <code>+Inf</code> bucket, return the largest finite edge;</li><li>otherwise interpolate linearly inside it: <code>lower + (upper − lower) × (rank − countBelow) / countInBucket</code>, where <code>lower</code> is the previous edge (0 for the first bucket);</li><li>round with <code>Number(v.toFixed(6))</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bucket của histogram là counter nên cộng được giữa các container — đó là toàn bộ lý do tránh Summary. Mỗi bản sao cho bucket cộng dồn dạng <code>[[le, count], …]</code>, phần tử cuối có <code>le = \"+Inf\"</code>; mọi bản sao cùng các cạnh. Viết <code>globalQuantile(q, replicas)</code>:</p><ol><li>cộng số đếm của từng <code>le</code> qua các bản sao;</li><li><code>total</code> = số đếm của <code>+Inf</code>; bằng 0 thì trả <code>null</code>;</li><li><code>rank = q × total</code>; tìm bucket đầu tiên có số đếm ≥ rank;</li><li>nếu đó là bucket <code>+Inf</code>, trả cạnh hữu hạn lớn nhất;</li><li>không thì nội suy tuyến tính trong bucket: <code>lower + (upper − lower) × (rank − countBelow) / countInBucket</code>, với <code>lower</code> là cạnh trước (0 cho bucket đầu);</li><li>làm tròn bằng <code>Number(v.toFixed(6))</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "globalQuantile(0.95, [[[0.005,193],[0.01,297],[0.025,300],[\"+Inf\",300]]])",
+          "output": "0.009423",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Merge first: replicas[0].map(([le], i) => [le, sum of r[i][1]]).|||Gộp trước: replicas[0].map(([le], i) => [le, tổng r[i][1]]).",
+        "countBelow and countInBucket come from the merged CUMULATIVE counts: inBucket = c[i] − c[i−1].|||countBelow và countInBucket lấy từ số đếm CỘNG DỒN đã gộp: inBucket = c[i] − c[i−1]."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** global percentile from replica buckets */\nfunction globalQuantile(q, replicas) {\n  // Write your solution here — this averages each replica's own estimate\n  const per = replicas.map((b) => {\n    const total = b[b.length - 1][1];\n    const i = b.findIndex(([, c]) => c >= q * total);\n    return b[i][0] === '+Inf' ? b[i - 1][0] : b[i][0];\n  });\n  return per.reduce((a, b) => a + b, 0) / per.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction globalQuantile(q, replicas) {\n  // 1) bucket là counter ⇒ CỘNG theo từng cạnh giữa các container ⇒ một histogram toàn cục.\n  const merged = replicas[0].map(([le], i) => [le, replicas.reduce((s, r) => s + r[i][1], 0)]);\n  const total = merged[merged.length - 1][1];                       // bucket +Inf = tổng số quan sát\n  if (total === 0) return null;\n  // 2) histogram_quantile: hạng = q × tổng, tìm bucket đầu tiên có số đếm ≥ hạng, nội suy tuyến tính trong bucket.\n  const rank = q * total;\n  const i = merged.findIndex(([, c]) => c >= rank);\n  if (merged[i][0] === '+Inf') return merged[i - 1][0];             // rơi vào +Inf ⇒ trả cạnh hữu hạn lớn nhất\n  const lower = i === 0 ? 0 : merged[i - 1][0];\n  const below = i === 0 ? 0 : merged[i - 1][1];\n  const inBucket = merged[i][1] - below;\n  const v = lower + (merged[i][0] - lower) * ((rank - below) / inBucket);\n  return Number(v.toFixed(6));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is how Prometheus answers histogram_quantile(0.95, sum by (le) (rate(…_bucket[5m]))). The interpolation is a guess inside one bucket — Prometheus cannot see inside it — so any p95 between 10 ms and 25 ms here is an estimate. Edges at your decision points make the guess irrelevant.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là cách Prometheus trả lời histogram_quantile(0.95, sum by (le) (rate(…_bucket[5m]))). Phép nội suy là phỏng đoán bên trong một bucket — Prometheus không nhìn vào trong được — nên mọi p95 giữa 10 ms và 25 ms ở đây đều là ước lượng. Đặt cạnh ở đúng điểm bạn ra quyết định thì phỏng đoán không còn quan trọng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s 300 requests, p95",
+              "vi": "300 request của bài, p95"
+            },
+            "goi": "globalQuantile(0.95, [[[0.005,193],[0.01,297],[0.025,300],[\"+Inf\",300]]])",
+            "mongDoi": 0.009423
+          },
+          {
+            "moTa": {
+              "en": "Three replicas, p50",
+              "vi": "Ba bản sao, p50"
+            },
+            "goi": "globalQuantile(0.5, [[[0.005,193],[0.01,297],[0.025,300],[\"+Inf\",300]],[[0.005,150],[0.01,310],[0.025,318],[\"+Inf\",320]],[[0.005,201],[0.01,288],[0.025,299],[\"+Inf\",300]]])",
+            "mongDoi": 0.004228
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "globalQuantile(0.99, [[[0.005,10],[0.01,20],[0.025,30],[\"+Inf\",100]],[[0.005,90],[0.01,95],[0.025,99],[\"+Inf\",100]]])",
+            "mongDoi": 0.025,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "globalQuantile(0.95, [[[0.005,0],[0.01,0],[0.025,0],[\"+Inf\",0]],[[0.005,0],[0.01,0],[0.025,0],[\"+Inf\",0]]])",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "globalQuantile(0.1, [[[0.005,40],[0.01,80],[0.025,100],[\"+Inf\",100]]])",
+            "mongDoi": 0.00125,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Averaging each replica’s p95: the mean of three p95s is not the global p95 (one busy replica is diluted by two quiet ones).|||Lấy trung bình p95 của từng bản sao: trung bình ba p95 không phải p95 toàn cục (một bản sao bận bị hai bản rảnh pha loãng)."
+        },
+        {
+          "loi": "Treating cumulative counts as per-bucket counts when interpolating.|||Coi số đếm cộng dồn là số đếm riêng của bucket khi nội suy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "histogram_quantile",
+          "vi": "histogram_quantile",
+          "giaiThich": "PromQL function computing a percentile from buckets"
+        },
+        {
+          "en": "interpolation",
+          "vi": "nội suy"
+        }
+      ]
+    }
+  ]
+}

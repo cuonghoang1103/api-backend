@@ -1,0 +1,742 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-6-tong-ket-khoa-hoc",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-6-tong-ket-khoa-hoc"
+  },
+  "exercises": [
+    {
+      "title": "One number per chapter, five ideas",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Which of the five ideas of the course does each measured number illustrate best?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi con số đã đo minh hoạ rõ nhất cho ý tưởng nào trong năm ý tưởng của khoá?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the number refuted.|||Hỏi con số đó đã bác bỏ điều gì.",
+        "Removing work vs speeding up work.|||Bỏ bớt việc so với làm cùng việc nhanh hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One number per chapter, five ideas\n\nAnswer in the answer panel (no code needed).\n\n1. Number → ideaCon số → ý tưởng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One number per chapter, five ideas — answer key\n\n1. Number → ideaCon số → ý tưởng\n   - r1.i: measure, do not guess\n   - r2.i: doing less beats going faster\n   - r3.i: defaults are decisions\n   - r4.i: types are not authorisation\n   - r5.i: fail loudly\n   - r6.i: measure, do not guess\n   Every number came from a script that was executed, and several contradicted the documentation (Docker’s stop timeout, brotli’s highest level, the cost of AsyncLocalStorage, the shape of an “LRU” cache). When you do not know, run it.VI: Mọi con số đều đến từ một script đã thật sự chạy, và vài con số mâu thuẫn với tài liệu (thời gian dừng của Docker, mức brotli cao nhất, chi phí AsyncLocalStorage, hình dạng thật của một cache “LRU”). Khi không biết, hãy chạy thử.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every number came from a script that was executed, and several contradicted the documentation (Docker’s stop timeout, brotli’s highest level, the cost of AsyncLocalStorage, the shape of an “LRU” cache). When you do not know, run it.</p><p><i>VI: Mọi con số đều đến từ một script đã thật sự chạy, và vài con số mâu thuẫn với tài liệu (thời gian dừng của Docker, mức brotli cao nhất, chi phí AsyncLocalStorage, hình dạng thật của một cache “LRU”). Khi không biết, hãy chạy thử.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Number → idea</p><p style=\"opacity:.75;font-size:.92em\"><i>Con số → ý tưởng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Measured"
+              },
+              {
+                "ma": "i",
+                "ten": "Idea",
+                "luaChon": [
+                  "measure, do not guess",
+                  "doing less beats going faster",
+                  "defaults are decisions",
+                  "types are not authorisation",
+                  "fail loudly"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "The regexes everyone suspected were 3.2% of CPU (16.1)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "An index 657×, a cache hit 143.5×, N+1 → 2 queries 6.3×, vs a faster serialiser 1.35×"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "pino-http logged every header, tokens included; docker stop killed after 3.14 s here"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "typeof threadId === \"number\" passed, and one user read another’s socket thread (chapter 11)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "A stale build answered 404 behind a green health check; a missing variable should exit 1 at boot"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "A healthy p95 of 114.2 ms hid one 8,241 ms request (15.3)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": "measure, do not guess",
+              "r2.i": "doing less beats going faster",
+              "r3.i": "defaults are decisions",
+              "r4.i": "types are not authorisation",
+              "r5.i": "fail loudly",
+              "r6.i": "measure, do not guess"
+            },
+            "giaiThich": "<p>Every number came from a script that was executed, and several contradicted the documentation (Docker’s stop timeout, brotli’s highest level, the cost of AsyncLocalStorage, the shape of an “LRU” cache). When you do not know, run it.</p><p><i>VI: Mọi con số đều đến từ một script đã thật sự chạy, và vài con số mâu thuẫn với tài liệu (thời gian dừng của Docker, mức brotli cao nhất, chi phí AsyncLocalStorage, hình dạng thật của một cache “LRU”). Khi không biết, hãy chạy thử.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the table as a quiz of numbers: it is a reminder of what each chapter measured.|||Đọc bảng như bài đố con số: nó là lời nhắc mỗi chương đã đo gì."
+        },
+        {
+          "loi": "Mixing “defaults” with “measure”: a default is a decision someone made for you.|||Lẫn “mặc định” với “đo”: mặc định là quyết định ai đó đã làm thay bạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default",
+          "vi": "mặc định",
+          "giaiThich": "a decision a library or platform made for you"
+        }
+      ]
+    },
+    {
+      "title": "What a real backend does before serving one request",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "review",
+        "operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The production boot log of the website (3.63 s from start to “API running”), in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhật ký khởi động production của website (3,63 s từ lúc chạy tới “API running”), theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Error tracking must exist before anything that can fail.|||Theo dõi lỗi phải có trước mọi thứ có thể hỏng.",
+        "“API running” is the last line by definition.|||“API running” là dòng cuối theo định nghĩa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a real backend does before serving one request\n\nAnswer in the answer panel (no code needed).\n\n1. Each line is a chapter; order them as they appear.Mỗi dòng là một chương; sắp theo thứ tự xuất hiện.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a real backend does before serving one request — answer key\n\n1. Each line is a chapter; order them as they appear.Mỗi dòng là một chương; sắp theo thứ tự xuất hiện.\n   Answer: m8) Sentry initialised (chapter 15)  →  m3) Redis ready (chapter 12)  →  m4) Socket.IO Redis adapter attached (chapter 11)  →  m6) Database connected in 10 ms (chapter 7)  →  m7) Table and index checks OK (chapter 7)  →  m2) Embed queue recovery scan (chapter 13)  →  m1) All cron jobs registered (chapter 13, the per-process flag of 16.4)  →  m5) API running on port 3001 (chapters 5 and 17)\n   Read it as a checklist that ran: error tracking first (so a boot failure is reported), shared state, the database, indexes, recovery of half-done jobs, schedules — and only then accepting traffic. If boot fails, the missing line tells you where to look.VI: Đọc nó như một danh sách kiểm đã chạy: theo dõi lỗi trước (để lỗi khởi động cũng được báo), trạng thái chung, CSDL, index, phục hồi job làm dở, lịch chạy — và chỉ khi đó mới nhận lưu lượng. Nếu khởi động hỏng, dòng bị thiếu cho bạn biết phải nhìn vào đâu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Read it as a checklist that ran: error tracking first (so a boot failure is reported), shared state, the database, indexes, recovery of half-done jobs, schedules — and only then accepting traffic. If boot fails, the missing line tells you where to look.</p><p><i>VI: Đọc nó như một danh sách kiểm đã chạy: theo dõi lỗi trước (để lỗi khởi động cũng được báo), trạng thái chung, CSDL, index, phục hồi job làm dở, lịch chạy — và chỉ khi đó mới nhận lưu lượng. Nếu khởi động hỏng, dòng bị thiếu cho bạn biết phải nhìn vào đâu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Each line is a chapter; order them as they appear.</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi dòng là một chương; sắp theo thứ tự xuất hiện.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "All cron jobs registered (chapter 13, the per-process flag of 16.4)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Embed queue recovery scan (chapter 13)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Redis ready (chapter 12)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Socket.IO Redis adapter attached (chapter 11)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "API running on port 3001 (chapters 5 and 17)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Database connected in 10 ms (chapter 7)"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Table and index checks OK (chapter 7)"
+              },
+              {
+                "ma": "m8",
+                "noiDung": "Sentry initialised (chapter 15)"
+              }
+            ],
+            "dapAn": [
+              "m8",
+              "m3",
+              "m4",
+              "m6",
+              "m7",
+              "m2",
+              "m1",
+              "m5"
+            ],
+            "giaiThich": "<p>Read it as a checklist that ran: error tracking first (so a boot failure is reported), shared state, the database, indexes, recovery of half-done jobs, schedules — and only then accepting traffic. If boot fails, the missing line tells you where to look.</p><p><i>VI: Đọc nó như một danh sách kiểm đã chạy: theo dõi lỗi trước (để lỗi khởi động cũng được báo), trạng thái chung, CSDL, index, phục hồi job làm dở, lịch chạy — và chỉ khi đó mới nhận lưu lượng. Nếu khởi động hỏng, dòng bị thiếu cho bạn biết phải nhìn vào đâu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Accepting traffic before the database is connected.|||Nhận lưu lượng trước khi CSDL kết nối."
+        },
+        {
+          "loi": "Registering cron jobs before the recovery scan.|||Đăng ký cron trước khi quét phục hồi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boot sequence",
+          "vi": "trình tự khởi động"
+        }
+      ]
+    },
+    {
+      "title": "After the course: what was left out, and the trap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the second part of lesson 18.6.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về phần hai của bài 18.6.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each pattern earns its place under a condition.|||Mỗi mẫu thiết kế có chỗ đứng dưới một điều kiện.",
+        "The habit transfers; the list of tools does not.|||Thói quen thì mang theo được; danh sách công cụ thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# After the course: what was left out, and the trap\n\nAnswer in the answer panel (no code needed).\n\n1. GraphQL, gRPC, serverless, Kubernetes, event sourcing and CQRS were left out on purpose. Why?GraphQL, gRPC, serverless, Kubernetes, event sourcing và CQRS được cố ý bỏ ra ngoài. Vì sao?\n2. What does the course say to carry forward? (choose all that apply)Khoá học bảo mang theo điều gì? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# After the course: what was left out, and the trap — answer key\n\n1. GraphQL, gRPC, serverless, Kubernetes, event sourcing and CQRS were left out on purpose. Why?GraphQL, gRPC, serverless, Kubernetes, event sourcing và CQRS được cố ý bỏ ra ngoài. Vì sao?\n   Answer: b) None decides whether a first backend survives; they are easier once the layers underneath are measured\n   All are real and have a place. The trap after finishing is building the same thing again with more layers — a queue for 8 ms of work, a cache in front of a 2 ms query, three services where one file would do.VI: Tất cả đều có thật và có chỗ của chúng. Cái bẫy sau khi học xong là dựng lại cùng một thứ với nhiều tầng hơn — hàng đợi cho việc 8 ms, cache trước truy vấn 2 ms, ba dịch vụ cho thứ một tệp làm được.\n\n2. What does the course say to carry forward? (choose all that apply)Khoá học bảo mang theo điều gì? (chọn mọi câu đúng)\n   Answer: a) When you do not know, run it + c) Carry the condition with each pattern, and measure that it holds + d) Describe your system accurately, gaps included\n   Two security holes in the real system were found not by an audit but by measuring something for a lesson. Build something real, put it in front of people, then measure it.VI: Hai lỗ hổng bảo mật trong hệ thống thật được tìm ra không phải bởi một đợt kiểm toán mà bởi việc đo một thứ cho bài học. Hãy làm một thứ thật, đưa tới người dùng thật, rồi đo nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> None decides whether a first backend survives; they are easier once the layers underneath are measured</p><p>All are real and have a place. The trap after finishing is building the same thing again with more layers — a queue for 8 ms of work, a cache in front of a 2 ms query, three services where one file would do.</p><p><i>VI: Tất cả đều có thật và có chỗ của chúng. Cái bẫy sau khi học xong là dựng lại cùng một thứ với nhiều tầng hơn — hàng đợi cho việc 8 ms, cache trước truy vấn 2 ms, ba dịch vụ cho thứ một tệp làm được.</i></p></li><li><p><b>a)</b> When you do not know, run it + <b>c)</b> Carry the condition with each pattern, and measure that it holds + <b>d)</b> Describe your system accurately, gaps included</p><p>Two security holes in the real system were found not by an audit but by measuring something for a lesson. Build something real, put it in front of people, then measure it.</p><p><i>VI: Hai lỗ hổng bảo mật trong hệ thống thật được tìm ra không phải bởi một đợt kiểm toán mà bởi việc đo một thứ cho bài học. Hãy làm một thứ thật, đưa tới người dùng thật, rồi đo nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>GraphQL, gRPC, serverless, Kubernetes, event sourcing and CQRS were left out on purpose. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>GraphQL, gRPC, serverless, Kubernetes, event sourcing và CQRS được cố ý bỏ ra ngoài. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They require a different programming language than Node.js"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None decides whether a first backend survives; they are easier once the layers underneath are measured"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They cannot run on a single VPS at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are outdated and no longer used in production"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>All are real and have a place. The trap after finishing is building the same thing again with more layers — a queue for 8 ms of work, a cache in front of a 2 ms query, three services where one file would do.</p><p><i>VI: Tất cả đều có thật và có chỗ của chúng. Cái bẫy sau khi học xong là dựng lại cùng một thứ với nhiều tầng hơn — hàng đợi cho việc 8 ms, cache trước truy vấn 2 ms, ba dịch vụ cho thứ một tệp làm được.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What does the course say to carry forward? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá học bảo mang theo điều gì? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When you do not know, run it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Adopt every pattern of the course in your next project, from day one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Carry the condition with each pattern, and measure that it holds"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Describe your system accurately, gaps included"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Two security holes in the real system were found not by an audit but by measuring something for a lesson. Build something real, put it in front of people, then measure it.</p><p><i>VI: Hai lỗ hổng bảo mật trong hệ thống thật được tìm ra không phải bởi một đợt kiểm toán mà bởi việc đo một thứ cho bài học. Hãy làm một thứ thật, đưa tới người dùng thật, rồi đo nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A cache in front of a 2 ms query.|||Cache trước một truy vấn 2 ms."
+        },
+        {
+          "loi": "Splitting into services “because the course showed how”.|||Tách dịch vụ “vì khoá học đã chỉ cách”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "over-engineering",
+          "vi": "thiết kế quá tay"
+        }
+      ]
+    },
+    {
+      "title": "bootCheck(logLines): which line is missing, and which chapter to reopen",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "operations",
+        "logs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The boot log is a checklist that ran. Expected markers, in order: <code>Sentry initialised</code>, <code>Redis ready</code>, <code>Socket.IO Redis adapter attached</code>, <code>Database connected</code>, <code>Table and index checks OK</code>, <code>Embed queue recovery scan</code>, <code>Cron jobs registered</code>, <code>API running</code>. Write <code>bootCheck(logLines)</code>: look for each marker (case-insensitive substring) in a line <b>after</b> the line where the previous marker was found. At the first marker not found, return <code>{ ok: false, missing, hint, lastError }</code> where <code>hint</code> is its chapter hint (copy the table in the starter) and <code>lastError</code> the first line after the last found marker containing the word <code>error</code> or <code>fatal</code>, or <code>missing</code> (case-insensitive), else <code>null</code>. All found: <code>{ ok: true, missing: null, hint: null, lastError: null }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhật ký khởi động là một danh sách kiểm đã chạy. Các mốc mong đợi, theo thứ tự: <code>Sentry initialised</code>, <code>Redis ready</code>, <code>Socket.IO Redis adapter attached</code>, <code>Database connected</code>, <code>Table and index checks OK</code>, <code>Embed queue recovery scan</code>, <code>Cron jobs registered</code>, <code>API running</code>. Viết <code>bootCheck(logLines)</code>: tìm mỗi mốc (chuỗi con, không phân biệt hoa thường) ở một dòng <b>sau</b> dòng đã tìm thấy mốc trước. Ở mốc đầu tiên không tìm thấy, trả <code>{ ok: false, missing, hint, lastError }</code> với <code>hint</code> là gợi ý chương của nó (chép bảng trong code khởi đầu) và <code>lastError</code> là dòng đầu tiên sau mốc tìm thấy cuối cùng có chứa từ <code>error</code> hoặc <code>fatal</code>, hoặc <code>missing</code> (không phân biệt hoa thường), không có thì <code>null</code>. Tìm thấy hết: <code>{ ok: true, missing: null, hint: null, lastError: null }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "bootCheck([\"[boot] Sentry initialised\",\"[boot] Redis ready\",\"[boot] Socket.IO Redis adapter attached\",\"[boot] Database connected in 10ms\",\"[boot] Table and index checks OK\",\"[boot] Embed queue recovery scan: 0 stuck\",\"[boot] Cron jobs registered (40)\",\"[boot] API running on port 3001\"])",
+          "output": "{\"ok\":true,\"missing\":null,\"hint\":null,\"lastError\":null}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep an index from = (line of the previous marker) + 1 and search with findIndex((l, k) => k >= from && …).|||Giữ chỉ số from = (dòng của mốc trước) + 1 và tìm bằng findIndex((l, k) => k >= from && …).",
+        "The error line that explains a missing step is usually just after the last step that worked.|||Dòng lỗi giải thích bước bị thiếu thường nằm ngay sau bước cuối cùng chạy được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which boot step is missing? */\nfunction bootCheck(logLines) {\n  const STEPS = [\n    ['Sentry initialised', 'chapter 15: error tracking (SENTRY_DSN)'],\n    ['Redis ready', 'chapter 12: REDIS_URL and the redis container'],\n    ['Socket.IO Redis adapter attached', 'chapter 11: the adapter needs Redis first'],\n    ['Database connected', 'chapter 7 and the environment (17.4): DATABASE_URL'],\n    ['Table and index checks OK', 'chapter 7: migrations (prisma migrate status)'],\n    ['Embed queue recovery scan', 'chapter 13: the in-process queue'],\n    ['Cron jobs registered', 'chapter 13 / 16.4: cron.service'],\n    ['API running', 'chapter 5 and 17: read the error just above'],\n  ];\n  // Write your solution here\n  const last = logLines[logLines.length - 1] || '';\n  if (last.includes('API running')) return { ok: true, missing: null, hint: null, lastError: null };\n  return { ok: false, missing: 'API running', hint: STEPS[7][1], lastError: last };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction bootCheck(logLines) {\n  const STEPS = [\n    ['Sentry initialised', 'chapter 15: error tracking (SENTRY_DSN)'],\n    ['Redis ready', 'chapter 12: REDIS_URL and the redis container'],\n    ['Socket.IO Redis adapter attached', 'chapter 11: the adapter needs Redis first'],\n    ['Database connected', 'chapter 7 and the environment (17.4): DATABASE_URL'],\n    ['Table and index checks OK', 'chapter 7: migrations (prisma migrate status)'],\n    ['Embed queue recovery scan', 'chapter 13: the in-process queue'],\n    ['Cron jobs registered', 'chapter 13 / 16.4: cron.service'],\n    ['API running', 'chapter 5 and 17: read the error just above'],\n  ];\n  // Mỗi bước phải xuất hiện, và theo đúng thứ tự (tìm tiếp từ sau dòng của bước trước).\n  let from = 0;\n  for (const [marker, hint] of STEPS) {\n    const i = logLines.findIndex((l, k) => k >= from && l.toLowerCase().includes(marker.toLowerCase()));\n    if (i < 0) {\n      const last = logLines.slice(from).find((l) => /\\berror\\b|\\bfatal\\b|missing/i.test(l)) || null;\n      return { ok: false, missing: marker, hint, lastError: last };\n    }\n    from = i + 1;\n  }\n  return { ok: true, missing: null, hint: null, lastError: null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>No “Database connected”? Chapter 7 and the environment (17.4). No “API running”? Read the error just above it. A container that dies at boot with its reason is a gift; reading the boot log in order turns that gift into a five-second diagnosis.</p>",
+      "solutionExplanationHtmlVi": "<p>Không có “Database connected”? Chương 7 và môi trường (17.4). Không có “API running”? Đọc lỗi ngay phía trên. Một container chết lúc khởi động kèm lý do là món quà; đọc nhật ký khởi động theo thứ tự biến món quà đó thành một chẩn đoán năm giây.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The production boot log",
+              "vi": "Nhật ký khởi động production"
+            },
+            "goi": "bootCheck([\"[boot] Sentry initialised\",\"[boot] Redis ready\",\"[boot] Socket.IO Redis adapter attached\",\"[boot] Database connected in 10ms\",\"[boot] Table and index checks OK\",\"[boot] Embed queue recovery scan: 0 stuck\",\"[boot] Cron jobs registered (40)\",\"[boot] API running on port 3001\"])",
+            "mongDoi": {
+              "ok": true,
+              "missing": null,
+              "hint": null,
+              "lastError": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "The database never answers",
+              "vi": "CSDL không bao giờ trả lời"
+            },
+            "goi": "bootCheck([\"[boot] Sentry initialised\",\"[boot] Redis ready\",\"[boot] Socket.IO Redis adapter attached\",\"[boot] connecting to database...\",\"Error: P1001 Can't reach database server at db:5432\",\"[boot] exiting with code 1\"])",
+            "mongDoi": {
+              "ok": false,
+              "missing": "Database connected",
+              "hint": "chapter 7 and the environment (17.4): DATABASE_URL",
+              "lastError": "Error: P1001 Can't reach database server at db:5432"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "bootCheck([\"MISSING ENVIRONMENT VARIABLES: R2_ACCESS_KEY_ID\"])",
+            "mongDoi": {
+              "ok": false,
+              "missing": "Sentry initialised",
+              "hint": "chapter 15: error tracking (SENTRY_DSN)",
+              "lastError": "MISSING ENVIRONMENT VARIABLES: R2_ACCESS_KEY_ID"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bootCheck([\"[old] Cron jobs registered (40)\",\"[old] API running on port 3001\",\"[boot] Sentry initialised\",\"[boot] Redis ready\",\"[boot] Socket.IO Redis adapter attached\",\"[boot] Database connected in 10ms\",\"[boot] Table and index checks OK\",\"[boot] Embed queue recovery scan: 0 stuck\",\"[boot] TypeError: cron.schedule is not a function\"])",
+            "mongDoi": {
+              "ok": false,
+              "missing": "Cron jobs registered",
+              "hint": "chapter 13 / 16.4: cron.service",
+              "lastError": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bootCheck([\"[boot] Sentry initialised\",\"[boot] Redis ready\",\"[boot] Socket.IO Redis adapter attached\",\"[boot] Database connected in 10ms\",\"[boot] Table and index checks OK\",\"[boot] Embed queue recovery scan: 0 stuck\",\"[boot] Cron jobs registered (40)\",\"[boot] listen EADDRINUSE: address already in use :::3001\"])",
+            "mongDoi": {
+              "ok": false,
+              "missing": "API running",
+              "hint": "chapter 5 and 17: read the error just above",
+              "lastError": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Searching the whole log for each marker: a line from a previous boot (before a restart) makes a missing step look present.|||Tìm mỗi mốc trên toàn log: một dòng của lần khởi động trước (trước khi restart) làm bước thiếu trông như có."
+        },
+        {
+          "loi": "Reading only the last line: “API running” is absent, but the reason is several lines up.|||Chỉ đọc dòng cuối: thiếu “API running”, nhưng lý do nằm vài dòng phía trên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boot log",
+          "vi": "nhật ký khởi động"
+        }
+      ]
+    },
+    {
+      "title": "productionChecklist(config): seven items before your first production deploy",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "production",
+        "review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Encode the course’s seven-item checklist. <code>config</code> describes a deployment with these fields; a check passes only when the field has exactly the stated value:</p><ol><li><b>secrets</b>: <code>secretsInImage === false</code> (“secrets are in the image”), <code>requiredEnvCheckedAtBoot === true</code> (“required env not checked at boot”);</li><li><b>auth</b>: <code>passwordHash</code> is <code>\"argon2\"</code> or <code>\"bcrypt\"</code> (“passwords not hashed with argon2/bcrypt”), <code>jwtExpires</code> (“JWTs do not expire”), <code>authorizeEveryHandler</code> (“ownership not checked in every handler”);</li><li><b>input</b>: <code>validateBodies</code> (“bodies not validated”), <code>bodyLimit</code> (“no body size cap”), <code>redactLogs</code> (“secrets not redacted in logs”);</li><li><b>database</b>: <code>additiveMigrations</code> (“migrations not additive”), <code>indexesOnFilters</code> (“no index on filtered columns”), <code>poolMeasured</code> (“pool size not measured”);</li><li><b>observability</b>: <code>jsonLogsWithRequestId</code> (“no JSON logs with request id”), <code>externalUptimeCheck</code> (“no external uptime check”), <code>diskAlert</code> (“no disk alert”);</li><li><b>lifecycle</b>: <code>cmdExecForm</code> (“CMD is not the exec form”), <code>sigtermHandler</code> (“no SIGTERM handler”), <code>stopGracePeriodSec</code> a number greater than <code>slowestRequestSec</code> (default 0) (“stop_grace_period not set above the slowest request”), <code>livenessTouchesDb === false</code> (“liveness touches the database”);</li><li><b>deploy</b>: <code>proxyOwnsPort</code> (“no proxy owns the port”), <code>smokeTest</code> (“no smoke test”), <code>imageTag</code> non-empty and not <code>\"latest\"</code> (“image tag is not immutable”).</li></ol><p>(Fields not marked otherwise must be <code>true</code>.) Return <code>{ passed, of: 7, items }</code>: <code>items[name]</code> is <code>\"ok\"</code> or the list of failure texts in the order above; <code>passed</code> counts the ok items.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã hoá danh sách kiểm bảy mục của khoá. <code>config</code> mô tả một lần triển khai với các trường sau; một phép kiểm chỉ đạt khi trường có đúng giá trị đã nêu:</p><ol><li><b>secrets</b>: <code>secretsInImage === false</code> (“secrets are in the image”), <code>requiredEnvCheckedAtBoot === true</code> (“required env not checked at boot”);</li><li><b>auth</b>: <code>passwordHash</code> là <code>\"argon2\"</code> hoặc <code>\"bcrypt\"</code> (“passwords not hashed with argon2/bcrypt”), <code>jwtExpires</code> (“JWTs do not expire”), <code>authorizeEveryHandler</code> (“ownership not checked in every handler”);</li><li><b>input</b>: <code>validateBodies</code> (“bodies not validated”), <code>bodyLimit</code> (“no body size cap”), <code>redactLogs</code> (“secrets not redacted in logs”);</li><li><b>database</b>: <code>additiveMigrations</code> (“migrations not additive”), <code>indexesOnFilters</code> (“no index on filtered columns”), <code>poolMeasured</code> (“pool size not measured”);</li><li><b>observability</b>: <code>jsonLogsWithRequestId</code> (“no JSON logs with request id”), <code>externalUptimeCheck</code> (“no external uptime check”), <code>diskAlert</code> (“no disk alert”);</li><li><b>lifecycle</b>: <code>cmdExecForm</code> (“CMD is not the exec form”), <code>sigtermHandler</code> (“no SIGTERM handler”), <code>stopGracePeriodSec</code> là số lớn hơn <code>slowestRequestSec</code> (mặc định 0) (“stop_grace_period not set above the slowest request”), <code>livenessTouchesDb === false</code> (“liveness touches the database”);</li><li><b>deploy</b>: <code>proxyOwnsPort</code> (“no proxy owns the port”), <code>smokeTest</code> (“no smoke test”), <code>imageTag</code> khác rỗng và khác <code>\"latest\"</code> (“image tag is not immutable”).</li></ol><p>(Trường không ghi khác thì phải là <code>true</code>.) Trả về <code>{ passed, of: 7, items }</code>: <code>items[tên]</code> là <code>\"ok\"</code> hoặc danh sách chữ lỗi theo thứ tự trên; <code>passed</code> đếm số mục ok.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "productionChecklist({\"secretsInImage\":false,\"requiredEnvCheckedAtBoot\":true,\"passwordHash\":\"bcrypt\",\"jwtExpires\":true,\"authorizeEveryHandler\":true,\"validateBodies\":true,\"bodyLimit\":true,\"redactLogs\":true,\"additiveMigrations\":true,\"indexesOnFilters\":true,\"poolMeasured\":true,\"jsonLogsWithRequestId\":true,\"externalUptimeCheck\":false,\"diskAlert\":true,\"cmdExecForm\":true,\"sigtermHandler\":true,\"stopGracePeriodSec\":null,\"slowestRequestSec\":30,\"livenessTouchesDb\":true,\"proxyOwnsPort\":true,\"smokeTest\":true,\"imageTag\":\"7d2e801\"})",
+          "output": "{\"passed\":5,\"of\":7,\"items\":{\"secrets\":\"ok\",\"auth\":\"ok\",\"input\":\"ok\",\"database\":\"ok\",\"observability\":[\"no external uptime check\"],\"lifecycle\":[\"stop_grace_period not set above the slowest request\",\"liveness touches the database\"],\"deploy\":\"ok\"}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Describe the checklist as data: [[name, [[condition, failure text], …]], …], then loop.|||Mô tả danh sách kiểm như dữ liệu: [[tên, [[điều kiện, chữ lỗi], …]], …], rồi lặp.",
+        "Use === true / === false: a missing field must fail, not pass.|||Dùng === true / === false: trường bị thiếu phải trượt, không được đạt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the seven-item production checklist */\nfunction productionChecklist(c) {\n  // Write your solution here — this only checks a few fields, and treats missing ones as ok\n  const items = {\n    secrets: c.secretsInImage ? ['secrets are in the image'] : 'ok',\n    deploy: c.imageTag === 'latest' ? ['image tag is not immutable'] : 'ok',\n  };\n  const passed = Object.values(items).filter((v) => v === 'ok').length;\n  return { passed, of: 7, items };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction productionChecklist(c) {\n  // Bảy mục, không phải bảy mươi — mỗi mục là một chương có số đo.\n  const items = [\n    ['secrets', [[c.secretsInImage === false, 'secrets are in the image'], [c.requiredEnvCheckedAtBoot === true, 'required env not checked at boot']]],\n    ['auth', [[['argon2', 'bcrypt'].includes(c.passwordHash), 'passwords not hashed with argon2/bcrypt'], [c.jwtExpires === true, 'JWTs do not expire'], [c.authorizeEveryHandler === true, 'ownership not checked in every handler']]],\n    ['input', [[c.validateBodies === true, 'bodies not validated'], [c.bodyLimit === true, 'no body size cap'], [c.redactLogs === true, 'secrets not redacted in logs']]],\n    ['database', [[c.additiveMigrations === true, 'migrations not additive'], [c.indexesOnFilters === true, 'no index on filtered columns'], [c.poolMeasured === true, 'pool size not measured']]],\n    ['observability', [[c.jsonLogsWithRequestId === true, 'no JSON logs with request id'], [c.externalUptimeCheck === true, 'no external uptime check'], [c.diskAlert === true, 'no disk alert']]],\n    ['lifecycle', [[c.cmdExecForm === true, 'CMD is not the exec form'], [c.sigtermHandler === true, 'no SIGTERM handler'], [typeof c.stopGracePeriodSec === 'number' && c.stopGracePeriodSec > (c.slowestRequestSec || 0), 'stop_grace_period not set above the slowest request'], [c.livenessTouchesDb === false, 'liveness touches the database']]],\n    ['deploy', [[c.proxyOwnsPort === true, 'no proxy owns the port'], [c.smokeTest === true, 'no smoke test'], [!!c.imageTag && c.imageTag !== 'latest', 'image tag is not immutable']]],\n  ];\n  const result = {};\n  let passed = 0;\n  for (const [name, checks] of items) {\n    const problems = checks.filter(([ok]) => !ok).map(([, why]) => why);\n    result[name] = problems.length ? problems : 'ok';\n    if (!problems.length) passed++;\n  }\n  return { passed, of: items.length, items: result };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured on the website on 08/11/2026, honestly: no stop_grace_period on the backend (the app waits up to 30 s), a healthcheck that runs SELECT 1, and an external monitor that would read “ok” through a database outage. Seven items, not seventy — none exotic, each learned by getting it wrong once.</p>",
+      "solutionExplanationHtmlVi": "<p>Đo trên website ngày 08/11/2026, một cách trung thực: backend không có stop_grace_period (app chờ tới 30 s), healthcheck chạy SELECT 1, và giám sát bên ngoài sẽ đọc “ok” ngay cả khi CSDL sập. Bảy mục, không phải bảy mươi — không mục nào lạ, mỗi mục đều học được bằng một lần làm sai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The website, as measured on 08/11/2026",
+              "vi": "Website, đo ngày 08/11/2026"
+            },
+            "goi": "productionChecklist({\"secretsInImage\":false,\"requiredEnvCheckedAtBoot\":true,\"passwordHash\":\"bcrypt\",\"jwtExpires\":true,\"authorizeEveryHandler\":true,\"validateBodies\":true,\"bodyLimit\":true,\"redactLogs\":true,\"additiveMigrations\":true,\"indexesOnFilters\":true,\"poolMeasured\":true,\"jsonLogsWithRequestId\":true,\"externalUptimeCheck\":false,\"diskAlert\":true,\"cmdExecForm\":true,\"sigtermHandler\":true,\"stopGracePeriodSec\":null,\"slowestRequestSec\":30,\"livenessTouchesDb\":true,\"proxyOwnsPort\":true,\"smokeTest\":true,\"imageTag\":\"7d2e801\"})",
+            "mongDoi": {
+              "passed": 5,
+              "of": 7,
+              "items": {
+                "secrets": "ok",
+                "auth": "ok",
+                "input": "ok",
+                "database": "ok",
+                "observability": [
+                  "no external uptime check"
+                ],
+                "lifecycle": [
+                  "stop_grace_period not set above the slowest request",
+                  "liveness touches the database"
+                ],
+                "deploy": "ok"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "After the three fixes",
+              "vi": "Sau ba bản sửa"
+            },
+            "goi": "productionChecklist({\"secretsInImage\":false,\"requiredEnvCheckedAtBoot\":true,\"passwordHash\":\"bcrypt\",\"jwtExpires\":true,\"authorizeEveryHandler\":true,\"validateBodies\":true,\"bodyLimit\":true,\"redactLogs\":true,\"additiveMigrations\":true,\"indexesOnFilters\":true,\"poolMeasured\":true,\"jsonLogsWithRequestId\":true,\"externalUptimeCheck\":true,\"diskAlert\":true,\"cmdExecForm\":true,\"sigtermHandler\":true,\"stopGracePeriodSec\":45,\"slowestRequestSec\":30,\"livenessTouchesDb\":false,\"proxyOwnsPort\":true,\"smokeTest\":true,\"imageTag\":\"7d2e801\"})",
+            "mongDoi": {
+              "passed": 7,
+              "of": 7,
+              "items": {
+                "secrets": "ok",
+                "auth": "ok",
+                "input": "ok",
+                "database": "ok",
+                "observability": "ok",
+                "lifecycle": "ok",
+                "deploy": "ok"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "productionChecklist({})",
+            "mongDoi": {
+              "passed": 0,
+              "of": 7,
+              "items": {
+                "secrets": [
+                  "secrets are in the image",
+                  "required env not checked at boot"
+                ],
+                "auth": [
+                  "passwords not hashed with argon2/bcrypt",
+                  "JWTs do not expire",
+                  "ownership not checked in every handler"
+                ],
+                "input": [
+                  "bodies not validated",
+                  "no body size cap",
+                  "secrets not redacted in logs"
+                ],
+                "database": [
+                  "migrations not additive",
+                  "no index on filtered columns",
+                  "pool size not measured"
+                ],
+                "observability": [
+                  "no JSON logs with request id",
+                  "no external uptime check",
+                  "no disk alert"
+                ],
+                "lifecycle": [
+                  "CMD is not the exec form",
+                  "no SIGTERM handler",
+                  "stop_grace_period not set above the slowest request",
+                  "liveness touches the database"
+                ],
+                "deploy": [
+                  "no proxy owns the port",
+                  "no smoke test",
+                  "image tag is not immutable"
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "productionChecklist({\"secretsInImage\":true,\"requiredEnvCheckedAtBoot\":true,\"passwordHash\":\"sha256\",\"jwtExpires\":true,\"authorizeEveryHandler\":true,\"validateBodies\":true,\"bodyLimit\":true,\"redactLogs\":true,\"additiveMigrations\":true,\"indexesOnFilters\":true,\"poolMeasured\":true,\"jsonLogsWithRequestId\":true,\"externalUptimeCheck\":false,\"diskAlert\":true,\"cmdExecForm\":false,\"sigtermHandler\":true,\"stopGracePeriodSec\":30,\"slowestRequestSec\":30,\"livenessTouchesDb\":true,\"proxyOwnsPort\":true,\"smokeTest\":true,\"imageTag\":\"latest\"})",
+            "mongDoi": {
+              "passed": 2,
+              "of": 7,
+              "items": {
+                "secrets": [
+                  "secrets are in the image"
+                ],
+                "auth": [
+                  "passwords not hashed with argon2/bcrypt"
+                ],
+                "input": "ok",
+                "database": "ok",
+                "observability": [
+                  "no external uptime check"
+                ],
+                "lifecycle": [
+                  "CMD is not the exec form",
+                  "stop_grace_period not set above the slowest request",
+                  "liveness touches the database"
+                ],
+                "deploy": [
+                  "image tag is not immutable"
+                ]
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating an undefined field as “not a problem”: an unknown answer to “are secrets in the image?” is a failed check.|||Coi trường undefined là “không vấn đề”: câu trả lời không biết cho “bí mật có trong ảnh không?” là một phép kiểm trượt."
+        },
+        {
+          "loi": "Passing the grace period because it is “set”: it must be longer than the slowest request (and than the app’s own force-exit timer).|||Cho qua thời gian ân hạn vì “đã đặt”: nó phải dài hơn request chậm nhất (và hơn hẹn giờ ép thoát của chính app)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "checklist",
+          "vi": "danh sách kiểm"
+        },
+        {
+          "en": "immutable tag",
+          "vi": "thẻ bất biến"
+        }
+      ]
+    }
+  ]
+}

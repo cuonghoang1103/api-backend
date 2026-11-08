@@ -1,0 +1,1002 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-3-1-path-fs",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-3-1-path-fs"
+  },
+  "exercises": [
+    {
+      "title": "3.1 · path and fs: predict before you run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "path",
+        "fs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Four questions straight from the lesson’s programs. Each answer was checked by running the code with Node 22.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn câu lấy thẳng từ các chương trình của bài. Mọi đáp án đã được kiểm bằng cách chạy code với Node 22.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Run the lesson’s first program in your head: what does .. do inside join?|||Chạy chương trình đầu của bài trong đầu: .. làm gì bên trong join?",
+        "Match each error code to its one-line meaning in the lesson table.|||Ghép mỗi mã lỗi với nghĩa một dòng trong bảng của bài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1 · path and fs: predict before you run\n\nAnswer in the answer panel (no code needed).\n\n1. What does path.join('/var/www', 'uploads', '..', 'images', 'a.png') print?path.join('/var/www', 'uploads', '..', 'images', 'a.png') in ra gì?\n2. path.join('/var/www', '/uploads') and path.resolve('/var/www', '/uploads') give…path.join('/var/www', '/uploads') và path.resolve('/var/www', '/uploads') cho ra…\n3. When is readFileSync acceptable in a server?Khi nào dùng readFileSync trong server là chấp nhận được?\n4. Why is if (existsSync(p)) await fs.readFile(p) wrong?Vì sao if (existsSync(p)) await fs.readFile(p) sai?\n5. Inside Docker your app gets EACCES writing to /app/uploads. What does it most likely mean?Trong Docker, app nhận EACCES khi ghi vào /app/uploads. Nhiều khả năng nhất là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1 · path and fs: predict before you run — answer key\n\n1. What does path.join('/var/www', 'uploads', '..', 'images', 'a.png') print?path.join('/var/www', 'uploads', '..', 'images', 'a.png') in ra gì?\n   Answer: c) /var/www/images/a.png\n   join glues the pieces AND normalises them: the .. cancels uploads. It keeps the leading / because the first piece is absolute.VI: join nối các mảnh VÀ chuẩn hoá: .. triệt tiêu uploads. Nó giữ dấu / đầu vì mảnh đầu là đường tuyệt đối.\n\n2. path.join('/var/www', '/uploads') and path.resolve('/var/www', '/uploads') give…path.join('/var/www', '/uploads') và path.resolve('/var/www', '/uploads') cho ra…\n   Answer: d) /var/www/uploads and /uploads\n   join only glues (the double slash collapses). resolve walks right to left and stops at the first ABSOLUTE piece, so /uploads wins — one reason a user-supplied name that starts with / is dangerous.VI: join chỉ nối (dấu // gộp lại). resolve đi từ phải sang trái và dừng ở mảnh TUYỆT ĐỐI đầu tiên, nên /uploads thắng — một lý do tên do người dùng gửi mà bắt đầu bằng / là nguy hiểm.\n\n3. When is readFileSync acceptable in a server?Khi nào dùng readFileSync trong server là chấp nhận được?\n   Answer: a) At startup, loading config before the server starts listening\n   While a Sync call runs, the whole process serves nobody. Before listen() nobody is waiting yet, so it is fine there; inside a handler it is always a bug.VI: Trong lúc lệnh Sync chạy, cả tiến trình không phục vụ ai. Trước listen() chưa ai chờ nên không sao; trong handler thì luôn là lỗi.\n\n4. Why is if (existsSync(p)) await fs.readFile(p) wrong?Vì sao if (existsSync(p)) await fs.readFile(p) sai?\n   Answer: c) The file can vanish between the check and the read — just read and handle ENOENT\n   Check-then-act is a race: another process (or request) can delete the file in between, and readFile still throws. Try it, and branch on err.code.VI: Kiểm-rồi-làm là một cuộc đua: tiến trình (hay request) khác có thể xoá file ở giữa, và readFile vẫn ném lỗi. Cứ đọc, rồi rẽ nhánh theo err.code.\n\n5. Inside Docker your app gets EACCES writing to /app/uploads. What does it most likely mean?Trong Docker, app nhận EACCES khi ghi vào /app/uploads. Nhiều khả năng nhất là gì?\n   Answer: a) The process runs as a non-root user that has no write permission there\n   EACCES = permission denied. Missing folder is ENOENT, too many handles is EMFILE, file/dir confusion is EISDIR / ENOTDIR.VI: EACCES = không có quyền. Thiếu thư mục là ENOENT, quá nhiều handle là EMFILE, nhầm file/thư mục là EISDIR / ENOTDIR.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> /var/www/images/a.png</p><p>join glues the pieces AND normalises them: the .. cancels uploads. It keeps the leading / because the first piece is absolute.</p><p><i>VI: join nối các mảnh VÀ chuẩn hoá: .. triệt tiêu uploads. Nó giữ dấu / đầu vì mảnh đầu là đường tuyệt đối.</i></p></li><li><p><b>d)</b> /var/www/uploads and /uploads</p><p>join only glues (the double slash collapses). resolve walks right to left and stops at the first ABSOLUTE piece, so /uploads wins — one reason a user-supplied name that starts with / is dangerous.</p><p><i>VI: join chỉ nối (dấu // gộp lại). resolve đi từ phải sang trái và dừng ở mảnh TUYỆT ĐỐI đầu tiên, nên /uploads thắng — một lý do tên do người dùng gửi mà bắt đầu bằng / là nguy hiểm.</i></p></li><li><p><b>a)</b> At startup, loading config before the server starts listening</p><p>While a Sync call runs, the whole process serves nobody. Before listen() nobody is waiting yet, so it is fine there; inside a handler it is always a bug.</p><p><i>VI: Trong lúc lệnh Sync chạy, cả tiến trình không phục vụ ai. Trước listen() chưa ai chờ nên không sao; trong handler thì luôn là lỗi.</i></p></li><li><p><b>c)</b> The file can vanish between the check and the read — just read and handle ENOENT</p><p>Check-then-act is a race: another process (or request) can delete the file in between, and readFile still throws. Try it, and branch on err.code.</p><p><i>VI: Kiểm-rồi-làm là một cuộc đua: tiến trình (hay request) khác có thể xoá file ở giữa, và readFile vẫn ném lỗi. Cứ đọc, rồi rẽ nhánh theo err.code.</i></p></li><li><p><b>a)</b> The process runs as a non-root user that has no write permission there</p><p>EACCES = permission denied. Missing folder is ENOENT, too many handles is EMFILE, file/dir confusion is EISDIR / ENOTDIR.</p><p><i>VI: EACCES = không có quyền. Thiếu thư mục là ENOENT, quá nhiều handle là EMFILE, nhầm file/thư mục là EISDIR / ENOTDIR.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does <code>path.join('/var/www', 'uploads', '..', 'images', 'a.png')</code> print?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>path.join('/var/www', 'uploads', '..', 'images', 'a.png')</code> in ra gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/var/www/uploads/../images/a.png"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/images/a.png"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/var/www/images/a.png"
+              },
+              {
+                "ma": "d",
+                "noiDung": "var/www/images/a.png"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>join glues the pieces AND normalises them: the .. cancels uploads. It keeps the leading / because the first piece is absolute.</p><p><i>VI: join nối các mảnh VÀ chuẩn hoá: .. triệt tiêu uploads. Nó giữ dấu / đầu vì mảnh đầu là đường tuyệt đối.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><code>path.join('/var/www', '/uploads')</code> and <code>path.resolve('/var/www', '/uploads')</code> give…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>path.join('/var/www', '/uploads')</code> và <code>path.resolve('/var/www', '/uploads')</code> cho ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/var/www/uploads both times"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/var/www//uploads and /uploads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/uploads both times"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/var/www/uploads and /uploads"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>join only glues (the double slash collapses). resolve walks right to left and stops at the first ABSOLUTE piece, so /uploads wins — one reason a user-supplied name that starts with / is dangerous.</p><p><i>VI: join chỉ nối (dấu // gộp lại). resolve đi từ phải sang trái và dừng ở mảnh TUYỆT ĐỐI đầu tiên, nên /uploads thắng — một lý do tên do người dùng gửi mà bắt đầu bằng / là nguy hiểm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>When is <code>readFileSync</code> acceptable in a server?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào dùng <code>readFileSync</code> trong server là chấp nhận được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "At startup, loading config before the server starts listening"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Inside a request handler, if the file is smaller than 1 MB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Inside a handler, as long as you wrap it in try/catch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never — the Sync API was removed from fs in Node 22"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>While a Sync call runs, the whole process serves nobody. Before listen() nobody is waiting yet, so it is fine there; inside a handler it is always a bug.</p><p><i>VI: Trong lúc lệnh Sync chạy, cả tiến trình không phục vụ ai. Trước listen() chưa ai chờ nên không sao; trong handler thì luôn là lỗi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why is <code>if (existsSync(p)) await fs.readFile(p)</code> wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>if (existsSync(p)) await fs.readFile(p)</code> sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "readFile needs an absolute path, and existsSync only accepts relative ones"
+              },
+              {
+                "ma": "b",
+                "noiDung": "existsSync throws ENOENT when the file is missing, so the if never runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The file can vanish between the check and the read — just read and handle ENOENT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is correct; it is the recommended way to avoid ENOENT"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Check-then-act is a race: another process (or request) can delete the file in between, and readFile still throws. Try it, and branch on err.code.</p><p><i>VI: Kiểm-rồi-làm là một cuộc đua: tiến trình (hay request) khác có thể xoá file ở giữa, và readFile vẫn ném lỗi. Cứ đọc, rồi rẽ nhánh theo err.code.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Inside Docker your app gets <code>EACCES</code> writing to <code>/app/uploads</code>. What does it most likely mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Docker, app nhận <code>EACCES</code> khi ghi vào <code>/app/uploads</code>. Nhiều khả năng nhất là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The process runs as a non-root user that has no write permission there"
+              },
+              {
+                "ma": "b",
+                "noiDung": "You passed a directory where a file was expected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The folder does not exist yet; mkdir with recursive: true fixes it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Too many files are open; a file handle is leaking somewhere"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>EACCES = permission denied. Missing folder is ENOENT, too many handles is EMFILE, file/dir confusion is EISDIR / ENOTDIR.</p><p><i>VI: EACCES = không có quyền. Thiếu thư mục là ENOENT, quá nhiều handle là EMFILE, nhầm file/thư mục là EISDIR / ENOTDIR.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking join and resolve treat an absolute second piece the same way.|||Tưởng join và resolve xử lý mảnh thứ hai tuyệt đối giống nhau."
+        },
+        {
+          "loi": "Using existsSync “to be safe” before reading.|||Dùng existsSync “cho chắc” trước khi đọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normalise",
+          "vi": "chuẩn hoá",
+          "giaiThich": "remove . and .., collapse repeated slashes"
+        },
+        {
+          "en": "race condition",
+          "vi": "điều kiện đua",
+          "giaiThich": "the result depends on timing between two actors"
+        }
+      ]
+    },
+    {
+      "title": "3.1 · Take a path apart like path.parse",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "path"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson prints <code>path.parse('/tmp/anh/meo.jpg')</code> → <code>{\"root\":\"/\",\"dir\":\"/tmp/anh\",\"base\":\"meo.jpg\",\"ext\":\".jpg\",\"name\":\"meo\"}</code> and says: use these helpers instead of <code>split('.')</code>. To see why, write <code>parsePath(p)</code> that returns the same five fields as <code>path.posix.parse</code>:</p>\n<ul><li><code>root</code>: <code>\"/\"</code> for an absolute path, else <code>\"\"</code>;</li><li><code>dir</code>: everything before the last <code>/</code> (<code>\"/\"</code> if that slash is the first character, <code>\"\"</code> if there is none);</li><li><code>base</code>: the last segment — trailing slashes are ignored, so <code>\"notes/\"</code> has base <code>\"notes\"</code>;</li><li><code>ext</code>: from the <b>last</b> dot of base to the end — but a dot at position 0 (<code>.env</code>) is not an extension;</li><li><code>name</code>: base without ext.</li></ul><p>Special case: <code>\"/\"</code> → root and dir <code>\"/\"</code>, the other three empty.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học in <code>path.parse('/tmp/anh/meo.jpg')</code> → <code>{\"root\":\"/\",\"dir\":\"/tmp/anh\",\"base\":\"meo.jpg\",\"ext\":\".jpg\",\"name\":\"meo\"}</code> và dặn: dùng các hàm này thay vì <code>split('.')</code>. Để thấy vì sao, viết <code>parsePath(p)</code> trả về đúng năm trường như <code>path.posix.parse</code>:</p>\n<ul><li><code>root</code>: <code>\"/\"</code> nếu là đường tuyệt đối, ngược lại <code>\"\"</code>;</li><li><code>dir</code>: mọi thứ trước dấu <code>/</code> cuối (<code>\"/\"</code> nếu dấu đó là ký tự đầu, <code>\"\"</code> nếu không có);</li><li><code>base</code>: đoạn cuối — bỏ qua dấu / ở cuối, nên <code>\"notes/\"</code> có base <code>\"notes\"</code>;</li><li><code>ext</code>: từ dấu chấm <b>cuối</b> của base tới hết — nhưng dấu chấm ở vị trí 0 (<code>.env</code>) không phải phần mở rộng;</li><li><code>name</code>: base bỏ ext.</li></ul><p>Trường hợp riêng: <code>\"/\"</code> → root và dir là <code>\"/\"</code>, ba trường còn lại rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "p — a POSIX path (no \".\" or \"..\" segments, no repeated slashes)|||p — đường dẫn POSIX (không có đoạn \".\" hay \"..\", không có dấu / lặp)",
+      "outputSpec": "{ root, dir, base, ext, name } — all strings|||{ root, dir, base, ext, name } — đều là chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parsePath(\"/tmp/anh/meo.jpg\")",
+          "output": "{\"root\":\"/\",\"dir\":\"/tmp/anh\",\"base\":\"meo.jpg\",\"ext\":\".jpg\",\"name\":\"meo\"}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Strip trailing slashes first, then use lastIndexOf('/') once for dir/base and lastIndexOf('.') once for ext.|||Bỏ dấu / ở cuối trước, rồi dùng lastIndexOf('/') một lần cho dir/base và lastIndexOf('.') một lần cho ext.",
+        "dot <= 0 means “no extension”: -1 is no dot, 0 is a dotfile like .env.|||dot <= 0 nghĩa là “không có phần mở rộng”: -1 là không có dấu chấm, 0 là file ẩn như .env."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** take a POSIX path apart: { root, dir, base, ext, name } */\nfunction parsePath(p) {\n  // Write your solution here — this version is the classic split() mistake\n  const parts = p.split('/');\n  const base = parts[parts.length - 1];\n  const [name, ext] = base.split('.');\n  return { root: p[0] === '/' ? '/' : '', dir: parts.slice(0, -1).join('/'), base, ext: ext ? '.' + ext : '', name };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — mirrors path.posix.parse for paths without . / .. segments\nfunction parsePath(p) {\n  // the root is \"/\" for an absolute path, \"\" for a relative one\n  const root = p.startsWith('/') ? '/' : '';\n  // trailing slashes do not count: \"notes/\" is the folder \"notes\" (but \"/\" stays \"/\")\n  let end = p.length;\n  while (end > 1 && p[end - 1] === '/') end--;\n  const t = p.slice(0, end);\n  if (t === '/') return { root: '/', dir: '/', base: '', ext: '', name: '' };\n  const cut = t.lastIndexOf('/');\n  const base = t.slice(cut + 1);\n  const dir = cut < 0 ? '' : cut === 0 ? '/' : t.slice(0, cut);\n  // the extension starts at the LAST dot — but a leading dot (\".env\") is part of the name, not an extension\n  const dot = base.lastIndexOf('.');\n  const ext = dot <= 0 ? '' : base.slice(dot);\n  const name = base.slice(0, base.length - ext.length);\n  return { root, dir, base, ext, name };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every expected value here was produced by Node’s own <code>path.posix.parse</code> on the same input. The two rules people miss are the ones the lesson hints at: the extension is from the <b>last</b> dot (so <code>archive.tar.gz</code> has ext <code>.gz</code>, name <code>archive.tar</code>), and a leading dot belongs to the name.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi giá trị mong đợi ở đây đều do chính <code>path.posix.parse</code> của Node cho ra trên cùng đầu vào. Hai luật hay bị quên là đúng hai điều bài gợi ý: phần mở rộng tính từ dấu chấm <b>cuối</b> (nên <code>archive.tar.gz</code> có ext <code>.gz</code>, name <code>archive.tar</code>), và dấu chấm ở đầu thuộc về tên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s example",
+              "vi": "Ví dụ của bài"
+            },
+            "goi": "parsePath(\"/tmp/anh/meo.jpg\")",
+            "mongDoi": {
+              "root": "/",
+              "dir": "/tmp/anh",
+              "base": "meo.jpg",
+              "ext": ".jpg",
+              "name": "meo"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Two dots: the extension is from the last one",
+              "vi": "Hai dấu chấm: phần mở rộng tính từ dấu cuối"
+            },
+            "goi": "parsePath(\"bao-cao.final.pdf\")",
+            "mongDoi": {
+              "root": "",
+              "dir": "",
+              "base": "bao-cao.final.pdf",
+              "ext": ".pdf",
+              "name": "bao-cao.final"
+            }
+          },
+          {
+            "moTa": {
+              "en": "A dotfile has no extension",
+              "vi": "File ẩn không có phần mở rộng"
+            },
+            "goi": "parsePath(\".env\")",
+            "mongDoi": {
+              "root": "",
+              "dir": "",
+              "base": ".env",
+              "ext": "",
+              "name": ".env"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parsePath(\"/srv/archive.tar.gz\")",
+            "mongDoi": {
+              "root": "/",
+              "dir": "/srv",
+              "base": "archive.tar.gz",
+              "ext": ".gz",
+              "name": "archive.tar"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parsePath(\"notes/\")",
+            "mongDoi": {
+              "root": "",
+              "dir": "",
+              "base": "notes",
+              "ext": "",
+              "name": "notes"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parsePath(\"Makefile\")",
+            "mongDoi": {
+              "root": "",
+              "dir": "",
+              "base": "Makefile",
+              "ext": "",
+              "name": "Makefile"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parsePath(\"/\")",
+            "mongDoi": {
+              "root": "/",
+              "dir": "/",
+              "base": "",
+              "ext": "",
+              "name": ""
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "parsePath(\"/a/.hidden.txt\")",
+            "mongDoi": {
+              "root": "/",
+              "dir": "/a",
+              "base": ".hidden.txt",
+              "ext": ".txt",
+              "name": ".hidden"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "parsePath(\"src/app.test.mjs\")",
+            "mongDoi": {
+              "root": "",
+              "dir": "src",
+              "base": "app.test.mjs",
+              "ext": ".mjs",
+              "name": "app.test"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "parsePath(\"/var/www/\")",
+            "mongDoi": {
+              "root": "/",
+              "dir": "/var",
+              "base": "www",
+              "ext": "",
+              "name": "www"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split('.')[1] — \"bao-cao.final.pdf\" gives \"final\", not \".pdf\".|||split('.')[1] — \"bao-cao.final.pdf\" cho \"final\", không phải \".pdf\"."
+        },
+        {
+          "loi": "Treating \".env\" as name \"\" + ext \".env\".|||Coi \".env\" là name \"\" + ext \".env\"."
+        },
+        {
+          "loi": "Forgetting that \"notes/\" ends with a slash, so base comes out empty.|||Quên \"notes/\" có dấu / ở cuối nên base ra rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "extension",
+          "vi": "phần mở rộng",
+          "giaiThich": "the part after the last dot: .pdf, .gz"
+        },
+        {
+          "en": "dotfile",
+          "vi": "file ẩn (bắt đầu bằng dấu chấm)",
+          "giaiThich": ".env, .gitignore"
+        }
+      ]
+    },
+    {
+      "title": "3.1 · Write path.join yourself",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "path"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s output:</p><pre>manual  : /var/www//uploads\njoin    : /var/www/uploads</pre><p>Manual concatenation doubled the slash; <code>path.join</code> did not, and it also resolved <code>..</code>. Write <code>joinPath(...segments)</code> that returns exactly what <code>path.posix.join</code> returns:</p>\n<ol><li>drop empty strings; if nothing is left return <code>\".\"</code>;</li><li>glue the rest with <code>/</code>;</li><li>normalise: skip empty and <code>.</code> segments; <code>..</code> removes the previous segment — for an absolute path it can never go above <code>/</code>, for a relative path an extra <code>..</code> is kept;</li><li>an empty result is <code>\"/\"</code> (absolute) or <code>\".\"</code> (relative); a trailing slash in the input is kept.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output của bài:</p><pre>manual  : /var/www//uploads\njoin    : /var/www/uploads</pre><p>Nối chuỗi bằng tay làm dấu / bị đôi; <code>path.join</code> thì không, và còn xử lý <code>..</code>. Viết <code>joinPath(...segments)</code> trả về đúng như <code>path.posix.join</code>:</p>\n<ol><li>bỏ chuỗi rỗng; không còn gì thì trả <code>\".\"</code>;</li><li>nối phần còn lại bằng <code>/</code>;</li><li>chuẩn hoá: bỏ đoạn rỗng và <code>.</code>; <code>..</code> xoá đoạn trước nó — với đường tuyệt đối không bao giờ lên quá <code>/</code>, với đường tương đối thì <code>..</code> thừa được giữ lại;</li><li>kết quả rỗng là <code>\"/\"</code> (tuyệt đối) hoặc <code>\".\"</code> (tương đối); dấu / ở cuối đầu vào được giữ.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "segments — any number of strings|||segments — số chuỗi tuỳ ý",
+      "outputSpec": "string — the normalised POSIX path|||chuỗi — đường POSIX đã chuẩn hoá",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "joinPath(\"/var/www\", \"uploads\", \"..\", \"images\", \"a.png\")",
+          "output": "\"/var/www/images/a.png\"",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split the glued string on \"/\" and walk it with a stack: push names, pop on \"..\".|||Tách chuỗi đã nối theo \"/\" rồi đi qua bằng một ngăn xếp: push tên, pop khi gặp \"..\".",
+        "Remember the two flags before you split: does it start with \"/\"? does it end with \"/\"?|||Nhớ hai cờ trước khi tách: có bắt đầu bằng \"/\" không? có kết thúc bằng \"/\" không?",
+        "A \"..\" can only cancel a real name — never another \"..\" (relative paths like \"../../x\").|||\"..\" chỉ triệt tiêu được một tên thật — không triệt tiêu một \"..\" khác (đường tương đối như \"../../x\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** path.posix.join, by hand */\nfunction joinPath(...segments) {\n  // Write your solution here — concatenation is exactly what the lesson warns against\n  return segments.join('/');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — glue, then normalise with a stack\nfunction joinPath(...segments) {\n  // 1. glue the non-empty pieces with \"/\" (path.join ignores empty strings)\n  const parts = segments.filter((s) => s !== '');\n  if (parts.length === 0) return '.';\n  const joined = parts.join('/');\n  // 2. normalise: remove \".\", resolve \"..\", collapse \"//\"\n  const absolute = joined.startsWith('/');\n  const trailing = joined.endsWith('/');\n  const stack = [];\n  for (const seg of joined.split('/')) {\n    if (seg === '' || seg === '.') continue;\n    if (seg === '..') {\n      if (stack.length && stack[stack.length - 1] !== '..') stack.pop();\n      else if (!absolute) stack.push('..');      // a relative path may climb above its start; \"/..\" is still \"/\"\n    } else stack.push(seg);\n  }\n  let out = (absolute ? '/' : '') + stack.join('/');\n  if (out === '') out = absolute ? '/' : '.';\n  if (trailing && !out.endsWith('/')) out += '/';   // join keeps a trailing slash\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected values come from Node’s own <code>path.posix.join</code>. Join is just “glue, then normalise” — the normalise step is a stack, and the only subtle parts are the edges: empty result, a relative path that climbs (<code>../../y</code>), and the trailing slash that join deliberately keeps.</p>",
+      "solutionExplanationHtmlVi": "<p>Giá trị mong đợi lấy từ chính <code>path.posix.join</code> của Node. Join chỉ là “nối, rồi chuẩn hoá” — bước chuẩn hoá là một ngăn xếp, và chỗ tinh tế chỉ ở các biên: kết quả rỗng, đường tương đối leo lên (<code>../../y</code>), và dấu / cuối mà join cố ý giữ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s example",
+              "vi": "Ví dụ của bài"
+            },
+            "goi": "joinPath(\"/var/www\", \"uploads\", \"..\", \"images\", \"a.png\")",
+            "mongDoi": "/var/www/images/a.png"
+          },
+          {
+            "moTa": {
+              "en": "No double slash",
+              "vi": "Không có dấu đôi"
+            },
+            "goi": "joinPath(\"/var/www\", \"/uploads\")",
+            "mongDoi": "/var/www/uploads"
+          },
+          {
+            "moTa": {
+              "en": "Empty relative result is \".\"",
+              "vi": "Kết quả tương đối rỗng là \".\""
+            },
+            "goi": "joinPath(\"a\", \"..\")",
+            "mongDoi": "."
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "joinPath(\"/a\", \"../..\", \"b\")",
+            "mongDoi": "/b",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "joinPath(\"..\", \"x\")",
+            "mongDoi": "../x",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "joinPath()",
+            "mongDoi": ".",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "joinPath(\"a\", \"\", \"b\")",
+            "mongDoi": "a/b",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "joinPath(\"/var/www\", \"uploads/\")",
+            "mongDoi": "/var/www/uploads/",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "joinPath(\"./a\", \"./b\")",
+            "mongDoi": "a/b",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "joinPath(\"a//b\", \"/c/\")",
+            "mongDoi": "a/b/c/",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "joinPath(\"../../x\", \"../y\")",
+            "mongDoi": "../../y",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "joinPath(\"a/../\")",
+            "mongDoi": "./",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "parts.join('/') alone: /var/www//uploads keeps the double slash.|||Chỉ parts.join('/'): /var/www//uploads giữ nguyên dấu đôi."
+        },
+        {
+          "loi": "Letting \"..\" climb above \"/\" — joinPath(\"/a\", \"../..\", \"b\") is \"/b\", not \"/../b\".|||Cho \"..\" leo quá \"/\" — joinPath(\"/a\", \"../..\", \"b\") là \"/b\", không phải \"/../b\"."
+        },
+        {
+          "loi": "Returning \"\" instead of \".\" for joinPath(\"a\", \"..\").|||Trả \"\" thay vì \".\" cho joinPath(\"a\", \"..\")."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "segment",
+          "vi": "đoạn đường dẫn",
+          "giaiThich": "the text between two slashes"
+        },
+        {
+          "en": "separator",
+          "vi": "dấu phân cách",
+          "giaiThich": "\"/\" on POSIX, \"\\\\\" on Windows"
+        }
+      ]
+    },
+    {
+      "title": "3.1 · Read a note without checking first",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "fs",
+        "error codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s rule: <b>do not check existence, just try it and handle the failure</b>. Write <code>async readNote(fs, name)</code>, where <code>fs</code> has the same <code>readFile(path, 'utf8')</code> as <code>node:fs/promises</code> (it also has <code>stat</code> and <code>access</code> — you should not need them):</p>\n<ul><li>success → <code>{ status: 200, text }</code>;</li><li><code>err.code === 'ENOENT'</code> → <code>{ status: 404, error: 'NOT_FOUND' }</code>;</li><li><code>'EACCES'</code> → <code>{ status: 403, error: 'FORBIDDEN' }</code>; <code>'EISDIR'</code> → <code>{ status: 400, error: 'IS_A_DIRECTORY' }</code>;</li><li>any other error (e.g. <code>EMFILE</code>) is not the client’s problem: <b>rethrow it</b>.</li></ul><p>The grader counts the calls you make on <code>fs</code>, and one hidden test deletes the file between a <code>stat</code> and a <code>readFile</code> — exactly the race in the lesson.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Call fs.readFile exactly once per call of readNote; no stat/access/exists first.</li>\n  <li>Branch on err.code, never on the message text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật của bài: <b>đừng kiểm có tồn tại không, cứ thử rồi xử lý thất bại</b>. Viết <code>async readNote(fs, name)</code>, với <code>fs</code> có <code>readFile(path, 'utf8')</code> giống <code>node:fs/promises</code> (nó cũng có <code>stat</code> và <code>access</code> — bạn không cần tới):</p>\n<ul><li>đọc được → <code>{ status: 200, text }</code>;</li><li><code>err.code === 'ENOENT'</code> → <code>{ status: 404, error: 'NOT_FOUND' }</code>;</li><li><code>'EACCES'</code> → <code>{ status: 403, error: 'FORBIDDEN' }</code>; <code>'EISDIR'</code> → <code>{ status: 400, error: 'IS_A_DIRECTORY' }</code>;</li><li>lỗi khác (vd <code>EMFILE</code>) không phải lỗi của client: <b>ném lại</b>.</li></ul><p>Máy chấm đếm các lời gọi lên <code>fs</code>, và một kiểm ẩn xoá file giữa <code>stat</code> và <code>readFile</code> — đúng cuộc đua trong bài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi lần gọi readNote chỉ gọi fs.readFile đúng một lần; không stat/access/exists trước.</li>\n  <li>Rẽ nhánh theo err.code, không theo chữ trong message.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Object.assign(await readNote(fs, \"note.txt\"), { calls: fs.calls })",
+          "output": "{\"status\":200,\"text\":\"hello\",\"calls\":[\"readFile note.txt\"]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "await inside try { } — a rejected promise becomes a throw you can catch.|||await bên trong try { } — Promise bị reject thành một throw bắt được.",
+        "In catch, compare err.code with the three known codes; the last line of catch is throw err.|||Trong catch, so err.code với ba mã đã biết; dòng cuối của catch là throw err."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** read one note: 200 / 404 / 403 / 400, rethrow anything else */\nasync function readNote(fs, name) {\n  // Write your solution here — this is the check-then-act version the lesson warns about\n  try {\n    await fs.access(name);\n  } catch {\n    return { status: 404, error: 'NOT_FOUND' };\n  }\n  const text = await fs.readFile(name, 'utf8');\n  return { status: 200, text };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — try, then branch on err.code\nasync function readNote(fs, name) {\n  // no existsSync / stat / access first — the file could vanish in between. Just try it.\n  try {\n    const text = await fs.readFile(name, 'utf8');\n    return { status: 200, text };\n  } catch (err) {\n    // translate the error codes a client should hear about; anything else is OUR bug → rethrow\n    if (err.code === 'ENOENT') return { status: 404, error: 'NOT_FOUND' };\n    if (err.code === 'EACCES') return { status: 403, error: 'FORBIDDEN' };\n    if (err.code === 'EISDIR') return { status: 400, error: 'IS_A_DIRECTORY' };\n    throw err;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The error codes and messages of the fake fs are the real ones (<code>ENOENT: no such file or directory, open 'x'</code>). Trying first removes the race completely: there is only one disk operation, so there is nothing to happen “in between”. Rethrowing the unknown codes keeps real bugs loud — the lesson’s EMFILE means you are leaking handles, and a 404 would bury it.</p>",
+      "solutionExplanationHtmlVi": "<p>Mã lỗi và thông điệp của fs giả là thật (<code>ENOENT: no such file or directory, open 'x'</code>). Thử trước loại bỏ hoàn toàn cuộc đua: chỉ có một thao tác đĩa, nên không có gì xảy ra “ở giữa”. Ném lại các mã lạ giữ cho lỗi thật luôn lộ ra — EMFILE trong bài nghĩa là bạn đang rò handle, và trả 404 sẽ chôn nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Found: 200 and exactly one readFile call",
+              "vi": "Có file: 200 và đúng một lần gọi readFile"
+            },
+            "goi": "Object.assign(await readNote(fs, \"note.txt\"), { calls: fs.calls })",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({ 'note.txt': 'hello' });",
+            "mongDoi": {
+              "status": 200,
+              "text": "hello",
+              "calls": [
+                "readFile note.txt"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "ENOENT → 404",
+              "vi": "ENOENT → 404"
+            },
+            "goi": "await readNote(fs, \"missing.txt\")",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({});",
+            "mongDoi": {
+              "status": 404,
+              "error": "NOT_FOUND"
+            }
+          },
+          {
+            "moTa": {
+              "en": "EACCES → 403",
+              "vi": "EACCES → 403"
+            },
+            "goi": "await readNote(fs, \"secret.txt\")",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({ 'secret.txt': '#EACCES' });",
+            "mongDoi": {
+              "status": 403,
+              "error": "FORBIDDEN"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "Object.assign(await readNote(fs, \"uploads\"), { calls: fs.calls })",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({ 'uploads': '#EISDIR' });",
+            "mongDoi": {
+              "status": 400,
+              "error": "IS_A_DIRECTORY",
+              "calls": [
+                "readFile uploads"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await readNote(fs, \"a.txt\")",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({ 'a.txt': '#EMFILE' });",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "EMFILE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Race: the file is deleted right after stat — no crash",
+              "vi": "Đua: file bị xoá ngay sau stat — không sập"
+            },
+            "goi": "await readNote(fs, \"race.txt\").then((r) => r, (e) => ({ crashed: e.code }))",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst files = { 'race.txt': 'soon gone' }; const fs = mkFs(files); const real = fs.stat; fs.stat = function (p) { return real(p).then(function (s) { delete files[p]; return s; }); };",
+            "mongDoi": {
+              "status": 200,
+              "text": "soon gone"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(await readNote(fs, \"b.txt\"), fs.calls)",
+            "chuanBi": "function mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nfunction look(p) { var v = files[p]; if (v === undefined) throw fail('ENOENT', 'no such file or directory', p); if (v === '#EACCES') throw fail('EACCES', 'permission denied', p); if (v === '#EMFILE') throw fail('EMFILE', 'too many open files', p); return v; }\nreturn { calls: calls,\n  readFile: function (p, enc) { calls.push('readFile ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); if (v === '#EISDIR') throw fail('EISDIR', 'illegal operation on a directory, read', p); ok(v); } catch (e) { no(e); } }, 2); }); },\n  stat: function (p) { calls.push('stat ' + p); return new Promise(function (ok, no) { setTimeout(function () { try { var v = look(p); ok({ size: String(v).length, isDirectory: function () { return v === '#EISDIR'; } }); } catch (e) { no(e); } }, 1); }); },\n  access: function (p) { calls.push('access ' + p); return this.stat(p).then(function () {}); },\n}; }\nconst fs = mkFs({ 'b.txt': 'hai' });",
+            "mongDoi": [
+              "readFile b.txt"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking with stat/access first: the file can be deleted in between, and readFile still throws — now uncaught.|||Kiểm bằng stat/access trước: file có thể bị xoá ở giữa, và readFile vẫn ném — giờ không ai bắt."
+        },
+        {
+          "loi": "catch { return 404 } for every error: EMFILE (a handle leak on OUR side) is hidden as “not found”.|||catch { return 404 } cho mọi lỗi: EMFILE (rò handle phía MÌNH) bị giấu thành “không tìm thấy”."
+        },
+        {
+          "loi": "Matching err.message.includes(\"no such file\") — messages change, codes do not.|||So err.message.includes(\"no such file\") — thông điệp đổi được, mã thì không."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ENOENT",
+          "vi": "không có file hay thư mục"
+        },
+        {
+          "en": "check-then-act",
+          "vi": "kiểm rồi mới làm",
+          "giaiThich": "two steps with a gap where the world can change"
+        },
+        {
+          "en": "rethrow",
+          "vi": "ném lại",
+          "giaiThich": "let an error you cannot handle continue upwards"
+        }
+      ]
+    },
+    {
+      "title": "3.1 · Stop path traversal with resolve + startsWith",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "path",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s security box: <i>never do <code>path.join(uploadDir, req.params.filename)</code> with a user-supplied name</i> — <code>../../etc/passwd</code> escapes. The fix it gives:</p><pre>const full = path.resolve(uploadDir, name);\nif (!full.startsWith(path.resolve(uploadDir) + path.sep)) throw new Error('invalid path');</pre><p>There is no <code>node:path</code> in the grader, so write <code>safeResolve(root, name)</code> that does exactly that on POSIX paths:</p>\n<ul><li><code>root</code> is absolute. If <code>name</code> starts with <code>/</code> it <b>replaces</b> the root (that is what <code>resolve</code> does); otherwise it is appended;</li><li>normalise the result: drop empty and <code>.</code> segments, <code>..</code> removes the previous one and never goes above <code>/</code>; no trailing slash;</li><li>the result must start with <code>normalised root + \"/\"</code>, else <code>throw new Error('invalid path')</code>. Return the full path.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khung bảo mật của bài: <i>đừng bao giờ <code>path.join(uploadDir, req.params.filename)</code> với tên do người dùng gửi</i> — <code>../../etc/passwd</code> thoát ra ngoài. Cách sửa bài đưa:</p><pre>const full = path.resolve(uploadDir, name);\nif (!full.startsWith(path.resolve(uploadDir) + path.sep)) throw new Error('invalid path');</pre><p>Máy chấm không có <code>node:path</code>, nên hãy viết <code>safeResolve(root, name)</code> làm đúng điều đó trên đường POSIX:</p>\n<ul><li><code>root</code> là đường tuyệt đối. Nếu <code>name</code> bắt đầu bằng <code>/</code> nó <b>thay</b> root (đó là việc <code>resolve</code> làm); ngược lại nó được nối vào sau;</li><li>chuẩn hoá kết quả: bỏ đoạn rỗng và <code>.</code>, <code>..</code> xoá đoạn trước và không lên quá <code>/</code>; không có dấu / ở cuối;</li><li>kết quả phải bắt đầu bằng <code>root đã chuẩn hoá + \"/\"</code>, ngược lại <code>throw new Error('invalid path')</code>. Trả về đường đầy đủ.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "root — absolute POSIX path; name — any string from the client|||root — đường POSIX tuyệt đối; name — chuỗi bất kỳ từ client",
+      "outputSpec": "the absolute path inside root, or throw Error(\"invalid path\")|||đường tuyệt đối nằm trong root, hoặc ném Error(\"invalid path\")",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "safeResolve(\"/srv/uploads\", \"cat.png\")",
+          "output": "\"/srv/uploads/cat.png\"",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write one helper normalize(p) for absolute paths (a stack over p.split(\"/\")) and use it on BOTH the result and the root.|||Viết một hàm normalize(p) cho đường tuyệt đối (ngăn xếp trên p.split(\"/\")) và dùng cho CẢ kết quả lẫn root.",
+        "Do not look for \"..\" in the input: \"2026/../cat.png\" is legal and stays inside. Decide AFTER normalising.|||Đừng tìm \"..\" trong đầu vào: \"2026/../cat.png\" hợp lệ và vẫn ở trong. Quyết định SAU khi chuẩn hoá.",
+        "Try root \"/srv/uploads\" with name \"../uploads-evil/x.png\" — why does the check need the \"/\"?|||Thử root \"/srv/uploads\" với name \"../uploads-evil/x.png\" — vì sao phép kiểm cần dấu \"/\"?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the full path of name inside root, or throw Error('invalid path') */\nfunction safeResolve(root, name) {\n  // Write your solution here — a blocklist on the raw input, the mistake the lesson warns about\n  if (name.includes('..')) throw new Error('invalid path');\n  return root + '/' + name;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — normalise first, then check \"root + /\"\nfunction normalizeAbs(p) {\n  // collapse \"//\", drop \".\", resolve \"..\" — never above \"/\"\n  const stack = [];\n  for (const seg of p.split('/')) {\n    if (seg === '' || seg === '.') continue;\n    if (seg === '..') stack.pop();\n    else stack.push(seg);\n  }\n  return '/' + stack.join('/');\n}\n\nfunction safeResolve(root, name) {\n  // path.resolve(root, name): an absolute name REPLACES the root, a relative one is appended\n  const full = normalizeAbs(name.startsWith('/') ? name : root + '/' + name);\n  const base = normalizeAbs(root);\n  // inside means \"starts with root + /\" — plain startsWith(root) lets /srv/uploads-evil through\n  if (!full.startsWith(base + '/')) throw new Error('invalid path');\n  return full;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every case was compared with Node’s <code>path.posix.resolve</code> + the lesson’s check. Deciding on the <b>normalised</b> result is the whole trick: a blocklist on the raw input is always one encoding or one leading slash behind. The <code>+ path.sep</code> is not decoration — without it a sibling folder whose name starts the same way slips through.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ca đã được so với <code>path.posix.resolve</code> của Node + phép kiểm của bài. Quyết định trên kết quả <b>đã chuẩn hoá</b> là toàn bộ mấu chốt: danh sách chặn trên đầu vào thô luôn chậm hơn một kiểu mã hoá hay một dấu / ở đầu. <code>+ path.sep</code> không phải trang trí — thiếu nó, một thư mục anh em có tên bắt đầu giống hệt sẽ lọt qua.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A plain name",
+              "vi": "Tên bình thường"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"cat.png\")",
+            "mongDoi": "/srv/uploads/cat.png"
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s attack",
+              "vi": "Đòn tấn công trong bài"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"../../etc/passwd\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "invalid path"
+            }
+          },
+          {
+            "moTa": {
+              "en": "\"..\" that stays inside is legal",
+              "vi": "\"..\" vẫn ở bên trong là hợp lệ"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"2026/../cat.png\")",
+            "mongDoi": "/srv/uploads/cat.png"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"/etc/passwd\")",
+            "mongDoi": {
+              "loi": "Error"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"../uploads-evil/x.png\")",
+            "mongDoi": {
+              "loi": "Error"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"a/b/../../..\")",
+            "mongDoi": {
+              "loi": "Error"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"\")",
+            "mongDoi": {
+              "loi": "Error"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "safeResolve(\"/srv/uploads/\", \"x.png\")",
+            "mongDoi": "/srv/uploads/x.png",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"./2026//07/./a.png\")",
+            "mongDoi": "/srv/uploads/2026/07/a.png",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "safeResolve(\"/srv/uploads\", \"/srv/uploads/ok.png\")",
+            "mongDoi": "/srv/uploads/ok.png",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "if (name.includes(\"..\")) throw — blocks legal names and misses \"/etc/passwd\".|||if (name.includes(\"..\")) throw — chặn tên hợp lệ mà lọt \"/etc/passwd\"."
+        },
+        {
+          "loi": "full.startsWith(root) without the separator: \"/srv/uploads-evil\" starts with \"/srv/uploads\".|||full.startsWith(root) thiếu dấu phân cách: \"/srv/uploads-evil\" bắt đầu bằng \"/srv/uploads\"."
+        },
+        {
+          "loi": "Not normalising the root: \"/srv/uploads/\" + \"/\" is \"/srv/uploads//\" and nothing ever matches.|||Không chuẩn hoá root: \"/srv/uploads/\" + \"/\" thành \"/srv/uploads//\" và không gì khớp nổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "path traversal",
+          "vi": "duyệt ngược thư mục",
+          "giaiThich": "escaping a folder with ../"
+        },
+        {
+          "en": "resolve",
+          "vi": "phân giải thành đường tuyệt đối"
+        },
+        {
+          "en": "blocklist",
+          "vi": "danh sách chặn"
+        }
+      ]
+    }
+  ]
+}

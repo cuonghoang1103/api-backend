@@ -1,0 +1,843 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-3-2-buffer",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-3-2-buffer"
+  },
+  "exercises": [
+    {
+      "title": "3.2 · Characters are not bytes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Buffer",
+        "UTF-8"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Five questions on the lesson’s output for <code>Buffer.from('Xin chào')</code> and on the Buffer rules. Every answer was checked with Node 22.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về output của bài cho <code>Buffer.from('Xin chào')</code> và các luật của Buffer. Mọi đáp án đã kiểm bằng Node 22.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write “Xin chào” as bytes: which letter is not ASCII?|||Viết “Xin chào” thành byte: chữ nào không phải ASCII?",
+        "Remember three different counts: UTF-16 units (.length), UTF-8 bytes, and what a human calls a character.|||Nhớ ba cách đếm khác nhau: đơn vị UTF-16 (.length), byte UTF-8, và điều con người gọi là ký tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2 · Characters are not bytes\n\nAnswer in the answer panel (no code needed).\n\n1. 'Xin chào'.length is 8 but the buffer has 9 bytes. Why?'Xin chào'.length là 8 nhưng buffer có 9 byte. Vì sao?\n2. What does b.subarray(0, 7).toString('utf8') give for that buffer?b.subarray(0, 7).toString('utf8') cho gì với buffer đó?\n3. '😀'.length and Buffer.byteLength('😀') are…'😀'.length và Buffer.byteLength('😀') là…\n4. Why does the lesson forbid Buffer.allocUnsafe(n) unless you overwrite every byte at once?Vì sao bài cấm Buffer.allocUnsafe(n) trừ khi ghi đè mọi byte ngay?\n5. A payment webhook signature never matches. The route uses express.json() and verifies JSON.stringify(req.body). What is wrong?Chữ ký webhook thanh toán không bao giờ khớp. Route dùng express.json() và kiểm JSON.stringify(req.body). Sai ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2 · Characters are not bytes — answer key\n\n1. 'Xin chào'.length is 8 but the buffer has 9 bytes. Why?'Xin chào'.length là 8 nhưng buffer có 9 byte. Vì sao?\n   Answer: b) In UTF-8 the letter à costs two bytes (c3 a0); every ASCII letter costs one\n   ASCII = 1 byte, Vietnamese letters with diacritics = 2 or 3, emoji = 4. The hex 58696e206368c3a06f shows it.VI: ASCII = 1 byte, chữ Việt có dấu = 2 hoặc 3, emoji = 4. Chuỗi hex 58696e206368c3a06f cho thấy điều đó.\n\n2. What does b.subarray(0, 7).toString('utf8') give for that buffer?b.subarray(0, 7).toString('utf8') cho gì với buffer đó?\n   Answer: b) \"Xin ch�\" — the cut went through the middle of à\n   Byte 7 is the first half of à. Decoding half a sequence gives the replacement character U+FFFD — the real cause of the mangled text you see on websites.VI: Byte thứ 7 là nửa đầu của à. Giải mã nửa chuỗi byte cho ra ký tự thay thế U+FFFD — nguyên nhân thật của chữ lỗi bạn hay gặp trên web.\n\n3. '😀'.length and Buffer.byteLength('😀') are…'😀'.length và Buffer.byteLength('😀') là…\n   Answer: d) 2 and 4\n   JavaScript strings count UTF-16 code units (an emoji is a surrogate pair = 2); UTF-8 needs 4 bytes. Neither is “characters”.VI: Chuỗi JavaScript đếm đơn vị UTF-16 (emoji là một cặp surrogate = 2); UTF-8 cần 4 byte. Cả hai đều không phải “số ký tự”.\n\n4. Why does the lesson forbid Buffer.allocUnsafe(n) unless you overwrite every byte at once?Vì sao bài cấm Buffer.allocUnsafe(n) trừ khi ghi đè mọi byte ngay?\n   Answer: d) Its memory is not cleared and may still hold fragments of other data from your process\n   alloc(n) gives zeros; allocUnsafe(n) gives whatever was in that memory — maybe another user’s token. Sending it out leaks data.VI: alloc(n) cho toàn số 0; allocUnsafe(n) cho bất cứ thứ gì đang nằm ở vùng nhớ đó — có thể là token của người khác. Gửi nó ra ngoài là lộ dữ liệu.\n\n5. A payment webhook signature never matches. The route uses express.json() and verifies JSON.stringify(req.body). What is wrong?Chữ ký webhook thanh toán không bao giờ khớp. Route dùng express.json() và kiểm JSON.stringify(req.body). Sai ở đâu?\n   Answer: c) Re-serialising changes whitespace and key order; the HMAC must be computed over the raw body bytes\n   The signature was computed over the exact bytes the provider sent. Parse → stringify produces different bytes, so keep the raw body for that one route (chapter 6).VI: Chữ ký được tính trên đúng các byte nhà cung cấp gửi. Parse → stringify ra byte khác, nên giữ thân thô cho riêng route đó (chương 6).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> In UTF-8 the letter à costs two bytes (c3 a0); every ASCII letter costs one</p><p>ASCII = 1 byte, Vietnamese letters with diacritics = 2 or 3, emoji = 4. The hex 58696e206368<b>c3a0</b>6f shows it.</p><p><i>VI: ASCII = 1 byte, chữ Việt có dấu = 2 hoặc 3, emoji = 4. Chuỗi hex 58696e206368<b>c3a0</b>6f cho thấy điều đó.</i></p></li><li><p><b>b)</b> \"Xin ch�\" — the cut went through the middle of à</p><p>Byte 7 is the first half of à. Decoding half a sequence gives the replacement character U+FFFD — the real cause of the mangled text you see on websites.</p><p><i>VI: Byte thứ 7 là nửa đầu của à. Giải mã nửa chuỗi byte cho ra ký tự thay thế U+FFFD — nguyên nhân thật của chữ lỗi bạn hay gặp trên web.</i></p></li><li><p><b>d)</b> 2 and 4</p><p>JavaScript strings count UTF-16 code units (an emoji is a surrogate pair = 2); UTF-8 needs 4 bytes. Neither is “characters”.</p><p><i>VI: Chuỗi JavaScript đếm đơn vị UTF-16 (emoji là một cặp surrogate = 2); UTF-8 cần 4 byte. Cả hai đều không phải “số ký tự”.</i></p></li><li><p><b>d)</b> Its memory is not cleared and may still hold fragments of other data from your process</p><p>alloc(n) gives zeros; allocUnsafe(n) gives whatever was in that memory — maybe another user’s token. Sending it out leaks data.</p><p><i>VI: alloc(n) cho toàn số 0; allocUnsafe(n) cho bất cứ thứ gì đang nằm ở vùng nhớ đó — có thể là token của người khác. Gửi nó ra ngoài là lộ dữ liệu.</i></p></li><li><p><b>c)</b> Re-serialising changes whitespace and key order; the HMAC must be computed over the raw body bytes</p><p>The signature was computed over the exact bytes the provider sent. Parse → stringify produces different bytes, so keep the raw body for that one route (chapter 6).</p><p><i>VI: Chữ ký được tính trên đúng các byte nhà cung cấp gửi. Parse → stringify ra byte khác, nên giữ thân thô cho riêng route đó (chương 6).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>'Xin chào'.length</code> is 8 but the buffer has 9 bytes. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>'Xin chào'.length</code> là 8 nhưng buffer có 9 byte. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Buffer.from adds a terminating zero byte, like a C string"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In UTF-8 the letter à costs two bytes (c3 a0); every ASCII letter costs one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Buffer.from always uses UTF-16, which needs extra bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The space between the words is stored as two bytes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>ASCII = 1 byte, Vietnamese letters with diacritics = 2 or 3, emoji = 4. The hex 58696e206368<b>c3a0</b>6f shows it.</p><p><i>VI: ASCII = 1 byte, chữ Việt có dấu = 2 hoặc 3, emoji = 4. Chuỗi hex 58696e206368<b>c3a0</b>6f cho thấy điều đó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What does <code>b.subarray(0, 7).toString('utf8')</code> give for that buffer?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>b.subarray(0, 7).toString('utf8')</code> cho gì với buffer đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It throws RangeError because 7 splits a character"
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Xin ch�\" — the cut went through the middle of à"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Xin ch\" — Node drops the half character silently"
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Xin chà\" — seven characters"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Byte 7 is the first half of à. Decoding half a sequence gives the replacement character U+FFFD — the real cause of the mangled text you see on websites.</p><p><i>VI: Byte thứ 7 là nửa đầu của à. Giải mã nửa chuỗi byte cho ra ký tự thay thế U+FFFD — nguyên nhân thật của chữ lỗi bạn hay gặp trên web.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>'😀'.length</code> and <code>Buffer.byteLength('😀')</code> are…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>'😀'.length</code> và <code>Buffer.byteLength('😀')</code> là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2 and 2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 and 4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 and 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2 and 4"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>JavaScript strings count UTF-16 code units (an emoji is a surrogate pair = 2); UTF-8 needs 4 bytes. Neither is “characters”.</p><p><i>VI: Chuỗi JavaScript đếm đơn vị UTF-16 (emoji là một cặp surrogate = 2); UTF-8 cần 4 byte. Cả hai đều không phải “số ký tự”.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does the lesson forbid <code>Buffer.allocUnsafe(n)</code> unless you overwrite every byte at once?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bài cấm <code>Buffer.allocUnsafe(n)</code> trừ khi ghi đè mọi byte ngay?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It allocates inside V8’s heap, so the garbage collector moves it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It returns a buffer that cannot be passed to fs or crypto"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is slower than Buffer.alloc because it has to validate the size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its memory is not cleared and may still hold fragments of other data from your process"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>alloc(n) gives zeros; allocUnsafe(n) gives whatever was in that memory — maybe another user’s token. Sending it out leaks data.</p><p><i>VI: alloc(n) cho toàn số 0; allocUnsafe(n) cho bất cứ thứ gì đang nằm ở vùng nhớ đó — có thể là token của người khác. Gửi nó ra ngoài là lộ dữ liệu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A payment webhook signature never matches. The route uses <code>express.json()</code> and verifies <code>JSON.stringify(req.body)</code>. What is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chữ ký webhook thanh toán không bao giờ khớp. Route dùng <code>express.json()</code> và kiểm <code>JSON.stringify(req.body)</code>. Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The signature header must be parsed with Buffer.from(sig, \"utf8\") first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "express.json() decodes the body as latin1, which changes the bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Re-serialising changes whitespace and key order; the HMAC must be computed over the raw body bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "JSON.stringify escapes Vietnamese letters, so the signature needs base64"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The signature was computed over the exact bytes the provider sent. Parse → stringify produces different bytes, so keep the raw body for that one route (chapter 6).</p><p><i>VI: Chữ ký được tính trên đúng các byte nhà cung cấp gửi. Parse → stringify ra byte khác, nên giữ thân thô cho riêng route đó (chương 6).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming str.length is the number of bytes to send.|||Tưởng str.length là số byte sẽ gửi đi."
+        },
+        {
+          "loi": "Truncating a description with buffer.subarray(0, 100).|||Cắt mô tả bằng buffer.subarray(0, 100)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code unit",
+          "vi": "đơn vị mã UTF-16",
+          "giaiThich": "what String.length counts"
+        },
+        {
+          "en": "replacement character",
+          "vi": "ký tự thay thế U+FFFD (�)"
+        },
+        {
+          "en": "raw body",
+          "vi": "thân request thô (chưa parse)"
+        }
+      ]
+    },
+    {
+      "title": "3.2 · Count UTF-8 bytes like Buffer.byteLength",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Buffer",
+        "UTF-8"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>In the lesson, <code>'Xin chào'</code> is 8 characters but 9 bytes. The grader runs in a browser Worker, which has no <code>Buffer</code>, so write <code>utf8Length(str)</code> — the same number as <code>Buffer.byteLength(str, 'utf8')</code>. UTF-8 spends, per code point:</p>\n<table><thead><tr><th>code point</th><th>bytes</th><th>examples</th></tr></thead><tbody><tr><td>&lt; 0x80</td><td>1</td><td>a, 7, space</td></tr><tr><td>&lt; 0x800</td><td>2</td><td>à Đ ă</td></tr><tr><td>&lt; 0x10000</td><td>3</td><td>ấ ễ €</td></tr><tr><td>otherwise</td><td>4</td><td>😀</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong bài, <code>'Xin chào'</code> có 8 ký tự nhưng 9 byte. Máy chấm chạy trong Worker của trình duyệt, không có <code>Buffer</code>, nên hãy viết <code>utf8Length(str)</code> — cùng số với <code>Buffer.byteLength(str, 'utf8')</code>. UTF-8 tốn, cho mỗi code point:</p>\n<table><thead><tr><th>code point</th><th>byte</th><th>ví dụ</th></tr></thead><tbody><tr><td>&lt; 0x80</td><td>1</td><td>a, 7, dấu cách</td></tr><tr><td>&lt; 0x800</td><td>2</td><td>à Đ ă</td></tr><tr><td>&lt; 0x10000</td><td>3</td><td>ấ ễ €</td></tr><tr><td>còn lại</td><td>4</td><td>😀</td></tr></tbody></table>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "str — any string (well-formed: no lone surrogates)|||str — chuỗi bất kỳ (hợp lệ: không có surrogate lẻ)",
+      "outputSpec": "number of UTF-8 bytes|||số byte UTF-8",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "utf8Length(\"Xin chào\")",
+          "output": "9",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "for (const ch of str) gives one code point at a time; ch.codePointAt(0) is its number.|||for (const ch of str) cho từng code point; ch.codePointAt(0) là số của nó.",
+        "A classic for (let i…) loop sees an emoji as TWO units — each would count 3 bytes, giving 6 instead of 4.|||Vòng for (let i…) cổ điển thấy emoji là HAI đơn vị — mỗi cái tính 3 byte, ra 6 thay vì 4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Buffer.byteLength(str, 'utf8') without Buffer */\nfunction utf8Length(str) {\n  // Write your solution here\n  return str.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — one code point at a time\nfunction utf8Length(str) {\n  let bytes = 0;\n  // for…of walks CODE POINTS, so an emoji (two UTF-16 units) is seen once\n  for (const ch of str) {\n    const cp = ch.codePointAt(0);\n    if (cp < 0x80) bytes += 1;            // ASCII\n    else if (cp < 0x800) bytes += 2;      // à, Đ, ă …\n    else if (cp < 0x10000) bytes += 3;    // ấ, ễ, € …\n    else bytes += 4;                      // emoji and other astral characters\n  }\n  return bytes;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected values are <code>Buffer.byteLength</code> from Node 22 (“Tiếng Việt” = 14 bytes for 10 characters). This number matters in real code: <code>Content-Length</code> is bytes, a byte-limited column or an upload limit is bytes — <code>str.length</code> is neither.</p>",
+      "solutionExplanationHtmlVi": "<p>Giá trị mong đợi là <code>Buffer.byteLength</code> của Node 22 (“Tiếng Việt” = 14 byte cho 10 ký tự). Con số này quan trọng trong code thật: <code>Content-Length</code> tính bằng byte, cột giới hạn theo byte hay giới hạn upload cũng là byte — <code>str.length</code> không phải cái nào cả.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s string: 8 characters, 9 bytes",
+              "vi": "Chuỗi của bài: 8 ký tự, 9 byte"
+            },
+            "goi": "utf8Length(\"Xin chào\")",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Pure ASCII",
+              "vi": "ASCII thuần"
+            },
+            "goi": "utf8Length(\"hello\")",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "A three-byte Vietnamese letter",
+              "vi": "Chữ Việt ba byte"
+            },
+            "goi": "utf8Length(\"ấ\")",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "utf8Length(\"😀\")",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "utf8Length(\"\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "utf8Length(\"Tiếng Việt\")",
+            "mongDoi": 14,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "utf8Length(\"Nguyễn Văn Ánh 😀\")",
+            "mongDoi": 23,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "utf8Length(\"Giá 100€ — Đà Nẵng\")",
+            "mongDoi": 27,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "return str.length — right only for pure ASCII.|||return str.length — chỉ đúng với ASCII thuần."
+        },
+        {
+          "loi": "Iterating with str[i]/charCodeAt: an emoji counts as 3 + 3 bytes.|||Lặp bằng str[i]/charCodeAt: emoji bị tính 3 + 3 byte."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code point",
+          "vi": "điểm mã Unicode",
+          "giaiThich": "the number of a character, e.g. U+00E0 for à"
+        },
+        {
+          "en": "surrogate pair",
+          "vi": "cặp thay thế UTF-16",
+          "giaiThich": "two code units that encode one code point above U+FFFF"
+        }
+      ]
+    },
+    {
+      "title": "3.2 · Encode to UTF-8 and print the hex",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "Buffer",
+        "UTF-8",
+        "hex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson prints <code>Buffer.from('Xin chào', 'utf8').toString('hex')</code> → <code>58696e206368c3a06f</code>. Write <code>toHex(str)</code> that produces the same string without <code>Buffer</code> (and without <code>TextEncoder</code>). Encode each code point:</p>\n<pre>&lt; 0x80      0xxxxxxx\n&lt; 0x800     110xxxxx 10xxxxxx\n&lt; 0x10000   1110xxxx 10xxxxxx 10xxxxxx\notherwise   11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</pre><p>then write every byte as two lowercase hex digits.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài in <code>Buffer.from('Xin chào', 'utf8').toString('hex')</code> → <code>58696e206368c3a06f</code>. Viết <code>toHex(str)</code> cho ra cùng chuỗi mà không dùng <code>Buffer</code> (và không dùng <code>TextEncoder</code>). Mã hoá từng code point:</p>\n<pre>&lt; 0x80      0xxxxxxx\n&lt; 0x800     110xxxxx 10xxxxxx\n&lt; 0x10000   1110xxxx 10xxxxxx 10xxxxxx\ncòn lại     11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</pre><p>rồi viết mỗi byte thành hai chữ số hex viết thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "str — a well-formed string|||str — chuỗi hợp lệ",
+      "outputSpec": "lowercase hex string, 2 characters per byte|||chuỗi hex thường, 2 ký tự mỗi byte",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toHex(\"Xin chào\")",
+          "output": "\"58696e206368c3a06f\"",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "à is U+00E0: 0xc0 | (0xe0 >> 6) = 0xc3, 0x80 | (0xe0 & 63) = 0xa0 — the c3 a0 of the lesson.|||à là U+00E0: 0xc0 | (0xe0 >> 6) = 0xc3, 0x80 | (0xe0 & 63) = 0xa0 — đúng c3 a0 của bài.",
+        "b.toString(16) of 10 is \"a\": pad to two digits.|||b.toString(16) của 10 là \"a\": đệm cho đủ hai chữ số.",
+        "Walk code points with for…of, not str[i], so 😀 becomes f0 9f 98 80.|||Đi theo code point bằng for…of, không phải str[i], để 😀 thành f0 9f 98 80."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Buffer.from(str, 'utf8').toString('hex') without Buffer */\nfunction toHex(str) {\n  // Write your solution here — this prints code units, not UTF-8 bytes\n  let out = '';\n  for (let i = 0; i < str.length; i++) out += str.charCodeAt(i).toString(16);\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — encode code points to bytes, then 2 hex digits per byte\nfunction utf8Bytes(str) {\n  const out = [];\n  for (const ch of str) {\n    const cp = ch.codePointAt(0);\n    if (cp < 0x80) out.push(cp);\n    // multi-byte: a lead byte with the length in its top bits, then 10xxxxxx continuation bytes\n    else if (cp < 0x800) out.push(0xc0 | (cp >> 6), 0x80 | (cp & 63));\n    else if (cp < 0x10000) out.push(0xe0 | (cp >> 12), 0x80 | ((cp >> 6) & 63), 0x80 | (cp & 63));\n    else out.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 63), 0x80 | ((cp >> 6) & 63), 0x80 | (cp & 63));\n  }\n  return out;\n}\n\nfunction toHex(str) {\n  // two hex digits per byte, zero-padded: 0x0a is \"0a\", not \"a\"\n  return utf8Bytes(str).map((b) => b.toString(16).padStart(2, '0')).join('');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected strings are Node’s <code>Buffer.from(s).toString('hex')</code>. The top bits of the lead byte announce the length (110 = 2, 1110 = 3, 11110 = 4) and every continuation byte starts with 10 — which is exactly what lets a decoder find a cut in the middle of a character (next exercises).</p>",
+      "solutionExplanationHtmlVi": "<p>Chuỗi mong đợi là <code>Buffer.from(s).toString('hex')</code> của Node. Các bit đầu của byte dẫn báo độ dài (110 = 2, 1110 = 3, 11110 = 4) và mọi byte tiếp nối bắt đầu bằng 10 — đó chính là thứ giúp bộ giải mã nhận ra chỗ cắt giữa một ký tự (các bài sau).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s output",
+              "vi": "Output của bài"
+            },
+            "goi": "toHex(\"Xin chào\")",
+            "mongDoi": "58696e206368c3a06f"
+          },
+          {
+            "moTa": {
+              "en": "Two bytes",
+              "vi": "Hai byte"
+            },
+            "goi": "toHex(\"Đ\")",
+            "mongDoi": "c490"
+          },
+          {
+            "moTa": {
+              "en": "A newline needs padding: 0a",
+              "vi": "Xuống dòng cần đệm: 0a"
+            },
+            "goi": "toHex(\"a\\nb\")",
+            "mongDoi": "610a62"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "toHex(\"😀\")",
+            "mongDoi": "f09f9880",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "toHex(\"Tiếng Việt\")",
+            "mongDoi": "5469e1babf6e67205669e1bb8774",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "toHex(\"€5\")",
+            "mongDoi": "e282ac35",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "toHex(\"\")",
+            "mongDoi": "",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "charCodeAt(i).toString(16): \"à\" becomes \"e0\" — that is the code point, not its UTF-8 bytes.|||charCodeAt(i).toString(16): \"à\" thành \"e0\" — đó là code point, không phải các byte UTF-8."
+        },
+        {
+          "loi": "Forgetting padStart: a newline (0x0a) prints as \"a\" and every later byte shifts.|||Quên padStart: ký tự xuống dòng (0x0a) in thành \"a\" và mọi byte sau bị lệch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lead byte",
+          "vi": "byte dẫn",
+          "giaiThich": "the first byte of a multi-byte sequence"
+        },
+        {
+          "en": "continuation byte",
+          "vi": "byte tiếp nối",
+          "giaiThich": "10xxxxxx"
+        }
+      ]
+    },
+    {
+      "title": "3.2 · Truncate to N bytes without breaking a letter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Buffer",
+        "UTF-8"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s output:</p><pre>subarray(0,6) = \"Xin ch\"\nsubarray(0,7) = \"Xin ch�\"\nsubarray(0,8) = \"Xin chà\"</pre><p>A storage column (or an SMS gateway) accepts at most <code>maxBytes</code> UTF-8 bytes. Write <code>truncateUtf8(str, maxBytes)</code>: the <b>longest prefix of whole characters</b> whose UTF-8 size is ≤ <code>maxBytes</code>. Never return a half character (no <code>�</code>) and never split an emoji.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output của bài:</p><pre>subarray(0,6) = \"Xin ch\"\nsubarray(0,7) = \"Xin ch�\"\nsubarray(0,8) = \"Xin chà\"</pre><p>Một cột lưu trữ (hay cổng SMS) nhận tối đa <code>maxBytes</code> byte UTF-8. Viết <code>truncateUtf8(str, maxBytes)</code>: <b>tiền tố dài nhất gồm các ký tự nguyên vẹn</b> có kích thước UTF-8 ≤ <code>maxBytes</code>. Không bao giờ trả nửa ký tự (không có <code>�</code>) và không cắt đôi emoji.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "str — a string; maxBytes — integer ≥ 0|||str — chuỗi; maxBytes — số nguyên ≥ 0",
+      "outputSpec": "a prefix of str|||một tiền tố của str",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "truncateUtf8(\"Xin chào\", 7)",
+          "output": "\"Xin ch\"",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Walk code points, add each one’s byte size, stop BEFORE the one that would overflow.|||Đi theo code point, cộng kích thước byte của từng cái, dừng TRƯỚC cái làm tràn.",
+        "The byte size of one code point is the table from the previous exercise.|||Kích thước byte của một code point là bảng ở bài trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the longest prefix of whole characters that fits in maxBytes UTF-8 bytes */\nfunction truncateUtf8(str, maxBytes) {\n  // Write your solution here\n  return str.slice(0, maxBytes);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — add whole code points while they fit\nfunction truncateUtf8(str, maxBytes) {\n  let out = '';\n  let used = 0;\n  // add whole code points while they still fit — a character is never split\n  for (const ch of str) {\n    const cp = ch.codePointAt(0);\n    const n = cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;\n    if (used + n > maxBytes) break;\n    used += n;\n    out += ch;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lesson’s advice is “truncate the string, not the buffer”. Here the limit is in bytes, so you count bytes — but you only ever cut at a character boundary, which a code-point loop gives you for free. Expected results were checked: <code>Buffer.byteLength(result) ≤ maxBytes</code> and adding the next character would exceed it.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời khuyên của bài là “cắt chuỗi, đừng cắt buffer”. Ở đây giới hạn tính bằng byte nên bạn đếm byte — nhưng chỉ cắt ở ranh giới ký tự, thứ mà vòng lặp theo code point cho sẵn. Kết quả mong đợi đã được kiểm: <code>Buffer.byteLength(kết quả) ≤ maxBytes</code> và thêm ký tự kế tiếp sẽ vượt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "7 bytes: à does not fit",
+              "vi": "7 byte: à không vừa"
+            },
+            "goi": "truncateUtf8(\"Xin chào\", 7)",
+            "mongDoi": "Xin ch"
+          },
+          {
+            "moTa": {
+              "en": "8 bytes: à fits",
+              "vi": "8 byte: à vừa"
+            },
+            "goi": "truncateUtf8(\"Xin chào\", 8)",
+            "mongDoi": "Xin chà"
+          },
+          {
+            "moTa": {
+              "en": "Short enough already",
+              "vi": "Đã đủ ngắn"
+            },
+            "goi": "truncateUtf8(\"hello\", 10)",
+            "mongDoi": "hello"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "truncateUtf8(\"hi😀!\", 5)",
+            "mongDoi": "hi",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "truncateUtf8(\"hi😀!\", 6)",
+            "mongDoi": "hi😀",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "truncateUtf8(\"Tiếng Việt\", 4)",
+            "mongDoi": "Ti",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "truncateUtf8(\"Tiếng Việt\", 0)",
+            "mongDoi": "",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "truncateUtf8(\"Đà Nẵng mùa hè\", 12)",
+            "mongDoi": "Đà Nẵng ",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "str.slice(0, maxBytes) — counts UTF-16 units, so \"Xin chào\" with 7 keeps 9 bytes.|||str.slice(0, maxBytes) — đếm đơn vị UTF-16, nên \"Xin chào\" với 7 vẫn giữ 9 byte."
+        },
+        {
+          "loi": "Cutting the bytes and decoding them: that is exactly how \"Xin ch�\" is made.|||Cắt byte rồi giải mã: đó chính là cách tạo ra \"Xin ch�\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix",
+          "vi": "tiền tố"
+        },
+        {
+          "en": "character boundary",
+          "vi": "ranh giới ký tự"
+        }
+      ]
+    },
+    {
+      "title": "3.2 · A StringDecoder that waits for the rest of a letter",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "Buffer",
+        "streams",
+        "UTF-8"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A stream hands you a Buffer per <code>data</code> event, and the boundary between two chunks falls wherever it falls — sometimes in the middle of <code>à</code>. Decoding each chunk on its own then prints <code>�</code>. The lesson’s answer is <code>StringDecoder</code>: <i>it holds an incomplete sequence until the next chunk completes it</i>.</p>\n<p>Write <code>createDecoder()</code> returning <code>{ write(chunk), end() }</code> (chunks are arrays of byte values):</p>\n<ul><li><code>write(chunk)</code> returns the text of every <b>complete</b> character so far and keeps the 1–3 bytes of an unfinished one for the next call;</li><li><code>end()</code> returns <code>\"\\ufffd\"</code> if bytes are still pending (the input ended inside a character), else <code>\"\"</code> — exactly what <code>StringDecoder.end()</code> does.</li></ul><p>The starter already has a <code>decodeBytes(bytes)</code> helper; its problem is that it has no memory between chunks.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Keep the pending bytes inside the closure, not in a global.</li>\n  <li>write() must never return \"\\ufffd\" for valid input.</li>\n</ul>",
+      "problemHtmlVi": "<p>Stream đưa bạn một Buffer mỗi sự kiện <code>data</code>, và ranh giới giữa hai chunk rơi vào đâu thì rơi — có lúc vào giữa chữ <code>à</code>. Giải mã từng chunk riêng sẽ in ra <code>�</code>. Câu trả lời của bài là <code>StringDecoder</code>: <i>nó giữ một chuỗi byte dở dang tới khi chunk sau làm nó đủ</i>.</p>\n<p>Viết <code>createDecoder()</code> trả về <code>{ write(chunk), end() }</code> (chunk là mảng giá trị byte):</p>\n<ul><li><code>write(chunk)</code> trả về chữ của mọi ký tự <b>đã đủ byte</b> và giữ lại 1–3 byte của ký tự còn dở cho lần gọi sau;</li><li><code>end()</code> trả <code>\"\\ufffd\"</code> nếu vẫn còn byte chờ (đầu vào kết thúc giữa một ký tự), ngược lại <code>\"\"</code> — đúng như <code>StringDecoder.end()</code>.</li></ul><p>Code khởi đầu đã có hàm <code>decodeBytes(bytes)</code>; vấn đề của nó là không nhớ gì giữa các chunk.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giữ các byte đang chờ trong closure, không ở biến toàn cục.</li>\n  <li>write() không bao giờ trả \"\\ufffd\" với đầu vào hợp lệ.</li>\n</ul>",
+      "inputSpec": "chunks of valid UTF-8, split anywhere|||các chunk UTF-8 hợp lệ, cắt ở chỗ bất kỳ",
+      "outputSpec": "strings from write() and end()|||các chuỗi từ write() và end()",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const d = createDecoder(); return [d.write([0x58, 0x69, 0x6e, 0x20, 0x63, 0x68, 0xc3]), d.write([0xa0, 0x6f]), d.end()]; })()",
+          "output": "[\"Xin ch\",\"ào\",\"\"]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Join pending + chunk, then walk sequences from the start: a lead byte says the length (1–4).|||Ghép pending + chunk, rồi đi qua từng chuỗi byte từ đầu: byte dẫn cho biết độ dài (1–4).",
+        "Stop at the first sequence that would run past the end — everything from there becomes the new pending.|||Dừng ở chuỗi đầu tiên vượt quá cuối — mọi thứ từ đó trở thành pending mới.",
+        "Decode only the complete part with the helper; end() just looks at whether pending is empty.|||Chỉ giải mã phần đủ bằng hàm có sẵn; end() chỉ xem pending có rỗng không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helper: decode bytes, turning an INCOMPLETE sequence at the end into '\\ufffd' ──\nfunction decodeBytes(bytes) {\n  let s = '';\n  for (let i = 0; i < bytes.length;) {\n    const b = bytes[i];\n    const n = b < 0x80 ? 1 : b >= 0xf0 ? 4 : b >= 0xe0 ? 3 : 2;\n    if (i + n > bytes.length) { s += '\\ufffd'; break; }\n    let cp = n === 1 ? b : b & (0xff >> (n + 1));\n    for (let k = 1; k < n; k++) cp = (cp << 6) | (bytes[i + k] & 63);\n    s += String.fromCodePoint(cp);\n    i += n;\n  }\n  return s;\n}\n\n/** decode a stream of byte chunks without breaking letters at chunk boundaries */\nfunction createDecoder() {\n  // Write your solution here — no memory between chunks yet\n  return {\n    write(chunk) { return decodeBytes(chunk); },\n    end() { return ''; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — keep the bytes of an unfinished character for the next chunk\nfunction seqLength(lead) {\n  // the top bits of the lead byte say how long the sequence is\n  if (lead < 0x80) return 1;\n  if (lead >= 0xf0) return 4;\n  if (lead >= 0xe0) return 3;\n  return 2;\n}\n\nfunction decodeComplete(bytes) {\n  // bytes holds only whole sequences here\n  let s = '';\n  for (let i = 0; i < bytes.length;) {\n    const n = seqLength(bytes[i]);\n    let cp = n === 1 ? bytes[i] : bytes[i] & (0xff >> (n + 1));\n    for (let k = 1; k < n; k++) cp = (cp << 6) | (bytes[i + k] & 63);\n    s += String.fromCodePoint(cp);\n    i += n;\n  }\n  return s;\n}\n\nfunction createDecoder() {\n  let pending = [];   // bytes of a character that has not finished arriving\n  return {\n    write(chunk) {\n      const all = pending.concat(Array.from(chunk));\n      // find where the last COMPLETE sequence ends\n      let i = 0;\n      while (i < all.length && i + seqLength(all[i]) <= all.length) i += seqLength(all[i]);\n      pending = all.slice(i);          // 0–3 bytes wait for the next chunk\n      return decodeComplete(all.slice(0, i));\n    },\n    end() {\n      // the stream ended in the middle of a character: one replacement character, like StringDecoder\n      const out = pending.length ? '\\ufffd' : '';\n      pending = [];\n      return out;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every case was replayed through Node’s <code>new StringDecoder('utf8')</code> with the same chunks (e.g. <code>[0x58,0xc3]</code> then <code>[0xa0,0x6f]</code> → <code>\"X\"</code>, <code>\"ào\"</code>, <code>\"\"</code>). The idea is a carry: like adding numbers by hand, whatever does not fit in this column waits for the next one. Streams of text in Node (<code>setEncoding('utf8')</code>, readline) use exactly this.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ca đã được chạy lại qua <code>new StringDecoder('utf8')</code> của Node với đúng các chunk đó (vd <code>[0x58,0xc3]</code> rồi <code>[0xa0,0x6f]</code> → <code>\"X\"</code>, <code>\"ào\"</code>, <code>\"\"</code>). Ý tưởng là “nhớ sang”: như cộng tay, phần không vừa cột này chờ sang cột sau. Stream văn bản trong Node (<code>setEncoding('utf8')</code>, readline) dùng đúng cách này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "\"Xin chào\" cut at byte 7 (the lesson’s cut)",
+              "vi": "\"Xin chào\" cắt ở byte 7 (chỗ cắt của bài)"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([0x58, 0x69, 0x6e, 0x20, 0x63, 0x68, 0xc3]), d.write([0xa0, 0x6f]), d.end()]; })()",
+            "mongDoi": [
+              "Xin ch",
+              "ào",
+              ""
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Input ends inside ấ → end() gives �",
+              "vi": "Đầu vào hết giữa chữ ấ → end() cho �"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([0x41, 0xe1, 0xba]), d.end()]; })()",
+            "mongDoi": [
+              "A",
+              "�"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nothing pending",
+              "vi": "Không có gì chờ"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([0x68, 0x69]), d.end()]; })()",
+            "mongDoi": [
+              "hi",
+              ""
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([0xf0]), d.write([0x9f]), d.write([0x98, 0x80, 0x21]), d.end()]; })()",
+            "mongDoi": [
+              "",
+              "",
+              "😀!",
+              ""
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([0x54, 0x69, 0xe1]), d.write([0xba, 0xbf, 0x6e, 0x67, 0x20, 0x56, 0x69, 0xe1, 0xbb]), d.write([0x87, 0x74]), d.end()]; })()",
+            "mongDoi": [
+              "Ti",
+              "ếng Vi",
+              "ệt",
+              ""
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const a = createDecoder(); const b = createDecoder(); return [a.write([0xc3]), b.write([0xc4]), a.write([0xa0]), b.write([0x90]), a.end(), b.end()]; })()",
+            "mongDoi": [
+              "",
+              "",
+              "à",
+              "Đ",
+              "",
+              ""
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(() => { const d = createDecoder(); return [d.write([]), d.write([0xf0, 0x9f, 0x98]), d.end(), d.write([0x41]), d.end()]; })()",
+            "mongDoi": [
+              "",
+              "",
+              "�",
+              "A",
+              ""
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Decoding each chunk independently — the \"Xin ch�\" bug, one chunk at a time.|||Giải mã từng chunk riêng — lỗi \"Xin ch�\", từng chunk một."
+        },
+        {
+          "loi": "Keeping pending in a global: two decoders (two uploads at once) corrupt each other.|||Giữ pending ở biến toàn cục: hai decoder (hai upload cùng lúc) làm hỏng nhau."
+        },
+        {
+          "loi": "Forgetting end(): the last half character disappears silently instead of showing �.|||Quên end(): nửa ký tự cuối biến mất âm thầm thay vì hiện �."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "StringDecoder",
+          "vi": "bộ giải mã chuỗi",
+          "giaiThich": "node:string_decoder"
+        },
+        {
+          "en": "pending bytes",
+          "vi": "byte đang chờ"
+        },
+        {
+          "en": "closure",
+          "vi": "bao đóng",
+          "giaiThich": "a function that remembers variables of the scope it was created in"
+        }
+      ]
+    }
+  ]
+}

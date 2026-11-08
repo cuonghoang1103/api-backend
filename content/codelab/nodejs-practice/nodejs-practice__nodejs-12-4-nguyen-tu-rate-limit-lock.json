@@ -1,0 +1,921 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-12-4-nguyen-tu-rate-limit-lock",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-12-4-nguyen-tu-rate-limit-lock"
+  },
+  "exercises": [
+    {
+      "title": "12.4 · Atomic or merely looks like it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "atomicity",
+        "rate limiting",
+        "locks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Redis runs one command at a time. That makes each COMMAND atomic — not your sequence of commands. Each question is a measurement from the lesson.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Redis chạy một lệnh mỗi lúc. Điều đó làm từng LỆNH nguyên tử — không làm chuỗi lệnh của bạn nguyên tử. Mỗi câu là một phép đo trong bài.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: can another client run between my two commands?|||Hỏi: client khác có chạy chen giữa hai lệnh của mình được không?",
+        "A Lua script is ONE command for Redis.|||Với Redis, một kịch bản Lua là MỘT lệnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.4 · Atomic or merely looks like it?\n\nAnswer in the answer panel (no code needed).\n\n1. 500 concurrent requests against a limit of 100, implemented as GET → check → SET. What happened?500 request đồng thời với giới hạn 100, cài bằng GET → kiểm → SET. Chuyện gì xảy ra?\n2. INCR then EXPIRE as two commands. The process dies between them. What is the consequence?INCR rồi EXPIRE là hai lệnh. Tiến trình chết giữa hai lệnh. Hậu quả là gì?\n3. A fixed window of 5 requests per second. How many requests got through in ~300 ms around a window boundary?Cửa sổ cố định 5 request mỗi giây. Bao nhiêu request lọt qua trong ~300 ms quanh ranh giới cửa sổ?\n4. The sliding window (ZSET) is exact at the boundary. Why is it not the default for general API throttling?Cửa sổ trượt (ZSET) chính xác ở ranh giới. Vì sao nó không phải mặc định cho điều tiết API chung?\n5. Worker-1 holds a lock with a 300 ms TTL, its job takes 400 ms, worker-2 takes the expired lock, then worker-1 calls DEL. What happens?Worker-1 giữ khoá TTL 300 ms, job của nó mất 400 ms, worker-2 giành khoá đã hết hạn, rồi worker-1 gọi DEL. Chuyện gì xảy ra?\n6. 50 workers each add 1 to a counter (read-modify-write). No lock → 1, lock → 50, INCR → 50. What is the lesson’s conclusion?50 worker mỗi cái cộng 1 vào bộ đếm (đọc-sửa-ghi). Không khoá → 1, có khoá → 50, INCR → 50. Kết luận của bài là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.4 · Atomic or merely looks like it? — answer key\n\n1. 500 concurrent requests against a limit of 100, implemented as GET → check → SET. What happened?500 request đồng thời với giới hạn 100, cài bằng GET → kiểm → SET. Chuyện gì xảy ra?\n   Answer: a) All 500 passed and the counter ended at 1 — everyone read 0, decided “under the limit”, and wrote 1\n   Other clients run between your GET and your SET. The limiter did nothing at all — and every one-request-at-a-time test passed.VI: Các client khác chạy giữa GET và SET của bạn. Bộ giới hạn không làm gì cả — mà mọi test một-request-mỗi-lần vẫn qua.\n\n2. INCR then EXPIRE as two commands. The process dies between them. What is the consequence?INCR rồi EXPIRE là hai lệnh. Tiến trình chết giữa hai lệnh. Hậu quả là gì?\n   Answer: a) The key has TTL -1: it never resets and that user is rate-limited forever\n   One user permanently 429, nothing in the logs. Fix: MULTI/EXEC, or a Lua script that sets the expiry on the first increment — one atomic command, one round trip.VI: Một người dùng 429 vĩnh viễn, log không có gì. Chữa: MULTI/EXEC, hoặc kịch bản Lua đặt hạn ở lần tăng đầu tiên — một lệnh nguyên tử, một vòng đi-về.\n\n3. A fixed window of 5 requests per second. How many requests got through in ~300 ms around a window boundary?Cửa sổ cố định 5 request mỗi giây. Bao nhiêu request lọt qua trong ~300 ms quanh ranh giới cửa sổ?\n   Answer: a) 10 — five at the end of one window, five at the start of the next\n   Double the configured limit at the boundary. Fine for API throttling, not for a login endpoint — use a sliding window there.VI: Gấp đôi giới hạn khai báo ở ranh giới. Ổn cho điều tiết API, không ổn cho endpoint đăng nhập — ở đó dùng cửa sổ trượt.\n\n4. The sliding window (ZSET) is exact at the boundary. Why is it not the default for general API throttling?Cửa sổ trượt (ZSET) chính xác ở ranh giới. Vì sao nó không phải mặc định cho điều tiết API chung?\n   Answer: b) It stores one entry per request in the window: 89 KB for one user at a limit of 1,000 (vs 56 bytes for a fixed window)\n   All three algorithms cost one round trip (≈0.3 ms). Choose on memory and semantics: 10,000 users × 89 KB = 890 MB.VI: Cả ba thuật toán đều một vòng đi-về (≈0,3 ms). Chọn theo bộ nhớ và ngữ nghĩa: 10.000 người × 89 KB = 890 MB.\n\n5. Worker-1 holds a lock with a 300 ms TTL, its job takes 400 ms, worker-2 takes the expired lock, then worker-1 calls DEL. What happens?Worker-1 giữ khoá TTL 300 ms, job của nó mất 400 ms, worker-2 giành khoá đã hết hạn, rồi worker-1 gọi DEL. Chuyện gì xảy ra?\n   Answer: d) Worker-1 deletes worker-2’s lock and the critical section is open to anyone\n   A lock must carry a unique token and be released by compare-and-delete in ONE atomic step (Lua). GET, compare in JavaScript, then DEL reintroduces the race.VI: Khoá phải mang token duy nhất và được mở bằng so-rồi-xoá trong MỘT bước nguyên tử (Lua). GET, so trong JavaScript, rồi DEL là đưa cuộc đua trở lại.\n\n6. 50 workers each add 1 to a counter (read-modify-write). No lock → 1, lock → 50, INCR → 50. What is the lesson’s conclusion?50 worker mỗi cái cộng 1 vào bộ đếm (đọc-sửa-ghi). Không khoá → 1, có khoá → 50, INCR → 50. Kết luận của bài là gì?\n   Answer: d) The lock was never necessary: inside Redis use the atomic command or a script; a lock is for work OUTSIDE Redis\n   INCR gives the same correct answer with no token, no TTL tuning and no failure mode. Locks are for a third-party call, a file, a ten-second report.VI: INCR cho cùng đáp án đúng mà không cần token, không phải chỉnh TTL, không có kiểu hỏng nào. Khoá dành cho cuộc gọi bên thứ ba, một tệp, một báo cáo mười giây.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> All 500 passed and the counter ended at 1 — everyone read 0, decided “under the limit”, and wrote 1</p><p>Other clients run between your GET and your SET. The limiter did nothing at all — and every one-request-at-a-time test passed.</p><p><i>VI: Các client khác chạy giữa GET và SET của bạn. Bộ giới hạn không làm gì cả — mà mọi test một-request-mỗi-lần vẫn qua.</i></p></li><li><p><b>a)</b> The key has TTL -1: it never resets and that user is rate-limited forever</p><p>One user permanently 429, nothing in the logs. Fix: MULTI/EXEC, or a Lua script that sets the expiry on the first increment — one atomic command, one round trip.</p><p><i>VI: Một người dùng 429 vĩnh viễn, log không có gì. Chữa: MULTI/EXEC, hoặc kịch bản Lua đặt hạn ở lần tăng đầu tiên — một lệnh nguyên tử, một vòng đi-về.</i></p></li><li><p><b>a)</b> 10 — five at the end of one window, five at the start of the next</p><p>Double the configured limit at the boundary. Fine for API throttling, not for a login endpoint — use a sliding window there.</p><p><i>VI: Gấp đôi giới hạn khai báo ở ranh giới. Ổn cho điều tiết API, không ổn cho endpoint đăng nhập — ở đó dùng cửa sổ trượt.</i></p></li><li><p><b>b)</b> It stores one entry per request in the window: 89 KB for one user at a limit of 1,000 (vs 56 bytes for a fixed window)</p><p>All three algorithms cost one round trip (≈0.3 ms). Choose on memory and semantics: 10,000 users × 89 KB = 890 MB.</p><p><i>VI: Cả ba thuật toán đều một vòng đi-về (≈0,3 ms). Chọn theo bộ nhớ và ngữ nghĩa: 10.000 người × 89 KB = 890 MB.</i></p></li><li><p><b>d)</b> Worker-1 deletes worker-2’s lock and the critical section is open to anyone</p><p>A lock must carry a unique token and be released by compare-and-delete in ONE atomic step (Lua). GET, compare in JavaScript, then DEL reintroduces the race.</p><p><i>VI: Khoá phải mang token duy nhất và được mở bằng so-rồi-xoá trong MỘT bước nguyên tử (Lua). GET, so trong JavaScript, rồi DEL là đưa cuộc đua trở lại.</i></p></li><li><p><b>d)</b> The lock was never necessary: inside Redis use the atomic command or a script; a lock is for work OUTSIDE Redis</p><p>INCR gives the same correct answer with no token, no TTL tuning and no failure mode. Locks are for a third-party call, a file, a ten-second report.</p><p><i>VI: INCR cho cùng đáp án đúng mà không cần token, không phải chỉnh TTL, không có kiểu hỏng nào. Khoá dành cho cuộc gọi bên thứ ba, một tệp, một báo cáo mười giây.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>500 concurrent requests against a limit of 100, implemented as GET → check → SET. What happened?</p><p style=\"opacity:.75;font-size:.92em\"><i>500 request đồng thời với giới hạn 100, cài bằng GET → kiểm → SET. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All 500 passed and the counter ended at 1 — everyone read 0, decided “under the limit”, and wrote 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis rejected 400 SETs with a WRONGTYPE error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100 passed and the counter ended at 500, the same as INCR"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 100 passed, because Redis serialises the GET and the SET of each client"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Other clients run between your GET and your SET. The limiter did nothing at all — and every one-request-at-a-time test passed.</p><p><i>VI: Các client khác chạy giữa GET và SET của bạn. Bộ giới hạn không làm gì cả — mà mọi test một-request-mỗi-lần vẫn qua.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>INCR then EXPIRE as two commands. The process dies between them. What is the consequence?</p><p style=\"opacity:.75;font-size:.92em\"><i>INCR rồi EXPIRE là hai lệnh. Tiến trình chết giữa hai lệnh. Hậu quả là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The key has TTL -1: it never resets and that user is rate-limited forever"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The counter is rolled back because the second command never arrived"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing: Redis applies a default TTL of 60 s to counters"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The next INCR fails with an error until someone sets an expiry"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One user permanently 429, nothing in the logs. Fix: MULTI/EXEC, or a Lua script that sets the expiry on the first increment — one atomic command, one round trip.</p><p><i>VI: Một người dùng 429 vĩnh viễn, log không có gì. Chữa: MULTI/EXEC, hoặc kịch bản Lua đặt hạn ở lần tăng đầu tiên — một lệnh nguyên tử, một vòng đi-về.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A fixed window of 5 requests per second. How many requests got through in ~300 ms around a window boundary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cửa sổ cố định 5 request mỗi giây. Bao nhiêu request lọt qua trong ~300 ms quanh ranh giới cửa sổ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10 — five at the end of one window, five at the start of the next"
+              },
+              {
+                "ma": "b",
+                "noiDung": "6 — one extra request because of clock skew"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5 — the counter is shared across both windows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0 — the second window rejects everything until the first one expires"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Double the configured limit at the boundary. Fine for API throttling, not for a login endpoint — use a sliding window there.</p><p><i>VI: Gấp đôi giới hạn khai báo ở ranh giới. Ổn cho điều tiết API, không ổn cho endpoint đăng nhập — ở đó dùng cửa sổ trượt.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The sliding window (ZSET) is exact at the boundary. Why is it not the default for general API throttling?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cửa sổ trượt (ZSET) chính xác ở ranh giới. Vì sao nó không phải mặc định cho điều tiết API chung?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sorted sets cannot have a TTL, so the keys are never cleaned up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It stores one entry per request in the window: 89 KB for one user at a limit of 1,000 (vs 56 bytes for a fixed window)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs Redis Cluster because a single node cannot sort timestamps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It costs three round trips per check instead of one"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>All three algorithms cost one round trip (≈0.3 ms). Choose on memory and semantics: 10,000 users × 89 KB = 890 MB.</p><p><i>VI: Cả ba thuật toán đều một vòng đi-về (≈0,3 ms). Chọn theo bộ nhớ và ngữ nghĩa: 10.000 người × 89 KB = 890 MB.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Worker-1 holds a lock with a 300 ms TTL, its job takes 400 ms, worker-2 takes the expired lock, then worker-1 calls DEL. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Worker-1 giữ khoá TTL 300 ms, job của nó mất 400 ms, worker-2 giành khoá đã hết hạn, rồi worker-1 gọi DEL. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DEL fails because worker-1 no longer owns the key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis renews worker-1’s lock automatically while it is still running"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both workers block until the lock is released twice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Worker-1 deletes worker-2’s lock and the critical section is open to anyone"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A lock must carry a unique token and be released by compare-and-delete in ONE atomic step (Lua). GET, compare in JavaScript, then DEL reintroduces the race.</p><p><i>VI: Khoá phải mang token duy nhất và được mở bằng so-rồi-xoá trong MỘT bước nguyên tử (Lua). GET, so trong JavaScript, rồi DEL là đưa cuộc đua trở lại.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>50 workers each add 1 to a counter (read-modify-write). No lock → 1, lock → 50, INCR → 50. What is the lesson’s conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>50 worker mỗi cái cộng 1 vào bộ đếm (đọc-sửa-ghi). Không khoá → 1, có khoá → 50, INCR → 50. Kết luận của bài là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use a lock with a 5 ms TTL so that it matches the work time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Always take a lock around Redis writes, because INCR is only atomic on a single node"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Locks are faster than INCR because they batch the 50 updates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The lock was never necessary: inside Redis use the atomic command or a script; a lock is for work OUTSIDE Redis"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>INCR gives the same correct answer with no token, no TTL tuning and no failure mode. Locks are for a third-party call, a file, a ten-second report.</p><p><i>VI: INCR cho cùng đáp án đúng mà không cần token, không phải chỉnh TTL, không có kiểu hỏng nào. Khoá dành cho cuộc gọi bên thứ ba, một tệp, một báo cáo mười giây.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting a limiter because it passed tests that send one request at a time.|||Tin một bộ giới hạn vì nó qua các test gửi một request mỗi lần."
+        },
+        {
+          "loi": "Taking a distributed lock for something INCR already does atomically.|||Lấy khoá phân tán cho việc mà INCR đã làm nguyên tử sẵn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "atomic",
+          "vi": "nguyên tử",
+          "giaiThich": "không ai chen vào giữa được — Redis chạy MỘT lệnh / một script tại một thời điểm"
+        },
+        {
+          "en": "Lua script (EVAL)",
+          "vi": "kịch bản Lua",
+          "giaiThich": "chạy bên trong Redis, cả kịch bản là một lệnh nguyên tử, một vòng đi-về"
+        },
+        {
+          "en": "distributed lock",
+          "vi": "khoá phân tán",
+          "giaiThich": "SET khoá token PX ttl NX; chỉ mở khi token còn khớp"
+        },
+        {
+          "en": "check-then-act",
+          "vi": "kiểm-rồi-làm",
+          "giaiThich": "đọc, quyết định, ghi — để hở khe cho người khác chen vào"
+        }
+      ]
+    },
+    {
+      "title": "12.4 · An atomic fixed-window limiter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "atomicity",
+        "fixed window"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The starter is the GET → check → SET limiter of the lesson: correct one request at a time, useless under load. Rewrite <code>allowFixed(redis, key, limit, windowMs)</code> as ONE atomic step with <code>redis.script(fn)</code> — the stand-in for <code>EVAL</code> of the lesson’s Lua script:</p><pre>local c = redis.call('INCR', KEYS[1])\nif c == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end\nreturn c</pre><p>Inside <code>script(fn)</code>, <code>r.incr(k)</code> and <code>r.pexpire(k, ms)</code> run synchronously (no <code>await</code>). Resolve to <code>{ allowed, count }</code>: <code>allowed</code> is <code>count &lt;= limit</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>300 concurrent calls with limit 100 → exactly 100 allowed.</li>\n  <li>The expiry is set on the FIRST increment only, inside the same atomic step.</li>\n  <li>One round trip per call.</li>\n</ul>",
+      "problemHtmlVi": "<p>Code khởi đầu là bộ giới hạn GET → kiểm → SET của bài: đúng khi mỗi lần một request, vô dụng khi có tải. Viết lại <code>allowFixed(redis, key, limit, windowMs)</code> thành MỘT bước nguyên tử bằng <code>redis.script(fn)</code> — thứ đứng thay <code>EVAL</code> kịch bản Lua của bài:</p><pre>local c = redis.call('INCR', KEYS[1])\nif c == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end\nreturn c</pre><p>Bên trong <code>script(fn)</code>, <code>r.incr(k)</code> và <code>r.pexpire(k, ms)</code> chạy đồng bộ (không <code>await</code>). Resolve ra <code>{ allowed, count }</code>: <code>allowed</code> là <code>count &lt;= limit</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>300 lời gọi đồng thời với giới hạn 100 → đúng 100 được qua.</li>\n  <li>Hạn chỉ được đặt ở lần tăng ĐẦU TIÊN, trong cùng bước nguyên tử.</li>\n  <li>Mỗi lần gọi một vòng đi-về.</li>\n</ul>",
+      "inputSpec": "redis · key — e.g. \"rl:login:bob\" · limit — number · windowMs — number|||redis · key — vd \"rl:login:bob\" · limit — số · windowMs — số",
+      "outputSpec": "Promise<{ allowed: boolean, count: number }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));\nawait burst(300, 'rl:api:1.2.3.4', 100, 60000).then((r) => [r.filter((x) => x.allowed).length, Math.max(...r.map((x) => x.count))])",
+          "output": "[100,300]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "await redis.script((r) => { const c = r.incr(key); if (c === 1) r.pexpire(key, windowMs); return c; })",
+        "Compare outside the script: return { allowed: count <= limit, count }.|||So sánh ngoài kịch bản: return { allowed: count <= limit, count }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Fixed-window rate limit: at most `limit` calls per window of windowMs. */\nasync function allowFixed(redis, key, limit, windowMs) {\n  // Write your solution here — this is the lesson's broken limiter\n  const count = Number(await redis.get(key)) || 0;\n  if (count >= limit) return { allowed: false, count };\n  await redis.set(key, count + 1, 'PX', windowMs);\n  return { allowed: true, count: count + 1 };\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Fixed-window rate limit: at most `limit` calls per window of windowMs. */\nasync function allowFixed(redis, key, limit, windowMs) {\n  // ONE atomic step inside Redis (EVAL): nothing can run between the INCR and the PEXPIRE\n  const count = await redis.script((r) => {\n    const c = r.incr(key);                 // atomic: 300 concurrent callers get 1, 2, … 300\n    if (c === 1) r.pexpire(key, windowMs); // the window starts at the FIRST request and stays fixed\n    return c;\n  });\n  return { allowed: count <= limit, count };\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>INCR is atomic, so 300 concurrent increments produce 1…300 with no lost update; exactly the first 100 are ≤ limit. Doing INCR and PEXPIRE in one script makes the pair indivisible (no immortal counter) and costs one round trip instead of two. Setting the expiry only when c === 1 keeps the window fixed.</p>",
+      "solutionExplanationHtmlVi": "<p>INCR là nguyên tử, nên 300 lần tăng đồng thời cho 1…300 mà không mất lần nào; đúng 100 cái đầu ≤ giới hạn. Gộp INCR và PEXPIRE vào một kịch bản làm cặp lệnh không thể tách (không có bộ đếm bất tử) và tốn một vòng đi-về thay vì hai. Chỉ đặt hạn khi c === 1 giữ cửa sổ cố định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "300 concurrent, limit 100 → exactly 100 allowed",
+              "vi": "300 đồng thời, giới hạn 100 → đúng 100 được qua"
+            },
+            "goi": "await burst(300, 'rl:api:1.2.3.4', 100, 60000).then((r) => [r.filter((x) => x.allowed).length, Math.max(...r.map((x) => x.count))])",
+            "chuanBi": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));",
+            "mongDoi": [
+              100,
+              300
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The first call sets the window expiry",
+              "vi": "Lần gọi đầu đặt hạn của cửa sổ"
+            },
+            "goi": "[await allowFixed(redis, 'rl:login:bob', 5, 60000), await redis.pttl('rl:login:bob') > 59000]",
+            "chuanBi": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));",
+            "mongDoi": [
+              {
+                "allowed": true,
+                "count": 1
+              },
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "After the window, a new window starts",
+              "vi": "Hết cửa sổ thì cửa sổ mới bắt đầu"
+            },
+            "goi": "[await burst(10, 'k', 5, 1000).then((r) => r.filter((x) => x.allowed).length), await sleep(1001), await allowFixed(redis, 'k', 5, 1000)]",
+            "chuanBi": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));",
+            "mongDoi": [
+              5,
+              {
+                "$js": "undefined"
+              },
+              {
+                "allowed": true,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One round trip per call, TTL kept",
+              "vi": "Mỗi lần gọi một vòng đi-về, TTL được giữ"
+            },
+            "goi": "[await burst(250, 'rl:x', 100, 60000).then(() => redis.roundTrips), await redis.ttl('rl:x')]",
+            "chuanBi": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));",
+            "mongDoi": [
+              250,
+              60
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The window does not slide on later increments",
+              "vi": "Cửa sổ không trượt theo các lần tăng sau"
+            },
+            "goi": "await (async () => { await allowFixed(redis, 'w', 3, 1000); await sleep(600); await allowFixed(redis, 'w', 3, 1000); await allowFixed(redis, 'w', 3, 1000); await sleep(500); return [await allowFixed(redis, 'w', 3, 1000), await redis.pttl('w') > 900]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nconst burst = (n, key, limit, win) => Promise.all(Array.from({ length: n }, () => allowFixed(redis, key, limit, win)));",
+            "mongDoi": [
+              {
+                "allowed": true,
+                "count": 1
+              },
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await redis.incr(key) then await redis.pexpire(key, …): correct counts, two round trips, and a crash in between leaves a counter that never resets.|||await redis.incr(key) rồi await redis.pexpire(key, …): đếm đúng, hai vòng đi-về, và sập giữa chừng để lại bộ đếm không bao giờ đặt lại."
+        },
+        {
+          "loi": "Calling PEXPIRE on every increment: the window slides forward on every request and a client that keeps retrying is never released.|||Gọi PEXPIRE ở mọi lần tăng: cửa sổ trượt tới sau mỗi request và một client cứ thử lại không bao giờ được thả."
+        },
+        {
+          "loi": "Writing await inside the script function — a Lua script cannot wait for anything; the fake refuses it.|||Viết await bên trong hàm kịch bản — kịch bản Lua không chờ được gì; bản giả từ chối nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "atomic",
+          "vi": "nguyên tử",
+          "giaiThich": "không ai chen vào giữa được — Redis chạy MỘT lệnh / một script tại một thời điểm"
+        },
+        {
+          "en": "Lua script (EVAL)",
+          "vi": "kịch bản Lua",
+          "giaiThich": "chạy bên trong Redis, cả kịch bản là một lệnh nguyên tử, một vòng đi-về"
+        },
+        {
+          "en": "fixed window",
+          "vi": "cửa sổ cố định",
+          "giaiThich": "đếm theo từng ô thời gian — rò gấp đôi ở ranh giới"
+        }
+      ]
+    },
+    {
+      "title": "12.4 · Close the boundary hole: a sliding window",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "sliding window",
+        "sorted set",
+        "Lua"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A fixed window lets 10 requests through in ~300 ms around a boundary when the limit says 5 per second. The sliding window stores one timestamp per request in a sorted set and counts only those inside the last <code>windowMs</code>. Port the lesson’s Lua script to <code>redis.script(fn)</code>:</p><pre>ZREMRANGEBYSCORE key 0 (now - win)     -- drop what slid out\nn = ZCARD key\nif n &lt; limit then ZADD key now id; PEXPIRE key win; return {1, n + 1} end\nreturn {0, n}</pre><p>Write <code>allowSliding(redis, key, nowMs, windowMs, limit, requestId)</code> → <code>{ allowed, count }</code>. <code>requestId</code> is unique per request (two requests in the same millisecond must not collapse into one member). <code>nowMs</code> is passed in — never read the clock inside a script.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly the limit inside ANY window of windowMs, including across a boundary.</li>\n  <li>A rejected request is NOT added to the set.</li>\n  <li>The key expires after windowMs of silence (PEXPIRE on each accepted request).</li>\n</ul>",
+      "problemHtmlVi": "<p>Cửa sổ cố định cho 10 request lọt trong ~300 ms quanh ranh giới khi giới hạn ghi 5 mỗi giây. Cửa sổ trượt lưu một mốc thời gian mỗi request trong sorted set và chỉ đếm những cái nằm trong <code>windowMs</code> vừa qua. Chuyển kịch bản Lua của bài sang <code>redis.script(fn)</code>:</p><pre>ZREMRANGEBYSCORE key 0 (now - win)     -- vứt những gì đã trôi ra\nn = ZCARD key\nif n &lt; limit then ZADD key now id; PEXPIRE key win; return {1, n + 1} end\nreturn {0, n}</pre><p>Viết <code>allowSliding(redis, key, nowMs, windowMs, limit, requestId)</code> → <code>{ allowed, count }</code>. <code>requestId</code> là duy nhất cho mỗi request (hai request cùng một mili-giây không được gộp thành một phần tử). <code>nowMs</code> được truyền vào — đừng đọc đồng hồ bên trong kịch bản.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng bằng giới hạn trong BẤT KỲ cửa sổ windowMs nào, kể cả qua ranh giới.</li>\n  <li>Request bị từ chối KHÔNG được thêm vào tập.</li>\n  <li>Khoá hết hạn sau windowMs im lặng (PEXPIRE ở mỗi request được nhận).</li>\n</ul>",
+      "inputSpec": "redis · key · nowMs, windowMs, limit — numbers · requestId — unique string|||redis · key · nowMs, windowMs, limit — số · requestId — chuỗi duy nhất",
+      "outputSpec": "Promise<{ allowed: boolean, count: number }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));\nawait (async () => { const before = []; for (let t = 900; t < 950; t += 10) before.push((await at(t)).allowed); const after = []; for (let t = 1100; t < 1150; t += 10) after.push((await at(t)).allowed); return [before.filter(Boolean).length, after.filter(Boolean).length]; })()",
+          "output": "[5,0]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Inside the script: r.zremrangebyscore(key, 0, nowMs - windowMs); const n = r.zcard(key);|||Trong kịch bản: r.zremrangebyscore(key, 0, nowMs - windowMs); const n = r.zcard(key);",
+        "Accept only when n < limit: r.zadd(key, nowMs, requestId); r.pexpire(key, windowMs); return { allowed: true, count: n + 1 }; otherwise return { allowed: false, count: n }.|||Chỉ nhận khi n < limit: r.zadd(key, nowMs, requestId); r.pexpire(key, windowMs); return { allowed: true, count: n + 1 }; ngược lại return { allowed: false, count: n }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Sliding-window limit (sorted set of request timestamps). */\nasync function allowSliding(redis, key, nowMs, windowMs, limit, requestId) {\n  // Write your solution here — this is a FIXED window in disguise (calendar buckets)\n  const bucket = `${key}:${Math.floor(nowMs / windowMs)}`;\n  const count = await redis.script((r) => { const c = r.incr(bucket); if (c === 1) r.pexpire(bucket, windowMs); return c; });\n  return { allowed: count <= limit, count: Math.min(count, limit) };\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Sliding-window limit (sorted set of request timestamps). */\nasync function allowSliding(redis, key, nowMs, windowMs, limit, requestId) {\n  return redis.script((r) => {                              // ONE atomic decision (EVAL)\n    r.zremrangebyscore(key, 0, nowMs - windowMs);          // drop everything that slid out of the window\n    const n = r.zcard(key);                                // requests still inside the last windowMs\n    if (n < limit) {\n      r.zadd(key, nowMs, requestId);                       // member must be UNIQUE — not the timestamp\n      r.pexpire(key, windowMs);                            // idle users clean themselves up\n      return { allowed: true, count: n + 1 };\n    }\n    return { allowed: false, count: n };                   // rejected requests are NOT recorded\n  });\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The window is “the last windowMs before now”, not a calendar bucket, so the five requests before the boundary still count 160 ms after it — exactly the lesson’s “before boundary 5, after 160 ms 0”. The script makes trim + count + add one atomic decision. The price is memory: one member per accepted request, which is why the lesson keeps this for small, security-sensitive limits.</p>",
+      "solutionExplanationHtmlVi": "<p>Cửa sổ là \"windowMs vừa qua tính tới bây giờ\", không phải ô lịch, nên năm request trước ranh giới vẫn được đếm 160 ms sau nó — đúng \"trước ranh giới 5, sau 160 ms 0\" của bài. Kịch bản biến cắt + đếm + thêm thành một quyết định nguyên tử. Cái giá là bộ nhớ: mỗi request được nhận một phần tử, vì thế bài chỉ dùng nó cho giới hạn nhỏ và nhạy cảm về bảo mật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Boundary: 5 before 1000 ms, 0 just after (the fixed window would allow 5 more)",
+              "vi": "Ranh giới: 5 trước mốc 1000 ms, 0 ngay sau (cửa sổ cố định sẽ cho thêm 5)"
+            },
+            "goi": "await (async () => { const before = []; for (let t = 900; t < 950; t += 10) before.push((await at(t)).allowed); const after = []; for (let t = 1100; t < 1150; t += 10) after.push((await at(t)).allowed); return [before.filter(Boolean).length, after.filter(Boolean).length]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));",
+            "mongDoi": [
+              5,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Five in the same millisecond all count; a full second later one is allowed again",
+              "vi": "Năm request cùng mili-giây đều được tính; tròn một giây sau lại cho qua một"
+            },
+            "goi": "await (async () => { for (let i = 0; i < 5; i++) await at(100); const r = await at(1101); return [r, await redis.zcard('rl:login:bob')]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));",
+            "mongDoi": [
+              {
+                "allowed": true,
+                "count": 1
+              },
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Rejected requests are not added",
+              "vi": "Request bị từ chối không được thêm vào"
+            },
+            "goi": "await (async () => { const r = []; for (let i = 0; i < 8; i++) r.push((await at(500 + i)).count); return [r, await redis.zcard('rl:login:bob')]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                5,
+                5,
+                5
+              ],
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const r = await Promise.all(Array.from({ length: 50 }, () => at(2000, 'rl:burst', 1000, 10))); return [r.filter((x) => x.allowed).length, await redis.pttl('rl:burst') > 0]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));",
+            "mongDoi": [
+              10,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { await at(0, 'k2', 60000, 2); await at(30000, 'k2', 60000, 2); const a = await at(59999, 'k2', 60000, 2); const b = await at(60001, 'k2', 60000, 2); return [a.allowed, b.allowed, b.count]; })()",
+            "chuanBi": "const redis = new FakeRedis();\nlet seq = 0;\nconst at = (ms, key = 'rl:login:bob', win = 1000, limit = 5) => allowSliding(redis, key, ms, win, limit, 'r' + (++seq));",
+            "mongDoi": [
+              false,
+              true,
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the timestamp as the member: two requests in the same millisecond become one entry and the limit leaks.|||Dùng mốc thời gian làm phần tử: hai request cùng mili-giây thành một mục và giới hạn bị rò."
+        },
+        {
+          "loi": "Adding the request before checking the count: rejected requests fill the window and a client that keeps retrying is locked out forever.|||Thêm request trước khi kiểm số đếm: các request bị từ chối lấp đầy cửa sổ và client cứ thử lại bị khoá ngoài mãi mãi."
+        },
+        {
+          "loi": "Doing ZREMRANGEBYSCORE, ZCARD and ZADD as three awaited commands: the same check-then-act race as GET → SET, now with a sorted set.|||Làm ZREMRANGEBYSCORE, ZCARD và ZADD bằng ba lệnh await: đúng cuộc đua kiểm-rồi-làm như GET → SET, giờ với sorted set."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sliding window",
+          "vi": "cửa sổ trượt",
+          "giaiThich": "đếm trong khoảng windowMs vừa qua — không rò ở ranh giới"
+        },
+        {
+          "en": "Lua script (EVAL)",
+          "vi": "kịch bản Lua",
+          "giaiThich": "chạy bên trong Redis, cả kịch bản là một lệnh nguyên tử, một vòng đi-về"
+        }
+      ]
+    },
+    {
+      "title": "12.4 · A token bucket that allows bursts",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "token bucket",
+        "Lua"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>For a public API you usually want bursts: a page that fires eight requests on load should succeed, a script hammering you steadily should not. A bucket holds up to <code>capacity</code> tokens and refills at <code>refillPerSec</code> tokens per second; each request spends one. Two fields in a hash, 96 bytes per user. Write <code>takeToken(redis, key, { capacity, refillPerSec }, nowMs)</code> as one <code>redis.script(fn)</code>:</p><ol><li>read <code>tokens</code> and <code>ts</code> from the hash (missing ⇒ a FULL bucket at <code>nowMs</code>);</li><li>refill: <code>tokens = min(capacity, tokens + (nowMs - ts) / 1000 * refillPerSec)</code>;</li><li>if <code>tokens &gt;= 1</code> spend one and allow, else deny;</li><li>write back <code>tokens</code> and <code>ts = nowMs</code>, and <code>PEXPIRE</code> the key after <code>Math.ceil(capacity / refillPerSec * 1000)</code> ms (an idle bucket is full anyway, so it can disappear).</li></ol><p>Resolve to <code>{ allowed, tokens }</code> with <code>tokens</code> rounded to 2 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>10 instant requests on a fresh bucket of 5 → 5 allowed.</li>\n  <li>Refill is continuous: 600 ms at 5/s gives 3 tokens.</li>\n  <li>Read, refill, spend and write in ONE atomic step.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với API công khai bạn thường muốn cho phép bùng phát: một trang bắn tám request khi tải phải thành công, một script nện đều đặn thì không. Một bình chứa tối đa <code>capacity</code> token và được nạp <code>refillPerSec</code> token mỗi giây; mỗi request tiêu một token. Hai trường trong một hash, 96 byte mỗi người. Viết <code>takeToken(redis, key, { capacity, refillPerSec }, nowMs)</code> bằng một <code>redis.script(fn)</code>:</p><ol><li>đọc <code>tokens</code> và <code>ts</code> trong hash (không có ⇒ bình ĐẦY tại <code>nowMs</code>);</li><li>nạp: <code>tokens = min(capacity, tokens + (nowMs - ts) / 1000 * refillPerSec)</code>;</li><li>nếu <code>tokens &gt;= 1</code> tiêu một và cho qua, ngược lại từ chối;</li><li>ghi lại <code>tokens</code> và <code>ts = nowMs</code>, rồi <code>PEXPIRE</code> khoá sau <code>Math.ceil(capacity / refillPerSec * 1000)</code> ms (bình nhàn rỗi thì đằng nào cũng đầy, nên có thể biến mất).</li></ol><p>Resolve ra <code>{ allowed, tokens }</code> với <code>tokens</code> làm tròn 2 chữ số thập phân.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>10 request tức thì trên bình mới 5 token → 5 được qua.</li>\n  <li>Nạp liên tục: 600 ms ở 5/s cho 3 token.</li>\n  <li>Đọc, nạp, tiêu và ghi trong MỘT bước nguyên tử.</li>\n</ul>",
+      "inputSpec": "redis · key · { capacity, refillPerSec } · nowMs",
+      "outputSpec": "Promise<{ allowed: boolean, tokens: number }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };\nawait (async () => { const r = []; for (let i = 0; i < 10; i++) r.push((await takeToken(redis, 'tb:ip1', B, 1000)).allowed); return r.filter(Boolean).length; })()",
+          "output": "5",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const h = r.hgetall(key); let tokens = h.tokens === undefined ? capacity : Number(h.tokens); const ts = h.ts === undefined ? nowMs : Number(h.ts);",
+        "After deciding: r.hset(key, { tokens, ts: nowMs }); r.pexpire(key, Math.ceil(capacity / refillPerSec * 1000)); round with Math.round(tokens * 100) / 100 only in the RETURN value.|||Sau khi quyết: r.hset(key, { tokens, ts: nowMs }); r.pexpire(key, Math.ceil(capacity / refillPerSec * 1000)); chỉ làm tròn bằng Math.round(tokens * 100) / 100 ở giá trị TRẢ VỀ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Token bucket in a hash { tokens, ts }. */\nasync function takeToken(redis, key, { capacity, refillPerSec }, nowMs) {\n  // Write your solution here — this bucket never refills\n  return redis.script((r) => {\n    const h = r.hgetall(key);\n    let tokens = h.tokens === undefined ? capacity : Number(h.tokens);\n    const allowed = tokens >= 1;\n    if (allowed) tokens -= 1;\n    r.hset(key, { tokens, ts: nowMs });\n    return { allowed, tokens };\n  });\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Token bucket in a hash { tokens, ts }. */\nasync function takeToken(redis, key, { capacity, refillPerSec }, nowMs) {\n  return redis.script((r) => {                                // read → refill → spend → write: ONE atomic step\n    const h = r.hgetall(key);\n    let tokens = h.tokens === undefined ? capacity : Number(h.tokens);   // new user = full bucket\n    const ts = h.ts === undefined ? nowMs : Number(h.ts);\n    tokens = Math.min(capacity, tokens + ((nowMs - ts) / 1000) * refillPerSec);   // lazy refill, capped\n    const allowed = tokens >= 1;\n    if (allowed) tokens -= 1;\n    r.hset(key, { tokens, ts: nowMs });                       // store the exact value — never round state\n    r.pexpire(key, Math.ceil((capacity / refillPerSec) * 1000));   // idle long enough ⇒ full ⇒ may vanish\n    return { allowed, tokens: Math.round(tokens * 100) / 100 };\n  });\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The bucket stores only “how many tokens, as of when”, so it never needs per-request state; the refill is computed lazily from the elapsed time on the next request. Doing the whole read-refill-spend-write in one script removes the race, and the expiry equal to the time needed to refill to full lets idle users vanish without changing behaviour.</p>",
+      "solutionExplanationHtmlVi": "<p>Bình chỉ lưu \"bao nhiêu token, tính tới lúc nào\", nên không bao giờ cần trạng thái theo từng request; phần nạp được tính lười từ thời gian đã trôi ở request kế tiếp. Làm trọn đọc-nạp-tiêu-ghi trong một kịch bản xoá cuộc đua, và hạn bằng thời gian nạp đầy cho phép người dùng nhàn rỗi biến mất mà không đổi hành vi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "10 instant requests → the bucket of 5 bursts empty",
+              "vi": "10 request tức thì → bình 5 token bùng hết"
+            },
+            "goi": "await (async () => { const r = []; for (let i = 0; i < 10; i++) r.push((await takeToken(redis, 'tb:ip1', B, 1000)).allowed); return r.filter(Boolean).length; })()",
+            "chuanBi": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "600 ms later: 3 tokens refilled, one spent → 2 left",
+              "vi": "600 ms sau: nạp 3 token, tiêu một → còn 2"
+            },
+            "goi": "await (async () => { for (let i = 0; i < 5; i++) await takeToken(redis, 'tb:ip2', B, 1000); return takeToken(redis, 'tb:ip2', B, 1600); })()",
+            "chuanBi": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };",
+            "mongDoi": {
+              "allowed": true,
+              "tokens": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "An hour of silence refills only up to capacity; TTL = time to refill",
+              "vi": "Một giờ im lặng chỉ nạp tới capacity; TTL = thời gian nạp đầy"
+            },
+            "goi": "[await takeToken(redis, 'tb:ip3', B, 0), await takeToken(redis, 'tb:ip3', B, 3600000), await redis.pttl('tb:ip3')]",
+            "chuanBi": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };",
+            "mongDoi": [
+              {
+                "allowed": true,
+                "tokens": 4
+              },
+              {
+                "allowed": true,
+                "tokens": 4
+              },
+              999
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const r = await Promise.all(Array.from({ length: 12 }, () => takeToken(redis, 'tb:par', { capacity: 8, refillPerSec: 1 }, 5000))); return r.filter((x) => x.allowed).length; })()",
+            "chuanBi": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };",
+            "mongDoi": 8,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const S = { capacity: 2, refillPerSec: 0.5 }; const out = []; for (const t of [0, 0, 0, 1000, 2000, 2500, 6500]) { const x = await takeToken(redis, 'tb:s', S, t); out.push(x.allowed + ':' + x.tokens); } return out; })()",
+            "chuanBi": "const redis = new FakeRedis();\nconst B = { capacity: 5, refillPerSec: 5 };",
+            "mongDoi": [
+              "true:1",
+              "true:0",
+              "false:0",
+              "false:0.5",
+              "true:0",
+              "false:0.25",
+              "true:1"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the cap: a user quiet for an hour gets 18,000 tokens and can burst far beyond capacity.|||Quên chặn trần: người im lặng một giờ có 18.000 token và bùng vượt xa capacity."
+        },
+        {
+          "loi": "Rounding the stored value: small refills (0.004 tokens) are lost forever and a steady client is starved.|||Làm tròn giá trị lưu: các lần nạp nhỏ (0,004 token) mất vĩnh viễn và client đều đặn bị bỏ đói."
+        },
+        {
+          "loi": "Reading the hash with one command and writing with another: two concurrent requests both see 1 token and both spend it.|||Đọc hash bằng một lệnh, ghi bằng lệnh khác: hai request đồng thời cùng thấy 1 token và cùng tiêu nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "token bucket",
+          "vi": "bình token",
+          "giaiThich": "cho bùng tới capacity, rồi bị bóp về tốc độ nạp"
+        },
+        {
+          "en": "Lua script (EVAL)",
+          "vi": "kịch bản Lua",
+          "giaiThich": "chạy bên trong Redis, cả kịch bản là một lệnh nguyên tử, một vòng đi-về"
+        }
+      ]
+    },
+    {
+      "title": "12.4 · A lock you cannot release for someone else",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "distributed lock"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two ways to get a distributed lock wrong: no expiry (one crash and it is held forever) and unlocking with plain <code>DEL</code> (a slow worker deletes the lock of the worker that legitimately took it after expiry). Write:</p><ul><li><code>acquire(redis, key, token, ttlMs)</code> → <code>true</code> if this caller now holds the lock (<code>SET key token PX ttlMs NX</code>), <code>false</code> if someone else holds it;</li><li><code>release(redis, key, token)</code> → <code>1</code> if it deleted ITS OWN lock, <code>0</code> otherwise — compare-and-delete in ONE <code>redis.script(fn)</code> (the lesson’s <code>if GET == token then DEL</code> Lua).</li></ul><p>In production the token is <code>crypto.randomUUID()</code>; here the caller passes it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The lock always has an expiry.</li>\n  <li>release never deletes a lock held by another token.</li>\n  <li>Check and delete happen in the same atomic step.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai cách làm hỏng khoá phân tán: không có hạn (sập một lần là bị giữ mãi) và mở khoá bằng <code>DEL</code> thường (worker chậm xoá khoá của worker đã giành nó hợp lệ sau khi hết hạn). Viết:</p><ul><li><code>acquire(redis, key, token, ttlMs)</code> → <code>true</code> nếu người gọi giờ đang giữ khoá (<code>SET key token PX ttlMs NX</code>), <code>false</code> nếu người khác đang giữ;</li><li><code>release(redis, key, token)</code> → <code>1</code> nếu đã xoá khoá CỦA CHÍNH MÌNH, <code>0</code> trong mọi trường hợp khác — so-rồi-xoá trong MỘT <code>redis.script(fn)</code> (Lua <code>if GET == token then DEL</code> của bài).</li></ul><p>Trên production token là <code>crypto.randomUUID()</code>; ở đây nơi gọi truyền vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá luôn có hạn.</li>\n  <li>release không bao giờ xoá khoá đang do token khác giữ.</li>\n  <li>Kiểm và xoá xảy ra trong cùng một bước nguyên tử.</li>\n</ul>",
+      "inputSpec": "redis · key · token — string · ttlMs — number|||redis · key · token — chuỗi · ttlMs — số",
+      "outputSpec": "acquire → Promise<boolean> · release → Promise<0 | 1>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\n[await acquire(redis, 'lock:report', 'w1', 300), await acquire(redis, 'lock:report', 'w2', 300), await redis.pttl('lock:report') > 0]",
+          "output": "[true,false,true]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "acquire: (await redis.set(key, token, 'PX', ttlMs, 'NX')) === 'OK'.",
+        "release: redis.script((r) => (r.get(key) === token ? r.del(key) : 0))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Try to take the lock. */\nasync function acquire(redis, key, token, ttlMs) {\n  // Write your solution here — both functions have one of the lesson's bugs\n  return (await redis.set(key, token, 'NX')) === 'OK';\n}\n\n/** Release the lock only if we still own it. */\nasync function release(redis, key, token) {\n  return redis.del(key);\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Try to take the lock. */\nasync function acquire(redis, key, token, ttlMs) {\n  // NX = only if nobody holds it · PX = a crashed holder cannot block everyone forever\n  return (await redis.set(key, token, 'PX', ttlMs, 'NX')) === 'OK';\n}\n\n/** Release the lock only if we still own it. */\nasync function release(redis, key, token) {\n  // compare-and-delete in ONE atomic step (EVAL): the lock cannot expire and change hands in between\n  return redis.script((r) => (r.get(key) === token ? r.del(key) : 0));\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NX gives mutual exclusion, PX guarantees a crashed holder cannot block forever, and the token proves ownership. The compare-and-delete must be ONE script because the lock can expire between a GET and a DEL. In the lesson’s run, worker-1 releasing after its TTL “deleted 0 keys” and the lock stayed with worker-2.</p>",
+      "solutionExplanationHtmlVi": "<p>NX cho loại trừ lẫn nhau, PX bảo đảm người giữ bị sập không chặn mãi, và token chứng minh quyền sở hữu. So-rồi-xoá phải là MỘT kịch bản vì khoá có thể hết hạn giữa GET và DEL. Trong lần chạy của bài, worker-1 mở khoá sau khi hết TTL \"xoá 0 khoá\" và khoá vẫn thuộc worker-2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Second acquire fails; the lock has an expiry",
+              "vi": "Lần giành thứ hai thất bại; khoá có hạn"
+            },
+            "goi": "[await acquire(redis, 'lock:report', 'w1', 300), await acquire(redis, 'lock:report', 'w2', 300), await redis.pttl('lock:report') > 0]",
+            "chuanBi": "const redis = new FakeRedis();",
+            "mongDoi": [
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s scenario: worker-1 releases late → deletes 0, lock stays with worker-2",
+              "vi": "Kịch bản của bài: worker-1 mở muộn → xoá 0, khoá vẫn của worker-2"
+            },
+            "goi": "await (async () => { await acquire(redis, 'lock:report', 'w1', 300); await sleep(400); const w2 = await acquire(redis, 'lock:report', 'w2', 300); const r1 = await release(redis, 'lock:report', 'w1'); return [w2, r1, await redis.get('lock:report'), await release(redis, 'lock:report', 'w2'), await redis.exists('lock:report')]; })()",
+            "chuanBi": "const redis = new FakeRedis();",
+            "mongDoi": [
+              true,
+              0,
+              "w2",
+              1,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A crashed holder does not block forever",
+              "vi": "Người giữ bị sập không chặn mãi"
+            },
+            "goi": "await (async () => { await acquire(redis, 'lock:crash', 'w1', 500); await sleep(501); return acquire(redis, 'lock:crash', 'w9', 500); })()",
+            "chuanBi": "const redis = new FakeRedis();",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const got = await Promise.all(['a', 'b', 'c', 'd'].map((t) => acquire(redis, 'lock:x', t, 1000))); const owner = await redis.get('lock:x'); const rel = await Promise.all(['a', 'b', 'c', 'd'].map((t) => release(redis, 'lock:x', t))); return [got.filter(Boolean).length, rel.reduce((x, y) => x + y, 0), owner === ['a', 'b', 'c', 'd'][got.indexOf(true)]]; })()",
+            "chuanBi": "const redis = new FakeRedis();",
+            "mongDoi": [
+              1,
+              1,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await release(redis, 'lock:none', 'w1'), await acquire(redis, 'lock:y', 't1', 1000), await release(redis, 'lock:y', 't1'), await acquire(redis, 'lock:y', 't2', 1000)]",
+            "chuanBi": "const redis = new FakeRedis();",
+            "mongDoi": [
+              0,
+              true,
+              1,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SET key token NX without PX (the old SETNX): a crashed holder leaves TTL -1 and everyone waits forever.|||SET key token NX thiếu PX (SETNX cũ): người giữ bị sập để lại TTL -1 và mọi người chờ mãi."
+        },
+        {
+          "loi": "await redis.get(key) === token, then await redis.del(key): the lock can expire and be taken between the two commands — you delete the new owner’s lock.|||await redis.get(key) === token, rồi await redis.del(key): khoá có thể hết hạn và bị người khác giành giữa hai lệnh — bạn xoá khoá của chủ mới."
+        },
+        {
+          "loi": "Believing the lock makes a slow job safe: if the job outlives the TTL, two workers run at once; make the work idempotent or renew the lock.|||Tin rằng khoá làm job chậm an toàn: job sống lâu hơn TTL thì hai worker chạy cùng lúc; hãy làm việc luỹ đẳng hoặc gia hạn khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "distributed lock",
+          "vi": "khoá phân tán",
+          "giaiThich": "SET khoá token PX ttl NX; chỉ mở khi token còn khớp"
+        },
+        {
+          "en": "compare-and-delete",
+          "vi": "so-rồi-xoá",
+          "giaiThich": "chỉ xoá khi giá trị còn đúng là của mình — trong một bước"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,737 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-16-6-toi-uu-vo-ich",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-16-6-toi-uu-vo-ich"
+  },
+  "exercises": [
+    {
+      "title": "amdahl(sharePct, speedup): you can only save what the part costs",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Amdahl",
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>amdahl(sharePct, speedup)</code>: the percentage of the whole request saved by making a part that takes <code>sharePct</code>% of the time <code>speedup</code> times faster — <code>share × (1 − 1/speedup)</code>, rounded to 2 decimals. <code>speedup</code> may be <code>Infinity</code> (the part removed entirely); a speedup below 1 means the “optimisation” made it slower and the result is negative.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>amdahl(sharePct, speedup)</code>: phần trăm của cả request tiết kiệm được khi làm một phần chiếm <code>sharePct</code>% thời gian nhanh lên <code>speedup</code> lần — <code>share × (1 − 1/speedup)</code>, làm tròn 2 chữ số. <code>speedup</code> có thể là <code>Infinity</code> (xoá hẳn phần đó); tăng tốc nhỏ hơn 1 nghĩa là “tối ưu” làm nó chậm đi và kết quả âm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "amdahl(16.2, 1.35)",
+          "output": "4.2",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "1 / Infinity is 0 in JavaScript, so the formula already handles removal.|||1 / Infinity là 0 trong JavaScript, nên công thức đã xử lý trường hợp xoá hẳn.",
+        "Round only at the end: Number(x.toFixed(2)).|||Chỉ làm tròn ở cuối: Number(x.toFixed(2))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Amdahl's law */\nfunction amdahl(sharePct, speedup) {\n  // Write your solution here\n  return Number((sharePct * speedup - sharePct).toFixed(2));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction amdahl(sharePct, speedup) {\n  // tiết kiệm = tỉ lệ × (1 − 1/tăng tốc). Xoá hẳn phần đó (tăng tốc vô hạn) ⇒ tiết kiệm đúng bằng tỉ lệ — đó là TRẦN.\n  const saving = sharePct * (1 - 1 / speedup);\n  return Number(saving.toFixed(2));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same library is worth 4.2% on the 16.1 route (stringify 16.2% of CPU) and 0.73% on the 16.2 route (2.8% of the request); even infinitely fast it is capped at the share. On the varied 340 KB payload it was 0.96× — slower — and Amdahl gives a negative number.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng một thư viện đáng 4,2% trên route 16.1 (stringify 16,2% CPU) và 0,73% trên route 16.2 (2,8% request); kể cả nhanh vô hạn cũng bị chặn ở tỉ lệ. Trên payload đa dạng 340 KB nó là 0,96× — chậm hơn — và Amdahl cho số âm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "16.1 route: stringify 16.2%, 1.35× faster",
+              "vi": "Route 16.1: stringify 16,2%, nhanh 1,35 lần"
+            },
+            "goi": "amdahl(16.2, 1.35)",
+            "mongDoi": 4.2
+          },
+          {
+            "moTa": {
+              "en": "16.2 route: 2.8% of the request",
+              "vi": "Route 16.2: 2,8% request"
+            },
+            "goi": "amdahl(2.8, 1.35)",
+            "mongDoi": 0.73
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "amdahl(2.8, Infinity)",
+            "mongDoi": 2.8,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "amdahl(2.17, 1.6)",
+            "mongDoi": 0.81,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "amdahl(16.2, 0.96)",
+            "mongDoi": -0.68,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying share by speedup (“1.35× faster on 16.2% = 21.9%”): the saving can never exceed the share.|||Nhân tỉ lệ với tốc độ (“nhanh 1,35 lần trên 16,2% = 21,9%”): phần tiết kiệm không bao giờ vượt tỉ lệ."
+        },
+        {
+          "loi": "Using the standalone benchmark’s speedup without measuring the share inside the real request.|||Dùng mức tăng tốc của benchmark riêng lẻ mà không đo tỉ lệ bên trong request thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "share",
+          "vi": "tỉ lệ",
+          "giaiThich": "the fraction of total time a part takes"
+        },
+        {
+          "en": "speed-up",
+          "vi": "hệ số tăng tốc"
+        }
+      ]
+    },
+    {
+      "title": "Where the real wins came from: put each change in its category",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The five categories of lesson 16.6, in order of how much they won in this course.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm nhóm của bài 16.6, theo thứ tự mức thắng trong khoá học.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the change remove work, repeat it less, move it, buy more CPU, or speed up the same work?|||Thay đổi đó bỏ việc, lặp ít hơn, dời việc, mua thêm CPU, hay tăng tốc cùng một việc?",
+        "A queue does not make anything faster; it takes work off the user’s critical path.|||Hàng đợi không làm gì nhanh hơn; nó đưa việc ra khỏi đường găng của người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where the real wins came from: put each change in its category\n\nAnswer in the answer panel (no code needed).\n\n1. Classify each measured changeXếp nhóm từng thay đổi đã đo\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where the real wins came from: put each change in its category — answer key\n\n1. Classify each measured changeXếp nhóm từng thay đổi đã đo\n   - r1.k: do less work\n   - r2.k: do less work\n   - r3.k: do it once\n   - r4.k: do it somewhere else\n   - r5.k: add hardware\n   - r6.k: make it faster\n   - r7.k: do less work\n   Every large win removes work or does it once. Only “make it faster” can come out below 1 — and it is the category people reach for first, because it feels like engineering.VI: Mọi thắng lợi lớn đều bỏ bớt việc hoặc làm một lần. Chỉ “làm nhanh hơn” mới có thể ra dưới 1 — và đó là nhóm người ta với tới đầu tiên, vì nó trông giống kỹ thuật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every large win removes work or does it once. Only “make it faster” can come out below 1 — and it is the category people reach for first, because it feels like engineering.</p><p><i>VI: Mọi thắng lợi lớn đều bỏ bớt việc hoặc làm một lần. Chỉ “làm nhanh hơn” mới có thể ra dưới 1 — và đó là nhóm người ta với tới đầu tiên, vì nó trông giống kỹ thuật.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Classify each measured change</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp nhóm từng thay đổi đã đo</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Change (measured gain)"
+              },
+              {
+                "ma": "k",
+                "ten": "Category",
+                "luaChon": [
+                  "do less work",
+                  "do it once",
+                  "do it somewhere else",
+                  "add hardware",
+                  "make it faster"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "An index on the filtered column (657×)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "A Redis cache hit instead of the query (143.5×)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Precompute renderNote at startup (2.3×)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Send the email from a queue worker, not inside the request"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Cluster for CPU-heavy work (3.4×)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "fast-json-stringify instead of JSON.stringify (0.96–1.35×)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Send only the fields the list renders (2.8×)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "do less work",
+              "r2.k": "do less work",
+              "r3.k": "do it once",
+              "r4.k": "do it somewhere else",
+              "r5.k": "add hardware",
+              "r6.k": "make it faster",
+              "r7.k": "do less work"
+            },
+            "giaiThich": "<p>Every large win removes work or does it once. Only “make it faster” can come out below 1 — and it is the category people reach for first, because it feels like engineering.</p><p><i>VI: Mọi thắng lợi lớn đều bỏ bớt việc hoặc làm một lần. Chỉ “làm nhanh hơn” mới có thể ra dưới 1 — và đó là nhóm người ta với tới đầu tiên, vì nó trông giống kỹ thuật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling an index “make it faster”: it reads fewer rows, which is doing less.|||Gọi index là “làm nhanh hơn”: nó đọc ít dòng hơn, tức là làm ít việc hơn."
+        },
+        {
+          "loi": "Putting the queue under “add hardware” because a worker is another process.|||Xếp hàng đợi vào “thêm phần cứng” vì worker là tiến trình khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "critical path",
+          "vi": "đường găng",
+          "giaiThich": "what the user waits for"
+        }
+      ]
+    },
+    {
+      "title": "Exhibit A, and the three cases where micro-optimisation is right",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 16.6.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 16.6.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask for the share of the whole request, not the speed-up of one function.|||Hỏi tỉ lệ trên cả request, không hỏi tốc độ của một hàm.",
+        "Count the bugs a change can cause next to the percent it buys.|||Đếm số lỗi một thay đổi có thể gây ra bên cạnh phần trăm nó mua được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exhibit A, and the three cases where micro-optimisation is right\n\nAnswer in the answer panel (no code needed).\n\n1. fast-json-stringify alone on the 500 varied notes (348,590 B): 0.431 ms vs JSON.stringify 0.414 ms. On one 682-byte object: 1.85× faster. What is the lesson?fast-json-stringify riêng lẻ trên 500 ghi chú đa dạng (348.590 B): 0,431 ms so với JSON.stringify 0,414 ms. Trên một object 682 byte: nhanh 1,85 lần. Bài học là gì?\n2. When IS micro-optimisation the right call? (choose all that apply)Khi nào tối ưu vi mô LÀ đúng? (chọn mọi câu đúng)\n3. Which two “optimisations” of this chapter were worse than neutral?Hai “tối ưu” nào của chương này còn tệ hơn trung tính?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exhibit A, and the three cases where micro-optimisation is right — answer key\n\n1. fast-json-stringify alone on the 500 varied notes (348,590 B): 0.431 ms vs JSON.stringify 0.414 ms. On one 682-byte object: 1.85× faster. What is the lesson?fast-json-stringify riêng lẻ trên 500 ghi chú đa dạng (348.590 B): 0,431 ms so với JSON.stringify 0,414 ms. Trên một object 682 byte: nhanh 1,85 lần. Bài học là gì?\n   Answer: d) The shape of the data decides: test on your data, inside the whole request\n   Inside the 16.2 request it was 1.35× faster alone, with a ceiling of 0.6% of the request; the measured +3.5% was larger than the ceiling itself — noise.VI: Bên trong request 16.2 nó nhanh 1,35 lần khi đứng riêng, với trần 0,6% request; +3,5% đo được còn lớn hơn cả trần — là nhiễu.\n\n2. When IS micro-optimisation the right call? (choose all that apply)Khi nào tối ưu vi mô LÀ đúng? (chọn mọi câu đúng)\n   Answer: b) A loop that runs millions of times (10,000 sequential Redis calls → a pipeline) + c) A library that other people’s hot paths run through + d) A hot path the profile named, like the 16.2% stringify line of 16.1\n   Outside those three it is a hobby. And when you do it, write the reason next to the line: which number, measured on which day.VI: Ngoài ba trường hợp đó là sở thích. Và khi làm, hãy ghi lý do cạnh dòng mã: con số nào, đo ngày nào.\n\n3. Which two “optimisations” of this chapter were worse than neutral?Hai “tối ưu” nào của chương này còn tệ hơn trung tính?\n   Answer: a) High compression levels, and clustering an I/O-bound app\n   Less throughput for a barely smaller (or bigger) file; +6.7% for four new classes of correctness bug. An optimisation that adds a bug is not a slow win, it is a loss.VI: Ít thông lượng hơn để đổi lấy file nhỏ hơn chút (hoặc to hơn); +6,7% đổi lấy bốn loại lỗi đúng đắn mới. Tối ưu mà thêm lỗi không phải thắng chậm, mà là thua.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The shape of the data decides: test on your data, inside the whole request</p><p>Inside the 16.2 request it was 1.35× faster alone, with a ceiling of 0.6% of the request; the measured +3.5% was larger than the ceiling itself — noise.</p><p><i>VI: Bên trong request 16.2 nó nhanh 1,35 lần khi đứng riêng, với trần 0,6% request; +3,5% đo được còn lớn hơn cả trần — là nhiễu.</i></p></li><li><p><b>b)</b> A loop that runs millions of times (10,000 sequential Redis calls → a pipeline) + <b>c)</b> A library that other people’s hot paths run through + <b>d)</b> A hot path the profile named, like the 16.2% stringify line of 16.1</p><p>Outside those three it is a hobby. And when you do it, write the reason next to the line: which number, measured on which day.</p><p><i>VI: Ngoài ba trường hợp đó là sở thích. Và khi làm, hãy ghi lý do cạnh dòng mã: con số nào, đo ngày nào.</i></p></li><li><p><b>a)</b> High compression levels, and clustering an I/O-bound app</p><p>Less throughput for a barely smaller (or bigger) file; +6.7% for four new classes of correctness bug. An optimisation that adds a bug is not a slow win, it is a loss.</p><p><i>VI: Ít thông lượng hơn để đổi lấy file nhỏ hơn chút (hoặc to hơn); +6,7% đổi lấy bốn loại lỗi đúng đắn mới. Tối ưu mà thêm lỗi không phải thắng chậm, mà là thua.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>fast-json-stringify alone on the 500 varied notes (348,590 B): 0.431 ms vs JSON.stringify 0.414 ms. On one 682-byte object: 1.85× faster. What is the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>fast-json-stringify riêng lẻ trên 500 ghi chú đa dạng (348.590 B): 0,431 ms so với JSON.stringify 0,414 ms. Trên một object 682 byte: nhanh 1,85 lần. Bài học là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JSON.stringify is always faster because it is native code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fast-json-stringify is broken on large payloads and should never be used"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Small objects are the common case, so the library is always worth it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The shape of the data decides: test on your data, inside the whole request"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Inside the 16.2 request it was 1.35× faster alone, with a ceiling of 0.6% of the request; the measured +3.5% was larger than the ceiling itself — noise.</p><p><i>VI: Bên trong request 16.2 nó nhanh 1,35 lần khi đứng riêng, với trần 0,6% request; +3,5% đo được còn lớn hơn cả trần — là nhiễu.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>When IS micro-optimisation the right call? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào tối ưu vi mô LÀ đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Any let that could be a const, because it appears in every file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A loop that runs millions of times (10,000 sequential Redis calls → a pipeline)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A library that other people’s hot paths run through"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A hot path the profile named, like the 16.2% stringify line of 16.1"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Outside those three it is a hobby. And when you do it, write the reason next to the line: which number, measured on which day.</p><p><i>VI: Ngoài ba trường hợp đó là sở thích. Và khi làm, hãy ghi lý do cạnh dòng mã: con số nào, đo ngày nào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which two “optimisations” of this chapter were worse than neutral?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai “tối ưu” nào của chương này còn tệ hơn trung tính?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "High compression levels, and clustering an I/O-bound app"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Sending fewer fields, and reusing connections"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Precomputing renderNote, and pre-serialising the body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An index on the filtered column, and a Redis cache"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Less throughput for a barely smaller (or bigger) file; +6.7% for four new classes of correctness bug. An optimisation that adds a bug is not a slow win, it is a loss.</p><p><i>VI: Ít thông lượng hơn để đổi lấy file nhỏ hơn chút (hoặc to hơn); +6,7% đổi lấy bốn loại lỗi đúng đắn mới. Tối ưu mà thêm lỗi không phải thắng chậm, mà là thua.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Shipping a micro-optimisation as a performance fix without a profile line behind it.|||Đưa tối ưu vi mô lên như một bản sửa hiệu năng mà không có dòng profile nào đứng sau."
+        },
+        {
+          "loi": "Trusting an isolated benchmark of one function.|||Tin một benchmark riêng lẻ của một hàm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "micro-optimisation",
+          "vi": "tối ưu vi mô"
+        },
+        {
+          "en": "hot path",
+          "vi": "đường nóng"
+        }
+      ]
+    },
+    {
+      "title": "optimisationLoop(startP95, targetP95, steps): keep what helped, revert what did not, stop at the finish line",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "performance",
+        "process"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Optimisation has no natural stopping point, so the finish line is set before starting. <code>steps</code> are tried in order; each is <code>{ change, p95After }</code> — the p95 measured after applying <code>change</code> on top of everything kept so far. Write <code>optimisationLoop(startP95, targetP95, steps)</code>: if the start already meets the target (<code>≤</code>), return <code>{ kept: [], reverted: [], stoppedAt: \"already met\", finalP95: startP95 }</code>. Otherwise, for each step: keep it if <code>p95After</code> is strictly lower than the current p95 (which becomes the new current), else revert it; as soon as the current p95 is <code>≤ targetP95</code>, stop (later steps are not tried). Return <code>{ kept, reverted, stoppedAt, finalP95 }</code> — <code>stoppedAt</code> is the change that reached the target, or <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tối ưu không có điểm dừng tự nhiên, nên vạch đích được đặt trước khi bắt đầu. <code>steps</code> được thử theo thứ tự; mỗi bước là <code>{ change, p95After }</code> — p95 đo được sau khi áp <code>change</code> lên trên mọi thứ đã giữ. Viết <code>optimisationLoop(startP95, targetP95, steps)</code>: nếu lúc đầu đã đạt mục tiêu (<code>≤</code>) thì trả <code>{ kept: [], reverted: [], stoppedAt: \"already met\", finalP95: startP95 }</code>. Không thì với mỗi bước: giữ nếu <code>p95After</code> thấp hơn hẳn p95 hiện tại (thành p95 hiện tại mới), không thì hoàn tác; ngay khi p95 hiện tại <code>≤ targetP95</code> thì dừng (các bước sau không thử). Trả về <code>{ kept, reverted, stoppedAt, finalP95 }</code> — <code>stoppedAt</code> là thay đổi chạm đích, hoặc <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "optimisationLoop(900, 300, [{\"change\":\"cache /feed 10 s in Redis\",\"p95After\":340},{\"change\":\"rewrite date helper\",\"p95After\":341},{\"change\":\"select only list fields\",\"p95After\":260},{\"change\":\"fast-json-stringify\",\"p95After\":255}])",
+          "output": "{\"kept\":[\"cache /feed 10 s in Redis\",\"select only list fields\"],\"reverted\":[\"rewrite date helper\"],\"stoppedAt\":\"select only list fields\",\"finalP95\":260}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Track one variable, the current p95; compare each step to it, not to the start.|||Giữ một biến, p95 hiện tại; so từng bước với nó, không so với lúc đầu.",
+        "Check the target after each step and break.|||Kiểm mục tiêu sau mỗi bước rồi break."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the optimisation loop with a finish line */\nfunction optimisationLoop(startP95, targetP95, steps) {\n  // Write your solution here\n  let p95 = startP95;\n  const kept = [];\n  for (const s of steps) { kept.push(s.change); p95 = Math.min(p95, s.p95After); }\n  return { kept, reverted: [], stoppedAt: null, finalP95: p95 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction optimisationLoop(startP95, targetP95, steps) {\n  // Vạch đích đặt TRƯỚC khi bắt đầu. Mỗi bước: đo lại; không cải thiện ⇒ hoàn tác; chạm đích ⇒ DỪNG.\n  let p95 = startP95;\n  const kept = [];\n  const reverted = [];\n  let stoppedAt = null;\n  if (p95 <= targetP95) return { kept, reverted, stoppedAt: 'already met', finalP95: p95 };\n  for (const s of steps) {\n    if (s.p95After < p95) { kept.push(s.change); p95 = s.p95After; } else reverted.push(s.change);\n    if (p95 <= targetP95) { stoppedAt = s.change; break; }\n  }\n  return { kept, reverted, stoppedAt, finalP95: p95 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Set the p95 target users feel → profile → biggest line → fix one thing → measure → target met → stop. A day of engineering costs more than a month of a bigger VPS, unless the change removes a scaling limit (the index, the cache), not just a scaling cost.</p>",
+      "solutionExplanationHtmlVi": "<p>Đặt mục tiêu p95 người dùng cảm nhận được → profile → dòng lớn nhất → sửa một thứ → đo → đạt đích → dừng. Một ngày công đắt hơn một tháng VPS lớn hơn, trừ khi thay đổi xoá được một giới hạn mở rộng (index, cache), chứ không chỉ một chi phí mở rộng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "/feed: 900 ms → target 300 ms",
+              "vi": "/feed: 900 ms → mục tiêu 300 ms"
+            },
+            "goi": "optimisationLoop(900, 300, [{\"change\":\"cache /feed 10 s in Redis\",\"p95After\":340},{\"change\":\"rewrite date helper\",\"p95After\":341},{\"change\":\"select only list fields\",\"p95After\":260},{\"change\":\"fast-json-stringify\",\"p95After\":255}])",
+            "mongDoi": {
+              "kept": [
+                "cache /feed 10 s in Redis",
+                "select only list fields"
+              ],
+              "reverted": [
+                "rewrite date helper"
+              ],
+              "stoppedAt": "select only list fields",
+              "finalP95": 260
+            }
+          },
+          {
+            "moTa": {
+              "en": "Already under the target",
+              "vi": "Đã dưới mục tiêu"
+            },
+            "goi": "optimisationLoop(250, 300, [{\"change\":\"anything\",\"p95After\":200}])",
+            "mongDoi": {
+              "kept": [],
+              "reverted": [],
+              "stoppedAt": "already met",
+              "finalP95": 250
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "optimisationLoop(900, 100, [{\"change\":\"a\",\"p95After\":950},{\"change\":\"b\",\"p95After\":600},{\"change\":\"c\",\"p95After\":600},{\"change\":\"d\",\"p95After\":450}])",
+            "mongDoi": {
+              "kept": [
+                "b",
+                "d"
+              ],
+              "reverted": [
+                "a",
+                "c"
+              ],
+              "stoppedAt": null,
+              "finalP95": 450
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "optimisationLoop(500, 300, [{\"change\":\"x\",\"p95After\":300},{\"change\":\"y\",\"p95After\":100}])",
+            "mongDoi": {
+              "kept": [
+                "x"
+              ],
+              "reverted": [],
+              "stoppedAt": "x",
+              "finalP95": 300
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping a change that did not move p95: more complex code that is no faster is a net loss.|||Giữ một thay đổi không làm p95 nhúc nhích: mã phức tạp hơn mà không nhanh hơn là lỗ."
+        },
+        {
+          "loi": "Continuing after the target: “make it faster” can never be finished; “p95 under 300 ms” can.|||Tiếp tục sau khi đạt đích: “làm nhanh hơn” không bao giờ xong; “p95 dưới 300 ms” thì xong được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "finish line",
+          "vi": "vạch đích"
+        },
+        {
+          "en": "revert",
+          "vi": "hoàn tác"
+        }
+      ]
+    },
+    {
+      "title": "triage(proposals): three questions before any optimisation",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "performance",
+        "decision"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Each proposal is <code>{ name, sharePct, speedup, addsBugs }</code> (<code>speedup = Infinity</code> when the work is removed). For each compute <code>savingPct</code> (Amdahl, rounded to 2 decimals) and a <code>verdict</code>: <code>\"skip: under 5%\"</code> if <code>sharePct &lt; 5</code>; otherwise <code>\"skip: adds bugs\"</code> if <code>addsBugs</code>; otherwise <code>\"do\"</code>. Return <code>{ name, savingPct, verdict }</code> for all proposals: first every <code>\"do\"</code>, then the skipped ones, each group sorted by <code>savingPct</code> descending.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đề xuất là <code>{ name, sharePct, speedup, addsBugs }</code> (<code>speedup = Infinity</code> khi bỏ hẳn việc đó). Với mỗi cái tính <code>savingPct</code> (Amdahl, làm tròn 2 chữ số) và <code>verdict</code>: <code>\"skip: under 5%\"</code> nếu <code>sharePct &lt; 5</code>; không thì <code>\"skip: adds bugs\"</code> nếu <code>addsBugs</code>; không thì <code>\"do\"</code>. Trả về <code>{ name, savingPct, verdict }</code> cho mọi đề xuất: trước hết mọi <code>\"do\"</code>, rồi tới các đề xuất bị bỏ, mỗi nhóm sắp theo <code>savingPct</code> giảm dần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "triage([{ name: \"A: rewrite the date-formatting helper\", sharePct: 2, speedup: 3, addsBugs: false }, { name: \"B: cache the feed for 10 s in Redis\", sharePct: 90, speedup: Infinity, addsBugs: false }, { name: \"C: two more cluster workers\", sharePct: 35, speedup: 1.07, addsBugs: true }])",
+          "output": "[{\"name\":\"B: cache the feed for 10 s in Redis\",\"savingPct\":90,\"verdict\":\"do\"},{\"name\":\"C: two more cluster workers\",\"savingPct\":2.29,\"verdict\":\"skip: adds bugs\"},{\"name\":\"A: rewrite the date-formatting helper\",\"savingPct\":1.33,\"verdict\":\"skip: under 5%\"}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Map first, sort second.|||Map trước, sort sau.",
+        "The comparator: “do” before the rest; inside a group, larger savingPct first.|||Hàm so sánh: “do” trước phần còn lại; trong một nhóm, savingPct lớn hơn đứng trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which optimisation proposals are worth doing? */\nfunction triage(proposals) {\n  // Write your solution here\n  return proposals\n    .map((p) => ({ name: p.name, savingPct: p.sharePct, verdict: 'do' }))\n    .sort((a, b) => b.savingPct - a.savingPct);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction triage(proposals) {\n  // Ba câu hỏi: (1) bao nhiêu phần trăm? dưới 5% ⇒ dừng; (2) xoá được không? (speedup = Infinity); (3) có thêm lỗi không?\n  return proposals\n    .map((p) => {\n      const savingPct = Number((p.sharePct * (1 - 1 / p.speedup)).toFixed(2));\n      let verdict = 'do';\n      if (p.sharePct < 5) verdict = 'skip: under 5%';\n      else if (p.addsBugs) verdict = 'skip: adds bugs';\n      return { name: p.name, savingPct, verdict };\n    })\n    .sort((a, b) => (a.verdict === 'do') !== (b.verdict === 'do') ? (a.verdict === 'do' ? -1 : 1) : b.savingPct - a.savingPct);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The /feed example of the lesson: B first (do less work, it removes the query on most requests), A skipped (2% of CPU), C skipped (65% idle means I/O-bound, +6.7% at best, and workers add bugs, not speed). Then measure p95 again against the 300 ms finish line.</p>",
+      "solutionExplanationHtmlVi": "<p>Ví dụ /feed của bài: B trước (làm ít việc hơn, bỏ được truy vấn ở đa số request), bỏ A (2% CPU), bỏ C (rảnh 65% nghĩa là bị giới hạn bởi I/O, tốt lắm +6,7%, và worker thêm lỗi chứ không thêm tốc độ). Rồi đo lại p95 so với vạch đích 300 ms.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The /feed proposals of the lesson",
+              "vi": "Các đề xuất /feed của bài"
+            },
+            "goi": "triage([{ name: \"A: rewrite the date-formatting helper\", sharePct: 2, speedup: 3, addsBugs: false }, { name: \"B: cache the feed for 10 s in Redis\", sharePct: 90, speedup: Infinity, addsBugs: false }, { name: \"C: two more cluster workers\", sharePct: 35, speedup: 1.07, addsBugs: true }])",
+            "mongDoi": [
+              {
+                "name": "B: cache the feed for 10 s in Redis",
+                "savingPct": 90,
+                "verdict": "do"
+              },
+              {
+                "name": "C: two more cluster workers",
+                "savingPct": 2.29,
+                "verdict": "skip: adds bugs"
+              },
+              {
+                "name": "A: rewrite the date-formatting helper",
+                "savingPct": 1.33,
+                "verdict": "skip: under 5%"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A faster library vs sending less",
+              "vi": "Thư viện nhanh hơn so với gửi ít hơn"
+            },
+            "goi": "triage([{ name: \"fast-json-stringify\", sharePct: 2.8, speedup: 1.35, addsBugs: false }, { name: \"fewer fields\", sharePct: 40, speedup: 2.8, addsBugs: false }])",
+            "mongDoi": [
+              {
+                "name": "fewer fields",
+                "savingPct": 25.71,
+                "verdict": "do"
+              },
+              {
+                "name": "fast-json-stringify",
+                "savingPct": 0.73,
+                "verdict": "skip: under 5%"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "triage([{ name: \"x\", sharePct: 5, speedup: 2, addsBugs: false }, { name: \"y\", sharePct: 20, speedup: 1.25, addsBugs: false }, { name: \"z\", sharePct: 60, speedup: 10, addsBugs: true }, { name: \"w\", sharePct: 4.9, speedup: Infinity, addsBugs: false }])",
+            "mongDoi": [
+              {
+                "name": "y",
+                "savingPct": 4,
+                "verdict": "do"
+              },
+              {
+                "name": "x",
+                "savingPct": 2.5,
+                "verdict": "do"
+              },
+              {
+                "name": "z",
+                "savingPct": 54,
+                "verdict": "skip: adds bugs"
+              },
+              {
+                "name": "w",
+                "savingPct": 4.9,
+                "verdict": "skip: under 5%"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "triage([])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ranking only by saving: a 7% gain that brings four classes of correctness bug (cluster) lands above a safe 4%.|||Xếp chỉ theo phần tiết kiệm: 7% kèm bốn loại lỗi đúng đắn (cluster) đứng trên một 4% an toàn."
+        },
+        {
+          "loi": "Treating “under 5%” as “never”: it means not now, not before the bigger lines are gone.|||Coi “dưới 5%” là “không bao giờ”: nó nghĩa là chưa phải lúc, chưa phải trước khi các dòng lớn hơn đi hết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "triage",
+          "vi": "phân loại ưu tiên"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,749 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-14-4-db-that",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-14-4-db-that"
+  },
+  "exercises": [
+    {
+      "title": "14.4 · What only a real database can tell you",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "integration tests",
+        "PostgreSQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A fake repository answers whatever you told it to answer. A real table has opinions: unique constraints, column widths, isolation, and a clock that keeps running between two statements.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Repository giả trả lời đúng điều bạn bảo nó. Bảng thật có chính kiến: ràng buộc duy nhất, độ rộng cột, mức cô lập, và một đồng hồ vẫn chạy giữa hai câu lệnh.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A fake has no constraints, no connections, no startup.|||Đồ giả không có ràng buộc, không có kết nối, không có khởi động.",
+        "Every “it passes locally” story here is about state or timing.|||Mọi chuyện \"ở máy thì qua\" ở đây đều là về trạng thái hoặc thời điểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.4 · What only a real database can tell you\n\nAnswer in the answer panel (no code needed).\n\n1. Five concurrent creates of the same title: the fake repo answers 201 201 201 201 201; the real table answers 500 four times and keeps one row. Why 500 and not 409?Năm lần tạo đồng thời cùng một tiêu đề: repo giả trả 201 201 201 201 201; bảng thật trả 500 bốn lần và giữ một dòng. Vì sao 500 mà không phải 409?\n2. The first two attempts to reproduce the race produced 201 409 409 409 409 — correct. What hid the bug?Hai lần đầu thử tái hiện cuộc đua cho 201 409 409 409 409 — đúng. Điều gì đã che lỗi?\n3. Transaction-and-rollback isolation: the app was built around the POOL, the test ran BEGIN/ROLLBACK on a client. What happens?Cô lập bằng giao dịch-và-rollback: app được dựng quanh POOL, test chạy BEGIN/ROLLBACK trên một client. Chuyện gì xảy ra?\n4. Four test files each TRUNCATE notes in beforeAll, insert 20 rows, assert 20. Ten parallel runs: PASS=0 FAIL=10, “expected 76 to be 20”. Which fix keeps the parallelism?Bốn tệp test đều TRUNCATE notes trong beforeAll, chèn 20 dòng, khẳng định 20. Mười lần chạy song song: PASS=0 FAIL=10, \"expected 76 to be 20\". Cách chữa nào giữ được song song?\n5. A throw-away Postgres container: pg_isready said OK at 954 ms, a real connection worked at 1,149 ms; in between the socket did not exist. What should the test setup wait for?Một container Postgres dùng-một-lần: pg_isready báo OK ở 954 ms, kết nối thật được ở 1.149 ms; ở giữa socket không tồn tại. Phần chuẩn bị test nên chờ cái gì?\n6. The suite went red with “expected 2 to be 1” although neither the tests nor the code changed. The defence?Bộ test đỏ với \"expected 2 to be 1\" dù cả test lẫn code không đổi. Cách phòng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.4 · What only a real database can tell you — answer key\n\n1. Five concurrent creates of the same title: the fake repo answers 201 201 201 201 201; the real table answers 500 four times and keeps one row. Why 500 and not 409?Năm lần tạo đồng thời cùng một tiêu đề: repo giả trả 201 201 201 201 201; bảng thật trả 500 bốn lần và giữ một dòng. Vì sao 500 mà không phải 409?\n   Answer: b) The INSERT failed with code 23505 but no status attached\n   The fix belongs in the repository, where the driver’s vocabulary is in scope: catch 23505, throw SLUG_TAKEN with status 409. The pre-check stays as a courtesy; the constraint is the rule.VI: Cách chữa thuộc về repository, nơi có sẵn từ vựng của driver: bắt 23505, ném SLUG_TAKEN với status 409. Phép kiểm trước giữ lại như một phép lịch sự; ràng buộc mới là luật.\n\n2. The first two attempts to reproduce the race produced 201 409 409 409 409 — correct. What hid the bug?Hai lần đầu thử tái hiện cuộc đua cho 201 409 409 409 409 — đúng. Điều gì đã che lỗi?\n   Answer: b) Lazy connection handshakes serialised the requests by accident\n   The race only appeared once five connections were opened and warmed first. A concurrency bug you cannot reproduce may be hiding behind a warm-up cost.VI: Cuộc đua chỉ hiện ra khi năm kết nối được mở và làm ấm trước. Lỗi đồng thời không tái hiện được có thể đang nấp sau một chi phí khởi động.\n\n3. Transaction-and-rollback isolation: the app was built around the POOL, the test ran BEGIN/ROLLBACK on a client. What happens?Cô lập bằng giao dịch-và-rollback: app được dựng quanh POOL, test chạy BEGIN/ROLLBACK trên một client. Chuyện gì xảy ra?\n   Answer: d) The app’s queries run on other connections, outside the transaction — the rollback cleans up nothing\n   Build the app around the same client that holds the transaction. Cost: one BEGIN and one ROLLBACK per test, well under a millisecond.VI: Dựng app quanh chính client đang giữ giao dịch. Chi phí: một BEGIN và một ROLLBACK mỗi test, dưới một mili-giây.\n\n4. Four test files each TRUNCATE notes in beforeAll, insert 20 rows, assert 20. Ten parallel runs: PASS=0 FAIL=10, “expected 76 to be 20”. Which fix keeps the parallelism?Bốn tệp test đều TRUNCATE notes trong beforeAll, chèn 20 dòng, khẳng định 20. Mười lần chạy song song: PASS=0 FAIL=10, \"expected 76 to be 20\". Cách chữa nào giữ được song song?\n   Answer: c) A schema per worker: 10/10 in 258 ms, the same as the broken parallel run\n   Sequential is correct but turns test time from O(max) into O(sum) forever (731 vs 260 ms on four files). Retrying a reliably broken test is not a fix at all.VI: Chạy tuần tự thì đúng nhưng biến thời gian test từ O(max) thành O(sum) mãi mãi (731 so với 260 ms với bốn tệp). Thử lại một test hỏng chắc chắn không phải là cách chữa.\n\n5. A throw-away Postgres container: pg_isready said OK at 954 ms, a real connection worked at 1,149 ms; in between the socket did not exist. What should the test setup wait for?Một container Postgres dùng-một-lần: pg_isready báo OK ở 954 ms, kết nối thật được ở 1.149 ms; ở giữa socket không tồn tại. Phần chuẩn bị test nên chờ cái gì?\n   Answer: d) A real query — SELECT 1 in a retry loop — not the health probe\n   The entrypoint starts a temporary server for the init scripts, shuts it down, starts the real one — and pg_isready answers during that window. The source of a whole genre of “works locally, fails in CI”.VI: Entrypoint khởi một server tạm cho các script khởi tạo, tắt nó, rồi khởi server thật — và pg_isready trả lời trong khe đó. Nguồn của cả một thể loại \"chạy ở máy, hỏng trên CI\".\n\n6. The suite went red with “expected 2 to be 1” although neither the tests nor the code changed. The defence?Bộ test đỏ với \"expected 2 to be 1\" dù cả test lẫn code không đổi. Cách phòng?\n   Answer: c) Assert only on rows the test itself created\n   A separate script had left one row behind. Rollback isolates tests from each other, not from state that was already there.VI: Một script khác đã để lại một dòng. Rollback cô lập các test với nhau, không cô lập khỏi trạng thái đã có từ trước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The INSERT failed with code 23505 but no status attached</p><p>The fix belongs in the repository, where the driver’s vocabulary is in scope: catch 23505, throw SLUG_TAKEN with status 409. The pre-check stays as a courtesy; the constraint is the rule.</p><p><i>VI: Cách chữa thuộc về repository, nơi có sẵn từ vựng của driver: bắt 23505, ném SLUG_TAKEN với status 409. Phép kiểm trước giữ lại như một phép lịch sự; ràng buộc mới là luật.</i></p></li><li><p><b>b)</b> Lazy connection handshakes serialised the requests by accident</p><p>The race only appeared once five connections were opened and warmed first. A concurrency bug you cannot reproduce may be hiding behind a warm-up cost.</p><p><i>VI: Cuộc đua chỉ hiện ra khi năm kết nối được mở và làm ấm trước. Lỗi đồng thời không tái hiện được có thể đang nấp sau một chi phí khởi động.</i></p></li><li><p><b>d)</b> The app’s queries run on other connections, outside the transaction — the rollback cleans up nothing</p><p>Build the app around the same client that holds the transaction. Cost: one BEGIN and one ROLLBACK per test, well under a millisecond.</p><p><i>VI: Dựng app quanh chính client đang giữ giao dịch. Chi phí: một BEGIN và một ROLLBACK mỗi test, dưới một mili-giây.</i></p></li><li><p><b>c)</b> A schema per worker: 10/10 in 258 ms, the same as the broken parallel run</p><p>Sequential is correct but turns test time from O(max) into O(sum) forever (731 vs 260 ms on four files). Retrying a reliably broken test is not a fix at all.</p><p><i>VI: Chạy tuần tự thì đúng nhưng biến thời gian test từ O(max) thành O(sum) mãi mãi (731 so với 260 ms với bốn tệp). Thử lại một test hỏng chắc chắn không phải là cách chữa.</i></p></li><li><p><b>d)</b> A real query — SELECT 1 in a retry loop — not the health probe</p><p>The entrypoint starts a temporary server for the init scripts, shuts it down, starts the real one — and pg_isready answers during that window. The source of a whole genre of “works locally, fails in CI”.</p><p><i>VI: Entrypoint khởi một server tạm cho các script khởi tạo, tắt nó, rồi khởi server thật — và pg_isready trả lời trong khe đó. Nguồn của cả một thể loại \"chạy ở máy, hỏng trên CI\".</i></p></li><li><p><b>c)</b> Assert only on rows the test itself created</p><p>A separate script had left one row behind. Rollback isolates tests from each other, not from state that was already there.</p><p><i>VI: Một script khác đã để lại một dòng. Rollback cô lập các test với nhau, không cô lập khỏi trạng thái đã có từ trước.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Five concurrent creates of the same title: the fake repo answers 201 201 201 201 201; the real table answers 500 four times and keeps one row. Why 500 and not 409?</p><p style=\"opacity:.75;font-size:.92em\"><i>Năm lần tạo đồng thời cùng một tiêu đề: repo giả trả 201 201 201 201 201; bảng thật trả 500 bốn lần và giữ một dòng. Vì sao 500 mà không phải 409?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PostgreSQL returns HTTP 500 for any constraint violation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The INSERT failed with code 23505 but no status attached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The fake repo was still used by four of the five requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pool ran out of connections and answered 500"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The fix belongs in the repository, where the driver’s vocabulary is in scope: catch 23505, throw SLUG_TAKEN with status 409. The pre-check stays as a courtesy; the constraint is the rule.</p><p><i>VI: Cách chữa thuộc về repository, nơi có sẵn từ vựng của driver: bắt 23505, ném SLUG_TAKEN với status 409. Phép kiểm trước giữ lại như một phép lịch sự; ràng buộc mới là luật.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The first two attempts to reproduce the race produced 201 409 409 409 409 — correct. What hid the bug?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai lần đầu thử tái hiện cuộc đua cho 201 409 409 409 409 — đúng. Điều gì đã che lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The database was in serializable isolation by default"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Lazy connection handshakes serialised the requests by accident"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Node runs async functions one at a time, so there is no race"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The unique index had not been created yet"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The race only appeared once five connections were opened and warmed first. A concurrency bug you cannot reproduce may be hiding behind a warm-up cost.</p><p><i>VI: Cuộc đua chỉ hiện ra khi năm kết nối được mở và làm ấm trước. Lỗi đồng thời không tái hiện được có thể đang nấp sau một chi phí khởi động.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Transaction-and-rollback isolation: the app was built around the POOL, the test ran BEGIN/ROLLBACK on a client. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cô lập bằng giao dịch-và-rollback: app được dựng quanh POOL, test chạy BEGIN/ROLLBACK trên một client. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "pg refuses BEGIN on a client that came from a pool"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The test deadlocks, because two connections write the same table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The rollback also undoes the pool’s queries, because they share one database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The app’s queries run on other connections, outside the transaction — the rollback cleans up nothing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Build the app around the same client that holds the transaction. Cost: one BEGIN and one ROLLBACK per test, well under a millisecond.</p><p><i>VI: Dựng app quanh chính client đang giữ giao dịch. Chi phí: một BEGIN và một ROLLBACK mỗi test, dưới một mili-giây.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Four test files each TRUNCATE notes in beforeAll, insert 20 rows, assert 20. Ten parallel runs: PASS=0 FAIL=10, “expected 76 to be 20”. Which fix keeps the parallelism?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn tệp test đều TRUNCATE notes trong beforeAll, chèn 20 dòng, khẳng định 20. Mười lần chạy song song: PASS=0 FAIL=10, \"expected 76 to be 20\". Cách chữa nào giữ được song song?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "--no-file-parallelism: 10/10, and it is free"
+              },
+              {
+                "ma": "b",
+                "noiDung": "retry: 3 in the config"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A schema per worker: 10/10 in 258 ms, the same as the broken parallel run"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A longer timeout in beforeAll"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Sequential is correct but turns test time from O(max) into O(sum) forever (731 vs 260 ms on four files). Retrying a reliably broken test is not a fix at all.</p><p><i>VI: Chạy tuần tự thì đúng nhưng biến thời gian test từ O(max) thành O(sum) mãi mãi (731 so với 260 ms với bốn tệp). Thử lại một test hỏng chắc chắn không phải là cách chữa.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A throw-away Postgres container: pg_isready said OK at 954 ms, a real connection worked at 1,149 ms; in between the socket did not exist. What should the test setup wait for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một container Postgres dùng-một-lần: pg_isready báo OK ở 954 ms, kết nối thật được ở 1.149 ms; ở giữa socket không tồn tại. Phần chuẩn bị test nên chờ cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "pg_isready twice in a row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A fixed sleep of 2 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The container’s healthy status in docker ps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A real query — SELECT 1 in a retry loop — not the health probe"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The entrypoint starts a temporary server for the init scripts, shuts it down, starts the real one — and pg_isready answers during that window. The source of a whole genre of “works locally, fails in CI”.</p><p><i>VI: Entrypoint khởi một server tạm cho các script khởi tạo, tắt nó, rồi khởi server thật — và pg_isready trả lời trong khe đó. Nguồn của cả một thể loại \"chạy ở máy, hỏng trên CI\".</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The suite went red with “expected 2 to be 1” although neither the tests nor the code changed. The defence?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ test đỏ với \"expected 2 to be 1\" dù cả test lẫn code không đổi. Cách phòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Add a retry, since the failure is random"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Delete the assertion on the row count"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Assert only on rows the test itself created"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run the suite twice and keep the second result"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A separate script had left one row behind. Rollback isolates tests from each other, not from state that was already there.</p><p><i>VI: Một script khác đã để lại một dòng. Rollback cô lập các test với nhau, không cô lập khỏi trạng thái đã có từ trước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing the green unit suite proves uniqueness.|||Tin bộ unit test xanh chứng minh được tính duy nhất."
+        },
+        {
+          "loi": "Waiting for pg_isready in CI.|||Chờ pg_isready trên CI."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "23505 unique_violation",
+          "vi": "vi phạm khoá duy nhất",
+          "giaiThich": "mã lỗi PostgreSQL"
+        },
+        {
+          "en": "22001 string_data_right_truncation",
+          "vi": "chuỗi quá dài",
+          "giaiThich": "giá trị vượt varchar(n)"
+        },
+        {
+          "en": "isolation",
+          "vi": "cô lập",
+          "giaiThich": "giữ cho test không rò trạng thái sang nhau"
+        }
+      ]
+    },
+    {
+      "title": "14.4 · Teach the repository the driver’s vocabulary",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "repository",
+        "error mapping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>In production the duplicate-slug race answered 500, because the PostgreSQL error carried a code but no status. Write <code>insertNote(client, n)</code> for <code>n = { title, slug, body, authorId }</code>:</p><ul><li>run <code>INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *</code> with the four values and resolve to the row;</li><li><code>code '23505'</code> (unique violation) ⇒ throw <code>Error('SLUG_TAKEN')</code> with <code>status: 409</code>;</li><li><code>code '22001'</code> (value too long — zod and the column disagree after somebody widened one of them) ⇒ throw <code>Error('TITLE_TOO_LONG')</code> with <code>status: 422</code>;</li><li>anything else ⇒ re-throw the original error unchanged (a lost connection must stay a 500).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Parameters, never string concatenation.</li>\n  <li>Map by err.code, not by matching the message text.</li>\n  <li>Unknown errors are re-thrown as they are.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên production cuộc đua slug trùng trả 500, vì lỗi PostgreSQL mang mã nhưng không có status. Viết <code>insertNote(client, n)</code> với <code>n = { title, slug, body, authorId }</code>:</p><ul><li>chạy <code>INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *</code> với bốn giá trị và resolve ra dòng;</li><li><code>code '23505'</code> (vi phạm khoá duy nhất) ⇒ ném <code>Error('SLUG_TAKEN')</code> với <code>status: 409</code>;</li><li><code>code '22001'</code> (giá trị quá dài — zod và cột lệch nhau sau khi ai đó nới một bên) ⇒ ném <code>Error('TITLE_TOO_LONG')</code> với <code>status: 422</code>;</li><li>mọi thứ khác ⇒ ném lại nguyên lỗi gốc (mất kết nối vẫn phải là 500).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng tham số, không bao giờ nối chuỗi.</li>\n  <li>Ánh xạ theo err.code, không theo việc khớp chữ của thông điệp.</li>\n  <li>Lỗi lạ được ném lại nguyên trạng.</li>\n</ul>",
+      "inputSpec": "client — fake-pg.js · n — { title, slug, body, authorId }",
+      "outputSpec": "Promise<row> — or throws { message, status }|||Promise<row> — hoặc ném { message, status }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);\n[await insertNote(client, note('Hello')), client.queries]",
+          "output": "[{\"id\":1,\"title\":\"Hello\",\"slug\":\"hello\",\"body\":\"\",\"author_id\":7},1]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "try { const r = await client.query(SQL, [n.title, n.slug, n.body, n.authorId]); return r.rows[0]; } catch (e) { … }",
+        "throw Object.assign(new Error('SLUG_TAKEN'), { status: 409 }); — and a plain throw e for everything else.|||throw Object.assign(new Error('SLUG_TAKEN'), { status: 409 }); — và throw e thường cho mọi thứ khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function insertNote(client, n) {\n  // Write your solution here\n  const r = await client.query('INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *', [n.title, n.slug, n.body, n.authorId]);\n  return r.rows[0];\n}\n"
+        },
+        {
+          "name": "fake-pg.js",
+          "language": "javascript",
+          "code": "// fake-pg.js — PROVIDED (loaded before answer.js). A pg client against a notes table with\n// UNIQUE (slug) \"notes_slug_key\" and title varchar(200). client.query(sql, params) → { rows }; errors are like pg's:\n//   duplicate slug → err.code '23505', err.constraint 'notes_slug_key' · title > 200 chars → err.code '22001'\n// client.down = true ⇒ every query rejects with Error('Connection terminated unexpectedly') (no code)\nfunction makeClient() {\n  const rows = [];\n  const client = { rows, down: false, queries: 0,\n    query(sql, params = []) {\n      client.queries++;\n      return new Promise((ok, no) => setTimeout(() => {\n        if (client.down) return no(new Error('Connection terminated unexpectedly'));\n        if (/^INSERT INTO notes/i.test(sql)) {\n          const [title, slug, body, authorId] = params;\n          if (String(title).length > 200) return no(Object.assign(new Error('value too long for type character varying(200)'), { code: '22001' }));\n          if (rows.some((r) => r.slug === slug)) return no(Object.assign(new Error('duplicate key value violates unique constraint \"notes_slug_key\"'), { code: '23505', constraint: 'notes_slug_key' }));\n          const row = { id: rows.length + 1, title, slug, body, author_id: authorId };\n          rows.push(row);\n          return ok({ rows: [{ ...row }] });\n        }\n        no(new Error('unsupported in this fake: ' + sql));\n      }, 2));\n    } };\n  return client;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const SQL = 'INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *';\nconst domain = (message, status) => Object.assign(new Error(message), { status });\n\n/** The repository speaks the driver's vocabulary — so it is where driver codes become domain errors. */\nasync function insertNote(client, n) {\n  try {\n    const r = await client.query(SQL, [n.title, n.slug, n.body, n.authorId]);   // parameters, never concatenation\n    return r.rows[0];\n  } catch (e) {\n    if (e.code === '23505') throw domain('SLUG_TAKEN', 409);       // the constraint IS the rule\n    if (e.code === '22001') throw domain('TITLE_TOO_LONG', 422);   // zod and varchar(200) disagree\n    throw e;                                                        // unknown: stays a 500, untouched\n  }\n}\n"
+        },
+        {
+          "name": "fake-pg.js",
+          "language": "javascript",
+          "code": "// fake-pg.js — PROVIDED (loaded before answer.js). A pg client against a notes table with\n// UNIQUE (slug) \"notes_slug_key\" and title varchar(200). client.query(sql, params) → { rows }; errors are like pg's:\n//   duplicate slug → err.code '23505', err.constraint 'notes_slug_key' · title > 200 chars → err.code '22001'\n// client.down = true ⇒ every query rejects with Error('Connection terminated unexpectedly') (no code)\nfunction makeClient() {\n  const rows = [];\n  const client = { rows, down: false, queries: 0,\n    query(sql, params = []) {\n      client.queries++;\n      return new Promise((ok, no) => setTimeout(() => {\n        if (client.down) return no(new Error('Connection terminated unexpectedly'));\n        if (/^INSERT INTO notes/i.test(sql)) {\n          const [title, slug, body, authorId] = params;\n          if (String(title).length > 200) return no(Object.assign(new Error('value too long for type character varying(200)'), { code: '22001' }));\n          if (rows.some((r) => r.slug === slug)) return no(Object.assign(new Error('duplicate key value violates unique constraint \"notes_slug_key\"'), { code: '23505', constraint: 'notes_slug_key' }));\n          const row = { id: rows.length + 1, title, slug, body, author_id: authorId };\n          rows.push(row);\n          return ok({ rows: [{ ...row }] });\n        }\n        no(new Error('unsupported in this fake: ' + sql));\n      }, 2));\n    } };\n  return client;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The constraint is what actually enforces uniqueness; the repository is where the driver’s codes are in scope, so it is where 23505 becomes the domain error the HTTP layer already maps to 409. 22001 is the bug no unit test can see — the fake accepts any string — which is the whole argument for a real-database test.</p>",
+      "solutionExplanationHtmlVi": "<p>Ràng buộc mới là thứ thật sự bảo đảm tính duy nhất; repository là nơi mã của driver nằm trong tầm, nên đó là nơi 23505 thành lỗi miền mà tầng HTTP đã ánh xạ sẵn thành 409. 22001 là lỗi mà không unit test nào thấy — đồ giả nhận mọi chuỗi — đó chính là toàn bộ lý lẽ cho test trên CSDL thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-pg.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Inserts and returns the row",
+              "vi": "Chèn và trả về dòng"
+            },
+            "goi": "[await insertNote(client, note('Hello')), client.queries]",
+            "chuanBi": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);",
+            "mongDoi": [
+              {
+                "id": 1,
+                "title": "Hello",
+                "slug": "hello",
+                "body": "",
+                "author_id": 7
+              },
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A duplicate slug → 409 SLUG_TAKEN",
+              "vi": "Slug trùng → 409 SLUG_TAKEN"
+            },
+            "goi": "[await outcome(insertNote(client, note('A', 'a'))), await outcome(insertNote(client, note('A again', 'a')))]",
+            "chuanBi": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);",
+            "mongDoi": [
+              [
+                "ok",
+                1
+              ],
+              [
+                "SLUG_TAKEN",
+                409
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A 201-character title → 422 TITLE_TOO_LONG",
+              "vi": "Tiêu đề 201 ký tự → 422 TITLE_TOO_LONG"
+            },
+            "goi": "await outcome(insertNote(client, note('x'.repeat(201), 'long')))",
+            "chuanBi": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);",
+            "mongDoi": [
+              "TITLE_TOO_LONG",
+              422
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Five concurrent duplicates: one ok, four 409 (not 500)",
+              "vi": "Năm bản trùng đồng thời: một ok, bốn 409 (không phải 500)"
+            },
+            "goi": "await Promise.all(Array.from({ length: 5 }, () => outcome(insertNote(client, note('Race', 'race')))))",
+            "chuanBi": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);",
+            "mongDoi": [
+              [
+                "ok",
+                1
+              ],
+              [
+                "SLUG_TAKEN",
+                409
+              ],
+              [
+                "SLUG_TAKEN",
+                409
+              ],
+              [
+                "SLUG_TAKEN",
+                409
+              ],
+              [
+                "SLUG_TAKEN",
+                409
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { client.down = true; const r = await outcome(insertNote(client, note('Hi'))); return r; })()",
+            "chuanBi": "const client = makeClient();\nconst note = (title, slug = title.toLowerCase()) => ({ title, slug, body: '', authorId: 7 });\nconst outcome = (p) => p.then((r) => ['ok', r.id], (e) => [e.message, e.status ?? null]);",
+            "mongDoi": [
+              "Connection terminated unexpectedly",
+              null
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Relying on the pre-check (findBySlug) alone: correct in every unit test, 500 four times out of five under concurrency.|||Chỉ dựa vào phép kiểm trước (findBySlug): đúng ở mọi unit test, 500 bốn lần trên năm khi đồng thời."
+        },
+        {
+          "loi": "if (e.message.includes('duplicate')): messages are localised and change between versions; codes do not.|||if (e.message.includes('duplicate')): thông điệp được bản địa hoá và đổi giữa các phiên bản; mã thì không."
+        },
+        {
+          "loi": "Mapping every error to 409: a dropped connection tells the user their title is taken.|||Ánh xạ mọi lỗi thành 409: mất kết nối lại báo người dùng rằng tiêu đề đã có người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "23505",
+          "vi": "unique_violation",
+          "giaiThich": "vi phạm ràng buộc UNIQUE"
+        },
+        {
+          "en": "22001",
+          "vi": "string_data_right_truncation",
+          "giaiThich": "giá trị dài hơn varchar(n)"
+        }
+      ]
+    },
+    {
+      "title": "14.4 · Wait for a real query, not for pg_isready",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "test setup",
+        "flaky tests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The test setup starts a throw-away Postgres container and must wait until it can really be used. <code>pg_isready</code> lies during initialisation — it said OK at 954 ms while a real connection only worked at 1,149 ms. Write <code>waitForDb(query, { intervalMs = 50, timeoutMs = 5000 } = {})</code>:</p><ul><li>try <code>query('SELECT 1')</code>; if it rejects, wait <code>intervalMs</code> and try again;</li><li>resolve to the number of milliseconds since <code>waitForDb</code> was called, as soon as one query succeeds;</li><li>if <code>timeoutMs</code> has passed, reject with <code>Error('DB_NOT_READY: ' + lastError.message)</code> — the last real error is what someone will read in the CI log.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Never trust pgIsReady() — the probe passes 195 ms too early.</li>\n  <li>Wait with a timer between attempts (no busy loop).</li>\n  <li>Time out with the last real error in the message.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần chuẩn bị test khởi một container Postgres dùng-một-lần và phải chờ tới khi thật sự dùng được nó. <code>pg_isready</code> nói dối trong lúc khởi tạo — nó báo OK ở 954 ms trong khi kết nối thật chỉ được ở 1.149 ms. Viết <code>waitForDb(query, { intervalMs = 50, timeoutMs = 5000 } = {})</code>:</p><ul><li>thử <code>query('SELECT 1')</code>; nếu reject, chờ <code>intervalMs</code> rồi thử lại;</li><li>resolve ra số mili-giây kể từ lúc gọi <code>waitForDb</code>, ngay khi có một truy vấn thành công;</li><li>nếu đã quá <code>timeoutMs</code>, reject với <code>Error('DB_NOT_READY: ' + lastError.message)</code> — lỗi thật cuối cùng là thứ người ta sẽ đọc trong log CI.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ tin pgIsReady() — phép dò qua sớm 195 ms.</li>\n  <li>Chờ bằng hẹn giờ giữa các lần thử (không quay vòng bận).</li>\n  <li>Hết giờ thì báo kèm lỗi thật cuối cùng trong thông điệp.</li>\n</ul>",
+      "inputSpec": "query — async (sql) => result · options|||query — async (sql) => result · tuỳ chọn",
+      "outputSpec": "Promise<number> — ms until the first successful query|||Promise<number> — số ms tới truy vấn thành công đầu tiên",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await waitForDb(query) >= 1149, boot.queries > 1]",
+          "output": "[true,true]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const t0 = Date.now(); let last; while (Date.now() - t0 < timeoutMs) { try { await query('SELECT 1'); return Date.now() - t0; } catch (e) { last = e; } await new Promise((ok) => setTimeout(ok, intervalMs)); }",
+        "After the loop: throw new Error('DB_NOT_READY: ' + (last ? last.message : 'timeout')).|||Sau vòng lặp: throw new Error('DB_NOT_READY: ' + (last ? last.message : 'timeout'))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Wait until the database can run a query. */\nasync function waitForDb(query, { intervalMs = 50, timeoutMs = 5000 } = {}) {\n  // Write your solution here — this trusts the health probe\n  const t0 = Date.now();\n  while (!(await pgIsReady())) await new Promise((ok) => setTimeout(ok, intervalMs));\n  return Date.now() - t0;\n}\n"
+        },
+        {
+          "name": "fake-docker-pg.js",
+          "language": "javascript",
+          "code": "// fake-docker-pg.js — PROVIDED (loaded before answer.js). A throw-away Postgres container that has just been started\n// at virtual time 0 (measured in the lesson: pg_isready OK at 954 ms, a real connection only at 1,149 ms):\n//   await pgIsReady()     → true from 954 ms on (it LIES between 954 and 1,149 ms)\n//   await query('SELECT 1') → rejects before 1,149 ms (socket missing / starting up / shutting down), then { rows: [{ '?column?': 1 }] }\n//   boot.queries — number of query attempts · boot.failForever = true ⇒ query never succeeds\nconst boot = { t0: Date.now(), queries: 0, failForever: false, readyAt: 1149 };\nconst since = () => Date.now() - boot.t0;\nfunction pgIsReady() { return new Promise((ok) => setTimeout(() => ok(since() >= 954), 5)); }\nfunction query(sql) {\n  boot.queries++;\n  return new Promise((ok, no) => setTimeout(() => {\n    const t = since();\n    if (boot.failForever || t < 300) return no(new Error('connect ECONNREFUSED 127.0.0.1:5432'));\n    if (t < 954) return no(new Error('the database system is starting up'));\n    if (t < 1000) return no(new Error('the database system is shutting down'));\n    if (t < boot.readyAt) return no(new Error('connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory'));\n    ok({ rows: [{ '?column?': 1 }] });\n  }, 3));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Wait until the database can run a query — the ONLY proof of readiness. */\nasync function waitForDb(query, { intervalMs = 50, timeoutMs = 5000 } = {}) {\n  const t0 = Date.now();\n  let last = null;\n  while (Date.now() - t0 < timeoutMs) {\n    try {\n      await query('SELECT 1');                     // a real round trip through a real connection\n      return Date.now() - t0;\n    } catch (e) {\n      last = e;                                    // keep the REAL reason for the CI log\n    }\n    await new Promise((ok) => setTimeout(ok, intervalMs));   // wait with a timer, not a busy loop\n  }\n  throw new Error('DB_NOT_READY: ' + (last ? last.message : 'timeout'));\n}\n"
+        },
+        {
+          "name": "fake-docker-pg.js",
+          "language": "javascript",
+          "code": "// fake-docker-pg.js — PROVIDED (loaded before answer.js). A throw-away Postgres container that has just been started\n// at virtual time 0 (measured in the lesson: pg_isready OK at 954 ms, a real connection only at 1,149 ms):\n//   await pgIsReady()     → true from 954 ms on (it LIES between 954 and 1,149 ms)\n//   await query('SELECT 1') → rejects before 1,149 ms (socket missing / starting up / shutting down), then { rows: [{ '?column?': 1 }] }\n//   boot.queries — number of query attempts · boot.failForever = true ⇒ query never succeeds\nconst boot = { t0: Date.now(), queries: 0, failForever: false, readyAt: 1149 };\nconst since = () => Date.now() - boot.t0;\nfunction pgIsReady() { return new Promise((ok) => setTimeout(() => ok(since() >= 954), 5)); }\nfunction query(sql) {\n  boot.queries++;\n  return new Promise((ok, no) => setTimeout(() => {\n    const t = since();\n    if (boot.failForever || t < 300) return no(new Error('connect ECONNREFUSED 127.0.0.1:5432'));\n    if (t < 954) return no(new Error('the database system is starting up'));\n    if (t < 1000) return no(new Error('the database system is shutting down'));\n    if (t < boot.readyAt) return no(new Error('connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory'));\n    ok({ rows: [{ '?column?': 1 }] });\n  }, 3));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The only proof that a database can run your tests is that it ran a query. The Postgres entrypoint starts a temporary server for its init scripts, shuts it down and starts the real one; the probe answers during that window. A retry loop on SELECT 1 with a deadline and the last error in the message turns a flaky CI step into a deterministic one — exactly the order the site’s work-db-tests job uses: the health probe only gates the service, the tests start after real queries built the schema.</p>",
+      "solutionExplanationHtmlVi": "<p>Bằng chứng duy nhất cho việc CSDL chạy được test của bạn là nó đã chạy một truy vấn. Entrypoint của Postgres khởi một server tạm cho các script khởi tạo, tắt nó, rồi khởi server thật; phép dò trả lời trong khe đó. Vòng thử lại trên SELECT 1 có hạn chót và lỗi cuối trong thông điệp biến một bước CI chập chờn thành tất định — đúng thứ tự mà job work-db-tests của website dùng: phép dò sức khoẻ chỉ chặn service, test chạy sau khi các truy vấn thật đã dựng lược đồ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-docker-pg.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Resolves only once SELECT 1 works (≥ 1,149 ms), after several attempts",
+              "vi": "Chỉ resolve khi SELECT 1 chạy được (≥ 1.149 ms), sau vài lần thử"
+            },
+            "goi": "[await waitForDb(query) >= 1149, boot.queries > 1]",
+            "mongDoi": [
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The database really answers afterwards",
+              "vi": "Sau đó CSDL thật sự trả lời"
+            },
+            "goi": "await (async () => { const ms = await waitForDb(query, { intervalMs: 100 }); const r = await query('SELECT 1'); return [ms >= 1149 && ms < 1300, r.rows[0]]; })()",
+            "mongDoi": [
+              true,
+              {
+                "?column?": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Times out with the last real error",
+              "vi": "Hết giờ kèm lỗi thật cuối cùng"
+            },
+            "goi": "await (async () => { boot.failForever = true; try { await waitForDb(query, { timeoutMs: 800 }); return 'resolved'; } catch (e) { return e.message; } })()",
+            "mongDoi": "DB_NOT_READY: connect ECONNREFUSED 127.0.0.1:5432"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { boot.readyAt = 3000; let err; try { await waitForDb(query, { timeoutMs: 2000, intervalMs: 200 }); } catch (e) { err = e.message; } return [err, boot.queries <= 12]; })()",
+            "mongDoi": [
+              "DB_NOT_READY: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: No such file or directory",
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { boot.readyAt = 1500; const ms = await waitForDb(query, { intervalMs: 10 }); return [ms >= 1500, ms < 1520]; })()",
+            "mongDoi": [
+              true,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Waiting for pg_isready and then running the migrations: “No such file or directory” in CI, once in a while.|||Chờ pg_isready rồi chạy migration: thỉnh thoảng lại \"No such file or directory\" trên CI."
+        },
+        {
+          "loi": "A fixed sleep(2000): too long on a fast laptop, too short on a loaded CI runner.|||Một sleep(2000) cố định: quá lâu trên máy nhanh, quá ngắn trên runner CI đang tải nặng."
+        },
+        {
+          "loi": "Timing out with a generic “timeout”: the person reading the CI log has no idea whether the server was down, starting or refusing the password.|||Hết giờ với một chữ \"timeout\" chung chung: người đọc log CI không biết server đang tắt, đang khởi động hay từ chối mật khẩu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pg_isready",
+          "vi": "phép dò sẵn sàng",
+          "giaiThich": "trả lời trong lúc khởi tạo — không chứng minh truy vấn chạy được"
+        },
+        {
+          "en": "readiness",
+          "vi": "sẵn sàng",
+          "giaiThich": "được chứng minh bằng một truy vấn thật"
+        }
+      ]
+    },
+    {
+      "title": "14.4 · Isolate every test in a transaction that rolls back",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "test isolation",
+        "transactions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The fastest correct isolation: <code>BEGIN</code> before each test, <code>ROLLBACK</code> after, and the table is byte-identical afterwards. The critical detail is that the code under test must use the SAME client that holds the transaction — hand it the pool and its queries run on other connections, outside your transaction, and the rollback cleans up nothing. Write <code>withRollback(pool, fn)</code>:</p><ol><li><code>const client = await pool.connect()</code>, then <code>BEGIN</code>;</li><li><code>await fn(client)</code> — the test builds its app around <code>client</code>;</li><li>ALWAYS (even if <code>fn</code> throws): <code>ROLLBACK</code> and <code>client.release()</code>;</li><li>resolve to what <code>fn</code> returned, or re-throw its error.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>fn receives the client that holds the transaction — never the pool.</li>\n  <li>ROLLBACK + release in finally.</li>\n  <li>The committed table is unchanged afterwards.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cách cô lập đúng và nhanh nhất: <code>BEGIN</code> trước mỗi test, <code>ROLLBACK</code> sau đó, và bảng giống hệt từng byte như trước. Chi tiết then chốt là code đang test phải dùng CHÍNH client đang giữ giao dịch — đưa nó cái pool thì truy vấn của nó chạy trên kết nối khác, ngoài giao dịch của bạn, và rollback chẳng dọn được gì. Viết <code>withRollback(pool, fn)</code>:</p><ol><li><code>const client = await pool.connect()</code>, rồi <code>BEGIN</code>;</li><li><code>await fn(client)</code> — test dựng app của nó quanh <code>client</code>;</li><li>LUÔN LUÔN (kể cả khi <code>fn</code> ném lỗi): <code>ROLLBACK</code> và <code>client.release()</code>;</li><li>resolve ra thứ <code>fn</code> trả về, hoặc ném lại lỗi của nó.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>fn nhận client đang giữ giao dịch — không bao giờ là pool.</li>\n  <li>ROLLBACK + release trong finally.</li>\n  <li>Bảng đã commit không đổi sau đó.</li>\n</ul>",
+      "inputSpec": "pool — fake-pool.js · fn — async (db) => any",
+      "outputSpec": "Promise<whatever fn returns>|||Promise<thứ fn trả về>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const pool = makePool();\npool.table.push({ title: 'seed' });\n[await withRollback(pool, createTwoNotes), pool.table.length, pool.released]",
+          "output": "[3,1,1]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const client = await pool.connect(); await client.query('BEGIN'); try { return await fn(client); } finally { … }",
+        "In finally: await client.query('ROLLBACK'); client.release(); — release even if the ROLLBACK itself fails (a nested try/finally).|||Trong finally: await client.query('ROLLBACK'); client.release(); — release kể cả khi chính ROLLBACK hỏng (một try/finally lồng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run fn inside a transaction that is always rolled back. */\nasync function withRollback(pool, fn) {\n  // Write your solution here — the classic mistake: the code under test gets the pool\n  const client = await pool.connect();\n  await client.query('BEGIN');\n  const result = await fn(pool);\n  await client.query('ROLLBACK');\n  client.release();\n  return result;\n}\n"
+        },
+        {
+          "name": "fake-pool.js",
+          "language": "javascript",
+          "code": "// fake-pool.js — PROVIDED (loaded before answer.js). A pg Pool over one notes table, with real transaction semantics:\n//   const client = await pool.connect()   — a dedicated connection; client.release() gives it back\n//   await client.query('BEGIN' | 'ROLLBACK' | 'COMMIT') · await client.query('INSERT note', [title]) · await client.query('COUNT')\n//   await pool.query(…)   — runs on SOME connection of its own, autocommit (outside any client's transaction)\n//   writes inside a client's open transaction are only visible to that client until COMMIT; ROLLBACK discards them\n//   pool.table — the committed rows · pool.connected / pool.released — counters\nfunction makePool() {\n  const pool = { table: [], connected: 0, released: 0 };\n  const run = (state, sql, params) => new Promise((ok, no) => setTimeout(() => {\n    if (sql === 'BEGIN') { state.tx = []; return ok({ rows: [] }); }\n    if (sql === 'ROLLBACK') { state.tx = null; return ok({ rows: [] }); }\n    if (sql === 'COMMIT') { if (state.tx) pool.table.push(...state.tx); state.tx = null; return ok({ rows: [] }); }\n    if (sql === 'INSERT note') { const row = { title: params[0] }; (state.tx || pool.table).push(row); return ok({ rows: [row] }); }\n    if (sql === 'COUNT') return ok({ rows: [{ c: pool.table.length + (state.tx ? state.tx.length : 0) }] });\n    no(new Error('unsupported: ' + sql));\n  }, 1));\n  pool.connect = () => new Promise((ok) => setTimeout(() => {\n    pool.connected++;\n    const state = { tx: null, released: false };\n    ok({ query: (sql, params) => run(state, sql, params), release: () => { if (!state.released) { state.released = true; pool.released++; } } });\n  }, 1));\n  pool.query = (sql, params) => run({ tx: null }, sql, params);\n  return pool;\n}\n/** what a test's \"app\" does with whatever db it is given */\nasync function createTwoNotes(db) { await db.query('INSERT note', ['a']); await db.query('INSERT note', ['b']); return (await db.query('COUNT')).rows[0].c; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run fn inside a transaction that is always rolled back — fn gets THE client that holds it. */\nasync function withRollback(pool, fn) {\n  const client = await pool.connect();          // one dedicated connection = one transaction\n  try {\n    await client.query('BEGIN');\n    return await fn(client);                    // the code under test must use this client, never the pool\n  } finally {\n    try {\n      await client.query('ROLLBACK');           // success or failure: leave the table byte-identical\n    } finally {\n      client.release();                         // and give the connection back, even if ROLLBACK failed\n    }\n  }\n}\n"
+        },
+        {
+          "name": "fake-pool.js",
+          "language": "javascript",
+          "code": "// fake-pool.js — PROVIDED (loaded before answer.js). A pg Pool over one notes table, with real transaction semantics:\n//   const client = await pool.connect()   — a dedicated connection; client.release() gives it back\n//   await client.query('BEGIN' | 'ROLLBACK' | 'COMMIT') · await client.query('INSERT note', [title]) · await client.query('COUNT')\n//   await pool.query(…)   — runs on SOME connection of its own, autocommit (outside any client's transaction)\n//   writes inside a client's open transaction are only visible to that client until COMMIT; ROLLBACK discards them\n//   pool.table — the committed rows · pool.connected / pool.released — counters\nfunction makePool() {\n  const pool = { table: [], connected: 0, released: 0 };\n  const run = (state, sql, params) => new Promise((ok, no) => setTimeout(() => {\n    if (sql === 'BEGIN') { state.tx = []; return ok({ rows: [] }); }\n    if (sql === 'ROLLBACK') { state.tx = null; return ok({ rows: [] }); }\n    if (sql === 'COMMIT') { if (state.tx) pool.table.push(...state.tx); state.tx = null; return ok({ rows: [] }); }\n    if (sql === 'INSERT note') { const row = { title: params[0] }; (state.tx || pool.table).push(row); return ok({ rows: [row] }); }\n    if (sql === 'COUNT') return ok({ rows: [{ c: pool.table.length + (state.tx ? state.tx.length : 0) }] });\n    no(new Error('unsupported: ' + sql));\n  }, 1));\n  pool.connect = () => new Promise((ok) => setTimeout(() => {\n    pool.connected++;\n    const state = { tx: null, released: false };\n    ok({ query: (sql, params) => run(state, sql, params), release: () => { if (!state.released) { state.released = true; pool.released++; } } });\n  }, 1));\n  pool.query = (sql, params) => run({ tx: null }, sql, params);\n  return pool;\n}\n/** what a test's \"app\" does with whatever db it is given */\nasync function createTwoNotes(db) { await db.query('INSERT note', ['a']); await db.query('INSERT note', ['b']); return (await db.query('COUNT')).rows[0].c; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A transaction is per connection, so isolation only works if every query of the test goes through the client that opened it. try/finally guarantees the ROLLBACK and the release whatever the test does — which is what keeps one red test from poisoning the next. Its one limitation: code that manages its own transactions needs savepoints, and a “rolled back on error” test cannot itself run inside a transaction.</p>",
+      "solutionExplanationHtmlVi": "<p>Giao dịch gắn với từng kết nối, nên cô lập chỉ hoạt động nếu mọi truy vấn của test đi qua client đã mở nó. try/finally bảo đảm ROLLBACK và release bất kể test làm gì — thứ giữ cho một test đỏ không đầu độc test sau. Giới hạn duy nhất: code tự quản giao dịch cần savepoint, và test \"đã rollback khi lỗi\" không thể tự chạy bên trong một giao dịch.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-pool.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Inside: 3 rows; after: 1 (the seed), connection released",
+              "vi": "Bên trong: 3 dòng; sau đó: 1 (dòng mồi), kết nối được trả"
+            },
+            "goi": "[await withRollback(pool, createTwoNotes), pool.table.length, pool.released]",
+            "chuanBi": "const pool = makePool();\npool.table.push({ title: 'seed' });",
+            "mongDoi": [
+              3,
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Two tests in a row see the same starting state",
+              "vi": "Hai test liên tiếp thấy cùng trạng thái ban đầu"
+            },
+            "goi": "await (async () => { const a = await withRollback(pool, createTwoNotes); const b = await withRollback(pool, createTwoNotes); return [a, b]; })()",
+            "chuanBi": "const pool = makePool();\npool.table.push({ title: 'seed' });",
+            "mongDoi": [
+              3,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A failing test still rolls back and releases",
+              "vi": "Test hỏng vẫn rollback và trả kết nối"
+            },
+            "goi": "await (async () => { let err; try { await withRollback(pool, async (db) => { await db.query('INSERT note', ['x']); throw new Error('expected 2 to be 1'); }); } catch (e) { err = e.message; } return [err, pool.table.length, pool.connected, pool.released]; })()",
+            "chuanBi": "const pool = makePool();\npool.table.push({ title: 'seed' });",
+            "mongDoi": [
+              "expected 2 to be 1",
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { for (let i = 0; i < 5; i++) await withRollback(pool, createTwoNotes).catch(() => {}); return [pool.table.length, pool.connected, pool.released, (await pool.query('COUNT')).rows[0].c]; })()",
+            "chuanBi": "const pool = makePool();\npool.table.push({ title: 'seed' });",
+            "mongDoi": [
+              1,
+              5,
+              5,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const r = await withRollback(pool, async (db) => { await db.query('INSERT note', ['only-here']); return (await pool.query('COUNT')).rows[0].c; }); return [r, pool.table.map((x) => x.title)]; })()",
+            "chuanBi": "const pool = makePool();\npool.table.push({ title: 'seed' });",
+            "mongDoi": [
+              1,
+              [
+                "seed"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "fn(pool): the inserts autocommit on other connections — the next test sees 2, then 4, then 6 rows.|||fn(pool): các lệnh chèn tự commit trên kết nối khác — test sau thấy 2, rồi 4, rồi 6 dòng."
+        },
+        {
+          "loi": "ROLLBACK only on success: a failing test leaves its rows behind and makes the NEXT test fail with “expected 2 to be 1”.|||Chỉ ROLLBACK khi thành công: test hỏng để lại các dòng của nó và làm test KẾ TIẾP đỏ với \"expected 2 to be 1\"."
+        },
+        {
+          "loi": "Forgetting release(): after ten tests the pool (max 10) is exhausted and the suite hangs.|||Quên release(): sau mười test pool (tối đa 10) cạn và bộ test treo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction rollback isolation",
+          "vi": "cô lập bằng rollback",
+          "giaiThich": "BEGIN trước, ROLLBACK sau — bảng y như cũ"
+        },
+        {
+          "en": "connection pool",
+          "vi": "bể kết nối",
+          "giaiThich": "pool.query chạy trên một kết nối bất kỳ của nó"
+        }
+      ]
+    }
+  ]
+}

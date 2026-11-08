@@ -1,0 +1,685 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-0-3-cai-dat",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-0-3-cai-dat"
+  },
+  "exercises": [
+    {
+      "title": "Pick the right version, the right tool",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Setup decisions from the lesson. Choose the correct one each time.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các quyết định cài đặt trong bài. Mỗi câu chọn cái đúng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Even = LTS = production.|||Chẵn = LTS = production.",
+        "Most \"it did not install\" reports are an old terminal or two Nodes on the PATH.|||Phần lớn báo \"không cài được\" là do terminal cũ hoặc hai Node trên PATH."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the right version, the right tool\n\nAnswer in the answer panel (no code needed).\n\n1. Which Node version should a new project in this course use?Dự án mới trong khoá này dùng Node nào?\n2. Why install Node through a version manager instead of the plain installer?Vì sao cài Node qua trình quản lý phiên bản thay vì bộ cài thường?\n3. You installed nvm and the same terminal says nvm: command not found. Fix?Cài nvm xong, chính terminal đó báo nvm: command not found. Sửa thế nào?\n4. You are on Windows. Which is right?Bạn dùng Windows. Cái nào đúng?\n5. Why write require('node:os') instead of require('os')?Vì sao viết require('node:os') thay vì require('os')?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the right version, the right tool — answer key\n\n1. Which Node version should a new project in this course use?Dự án mới trong khoá này dùng Node nào?\n   Answer: c) The current LTS — Node 22.x\n   Even majors become LTS. 23 is odd (experimental), and 16, 18 and — as of October 2026 — 20 are past end-of-life. The course is verified on 22.x.VI: Bản chẵn thành LTS. 23 là lẻ (thử nghiệm), còn 16, 18 và — tính tới 10/2026 — 20 đã hết vòng đời. Khoá được kiểm trên 22.x.\n\n2. Why install Node through a version manager instead of the plain installer?Vì sao cài Node qua trình quản lý phiên bản thay vì bộ cài thường?\n   Answer: c) Two projects will disagree on the version; switching becomes one command instead of a reinstall\n   Every real project pins a version, and sooner or later two of yours disagree. nvm use 22 is a one-command switch.VI: Dự án thật nào cũng ghim phiên bản, sớm muộn hai dự án của bạn sẽ khác nhau. nvm use 22 là chuyển trong một lệnh.\n\n3. You installed nvm and the same terminal says nvm: command not found. Fix?Cài nvm xong, chính terminal đó báo nvm: command not found. Sửa thế nào?\n   Answer: b) Close the terminal and open a new one — it never re-read ~/.zshrc / ~/.bashrc\n   The installer appended its setup lines to your shell profile; an already-open terminal read that file before the change.VI: Bộ cài nối các dòng thiết lập vào profile của shell; terminal đang mở đã đọc tệp đó trước khi đổi.\n\n4. You are on Windows. Which is right?Bạn dùng Windows. Cái nào đúng?\n   Answer: a) Use nvm-windows or fnm, remove any Node from nodejs.org first, install from an Administrator terminal\n   The Linux nvm does not work on Windows, and two Nodes on the PATH is \"a debugging nightmare\".VI: nvm của Linux không chạy trên Windows, và hai Node trên PATH là \"ác mộng gỡ lỗi\".\n\n5. Why write require('node:os') instead of require('os')?Vì sao viết require('node:os') thay vì require('os')?\n   Answer: c) node: says \"built-in\", so nothing published to npm under the same name can be loaded by mistake\n   Both work today, but the prefix removes the ambiguity — and package-name attacks are real (chapter 4).VI: Cả hai đều chạy, nhưng tiền tố loại bỏ sự mơ hồ — và tấn công bằng tên gói là có thật (chương 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The current LTS — Node 22.x</p><p>Even majors become LTS. 23 is odd (experimental), and 16, 18 and — as of October 2026 — 20 are past end-of-life. The course is verified on 22.x.</p><p><i>VI: Bản chẵn thành LTS. 23 là lẻ (thử nghiệm), còn 16, 18 và — tính tới 10/2026 — 20 đã hết vòng đời. Khoá được kiểm trên 22.x.</i></p></li><li><p><b>c)</b> Two projects will disagree on the version; switching becomes one command instead of a reinstall</p><p>Every real project pins a version, and sooner or later two of yours disagree. <code>nvm use 22</code> is a one-command switch.</p><p><i>VI: Dự án thật nào cũng ghim phiên bản, sớm muộn hai dự án của bạn sẽ khác nhau. nvm use 22 là chuyển trong một lệnh.</i></p></li><li><p><b>b)</b> Close the terminal and open a new one — it never re-read ~/.zshrc / ~/.bashrc</p><p>The installer appended its setup lines to your shell profile; an already-open terminal read that file before the change.</p><p><i>VI: Bộ cài nối các dòng thiết lập vào profile của shell; terminal đang mở đã đọc tệp đó trước khi đổi.</i></p></li><li><p><b>a)</b> Use nvm-windows or fnm, remove any Node from nodejs.org first, install from an Administrator terminal</p><p>The Linux nvm does not work on Windows, and two Nodes on the PATH is \"a debugging nightmare\".</p><p><i>VI: nvm của Linux không chạy trên Windows, và hai Node trên PATH là \"ác mộng gỡ lỗi\".</i></p></li><li><p><b>c)</b> node: says \"built-in\", so nothing published to npm under the same name can be loaded by mistake</p><p>Both work today, but the prefix removes the ambiguity — and package-name attacks are real (chapter 4).</p><p><i>VI: Cả hai đều chạy, nhưng tiền tố loại bỏ sự mơ hồ — và tấn công bằng tên gói là có thật (chương 4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "v1",
+            "de": "<p>Which Node version should a new project in this course use?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự án mới trong khoá này dùng Node nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Node 23, the newest"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node 18, the most tutorials use it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The current LTS — Node 22.x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Whatever the OS package manager installs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Even majors become LTS. 23 is odd (experimental), and 16, 18 and — as of October 2026 — 20 are past end-of-life. The course is verified on 22.x.</p><p><i>VI: Bản chẵn thành LTS. 23 là lẻ (thử nghiệm), còn 16, 18 và — tính tới 10/2026 — 20 đã hết vòng đời. Khoá được kiểm trên 22.x.</i></p>"
+          },
+          {
+            "ma": "v2",
+            "de": "<p>Why install Node through a version manager instead of the plain installer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cài Node qua trình quản lý phiên bản thay vì bộ cài thường?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The plain installer is slower to download and needs a restart afterwards"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm only works when Node was installed through nvm, never from the installer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two projects will disagree on the version; switching becomes one command instead of a reinstall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The plain installer cannot install LTS versions, only the newest odd major"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every real project pins a version, and sooner or later two of yours disagree. <code>nvm use 22</code> is a one-command switch.</p><p><i>VI: Dự án thật nào cũng ghim phiên bản, sớm muộn hai dự án của bạn sẽ khác nhau. nvm use 22 là chuyển trong một lệnh.</i></p>"
+          },
+          {
+            "ma": "v3",
+            "de": "<p>You installed nvm and the same terminal says <code>nvm: command not found</code>. Fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cài nvm xong, chính terminal đó báo nvm: command not found. Sửa thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Install Node from nodejs.org instead — nvm does not work on macOS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Close the terminal and open a new one — it never re-read ~/.zshrc / ~/.bashrc"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reinstall nvm with sudo so it can write to the system folders"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run nvm install 22 again; the first install did not finish"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The installer appended its setup lines to your shell profile; an already-open terminal read that file before the change.</p><p><i>VI: Bộ cài nối các dòng thiết lập vào profile của shell; terminal đang mở đã đọc tệp đó trước khi đổi.</i></p>"
+          },
+          {
+            "ma": "v4",
+            "de": "<p>You are on Windows. Which is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn dùng Windows. Cái nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use nvm-windows or fnm, remove any Node from nodejs.org first, install from an Administrator terminal"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep both the nodejs.org Node and nvm-windows so you always have a fallback"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use the same Linux nvm install.sh script through PowerShell, as on macOS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Windows cannot run Node 22 natively, so install Node 20 from the installer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The Linux nvm does not work on Windows, and two Nodes on the PATH is \"a debugging nightmare\".</p><p><i>VI: nvm của Linux không chạy trên Windows, và hai Node trên PATH là \"ác mộng gỡ lỗi\".</i></p>"
+          },
+          {
+            "ma": "v5",
+            "de": "<p>Why write <code>require('node:os')</code> instead of <code>require('os')</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao viết require('node:os') thay vì require('os')?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It loads the newest version of os from npm instead of the bundled one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is faster, because Node skips the search through node_modules folders"
+              },
+              {
+                "ma": "c",
+                "noiDung": "node: says \"built-in\", so nothing published to npm under the same name can be loaded by mistake"
+              },
+              {
+                "ma": "d",
+                "noiDung": "require('os') no longer works in Node 22 and throws ERR_UNKNOWN_BUILTIN"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Both work today, but the prefix removes the ambiguity — and package-name attacks are real (chapter 4).</p><p><i>VI: Cả hai đều chạy, nhưng tiền tố loại bỏ sự mơ hồ — và tấn công bằng tên gói là có thật (chương 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deploying an odd major because it has new features.|||Deploy bản lẻ vì có tính năng mới."
+        },
+        {
+          "loi": "Reinstalling when only a new terminal was needed.|||Cài lại trong khi chỉ cần mở terminal mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version manager",
+          "vi": "trình quản lý phiên bản",
+          "giaiThich": "nvm / fnm / volta — installs and switches Node versions per project."
+        },
+        {
+          "en": "LTS vs odd major",
+          "vi": "LTS vs bản lẻ",
+          "giaiThich": "Even majors (22, 24) get ~30 months of support; odd majors are experimental — never production."
+        },
+        {
+          "en": "engines",
+          "vi": "engines",
+          "giaiThich": "package.json field that pins the Node version a project expects, e.g. \"node\": \"22.x\"."
+        },
+        {
+          "en": ".nvmrc",
+          "vi": ".nvmrc",
+          "giaiThich": "A file with the Node version for this folder; nvm use reads it."
+        },
+        {
+          "en": "REPL",
+          "vi": "REPL",
+          "giaiThich": "The interactive prompt you get by typing node with no file."
+        },
+        {
+          "en": "node: prefix",
+          "vi": "tiền tố node:",
+          "giaiThich": "require('node:os') — says \"built-in\", not an npm package with the same name."
+        }
+      ]
+    },
+    {
+      "title": "Install Node 22 with nvm, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 3,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>macOS / Linux. Put the steps in order, ending with the check that Node really is 22.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>macOS / Linux. Sắp các bước, kết thúc bằng phép kiểm Node đúng là 22.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The new terminal comes right after installing nvm.|||Terminal mới ngay sau khi cài nvm.",
+        "Verify last.|||Kiểm tra sau cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Install Node 22 with nvm, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the steps.Sắp các bước.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Install Node 22 with nvm, in order — answer key\n\n1. Order the steps.Sắp các bước.\n   Answer: m1) Run the nvm install script (curl … install.sh | bash)  →  m6) Close the terminal and open a new one  →  m2) nvm install 22  →  m5) nvm use 22  →  m4) nvm alias default 22  →  m3) node -v (expect v22.x)\n   Install the manager, reload the shell so it is found, install and activate 22, make it the default for future shells, and only then trust it: node -v in a terminal opened after the change.VI: Cài trình quản lý, nạp lại shell để tìm thấy nó, cài và kích hoạt 22, đặt làm mặc định cho shell sau này, rồi mới tin: node -v trong terminal mở sau khi đổi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Install the manager, reload the shell so it is found, install and activate 22, make it the default for future shells, and only then trust it: <code>node -v</code> in a terminal opened after the change.</p><p><i>VI: Cài trình quản lý, nạp lại shell để tìm thấy nó, cài và kích hoạt 22, đặt làm mặc định cho shell sau này, rồi mới tin: node -v trong terminal mở sau khi đổi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "n1",
+            "de": "<p>Order the steps.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Run the nvm install script (curl … install.sh | bash)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "nvm install 22"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "node -v (expect v22.x)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "nvm alias default 22"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "nvm use 22"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Close the terminal and open a new one"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m6",
+              "m2",
+              "m5",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Install the manager, reload the shell so it is found, install and activate 22, make it the default for future shells, and only then trust it: <code>node -v</code> in a terminal opened after the change.</p><p><i>VI: Cài trình quản lý, nạp lại shell để tìm thấy nó, cài và kích hoạt 22, đặt làm mặc định cho shell sau này, rồi mới tin: node -v trong terminal mở sau khi đổi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running nvm install 22 in the same terminal that just installed nvm.|||Chạy nvm install 22 ngay trong terminal vừa cài nvm."
+        },
+        {
+          "loi": "Skipping nvm alias default — the next terminal falls back to another version.|||Bỏ nvm alias default — terminal sau quay về phiên bản khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version manager",
+          "vi": "trình quản lý phiên bản",
+          "giaiThich": "nvm / fnm / volta — installs and switches Node versions per project."
+        },
+        {
+          "en": "LTS vs odd major",
+          "vi": "LTS vs bản lẻ",
+          "giaiThich": "Even majors (22, 24) get ~30 months of support; odd majors are experimental — never production."
+        },
+        {
+          "en": "engines",
+          "vi": "engines",
+          "giaiThich": "package.json field that pins the Node version a project expects, e.g. \"node\": \"22.x\"."
+        },
+        {
+          "en": ".nvmrc",
+          "vi": ".nvmrc",
+          "giaiThich": "A file with the Node version for this folder; nvm use reads it."
+        },
+        {
+          "en": "REPL",
+          "vi": "REPL",
+          "giaiThich": "The interactive prompt you get by typing node with no file."
+        },
+        {
+          "en": "node: prefix",
+          "vi": "tiền tố node:",
+          "giaiThich": "require('node:os') — says \"built-in\", not an npm package with the same name."
+        }
+      ]
+    },
+    {
+      "title": "Command → what it tells you",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>For each command from the lesson, choose what it answers.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi lệnh trong bài, chọn thứ nó cho biết.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "-p means \"print the value of this expression\".|||-p nghĩa là \"in giá trị biểu thức này\".",
+        "v8 and uv are the two engines inside Node.|||v8 và uv là hai bộ máy bên trong Node."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Command → what it tells you\n\nAnswer in the answer panel (no code needed).\n\n1. What does each command tell you?Mỗi lệnh cho biết gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Command → what it tells you — answer key\n\n1. What does each command tell you?Mỗi lệnh cho biết gì?\n   - r1.kq: the Node version (e.g. v22.21.0)\n   - r2.kq: the npm version\n   - r3.kq: the V8 engine version\n   - r4.kq: the libuv version\n   - r5.kq: opens the interactive REPL\n   - r6.kq: runs a file\n   Three commands verify an install: node -v, npm -v and process.versions.v8 (proof that Node wraps V8). process.versions.uv shows libuv, the event-loop library. node alone opens the REPL — the fastest way to ask \"what does this expression return?\" (try typeof null ⇒ 'object').VI: Ba lệnh kiểm cài đặt: node -v, npm -v và process.versions.v8 (chứng minh Node bọc V8). process.versions.uv cho biết libuv. node không kèm tệp mở REPL — cách nhanh nhất hỏi \"biểu thức này trả gì?\" (thử typeof null ⇒ 'object').\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three commands verify an install: <code>node -v</code>, <code>npm -v</code> and <code>process.versions.v8</code> (proof that Node wraps V8). <code>process.versions.uv</code> shows libuv, the event-loop library. <code>node</code> alone opens the REPL — the fastest way to ask \"what does this expression return?\" (try <code>typeof null</code> ⇒ 'object').</p><p><i>VI: Ba lệnh kiểm cài đặt: node -v, npm -v và process.versions.v8 (chứng minh Node bọc V8). process.versions.uv cho biết libuv. node không kèm tệp mở REPL — cách nhanh nhất hỏi \"biểu thức này trả gì?\" (thử typeof null ⇒ 'object').</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "k1",
+            "de": "<p>What does each command tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi lệnh cho biết gì?</i></p>",
+            "cot": [
+              {
+                "ma": "lenh",
+                "ten": "Command|||Lệnh"
+              },
+              {
+                "ma": "kq",
+                "ten": "Answers|||Cho biết",
+                "luaChon": [
+                  "the Node version (e.g. v22.21.0)",
+                  "the npm version",
+                  "the V8 engine version",
+                  "the libuv version",
+                  "opens the interactive REPL",
+                  "runs a file"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "lenh": "node -v"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "lenh": "npm -v"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "lenh": "node -p \"process.versions.v8\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "lenh": "node -p \"process.versions.uv\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "lenh": "node   (no file name)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "lenh": "node hello.js"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kq": "the Node version (e.g. v22.21.0)",
+              "r2.kq": "the npm version",
+              "r3.kq": "the V8 engine version",
+              "r4.kq": "the libuv version",
+              "r5.kq": "opens the interactive REPL",
+              "r6.kq": "runs a file"
+            },
+            "giaiThich": "<p>Three commands verify an install: <code>node -v</code>, <code>npm -v</code> and <code>process.versions.v8</code> (proof that Node wraps V8). <code>process.versions.uv</code> shows libuv, the event-loop library. <code>node</code> alone opens the REPL — the fastest way to ask \"what does this expression return?\" (try <code>typeof null</code> ⇒ 'object').</p><p><i>VI: Ba lệnh kiểm cài đặt: node -v, npm -v và process.versions.v8 (chứng minh Node bọc V8). process.versions.uv cho biết libuv. node không kèm tệp mở REPL — cách nhanh nhất hỏi \"biểu thức này trả gì?\" (thử typeof null ⇒ 'object').</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting node -v to print the npm version.|||Tưởng node -v in phiên bản npm."
+        },
+        {
+          "loi": "Thinking node with no file does nothing — it opens the REPL.|||Nghĩ node không kèm tệp không làm gì — nó mở REPL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version manager",
+          "vi": "trình quản lý phiên bản",
+          "giaiThich": "nvm / fnm / volta — installs and switches Node versions per project."
+        },
+        {
+          "en": "LTS vs odd major",
+          "vi": "LTS vs bản lẻ",
+          "giaiThich": "Even majors (22, 24) get ~30 months of support; odd majors are experimental — never production."
+        },
+        {
+          "en": "engines",
+          "vi": "engines",
+          "giaiThich": "package.json field that pins the Node version a project expects, e.g. \"node\": \"22.x\"."
+        },
+        {
+          "en": ".nvmrc",
+          "vi": ".nvmrc",
+          "giaiThich": "A file with the Node version for this folder; nvm use reads it."
+        },
+        {
+          "en": "REPL",
+          "vi": "REPL",
+          "giaiThich": "The interactive prompt you get by typing node with no file."
+        },
+        {
+          "en": "node: prefix",
+          "vi": "tiền tố node:",
+          "giaiThich": "require('node:os') — says \"built-in\", not an npm package with the same name."
+        }
+      ]
+    },
+    {
+      "title": "Laptop, CI and server must agree: read \"engines\"",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "package.json engines",
+        "version drift"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"Your laptop, your CI and your server should run the same major. Version drift causes bugs that only appear after deploy.\" This website pins Node 22 in package.json <code>engines</code>, the Dockerfile and CI. Write <code>checkNodeSetup(pkg, envs)</code>:</p>\n<ul><li><code>pkg</code> is a parsed package.json. The pinned major is the first whole number in <code>pkg.engines.node</code> (<code>'22.x'</code>, <code>'&gt;=22 &lt;23'</code>, <code>'^22.11.0'</code> all pin 22).</li>\n<li><code>envs</code> maps an environment name to the output of <code>node -v</code> there, e.g. <code>{ laptop: 'v22.21.0', ci: '22.23.3', server: 'v20.11.1' }</code> (with or without the <code>v</code>).</li>\n<li>Return an array of problems, in this order: first <code>'package.json has no engines.node'</code> if it is missing; then for each environment (in the order of <code>envs</code>): <code>'&lt;env&gt;: Node &lt;m&gt; is an odd major (not LTS)'</code> when its major is odd, and <code>'&lt;env&gt;: runs Node &lt;m&gt;, package.json pins &lt;p&gt;'</code> when it differs from the pinned major.</li></ul><pre>checkNodeSetup({ engines: { node: '22.x' } }, { laptop: 'v22.21.0', ci: '22.23.3', server: 'v20.11.1' })\n// ['server: runs Node 20, package.json pins 22']</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Exact messages, in the order described; <code>[]</code> when everything agrees.</li>\n  <li>Accept versions with and without the leading <code>v</code>.</li>\n  <li>Without <code>engines.node</code> there is nothing to compare against — still report odd majors.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Laptop, CI và server nên chạy cùng bản chính. Lệch phiên bản gây bug chỉ hiện sau khi deploy.\" Viết checkNodeSetup(pkg, envs): bản chính được ghim = số nguyên đầu tiên trong pkg.engines.node; envs ánh xạ tên môi trường → output node -v ở đó (có hoặc không có v). Trả mảng vấn đề theo thứ tự: thiếu engines.node ⇒ 'package.json has no engines.node'; rồi mỗi môi trường: bản lẻ ⇒ '&lt;env&gt;: Node &lt;m&gt; is an odd major (not LTS)', khác bản ghim ⇒ '&lt;env&gt;: runs Node &lt;m&gt;, package.json pins &lt;p&gt;'.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng chuỗi thông báo, đúng thứ tự; [] khi mọi thứ khớp.</li>\n  <li>Nhận phiên bản có và không có chữ v đầu.</li>\n  <li>Không có engines.node thì không có gì để so — vẫn báo bản lẻ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkNodeSetup({ engines: { node: '22.x' } }, { laptop: 'v22.21.0', ci: '22.23.3', server: 'v20.11.1' })",
+          "output": "[\"server: runs Node 20, package.json pins 22\"]",
+          "explanation": "Different patches are fine; a different major is not.|||Khác bản vá thì ổn; khác bản chính thì không."
+        }
+      ],
+      "hintsJson": [
+        "Major of a version: <code>Number(v.replace(/^v/, '').split('.')[0])</code>.|||Bản chính: Number(v.replace(/^v/, '').split('.')[0]).",
+        "Pinned major: <code>const m = String(pkg.engines.node).match(/\\d+/)</code> — the first run of digits.|||Bản ghim: const m = String(pkg.engines.node).match(/\\d+/) — dãy chữ số đầu tiên.",
+        "<code>pkg.engines?.node</code> is safe when engines is missing; loop with <code>for (const [env, v] of Object.entries(envs))</code>.|||pkg.engines?.node an toàn khi thiếu engines; lặp bằng Object.entries(envs)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function checkNodeSetup(pkg, envs) {\n  const problems = [];\n  const pinned = pkg.engines.node;\n  for (const env in envs) {\n    if (envs[env] !== pinned) problems.push(env + ': runs Node ' + envs[env] + ', package.json pins ' + pinned);\n  }\n  return problems;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Only the MAJOR has to match (\"a newer patch such as 22.23.x is normal\").\nconst majorOf = (v) => Number(String(v).replace(/^v/, '').split('.')[0]);\n\nfunction checkNodeSetup(pkg, envs) {\n  const problems = [];\n  const range = pkg.engines?.node;                       // safe when \"engines\" is missing\n  const m = range ? String(range).match(/\\d+/) : null;  // first whole number: 22.x, >=22 <23, ^22.11.0\n  const pinned = m ? Number(m[0]) : null;\n  if (pinned === null) problems.push('package.json has no engines.node');\n\n  for (const [env, version] of Object.entries(envs)) {   // keeps the order of envs\n    const major = majorOf(version);\n    if (major % 2 === 1) problems.push(env + ': Node ' + major + ' is an odd major (not LTS)');\n    if (pinned !== null && major !== pinned) problems.push(env + ': runs Node ' + major + ', package.json pins ' + pinned);\n  }\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Only the major matters for compatibility in this check (\"a newer patch such as 22.23.x is normal\"). Reading the pin from <code>engines</code> makes package.json the single source of truth; comparing every environment with it turns \"works on my machine\" into an explicit report. Odd majors are flagged independently because they are wrong for production even when every machine agrees on them.</p>",
+      "solutionExplanationHtmlVi": "<p>Với phép kiểm này chỉ bản chính quan trọng (\"bản vá mới hơn như 22.23.x là bình thường\"). Đọc bản ghim từ engines làm package.json thành nguồn sự thật duy nhất; so mọi môi trường với nó biến \"máy tôi chạy được\" thành một báo cáo rõ ràng. Bản lẻ bị báo riêng vì nó sai cho production kể cả khi mọi máy đều dùng nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "server drifted to 20",
+              "vi": "server lệch sang 20"
+            },
+            "goi": "checkNodeSetup({ engines: { node: '22.x' } }, { laptop: 'v22.21.0', ci: '22.23.3', server: 'v20.11.1' })",
+            "mongDoi": [
+              "server: runs Node 20, package.json pins 22"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "everything on 22 (different patches) ⇒ []",
+              "vi": "tất cả 22 (khác bản vá) ⇒ []"
+            },
+            "goi": "checkNodeSetup({ engines: { node: '>=22 <23' } }, { laptop: 'v22.21.0', ci: 'v22.23.3', server: '22.11.0' })",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "no engines field, odd major on the laptop",
+              "vi": "thiếu engines, laptop chạy bản lẻ"
+            },
+            "goi": "checkNodeSetup({ name: 'notes-api' }, { laptop: 'v23.4.0', server: 'v22.21.0' })",
+            "mongDoi": [
+              "package.json has no engines.node",
+              "laptop: Node 23 is an odd major (not LTS)"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkNodeSetup({ engines: { node: '^22.11.0' } }, { laptop: 'v23.1.0', docker: '22.23.3', ci: 'v18.20.4' })",
+            "mongDoi": [
+              "laptop: Node 23 is an odd major (not LTS)",
+              "laptop: runs Node 23, package.json pins 22",
+              "ci: runs Node 18, package.json pins 22"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[checkNodeSetup({ engines: { node: '24' } }, { a: 'v24.0.1' }), checkNodeSetup({ engines: {} }, {})]",
+            "mongDoi": [
+              [],
+              [
+                "package.json has no engines.node"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing whole version strings (<code>'v22.21.0' !== '22.23.3'</code>) — patch differences are normal; only the major has to match.|||So cả chuỗi phiên bản — khác bản vá là bình thường; chỉ bản chính phải khớp."
+        },
+        {
+          "loi": "Parsing <code>'&gt;=22 &lt;23'</code> with <code>parseInt</code> — it starts with \"&gt;\", so you get NaN.|||Dùng parseInt cho '>=22 <23' — chuỗi bắt đầu bằng \">\" nên ra NaN."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version manager",
+          "vi": "trình quản lý phiên bản",
+          "giaiThich": "nvm / fnm / volta — installs and switches Node versions per project."
+        },
+        {
+          "en": "LTS vs odd major",
+          "vi": "LTS vs bản lẻ",
+          "giaiThich": "Even majors (22, 24) get ~30 months of support; odd majors are experimental — never production."
+        },
+        {
+          "en": "engines",
+          "vi": "engines",
+          "giaiThich": "package.json field that pins the Node version a project expects, e.g. \"node\": \"22.x\"."
+        },
+        {
+          "en": ".nvmrc",
+          "vi": ".nvmrc",
+          "giaiThich": "A file with the Node version for this folder; nvm use reads it."
+        },
+        {
+          "en": "REPL",
+          "vi": "REPL",
+          "giaiThich": "The interactive prompt you get by typing node with no file."
+        },
+        {
+          "en": "node: prefix",
+          "vi": "tiền tố node:",
+          "giaiThich": "require('node:os') — says \"built-in\", not an npm package with the same name."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,746 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-12-1-redis-co-ban",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-12-1-redis-co-ban"
+  },
+  "exercises": [
+    {
+      "title": "12.1 · Where the time goes: reading the measurements",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "round trip",
+        "pipelining"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Every number below comes from the lesson, measured from Node against a local Redis. Read each one the way the lesson does: the work is free, the waiting is everything.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi con số dưới đây lấy từ bài học, đo từ Node tới một Redis cục bộ. Đọc từng số như bài đã đọc: việc thì miễn phí, chờ mới là tất cả.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of each number: is this the work, or the waiting?|||Với mỗi con số hãy hỏi: đây là việc, hay là chờ?",
+        "Remember: Redis runs ONE command (or one batch) at a time for everyone.|||Nhớ: Redis chạy MỘT lệnh (hoặc một lô) tại một thời điểm cho tất cả mọi người."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1 · Where the time goes: reading the measurements\n\nAnswer in the answer panel (no code needed).\n\n1. 2,000 PING commands, each awaited, took 408.8 ms on localhost (0.204 ms each). Where did almost all of that time go?2.000 lệnh PING, await từng lệnh, mất 408,8 ms trên localhost (0,204 ms mỗi lệnh). Gần hết thời gian đó đi đâu?\n2. 10,000 SETs: awaited one by one 1,965 ms, in one pipeline 31 ms. What did the pipeline remove?10.000 SET: await từng cái 1.965 ms, trong một pipeline 31 ms. Pipeline đã bỏ đi cái gì?\n3. Batch size 1 → 100 bought 49×; 1,000 → 10,000 bought 8%. What batch size does the lesson recommend, and why?Cỡ lô 1 → 100 được 49×; 1.000 → 10.000 chỉ được 8%. Bài khuyên cỡ lô nào, vì sao?\n4. A GET of 100 bytes took 0.186 ms, of 10 KB 0.204 ms. What design rule follows?GET 100 byte mất 0,186 ms, 10 KB mất 0,204 ms. Rút ra quy tắc thiết kế nào?\n5. Why does the lesson open ONE Redis client per process, with an error listener and maxRetriesPerRequest: 2?Vì sao bài mở MỘT client Redis cho mỗi tiến trình, có bộ nghe lỗi và maxRetriesPerRequest: 2?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1 · Where the time goes: reading the measurements — answer key\n\n1. 2,000 PING commands, each awaited, took 408.8 ms on localhost (0.204 ms each). Where did almost all of that time go?2.000 lệnh PING, await từng lệnh, mất 408,8 ms trên localhost (0,204 ms mỗi lệnh). Gần hết thời gian đó đi đâu?\n   Answer: b) The round trip: writing to the socket, the kernel waking Redis, the reply waking Node again\n   PING does no work. 0.204 ms is the socket round trip; the command itself is a rounding error inside that number — which is why 10,000 SETs cost the same as 10,000 PINGs.VI: PING không làm gì cả. 0,204 ms là vòng đi-về qua socket; bản thân lệnh chỉ là phần lẻ trong con số đó — vì thế 10.000 SET tốn ngang 10.000 PING.\n\n2. 10,000 SETs: awaited one by one 1,965 ms, in one pipeline 31 ms. What did the pipeline remove?10.000 SET: await từng cái 1.965 ms, trong một pipeline 31 ms. Pipeline đã bỏ đi cái gì?\n   Answer: c) The waiting between commands — the work is the same 10,000 SETs, sent without waiting for each reply\n   A pipeline sends many commands and reads all replies at once: one round trip instead of 10,000. 63× faster for exactly the same work.VI: Pipeline gửi nhiều lệnh rồi đọc mọi câu trả lời một lượt: một vòng đi-về thay vì 10.000. Nhanh hơn 63× cho đúng cùng khối việc.\n\n3. Batch size 1 → 100 bought 49×; 1,000 → 10,000 bought 8%. What batch size does the lesson recommend, and why?Cỡ lô 1 → 100 được 49×; 1.000 → 10.000 chỉ được 8%. Bài khuyên cỡ lô nào, vì sao?\n   Answer: c) Chunks of 100–1,000: the curve is flat after that, and one giant batch blocks every other client while it runs\n   Redis is single-threaded: a 10,000-command batch is one long stretch during which nobody else is served. The gain past ~1,000 is tiny, the cost to others is not.VI: Redis đơn luồng: một lô 10.000 lệnh là một khoảng dài không ai khác được phục vụ. Lợi ích sau ~1.000 rất nhỏ, cái giá với người khác thì không.\n\n4. A GET of 100 bytes took 0.186 ms, of 10 KB 0.204 ms. What design rule follows?GET 100 byte mất 0,186 ms, 10 KB mất 0,204 ms. Rút ra quy tắc thiết kế nào?\n   Answer: a) Fetching one 10 KB object is far cheaper than a hundred 100-byte objects — group related data in one key\n   Until ~100 KB the round trip dominates: 100× more data cost 10% more time. A hundred small keys means a hundred round trips.VI: Tới khoảng 100 KB vòng đi-về vẫn áp đảo: dữ liệu gấp 100 lần chỉ tốn thêm 10% thời gian. Một trăm khoá nhỏ là một trăm vòng đi-về.\n\n5. Why does the lesson open ONE Redis client per process, with an error listener and maxRetriesPerRequest: 2?Vì sao bài mở MỘT client Redis cho mỗi tiến trình, có bộ nghe lỗi và maxRetriesPerRequest: 2?\n   Answer: c) A connection is expensive to open and multiplexes thousands of commands; an unhandled error event crashes Node; unbounded retries hang requests\n   One shared client is reused by every request. An EventEmitter emitting \"error\" with nobody listening kills the process (chapter 3.4). A bounded retry fails fast instead of piling up hung HTTP requests.VI: Một client dùng chung cho mọi request. EventEmitter phát \"error\" mà không ai nghe sẽ giết tiến trình (chương 3.4). Thử lại có giới hạn thì lỗi nhanh, thay vì dồn đống request HTTP treo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The round trip: writing to the socket, the kernel waking Redis, the reply waking Node again</p><p>PING does no work. 0.204 ms is the socket round trip; the command itself is a rounding error inside that number — which is why 10,000 SETs cost the same as 10,000 PINGs.</p><p><i>VI: PING không làm gì cả. 0,204 ms là vòng đi-về qua socket; bản thân lệnh chỉ là phần lẻ trong con số đó — vì thế 10.000 SET tốn ngang 10.000 PING.</i></p></li><li><p><b>c)</b> The waiting between commands — the work is the same 10,000 SETs, sent without waiting for each reply</p><p>A pipeline sends many commands and reads all replies at once: one round trip instead of 10,000. 63× faster for exactly the same work.</p><p><i>VI: Pipeline gửi nhiều lệnh rồi đọc mọi câu trả lời một lượt: một vòng đi-về thay vì 10.000. Nhanh hơn 63× cho đúng cùng khối việc.</i></p></li><li><p><b>c)</b> Chunks of 100–1,000: the curve is flat after that, and one giant batch blocks every other client while it runs</p><p>Redis is single-threaded: a 10,000-command batch is one long stretch during which nobody else is served. The gain past ~1,000 is tiny, the cost to others is not.</p><p><i>VI: Redis đơn luồng: một lô 10.000 lệnh là một khoảng dài không ai khác được phục vụ. Lợi ích sau ~1.000 rất nhỏ, cái giá với người khác thì không.</i></p></li><li><p><b>a)</b> Fetching one 10 KB object is far cheaper than a hundred 100-byte objects — group related data in one key</p><p>Until ~100 KB the round trip dominates: 100× more data cost 10% more time. A hundred small keys means a hundred round trips.</p><p><i>VI: Tới khoảng 100 KB vòng đi-về vẫn áp đảo: dữ liệu gấp 100 lần chỉ tốn thêm 10% thời gian. Một trăm khoá nhỏ là một trăm vòng đi-về.</i></p></li><li><p><b>c)</b> A connection is expensive to open and multiplexes thousands of commands; an unhandled error event crashes Node; unbounded retries hang requests</p><p>One shared client is reused by every request. An EventEmitter emitting \"error\" with nobody listening kills the process (chapter 3.4). A bounded retry fails fast instead of piling up hung HTTP requests.</p><p><i>VI: Một client dùng chung cho mọi request. EventEmitter phát \"error\" mà không ai nghe sẽ giết tiến trình (chương 3.4). Thử lại có giới hạn thì lỗi nhanh, thay vì dồn đống request HTTP treo.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>2,000 PING commands, each awaited, took 408.8 ms on localhost (0.204 ms each). Where did almost all of that time go?</p><p style=\"opacity:.75;font-size:.92em\"><i>2.000 lệnh PING, await từng lệnh, mất 408,8 ms trên localhost (0,204 ms mỗi lệnh). Gần hết thời gian đó đi đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redis writing every command to the append-only file before replying"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The round trip: writing to the socket, the kernel waking Redis, the reply waking Node again"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redis executing PING, which has to scan the keyspace once for every call"
+              },
+              {
+                "ma": "d",
+                "noiDung": "JSON.stringify and JSON.parse of the PONG reply inside ioredis"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>PING does no work. 0.204 ms is the socket round trip; the command itself is a rounding error inside that number — which is why 10,000 SETs cost the same as 10,000 PINGs.</p><p><i>VI: PING không làm gì cả. 0,204 ms là vòng đi-về qua socket; bản thân lệnh chỉ là phần lẻ trong con số đó — vì thế 10.000 SET tốn ngang 10.000 PING.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>10,000 SETs: awaited one by one 1,965 ms, in one pipeline 31 ms. What did the pipeline remove?</p><p style=\"opacity:.75;font-size:.92em\"><i>10.000 SET: await từng cái 1.965 ms, trong một pipeline 31 ms. Pipeline đã bỏ đi cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The durability of the writes: pipelined commands are not stored until EXEC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis’s single thread, because a pipeline runs commands on several threads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The waiting between commands — the work is the same 10,000 SETs, sent without waiting for each reply"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Half of the work, because a pipeline merges identical SET commands into one"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A pipeline sends many commands and reads all replies at once: one round trip instead of 10,000. 63× faster for exactly the same work.</p><p><i>VI: Pipeline gửi nhiều lệnh rồi đọc mọi câu trả lời một lượt: một vòng đi-về thay vì 10.000. Nhanh hơn 63× cho đúng cùng khối việc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Batch size 1 → 100 bought 49×; 1,000 → 10,000 bought 8%. What batch size does the lesson recommend, and why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cỡ lô 1 → 100 được 49×; 1.000 → 10.000 chỉ được 8%. Bài khuyên cỡ lô nào, vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Exactly 1 command per pipeline, because larger batches lose replies under load"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Always everything in one pipeline, because each extra round trip costs another 0.2 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Chunks of 100–1,000: the curve is flat after that, and one giant batch blocks every other client while it runs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Chunks of 10, because Redis rejects pipelines of more than 64 commands"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Redis is single-threaded: a 10,000-command batch is one long stretch during which nobody else is served. The gain past ~1,000 is tiny, the cost to others is not.</p><p><i>VI: Redis đơn luồng: một lô 10.000 lệnh là một khoảng dài không ai khác được phục vụ. Lợi ích sau ~1.000 rất nhỏ, cái giá với người khác thì không.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A GET of 100 bytes took 0.186 ms, of 10 KB 0.204 ms. What design rule follows?</p><p style=\"opacity:.75;font-size:.92em\"><i>GET 100 byte mất 0,186 ms, 10 KB mất 0,204 ms. Rút ra quy tắc thiết kế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fetching one 10 KB object is far cheaper than a hundred 100-byte objects — group related data in one key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Store big values in Postgres, because Redis cannot hold values above 10 KB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Compress every value, because 10 KB costs 100× more transfer than 100 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keep every value under 100 bytes, because Redis slows down linearly with value size"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Until ~100 KB the round trip dominates: 100× more data cost 10% more time. A hundred small keys means a hundred round trips.</p><p><i>VI: Tới khoảng 100 KB vòng đi-về vẫn áp đảo: dữ liệu gấp 100 lần chỉ tốn thêm 10% thời gian. Một trăm khoá nhỏ là một trăm vòng đi-về.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why does the lesson open ONE Redis client per process, with an error listener and maxRetriesPerRequest: 2?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bài mở MỘT client Redis cho mỗi tiến trình, có bộ nghe lỗi và maxRetriesPerRequest: 2?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Two retries make every command exactly-once, and the listener logs slow commands"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis allows only one connection per IP address, and the listener is required by the protocol"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A connection is expensive to open and multiplexes thousands of commands; an unhandled error event crashes Node; unbounded retries hang requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One client is faster because ioredis caches every GET reply in process memory"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One shared client is reused by every request. An EventEmitter emitting \"error\" with nobody listening kills the process (chapter 3.4). A bounded retry fails fast instead of piling up hung HTTP requests.</p><p><i>VI: Một client dùng chung cho mọi request. EventEmitter phát \"error\" mà không ai nghe sẽ giết tiến trình (chương 3.4). Thử lại có giới hạn thì lỗi nhanh, thay vì dồn đống request HTTP treo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding \"Redis is slow\" from a loop of 200 awaited GETs — the loop is slow, MGET does the same in 1.6 ms.|||Kết luận \"Redis chậm\" từ một vòng lặp 200 GET có await — chậm là vòng lặp, MGET làm việc đó trong 1,6 ms."
+        },
+        {
+          "loi": "Putting 100,000 commands in one pipeline and freezing every other client meanwhile.|||Nhét 100.000 lệnh vào một pipeline và làm đứng mọi client khác trong lúc đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round trip (RTT)",
+          "vi": "vòng đi-về",
+          "giaiThich": "một lệnh gửi đi + chờ câu trả lời; với lệnh nhỏ nó chiếm gần hết thời gian"
+        },
+        {
+          "en": "pipeline",
+          "vi": "đường ống lệnh",
+          "giaiThich": "gửi nhiều lệnh một lượt, đọc mọi câu trả lời một lượt — một vòng đi-về"
+        },
+        {
+          "en": "MGET",
+          "vi": "lấy nhiều khoá",
+          "giaiThich": "một lệnh, nhiều khoá, một vòng đi-về"
+        }
+      ]
+    },
+    {
+      "title": "12.1 · Replace the GET loop with one MGET",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "MGET",
+        "round trip"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The Notes API shows the authors of a page of notes. The current code awaits one <code>GET user:&lt;id&gt;</code> per id — 200 ids, 200 round trips (~41 ms in the lesson), and somebody concluded \"Redis is slow here\". Rewrite <code>getUsers(redis, ids)</code> so it makes <b>exactly one</b> round trip with <code>MGET</code>.</p><p>Each key <code>user:&lt;id&gt;</code> holds a JSON string of the user. Return an array in the SAME order as <code>ids</code>: the parsed user, or <code>null</code> for an id that has no key. An empty <code>ids</code> returns <code>[]</code> without calling Redis.</p><p>The file <code>fake-redis.js</code> gives you an in-memory Redis with the ioredis API (<code>await redis.mget(...keys)</code> returns an array of strings / <code>null</code>); <code>redis.roundTrips</code> counts round trips.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One round trip for any number of ids (ids.length ≥ 1).</li>\n  <li>Keep the order of ids; missing users are null.</li>\n  <li>Do not call Redis at all for an empty list.</li>\n</ul>",
+      "problemHtmlVi": "<p>Notes API hiển thị tác giả của một trang ghi chú. Code hiện tại await một <code>GET user:&lt;id&gt;</code> cho mỗi id — 200 id, 200 vòng đi-về (~41 ms trong bài), và có người đã kết luận \"Redis chậm ở đây\". Viết lại <code>getUsers(redis, ids)</code> để nó chỉ đi-về <b>đúng một lần</b> bằng <code>MGET</code>.</p><p>Mỗi khoá <code>user:&lt;id&gt;</code> giữ chuỗi JSON của người dùng. Trả mảng theo ĐÚNG thứ tự <code>ids</code>: người dùng đã parse, hoặc <code>null</code> với id không có khoá. <code>ids</code> rỗng thì trả <code>[]</code> và không gọi Redis.</p><p>Tệp <code>fake-redis.js</code> là một Redis trong bộ nhớ với API của ioredis (<code>await redis.mget(...keys)</code> trả mảng chuỗi / <code>null</code>); <code>redis.roundTrips</code> đếm số vòng đi-về.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một vòng đi-về cho mọi số lượng id (ids.length ≥ 1).</li>\n  <li>Giữ thứ tự ids; người dùng không có là null.</li>\n  <li>Danh sách rỗng thì không gọi Redis.</li>\n</ul>",
+      "inputSpec": "redis — FakeRedis · ids — number[]",
+      "outputSpec": "Promise<(object | null)[]>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;\n[await getUsers(redis, [3, 1, 7]), redis.roundTrips]",
+          "output": "[[{\"id\":3,\"name\":\"u3\"},{\"id\":1,\"name\":\"u1\"},null],1]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build the key list first: ids.map((id) => `user:${id}`).|||Dựng danh sách khoá trước: ids.map((id) => `user:${id}`).",
+        "await redis.mget(...keys) returns the values in key order — map each one with v === null ? null : JSON.parse(v).|||await redis.mget(...keys) trả giá trị theo thứ tự khoá — map từng cái bằng v === null ? null : JSON.parse(v)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Return the users for ids (same order, null when missing) — in ONE round trip. */\nasync function getUsers(redis, ids) {\n  // Write your solution here — this loop is correct but makes ids.length round trips\n  const out = [];\n  for (const id of ids) {\n    const v = await redis.get(`user:${id}`);\n    out.push(v === null ? null : JSON.parse(v));\n  }\n  return out;\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Return the users for ids (same order, null when missing) — in ONE round trip. */\nasync function getUsers(redis, ids) {\n  if (ids.length === 0) return [];                       // MGET with no key is an error in real Redis — and pointless\n  const keys = ids.map((id) => `user:${id}`);\n  const values = await redis.mget(...keys);              // ONE command, ONE round trip, values in key order\n  // a missing key comes back as null — keep the slot so result[i] still belongs to ids[i]\n  return values.map((v) => (v === null ? null : JSON.parse(v)));\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>MGET is pipelining built into the command: one request, one reply, whatever the number of keys. The lesson measured 1,000 sequential GETs at 200.2 ms against one MGET at 1.6 ms (127×). Whenever you are about to loop over ids and GET each one, look for the plural command first: MGET, HMGET, SMEMBERS, ZRANGE.</p>",
+      "solutionExplanationHtmlVi": "<p>MGET là pipeline gắn sẵn trong lệnh: một yêu cầu, một câu trả lời, bất kể bao nhiêu khoá. Bài đo 1.000 GET tuần tự 200,2 ms so với một MGET 1,6 ms (127×). Mỗi khi định lặp qua các id và GET từng cái, hãy tìm lệnh số nhiều trước: MGET, HMGET, SMEMBERS, ZRANGE.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three ids, one missing (7): order kept, one round trip",
+              "vi": "Ba id, một id thiếu (7): giữ thứ tự, một vòng đi-về"
+            },
+            "goi": "[await getUsers(redis, [3, 1, 7]), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;",
+            "mongDoi": [
+              [
+                {
+                  "id": 3,
+                  "name": "u3"
+                },
+                {
+                  "id": 1,
+                  "name": "u1"
+                },
+                null
+              ],
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "200 ids → still ONE round trip",
+              "vi": "200 id → vẫn MỘT vòng đi-về"
+            },
+            "goi": "[(await getUsers(redis, Array.from({ length: 200 }, (_, i) => i + 1))).filter(Boolean).length, redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;",
+            "mongDoi": [
+              172,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Empty list: no Redis call",
+              "vi": "Danh sách rỗng: không gọi Redis"
+            },
+            "goi": "[await getUsers(redis, []), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;",
+            "mongDoi": [
+              [],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[(await getUsers(redis, [14, 15, 999, 15])), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;",
+            "mongDoi": [
+              [
+                null,
+                {
+                  "id": 15,
+                  "name": "u15"
+                },
+                null,
+                {
+                  "id": 15,
+                  "name": "u15"
+                }
+              ],
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[(await getUsers(redis, Array.from({ length: 50 }, (_, i) => 300 - i))).map((u) => (u ? u.id : null)).join(','), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nfor (let id = 1; id <= 300; id++) if (id % 7 !== 0) await redis.set(`user:${id}`, JSON.stringify({ id, name: 'u' + id }));\nredis.roundTrips = 0;",
+            "mongDoi": [
+              "300,299,298,297,296,295,,293,292,291,290,289,288,,286,285,284,283,282,281,,279,278,277,276,275,274,,272,271,270,269,268,267,,265,264,263,262,261,260,,258,257,256,255,254,253,,251",
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping the for … await redis.get() loop: correct data, N round trips — the exact mistake that makes Redis look slower than Postgres.|||Giữ vòng for … await redis.get(): dữ liệu đúng, N vòng đi-về — đúng lỗi làm Redis trông chậm hơn Postgres."
+        },
+        {
+          "loi": "Using Promise.all of N GETs: faster, but still N commands and N replies; MGET is one command.|||Dùng Promise.all của N lệnh GET: nhanh hơn, nhưng vẫn N lệnh và N câu trả lời; MGET là một lệnh."
+        },
+        {
+          "loi": "Filtering out the nulls — the caller relies on result[i] belonging to ids[i].|||Lọc bỏ các null — nơi gọi dựa vào việc result[i] thuộc về ids[i]."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round trip (RTT)",
+          "vi": "vòng đi-về",
+          "giaiThich": "một lệnh gửi đi + chờ câu trả lời; với lệnh nhỏ nó chiếm gần hết thời gian"
+        },
+        {
+          "en": "MGET",
+          "vi": "lấy nhiều khoá",
+          "giaiThich": "một lệnh, nhiều khoá, một vòng đi-về"
+        }
+      ]
+    },
+    {
+      "title": "12.1 · Write 10,000 keys in pipelined chunks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "pipelining",
+        "batch size"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A nightly import writes thousands of keys. Awaiting each <code>SET</code> costs one round trip per key (10,000 SETs = 1,965 ms in the lesson); one giant pipeline is fast but blocks every other client while Redis chews through it. Write <code>setMany(redis, entries, chunkSize = 500)</code>:</p><ul><li><code>entries</code> is an array of <code>[key, value]</code> pairs;</li><li>send them with <code>redis.pipeline()</code> in chunks of at most <code>chunkSize</code> commands — <code>Math.ceil(entries.length / chunkSize)</code> round trips in total, one <code>exec()</code> per chunk, chunks one after another;</li><li>if a chunk reply contains an error (<code>[err, result]</code> with <code>err</code> not null), throw that error;</li><li>return the number of keys written.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly Math.ceil(n / chunkSize) round trips (0 when there is nothing to write).</li>\n  <li>No pipeline larger than chunkSize commands.</li>\n  <li>Surface errors from exec(): pipelines report them per command, they do not throw by themselves.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một đợt nhập dữ liệu ban đêm ghi hàng nghìn khoá. Await từng <code>SET</code> tốn một vòng đi-về mỗi khoá (10.000 SET = 1.965 ms trong bài); một pipeline khổng lồ thì nhanh nhưng làm đứng mọi client khác trong lúc Redis nhai nó. Viết <code>setMany(redis, entries, chunkSize = 500)</code>:</p><ul><li><code>entries</code> là mảng các cặp <code>[key, value]</code>;</li><li>gửi bằng <code>redis.pipeline()</code> theo từng lô tối đa <code>chunkSize</code> lệnh — tổng cộng <code>Math.ceil(entries.length / chunkSize)</code> vòng đi-về, mỗi lô một <code>exec()</code>, các lô nối tiếp nhau;</li><li>nếu câu trả lời của một lô có lỗi (<code>[err, result]</code> mà <code>err</code> khác null) thì ném lỗi đó;</li><li>trả số khoá đã ghi.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng Math.ceil(n / chunkSize) vòng đi-về (0 khi không có gì để ghi).</li>\n  <li>Không pipeline nào lớn hơn chunkSize lệnh.</li>\n  <li>Đưa lỗi trong exec() ra ngoài: pipeline báo lỗi theo từng lệnh, tự nó không ném.</li>\n</ul>",
+      "inputSpec": "redis — FakeRedis · entries — [string, string][] · chunkSize — number (default 500)|||redis — FakeRedis · entries — [string, string][] · chunkSize — số (mặc định 500)",
+      "outputSpec": "Promise<number> — keys written|||Promise<number> — số khoá đã ghi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);\n[await setMany(redis, make(1200)), redis.roundTrips, await redis.get('k:1199')]",
+          "output": "[1200,3,\"v1199\"]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "for (let i = 0; i < entries.length; i += chunkSize) { const part = entries.slice(i, i + chunkSize); … }",
+        "Inside: const p = redis.pipeline(); for (const [k, v] of part) p.set(k, v); const replies = await p.exec(); then look for replies.find(([err]) => err).|||Bên trong: const p = redis.pipeline(); for (const [k, v] of part) p.set(k, v); const replies = await p.exec(); rồi tìm replies.find(([err]) => err)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Write all entries with pipelines of at most chunkSize commands. */\nasync function setMany(redis, entries, chunkSize = 500) {\n  // Write your solution here — this is the 1,965 ms version (one round trip per key)\n  for (const [k, v] of entries) await redis.set(k, v);\n  return entries.length;\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Write all entries with pipelines of at most chunkSize commands. */\nasync function setMany(redis, entries, chunkSize = 500) {\n  let written = 0;\n  for (let i = 0; i < entries.length; i += chunkSize) {\n    const part = entries.slice(i, i + chunkSize);        // never more than chunkSize commands in one batch\n    const p = redis.pipeline();\n    for (const [k, v] of part) p.set(k, v);              // queued locally — nothing is sent yet\n    const replies = await p.exec();                      // ONE round trip for the whole chunk\n    const failed = replies.find(([err]) => err);         // exec() resolves even if a command failed\n    if (failed) throw failed[0];\n    written += part.length;\n  }\n  return written;                                        // other clients got a turn between chunks\n}\n"
+        },
+        {
+          "name": "fake-redis.js",
+          "language": "javascript",
+          "code": "// fake-redis.js — PROVIDED by the exercise. Read it, do not edit it (it is loaded before answer.js).\n// A tiny in-memory Redis with an ioredis-like API. Every command is ONE round trip of 1 ms (virtual clock):\n// the command runs inside \"Redis\" the moment you send it, the reply arrives 1 ms later.\n//   const redis = new FakeRedis();\n//   await redis.set('k', 'v', 'EX', 60)      // also 'PX', ms · 'NX' · 'XX' · 'KEEPTTL'  → 'OK' | null\n//   await redis.get('k') · mget(k1, k2…) · del · unlink · exists · incr · incrby · expire · pexpire · ttl · pttl\n//   hset(k, field, v) | hset(k, {f: v}) · hget · hmget · hgetall · hincrby · hdel · hlen\n//   zadd(k, score, member) · zincrby · zscore · zcard · zrank · zrevrank · zrange / zrevrange(k, start, stop, 'WITHSCORES')\n//   zremrangebyscore(k, min, max) · sadd · srem · sismember · scard · smembers · lpush · rpush · lpop · rpop · lrange · ltrim · llen\n//   setbit(k, offset, 0|1) · getbit · bitcount · bitop('AND'|'OR', dest, k1, k2…) · keys(pattern) · scan(cursor, 'MATCH', p, 'COUNT', n)\n//   redis.pipeline() / redis.multi(): queue commands, then await .exec() → [[null, result], …] in ONE round trip\n//   await redis.script((r) => { … })  stands in for EVAL of a Lua script: inside, r.<command>(…) runs SYNCHRONOUSLY\n//                                     (no await), the whole function is ONE atomic command and ONE round trip.\n// Counters you (and the grader) can read: redis.roundTrips · redis.commands · redis.log (command names in order).\n// redis.down = true  ⇒ every command rejects with Error('connect ECONNREFUSED 127.0.0.1:6379').\n// redis.maxKeys = n  ⇒ \"maxmemory, policy noeviction\": a write that would create key n+1 fails with ReplyError OOM.\nclass FakeRedis {\n  constructor(opts) {\n    opts = opts || {};\n    this.rttMs = opts.rttMs == null ? 1 : opts.rttMs;\n    this.data = new Map();      // key → { t: type, v: value, exp: ms | null }\n    this.roundTrips = 0; this.commands = 0; this.log = []; this.down = false;\n    this.cursorPage = opts.scanPage || 10;\n  }\n  // ── internals ──\n  _live(k) { const e = this.data.get(String(k)); if (!e) return null; if (e.exp != null && Date.now() > e.exp) { this.data.delete(String(k)); return null; } return e; }\n  _room(k) { // maxmemory with the default policy noeviction (lesson 12.6): a NEW key beyond maxKeys is refused\n    if (this.maxKeys != null && !this._live(k) && this.data.size >= this.maxKeys) {\n      const err = new Error(\"OOM command not allowed when used memory > 'maxmemory'.\"); err.name = 'ReplyError'; throw err;\n    }\n  }\n  _get(k, t, make) {\n    let e = this._live(k);\n    if (!e) { if (!make) return null; this._room(k); e = { t, v: make(), exp: null }; this.data.set(String(k), e); }\n    if (e.t !== t) { const err = new Error('WRONGTYPE Operation against a key holding the wrong kind of value'); err.name = 'ReplyError'; throw err; }\n    return e;\n  }\n  _wait(v, err) { const ms = this.rttMs; return new Promise((ok, no) => setTimeout(() => (err ? no(err) : ok(v)), ms)); }\n  _send(name, args) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    try { return this._wait(this._run(name, args)); } catch (e) { return this._wait(null, e); }\n  }\n  _run(name, args) {\n    const f = FakeRedis.ops[name];\n    if (!f) throw new Error('ERR unknown command ' + name);\n    this.commands++; this.log.push(name);\n    return f.apply(this, args);\n  }\n  pipeline() {\n    const self = this, q = [], p = {};\n    for (const n of FakeRedis.names) p[n] = (...a) => { q.push([n, a]); return p; };\n    p.exec = () => {\n      self.roundTrips++;\n      if (self.down) return self._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n      return self._wait(q.map(([n, a]) => { try { return [null, self._run(n, a)]; } catch (e) { return [e, null]; } }));\n    };\n    p.length = () => q.length;\n    return p;\n  }\n  multi() { return this.pipeline(); }\n  script(fn) {\n    this.roundTrips++;\n    if (this.down) return this._wait(null, new Error('connect ECONNREFUSED 127.0.0.1:6379'));\n    const self = this, r = {};\n    for (const n of FakeRedis.names) r[n] = (...a) => self._run(n, a);\n    this.commands++; this.log.push('EVAL');\n    try { const out = fn(r); if (out && typeof out.then === 'function') throw new Error('script(fn): fn must be synchronous — Lua cannot await'); return this._wait(out); }\n    catch (e) { return this._wait(null, e); }\n  }\n}\nFakeRedis.ops = {\n  get(k) { const e = this._get(k, 'string'); return e ? e.v : null; },\n  set(k, v, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const e = this._live(k);\n    if (up.includes('NX') && e) return null;\n    if (up.includes('XX') && !e) return null;\n    this._room(k);\n    let exp = null;\n    const i = up.indexOf('EX'), j = up.indexOf('PX');\n    if (i >= 0) exp = Date.now() + Number(o[i + 1]) * 1000;\n    else if (j >= 0) exp = Date.now() + Number(o[j + 1]);\n    else if (up.includes('KEEPTTL') && e) exp = e.exp;\n    this.data.set(String(k), { t: 'string', v: String(v), exp });\n    return 'OK';\n  },\n  mget(...ks) { return ks.flat().map((k) => { const e = this._live(k); return e && e.t === 'string' ? e.v : null; }); },\n  del(...ks) { let n = 0; for (const k of ks.flat()) if (this._live(k)) { this.data.delete(String(k)); n++; } return n; },\n  unlink(...ks) { return FakeRedis.ops.del.apply(this, ks); },\n  exists(...ks) { return ks.flat().filter((k) => this._live(k)).length; },\n  incr(k) { return FakeRedis.ops.incrby.call(this, k, 1); },\n  incrby(k, n) {\n    const e = this._get(k, 'string', () => '0');\n    const x = Number(e.v) + Number(n);\n    if (!Number.isInteger(Number(e.v))) throw new Error('ERR value is not an integer or out of range');\n    e.v = String(x); return x;\n  },\n  expire(k, s) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(s) * 1000; return 1; },\n  pexpire(k, ms) { const e = this._live(k); if (!e) return 0; e.exp = Date.now() + Number(ms); return 1; },\n  persist(k) { const e = this._live(k); if (!e || e.exp == null) return 0; e.exp = null; return 1; },\n  pttl(k) { const e = this._live(k); if (!e) return -2; if (e.exp == null) return -1; return e.exp - Date.now(); },\n  ttl(k) { const p = FakeRedis.ops.pttl.call(this, k); return p < 0 ? p : Math.floor((p + 500) / 1000); },\n  hset(k, ...a) {\n    const e = this._get(k, 'hash', () => new Map()); let n = 0;\n    const pairs = a.length === 1 && typeof a[0] === 'object' ? Object.entries(a[0]) : [];\n    for (let i = 0; i + 1 < a.length; i += 2) pairs.push([a[i], a[i + 1]]);\n    for (const [f, v] of pairs) { if (!e.v.has(String(f))) n++; e.v.set(String(f), String(v)); }\n    return n;\n  },\n  hget(k, f) { const e = this._get(k, 'hash'); return e && e.v.has(String(f)) ? e.v.get(String(f)) : null; },\n  hmget(k, ...fs) { const e = this._get(k, 'hash'); return fs.flat().map((f) => (e && e.v.has(String(f)) ? e.v.get(String(f)) : null)); },\n  hgetall(k) { const e = this._get(k, 'hash'); return e ? Object.fromEntries(e.v) : {}; },\n  hincrby(k, f, n) { const e = this._get(k, 'hash', () => new Map()); const x = Number(e.v.get(String(f)) || 0) + Number(n); e.v.set(String(f), String(x)); return x; },\n  hdel(k, ...fs) { const e = this._get(k, 'hash'); if (!e) return 0; let n = 0; for (const f of fs.flat()) if (e.v.delete(String(f))) n++; if (!e.v.size) this.data.delete(String(k)); return n; },\n  hlen(k) { const e = this._get(k, 'hash'); return e ? e.v.size : 0; },\n  zadd(k, ...a) { const e = this._get(k, 'zset', () => new Map()); let n = 0; for (let i = 0; i + 1 < a.length; i += 2) { if (!e.v.has(String(a[i + 1]))) n++; e.v.set(String(a[i + 1]), Number(a[i])); } return n; },\n  zincrby(k, inc, m) { const e = this._get(k, 'zset', () => new Map()); const x = (e.v.get(String(m)) || 0) + Number(inc); e.v.set(String(m), x); return String(x); },\n  zscore(k, m) { const e = this._get(k, 'zset'); return e && e.v.has(String(m)) ? String(e.v.get(String(m))) : null; },\n  zcard(k) { const e = this._get(k, 'zset'); return e ? e.v.size : 0; },\n  _zsorted(k, rev) {\n    const e = this._get(k, 'zset'); if (!e) return [];\n    const a = [...e.v].sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));\n    return rev ? a.reverse() : a;\n  },\n  _zslice(k, s, t, ws, rev) {\n    const a = FakeRedis.ops._zsorted.call(this, k, rev), n = a.length;\n    let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; i = Math.max(0, i); j = Math.min(n - 1, j);\n    const part = i > j ? [] : a.slice(i, j + 1);\n    return String(ws || '').toUpperCase() === 'WITHSCORES' ? part.flatMap(([m, sc]) => [m, String(sc)]) : part.map(([m]) => m);\n  },\n  zrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, false); },\n  zrevrange(k, s, t, ws) { return FakeRedis.ops._zslice.call(this, k, s, t, ws, true); },\n  zrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, false).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zrevrank(k, m) { const i = FakeRedis.ops._zsorted.call(this, k, true).findIndex((x) => x[0] === String(m)); return i < 0 ? null : i; },\n  zremrangebyscore(k, min, max) {\n    const e = this._get(k, 'zset'); if (!e) return 0;\n    const lo = min === '-inf' ? -Infinity : Number(min), hi = max === '+inf' ? Infinity : Number(max); let n = 0;\n    for (const [m, sc] of [...e.v]) if (sc >= lo && sc <= hi) { e.v.delete(m); n++; }\n    return n;\n  },\n  sadd(k, ...ms) { const e = this._get(k, 'set', () => new Set()); let n = 0; for (const m of ms.flat()) if (!e.v.has(String(m))) { e.v.add(String(m)); n++; } return n; },\n  srem(k, ...ms) { const e = this._get(k, 'set'); if (!e) return 0; let n = 0; for (const m of ms.flat()) if (e.v.delete(String(m))) n++; return n; },\n  sismember(k, m) { const e = this._get(k, 'set'); return e && e.v.has(String(m)) ? 1 : 0; },\n  scard(k) { const e = this._get(k, 'set'); return e ? e.v.size : 0; },\n  smembers(k) { const e = this._get(k, 'set'); return e ? [...e.v].sort() : []; },\n  lpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.unshift(String(v)); return e.v.length; },\n  rpush(k, ...vs) { const e = this._get(k, 'list', () => []); for (const v of vs.flat()) e.v.push(String(v)); return e.v.length; },\n  lpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.shift() : null; },\n  rpop(k) { const e = this._get(k, 'list'); return e && e.v.length ? e.v.pop() : null; },\n  llen(k) { const e = this._get(k, 'list'); return e ? e.v.length : 0; },\n  lrange(k, s, t) { const e = this._get(k, 'list'); if (!e) return []; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; return e.v.slice(Math.max(0, i), j + 1); },\n  ltrim(k, s, t) { const e = this._get(k, 'list'); if (!e) return 'OK'; const n = e.v.length; let i = Number(s), j = Number(t); if (i < 0) i += n; if (j < 0) j += n; e.v = e.v.slice(Math.max(0, i), j + 1); return 'OK'; },\n  setbit(k, off, b) { const e = this._get(k, 'bitmap', () => new Set()); const o = Number(off); const old = e.v.has(o) ? 1 : 0; if (Number(b)) e.v.add(o); else e.v.delete(o); return old; },\n  getbit(k, off) { const e = this._get(k, 'bitmap'); return e && e.v.has(Number(off)) ? 1 : 0; },\n  bitcount(k) { const e = this._get(k, 'bitmap'); return e ? e.v.size : 0; },\n  bitop(op, dest, ...ks) {\n    const sets = ks.flat().map((k) => { const e = this._get(k, 'bitmap'); return e ? e.v : new Set(); });\n    let out;\n    if (String(op).toUpperCase() === 'AND') out = new Set([...(sets[0] || [])].filter((x) => sets.every((s) => s.has(x))));\n    else out = new Set(sets.flatMap((s) => [...s]));\n    this.data.set(String(dest), { t: 'bitmap', v: out, exp: null });\n    return out.size;\n  },\n  keys(p) {\n    const re = new RegExp('^' + String(p).replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    this.usedKeys = true;\n    return [...this.data.keys()].filter((k) => this._live(k) && re.test(k)).sort();\n  },\n  scan(cursor, ...o) {\n    const up = o.map((x) => String(x).toUpperCase());\n    const im = up.indexOf('MATCH'), ic = up.indexOf('COUNT');\n    const p = im >= 0 ? String(o[im + 1]) : '*';\n    const cnt = ic >= 0 ? Number(o[ic + 1]) : this.cursorPage;\n    const re = new RegExp('^' + p.replace(/[.+^$()|{}[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*').replace(/\\?/g, '.') + '$');\n    const all = [...this.data.keys()].sort();\n    const c = Number(cursor);\n    // like real SCAN: a page may repeat the last key of the previous page (dedupe if it matters)\n    const from = c === 0 ? 0 : Math.max(0, c - 1);\n    const page = all.slice(from, c + cnt);\n    const next = c + cnt >= all.length ? '0' : String(c + cnt);\n    return [next, page.filter((k) => this._live(k) && re.test(k))];\n  },\n};\nFakeRedis.names = Object.keys(FakeRedis.ops).filter((n) => n[0] !== '_');\nfor (const n of FakeRedis.names) FakeRedis.prototype[n] = function (...a) { return this._send(n, a); };\n// await sleep(ms) — wait on the virtual clock (the grader jumps straight to the next timer, nothing really sleeps)\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lesson’s batch-size curve: 1 → 100 commands per pipeline bought 49×, 1,000 → 10,000 bought 8%. Chunks of a few hundred keep almost all of the speed and give other clients a turn between chunks, because Redis serves them in between round trips. Checking each [err, result] pair matters because ioredis resolves exec() even when individual commands failed.</p>",
+      "solutionExplanationHtmlVi": "<p>Đường cong cỡ lô trong bài: 1 → 100 lệnh mỗi pipeline được 49×, 1.000 → 10.000 được 8%. Lô vài trăm giữ gần hết tốc độ và cho client khác một lượt giữa các lô, vì Redis phục vụ họ giữa các vòng đi-về. Phải kiểm từng cặp [err, result] vì ioredis vẫn resolve exec() dù từng lệnh hỏng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-redis.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "1,200 keys, chunk 500 → 3 round trips",
+              "vi": "1.200 khoá, lô 500 → 3 vòng đi-về"
+            },
+            "goi": "[await setMany(redis, make(1200)), redis.roundTrips, await redis.get('k:1199')]",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);",
+            "mongDoi": [
+              1200,
+              3,
+              "v1199"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "10 keys, chunk 4 → 3 round trips",
+              "vi": "10 khoá, lô 4 → 3 vòng đi-về"
+            },
+            "goi": "[await setMany(redis, make(10), 4), redis.roundTrips, await redis.mget('k:0', 'k:9')]",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);",
+            "mongDoi": [
+              10,
+              3,
+              [
+                "v0",
+                "v9"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nothing to write → no round trip",
+              "vi": "Không có gì để ghi → không vòng đi-về"
+            },
+            "goi": "[await setMany(redis, []), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);",
+            "mongDoi": [
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A failed command inside a chunk is thrown",
+              "vi": "Lệnh hỏng trong một lô thì phải ném ra"
+            },
+            "goi": "await setMany(redis, make(6), 10)",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);\nredis.maxKeys = 3;",
+            "mongDoi": {
+              "loi": "ReplyError",
+              "thongDiep": "OOM"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await setMany(redis, make(1001, 'x'), 1000), redis.roundTrips - 0, await redis.get('x:1000')]",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);",
+            "mongDoi": [
+              1001,
+              2,
+              "v1000"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await setMany(redis, make(500)), redis.roundTrips]",
+            "chuanBi": "const redis = new FakeRedis();\nconst make = (n, p = 'k') => Array.from({ length: n }, (_, i) => [p + ':' + i, 'v' + i]);",
+            "mongDoi": [
+              500,
+              1
+            ],
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "tep": "answer.js",
+            "khop": "pipeline\\(|multi\\(",
+            "moTa": {
+              "en": "Uses redis.pipeline() (or multi())",
+              "vi": "Dùng redis.pipeline() (hoặc multi())"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "One pipeline for all 10,000 commands — fastest on your laptop, a latency spike for everybody else in production.|||Một pipeline cho cả 10.000 lệnh — nhanh nhất trên máy bạn, một cú tăng độ trễ cho mọi người khác trên production."
+        },
+        {
+          "loi": "Forgetting to await exec(): the function returns before anything is written, and the chunk errors vanish.|||Quên await exec(): hàm trả về trước khi ghi xong, và lỗi của lô biến mất."
+        },
+        {
+          "loi": "Assuming exec() throws on a failed command — it resolves with [err, null] for that slot, so an unchecked failure is silent.|||Tưởng exec() ném lỗi khi một lệnh hỏng — nó resolve với [err, null] ở ô đó, nên lỗi không kiểm là lỗi câm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pipeline",
+          "vi": "đường ống lệnh",
+          "giaiThich": "gửi nhiều lệnh một lượt, đọc mọi câu trả lời một lượt — một vòng đi-về"
+        },
+        {
+          "en": "round trip (RTT)",
+          "vi": "vòng đi-về",
+          "giaiThich": "một lệnh gửi đi + chờ câu trả lời; với lệnh nhỏ nó chiếm gần hết thời gian"
+        },
+        {
+          "en": "chunk",
+          "vi": "lô",
+          "giaiThich": "một phần của danh sách lớn, gửi trong một lượt"
+        }
+      ]
+    },
+    {
+      "title": "12.1 · getRedis(): one shared client, even under 20 first requests",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "singleton",
+        "lazy initialisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The site’s <code>src/config/redis.ts</code> exports a lazy <code>getRedis()</code> that memoises the client <b>and returns the in-flight connect promise if one is already running</b> — so twenty concurrent first requests open one connection, not twenty. Write it.</p><ul><li><code>createClient()</code> (from <code>fake-client.js</code>) makes a new connection object; <code>await client.connect()</code> takes 5 ms.</li><li>Every call to <code>getRedis()</code> resolves to the SAME, connected client (<code>isReady === true</code>).</li><li>Attach exactly one <code>'error'</code> listener (an EventEmitter that emits <code>error</code> with no listener crashes Node).</li><li>If <code>connect()</code> rejects, the caller gets the error, and the NEXT call tries again with a fresh client (do not cache a failure forever).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>20 concurrent first calls → createClient.created === 1.</li>\n  <li>Never resolve to a client that is not connected yet.</li>\n  <li>A failed connect is not cached.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/config/redis.ts</code> của website xuất một <code>getRedis()</code> khởi tạo lười, nhớ client <b>và trả về chính promise đang kết nối nếu đã có một lần kết nối đang chạy</b> — nên hai mươi request đầu tiên đồng thời chỉ mở một kết nối, không phải hai mươi. Hãy viết nó.</p><ul><li><code>createClient()</code> (trong <code>fake-client.js</code>) tạo một đối tượng kết nối mới; <code>await client.connect()</code> mất 5 ms.</li><li>Mọi lần gọi <code>getRedis()</code> resolve ra CÙNG một client đã kết nối (<code>isReady === true</code>).</li><li>Gắn đúng một bộ nghe <code>'error'</code> (EventEmitter phát <code>error</code> mà không ai nghe sẽ làm sập Node).</li><li>Nếu <code>connect()</code> reject, nơi gọi nhận lỗi, và lần gọi KẾ TIẾP thử lại bằng client mới (đừng nhớ một lần hỏng mãi mãi).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>20 lời gọi đầu tiên đồng thời → createClient.created === 1.</li>\n  <li>Không bao giờ resolve ra client chưa kết nối xong.</li>\n  <li>Lần kết nối hỏng không được nhớ lại.</li>\n</ul>",
+      "inputSpec": "— (module-level state in answer.js)|||— (trạng thái cấp module trong answer.js)",
+      "outputSpec": "Promise<client>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const all = await Promise.all(Array.from({ length: 20 }, () => getRedis())); return [createClient.created, all.every((x) => x === all[0]), all.every((x) => x.isReady)]; })()",
+          "output": "[1,true,true]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep two module variables: client (the connected one) and connecting (the promise of the connect that is running).|||Giữ hai biến cấp module: client (cái đã kết nối) và connecting (promise của lần kết nối đang chạy).",
+        "If client → return it. If connecting → return connecting. Otherwise create the promise, store it in connecting BEFORE awaiting anything, and clear it in .finally().|||Có client → trả nó. Có connecting → trả connecting. Không thì tạo promise, gán vào connecting TRƯỚC khi await bất cứ gì, và xoá nó trong .finally()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "let client = null;\n\n/** One shared, connected client per process. */\nasync function getRedis() {\n  // Write your solution here — correct for ONE caller, wrong for 20 concurrent ones\n  if (client) return client;\n  const c = createClient();\n  c.on('error', (err) => console.error('redis error', err.message));\n  await c.connect();\n  client = c;\n  return client;\n}\n"
+        },
+        {
+          "name": "fake-client.js",
+          "language": "javascript",
+          "code": "// fake-client.js — PROVIDED by the exercise (loaded before answer.js).\n// createClient() builds a NEW connection object every time (count: createClient.created).\n// client.connect() takes 5 ms (virtual) and sets client.isReady = true; set createClient.failNext = n to make\n// the next n connect() calls reject with Error('ECONNREFUSED'). client.on(event, fn) registers a listener.\nfunction createClient() {\n  createClient.created++;\n  const listeners = {};\n  const client = {\n    id: createClient.created, isReady: false,\n    on(ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return client; },\n    listenerCount(ev) { return (listeners[ev] || []).length; },\n    connect() {\n      return new Promise((ok, no) => setTimeout(() => {\n        if (createClient.failNext > 0) { createClient.failNext--; no(new Error('ECONNREFUSED')); return; }\n        client.isReady = true; ok(client);\n      }, 5));\n    },\n  };\n  return client;\n}\ncreateClient.created = 0;\ncreateClient.failNext = 0;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "let client = null;       // the connected client, once we have one\nlet connecting = null;   // the promise of the connect that is running right now\n\n/** One shared, connected client per process. */\nasync function getRedis() {\n  if (client) return client;                 // fast path: already connected\n  if (connecting) return connecting;         // someone is connecting: wait for THEIR connection\n  // set connecting synchronously — no other callback can run between the check above and this line\n  connecting = (async () => {\n    const c = createClient();\n    c.on('error', (err) => console.error('redis error', err.message));   // never leave 'error' unhandled\n    await c.connect();\n    client = c;                              // publish only a READY client\n    return c;\n  })().finally(() => { connecting = null; }); // success or failure: the next caller decides again\n  return connecting;\n}\n"
+        },
+        {
+          "name": "fake-client.js",
+          "language": "javascript",
+          "code": "// fake-client.js — PROVIDED by the exercise (loaded before answer.js).\n// createClient() builds a NEW connection object every time (count: createClient.created).\n// client.connect() takes 5 ms (virtual) and sets client.isReady = true; set createClient.failNext = n to make\n// the next n connect() calls reject with Error('ECONNREFUSED'). client.on(event, fn) registers a listener.\nfunction createClient() {\n  createClient.created++;\n  const listeners = {};\n  const client = {\n    id: createClient.created, isReady: false,\n    on(ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return client; },\n    listenerCount(ev) { return (listeners[ev] || []).length; },\n    connect() {\n      return new Promise((ok, no) => setTimeout(() => {\n        if (createClient.failNext > 0) { createClient.failNext--; no(new Error('ECONNREFUSED')); return; }\n        client.isReady = true; ok(client);\n      }, 5));\n    },\n  };\n  return client;\n}\ncreateClient.created = 0;\ncreateClient.failNext = 0;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The event loop runs one callback at a time, so between \"is anyone connecting?\" and \"I am connecting now\" nothing else can run — storing the promise synchronously is enough, no lock needed. Concurrent callers attach to the same promise; .finally() clears it so a failure is retried by the next caller, while success leaves a memoised client. Production reports connected_clients:4 for the whole backend because of exactly this.</p>",
+      "solutionExplanationHtmlVi": "<p>Event loop chạy một callback mỗi lúc, nên giữa \"có ai đang kết nối không?\" và \"tôi đang kết nối\" không gì khác chạy được — gán promise một cách đồng bộ là đủ, không cần khoá. Những lời gọi đồng thời bám vào cùng promise; .finally() xoá nó để lần hỏng được thử lại bởi người gọi sau, còn thành công thì để lại client đã nhớ. Production báo connected_clients:4 cho cả backend nhờ đúng điều này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-client.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "20 concurrent first calls: one connection, all ready",
+              "vi": "20 lời gọi đầu đồng thời: một kết nối, tất cả sẵn sàng"
+            },
+            "goi": "await (async () => { const all = await Promise.all(Array.from({ length: 20 }, () => getRedis())); return [createClient.created, all.every((x) => x === all[0]), all.every((x) => x.isReady)]; })()",
+            "mongDoi": [
+              1,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Sequential calls reuse the client; one error listener",
+              "vi": "Gọi tuần tự dùng lại client; một bộ nghe lỗi"
+            },
+            "goi": "await (async () => { const a = await getRedis(); const b = await getRedis(); return [createClient.created, a === b, a.listenerCount('error')]; })()",
+            "mongDoi": [
+              1,
+              true,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A failed connect is retried by the next call",
+              "vi": "Lần kết nối hỏng được thử lại ở lần gọi sau"
+            },
+            "goi": "await (async () => { createClient.failNext = 1; let first; try { await getRedis(); first = 'resolved'; } catch (e) { first = e.message; } const c = await getRedis(); return [first, c.isReady, createClient.created]; })()",
+            "mongDoi": [
+              "ECONNREFUSED",
+              true,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const p1 = getRedis(); await sleep(2); const p2 = getRedis(); await sleep(10); const p3 = getRedis(); const r = await Promise.all([p1, p2, p3]); return [createClient.created, r[0] === r[1] && r[1] === r[2], r[2].listenerCount('error')]; })()",
+            "chuanBi": "const sleep = (ms) => new Promise((ok) => setTimeout(ok, ms));",
+            "mongDoi": [
+              1,
+              true,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { createClient.failNext = 1; const r = await Promise.allSettled(Array.from({ length: 5 }, () => getRedis())); const c = await getRedis(); return [r.map((x) => x.status).join(','), createClient.created, c.isReady]; })()",
+            "mongDoi": [
+              "rejected,rejected,rejected,rejected,rejected",
+              2,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assigning client only after await connect(): every request that arrives during those 5 ms creates its own connection — 20 requests, 20 connections.|||Chỉ gán client sau await connect(): mọi request tới trong 5 ms đó tự tạo kết nối riêng — 20 request, 20 kết nối."
+        },
+        {
+          "loi": "Assigning client before connect() finishes: the other callers get a client that is not ready and their first command fails.|||Gán client trước khi connect() xong: những nơi gọi khác nhận client chưa sẵn sàng và lệnh đầu tiên của họ hỏng."
+        },
+        {
+          "loi": "Caching the rejected promise: after one network blip at boot, getRedis() fails forever.|||Nhớ luôn promise đã reject: sau một lần mạng chập chờn lúc khởi động, getRedis() hỏng mãi mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memoise",
+          "vi": "ghi nhớ kết quả",
+          "giaiThich": "tính một lần, lần sau trả lại cái đã có"
+        },
+        {
+          "en": "in-flight promise",
+          "vi": "promise đang bay",
+          "giaiThich": "việc đã bắt đầu nhưng chưa xong — người tới sau bám vào nó"
+        }
+      ]
+    }
+  ]
+}

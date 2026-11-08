@@ -1,0 +1,624 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-0-0-start-here-1",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-0-0-start-here-1"
+  },
+  "exercises": [
+    {
+      "title": "Client or server: who must do this job?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The client asks; the server checks who is asking, reads or writes the database and answers. For each job in a Notes app, decide where it <b>must</b> happen. Remember the lesson's reason: anyone can open the browser dev tools and change what the page sends.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Client hỏi; server kiểm ai đang hỏi, đọc/ghi CSDL rồi trả lời. Với mỗi việc trong một app ghi chú, quyết định nó PHẢI xảy ra ở đâu. Nhớ lý do của bài: ai cũng mở được dev tools của trình duyệt và sửa thứ trang gửi đi.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: if a user edited the page to skip this, would something bad happen to data, money or another user?|||Hỏi: nếu người dùng sửa trang để bỏ qua việc này, dữ liệu, tiền hay người khác có bị hại không?",
+        "A check may appear on BOTH sides: the client for comfort, the server for truth.|||Một phép kiểm có thể ở CẢ hai phía: client cho dễ chịu, server cho chắc chắn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Client or server: who must do this job?\n\nAnswer in the answer panel (no code needed).\n\n1. Where must each job run?Mỗi việc phải chạy ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Client or server: who must do this job? — answer key\n\n1. Where must each job run?Mỗi việc phải chạy ở đâu?\n   - r1.noi: client\n   - r2.noi: server\n   - r3.noi: server\n   - r4.noi: server\n   - r5.noi: client\n   - r6.noi: server\n   - r7.noi: server\n   Anything that protects data, money or other people must run on the server, because the client can be changed by whoever holds it. The client is great for drawing and for friendly hints — a red border is a suggestion; the same check on the server is the guarantee.VI: Mọi thứ bảo vệ dữ liệu, tiền hay người khác phải chạy ở server, vì client có thể bị người cầm nó sửa. Client rất hợp để vẽ và gợi ý thân thiện — viền đỏ là GỢI Ý; cùng phép kiểm đó ở server mới là BẢO ĐẢM.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Anything that protects data, money or other people must run on the server, because the client can be changed by whoever holds it. The client is great for drawing and for friendly hints — a red border is a <i>suggestion</i>; the same check on the server is the <i>guarantee</i>.</p><p><i>VI: Mọi thứ bảo vệ dữ liệu, tiền hay người khác phải chạy ở server, vì client có thể bị người cầm nó sửa. Client rất hợp để vẽ và gợi ý thân thiện — viền đỏ là GỢI Ý; cùng phép kiểm đó ở server mới là BẢO ĐẢM.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "c1",
+            "de": "<p>Where must each job run?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi việc phải chạy ở đâu?</i></p>",
+            "cot": [
+              {
+                "ma": "viec",
+                "ten": "Job|||Việc"
+              },
+              {
+                "ma": "noi",
+                "ten": "Where|||Ở đâu",
+                "luaChon": [
+                  "client",
+                  "server"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "viec": "Draw the note list and the \"New note\" button"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "viec": "Check that the password is correct at login"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "viec": "Store every user's notes so they survive a closed browser"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "viec": "Decide whether user 7 may read user 9's note"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "viec": "Show a red border while the title field is empty (a hint for the user)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "viec": "Reject a note whose title is empty, even if the page did not stop it"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "viec": "Charge money for a Pro account"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.noi": "client",
+              "r2.noi": "server",
+              "r3.noi": "server",
+              "r4.noi": "server",
+              "r5.noi": "client",
+              "r6.noi": "server",
+              "r7.noi": "server"
+            },
+            "giaiThich": "<p>Anything that protects data, money or other people must run on the server, because the client can be changed by whoever holds it. The client is great for drawing and for friendly hints — a red border is a <i>suggestion</i>; the same check on the server is the <i>guarantee</i>.</p><p><i>VI: Mọi thứ bảo vệ dữ liệu, tiền hay người khác phải chạy ở server, vì client có thể bị người cầm nó sửa. Client rất hợp để vẽ và gợi ý thân thiện — viền đỏ là GỢI Ý; cùng phép kiểm đó ở server mới là BẢO ĐẢM.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting a check that only exists in the browser.|||Tin một phép kiểm chỉ có trong trình duyệt."
+        },
+        {
+          "loi": "Thinking the server should draw the UI — in this course the server answers with data (JSON).|||Nghĩ server phải vẽ giao diện — trong khoá này server trả dữ liệu (JSON)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backend / server",
+          "vi": "backend / máy chủ",
+          "giaiThich": "The program that holds the data and answers requests; the user never sees it."
+        },
+        {
+          "en": "client",
+          "vi": "máy khách",
+          "giaiThich": "The part the user touches — a web page or an app — that asks the server for things."
+        },
+        {
+          "en": "request–response",
+          "vi": "yêu cầu – phản hồi",
+          "giaiThich": "The ask-and-answer cycle almost every feature is built from."
+        },
+        {
+          "en": "untrusted client",
+          "vi": "client không đáng tin",
+          "giaiThich": "Anyone can change what the browser sends, so real checks live on the server."
+        },
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "What lets you write the server in JavaScript instead of PHP, Java or Python."
+        }
+      ]
+    },
+    {
+      "title": "One request–response pair, step by step",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A user presses \"Save\" on a new note. Put what happens in order — the cycle almost everything in this course is a variation of.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng bấm \"Lưu\" một ghi chú mới. Sắp các bước theo thứ tự — vòng mà gần như mọi thứ trong khoá này là biến thể của nó.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The client both starts and ends the cycle.|||Client vừa mở đầu vừa kết thúc vòng.",
+        "Check before you write: nothing reaches the database before the server has verified who and what.|||Kiểm trước khi ghi: không gì tới CSDL trước khi server xác minh ai và cái gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One request–response pair, step by step\n\nAnswer in the answer panel (no code needed).\n\n1. Order the steps.Sắp các bước.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One request–response pair, step by step — answer key\n\n1. Order the steps.Sắp các bước.\n   Answer: m2) The client sends a request: \"save this note\" with the title and text  →  m4) The server checks who is asking (is this user logged in?)  →  m6) The server validates the data again (title not empty…)  →  m3) The server writes the note to the database  →  m5) The server sends back a response: the saved note, or an error  →  m1) The client shows the result to the user\n   Ask → check identity → check data → touch the database → answer → display. The two checks happen on the server because the client cannot be trusted; the database lives on the server for the same reason.VI: Hỏi → kiểm danh tính → kiểm dữ liệu → chạm CSDL → trả lời → hiển thị. Hai phép kiểm ở server vì client không đáng tin; CSDL nằm ở server cũng vì lý do đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ask → check identity → check data → touch the database → answer → display. The two checks happen on the server because the client cannot be trusted; the database lives on the server for the same reason.</p><p><i>VI: Hỏi → kiểm danh tính → kiểm dữ liệu → chạm CSDL → trả lời → hiển thị. Hai phép kiểm ở server vì client không đáng tin; CSDL nằm ở server cũng vì lý do đó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "<p>Order the steps.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The client shows the result to the user"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The client sends a request: \"save this note\" with the title and text"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The server writes the note to the database"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The server checks who is asking (is this user logged in?)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The server sends back a response: the saved note, or an error"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The server validates the data again (title not empty…)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m4",
+              "m6",
+              "m3",
+              "m5",
+              "m1"
+            ],
+            "giaiThich": "<p>Ask → check identity → check data → touch the database → answer → display. The two checks happen on the server because the client cannot be trusted; the database lives on the server for the same reason.</p><p><i>VI: Hỏi → kiểm danh tính → kiểm dữ liệu → chạm CSDL → trả lời → hiển thị. Hai phép kiểm ở server vì client không đáng tin; CSDL nằm ở server cũng vì lý do đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing to the database before checking the user.|||Ghi CSDL trước khi kiểm người dùng."
+        },
+        {
+          "loi": "Ending at \"database write\" — the client still needs an answer.|||Kết thúc ở \"ghi CSDL\" — client vẫn cần câu trả lời."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backend / server",
+          "vi": "backend / máy chủ",
+          "giaiThich": "The program that holds the data and answers requests; the user never sees it."
+        },
+        {
+          "en": "client",
+          "vi": "máy khách",
+          "giaiThich": "The part the user touches — a web page or an app — that asks the server for things."
+        },
+        {
+          "en": "request–response",
+          "vi": "yêu cầu – phản hồi",
+          "giaiThich": "The ask-and-answer cycle almost every feature is built from."
+        },
+        {
+          "en": "untrusted client",
+          "vi": "client không đáng tin",
+          "giaiThich": "Anyone can change what the browser sends, so real checks live on the server."
+        },
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "What lets you write the server in JavaScript instead of PHP, Java or Python."
+        }
+      ]
+    },
+    {
+      "title": "Why JavaScript on the server, and what you need to start",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Quick questions on the rest of the first \"Start here\" lesson.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi nhanh về phần còn lại của bài \"Bắt đầu tại đây\" đầu tiên.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Runtime\", not \"language\".|||\"Môi trường chạy\", không phải \"ngôn ngữ\".",
+        "Trust is the reason behind every server-side choice in this lesson.|||Niềm tin là lý do đằng sau mọi lựa chọn phía server trong bài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why JavaScript on the server, and what you need to start\n\nAnswer in the answer panel (no code needed).\n\n1. What does Node.js add to JavaScript?Node.js thêm gì cho JavaScript?\n2. Why does the real data live on the server and not in the browser?Vì sao dữ liệu thật nằm ở server chứ không ở trình duyệt?\n3. What are you expected to know before Chapter 1?Trước Chương 1 bạn cần biết gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why JavaScript on the server, and what you need to start — answer key\n\n1. What does Node.js add to JavaScript?Node.js thêm gì cho JavaScript?\n   Answer: b) It lets JavaScript run on the server, so one language runs the whole stack\n   Before 2009 the server was PHP, Java, Ruby or Python while the browser ran JavaScript. Node put JavaScript on the server too — skills carry across and you stop translating ideas between two languages.VI: Trước 2009 server viết bằng PHP, Java, Ruby, Python còn trình duyệt chạy JavaScript. Node đưa JavaScript lên server — kỹ năng dùng lại được, không phải dịch ý tưởng giữa hai ngôn ngữ.\n\n2. Why does the real data live on the server and not in the browser?Vì sao dữ liệu thật nằm ở server chứ không ở trình duyệt?\n   Answer: c) The client cannot be trusted — anyone can change what the page sends or stores\n   The lesson's rule: \"a check done only in the browser is a suggestion, not a guarantee\".VI: Luật của bài: \"phép kiểm chỉ làm trong trình duyệt là gợi ý, không phải bảo đảm\".\n\n3. What are you expected to know before Chapter 1?Trước Chương 1 bạn cần biết gì?\n   Answer: b) Basic coding in any language (variables, loops, functions) and the will to type every example\n   No prior JavaScript (Chapter 1 rebuilds it), no backend, database or server experience — just basic coding and typing the examples yourself.VI: Không cần JavaScript trước (Chương 1 dựng lại), không cần backend, CSDL hay server — chỉ cần lập trình cơ bản và tự gõ ví dụ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It lets JavaScript run on the server, so one language runs the whole stack</p><p>Before 2009 the server was PHP, Java, Ruby or Python while the browser ran JavaScript. Node put JavaScript on the server too — skills carry across and you stop translating ideas between two languages.</p><p><i>VI: Trước 2009 server viết bằng PHP, Java, Ruby, Python còn trình duyệt chạy JavaScript. Node đưa JavaScript lên server — kỹ năng dùng lại được, không phải dịch ý tưởng giữa hai ngôn ngữ.</i></p></li><li><p><b>c)</b> The client cannot be trusted — anyone can change what the page sends or stores</p><p>The lesson's rule: \"a check done only in the browser is a suggestion, not a guarantee\".</p><p><i>VI: Luật của bài: \"phép kiểm chỉ làm trong trình duyệt là gợi ý, không phải bảo đảm\".</i></p></li><li><p><b>b)</b> Basic coding in any language (variables, loops, functions) and the will to type every example</p><p>No prior JavaScript (Chapter 1 rebuilds it), no backend, database or server experience — just basic coding and typing the examples yourself.</p><p><i>VI: Không cần JavaScript trước (Chương 1 dựng lại), không cần backend, CSDL hay server — chỉ cần lập trình cơ bản và tự gõ ví dụ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "w1",
+            "de": "<p>What does Node.js add to JavaScript?</p><p style=\"opacity:.75;font-size:.92em\"><i>Node.js thêm gì cho JavaScript?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is a new language that replaces JavaScript"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It lets JavaScript run on the server, so one language runs the whole stack"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a database for JavaScript apps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It makes the browser faster"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Before 2009 the server was PHP, Java, Ruby or Python while the browser ran JavaScript. Node put JavaScript on the server too — skills carry across and you stop translating ideas between two languages.</p><p><i>VI: Trước 2009 server viết bằng PHP, Java, Ruby, Python còn trình duyệt chạy JavaScript. Node đưa JavaScript lên server — kỹ năng dùng lại được, không phải dịch ý tưởng giữa hai ngôn ngữ.</i></p>"
+          },
+          {
+            "ma": "w2",
+            "de": "<p>Why does the real data live on the server and not in the browser?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dữ liệu thật nằm ở server chứ không ở trình duyệt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is only a historical convention from before JavaScript existed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Servers are always faster than browsers, so data is quicker to read there"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The client cannot be trusted — anyone can change what the page sends or stores"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers have no storage at all, so the data has nowhere else to live"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The lesson's rule: \"a check done only in the browser is a suggestion, not a guarantee\".</p><p><i>VI: Luật của bài: \"phép kiểm chỉ làm trong trình duyệt là gợi ý, không phải bảo đảm\".</i></p>"
+          },
+          {
+            "ma": "w3",
+            "de": "<p>What are you expected to know before Chapter 1?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước Chương 1 bạn cần biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing at all — not even what a variable or a loop is"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Basic coding in any language (variables, loops, functions) and the will to type every example"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Solid JavaScript, SQL and how to deploy a server to a VPS on your own"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express and React, because the course starts directly with a full-stack app"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No prior JavaScript (Chapter 1 rebuilds it), no backend, database or server experience — just basic coding and typing the examples yourself.</p><p><i>VI: Không cần JavaScript trước (Chương 1 dựng lại), không cần backend, CSDL hay server — chỉ cần lập trình cơ bản và tự gõ ví dụ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling Node.js a language or a framework.|||Gọi Node.js là ngôn ngữ hay framework."
+        },
+        {
+          "loi": "Thinking you must master JavaScript first — the course rebuilds the parts a backend uses.|||Nghĩ phải thạo JavaScript trước — khoá dựng lại đúng phần backend dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backend / server",
+          "vi": "backend / máy chủ",
+          "giaiThich": "The program that holds the data and answers requests; the user never sees it."
+        },
+        {
+          "en": "client",
+          "vi": "máy khách",
+          "giaiThich": "The part the user touches — a web page or an app — that asks the server for things."
+        },
+        {
+          "en": "request–response",
+          "vi": "yêu cầu – phản hồi",
+          "giaiThich": "The ask-and-answer cycle almost every feature is built from."
+        },
+        {
+          "en": "untrusted client",
+          "vi": "client không đáng tin",
+          "giaiThich": "Anyone can change what the browser sends, so real checks live on the server."
+        },
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "What lets you write the server in JavaScript instead of PHP, Java or Python."
+        }
+      ]
+    },
+    {
+      "title": "The server re-checks: validate a new note",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "server-side validation",
+        "untrusted client"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Your first backend function, in plain JavaScript (Chapter 1 explains every piece; here you only need <code>if</code>, strings and arrays). The page already shows a red border when the title is empty — but that is a suggestion. Write <code>validateNewNote(body)</code> for the server: it returns an array of error messages (empty array = valid), in this order:</p>\n<ol><li><code>title</code> missing, not a string, or only spaces ⇒ <code>'title is required'</code>.</li>\n<li><code>title</code> longer than 100 characters (after trimming) ⇒ <code>'title is too long'</code>.</li>\n<li>The client sent <code>ownerId</code> ⇒ <code>'ownerId is set by the server'</code> — the server decides who owns a note (from the login), never the client.</li></ol><pre>validateNewNote({ title: 'Buy milk' })                 // []\nvalidateNewNote({ title: '   ' })                      // ['title is required']\nvalidateNewNote({ title: 'Hi', ownerId: 1 })           // ['ownerId is set by the server']</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Return an array of messages in the order listed; <code>[]</code> when valid.</li>\n  <li>Trim before measuring the title.</li>\n  <li>Reject any <code>ownerId</code> sent by the client, whatever its value.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm backend đầu tiên, viết JavaScript thuần (Chương 1 giải thích từng phần; ở đây chỉ cần if, chuỗi, mảng). Trang đã có viền đỏ khi tiêu đề rỗng — nhưng đó là gợi ý. Viết validateNewNote(body) cho server: trả mảng thông báo lỗi (mảng rỗng = hợp lệ) theo thứ tự: thiếu/không phải chuỗi/chỉ có khoảng trắng ⇒ 'title is required'; dài hơn 100 ký tự (sau khi trim) ⇒ 'title is too long'; client gửi ownerId ⇒ 'ownerId is set by the server'.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả mảng thông báo theo thứ tự đã liệt kê; [] khi hợp lệ.</li>\n  <li>Trim trước khi đo tiêu đề.</li>\n  <li>Từ chối mọi ownerId client gửi, giá trị gì cũng vậy.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "validateNewNote({ title: '   ', ownerId: 1 })",
+          "output": "[\"title is required\",\"ownerId is set by the server\"]",
+          "explanation": "Both problems are reported.|||Báo cả hai lỗi."
+        }
+      ],
+      "hintsJson": [
+        "Start with <code>const errors = [];</code> and <code>push</code> a message for each rule that fails; return <code>errors</code> at the end.|||Bắt đầu với const errors = []; push thông báo cho mỗi luật trượt; cuối cùng return errors.",
+        "<code>typeof body.title === 'string'</code> tells you it is a string; <code>body.title.trim() === ''</code> tells you it is only spaces. Use <code>'ownerId' in body</code> for the last rule.|||typeof body.title === 'string' cho biết là chuỗi; body.title.trim() === '' cho biết chỉ có khoảng trắng. Dùng 'ownerId' in body cho luật cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function validateNewNote(body) {\n  const errors = [];\n  if (!body.title) errors.push('title is required');\n  return errors;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// The page's red border is a suggestion; this check is the guarantee.\nfunction validateNewNote(body) {\n  const errors = [];\n  const title = typeof body.title === 'string' ? body.title.trim() : '';\n  if (title === '') {\n    errors.push('title is required');           // missing, not a string, or only spaces\n  } else if (title.length > 100) {\n    errors.push('title is too long');\n  }\n  if ('ownerId' in body) {\n    errors.push('ownerId is set by the server'); // who owns a note comes from the login, not the client\n  }\n  return errors;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The browser check helps honest users; this function protects the data from everyone else. Collecting all messages (instead of stopping at the first) lets the client show every problem at once. The <code>ownerId</code> rule is the lesson's \"untrusted client\" in one line: fields that decide permissions come from the server's knowledge of who is logged in, never from the request body.</p>",
+      "solutionExplanationHtmlVi": "<p>Phép kiểm trong trình duyệt giúp người dùng ngay thẳng; hàm này bảo vệ dữ liệu khỏi mọi người còn lại. Gom đủ thông báo (thay vì dừng ở lỗi đầu) để client hiện mọi vấn đề một lần. Luật ownerId là \"client không đáng tin\" gói trong một dòng: trường quyết định quyền đến từ việc server biết ai đang đăng nhập, không bao giờ từ body của request.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "a valid note",
+              "vi": "ghi chú hợp lệ"
+            },
+            "goi": "validateNewNote({ title: 'Buy milk', text: '2 litres' })",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "only spaces ⇒ title is required",
+              "vi": "chỉ khoảng trắng ⇒ title is required"
+            },
+            "goi": "validateNewNote({ title: '   ' })",
+            "mongDoi": [
+              "title is required"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "ownerId from the client is rejected",
+              "vi": "ownerId từ client bị từ chối"
+            },
+            "goi": "validateNewNote({ title: 'Hi', ownerId: 1 })",
+            "mongDoi": [
+              "ownerId is set by the server"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[validateNewNote({}), validateNewNote({ title: 42 }), validateNewNote({ title: 'x'.repeat(101) }), validateNewNote({ title: '  ' + 'y'.repeat(100) + '  ' })]",
+            "mongDoi": [
+              [
+                "title is required"
+              ],
+              [
+                "title is required"
+              ],
+              [
+                "title is too long"
+              ],
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[validateNewNote({ title: '', ownerId: null }), validateNewNote({ title: 'ok', ownerId: undefined })]",
+            "mongDoi": [
+              [
+                "title is required",
+                "ownerId is set by the server"
+              ],
+              [
+                "ownerId is set by the server"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking <code>if (!body.title)</code> only — a title of three spaces passes.|||Chỉ kiểm if (!body.title) — tiêu đề ba dấu cách vẫn qua."
+        },
+        {
+          "loi": "Accepting <code>ownerId</code> from the body — any user could create notes in someone else's name.|||Nhận ownerId từ body — ai cũng tạo được ghi chú dưới tên người khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backend / server",
+          "vi": "backend / máy chủ",
+          "giaiThich": "The program that holds the data and answers requests; the user never sees it."
+        },
+        {
+          "en": "client",
+          "vi": "máy khách",
+          "giaiThich": "The part the user touches — a web page or an app — that asks the server for things."
+        },
+        {
+          "en": "request–response",
+          "vi": "yêu cầu – phản hồi",
+          "giaiThich": "The ask-and-answer cycle almost every feature is built from."
+        },
+        {
+          "en": "untrusted client",
+          "vi": "client không đáng tin",
+          "giaiThich": "Anyone can change what the browser sends, so real checks live on the server."
+        },
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "What lets you write the server in JavaScript instead of PHP, Java or Python."
+        }
+      ]
+    }
+  ]
+}

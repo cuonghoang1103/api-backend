@@ -13,3 +13,29 @@
 # tiêu đề PEM và một chuỗi base64 cụt (`LS0tLS1CRUdJTiBPUEVOU1NIIFBSSV...`, giải
 # ra vừa đúng `-----BEGIN OPENSSH PRIV`) — không có một byte vật liệu khoá nào.
 content/exams/GITHUB-ACTIONS-FE.mjs:private-key:1358
+
+# ── Code Lab nodejs-practice (08/11/2026) — chuỗi MẪU để dạy, không mở được gì ─────────────
+# nodejs-11-1: khoá Sec-WebSocket-Key mẫu của RFC 6455 ("dGhlIHNhbXBsZSBub25jZQ==" = "the sample nonce") và
+#   khoá bắt tay sinh trong bài. nodejs-8-2: JWT demo ký bằng khoá GIẢ ghi ngay trong đề (bài dạy verify/alg).
+# nodejs-9-4 (bài "bí mật và phụ thuộc" — dạy quét bí mật): CHỈ dòng tiêu đề PEM, không byte khoá nào, và
+#   một chuỗi khoá API bịa (r8Kx…) làm mồi cho bộ quét người học viết. Vân tay ghim tệp + rule + dòng.
+content/codelab/nodejs-practice/nguon/nodejs-11-1-websocket-co-ban.mjs:generic-api-key:101
+content/codelab/nodejs-practice/nguon/nodejs-11-1-websocket-co-ban.mjs:generic-api-key:132
+content/codelab/nodejs-practice/nguon/nodejs-11-1-websocket-co-ban.mjs:generic-api-key:135
+content/codelab/nodejs-practice/nguon/nodejs-9-4-bi-mat-va-phu-thuoc.mjs:generic-api-key:301
+content/codelab/nodejs-practice/nguon/nodejs-9-4-bi-mat-va-phu-thuoc.mjs:private-key:252
+content/codelab/nodejs-practice/nodejs-practice__nodejs-11-1-websocket-co-ban.json:generic-api-key:460
+content/codelab/nodejs-practice/nodejs-practice__nodejs-11-1-websocket-co-ban.json:generic-api-key:519
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:267
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:318
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:341
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:456
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:507
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:526
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:550
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:563
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:586
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:610
+content/codelab/nodejs-practice/nodejs-practice__nodejs-8-2-jwt-access-refresh.json:jwt:637
+content/codelab/nodejs-practice/nodejs-practice__nodejs-9-4-bi-mat-va-phu-thuoc.json:generic-api-key:819
+content/codelab/nodejs-practice/nodejs-practice__nodejs-9-4-bi-mat-va-phu-thuoc.json:generic-api-key:859

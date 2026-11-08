@@ -1,0 +1,788 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-11-lab-realtime-notes",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-11-lab-realtime-notes"
+  },
+  "exercises": [
+    {
+      "title": "Lab 11 · 1 — Design review of the realtime layer",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "WebSocket",
+        "design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Before you build it: five design decisions for realtime Notes threads, each one taken from a measurement in Chapter 11.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi dựng: năm quyết định thiết kế cho realtime của các cuộc trò chuyện Notes, mỗi cái lấy từ một phép đo của Chương 11.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer is a measurement from 11.1–11.4: find it.|||Mỗi đáp án là một phép đo của 11.1–11.4: hãy tìm nó.",
+        "Ask \"what if this frame is lost / sent twice / sent by someone else?\".|||Hỏi \"nếu frame này mất / gửi hai lần / do người khác gửi thì sao?\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11 · 1 — Design review of the realtime layer\n\nAnswer in the answer panel (no code needed).\n\n1. A user sits on /messages without clicking into a conversation, and the unread badge never updates. What is the fix this site shipped?Người dùng ngồi ở /messages mà chưa bấm vào cuộc trò chuyện nào, và huy hiệu chưa đọc không bao giờ cập nhật. Bản sửa site này đã làm là gì?\n2. What should thread:new-message carry, given that frames can be lost?thread:new-message nên mang gì, khi frame có thể bị mất?\n3. One client can emit thousands of events per second. Where does the limit belong?Một client có thể emit hàng nghìn sự kiện mỗi giây. Giới hạn đặt ở đâu?\n4. The client’s reconnect uses a fixed 1-second retry. What happens after a deploy restarts the only backend?Client kết nối lại với khoảng thử cố định 1 giây. Chuyện gì xảy ra sau khi deploy khởi động lại backend duy nhất?\n5. Which checks belong in thread:send? (choose all)Những phép kiểm nào thuộc về thread:send? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11 · 1 — Design review of the realtime layer — answer key\n\n1. A user sits on /messages without clicking into a conversation, and the unread badge never updates. What is the fix this site shipped?Người dùng ngồi ở /messages mà chưa bấm vào cuộc trò chuyện nào, và huy hiệu chưa đọc không bao giờ cập nhật. Bản sửa site này đã làm là gì?\n   Answer: b) Auto-join every thread room of the user at connect (one query), then keep explicit joins for new threads\n   The comment in messaging.socket.ts records exactly this symptom. Auto-join at connect also means a reconnect restores the rooms by itself.VI: Chú thích trong messaging.socket.ts ghi đúng triệu chứng này. Tự join lúc connect cũng có nghĩa lần kết nối lại tự khôi phục room.\n\n2. What should thread:new-message carry, given that frames can be lost?thread:new-message nên mang gì, khi frame có thể bị mất?\n   Answer: b) The message with its id — the client de-duplicates by id and catches up with GET ?since=<last id> on reconnect\n   The socket is the signal, REST is the truth, the client is the referee. (A tiny signal like feed:has-new — a count only — is the extreme form of the same idea.)VI: Socket là tín hiệu, REST là sự thật, client là trọng tài. (Một tín hiệu nhỏ như feed:has-new — chỉ một con số — là dạng cực đoan của cùng ý tưởng.)\n\n3. One client can emit thousands of events per second. Where does the limit belong?Một client có thể emit hàng nghìn sự kiện mỗi giây. Giới hạn đặt ở đâu?\n   Answer: a) Per socket, inside the socket layer — none of these events touch the HTTP rate limiter\n   Mistake (4) of 11.3. After the 101, frames never pass through Express middleware again.VI: Lỗi (4) của 11.3. Sau 101, frame không bao giờ đi qua middleware Express nữa.\n\n4. The client’s reconnect uses a fixed 1-second retry. What happens after a deploy restarts the only backend?Client kết nối lại với khoảng thử cố định 1 giây. Chuyện gì xảy ra sau khi deploy khởi động lại backend duy nhất?\n   Answer: a) All clients reconnect in the same second, again and again — a self-inflicted flood; use capped, jittered backoff\n   Mistake (5) of 11.4: stagger the deploy or jitter the backoff.VI: Lỗi (5) của 11.4: deploy so le hoặc thêm jitter cho backoff.\n\n5. Which checks belong in thread:send? (choose all)Những phép kiểm nào thuộc về thread:send? (chọn mọi câu đúng)\n   Answer: a) The message is persisted BEFORE it is emitted to the room + b) The socket is a member of thread:<id> (authorize this event, not just the handshake) + c) The body length is bounded before it is stored + e) authorId comes from socket.data.userId, never from the payload\n   Frames do not carry headers — the Origin was checkable only at the handshake. Persist first so the REST catch-up and the live emit tell the same story.VI: Frame không mang header — Origin chỉ kiểm được lúc bắt tay. Lưu trước để bù tin qua REST và emit trực tiếp kể cùng một câu chuyện.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Auto-join every thread room of the user at connect (one query), then keep explicit joins for new threads</p><p>The comment in messaging.socket.ts records exactly this symptom. Auto-join at connect also means a reconnect restores the rooms by itself.</p><p><i>VI: Chú thích trong messaging.socket.ts ghi đúng triệu chứng này. Tự join lúc connect cũng có nghĩa lần kết nối lại tự khôi phục room.</i></p></li><li><p><b>b)</b> The message with its id — the client de-duplicates by id and catches up with GET ?since=&lt;last id&gt; on reconnect</p><p>The socket is the signal, REST is the truth, the client is the referee. (A tiny signal like feed:has-new — a count only — is the extreme form of the same idea.)</p><p><i>VI: Socket là tín hiệu, REST là sự thật, client là trọng tài. (Một tín hiệu nhỏ như feed:has-new — chỉ một con số — là dạng cực đoan của cùng ý tưởng.)</i></p></li><li><p><b>a)</b> Per socket, inside the socket layer — none of these events touch the HTTP rate limiter</p><p>Mistake (4) of 11.3. After the 101, frames never pass through Express middleware again.</p><p><i>VI: Lỗi (4) của 11.3. Sau 101, frame không bao giờ đi qua middleware Express nữa.</i></p></li><li><p><b>a)</b> All clients reconnect in the same second, again and again — a self-inflicted flood; use capped, jittered backoff</p><p>Mistake (5) of 11.4: stagger the deploy or jitter the backoff.</p><p><i>VI: Lỗi (5) của 11.4: deploy so le hoặc thêm jitter cho backoff.</i></p></li><li><p><b>a)</b> The message is persisted BEFORE it is emitted to the room + <b>b)</b> The socket is a member of thread:&lt;id&gt; (authorize this event, not just the handshake) + <b>c)</b> The body length is bounded before it is stored + <b>e)</b> authorId comes from socket.data.userId, never from the payload</p><p>Frames do not carry headers — the Origin was checkable only at the handshake. Persist first so the REST catch-up and the live emit tell the same story.</p><p><i>VI: Frame không mang header — Origin chỉ kiểm được lúc bắt tay. Lưu trước để bù tin qua REST và emit trực tiếp kể cùng một câu chuyện.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "d1",
+            "de": "<p>A user sits on /messages without clicking into a conversation, and the unread badge never updates. What is the fix this site shipped?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng ngồi ở /messages mà chưa bấm vào cuộc trò chuyện nào, và huy hiệu chưa đọc không bao giờ cập nhật. Bản sửa site này đã làm là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Emit new messages with io.emit so everyone receives them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Auto-join every thread room of the user at connect (one query), then keep explicit joins for new threads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Join the thread room only when the conversation is opened, and refresh the page otherwise"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Poll /messages/unread every 2 seconds on that page"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The comment in messaging.socket.ts records exactly this symptom. Auto-join at connect also means a reconnect restores the rooms by itself.</p><p><i>VI: Chú thích trong messaging.socket.ts ghi đúng triệu chứng này. Tự join lúc connect cũng có nghĩa lần kết nối lại tự khôi phục room.</i></p>"
+          },
+          {
+            "ma": "d2",
+            "de": "<p>What should <code>thread:new-message</code> carry, given that frames can be lost?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>thread:new-message</code> nên mang gì, khi frame có thể bị mất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the text, because ids would let attackers guess other threads"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The message with its id — the client de-duplicates by id and catches up with GET ?since=&lt;last id&gt; on reconnect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The whole thread history, so a lost frame is repaired by the next one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — clients should poll every second instead"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The socket is the signal, REST is the truth, the client is the referee. (A tiny signal like feed:has-new — a count only — is the extreme form of the same idea.)</p><p><i>VI: Socket là tín hiệu, REST là sự thật, client là trọng tài. (Một tín hiệu nhỏ như feed:has-new — chỉ một con số — là dạng cực đoan của cùng ý tưởng.)</i></p>"
+          },
+          {
+            "ma": "d3",
+            "de": "<p>One client can emit thousands of events per second. Where does the limit belong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một client có thể emit hàng nghìn sự kiện mỗi giây. Giới hạn đặt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Per socket, inside the socket layer — none of these events touch the HTTP rate limiter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nowhere: Socket.IO drops events above 100 per second by default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In express-rate-limit, which also wraps socket.on handlers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In nginx, which counts WebSocket frames like requests"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Mistake (4) of 11.3. After the 101, frames never pass through Express middleware again.</p><p><i>VI: Lỗi (4) của 11.3. Sau 101, frame không bao giờ đi qua middleware Express nữa.</i></p>"
+          },
+          {
+            "ma": "d4",
+            "de": "<p>The client’s reconnect uses a fixed 1-second retry. What happens after a deploy restarts the only backend?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client kết nối lại với khoảng thử cố định 1 giây. Chuyện gì xảy ra sau khi deploy khởi động lại backend duy nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All clients reconnect in the same second, again and again — a self-inflicted flood; use capped, jittered backoff"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The clients fall back to long-polling automatically, which spreads the load and avoids the problem"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the first client reconnects; the others wait until the server pushes them a wake-up event"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing bad: Socket.IO queues the reconnects on the server side and admits them one by one"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Mistake (5) of 11.4: stagger the deploy or jitter the backoff.</p><p><i>VI: Lỗi (5) của 11.4: deploy so le hoặc thêm jitter cho backoff.</i></p>"
+          },
+          {
+            "ma": "d5",
+            "de": "<p>Which checks belong in <code>thread:send</code>? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những phép kiểm nào thuộc về <code>thread:send</code>? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The message is persisted BEFORE it is emitted to the room"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The socket is a member of thread:&lt;id&gt; (authorize this event, not just the handshake)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The body length is bounded before it is stored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The Origin header of the frame matches the site"
+              },
+              {
+                "ma": "e",
+                "noiDung": "authorId comes from socket.data.userId, never from the payload"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Frames do not carry headers — the Origin was checkable only at the handshake. Persist first so the REST catch-up and the live emit tell the same story.</p><p><i>VI: Frame không mang header — Origin chỉ kiểm được lúc bắt tay. Lưu trước để bù tin qua REST và emit trực tiếp kể cùng một câu chuyện.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Joining rooms only when the UI opens a thread.|||Chỉ join room khi UI mở một cuộc trò chuyện."
+        },
+        {
+          "loi": "Treating the socket as reliable delivery.|||Coi socket là kênh giao tin đáng tin cậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "auto-join",
+          "vi": "tự vào phòng",
+          "giaiThich": "join mọi room của người dùng lúc connect"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11 · 2 — The server side: authenticate once, authorize every event",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 40,
+      "concepts": [
+        "WebSocket security",
+        "authorization",
+        "rate limiting",
+        "Socket.IO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Build the realtime layer of Notes threads for one process. <code>createRealtime({ verify, loadUser, db, io, log, limit })</code> → <code>{ connect(socket), on(socket, event, payload, ack) }</code>. Fakes: <code>socket = { handshake, data, rooms (Set), join, emit, to(room).emit }</code>, <code>io.to(room).emit</code>, <code>db = { threadsOf(userId), isParticipant(threadId, userId), addMessage({ threadId, authorId, body }) → { id, … } }</code> (all async).</p>\n<p><b><code>async connect(socket)</code></b> → <code>{ ok:true }</code> or <code>{ ok:false, error }</code>: token from <code>handshake.auth.token</code> (missing → <code>NO_TOKEN</code>); <code>verify</code> throws → its <code>message</code>; <code>loadUser</code> throws → <code>AUTH_UNAVAILABLE</code>; no user → <code>USER_NOT_FOUND</code>; disabled/locked → <code>ACCOUNT_DISABLED</code>; roleVersion differs → <code>TOKEN_STALE</code>. Then <code>socket.data.userId</code>, join <code>user:&lt;id&gt;</code> and <b>every</b> <code>thread:&lt;id&gt;</code> from <code>db.threadsOf</code>.</p>\n<p><b><code>async on(…)</code></b> — every reply goes through <code>ack</code> if it is a function:</p>\n<ul><li>rate limit <b>per socket</b>: at most <code>limit.max</code> events per fixed window of <code>limit.windowMs</code> (window starts at the first event, <code>Date.now()</code>) → over it: <code>{ ok:false, reason:'RATE_LIMITED' }</code>;</li>\n<li><code>thread:join {threadId}</code>: as in 11.3 — bad id → <code>BAD_THREAD_ID</code>; already a member → <code>{ ok:true }</code> without a DB call; <code>db.isParticipant</code> (throws ⇒ refused) false → emit <code>thread:join-denied {threadId}</code>, log <code>{ level:'warn', msg:'thread join denied', userId, threadId }</code>, <code>NOT_PARTICIPANT</code>; else join, <code>{ ok:true }</code>;</li>\n<li><code>thread:typing {threadId}</code>: member only (else <code>NOT_MEMBER</code>) → <code>socket.to(room).emit('thread:typing', { threadId, userId })</code>, <code>{ ok:true }</code>;</li>\n<li><code>thread:send {threadId, body}</code>: member only (<code>NOT_MEMBER</code>); body a string, non-empty after trim, ≤ 2000 chars (<code>BAD_BODY</code>); <b>persist first</b> with <code>authorId = socket.data.userId</code>, then <code>io.to(room).emit('thread:new-message', { id, threadId, authorId, body })</code>, reply <code>{ ok:true, id }</code>;</li>\n<li>anything else → <code>UNKNOWN_EVENT</code>. Refusals are <code>{ ok:false, reason }</code>.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Reuse your code from 11.2 and 11.3 (socketAuth, makeThreadHandlers, the ack pattern).</li>\n  <li>Never read a user id from a payload.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng tầng realtime cho các cuộc trò chuyện Notes, một tiến trình. <code>createRealtime({ verify, loadUser, db, io, log, limit })</code> → <code>{ connect(socket), on(socket, event, payload, ack) }</code>. Đồ giả: <code>socket = { handshake, data, rooms (Set), join, emit, to(room).emit }</code>, <code>io.to(room).emit</code>, <code>db = { threadsOf(userId), isParticipant(threadId, userId), addMessage({ threadId, authorId, body }) → { id, … } }</code> (đều async).</p>\n<p><b><code>async connect(socket)</code></b> → <code>{ ok:true }</code> hoặc <code>{ ok:false, error }</code>: token từ <code>handshake.auth.token</code> (thiếu → <code>NO_TOKEN</code>); <code>verify</code> ném lỗi → <code>message</code> của nó; <code>loadUser</code> ném lỗi → <code>AUTH_UNAVAILABLE</code>; không có user → <code>USER_NOT_FOUND</code>; bị vô hiệu/khoá → <code>ACCOUNT_DISABLED</code>; roleVersion lệch → <code>TOKEN_STALE</code>. Rồi gán <code>socket.data.userId</code>, join <code>user:&lt;id&gt;</code> và <b>mọi</b> <code>thread:&lt;id&gt;</code> từ <code>db.threadsOf</code>.</p>\n<p><b><code>async on(…)</code></b> — mọi câu trả lời đi qua <code>ack</code> nếu nó là hàm:</p>\n<ul><li>giới hạn <b>theo socket</b>: tối đa <code>limit.max</code> sự kiện trong một cửa sổ cố định <code>limit.windowMs</code> (cửa sổ bắt đầu ở sự kiện đầu, theo <code>Date.now()</code>) → vượt: <code>{ ok:false, reason:'RATE_LIMITED' }</code>;</li>\n<li><code>thread:join {threadId}</code>: như 11.3 — id sai → <code>BAD_THREAD_ID</code>; đã là thành viên → <code>{ ok:true }</code> không gọi CSDL; <code>db.isParticipant</code> (ném lỗi ⇒ từ chối) false → emit <code>thread:join-denied {threadId}</code>, log <code>{ level:'warn', msg:'thread join denied', userId, threadId }</code>, <code>NOT_PARTICIPANT</code>; còn lại join, <code>{ ok:true }</code>;</li>\n<li><code>thread:typing {threadId}</code>: chỉ thành viên (không thì <code>NOT_MEMBER</code>) → <code>socket.to(room).emit('thread:typing', { threadId, userId })</code>, <code>{ ok:true }</code>;</li>\n<li><code>thread:send {threadId, body}</code>: chỉ thành viên (<code>NOT_MEMBER</code>); body là chuỗi, không rỗng sau trim, ≤ 2000 ký tự (<code>BAD_BODY</code>); <b>lưu trước</b> với <code>authorId = socket.data.userId</code>, rồi <code>io.to(room).emit('thread:new-message', { id, threadId, authorId, body })</code>, trả <code>{ ok:true, id }</code>;</li>\n<li>còn lại → <code>UNKNOWN_EVENT</code>. Lời từ chối là <code>{ ok:false, reason }</code>.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng lại code của bạn ở 11.2 và 11.3 (socketAuth, makeThreadHandlers, mẫu ack).</li>\n  <li>Không bao giờ đọc id người dùng từ payload.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"JBrW\", \"ok:7:3\"); const r = await rt.connect(s); return [r, s.data, [...s.rooms].sort()]; })()",
+          "output": "[{\"ok\":true},{\"userId\":7},[\"JBrW\",\"thread:42\",\"user:7\"]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Do the rate-limit check first in <code>on</code>, then dispatch on <code>event</code>.|||Kiểm giới hạn trước tiên trong <code>on</code>, rồi mới phân nhánh theo <code>event</code>.",
+        "Keep the per-socket windows in a <code>Map</code> created once in createRealtime, keyed by the socket object.|||Giữ cửa sổ của từng socket trong một <code>Map</code> tạo một lần trong createRealtime, khoá là object socket.",
+        "For send: membership → body → <code>await db.addMessage</code> → emit → ack. In that order.|||Với send: thành viên → body → <code>await db.addMessage</code> → emit → ack. Đúng thứ tự đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The realtime layer of Notes threads (one process). */\nfunction createRealtime({ verify, loadUser, db, io, log, limit }) {\n  // Write your solution here\n  return {\n    async connect(socket) {\n      const payload = verify(socket.handshake.auth.token);\n      socket.data.userId = payload.userId;\n      socket.join('user:' + payload.userId);\n      return { ok: true };\n    },\n    async on(socket, event, payload, ack) {\n      if (event === 'thread:join') { socket.join('thread:' + payload.threadId); return ack && ack({ ok: true }); }\n      if (event === 'thread:typing') { socket.to('thread:' + payload.threadId).emit('thread:typing', payload); return ack && ack({ ok: true }); }\n      if (event === 'thread:send') {\n        io.to('thread:' + payload.threadId).emit('thread:new-message', payload);\n        const msg = await db.addMessage({ threadId: payload.threadId, authorId: payload.authorId, body: payload.body });\n        return ack && ack({ ok: true, id: msg.id });\n      }\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createRealtime({ verify, loadUser, db, io, log, limit }) {\n  const windows = new Map();     // socket -> { start, count }: a per-SOCKET rate limit (the HTTP limiter never sees frames)\n  const allowEvent = (socket) => {\n    const now = Date.now();\n    const w = windows.get(socket);\n    if (!w || now - w.start >= limit.windowMs) { windows.set(socket, { start: now, count: 1 }); return true; }\n    w.count++;\n    return w.count <= limit.max;\n  };\n  return {\n    // ---- authenticate ONCE: handshake ----\n    async connect(socket) {\n      const token = socket.handshake.auth && socket.handshake.auth.token;\n      if (!token) return { ok: false, error: 'NO_TOKEN' };\n      let payload;\n      try { payload = verify(token); } catch (e) { return { ok: false, error: e.message }; }\n      let user;\n      try { user = await loadUser(payload.userId); } catch { return { ok: false, error: 'AUTH_UNAVAILABLE' }; }\n      if (!user) return { ok: false, error: 'USER_NOT_FOUND' };\n      if (user.disabled || user.locked) return { ok: false, error: 'ACCOUNT_DISABLED' };\n      if (user.roleVersion !== payload.roleVersion) return { ok: false, error: 'TOKEN_STALE' };\n      socket.data.userId = user.id;\n      socket.join('user:' + user.id);\n      // auto-join every thread at connect (one query) — a reconnect restores the rooms by itself\n      for (const t of await db.threadsOf(user.id)) socket.join('thread:' + t);\n      return { ok: true };\n    },\n    // ---- authorize EVERY time: each event is an endpoint ----\n    async on(socket, event, payload, ack) {\n      const reply = (r) => { if (typeof ack === 'function') ack(r); };\n      if (!allowEvent(socket)) return reply({ ok: false, reason: 'RATE_LIMITED' });\n      const p = payload || {};\n      const room = 'thread:' + p.threadId;\n      const validId = Number.isInteger(p.threadId) && p.threadId > 0;\n      if (event === 'thread:join') {\n        if (!validId) return reply({ ok: false, reason: 'BAD_THREAD_ID' });\n        if (socket.rooms.has(room)) return reply({ ok: true });\n        let allowed = false;\n        try { allowed = await db.isParticipant(p.threadId, socket.data.userId); } catch { allowed = false; }   // fail closed\n        if (!allowed) {\n          socket.emit('thread:join-denied', { threadId: p.threadId });\n          log.push({ level: 'warn', msg: 'thread join denied', userId: socket.data.userId, threadId: p.threadId });\n          return reply({ ok: false, reason: 'NOT_PARTICIPANT' });\n        }\n        socket.join(room);\n        return reply({ ok: true });\n      }\n      if (event === 'thread:typing') {\n        if (!validId || !socket.rooms.has(room)) return reply({ ok: false, reason: 'NOT_MEMBER' });\n        socket.to(room).emit('thread:typing', { threadId: p.threadId, userId: socket.data.userId });   // not back to me\n        return reply({ ok: true });\n      }\n      if (event === 'thread:send') {\n        if (!validId || !socket.rooms.has(room)) return reply({ ok: false, reason: 'NOT_MEMBER' });\n        if (typeof p.body !== 'string' || !p.body.trim() || p.body.length > 2000) return reply({ ok: false, reason: 'BAD_BODY' });\n        // persist FIRST: the REST catch-up and the live emit must tell the same story\n        const msg = await db.addMessage({ threadId: p.threadId, authorId: socket.data.userId, body: p.body });\n        io.to(room).emit('thread:new-message', { id: msg.id, threadId: p.threadId, authorId: socket.data.userId, body: p.body });\n        return reply({ ok: true, id: msg.id });\n      }\n      return reply({ ok: false, reason: 'UNKNOWN_EVENT' });\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two halves of the chapter meet here. The handshake is the single authentication point, re-checked against the database and failing closed; after it, every handler is treated as an endpoint with its own authorization, its own input validation and its own rate limit — because after the 101 none of the HTTP middleware runs again. Auto-joining at connect fixes the frozen badge and makes reconnects self-healing; persisting before emitting keeps the live path and the REST catch-up consistent.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai nửa của chương gặp nhau ở đây. Lần bắt tay là điểm xác thực duy nhất, kiểm lại với CSDL và đóng khi hỏng; sau đó mỗi handler được coi là một endpoint với phân quyền riêng, kiểm đầu vào riêng và giới hạn riêng — vì sau 101 không middleware HTTP nào chạy nữa. Tự join lúc connect sửa huy hiệu bị đứng và làm lần kết nối lại tự lành; lưu trước khi emit giữ đường trực tiếp và đường bù tin qua REST nhất quán.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "connect: auto-join user + threads",
+              "vi": "connect: tự join user + các thread"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"JBrW\", \"ok:7:3\"); const r = await rt.connect(s); return [r, s.data, [...s.rooms].sort()]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              {
+                "ok": true
+              },
+              {
+                "userId": 7
+              },
+              [
+                "JBrW",
+                "thread:42",
+                "user:7"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Refused handshakes",
+              "vi": "Các lần bắt tay bị từ chối"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); return [await rt.connect(sock(\"a\")), await rt.connect(sock(\"b\", \"expired:7:3\")), await rt.connect(sock(\"c\", \"ok:7:2\")), await rt.connect(sock(\"d\", \"ok:8:1\"))]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "error": "NO_TOKEN"
+              },
+              {
+                "ok": false,
+                "error": "jwt expired"
+              },
+              {
+                "ok": false,
+                "error": "TOKEN_STALE"
+              },
+              {
+                "ok": false,
+                "error": "ACCOUNT_DISABLED"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "join: a stranger’s thread refused, a new own thread joined",
+              "vi": "join: thread của người lạ bị từ chối, thread mới của mình được vào"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"a\", \"ok:7:3\"); await rt.connect(s); await rt.on(s, \"thread:join\", { threadId: 99 }, ack); await rt.on(s, \"thread:join\", { threadId: 43 }, ack); return [acks, s.emitted, log, s.rooms.has(\"thread:99\"), s.rooms.has(\"thread:43\")]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                {
+                  "ok": false,
+                  "reason": "NOT_PARTICIPANT"
+                },
+                {
+                  "ok": true
+                }
+              ],
+              [
+                [
+                  "thread:join-denied",
+                  {
+                    "threadId": 99
+                  }
+                ]
+              ],
+              [
+                {
+                  "level": "warn",
+                  "msg": "thread join denied",
+                  "userId": 7,
+                  "threadId": 99
+                }
+              ],
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "send: persisted first, authorId from the socket",
+              "vi": "send: lưu trước, authorId từ socket"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"a\", \"ok:7:3\"); await rt.connect(s); await rt.on(s, \"thread:send\", { threadId: 42, body: \"Chuyển khoản 50 triệu nhé\", authorId: 1 }, ack); return [acks, MSGS, roomLog]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                {
+                  "ok": true,
+                  "id": 1
+                }
+              ],
+              [
+                {
+                  "id": 1,
+                  "threadId": 42,
+                  "authorId": 7,
+                  "body": "Chuyển khoản 50 triệu nhé"
+                }
+              ],
+              [
+                [
+                  "io",
+                  "thread:42",
+                  "thread:new-message",
+                  {
+                    "id": 1,
+                    "threadId": 42,
+                    "authorId": 7,
+                    "body": "Chuyển khoản 50 triệu nhé"
+                  }
+                ]
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"a\", \"ok:7:3\"); await rt.connect(s); await rt.on(s, \"thread:send\", { threadId: 99, body: \"x\" }, ack); await rt.on(s, \"thread:send\", { threadId: 42, body: \"   \" }, ack); await rt.on(s, \"thread:send\", { threadId: 42, body: \"x\".repeat(2001) }, ack); await rt.on(s, \"thread:typing\", { threadId: 99, userId: 1 }, ack); await rt.on(s, \"thread:typing\", { threadId: 42, userId: 1 }, ack); await rt.on(s, \"admin:wipe\", {}, ack); return [acks, MSGS.length, roomLog]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                {
+                  "ok": false,
+                  "reason": "NOT_MEMBER"
+                },
+                {
+                  "ok": false,
+                  "reason": "BAD_BODY"
+                },
+                {
+                  "ok": false,
+                  "reason": "BAD_BODY"
+                },
+                {
+                  "ok": false,
+                  "reason": "NOT_MEMBER"
+                },
+                {
+                  "ok": true
+                },
+                {
+                  "ok": false,
+                  "reason": "UNKNOWN_EVENT"
+                }
+              ],
+              0,
+              [
+                [
+                  "to",
+                  "thread:42",
+                  "thread:typing",
+                  {
+                    "threadId": 42,
+                    "userId": 7
+                  }
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const a = sock(\"a\", \"ok:7:3\"), b = sock(\"b\", \"ok:3:1\"); await rt.connect(a); await rt.connect(b); for (let i = 0; i < 25; i++) await rt.on(a, \"thread:typing\", { threadId: 42 }, ack); await rt.on(b, \"thread:typing\", { threadId: 42 }, ack); await new Promise((r) => setTimeout(r, 1000)); await rt.on(a, \"thread:typing\", { threadId: 42 }, ack); return [acks.filter((x) => x.reason === \"RATE_LIMITED\").length, acks[acks.length - 2], acks[acks.length - 1]]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              5,
+              {
+                "ok": true
+              },
+              {
+                "ok": true
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "await (async () => { const rt = createRealtime({ verify, loadUser, db, io, log, limit: LIMIT }); const s = sock(\"a\", \"ok:7:3\"); await rt.connect(s); dbDown = true; await rt.on(s, \"thread:join\", { threadId: 43 }, ack); await rt.on(s, \"thread:join\", { threadId: 42 }, ack); await rt.on(s, \"thread:join\", { threadId: \"43\" }); return [acks, s.rooms.has(\"thread:43\")]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3 }, 3: { id: 3, roleVersion: 1 }, 8: { id: 8, roleVersion: 1, disabled: true } };\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw new Error('jwt expired'); if (kind !== 'ok') throw new Error('invalid signature'); return { userId: Number(id), roleVersion: Number(rv) }; }\nasync function loadUser(id) { await new Promise((r) => setTimeout(r, 2)); return USERS[id] || null; }\nconst PARTS = { 42: [7, 3], 43: [7], 99: [1, 2], 50: [3] };\nconst MSGS = []; let dbDown = false;\nconst db = {\n  async threadsOf(u) { return Object.keys(PARTS).map(Number).filter((t) => PARTS[t].includes(u) && t !== 50 && t !== 43); },   // 43 is new: not auto-joined yet\n  async isParticipant(t, u) { await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('ETIMEDOUT'); return (PARTS[t] || []).includes(u); },\n  async addMessage(m) { await new Promise((r) => setTimeout(r, 3)); const row = { id: MSGS.length + 1, ...m }; MSGS.push(row); return row; },\n};\nconst roomLog = []; const io = { to: (room) => ({ emit: (e, p) => roomLog.push(['io', room, e, p]) }) };\nconst log = [];\nfunction sock(id, token) { const s = { id, handshake: { auth: token === undefined ? {} : { token } }, data: {}, rooms: new Set([id]), emitted: [] };\n  s.join = (r) => s.rooms.add(r); s.emit = (e, p) => s.emitted.push([e, p]); s.to = (room) => ({ emit: (e, p) => roomLog.push(['to', room, e, p]) }); return s; }\nconst LIMIT = { max: 20, windowMs: 1000 };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                {
+                  "ok": false,
+                  "reason": "NOT_PARTICIPANT"
+                },
+                {
+                  "ok": true
+                }
+              ],
+              false
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Emitting before persisting: a client that catches up over REST misses a message others saw live (or sees one that was never saved).|||Emit trước khi lưu: client bù tin qua REST lỡ một tin người khác đã thấy trực tiếp (hoặc thấy một tin chưa từng được lưu)."
+        },
+        {
+          "loi": "authorId from the payload: anyone can post as anyone.|||authorId từ payload: ai cũng đăng được dưới tên người khác."
+        },
+        {
+          "loi": "A global rate-limit counter instead of per socket: one noisy client silences everyone.|||Bộ đếm giới hạn toàn cục thay vì theo socket: một client ồn ào làm cả hệ thống im lặng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fixed window",
+          "vi": "cửa sổ cố định",
+          "giaiThich": "đếm sự kiện trong từng khoảng thời gian"
+        },
+        {
+          "en": "persist-then-emit",
+          "vi": "lưu rồi mới phát",
+          "giaiThich": "dữ liệu có trong CSDL trước khi báo"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11 · 3 — The client that survives tunnels, lifts and deploys",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 40,
+      "concepts": [
+        "reconnection",
+        "reliability",
+        "WebSocket"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Combine 11.1 and 11.3 into the client of a Notes thread. <code>createThreadClient({ connect, fetchSince, threadIds, baseMs, maxMs, random })</code> → <code>{ start(), stop(), messages(), lastSeenId }</code>:</p>\n<ul><li><code>connect()</code> → Promise of a socket <code>{ onmessage, onclose, emit(event, arg), close() }</code>, or a rejection;</li>\n<li>on every successful connect: reset the backoff; set <code>onmessage</code> (each live message <code>{ id, body }</code> is added unless its id is known); set <code>onclose</code>; <code>emit('thread:join', id)</code> for each of <code>threadIds</code>; then <code>await fetchSince(lastSeenId)</code> and add every message not already known — <b>including on the first connect</b> (initial load);</li>\n<li>on a failed connect or a close: retry after <code>floor(min(maxMs, baseMs·2<sup>attempt</sup>) × (0.5 + random()/2))</code> ms, then <code>attempt++</code>;</li>\n<li><code>stop()</code> cancels a pending retry and closes the socket; nothing reconnects after it;</li>\n<li><code>messages()</code> sorted by id, no duplicates; <code>lastSeenId</code> = highest id seen.</li></ul>\n<p>The fake server creates message <i>i</i> at virtual time <i>i</i>·300 ms and delivers it live only to a socket open at that moment; <code>fetchSince</code> takes 20 ms and returns what exists at its answer time — so the same message can arrive both ways.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Reuse createReconnector (11.1) and createChatClient (11.3).</li>\n  <li>Pass the lastSeenId at the moment of the fetch.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gộp 11.1 và 11.3 thành client của một cuộc trò chuyện Notes. <code>createThreadClient({ connect, fetchSince, threadIds, baseMs, maxMs, random })</code> → <code>{ start(), stop(), messages(), lastSeenId }</code>:</p>\n<ul><li><code>connect()</code> → Promise của một socket <code>{ onmessage, onclose, emit(event, arg), close() }</code>, hoặc bị reject;</li>\n<li>mỗi lần connect thành công: đặt lại backoff; gán <code>onmessage</code> (mỗi tin trực tiếp <code>{ id, body }</code> được thêm nếu id chưa biết); gán <code>onclose</code>; <code>emit('thread:join', id)</code> cho từng <code>threadIds</code>; rồi <code>await fetchSince(lastSeenId)</code> và thêm mọi tin chưa biết — <b>kể cả lần connect đầu</b> (tải ban đầu);</li>\n<li>connect hỏng hoặc bị đóng: thử lại sau <code>floor(min(maxMs, baseMs·2<sup>attempt</sup>) × (0.5 + random()/2))</code> ms, rồi <code>attempt++</code>;</li>\n<li><code>stop()</code> huỷ lần thử đang hẹn và đóng socket; sau đó không gì kết nối lại;</li>\n<li><code>messages()</code> sắp theo id, không trùng; <code>lastSeenId</code> = id lớn nhất đã thấy.</li></ul>\n<p>Server giả tạo tin thứ <i>i</i> ở thời điểm ảo <i>i</i>·300 ms và chỉ giao trực tiếp cho socket đang mở lúc đó; <code>fetchSince</code> mất 20 ms và trả những gì tồn tại lúc nó trả lời — nên cùng một tin có thể tới bằng cả hai đường.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng lại createReconnector (11.1) và createChatClient (11.3).</li>\n  <li>Truyền lastSeenId tại thời điểm fetch.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 1000 }, \"fail\", { openFor: 100000 }]), fetchSince, threadIds: [42], baseMs: 1000, maxMs: 30000, random: half }); c.start(); await sleep(5000); c.stop(); return [ids(c), calls, joins.map((j) => j[0]), fetches]; })()",
+          "output": "[[1,2,3,4,5,6,7,8,9,10],[0,1760,3270],[10,3280],[[10,0],[3280,3]]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Set <code>onmessage</code> BEFORE awaiting the fetch: live messages that arrive during it must not be lost.|||Gán <code>onmessage</code> TRƯỚC khi await fetch: tin trực tiếp tới trong lúc đó không được mất.",
+        "One <code>add()</code> with a Map keyed by id serves both paths.|||Một hàm <code>add()</code> với Map khoá theo id phục vụ cả hai đường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The live client of a Notes thread. */\nfunction createThreadClient({ connect, fetchSince, threadIds, baseMs, maxMs, random }) {\n  // Write your solution here\n  const list = [];\n  let joined = false;\n  const open = () => connect().then((s) => {\n    s.onmessage = (m) => list.push(m);\n    s.onclose = () => setTimeout(open, baseMs);\n    if (!joined) { for (const id of threadIds) s.emit('thread:join', id); joined = true; }\n  }, () => setTimeout(open, baseMs));\n  return { start() { open(); }, stop() {}, messages() { return list; }, get lastSeenId() { return list.length ? list[list.length - 1].id : 0; } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createThreadClient({ connect, fetchSince, threadIds, baseMs, maxMs, random }) {\n  const byId = new Map();\n  let lastSeenId = 0, attempt = 0, timer = null, stopped = false, socket = null;\n  const add = (m) => {\n    if (!m || !Number.isInteger(m.id) || byId.has(m.id)) return;     // de-duplicate by id: both paths may deliver it\n    byId.set(m.id, m);\n    if (m.id > lastSeenId) lastSeenId = m.id;\n  };\n  const schedule = () => {\n    if (stopped) return;\n    const delay = Math.floor(Math.min(maxMs, baseMs * 2 ** attempt) * (0.5 + random() / 2));   // capped, jittered\n    attempt++;\n    timer = setTimeout(open, delay);\n  };\n  const open = () => {\n    timer = null;\n    if (stopped) return;\n    connect().then(async (s) => {\n      if (stopped) { s.close(); return; }\n      socket = s;\n      attempt = 0;\n      s.onmessage = add;                                               // live path: fast, may be lost\n      s.onclose = () => { socket = null; schedule(); };\n      for (const id of threadIds) s.emit('thread:join', id);          // new socket, no rooms: join again\n      const missed = await fetchSince(lastSeenId);                      // truth path: everything after what we saw\n      missed.forEach(add);\n    }, schedule);\n  };\n  return {\n    start() { stopped = false; open(); },\n    stop() { stopped = true; if (timer) clearTimeout(timer); timer = null; if (socket) socket.close(); },\n    messages() { return [...byId.values()].sort((a, b) => a.id - b.id); },\n    get lastSeenId() { return lastSeenId; },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every failure mode of the chapter is handled by a division of labour rather than by trying to make the socket reliable: the backoff spreads reconnections, the re-join restores the rooms a new socket does not have, the REST fetch restores the messages the socket lost, and the id-keyed merge makes the overlap of the two paths harmless. The result is the lesson’s goal: a lost frame is a cosmetic delay, never lost data.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi kiểu hỏng của chương được xử lý bằng cách chia việc chứ không bằng cố làm socket đáng tin: backoff rải các lần kết nối lại, join lại khôi phục room mà socket mới không có, fetch REST khôi phục tin socket đã mất, và phép gộp theo id làm phần chồng của hai đường trở nên vô hại. Kết quả đúng mục tiêu của bài: mất một frame chỉ là trễ hiển thị, không bao giờ mất dữ liệu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A drop at 1 s, a refusal, then back: all 10 messages, once each",
+              "vi": "Rớt ở giây 1, một lần bị từ chối, rồi trở lại: đủ 10 tin, mỗi tin một lần"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 1000 }, \"fail\", { openFor: 100000 }]), fetchSince, threadIds: [42], baseMs: 1000, maxMs: 30000, random: half }); c.start(); await sleep(5000); c.stop(); return [ids(c), calls, joins.map((j) => j[0]), fetches]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              [
+                0,
+                1760,
+                3270
+              ],
+              [
+                10,
+                3280
+              ],
+              [
+                [
+                  10,
+                  0
+                ],
+                [
+                  3280,
+                  3
+                ]
+              ]
+            ],
+            "timeoutMs": 60000
+          },
+          {
+            "moTa": {
+              "en": "Opened late: the initial fetch loads 1–3, the rest arrives live",
+              "vi": "Mở muộn: lần fetch đầu tải 1–3, phần còn lại tới trực tiếp"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 100000 }]), fetchSince, threadIds: [42, 43], baseMs: 1000, maxMs: 30000, random: half }); await sleep(950); c.start(); await sleep(3000); c.stop(); return [ids(c), fetches, joins.map((j) => j.slice(1))]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              [
+                [
+                  960,
+                  0
+                ]
+              ],
+              [
+                [
+                  "thread:join",
+                  42
+                ],
+                [
+                  "thread:join",
+                  43
+                ]
+              ]
+            ],
+            "timeoutMs": 60000
+          },
+          {
+            "moTa": {
+              "en": "Reconnected 10 ms before message 3: it arrives live AND in the fetch — kept once",
+              "vi": "Kết nối lại 10 ms trước tin 3: nó tới trực tiếp VÀ trong lần fetch — giữ một bản"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 290 }, { openFor: 100000 }]), fetchSince, threadIds: [42], baseMs: 1000, maxMs: 30000, random: () => 0.16 }); c.start(); await sleep(4000); c.stop(); return [ids(c), calls, fetches, c.lastSeenId]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              [
+                0,
+                880
+              ],
+              [
+                [
+                  10,
+                  0
+                ],
+                [
+                  890,
+                  1
+                ]
+              ],
+              10
+            ],
+            "timeoutMs": 60000
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([\"fail\", \"fail\", \"fail\", \"fail\", \"fail\", { openFor: 100000 }]), fetchSince, threadIds: [7], baseMs: 500, maxMs: 2000, random: half }); c.start(); await sleep(9000); c.stop(); return [calls, ids(c).length, fetches.length]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                0,
+                385,
+                1145,
+                2655,
+                4165,
+                5675
+              ],
+              10,
+              1
+            ],
+            "timeoutMs": 120000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 100000 }]), fetchSince, threadIds: [42], baseMs: 100, maxMs: 1000, random: half }); c.start(); await sleep(700); c.stop(); const n = calls.length; await sleep(5000); return [ids(c), n === calls.length, calls]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                1,
+                2
+              ],
+              true,
+              [
+                0
+              ]
+            ],
+            "timeoutMs": 120000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const c = createThreadClient({ connect: makeServer([{ openFor: 400 }, { openFor: 400 }, { openFor: 400 }, { openFor: 100000 }]), fetchSince, threadIds: [1, 2], baseMs: 200, maxMs: 800, random: () => 1 }); c.start(); await sleep(4000); c.stop(); return [ids(c), joins.length, fetches.map((f) => f[1])]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// the server's database: message i is created at virtual time i*300 ms (ids 1..10)\nconst DB = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, at: (i + 1) * 300, body: 'm' + (i + 1) }));\nconst T0 = Date.now(); const now = () => Date.now() - T0;\nconst calls = [], joins = [], fetches = [];\n// plan[i]: 'fail' or { openFor: ms } — a connected socket receives LIVE every message created while it is open\nfunction makeServer(plan) { let i = 0;\n  return () => { calls.push(now()); const p = i < plan.length ? plan[i++] : 'fail';\n    return new Promise((res, rej) => setTimeout(() => { if (p === 'fail') return rej(new Error('ECONNREFUSED'));\n      const s = { open: true, onmessage: null, onclose: null, emit: (e, id) => joins.push([now(), e, id]), close() { s.open = false; } };\n      for (const m of DB) { const wait = m.at - now(); if (wait >= 0) setTimeout(() => { if (s.open && s.onmessage) s.onmessage({ id: m.id, body: m.body }); }, wait); }\n      setTimeout(() => { if (s.open) { s.open = false; if (s.onclose) s.onclose(); } }, p.openFor);\n      res(s); }, 10)); }; }\nasync function fetchSince(id) { fetches.push([now(), id]); await new Promise((r) => setTimeout(r, 20)); return DB.filter((m) => m.id > id && m.at <= now()).map((m) => ({ id: m.id, body: m.body })); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst half = () => 0.5;\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              8,
+              [
+                0,
+                1,
+                3,
+                5
+              ]
+            ],
+            "timeoutMs": 120000,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Fetching only after a REconnect: the first page load starts empty.|||Chỉ fetch sau lần kết nối LẠI: lần tải trang đầu bắt đầu trống."
+        },
+        {
+          "loi": "Re-joining only once at start: after the first drop the new socket has no rooms and receives nothing live.|||Chỉ join một lần lúc bắt đầu: sau lần rớt đầu, socket mới không có room và không nhận gì trực tiếp."
+        },
+        {
+          "loi": "A fixed retry interval.|||Khoảng thử lại cố định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "initial load",
+          "vi": "tải ban đầu",
+          "giaiThich": "lần fetch đầu tiên khi mở trang"
+        }
+      ]
+    }
+  ]
+}

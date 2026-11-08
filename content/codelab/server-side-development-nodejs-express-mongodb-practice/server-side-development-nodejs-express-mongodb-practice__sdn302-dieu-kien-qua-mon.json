@@ -1,0 +1,598 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-dieu-kien-qua-mon",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-dieu-kien-qua-mon"
+  },
+  "exercises": [
+    {
+      "title": "Two gates, one average: who passes SDN302?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "grading"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The passing rule of the lesson and its worked example.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật qua môn của bài và ví dụ có lời giải.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Gates first, average second.|||Cổng trước, trung bình sau.",
+        "Attendance decides whether you can sit the final.|||Chuyên cần quyết định bạn có được thi cuối kỳ không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Two gates, one average: who passes SDN302?\n\nAnswer in the answer panel (no code needed).\n\n1. Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — weighted average above 5. Result?Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — trung bình trên 5. Kết quả?\n2. A student misses 25% of the contact slots. What happens?Một sinh viên vắng 25% số buổi. Chuyện gì xảy ra?\n3. Which components have their OWN ≥ 4 gate? (choose all)Thành phần nào có cổng ≥ 4 RIÊNG? (chọn hết)\n4. Why is the Practical Exam where most students stumble?Vì sao Practical Exam là chỗ đa số sinh viên vấp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Two gates, one average: who passes SDN302? — answer key\n\n1. Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — weighted average above 5. Result?Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — trung bình trên 5. Kết quả?\n   Answer: b) Fail: the Practical Exam is below its ≥ 4 gate\n   A gate is checked on its own: 3.5 < 4 fails the course whatever the average.VI: Cổng được kiểm riêng: 3.5 < 4 là trượt môn dù trung bình bao nhiêu.\n\n2. A student misses 25% of the contact slots. What happens?Một sinh viên vắng 25% số buổi. Chuyện gì xảy ra?\n   Answer: b) They cannot sit the final exam — attendance ≥ 80% is a hard gate\n   \"Missing more than 20% of contact slots bars you from the final exam entirely.\"VI: \"Vắng quá 20% số buổi là không được thi cuối kỳ.\"\n\n3. Which components have their OWN ≥ 4 gate? (choose all)Thành phần nào có cổng ≥ 4 RIÊNG? (chọn hết)\n   Answer: c) Final Exam (25%) + e) Practical Exam (25%)\n   Only the two exams are gated; the others count through the weighted average.VI: Chỉ hai bài thi có cổng; các phần khác tính qua trung bình có trọng số.\n\n4. Why is the Practical Exam where most students stumble?Vì sao Practical Exam là chỗ đa số sinh viên vấp?\n   Answer: b) An endpoint must actually RUN under time; theory alone earns nothing\n   85 minutes, connect Mongoose, define a route, validate input, return JSON — practise it hands-on.VI: 85 phút, nối Mongoose, định nghĩa route, kiểm đầu vào, trả JSON — phải luyện bằng tay.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Fail: the Practical Exam is below its ≥ 4 gate</p><p>A gate is checked on its own: 3.5 < 4 fails the course whatever the average.</p><p><i>VI: Cổng được kiểm riêng: 3.5 < 4 là trượt môn dù trung bình bao nhiêu.</i></p></li><li><p><b>b)</b> They cannot sit the final exam — attendance ≥ 80% is a hard gate</p><p>\"Missing more than 20% of contact slots bars you from the final exam entirely.\"</p><p><i>VI: \"Vắng quá 20% số buổi là không được thi cuối kỳ.\"</i></p></li><li><p><b>c)</b> Final Exam (25%) + <b>e)</b> Practical Exam (25%)</p><p>Only the two exams are gated; the others count through the weighted average.</p><p><i>VI: Chỉ hai bài thi có cổng; các phần khác tính qua trung bình có trọng số.</i></p></li><li><p><b>b)</b> An endpoint must actually RUN under time; theory alone earns nothing</p><p>85 minutes, connect Mongoose, define a route, validate input, return JSON — practise it hands-on.</p><p><i>VI: 85 phút, nối Mongoose, định nghĩa route, kiểm đầu vào, trả JSON — phải luyện bằng tay.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "d1",
+            "de": "<p>Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — weighted average above 5. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Assignment 8, Progress Test 7, Project 8, Practical Exam 3.5, Final 6 — trung bình trên 5. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It depends on attendance only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fail: the Practical Exam is below its ≥ 4 gate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pass: the average is above 5"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pass, because the Final is above 4"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A gate is checked on its own: 3.5 < 4 fails the course whatever the average.</p><p><i>VI: Cổng được kiểm riêng: 3.5 < 4 là trượt môn dù trung bình bao nhiêu.</i></p>"
+          },
+          {
+            "ma": "d2",
+            "de": "<p>A student misses 25% of the contact slots. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một sinh viên vắng 25% số buổi. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing, attendance is only a bonus"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They cannot sit the final exam — attendance ≥ 80% is a hard gate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They must retake only the Practical Exam"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They lose 2 points on the final"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"Missing more than 20% of contact slots bars you from the final exam entirely.\"</p><p><i>VI: \"Vắng quá 20% số buổi là không được thi cuối kỳ.\"</i></p>"
+          },
+          {
+            "ma": "d3",
+            "de": "<p>Which components have their OWN ≥ 4 gate? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thành phần nào có cổng ≥ 4 RIÊNG? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Assignments (20%)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Project (15%)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Final Exam (25%)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Progress Tests (15%)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Practical Exam (25%)"
+              }
+            ],
+            "dapAn": [
+              [
+                "c",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Only the two exams are gated; the others count through the weighted average.</p><p><i>VI: Chỉ hai bài thi có cổng; các phần khác tính qua trung bình có trọng số.</i></p>"
+          },
+          {
+            "ma": "d4",
+            "de": "<p>Why is the Practical Exam where most students stumble?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao Practical Exam là chỗ đa số sinh viên vấp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is the longest exam of the course, so students get tired"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An endpoint must actually RUN under time; theory alone earns nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It only asks multiple-choice questions with tricky options"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is graded on handwriting, which is hard to keep neat"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>85 minutes, connect Mongoose, define a route, validate input, return JSON — practise it hands-on.</p><p><i>VI: 85 phút, nối Mongoose, định nghĩa route, kiểm đầu vào, trả JSON — phải luyện bằng tay.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking only at the average.|||Chỉ nhìn trung bình."
+        },
+        {
+          "loi": "Thinking the project has a gate.|||Tưởng project có cổng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gate",
+          "vi": "cổng điểm",
+          "giaiThich": "điều kiện tối thiểu riêng"
+        },
+        {
+          "en": "weighted average",
+          "vi": "trung bình có trọng số"
+        }
+      ]
+    },
+    {
+      "title": "Compute the weighted average",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "reduce",
+        "rounding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>weightedAverage(s)</code> for <code>s = { assignments: [4 scores], practical, progressTests: [3 scores], project, final }</code> (scores 0–10). Use the weights of the lesson; the 4 assignments count through their average, the 3 progress tests too. Return the result <b>rounded to 2 decimals</b> as a number.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Weights: assignments 0.20, practical 0.25, progress tests 0.15, project 0.15, final 0.25.</li>\n  <li>Round with <code>Math.round(x * 100) / 100</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>weightedAverage(s)</code> với <code>s = { assignments: [4 điểm], practical, progressTests: [3 điểm], project, final }</code> (điểm 0–10). Dùng trọng số của bài; 4 assignment tính qua trung bình của chúng, 3 progress test cũng vậy. Trả kết quả <b>làm tròn 2 chữ số thập phân</b> dạng số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trọng số: assignments 0.20, practical 0.25, progress tests 0.15, project 0.15, final 0.25.</li>\n  <li>Làm tròn bằng <code>Math.round(x * 100) / 100</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "weightedAverage({ assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6 })",
+          "output": "6.23",
+          "explanation": "The worked example: 1.6 + 0.875 + 1.05 + 1.2 + 1.5 = 6.225 → 6.23.|||Ví dụ trong bài: 1.6 + 0.875 + 1.05 + 1.2 + 1.5 = 6.225 → 6.23."
+        }
+      ],
+      "hintsJson": [
+        "<code>const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;</code>",
+        "Floating point: 6.225 * 100 may be 622.4999…; add a tiny epsilon before rounding: <code>Math.round((x + 1e-9) * 100) / 100</code>.|||Số thực: 6.225 * 100 có thể là 622.4999…; cộng một epsilon nhỏ trước khi làm tròn: <code>Math.round((x + 1e-9) * 100) / 100</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nfunction weightedAverage(s) {\n  return s.assignments.reduce((a, b) => a + b, 0) * 0.2 + s.practical * 0.25 + s.final * 0.25;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nconst avg = (list) => list.reduce((sum, x) => sum + x, 0) / list.length;\n\nfunction weightedAverage(s) {\n  const total =\n    avg(s.assignments) * 0.20 +      // 4 assignments ⇒ their average carries 20%\n    s.practical * 0.25 +\n    avg(s.progressTests) * 0.15 +    // 3 progress tests ⇒ their average carries 15%\n    s.project * 0.15 +\n    s.final * 0.25;\n  return Math.round((total + 1e-9) * 100) / 100;   // epsilon: 6.225 must round to 6.23\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The five weights add up to 1.00; the multi-part components count through their own average first. Rounding after the sum (with a tiny epsilon against binary floating-point error) gives the 6.23 of the worked example.</p>",
+      "solutionExplanationHtmlVi": "<p>Năm trọng số cộng lại bằng 1.00; các thành phần nhiều phần tính qua trung bình riêng trước. Làm tròn sau khi cộng (kèm epsilon nhỏ chống sai số dấu phẩy động nhị phân) cho đúng 6.23 của ví dụ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The worked example → 6.23",
+              "vi": "Ví dụ trong bài → 6.23"
+            },
+            "goi": "weightedAverage({ assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6 })",
+            "mongDoi": 6.23
+          },
+          {
+            "moTa": {
+              "en": "All tens → 10",
+              "vi": "Toàn điểm 10 → 10"
+            },
+            "goi": "weightedAverage({ assignments: [10, 10, 10, 10], practical: 10, progressTests: [10, 10, 10], project: 10, final: 10 })",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "weightedAverage({ assignments: [6, 7, 8, 9], practical: 5, progressTests: [4, 5, 6], project: 7, final: 4 })",
+            "mongDoi": 5.55,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "weightedAverage({ assignments: [0, 0, 0, 0], practical: 4, progressTests: [0, 0, 0], project: 0, final: 4 })",
+            "mongDoi": 2,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Weighting each of the 4 assignments by 20% (total 80%).|||Cho mỗi assignment 20% (tổng thành 80%)."
+        },
+        {
+          "loi": "<code>toFixed(2)</code> returns a STRING, not a number.|||<code>toFixed(2)</code> trả CHUỖI, không phải số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "floating point",
+          "vi": "số thực dấu phẩy động"
+        }
+      ]
+    },
+    {
+      "title": "passStatus: check the gates and explain why",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "conditions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>passStatus(s)</code> where <code>s</code> is the score object of the previous exercise plus <code>attendance</code> (a percentage 0–100). Return</p>\n<pre>{ pass: boolean, average: number, reasons: string[] }</pre>\n<p><code>average</code> is the rounded weighted average (write <code>weightedAverage</code> again or reuse it). <code>reasons</code> lists every failed condition, in this order: <code>\"attendance below 80%\"</code>, <code>\"practical exam below 4\"</code>, <code>\"final exam below 4\"</code>, <code>\"average below 5\"</code>. <code>pass</code> is true only when there is no reason.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly 80% attendance, exactly 4 and exactly 5 all PASS (≥).</li>\n  <li>Check every condition — a student may fail for several reasons.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>passStatus(s)</code> với <code>s</code> là đối tượng điểm của bài trước cộng <code>attendance</code> (phần trăm 0–100). Trả</p>\n<pre>{ pass: boolean, average: number, reasons: string[] }</pre>\n<p><code>average</code> là trung bình có trọng số đã làm tròn (viết lại <code>weightedAverage</code> hoặc dùng lại). <code>reasons</code> liệt kê mọi điều kiện trượt, theo thứ tự: <code>\"attendance below 80%\"</code>, <code>\"practical exam below 4\"</code>, <code>\"final exam below 4\"</code>, <code>\"average below 5\"</code>. <code>pass</code> chỉ đúng khi không có lý do nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng 80% chuyên cần, đúng 4 và đúng 5 đều QUA (≥).</li>\n  <li>Kiểm mọi điều kiện — một sinh viên có thể trượt vì nhiều lý do.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "the worked example with attendance 90",
+          "output": "{\"pass\":false,\"average\":6.23,\"reasons\":[\"practical exam below 4\"]}",
+          "explanation": "Average fine, gate failed.|||Trung bình ổn, cổng trượt."
+        }
+      ],
+      "hintsJson": [
+        "Push into an array in the required order, then <code>pass: reasons.length === 0</code>.|||Đẩy vào mảng theo đúng thứ tự, rồi <code>pass: reasons.length === 0</code>.",
+        "Compare <code>average</code> (the rounded value) with 5.|||So <code>average</code> (giá trị đã làm tròn) với 5."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nfunction passStatus(s) {\n  const average = (s.practical + s.final) / 2;\n  if (average >= 5) return { pass: true, average, reasons: [] };\n  return { pass: false, average, reasons: ['average below 5'] };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nconst avg = (list) => list.reduce((sum, x) => sum + x, 0) / list.length;\nfunction weightedAverage(s) {\n  const t = avg(s.assignments) * 0.2 + s.practical * 0.25 + avg(s.progressTests) * 0.15 + s.project * 0.15 + s.final * 0.25;\n  return Math.round((t + 1e-9) * 100) / 100;\n}\n\nfunction passStatus(s) {\n  const average = weightedAverage(s);\n  const reasons = [];\n  // every condition is checked on its own — a student can fail for several reasons\n  if (s.attendance < 80) reasons.push('attendance below 80%');\n  if (s.practical < 4) reasons.push('practical exam below 4');\n  if (s.final < 4) reasons.push('final exam below 4');\n  if (average < 5) reasons.push('average below 5');\n  return { pass: reasons.length === 0, average, reasons };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each gate is an independent check, so the function evaluates all four and reports each failure — exactly how you should read your own transcript: the average is necessary, not sufficient.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi cổng là một phép kiểm độc lập, nên hàm đánh giá cả bốn và báo từng thất bại — đúng cách bạn nên đọc bảng điểm của mình: trung bình là cần, không phải đủ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The worked example fails on the practical gate",
+              "vi": "Ví dụ của bài trượt cổng practical"
+            },
+            "goi": "passStatus(base)",
+            "chuanBi": "const base = { assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6, attendance: 90 };",
+            "mongDoi": {
+              "pass": false,
+              "average": 6.23,
+              "reasons": [
+                "practical exam below 4"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Exactly 4 and exactly 80% pass",
+              "vi": "Đúng 4 và đúng 80% là qua"
+            },
+            "goi": "passStatus({ ...base, practical: 4, attendance: 80 })",
+            "chuanBi": "const base = { assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6, attendance: 90 };",
+            "mongDoi": {
+              "pass": true,
+              "average": 6.35,
+              "reasons": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "passStatus({ assignments: [3, 3, 3, 3], practical: 2, progressTests: [3, 3, 3], project: 3, final: 3.9, attendance: 70 })",
+            "chuanBi": "const base = { assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6, attendance: 90 };",
+            "mongDoi": {
+              "pass": false,
+              "average": 2.98,
+              "reasons": [
+                "attendance below 80%",
+                "practical exam below 4",
+                "final exam below 4",
+                "average below 5"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "passStatus({ assignments: [5, 5, 5, 5], practical: 4, progressTests: [5, 5, 5], project: 5, final: 6, attendance: 100 })",
+            "chuanBi": "const base = { assignments: [8, 8, 8, 8], practical: 3.5, progressTests: [7, 7, 7], project: 8, final: 6, attendance: 90 };",
+            "mongDoi": {
+              "pass": true,
+              "average": 5,
+              "reasons": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <code>&gt;</code> instead of <code>&gt;=</code>: a 4.0 on the practical would fail.|||Dùng <code>&gt;</code> thay vì <code>&gt;=</code>: 4.0 ở practical bị trượt."
+        },
+        {
+          "loi": "<code>if … else if …</code>: only the first reason is reported.|||<code>if … else if …</code>: chỉ báo được lý do đầu tiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "necessary vs sufficient",
+          "vi": "cần và đủ"
+        }
+      ]
+    },
+    {
+      "title": "What do I need on the final? minFinalToPass(s)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "search",
+        "floating point"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Before the final exam a student knows every score except <code>final</code>. Write <code>minFinalToPass(s)</code> that returns the smallest final score — in steps of <b>0.1</b> — that makes the student pass (all gates and average ≥ 5, using the same rounded average as before), or <code>null</code> if no final score from 0 to 10 can make them pass (e.g. attendance &lt; 80 or practical &lt; 4).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Try finals 0.0, 0.1, … 10.0 — count with integers (0…100) and divide by 10 to avoid 0.30000000000000004.</li>\n  <li>The final must also reach its own gate (≥ 4).</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước kỳ thi cuối, sinh viên biết mọi điểm trừ <code>final</code>. Viết <code>minFinalToPass(s)</code> trả điểm cuối kỳ nhỏ nhất — bước <b>0.1</b> — giúp sinh viên qua (mọi cổng và trung bình ≥ 5, dùng cùng trung bình đã làm tròn như trước), hoặc <code>null</code> nếu không điểm cuối kỳ nào từ 0 tới 10 giúp qua được (vd chuyên cần &lt; 80 hoặc practical &lt; 4).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thử điểm cuối kỳ 0.0, 0.1, … 10.0 — đếm bằng số nguyên (0…100) rồi chia 10 để tránh 0.30000000000000004.</li>\n  <li>Điểm cuối kỳ cũng phải đạt cổng của nó (≥ 4).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ assignments: [8,8,8,8], practical: 6, progressTests: [7,7,7], project: 8, attendance: 90 }",
+          "output": "4",
+          "explanation": "The average is already ≥ 5 at final 0, but the gate needs 4.|||Trung bình đã ≥ 5 khi final 0, nhưng cổng cần 4."
+        },
+        {
+          "input": "{ assignments: [4,4,4,4], practical: 4, progressTests: [4,4,4], project: 5, attendance: 85 }",
+          "output": "7.4",
+          "explanation": "Here the AVERAGE is what needs the higher final: 0.8 + 1 + 0.6 + 0.75 + 0.25 × 7.4 = 5.0.|||Ở đây TRUNG BÌNH mới là thứ cần điểm cuối kỳ cao hơn: 0.8 + 1 + 0.6 + 0.75 + 0.25 × 7.4 = 5.0."
+        }
+      ],
+      "hintsJson": [
+        "Reuse <code>passStatus</code> from the previous exercise and loop: <code>for (let t = 0; t &lt;= 100; t++) { const f = t / 10; if (passStatus({ ...s, final: f }).pass) return f; } return null;</code>|||Dùng lại <code>passStatus</code> của bài trước và lặp: <code>for (let t = 0; t &lt;= 100; t++) { const f = t / 10; if (passStatus({ ...s, final: f }).pass) return f; } return null;</code>",
+        "A closed formula is possible but rounding makes it fragile; the loop has only 101 steps.|||Có thể dùng công thức đóng nhưng làm tròn làm nó dễ sai; vòng lặp chỉ có 101 bước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nfunction minFinalToPass(s) {\n  for (let f = 0; f <= 10; f += 0.1) {\n    if (f * 0.25 >= 2.5) return f;\n  }\n  return null;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// SDN302 grading (lesson 0.2)\n// Assignment ×4 → 20% (their average) · Practical Exam → 25% · Progress Test ×3 → 15% (their average)\n// Project → 15% · Final Exam → 25%\n// PASS = attendance ≥ 80%  AND  practical ≥ 4  AND  final ≥ 4  AND  weighted average ≥ 5\nconst avg = (list) => list.reduce((sum, x) => sum + x, 0) / list.length;\nfunction weightedAverage(s) {\n  const t = avg(s.assignments) * 0.2 + s.practical * 0.25 + avg(s.progressTests) * 0.15 + s.project * 0.15 + s.final * 0.25;\n  return Math.round((t + 1e-9) * 100) / 100;\n}\nfunction passes(s) {\n  return s.attendance >= 80 && s.practical >= 4 && s.final >= 4 && weightedAverage(s) >= 5;\n}\n\nfunction minFinalToPass(s) {\n  // count with INTEGERS 0..100 and divide: 0.1 steps without floating-point drift\n  for (let t = 0; t <= 100; t++) {\n    const final = t / 10;\n    if (passes({ ...s, final })) return final;\n  }\n  return null;   // no final can fix it: attendance or the practical exam is the problem\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Searching the 101 possible scores with an integer counter is exact and reuses the already-tested rule, so the two exercises can never disagree. A null answer is meaningful: it tells the student the problem is elsewhere (attendance or the practical exam), not in the final.</p>",
+      "solutionExplanationHtmlVi": "<p>Duyệt 101 điểm có thể bằng biến đếm nguyên là chính xác và dùng lại luật đã được kiểm, nên hai bài không bao giờ mâu thuẫn. Kết quả null có nghĩa: nó báo cho sinh viên vấn đề ở chỗ khác (chuyên cần hay practical), không phải ở bài cuối kỳ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Strong student: only the gate matters → 4",
+              "vi": "Sinh viên khá: chỉ cổng quan trọng → 4"
+            },
+            "goi": "minFinalToPass({ assignments: [8, 8, 8, 8], practical: 6, progressTests: [7, 7, 7], project: 8, attendance: 90 })",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Weaker student: the average needs more",
+              "vi": "Sinh viên yếu hơn: trung bình cần nhiều hơn"
+            },
+            "goi": "minFinalToPass({ assignments: [4, 4, 4, 4], practical: 4, progressTests: [4, 4, 4], project: 5, attendance: 85 })",
+            "mongDoi": 7.4
+          },
+          {
+            "moTa": {
+              "en": "Practical or attendance gate failed → null",
+              "vi": "Trượt cổng practical hoặc chuyên cần → null"
+            },
+            "goi": "[minFinalToPass({ assignments: [9, 9, 9, 9], practical: 3.9, progressTests: [9, 9, 9], project: 9, attendance: 100 }), minFinalToPass({ assignments: [9, 9, 9, 9], practical: 9, progressTests: [9, 9, 9], project: 9, attendance: 79 })]",
+            "mongDoi": [
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "minFinalToPass({ assignments: [1, 1, 1, 1], practical: 4, progressTests: [1, 1, 1], project: 1, attendance: 100 })",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "minFinalToPass({ assignments: [5, 6, 4, 5], practical: 4.5, progressTests: [3, 4, 5], project: 6, attendance: 82 })",
+            "mongDoi": 5.5,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding 0.1 in a floating-point loop: 0.1 + 0.2 = 0.30000000000000004, and the answer prints as 4.300000000000001.|||Cộng 0.1 trong vòng lặp số thực: 0.1 + 0.2 = 0.30000000000000004, và đáp án in ra 4.300000000000001."
+        },
+        {
+          "loi": "Ignoring the final's own gate: returning 2.5 when the average only needs 2.5.|||Quên cổng riêng của final: trả 2.5 khi trung bình chỉ cần 2.5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "brute force",
+          "vi": "vét cạn"
+        }
+      ]
+    }
+  ]
+}

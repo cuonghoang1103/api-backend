@@ -1,0 +1,678 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-gioi-thieu",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-gioi-thieu"
+  },
+  "exercises": [
+    {
+      "title": "How a request flows through your server",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "architecture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The flow diagram of lesson 0.1, step by step.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sơ đồ luồng của bài 0.1, từng bước.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Follow the arrow of the lesson's diagram.|||Đi theo mũi tên trong sơ đồ của bài.",
+        "The database is the deepest layer.|||CSDL là tầng sâu nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# How a request flows through your server\n\nAnswer in the answer panel (no code needed).\n\n1. Order the steps of one request from the React app to MongoDB and back.Sắp các bước của một request từ app React tới MongoDB rồi quay về.\n2. Order the chapters of the journey.Sắp các chương của hành trình.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# How a request flows through your server — answer key\n\n1. Order the steps of one request from the React app to MongoDB and back.Sắp các bước của một request từ app React tới MongoDB rồi quay về.\n   Answer: m4) Client (React): fetch/axios sends an HTTP request  →  m1) Express: the route matches and the middleware chain runs  →  m2) Controller: validates the input and calls the service  →  m3) Mongoose model: queries MongoDB  →  m5) JSON response goes back to the client\n   This is the map of the whole course: Chapter 1–2 build the Express part, Chapter 3 the Mongoose part, Chapter 4 the controller/service layers, Chapter 5 the security in the middleware chain, Chapter 6 the client side.VI: Đây là bản đồ của cả môn: Chương 1–2 dựng phần Express, Chương 3 phần Mongoose, Chương 4 tầng controller/service, Chương 5 phần bảo mật trong chuỗi middleware, Chương 6 phía client.\n\n2. Order the chapters of the journey.Sắp các chương của hành trình.\n   Answer: m3) Node.js foundations (event loop, modules, HTTP module)  →  m6) Express (routing, middleware, generator)  →  m5) MongoDB & Mongoose (CRUD, schema, population)  →  m1) REST API in MVC (+ EJS/Handlebars)  →  m2) Auth & security (bcrypt, sessions, JWT, CORS, uploads)  →  m4) Integrate React & deploy (+ BaaS)\n   Each step uses the previous one: you cannot write a Mongoose controller before you can write an Express route.VI: Mỗi bước dùng bước trước: không thể viết controller Mongoose trước khi viết được route Express.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the map of the whole course: Chapter 1–2 build the Express part, Chapter 3 the Mongoose part, Chapter 4 the controller/service layers, Chapter 5 the security in the middleware chain, Chapter 6 the client side.</p><p><i>VI: Đây là bản đồ của cả môn: Chương 1–2 dựng phần Express, Chương 3 phần Mongoose, Chương 4 tầng controller/service, Chương 5 phần bảo mật trong chuỗi middleware, Chương 6 phía client.</i></p><p>Each step uses the previous one: you cannot write a Mongoose controller before you can write an Express route.</p><p><i>VI: Mỗi bước dùng bước trước: không thể viết controller Mongoose trước khi viết được route Express.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "f1",
+            "de": "<p>Order the steps of one request from the React app to MongoDB and back.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước của một request từ app React tới MongoDB rồi quay về.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Express: the route matches and the middleware chain runs"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Controller: validates the input and calls the service"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Mongoose model: queries MongoDB"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Client (React): <code>fetch</code>/<code>axios</code> sends an HTTP request"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "JSON response goes back to the client"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m2",
+              "m3",
+              "m5"
+            ],
+            "giaiThich": "<p>This is the map of the whole course: Chapter 1–2 build the Express part, Chapter 3 the Mongoose part, Chapter 4 the controller/service layers, Chapter 5 the security in the middleware chain, Chapter 6 the client side.</p><p><i>VI: Đây là bản đồ của cả môn: Chương 1–2 dựng phần Express, Chương 3 phần Mongoose, Chương 4 tầng controller/service, Chương 5 phần bảo mật trong chuỗi middleware, Chương 6 phía client.</i></p>"
+          },
+          {
+            "ma": "f2",
+            "de": "<p>Order the chapters of the journey.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các chương của hành trình.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "REST API in MVC (+ EJS/Handlebars)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Auth & security (bcrypt, sessions, JWT, CORS, uploads)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Node.js foundations (event loop, modules, HTTP module)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Integrate React & deploy (+ BaaS)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "MongoDB & Mongoose (CRUD, schema, population)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Express (routing, middleware, generator)"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m6",
+              "m5",
+              "m1",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>Each step uses the previous one: you cannot write a Mongoose controller before you can write an Express route.</p><p><i>VI: Mỗi bước dùng bước trước: không thể viết controller Mongoose trước khi viết được route Express.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting validation after the database call.|||Đặt kiểm tra sau lời gọi CSDL."
+        },
+        {
+          "loi": "Thinking React talks to MongoDB directly.|||Tưởng React nói chuyện thẳng với MongoDB."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "back-end",
+          "vi": "phía server"
+        },
+        {
+          "en": "MERN",
+          "vi": "MongoDB, Express, React, Node"
+        }
+      ]
+    },
+    {
+      "title": "The trust boundary: what the server must never do",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "security mindset"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The mindset shift of the lesson: on the server you own the data, the rules and the trust boundary.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cú chuyển tư duy của bài: trên server bạn sở hữu dữ liệu, luật và ranh giới tin cậy.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Imagine the request was typed by hand in Postman.|||Tưởng tượng request được gõ tay trong Postman.",
+        "What would an attacker love to read?|||Kẻ tấn công thích đọc gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The trust boundary: what the server must never do\n\nAnswer in the answer panel (no code needed).\n\n1. The React form disables the \"price\" field for normal users. Is the API safe if it accepts price from the body?Form React khoá ô \"price\" với người dùng thường. API có an toàn không nếu nó nhận price từ body?\n2. Which response is acceptable after creating a user?Câu trả lời nào chấp nhận được sau khi tạo người dùng?\n3. Which inputs must the server validate? (choose all)Đầu vào nào server phải kiểm tra? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The trust boundary: what the server must never do — answer key\n\n1. The React form disables the \"price\" field for normal users. Is the API safe if it accepts price from the body?Form React khoá ô \"price\" với người dùng thường. API có an toàn không nếu nó nhận price từ body?\n   Answer: a) No — anyone can send any body with Postman or curl; the server must decide what is accepted\n   The UI is a convenience, not a security layer. Every rule must be enforced on the server.VI: Giao diện là tiện ích, không phải lớp bảo mật. Mọi luật phải được thực thi trên server.\n\n2. Which response is acceptable after creating a user?Câu trả lời nào chấp nhận được sau khi tạo người dùng?\n   Answer: a) { \"id\": \"…\", \"name\": \"An\", \"email\": \"an@x.com\" }\n   Never send a password (plain or hashed) or a secret back — \"never send a password or secret back\".VI: Không bao giờ gửi lại mật khẩu (thô hay đã băm) hay secret — \"never send a password or secret back\".\n\n3. Which inputs must the server validate? (choose all)Đầu vào nào server phải kiểm tra? (chọn hết)\n   Answer: a) The JSON body + b) Route parameters like :id + d) Query strings like ?page=2 + e) Headers like Authorization\n   Everything that arrives over the network is client input. Only your own code is trusted.VI: Mọi thứ đến qua mạng đều là đầu vào của client. Chỉ mã của chính bạn là đáng tin.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> No — anyone can send any body with Postman or curl; the server must decide what is accepted</p><p>The UI is a convenience, not a security layer. Every rule must be enforced on the server.</p><p><i>VI: Giao diện là tiện ích, không phải lớp bảo mật. Mọi luật phải được thực thi trên server.</i></p></li><li><p><b>a)</b> <code>{ \"id\": \"…\", \"name\": \"An\", \"email\": \"an@x.com\" }</code></p><p>Never send a password (plain or hashed) or a secret back — \"never send a password or secret back\".</p><p><i>VI: Không bao giờ gửi lại mật khẩu (thô hay đã băm) hay secret — \"never send a password or secret back\".</i></p></li><li><p><b>a)</b> The JSON body + <b>b)</b> Route parameters like <code>:id</code> + <b>d)</b> Query strings like <code>?page=2</code> + <b>e)</b> Headers like <code>Authorization</code></p><p>Everything that arrives over the network is client input. Only your own code is trusted.</p><p><i>VI: Mọi thứ đến qua mạng đều là đầu vào của client. Chỉ mã của chính bạn là đáng tin.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "b1",
+            "de": "<p>The React form disables the \"price\" field for normal users. Is the API safe if it accepts <code>price</code> from the body?</p><p style=\"opacity:.75;font-size:.92em\"><i>Form React khoá ô \"price\" với người dùng thường. API có an toàn không nếu nó nhận <code>price</code> từ body?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — anyone can send any body with Postman or curl; the server must decide what is accepted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — a disabled input cannot be submitted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if the request uses HTTPS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — CORS blocks requests that are not from the form"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The UI is a convenience, not a security layer. Every rule must be enforced on the server.</p><p><i>VI: Giao diện là tiện ích, không phải lớp bảo mật. Mọi luật phải được thực thi trên server.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Which response is acceptable after creating a user?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu trả lời nào chấp nhận được sau khi tạo người dùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>{ \"id\": \"…\", \"name\": \"An\", \"email\": \"an@x.com\" }</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>{ \"id\": \"…\", \"passwordPlain\": \"secret123\" }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>{ \"id\": \"…\", \"email\": \"an@x.com\", \"password\": \"$2b$10$…\" }</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>{ \"user\": { … }, \"jwtSecret\": \"…\" }</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Never send a password (plain or hashed) or a secret back — \"never send a password or secret back\".</p><p><i>VI: Không bao giờ gửi lại mật khẩu (thô hay đã băm) hay secret — \"never send a password or secret back\".</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>Which inputs must the server validate? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu vào nào server phải kiểm tra? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The JSON body"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Route parameters like <code>:id</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The constants written in your own code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Query strings like <code>?page=2</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Headers like <code>Authorization</code>"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Everything that arrives over the network is client input. Only your own code is trusted.</p><p><i>VI: Mọi thứ đến qua mạng đều là đầu vào của client. Chỉ mã của chính bạn là đáng tin.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting front-end validation.|||Tin vào kiểm tra ở front-end."
+        },
+        {
+          "loi": "Returning whole user documents.|||Trả nguyên document người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trust boundary",
+          "vi": "ranh giới tin cậy"
+        },
+        {
+          "en": "validation",
+          "vi": "kiểm tra dữ liệu vào"
+        }
+      ]
+    },
+    {
+      "title": "Never send a password back: toPublicUser(user)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "allow-list",
+        "response shaping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>toPublicUser(user)</code> that turns a user record (as it comes from the database) into what the API may send to a client:</p>\n<pre>{ id, name, email, role }</pre>\n<ul><li><code>id</code> is <code>String(user._id)</code> (or <code>user.id</code> if there is no <code>_id</code>);</li>\n<li>every other field is dropped — <code>password</code>, <code>resetToken</code>, <code>__v</code>, and anything added to the model later;</li>\n<li>a missing <code>role</code> becomes <code>\"user\"</code>; the input object must not be modified.</li></ul>\n<p>Also write <code>toPublicUsers(list)</code> for arrays.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Build a NEW object from an allow-list of fields (do not <code>delete</code> from the original).</li>\n  <li><code>toPublicUsers</code> uses <code>map</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>toPublicUser(user)</code> biến một bản ghi người dùng (như lấy từ CSDL) thành thứ API được gửi cho client:</p>\n<pre>{ id, name, email, role }</pre>\n<ul><li><code>id</code> là <code>String(user._id)</code> (hoặc <code>user.id</code> nếu không có <code>_id</code>);</li>\n<li>mọi field khác bị bỏ — <code>password</code>, <code>resetToken</code>, <code>__v</code>, và bất cứ thứ gì model thêm về sau;</li>\n<li>thiếu <code>role</code> thì thành <code>\"user\"</code>; không được sửa đối tượng đầu vào.</li></ul>\n<p>Viết thêm <code>toPublicUsers(list)</code> cho mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dựng đối tượng MỚI từ danh sách field cho phép (không <code>delete</code> trên bản gốc).</li>\n  <li><code>toPublicUsers</code> dùng <code>map</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toPublicUser({ _id: \"u1\", name: \"An\", email: \"an@x.com\", password: \"$2b$10$…\", __v: 0 })",
+          "output": "{\"id\":\"u1\",\"name\":\"An\",\"email\":\"an@x.com\",\"role\":\"user\"}",
+          "explanation": "Allow-list: only four fields survive.|||Danh sách cho phép: chỉ bốn field còn lại."
+        }
+      ],
+      "hintsJson": [
+        "<code>return { id: String(user._id ?? user.id), name: user.name, email: user.email, role: user.role || 'user' };</code>",
+        "An allow-list is safer than a block-list: a field added next month (e.g. <code>otpSecret</code>) is hidden automatically.|||Danh sách cho phép an toàn hơn danh sách cấm: field thêm tháng sau (vd <code>otpSecret</code>) tự động bị giấu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function toPublicUser(user) {\n  delete user.password;\n  return user;\n}\nfunction toPublicUsers(list) {\n  return list;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// allow-list: name exactly what may leave the server; everything else stays inside\nfunction toPublicUser(user) {\n  return {\n    id: String(user._id ?? user.id),     // MongoDB's _id, as a string\n    name: user.name,\n    email: user.email,\n    role: user.role || 'user',\n  };\n}\n\nfunction toPublicUsers(list) {\n  return list.map(toPublicUser);          // a new array of new objects; the input is untouched\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An allow-list states what may leave the server; everything else stays inside by default. That is the safest way to honour \"never send a password or secret back\", and it keeps the response shape stable for the React app even when the database model grows.</p>",
+      "solutionExplanationHtmlVi": "<p>Danh sách cho phép nói rõ cái gì được rời server; mọi thứ khác mặc định ở lại. Đó là cách an toàn nhất để giữ \"never send a password or secret back\", và giữ hình dạng câu trả lời ổn định cho app React ngay cả khi model CSDL lớn dần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Only id, name, email, role",
+              "vi": "Chỉ id, name, email, role"
+            },
+            "goi": "toPublicUser(an)",
+            "chuanBi": "const an = { _id: 'u1', name: 'An', email: 'an@x.com', password: '$2b$10$abc', resetToken: 'r-123', __v: 0, role: 'admin' };",
+            "mongDoi": {
+              "id": "u1",
+              "name": "An",
+              "email": "an@x.com",
+              "role": "admin"
+            }
+          },
+          {
+            "moTa": {
+              "en": "The input is not modified",
+              "vi": "Không sửa đầu vào"
+            },
+            "goi": "(toPublicUser(an), an.password)",
+            "chuanBi": "const an = { _id: 'u1', name: 'An', email: 'an@x.com', password: '$2b$10$abc', resetToken: 'r-123', __v: 0, role: 'admin' };",
+            "mongDoi": "$2b$10$abc"
+          },
+          {
+            "moTa": {
+              "en": "No _id → id; no role → \"user\"",
+              "vi": "Không _id → id; không role → \"user\""
+            },
+            "goi": "toPublicUser({ id: 'u2', name: 'Bao', email: 'b@x.com', password: 'x' })",
+            "chuanBi": "const an = { _id: 'u1', name: 'An', email: 'an@x.com', password: '$2b$10$abc', resetToken: 'r-123', __v: 0, role: 'admin' };",
+            "mongDoi": {
+              "id": "u2",
+              "name": "Bao",
+              "email": "b@x.com",
+              "role": "user"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "toPublicUsers([an, { _id: 7, name: 'C', email: 'c@x.com', otpSecret: 'JBSWY3DP' }])",
+            "chuanBi": "const an = { _id: 'u1', name: 'An', email: 'an@x.com', password: '$2b$10$abc', resetToken: 'r-123', __v: 0, role: 'admin' };",
+            "mongDoi": [
+              {
+                "id": "u1",
+                "name": "An",
+                "email": "an@x.com",
+                "role": "admin"
+              },
+              {
+                "id": "7",
+                "name": "C",
+                "email": "c@x.com",
+                "role": "user"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "JSON.stringify(toPublicUsers([an])).includes('r-123')",
+            "chuanBi": "const an = { _id: 'u1', name: 'An', email: 'an@x.com', password: '$2b$10$abc', resetToken: 'r-123', __v: 0, role: 'admin' };",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>delete user.password; return user;</code> — mutates the caller's object and forgets <code>resetToken</code>.|||<code>delete user.password; return user;</code> — sửa đối tượng của bên gọi và quên <code>resetToken</code>."
+        },
+        {
+          "loi": "<code>const { password, ...rest } = user; return rest;</code> — a block-list: the next secret field leaks.|||<code>const { password, ...rest } = user; return rest;</code> — danh sách cấm: field bí mật tiếp theo sẽ lộ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        },
+        {
+          "en": "block-list",
+          "vi": "danh sách cấm"
+        }
+      ]
+    },
+    {
+      "title": "Never trust the client: accept a registration body",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "input validation",
+        "mass assignment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>readRegistration(body)</code>, the first thing a register endpoint should do with <code>req.body</code>. Return</p>\n<pre>{ ok: true, data: { name, email, password, role: 'user' } }   // or\n{ ok: false, errors: ['…', …] }</pre>\n<ul><li>accept only <code>name</code>, <code>email</code>, <code>password</code>; anything else (<code>role</code>, <code>isAdmin</code>, <code>_id</code>…) is ignored — <code>role</code> is ALWAYS <code>'user'</code>;</li>\n<li><code>name</code>: a string, trimmed, not empty ⇒ else <code>\"name is required\"</code>;</li>\n<li><code>email</code>: a string, trimmed + lower-cased, containing exactly one <code>@</code> with text on both sides ⇒ else <code>\"email is invalid\"</code>;</li>\n<li><code>password</code>: a string of 8+ characters (not trimmed) ⇒ else <code>\"password must have 8+ characters\"</code>;</li>\n<li>errors in this order; <code>body</code> may be <code>undefined</code> or not an object (treat it as <code>{}</code>).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Check types first: <code>typeof x === 'string'</code> — a client can send <code>\"name\": [\"An\"]</code>.</li>\n  <li>Collect ALL errors, do not stop at the first one.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>readRegistration(body)</code>, việc đầu tiên một endpoint đăng ký nên làm với <code>req.body</code>. Trả</p>\n<pre>{ ok: true, data: { name, email, password, role: 'user' } }   // hoặc\n{ ok: false, errors: ['…', …] }</pre>\n<ul><li>chỉ nhận <code>name</code>, <code>email</code>, <code>password</code>; mọi thứ khác (<code>role</code>, <code>isAdmin</code>, <code>_id</code>…) bị bỏ qua — <code>role</code> LUÔN là <code>'user'</code>;</li>\n<li><code>name</code>: chuỗi, đã trim, không rỗng ⇒ không thì <code>\"name is required\"</code>;</li>\n<li><code>email</code>: chuỗi, đã trim + chữ thường, có đúng một <code>@</code> với chữ ở hai bên ⇒ không thì <code>\"email is invalid\"</code>;</li>\n<li><code>password</code>: chuỗi 8+ ký tự (không trim) ⇒ không thì <code>\"password must have 8+ characters\"</code>;</li>\n<li>lỗi theo đúng thứ tự này; <code>body</code> có thể là <code>undefined</code> hoặc không phải object (coi như <code>{}</code>).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm kiểu trước: <code>typeof x === 'string'</code> — client gửi được <code>\"name\": [\"An\"]</code>.</li>\n  <li>Gom HẾT lỗi, đừng dừng ở lỗi đầu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readRegistration({ name: \" An \", email: \" AN@X.COM \", password: \"secret123\", role: \"admin\" })",
+          "output": "{\"ok\":true,\"data\":{\"name\":\"An\",\"email\":\"an@x.com\",\"password\":\"secret123\",\"role\":\"user\"}}",
+          "explanation": "role \"admin\" from the client is ignored.|||role \"admin\" từ client bị bỏ qua."
+        },
+        {
+          "input": "readRegistration({ email: \"nope\", password: \"123\" })",
+          "output": "{\"ok\":false,\"errors\":[\"name is required\",\"email is invalid\",\"password must have 8+ characters\"]}",
+          "explanation": "Three errors, in order.|||Ba lỗi, đúng thứ tự."
+        }
+      ],
+      "hintsJson": [
+        "<code>const b = body && typeof body === 'object' ? body : {};</code>",
+        "Email check: <code>const parts = email.split('@'); const valid = parts.length === 2 && parts[0] && parts[1];</code>|||Kiểm email: <code>const parts = email.split('@'); const valid = parts.length === 2 && parts[0] && parts[1];</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readRegistration(body) {\n  if (!body.name) return { ok: false, errors: ['name is required'] };\n  return { ok: true, data: { ...body } };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readRegistration(body) {\n  const b = body && typeof body === 'object' ? body : {};\n  const errors = [];\n\n  // accept ONLY these three fields, check their TYPE before touching them\n  const name = typeof b.name === 'string' ? b.name.trim() : '';\n  if (!name) errors.push('name is required');\n\n  const email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';\n  const parts = email.split('@');\n  if (!(parts.length === 2 && parts[0] && parts[1])) errors.push('email is invalid');\n\n  const password = typeof b.password === 'string' ? b.password : '';   // never trim a password\n  if (password.length < 8) errors.push('password must have 8+ characters');\n\n  if (errors.length) return { ok: false, errors };\n  return { ok: true, data: { name, email, password, role: 'user' } };   // role is decided by the SERVER\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The body is untrusted until proven otherwise: choose the fields you accept, normalise them (trim, lower-case), validate types and values, and set the privileged ones (<code>role</code>) yourself. Returning all errors at once lets the React form highlight every field in one round trip — and this function is exactly the kind of \"validate at the edge\" step lesson 8.2 asks for.</p>",
+      "solutionExplanationHtmlVi": "<p>Body là không tin được cho tới khi chứng minh được: chọn field bạn nhận, chuẩn hoá chúng (trim, chữ thường), kiểm kiểu và giá trị, và tự đặt các field đặc quyền (<code>role</code>). Trả mọi lỗi cùng lúc giúp form React tô đỏ mọi ô trong một lượt — và hàm này chính là bước \"kiểm tra ở rìa\" mà bài 8.2 yêu cầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Normalised data, role forced to \"user\"",
+              "vi": "Dữ liệu chuẩn hoá, role bị ép \"user\""
+            },
+            "goi": "readRegistration({ name: ' An ', email: ' AN@X.COM ', password: 'secret123', role: 'admin', isAdmin: true })",
+            "mongDoi": {
+              "ok": true,
+              "data": {
+                "name": "An",
+                "email": "an@x.com",
+                "password": "secret123",
+                "role": "user"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "All three errors in order",
+              "vi": "Cả ba lỗi đúng thứ tự"
+            },
+            "goi": "readRegistration({ email: 'nope', password: '123' })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "name is required",
+                "email is invalid",
+                "password must have 8+ characters"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A missing or non-object body",
+              "vi": "Body thiếu hoặc không phải object"
+            },
+            "goi": "[readRegistration(undefined), readRegistration('hello')]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "errors": [
+                  "name is required",
+                  "email is invalid",
+                  "password must have 8+ characters"
+                ]
+              },
+              {
+                "ok": false,
+                "errors": [
+                  "name is required",
+                  "email is invalid",
+                  "password must have 8+ characters"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "readRegistration({ name: ['An'], email: 'a@@x.com', password: 'secret123 ' })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "name is required",
+                "email is invalid"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "readRegistration({ name: 'An', email: '@x.com', password: 12345678 })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "email is invalid",
+                "password must have 8+ characters"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 6",
+              "vi": "Kiểm ẩn 6"
+            },
+            "goi": "readRegistration({ name: 'An', email: 'a@x', password: '        ' })",
+            "mongDoi": {
+              "ok": true,
+              "data": {
+                "name": "An",
+                "email": "a@x",
+                "password": "        ",
+                "role": "user"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return { ok: true, data: { ...body } }</code> — the client chooses its own <code>role</code>: privilege escalation in one field.|||<code>return { ok: true, data: { ...body } }</code> — client tự chọn <code>role</code>: leo thang đặc quyền chỉ bằng một field."
+        },
+        {
+          "loi": "<code>body.name.trim()</code> without a type check: <code>{\"name\": 5}</code> crashes the handler (500).|||<code>body.name.trim()</code> không kiểm kiểu: <code>{\"name\": 5}</code> làm sập handler (500)."
+        },
+        {
+          "loi": "Trimming the password — \"secret123 \" and \"secret123\" are different passwords.|||Trim mật khẩu — \"secret123 \" và \"secret123\" là hai mật khẩu khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "privilege escalation",
+          "vi": "leo thang đặc quyền"
+        },
+        {
+          "en": "normalise",
+          "vi": "chuẩn hoá"
+        }
+      ]
+    }
+  ]
+}

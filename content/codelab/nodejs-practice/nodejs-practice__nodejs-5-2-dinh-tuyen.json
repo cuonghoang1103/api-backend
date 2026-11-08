@@ -1,0 +1,972 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-5-2-dinh-tuyen",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-5-2-dinh-tuyen"
+  },
+  "exercises": [
+    {
+      "title": "5.2 · Routes are an ordered list",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Express",
+        "routing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the lesson’s live demonstrations. Each output was reproduced on express@5.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu về những minh hoạ trực tiếp của bài. Mỗi output đã được tái hiện trên express@5.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read “ordered list” literally.|||Hiểu “danh sách có thứ tự” theo nghĩa đen.",
+        "A URL has no types.|||URL không có kiểu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2 · Routes are an ordered list\n\nAnswer in the answer panel (no code needed).\n\n1. app.get('/notes/:id', …) is declared before app.get('/notes/new', …). GET /notes/new answers…app.get('/notes/:id', …) được khai trước app.get('/notes/new', …). GET /notes/new trả về…\n2. For /search?q=node&tags=a&tags=b&page=2, req.query is…Với /search?q=node&tags=a&tags=b&page=2, req.query là…\n3. On Express 5, app.get('/files/*splat', …) with /files/a/b/c.png gives req.params =Trên Express 5, app.get('/files/*splat', …) với /files/a/b/c.png cho req.params =\n4. You copy a v4 snippet app.get('/notes/:id?', …) into an Express 5 app. What happens?Bạn chép đoạn v4 app.get('/notes/:id?', …) vào app Express 5. Chuyện gì xảy ra?\n5. A router is mounted with app.use('/api/v1/notes', notesRouter). Inside its router.get('/:id'), for GET /api/v1/notes/42…Một router được gắn bằng app.use('/api/v1/notes', notesRouter). Bên trong router.get('/:id') của nó, với GET /api/v1/notes/42…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2 · Routes are an ordered list — answer key\n\n1. app.get('/notes/:id', …) is declared before app.get('/notes/new', …). GET /notes/new answers…app.get('/notes/:id', …) được khai trước app.get('/notes/new', …). GET /notes/new trả về…\n   Answer: a) {\"handler\":\":id\",\"params\":{\"id\":\"new\"}} — :id matched the word \"new\"\n   First match wins. Express never looks at the second route; nothing warns you. Declare specific routes before parameterised ones.VI: Khớp đầu tiên thắng. Express không bao giờ nhìn tới route thứ hai; không có gì cảnh báo. Khai route cụ thể trước route có tham số.\n\n2. For /search?q=node&tags=a&tags=b&page=2, req.query is…Với /search?q=node&tags=a&tags=b&page=2, req.query là…\n   Answer: b) {\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":\"2\"}\n   Everything is a string, and a repeated key becomes an array — so an attacker can flip the type of any field by repeating it.VI: Mọi thứ là chuỗi, và khoá lặp thành mảng — nên kẻ tấn công có thể đổi kiểu của bất kỳ trường nào bằng cách lặp nó.\n\n3. On Express 5, app.get('/files/*splat', …) with /files/a/b/c.png gives req.params =Trên Express 5, app.get('/files/*splat', …) với /files/a/b/c.png cho req.params =\n   Answer: d) {\"splat\":[\"a\",\"b\",\"c.png\"]}\n   v5 requires named wildcards and gives an array of segments. The v4 form '/files/*' with req.params[0] now throws “Missing parameter name” at startup.VI: v5 bắt buộc wildcard có tên và cho mảng các đoạn. Dạng v4 '/files/*' với req.params[0] giờ ném “Missing parameter name” lúc khởi động.\n\n4. You copy a v4 snippet app.get('/notes/:id?', …) into an Express 5 app. What happens?Bạn chép đoạn v4 app.get('/notes/:id?', …) vào app Express 5. Chuyện gì xảy ra?\n   Answer: d) It throws at startup (“Unexpected ?”): declare /notes and /notes/:id\n   Measured with express@5: TypeError Unexpected ? at index 10: /notes/:id?. Declare /notes and /notes/:id separately.VI: Đo với express@5: TypeError Unexpected ? at index 10: /notes/:id?. Khai riêng /notes và /notes/:id.\n\n5. A router is mounted with app.use('/api/v1/notes', notesRouter). Inside its router.get('/:id'), for GET /api/v1/notes/42…Một router được gắn bằng app.use('/api/v1/notes', notesRouter). Bên trong router.get('/:id') của nó, với GET /api/v1/notes/42…\n   Answer: d) req.url is \"/42\", req.baseUrl is \"/api/v1/notes\", req.originalUrl is the full path\n   Paths inside a router are relative — change the mount path in one place and every route moves. Logs want req.originalUrl.VI: Đường dẫn trong router là tương đối — đổi chỗ gắn ở một nơi là mọi route đi theo. Log nên dùng req.originalUrl.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> {\"handler\":\":id\",\"params\":{\"id\":\"new\"}} — :id matched the word \"new\"</p><p>First match wins. Express never looks at the second route; nothing warns you. Declare specific routes before parameterised ones.</p><p><i>VI: Khớp đầu tiên thắng. Express không bao giờ nhìn tới route thứ hai; không có gì cảnh báo. Khai route cụ thể trước route có tham số.</i></p></li><li><p><b>b)</b> {\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":\"2\"}</p><p>Everything is a string, and a repeated key becomes an array — so an attacker can flip the type of any field by repeating it.</p><p><i>VI: Mọi thứ là chuỗi, và khoá lặp thành mảng — nên kẻ tấn công có thể đổi kiểu của bất kỳ trường nào bằng cách lặp nó.</i></p></li><li><p><b>d)</b> {\"splat\":[\"a\",\"b\",\"c.png\"]}</p><p>v5 requires named wildcards and gives an array of segments. The v4 form '/files/*' with req.params[0] now throws “Missing parameter name” at startup.</p><p><i>VI: v5 bắt buộc wildcard có tên và cho mảng các đoạn. Dạng v4 '/files/*' với req.params[0] giờ ném “Missing parameter name” lúc khởi động.</i></p></li><li><p><b>d)</b> It throws at startup (“Unexpected ?”): declare /notes and /notes/:id</p><p>Measured with express@5: TypeError Unexpected ? at index 10: /notes/:id?. Declare /notes and /notes/:id separately.</p><p><i>VI: Đo với express@5: TypeError Unexpected ? at index 10: /notes/:id?. Khai riêng /notes và /notes/:id.</i></p></li><li><p><b>d)</b> req.url is \"/42\", req.baseUrl is \"/api/v1/notes\", req.originalUrl is the full path</p><p>Paths inside a router are relative — change the mount path in one place and every route moves. Logs want req.originalUrl.</p><p><i>VI: Đường dẫn trong router là tương đối — đổi chỗ gắn ở một nơi là mọi route đi theo. Log nên dùng req.originalUrl.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>app.get('/notes/:id', …)</code> is declared before <code>app.get('/notes/new', …)</code>. <code>GET /notes/new</code> answers…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>app.get('/notes/:id', …)</code> được khai trước <code>app.get('/notes/new', …)</code>. <code>GET /notes/new</code> trả về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"handler\":\":id\",\"params\":{\"id\":\"new\"}} — :id matched the word \"new\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"handler\":\"new\"} — Express prefers literal routes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 404, because two routes match and neither wins"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 500, because Express detects the duplicate route at startup"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>First match wins. Express never looks at the second route; nothing warns you. Declare specific routes before parameterised ones.</p><p><i>VI: Khớp đầu tiên thắng. Express không bao giờ nhìn tới route thứ hai; không có gì cảnh báo. Khai route cụ thể trước route có tham số.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>For <code>/search?q=node&amp;tags=a&amp;tags=b&amp;page=2</code>, <code>req.query</code> is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với <code>/search?q=node&amp;tags=a&amp;tags=b&amp;page=2</code>, <code>req.query</code> là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":2}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":\"2\"}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"q\":\"node\",\"tags\":\"a,b\",\"page\":\"2\"}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{\"q\":\"node\",\"tags\":\"b\",\"page\":2}"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Everything is a string, and a repeated key becomes an array — so an attacker can flip the type of any field by repeating it.</p><p><i>VI: Mọi thứ là chuỗi, và khoá lặp thành mảng — nên kẻ tấn công có thể đổi kiểu của bất kỳ trường nào bằng cách lặp nó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On Express 5, <code>app.get('/files/*splat', …)</code> with <code>/files/a/b/c.png</code> gives <code>req.params</code> =</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Express 5, <code>app.get('/files/*splat', …)</code> với <code>/files/a/b/c.png</code> cho <code>req.params</code> =</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"splat\":\"a/b/c.png\"}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"0\":\"a/b/c.png\"}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"splat\":[\"c.png\"]}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{\"splat\":[\"a\",\"b\",\"c.png\"]}"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>v5 requires named wildcards and gives an array of segments. The v4 form '/files/*' with req.params[0] now throws “Missing parameter name” at startup.</p><p><i>VI: v5 bắt buộc wildcard có tên và cho mảng các đoạn. Dạng v4 '/files/*' với req.params[0] giờ ném “Missing parameter name” lúc khởi động.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You copy a v4 snippet <code>app.get('/notes/:id?', …)</code> into an Express 5 app. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn chép đoạn v4 <code>app.get('/notes/:id?', …)</code> vào app Express 5. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It starts, but only matches /notes and never matches /notes/42"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It starts, but every request to that route answers 400 Bad Request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It works as before: the :id parameter simply becomes optional"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It throws at startup (“Unexpected ?”): declare /notes and /notes/:id"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured with express@5: TypeError Unexpected ? at index 10: /notes/:id?. Declare /notes and /notes/:id separately.</p><p><i>VI: Đo với express@5: TypeError Unexpected ? at index 10: /notes/:id?. Khai riêng /notes và /notes/:id.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A router is mounted with <code>app.use('/api/v1/notes', notesRouter)</code>. Inside its <code>router.get('/:id')</code>, for <code>GET /api/v1/notes/42</code>…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một router được gắn bằng <code>app.use('/api/v1/notes', notesRouter)</code>. Bên trong <code>router.get('/:id')</code> của nó, với <code>GET /api/v1/notes/42</code>…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "req.baseUrl is empty because the router does not know where it is mounted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "req.url is the full path; the router repeats its own prefix"
+              },
+              {
+                "ma": "c",
+                "noiDung": "req.params.id is 42 as a number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "req.url is \"/42\", req.baseUrl is \"/api/v1/notes\", req.originalUrl is the full path"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Paths inside a router are relative — change the mount path in one place and every route moves. Logs want req.originalUrl.</p><p><i>VI: Đường dẫn trong router là tương đối — đổi chỗ gắn ở một nơi là mọi route đi theo. Log nên dùng req.originalUrl.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting Express to pick the “most specific” route.|||Mong Express chọn route “cụ thể nhất”."
+        },
+        {
+          "loi": "Using req.query.page as a number.|||Dùng req.query.page như một con số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "path parameter",
+          "vi": "tham số đường dẫn"
+        },
+        {
+          "en": "wildcard",
+          "vi": "ký tự đại diện"
+        },
+        {
+          "en": "mount path",
+          "vi": "đường gắn router"
+        }
+      ]
+    },
+    {
+      "title": "5.2 · Match a path pattern the way Express 5 does",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "routing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>matchPath(pattern, path)</code> → the <code>req.params</code> object Express 5 would give, or <code>null</code> if the route does not match. Patterns are made of <code>/</code>-separated segments, each one a literal, a parameter <code>:name</code>, or (only as the last segment) a named wildcard <code>*name</code>. Express’s default rules:</p>\n<ul><li>literals compare <b>case-insensitively</b> (<code>/NOTES/42</code> matches <code>/notes/:id</code>);</li><li>one trailing slash is allowed (<code>/notes/42/</code> matches);</li><li><code>:name</code> matches exactly one <b>non-empty</b> segment; its value is the URL-decoded <b>string</b> (<code>a%20b</code> → <code>\"a b\"</code>);</li><li><code>*name</code> matches one or more remaining segments and gives an array of decoded segments (<code>/files/a/b/</code> → <code>[\"a\", \"b\", \"\"]</code> — the trailing slash belongs to the wildcard);</li><li>a value that cannot be decoded throws (Express answers 400): <code>decodeURIComponent</code> already throws <code>URIError</code>.</li></ul><p>Paths always start with <code>/</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>matchPath(pattern, path)</code> → object <code>req.params</code> mà Express 5 sẽ cho, hoặc <code>null</code> nếu route không khớp. Mẫu gồm các đoạn ngăn bởi <code>/</code>, mỗi đoạn là chữ cố định, tham số <code>:name</code>, hoặc (chỉ ở đoạn cuối) wildcard có tên <code>*name</code>. Luật mặc định của Express:</p>\n<ul><li>chữ cố định so <b>không phân biệt hoa thường</b> (<code>/NOTES/42</code> khớp <code>/notes/:id</code>);</li><li>cho phép một dấu / ở cuối (<code>/notes/42/</code> khớp);</li><li><code>:name</code> khớp đúng một đoạn <b>không rỗng</b>; giá trị là <b>chuỗi</b> đã giải mã URL (<code>a%20b</code> → <code>\"a b\"</code>);</li><li><code>*name</code> khớp một hay nhiều đoạn còn lại và cho mảng các đoạn đã giải mã (<code>/files/a/b/</code> → <code>[\"a\", \"b\", \"\"]</code> — dấu / cuối thuộc về wildcard);</li><li>giá trị không giải mã được thì ném lỗi (Express trả 400): <code>decodeURIComponent</code> vốn đã ném <code>URIError</code>.</li></ul><p>path luôn bắt đầu bằng <code>/</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "pattern — e.g. \"/notes/:id\", \"/files/*splat\"; path — the request path|||pattern — vd \"/notes/:id\", \"/files/*splat\"; path — đường dẫn request",
+      "outputSpec": "params object, or null|||object params, hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "matchPath(\"/notes/:id\", \"/notes/42\")",
+          "output": "{\"id\":\"42\"}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split both on \"/\" and walk the pattern segment by segment.|||Tách cả hai theo \"/\" rồi đi qua mẫu từng đoạn.",
+        "Drop one empty last segment of the path — unless the pattern ends with a wildcard.|||Bỏ một đoạn rỗng cuối của path — trừ khi mẫu kết thúc bằng wildcard.",
+        "At the end the number of segments must be equal: /notes/42/x does not match /notes/:id.|||Cuối cùng số đoạn phải bằng nhau: /notes/42/x không khớp /notes/:id."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** req.params for pattern on path (Express 5 defaults), or null */\nfunction matchPath(pattern, path) {\n  // Write your solution here — exact, case-sensitive, no wildcard\n  const pat = pattern.split('/');\n  const segs = path.split('/');\n  if (pat.length !== segs.length) return null;\n  const params = {};\n  for (let i = 0; i < pat.length; i++) {\n    if (pat[i].startsWith(':')) params[pat[i].slice(1)] = segs[i];\n    else if (pat[i] !== segs[i]) return null;\n  }\n  return params;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — segment by segment, with Express 5's defaults\nfunction matchPath(pattern, path) {\n  const pat = pattern.split('/').slice(1);                 // \"/notes/:id\" → [\"notes\", \":id\"]\n  if (pat[pat.length - 1] === '') pat.pop();                // \"/\" → []\n  const segs = path.split('/').slice(1);                    // \"/notes/42/\" → [\"notes\", \"42\", \"\"]\n  const last = pat[pat.length - 1];\n  const hasSplat = last !== undefined && last.startsWith('*');\n  if (!hasSplat && segs[segs.length - 1] === '') segs.pop();  // one trailing slash is allowed (non-strict)\n  const params = {};\n  for (let i = 0; i < pat.length; i++) {\n    const t = pat[i];\n    if (t.startsWith('*')) {\n      // a named wildcard takes ONE OR MORE remaining segments, as an array\n      const rest = segs.slice(i);\n      if (rest.join('/') === '') return null;\n      params[t.slice(1)] = rest.map((s) => decodeURIComponent(s));\n      return params;\n    }\n    const s = segs[i];\n    if (s === undefined || s === '') return null;          // a parameter is never empty\n    if (t.startsWith(':')) params[t.slice(1)] = decodeURIComponent(s);   // always a STRING\n    else if (t.toLowerCase() !== s.toLowerCase()) return null;           // literals: case-insensitive\n  }\n  return segs.length === pat.length ? params : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every case was compared with the Layer of Express 5’s own router (<code>router/lib/layer.js</code>, path-to-regexp 8, sensitive: false, strict: false). Knowing these rules is what lets you predict the ordering bug: <code>:id</code> matches any one non-empty segment — including the word <code>new</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ca đã được so với Layer của chính router Express 5 (<code>router/lib/layer.js</code>, path-to-regexp 8, sensitive: false, strict: false). Nắm các luật này là thứ giúp bạn đoán trước lỗi thứ tự: <code>:id</code> khớp mọi đoạn không rỗng — kể cả chữ <code>new</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A parameter is a string",
+              "vi": "Tham số là chuỗi"
+            },
+            "goi": "matchPath(\"/notes/:id\", \"/notes/42\")",
+            "mongDoi": {
+              "id": "42"
+            }
+          },
+          {
+            "moTa": {
+              "en": ":id matches \"new\"; wrong lengths do not match",
+              "vi": ":id khớp \"new\"; sai số đoạn thì không khớp"
+            },
+            "goi": "[matchPath(\"/notes/:id\", \"/notes/new\"), matchPath(\"/notes/:id\", \"/notes\"), matchPath(\"/notes/:id\", \"/notes/42/x\")]",
+            "mongDoi": [
+              {
+                "id": "new"
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Named wildcard → array",
+              "vi": "Wildcard có tên → mảng"
+            },
+            "goi": "matchPath(\"/files/*splat\", \"/files/a/b/c.png\")",
+            "mongDoi": {
+              "splat": [
+                "a",
+                "b",
+                "c.png"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[matchPath(\"/notes/:id\", \"/notes/42/\"), matchPath(\"/notes/:id\", \"/NOTES/42\"), matchPath(\"/notes/:id\", \"/notes/a%20b\"), matchPath(\"/notes/:id\", \"/notes/\"), matchPath(\"/notes/:id\", \"/notes/42//\")]",
+            "mongDoi": [
+              {
+                "id": "42"
+              },
+              {
+                "id": "42"
+              },
+              {
+                "id": "a b"
+              },
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[matchPath(\"/files/*splat\", \"/files/a/b/\"), matchPath(\"/files/*splat\", \"/files/\"), matchPath(\"/files/*splat\", \"/files/a%2Fb/c\"), matchPath(\"/\", \"/\"), matchPath(\"/notes\", \"/notes/\"), matchPath(\"/a/:x/b/:y\", \"/a/1/b/2/\")]",
+            "mongDoi": [
+              {
+                "splat": [
+                  "a",
+                  "b",
+                  ""
+                ]
+              },
+              null,
+              {
+                "splat": [
+                  "a/b",
+                  "c"
+                ]
+              },
+              {},
+              {},
+              {
+                "x": "1",
+                "y": "2"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "matchPath(\"/notes/:id\", \"/notes/%E0%A4%A\")",
+            "mongDoi": {
+              "loi": "URIError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[matchPath(\"/users/:userId/notes/:noteId\", \"/users/7/notes/9\"), matchPath(\"/users/:userId/notes/:noteId\", \"/users/7/NOTES/9\"), matchPath(\"/users/:userId/notes/:noteId\", \"/users/7/notes\"), matchPath(\"/api/v1/health\", \"/API/V1/Health/\")]",
+            "mongDoi": [
+              {
+                "userId": "7",
+                "noteId": "9"
+              },
+              {
+                "userId": "7",
+                "noteId": "9"
+              },
+              null,
+              {}
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Number(…) the parameter: Express gives strings — converting is the route’s job, with a check.|||Number(…) tham số: Express cho chuỗi — đổi kiểu là việc của route, kèm kiểm tra."
+        },
+        {
+          "loi": "Letting :id match an empty segment, so /notes/ matches /notes/:id.|||Cho :id khớp đoạn rỗng, nên /notes/ khớp /notes/:id."
+        },
+        {
+          "loi": "Comparing literals case-sensitively.|||So chữ cố định phân biệt hoa thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "segment",
+          "vi": "đoạn đường dẫn"
+        },
+        {
+          "en": "case-insensitive",
+          "vi": "không phân biệt hoa thường"
+        },
+        {
+          "en": "URL decoding",
+          "vi": "giải mã URL"
+        }
+      ]
+    },
+    {
+      "title": "5.2 · Read the query string defensively",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "routing",
+        "validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Three facts from the lesson: everything in <code>req.query</code> is a string, a repeated key becomes an array, and the client controls the whole object. Write <code>listParams(query)</code> for <code>GET /api/v1/notes</code> → <code>{ page, limit, q, tags }</code>:</p>\n<ul><li>when a key arrives as an array, use its <b>first</b> value — except <code>tags</code>;</li><li><code>page</code>: integer (<code>Math.floor</code>), default 1, at least 1; anything that is not a number → 1;</li><li><code>limit</code>: integer, default 10, clamped to 1…50; not a number → 10;</li><li><code>q</code>: the trimmed string, or <code>\"\"</code>;</li><li><code>tags</code>: <b>always an array</b> — a single <code>tags=a</code> gives <code>[\"a\"]</code>, repeated keys give all values, missing gives <code>[]</code>; empty strings are dropped.</li></ul><p>The lesson’s two lines are your starting point: <code>Math.max(1, Number(req.query.page ?? 1) || 1)</code> and <code>Math.min(50, Math.max(1, Number(req.query.limit ?? 10) || 10))</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba sự thật của bài: mọi thứ trong <code>req.query</code> là chuỗi, khoá lặp thành mảng, và client kiểm soát cả object. Viết <code>listParams(query)</code> cho <code>GET /api/v1/notes</code> → <code>{ page, limit, q, tags }</code>:</p>\n<ul><li>khi một khoá tới dạng mảng, dùng giá trị <b>đầu</b> — trừ <code>tags</code>;</li><li><code>page</code>: số nguyên (<code>Math.floor</code>), mặc định 1, ít nhất 1; thứ không phải số → 1;</li><li><code>limit</code>: số nguyên, mặc định 10, kẹp trong 1…50; không phải số → 10;</li><li><code>q</code>: chuỗi đã trim, hoặc <code>\"\"</code>;</li><li><code>tags</code>: <b>luôn là mảng</b> — một <code>tags=a</code> cho <code>[\"a\"]</code>, khoá lặp cho mọi giá trị, thiếu thì <code>[]</code>; bỏ chuỗi rỗng.</li></ul><p>Hai dòng của bài là điểm xuất phát: <code>Math.max(1, Number(req.query.page ?? 1) || 1)</code> và <code>Math.min(50, Math.max(1, Number(req.query.limit ?? 10) || 10))</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "query — req.query (values are strings or arrays of strings)|||query — req.query (giá trị là chuỗi hoặc mảng chuỗi)",
+      "outputSpec": "{ page, limit, q, tags }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "listParams({\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":\"2\"})",
+          "output": "{\"page\":2,\"limit\":10,\"q\":\"node\",\"tags\":[\"a\",\"b\"]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A tiny helper one(v) = Array.isArray(v) ? v[0] : v removes most of the type flipping.|||Một hàm nhỏ one(v) = Array.isArray(v) ? v[0] : v gỡ phần lớn trò đổi kiểu.",
+        "Number(\"abc\") is NaN, and NaN || 10 is 10 — that is why the lesson writes || default.|||Number(\"abc\") là NaN, và NaN || 10 là 10 — đó là lý do bài viết || mặc định.",
+        "For tags, normalise to an array first, then filter.|||Với tags, chuẩn hoá thành mảng trước, rồi lọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** { page, limit, q, tags } from req.query, whatever the client sent */\nfunction listParams(query) {\n  // Write your solution here — this trusts the client\n  return { page: query.page || 1, limit: query.limit || 10, q: query.q || '', tags: query.tags || [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — pick one value, convert, default, clamp; tags always an array\nfunction listParams(query) {\n  const one = (v) => (Array.isArray(v) ? v[0] : v);              // ?page=2&page=3 → take the first\n  const int = (v, dflt) => Math.floor(Number(one(v) ?? dflt) || dflt);\n  const page = Math.max(1, int(query.page, 1));\n  const limit = Math.min(50, Math.max(1, int(query.limit, 10)));  // clamp: nobody asks for a million rows\n  const qText = one(query.q);\n  const q = typeof qText === 'string' ? qText.trim() : '';\n  const raw = query.tags === undefined ? [] : Array.isArray(query.tags) ? query.tags : [query.tags];   // one shape, always\n  const tags = raw.filter((t) => typeof t === 'string' && t !== '');\n  return { page, limit, q, tags };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The values in the tests are what Express 5’s query parser really produces (<code>node:querystring</code>: repeated keys → arrays). Normalising at the edge means the rest of the code sees one shape; the clamp means nobody can request a million rows. Never spread <code>req.query</code> straight into a database <code>where</code> — read the fields you expect, by name, as here.</p>",
+      "solutionExplanationHtmlVi": "<p>Các giá trị trong kiểm đúng là thứ bộ phân tích query của Express 5 tạo ra (<code>node:querystring</code>: khoá lặp → mảng). Chuẩn hoá ở biên nghĩa là phần còn lại của code chỉ thấy một dạng; phép kẹp nghĩa là không ai xin được một triệu dòng. Đừng bao giờ rải thẳng <code>req.query</code> vào <code>where</code> của CSDL — đọc các trường bạn mong đợi, theo tên, như ở đây.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s /search?q=node&tags=a&tags=b&page=2",
+              "vi": "/search?q=node&tags=a&tags=b&page=2 của bài"
+            },
+            "goi": "listParams({\"q\":\"node\",\"tags\":[\"a\",\"b\"],\"page\":\"2\"})",
+            "mongDoi": {
+              "page": 2,
+              "limit": 10,
+              "q": "node",
+              "tags": [
+                "a",
+                "b"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nothing sent: defaults",
+              "vi": "Không gửi gì: mặc định"
+            },
+            "goi": "listParams({})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 10,
+              "q": "",
+              "tags": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "A million rows → 50; one tag → array",
+              "vi": "Một triệu dòng → 50; một tag → mảng"
+            },
+            "goi": "listParams({\"limit\":\"1000000\",\"tags\":\"a\"})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 50,
+              "q": "",
+              "tags": [
+                "a"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "listParams({\"page\":\"abc\",\"limit\":\"-3\",\"q\":\"  express  \"})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 1,
+              "q": "express",
+              "tags": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "listParams({\"page\":[\"3\",\"9\"],\"limit\":[\"5\"],\"q\":[\"first\",\"second\"],\"tags\":[\"x\",\"\",\"y\"]})",
+            "mongDoi": {
+              "page": 3,
+              "limit": 5,
+              "q": "first",
+              "tags": [
+                "x",
+                "y"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "listParams({\"page\":\"2.7\",\"limit\":\"0\",\"tags\":\"\"})",
+            "mongDoi": {
+              "page": 2,
+              "limit": 10,
+              "q": "",
+              "tags": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"2\" + 1 is \"21\": using page without converting it.|||\"2\" + 1 là \"21\": dùng page mà không đổi kiểu."
+        },
+        {
+          "loi": "Number([\"2\", \"3\"]) is NaN — but Number([\"2\"]) is 2: arrays sneak through unless you pick one value.|||Number([\"2\", \"3\"]) là NaN — nhưng Number([\"2\"]) là 2: mảng lọt qua nếu bạn không chọn một giá trị."
+        },
+        {
+          "loi": "tags.map(…) crashing when tags is the string \"a\".|||tags.map(…) sập khi tags là chuỗi \"a\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clamp",
+          "vi": "kẹp giá trị trong khoảng"
+        },
+        {
+          "en": "normalise",
+          "vi": "chuẩn hoá dạng dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "5.2 · One router per resource, and mergeParams for nesting",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "Router"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Split the Notes routes into routers, as the lesson does. In <code>createApp()</code>:</p>\n<ul><li>a <code>notesRouter</code> mounted at <code>/api/v1/notes</code> with <code>GET /</code> (all notes), <code>GET /new</code> → <code>{ form: \"new note\" }</code>, and <code>GET /:id</code> → the note, 404 <code>{ error: \"Not Found\" }</code>, or 400 <code>{ error: \"id must be a number\" }</code> when the id is not an integer;</li><li>a <code>commentsRouter</code> mounted at <code>/api/v1/notes/:noteId/comments</code> whose <code>GET /</code> returns <code>{ noteId: &lt;number&gt;, comments: [texts] }</code> — it needs to read <code>:noteId</code> from its <b>parent</b> path.</li></ul><p>The starter has the ordering bug and a child router that cannot see the parent’s parameter.</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Paths inside a router are relative to its mount path.</li>\n  <li>Keep the data arrays as given.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tách các route của Notes thành router, như bài làm. Trong <code>createApp()</code>:</p>\n<ul><li>một <code>notesRouter</code> gắn ở <code>/api/v1/notes</code> có <code>GET /</code> (mọi ghi chú), <code>GET /new</code> → <code>{ form: \"new note\" }</code>, và <code>GET /:id</code> → ghi chú, 404 <code>{ error: \"Not Found\" }</code>, hoặc 400 <code>{ error: \"id must be a number\" }</code> khi id không phải số nguyên;</li><li>một <code>commentsRouter</code> gắn ở <code>/api/v1/notes/:noteId/comments</code> có <code>GET /</code> trả <code>{ noteId: &lt;số&gt;, comments: [các chữ] }</code> — nó cần đọc <code>:noteId</code> từ đường dẫn <b>cha</b>.</li></ul><p>Code khởi đầu có lỗi thứ tự và một router con không thấy tham số của cha.</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đường dẫn trong router là tương đối với chỗ gắn của nó.</li>\n  <li>Giữ nguyên các mảng dữ liệu đã cho.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "s(await request(createApp(), \"GET\", \"/api/v1/notes/new\"))",
+          "output": "{\"status\":200,\"body\":{\"form\":\"new note\"}}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Inside one router, declare from most specific to least specific: /new before /:id.|||Trong một router, khai từ cụ thể nhất tới chung nhất: /new trước /:id.",
+        "express.Router({ mergeParams: true }) lets the child see req.params.noteId.|||express.Router({ mergeParams: true }) cho router con thấy req.params.noteId.",
+        "Number.isInteger(Number(\"abc\")) is false → 400.|||Number.isInteger(Number(\"abc\")) là false → 400."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "/** notes router + nested comments router */\nfunction createApp() {\n  const app = express();\n  const notes = [{ id: 1, title: 'First note' }, { id: 2, title: 'Second note' }];\n  const comments = [{ noteId: 1, text: 'nice' }, { noteId: 1, text: 'thanks' }, { noteId: 2, text: 'ok' }];\n\n  // Write your solution here — the ordering bug, and a child router that cannot see :noteId\n  const notesRouter = express.Router();\n  notesRouter.get('/', (req, res) => res.json(notes));\n  notesRouter.get('/:id', (req, res) => {\n    const id = Number(req.params.id);\n    if (!Number.isInteger(id)) return res.status(400).json({ error: 'id must be a number' });\n    const note = notes.find((n) => n.id === id);\n    if (!note) return res.status(404).json({ error: 'Not Found' });\n    res.json(note);\n  });\n  notesRouter.get('/new', (req, res) => res.json({ form: 'new note' }));\n\n  const commentsRouter = express.Router();\n  commentsRouter.get('/', (req, res) => {\n    const noteId = Number(req.params.noteId);\n    res.json({ noteId, comments: comments.filter((c) => c.noteId === noteId).map((c) => c.text) });\n  });\n\n  app.use('/api/v1/notes/:noteId/comments', commentsRouter);\n  app.use('/api/v1/notes', notesRouter);\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Reference solution — specific before parameterised, mergeParams for the nested router\nfunction createApp() {\n  const app = express();\n  const notes = [{ id: 1, title: 'First note' }, { id: 2, title: 'Second note' }];\n  const comments = [{ noteId: 1, text: 'nice' }, { noteId: 1, text: 'thanks' }, { noteId: 2, text: 'ok' }];\n\n  const notesRouter = express.Router();\n  notesRouter.get('/', (req, res) => res.json(notes));\n  notesRouter.get('/new', (req, res) => res.json({ form: 'new note' }));   // specific BEFORE /:id\n  notesRouter.get('/:id', (req, res) => {\n    const id = Number(req.params.id);\n    if (!Number.isInteger(id)) return res.status(400).json({ error: 'id must be a number' });\n    const note = notes.find((n) => n.id === id);\n    if (!note) return res.status(404).json({ error: 'Not Found' });\n    res.json(note);\n  });\n\n  // mergeParams: the child router can read :noteId from the mount path\n  const commentsRouter = express.Router({ mergeParams: true });\n  commentsRouter.get('/', (req, res) => {\n    const noteId = Number(req.params.noteId);\n    res.json({ noteId, comments: comments.filter((c) => c.noteId === noteId).map((c) => c.text) });\n  });\n\n  app.use('/api/v1/notes/:noteId/comments', commentsRouter);\n  app.use('/api/v1/notes', notesRouter);\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A router is a mini-app with its own ordered list, so the ordering question becomes local to one resource. mergeParams is off by default because a router should not depend on where it is mounted — turn it on only for genuinely nested resources like comments of a note.</p>",
+      "solutionExplanationHtmlVi": "<p>Router là một mini-app có danh sách thứ tự riêng, nên câu hỏi thứ tự chỉ còn trong phạm vi một tài nguyên. mergeParams mặc định tắt vì một router không nên phụ thuộc vào chỗ nó được gắn — chỉ bật cho tài nguyên lồng thật sự như bình luận của một ghi chú.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "app.js",
+        "tepNap": [
+          "mini-express.js",
+          "app.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "/new is not shadowed by /:id",
+              "vi": "/new không bị /:id che"
+            },
+            "goi": "s(await request(createApp(), \"GET\", \"/api/v1/notes/new\"))",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "form": "new note"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "GET /:id found / not found",
+              "vi": "GET /:id có / không có"
+            },
+            "goi": "[s(await request(createApp(), \"GET\", \"/api/v1/notes/2\")), s(await request(createApp(), \"GET\", \"/api/v1/notes/9\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "id": 2,
+                  "title": "Second note"
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Not Found"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nested router reads :noteId",
+              "vi": "Router lồng đọc được :noteId"
+            },
+            "goi": "s(await request(createApp(), \"GET\", \"/api/v1/notes/1/comments\"))",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "noteId": 1,
+                "comments": [
+                  "nice",
+                  "thanks"
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[s(await request(createApp(), \"GET\", \"/api/v1/notes/abc\")), s(await request(createApp(), \"GET\", \"/api/v1/notes/\")), s(await request(createApp(), \"GET\", \"/api/v1/notes/2/comments/\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });",
+            "mongDoi": [
+              {
+                "status": 400,
+                "body": {
+                  "error": "id must be a number"
+                }
+              },
+              {
+                "status": 200,
+                "body": [
+                  {
+                    "id": 1,
+                    "title": "First note"
+                  },
+                  {
+                    "id": 2,
+                    "title": "Second note"
+                  }
+                ]
+              },
+              {
+                "status": 200,
+                "body": {
+                  "noteId": 2,
+                  "comments": [
+                    "ok"
+                  ]
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[s(await request(createApp(), \"GET\", \"/API/V1/NOTES/NEW\")), (await request(createApp(), \"GET\", \"/api/v1/notes/1/2\")).status]",
+            "chuanBi": "const s = (r) => ({ status: r.status, body: r.body ?? null });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "form": "new note"
+                }
+              },
+              404
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring /:id first: /api/v1/notes/new returns 400 (or a lookup of NaN).|||Khai /:id trước: /api/v1/notes/new trả 400 (hoặc tra NaN)."
+        },
+        {
+          "loi": "Forgetting mergeParams: req.params.noteId is undefined, Number(undefined) is NaN, and every list is empty.|||Quên mergeParams: req.params.noteId là undefined, Number(undefined) là NaN, và mọi danh sách đều rỗng."
+        },
+        {
+          "loi": "Repeating the prefix inside the router: router.get(\"/api/v1/notes/:id\") never matches.|||Lặp tiền tố trong router: router.get(\"/api/v1/notes/:id\") không bao giờ khớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "express.Router()",
+          "vi": "bộ định tuyến con"
+        },
+        {
+          "en": "mergeParams",
+          "vi": "gộp tham số của router cha"
+        }
+      ]
+    },
+    {
+      "title": "5.2 · Find routes that can never be reached",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "routing",
+        "static analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“This class of bug scales badly … nothing warns you — there is no compile step and no duplicate-route error.” Write the warning Express does not have. <code>routes</code> is the ordered list of one app: <code>[{ name, method, path }]</code> (<code>method</code> is <code>\"get\"</code>, <code>\"post\"</code>, … or <code>\"all\"</code>). A route is <b>shadowed</b> when an <b>earlier</b> route with the same method (or <code>\"all\"</code>) matches <i>every</i> path the later one could match. Return <code>[{ route, shadowedBy }]</code> in list order, naming the first such earlier route.</p>\n<p>Segments are literals (case-insensitive), <code>:param</code> (any one segment) and a final <code>*splat</code> (one or more segments). So:</p>\n<ul><li>a literal covers only the same literal; <code>:param</code> covers a literal or another <code>:param</code>, never a wildcard;</li><li>without wildcards both patterns need the same number of segments;</li><li>an earlier <code>…/*splat</code> at position k covers a later pattern that has at least k+1 segments (its own wildcard, if any, starting at k or later) and whose first k segments are covered.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>“Loại lỗi này càng lớn càng tệ … không có gì cảnh báo — không có bước biên dịch, không có lỗi route trùng.” Hãy viết lời cảnh báo mà Express không có. <code>routes</code> là danh sách có thứ tự của một app: <code>[{ name, method, path }]</code> (<code>method</code> là <code>\"get\"</code>, <code>\"post\"</code>, … hoặc <code>\"all\"</code>). Một route bị <b>che</b> khi một route <b>trước</b> nó cùng method (hoặc <code>\"all\"</code>) khớp <i>mọi</i> đường dẫn mà route sau có thể khớp. Trả về <code>[{ route, shadowedBy }]</code> theo thứ tự danh sách, nêu route trước đầu tiên như vậy.</p>\n<p>Các đoạn là chữ cố định (không phân biệt hoa thường), <code>:param</code> (một đoạn bất kỳ) và <code>*splat</code> ở cuối (một hay nhiều đoạn). Do đó:</p>\n<ul><li>chữ cố định chỉ phủ chính chữ đó; <code>:param</code> phủ một chữ cố định hoặc một <code>:param</code> khác, không bao giờ phủ wildcard;</li><li>không có wildcard thì hai mẫu cần cùng số đoạn;</li><li>một <code>…/*splat</code> phía trước ở vị trí k phủ một mẫu sau có ít nhất k+1 đoạn (wildcard của nó, nếu có, bắt đầu ở k hoặc sau) và k đoạn đầu được phủ.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "routes — [{ name, method, path }] in declaration order|||routes — [{ name, method, path }] theo thứ tự khai báo",
+      "outputSpec": "[{ route, shadowedBy }]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findShadowed([{\"name\":\"byId\",\"method\":\"get\",\"path\":\"/notes/:id\"},{\"name\":\"newForm\",\"method\":\"get\",\"path\":\"/notes/new\"}])",
+          "output": "[{\"route\":\"newForm\",\"shadowedBy\":\"byId\"}]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write covers(early, late) for two paths first; findShadowed is then a double loop.|||Viết covers(early, late) cho hai đường dẫn trước; findShadowed khi đó chỉ là hai vòng lặp.",
+        "Write segCovers(a, b) for one segment pair and reuse it.|||Viết segCovers(a, b) cho một cặp đoạn và dùng lại.",
+        "Test your idea on the lesson’s bug: /notes/:id before /notes/new.|||Thử ý tưởng trên lỗi của bài: /notes/:id trước /notes/new."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** routes that an earlier route makes unreachable */\nfunction findShadowed(routes) {\n  // Write your solution here — this only catches exact duplicates\n  const out = [];\n  routes.forEach((late, j) => {\n    const early = routes.slice(0, j).find((e) => e.method === late.method && e.path === late.path);\n    if (early) out.push({ route: late.name, shadowedBy: early.name });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — segment coverage, then the first earlier route that covers\nfunction segCovers(a, b) {\n  // does pattern segment a match everything segment b can match?\n  if (a.startsWith(':')) return !b.startsWith('*');\n  if (b.startsWith(':') || b.startsWith('*')) return false;\n  return a.toLowerCase() === b.toLowerCase();\n}\n\nfunction covers(early, late) {\n  const A = early.split('/').filter(Boolean);\n  const B = late.split('/').filter(Boolean);\n  const aSplat = A.length > 0 && A[A.length - 1].startsWith('*');\n  const bSplat = B.length > 0 && B[B.length - 1].startsWith('*');\n  if (aSplat) {\n    const k = A.length - 1;                              // the wildcard swallows segment k and everything after it\n    if (bSplat ? B.length - 1 < k : B.length < k + 1) return false;\n    for (let i = 0; i < k; i++) if (!segCovers(A[i], B[i])) return false;\n    return true;\n  }\n  if (bSplat || A.length !== B.length) return false;      // a wildcard path can be longer than any fixed pattern\n  return A.every((seg, i) => segCovers(seg, B[i]));\n}\n\nfunction findShadowed(routes) {\n  const out = [];\n  routes.forEach((late, j) => {\n    // the first EARLIER route of the same method (or \"all\") that matches everything this one matches\n    const early = routes.slice(0, j).find((e) => (e.method === late.method || e.method === 'all') && covers(e.path, late.path));\n    if (early) out.push({ route: late.name, shadowedBy: early.name });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is a static check over the ordered list — the kind of test you can run in CI over the central routes file the lesson mentions (about 150 router files on this site). It does not need to run a single request: it reasons about patterns, which is why it catches the bug before any user does.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là một phép kiểm tĩnh trên danh sách có thứ tự — loại test chạy được trong CI trên tệp route trung tâm mà bài nhắc tới (khoảng 150 tệp router trên trang này). Nó không cần chạy một request nào: nó lập luận trên các mẫu, vì thế bắt được lỗi trước khi người dùng nào gặp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s bug",
+              "vi": "Lỗi của bài"
+            },
+            "goi": "findShadowed([{\"name\":\"byId\",\"method\":\"get\",\"path\":\"/notes/:id\"},{\"name\":\"newForm\",\"method\":\"get\",\"path\":\"/notes/new\"}])",
+            "mongDoi": [
+              {
+                "route": "newForm",
+                "shadowedBy": "byId"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Fixed order: nothing shadowed",
+              "vi": "Thứ tự đúng: không có gì bị che"
+            },
+            "goi": "findShadowed([{\"name\":\"newForm\",\"method\":\"get\",\"path\":\"/notes/new\"},{\"name\":\"byId\",\"method\":\"get\",\"path\":\"/notes/:id\"}])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Different method or length: reachable",
+              "vi": "Khác method hoặc số đoạn: tới được"
+            },
+            "goi": "findShadowed([{\"name\":\"byId\",\"method\":\"get\",\"path\":\"/notes/:id\"},{\"name\":\"create\",\"method\":\"post\",\"path\":\"/notes/new\"},{\"name\":\"comments\",\"method\":\"get\",\"path\":\"/notes/:id/comments\"}])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "findShadowed([{\"name\":\"files\",\"method\":\"get\",\"path\":\"/files/*splat\"},{\"name\":\"one\",\"method\":\"get\",\"path\":\"/files/:name\"},{\"name\":\"deep\",\"method\":\"get\",\"path\":\"/files/a/b/c\"},{\"name\":\"other\",\"method\":\"get\",\"path\":\"/filez/x\"},{\"name\":\"root\",\"method\":\"get\",\"path\":\"/files\"}])",
+            "mongDoi": [
+              {
+                "route": "one",
+                "shadowedBy": "files"
+              },
+              {
+                "route": "deep",
+                "shadowedBy": "files"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "findShadowed([{\"name\":\"any\",\"method\":\"all\",\"path\":\"/admin/:page\"},{\"name\":\"stats\",\"method\":\"get\",\"path\":\"/ADMIN/stats\"},{\"name\":\"p2\",\"method\":\"get\",\"path\":\"/admin/:x\"},{\"name\":\"more\",\"method\":\"get\",\"path\":\"/admin/*rest\"}])",
+            "mongDoi": [
+              {
+                "route": "stats",
+                "shadowedBy": "any"
+              },
+              {
+                "route": "p2",
+                "shadowedBy": "any"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "findShadowed([{\"name\":\"a\",\"method\":\"get\",\"path\":\"/x/:id\"},{\"name\":\"b\",\"method\":\"get\",\"path\":\"/x/*rest\"},{\"name\":\"c\",\"method\":\"get\",\"path\":\"/x/*rest\"},{\"name\":\"d\",\"method\":\"get\",\"path\":\"/x/y/*rest\"},{\"name\":\"e\",\"method\":\"get\",\"path\":\"/x/:p/z\"}])",
+            "mongDoi": [
+              {
+                "route": "c",
+                "shadowedBy": "b"
+              },
+              {
+                "route": "d",
+                "shadowedBy": "b"
+              },
+              {
+                "route": "e",
+                "shadowedBy": "b"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying /notes/:id shadows /notes/:id/comments — different lengths, no wildcard: both reachable.|||Nói /notes/:id che /notes/:id/comments — khác số đoạn, không có wildcard: cả hai đều tới được."
+        },
+        {
+          "loi": "Ignoring the method: get /notes/:id does not shadow post /notes/new.|||Bỏ qua method: get /notes/:id không che post /notes/new."
+        },
+        {
+          "loi": "Letting a literal cover a :param: /notes/new does not shadow a later /notes/:id.|||Cho chữ cố định phủ :param: /notes/new không che /notes/:id phía sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shadowed route",
+          "vi": "route bị che"
+        },
+        {
+          "en": "static check",
+          "vi": "kiểm tĩnh (không chạy chương trình)"
+        }
+      ]
+    }
+  ]
+}

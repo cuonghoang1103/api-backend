@@ -1,0 +1,999 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-7-1-ket-noi-va-pool",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-7-1-ket-noi-va-pool"
+  },
+  "exercises": [
+    {
+      "title": "7.1 · 1 — What a connection costs, and who pays for it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "connection pool",
+        "Prisma 7"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 7.1 starts where most tutorials skip: the connection. Almost every “the database is slow” incident is really a connection problem. Six questions on the lesson’s measurements and on Prisma 7’s setup.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 7.1 bắt đầu ở chỗ hầu hết hướng dẫn bỏ qua: kết nối. Gần như mọi sự cố \"CSDL chậm\" thật ra là vấn đề kết nối. Sáu câu hỏi về các phép đo của bài và cách dựng Prisma 7.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every open connection is one PostgreSQL process with its own memory.|||Mỗi kết nối mở là một tiến trình PostgreSQL với bộ nhớ riêng.",
+        "Multiply before you deploy: containers × clients × pool size.|||Nhân trước khi deploy: container × client × kích thước pool."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1 · 1 — What a connection costs, and who pays for it\n\nAnswer in the answer panel (no code needed).\n\n1. 50 × SELECT 1: a new connection each time took 8.03 ms/query, one reused connection 0.38 ms/query. Where did the other 7.6 ms go?50 × SELECT 1: mỗi lần một kết nối mới mất 8,03 ms/truy vấn, một kết nối dùng lại mất 0,38 ms. 7,6 ms còn lại đi đâu?\n2. Pool size 1 → 5 saved 1.7 s for 20 × 100 ms queries; 10 → 20 saved 105 ms. What does that tell you?Pool từ 1 → 5 tiết kiệm 1,7 s cho 20 × 100 ms truy vấn; 10 → 20 tiết kiệm 105 ms. Điều đó nói gì?\n3. 3 containers, each accidentally builds 4 PrismaClients, each with a pool of 10. max_connections = 100. What happens?3 container, mỗi cái lỡ tạo 4 PrismaClient, mỗi client pool 10. max_connections = 100. Chuyện gì xảy ra?\n4. Twenty files do import { prisma } from \"./db.mjs\". How many clients (pools) exist in that process?Hai mươi tệp cùng import { prisma } from \"./db.mjs\". Trong tiến trình đó có bao nhiêu client (pool)?\n5. The server log after a deploy: POST /api/v1/notes 201 91.7ms, then 201 3.9ms. Why is the first one 24× slower?Log server sau deploy: POST /api/v1/notes 201 91.7ms, rồi 201 3.9ms. Vì sao lần đầu chậm 24 lần?\n6. A 2024 blog post imports PrismaClient from @prisma/client, never passes an adapter and never loads dotenv. On Prisma 7 what breaks?Một bài blog 2024 import PrismaClient từ @prisma/client, không truyền adapter và không nạp dotenv. Trên Prisma 7 cái gì hỏng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1 · 1 — What a connection costs, and who pays for it — answer key\n\n1. 50 × SELECT 1: a new connection each time took 8.03 ms/query, one reused connection 0.38 ms/query. Where did the other 7.6 ms go?50 × SELECT 1: mỗi lần một kết nối mới mất 8,03 ms/truy vấn, một kết nối dùng lại mất 0,38 ms. 7,6 ms còn lại đi đâu?\n   Answer: c) TCP connect, authentication, PostgreSQL forking a backend process, session setup — then tearing it all down\n   PostgreSQL forks one OS process per connection. That single fact is the whole argument for a pool.VI: PostgreSQL tạo một tiến trình hệ điều hành cho mỗi kết nối. Một sự thật đó là toàn bộ lý do cần pool.\n\n2. Pool size 1 → 5 saved 1.7 s for 20 × 100 ms queries; 10 → 20 saved 105 ms. What does that tell you?Pool từ 1 → 5 tiết kiệm 1,7 s cho 20 × 100 ms truy vấn; 10 → 20 tiết kiệm 105 ms. Điều đó nói gì?\n   Answer: d) Pool size has sharply diminishing returns, while each connection has a real cost on the database\n   Start with 5–10 per process. A 4-core API container saturates its CPU long before 10 connections.VI: Bắt đầu với 5–10 mỗi tiến trình. Container API 4 nhân hết CPU từ lâu trước khi dùng hết 10 kết nối.\n\n3. 3 containers, each accidentally builds 4 PrismaClients, each with a pool of 10. max_connections = 100. What happens?3 container, mỗi cái lỡ tạo 4 PrismaClient, mỗi client pool 10. max_connections = 100. Chuyện gì xảy ra?\n   Answer: a) 120 connections > 100 ⇒ “sorry, too many clients already” (53300)\n   Total = processes × pool per process, plus migrations, workers and that psql session you left open.VI: Tổng = số tiến trình × pool mỗi tiến trình, cộng migration, worker và phiên psql bạn quên đóng.\n\n4. Twenty files do import { prisma } from \"./db.mjs\". How many clients (pools) exist in that process?Hai mươi tệp cùng import { prisma } from \"./db.mjs\". Trong tiến trình đó có bao nhiêu client (pool)?\n   Answer: c) One — an ES module body runs once per process, no matter how many files import it\n   The rule: one client per process. new PrismaClient() inside a handler is a pool per request — the process falls over in minutes.VI: Luật: một client mỗi tiến trình. new PrismaClient() trong handler là một pool mỗi request — tiến trình sập trong vài phút.\n\n5. The server log after a deploy: POST /api/v1/notes 201 91.7ms, then 201 3.9ms. Why is the first one 24× slower?Log server sau deploy: POST /api/v1/notes 201 91.7ms, rồi 201 3.9ms. Vì sao lần đầu chậm 24 lần?\n   Answer: b) Prisma connects lazily: the first query pays the connection handshake\n   A health check that touches the database warms the pool before real users do.VI: Health check có chạm CSDL làm ấm pool trước khi người dùng thật tới.\n\n6. A 2024 blog post imports PrismaClient from @prisma/client, never passes an adapter and never loads dotenv. On Prisma 7 what breaks?Một bài blog 2024 import PrismaClient từ @prisma/client, không truyền adapter và không nạp dotenv. Trên Prisma 7 cái gì hỏng?\n   Answer: d) All three: client output path, a required adapter, and no auto-loaded .env\n   And pin the major version: unpinned installs mixed an 8.0.0 RC CLI with client 7.10.1 on 1 Nov 2026.VI: Và ghim phiên bản chính: cài không ghim đã trộn CLI 8.0.0 RC với client 7.10.1 ngày 1/11/2026.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> TCP connect, authentication, PostgreSQL forking a backend process, session setup — then tearing it all down</p><p>PostgreSQL forks one OS process per connection. That single fact is the whole argument for a pool.</p><p><i>VI: PostgreSQL tạo một tiến trình hệ điều hành cho mỗi kết nối. Một sự thật đó là toàn bộ lý do cần pool.</i></p></li><li><p><b>d)</b> Pool size has sharply diminishing returns, while each connection has a real cost on the database</p><p>Start with 5–10 per process. A 4-core API container saturates its CPU long before 10 connections.</p><p><i>VI: Bắt đầu với 5–10 mỗi tiến trình. Container API 4 nhân hết CPU từ lâu trước khi dùng hết 10 kết nối.</i></p></li><li><p><b>a)</b> 120 connections > 100 ⇒ “sorry, too many clients already” (53300)</p><p>Total = processes × pool per process, plus migrations, workers and that psql session you left open.</p><p><i>VI: Tổng = số tiến trình × pool mỗi tiến trình, cộng migration, worker và phiên psql bạn quên đóng.</i></p></li><li><p><b>c)</b> One — an ES module body runs once per process, no matter how many files import it</p><p>The rule: one client per process. new PrismaClient() inside a handler is a pool per request — the process falls over in minutes.</p><p><i>VI: Luật: một client mỗi tiến trình. new PrismaClient() trong handler là một pool mỗi request — tiến trình sập trong vài phút.</i></p></li><li><p><b>b)</b> Prisma connects lazily: the first query pays the connection handshake</p><p>A health check that touches the database warms the pool before real users do.</p><p><i>VI: Health check có chạm CSDL làm ấm pool trước khi người dùng thật tới.</i></p></li><li><p><b>d)</b> All three: client output path, a required adapter, and no auto-loaded .env</p><p>And pin the major version: unpinned installs mixed an 8.0.0 RC CLI with client 7.10.1 on 1 Nov 2026.</p><p><i>VI: Và ghim phiên bản chính: cài không ghim đã trộn CLI 8.0.0 RC với client 7.10.1 ngày 1/11/2026.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>50 × <code>SELECT 1</code>: a new connection each time took 8.03 ms/query, one reused connection 0.38 ms/query. Where did the other 7.6 ms go?</p><p style=\"opacity:.75;font-size:.92em\"><i>50 × <code>SELECT 1</code>: mỗi lần một kết nối mới mất 8,03 ms/truy vấn, một kết nối dùng lại mất 0,38 ms. 7,6 ms còn lại đi đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JSON serialisation of the result in Node"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The event loop waiting for the garbage collector"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP connect, authentication, PostgreSQL forking a backend process, session setup — then tearing it all down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Parsing the SQL text, which is cached on a reused connection"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>PostgreSQL forks one OS process per connection. That single fact is the whole argument for a pool.</p><p><i>VI: PostgreSQL tạo một tiến trình hệ điều hành cho mỗi kết nối. Một sự thật đó là toàn bộ lý do cần pool.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Pool size 1 → 5 saved 1.7 s for 20 × 100 ms queries; 10 → 20 saved 105 ms. What does that tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Pool từ 1 → 5 tiết kiệm 1,7 s cho 20 × 100 ms truy vấn; 10 → 20 tiết kiệm 105 ms. Điều đó nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The database got faster as the pool grew"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pool size does not matter for queries that take 100 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Bigger pools are always better, so use 100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pool size has sharply diminishing returns, while each connection has a real cost on the database"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Start with 5–10 per process. A 4-core API container saturates its CPU long before 10 connections.</p><p><i>VI: Bắt đầu với 5–10 mỗi tiến trình. Container API 4 nhân hết CPU từ lâu trước khi dùng hết 10 kết nối.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>3 containers, each accidentally builds 4 PrismaClients, each with a pool of 10. max_connections = 100. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>3 container, mỗi cái lỡ tạo 4 PrismaClient, mỗi client pool 10. max_connections = 100. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "120 connections > 100 ⇒ “sorry, too many clients already” (53300)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the 4th client of each container fails, the rest work"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prisma shares one pool between the 4 clients automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL queues the extra 20 connections until others close"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Total = processes × pool per process, plus migrations, workers and that psql session you left open.</p><p><i>VI: Tổng = số tiến trình × pool mỗi tiến trình, cộng migration, worker và phiên psql bạn quên đóng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Twenty files do <code>import { prisma } from \"./db.mjs\"</code>. How many clients (pools) exist in that process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai mươi tệp cùng <code>import { prisma } from \"./db.mjs\"</code>. Trong tiến trình đó có bao nhiêu client (pool)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Twenty — one per importing file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One per request, because Express creates a new scope"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One — an ES module body runs once per process, no matter how many files import it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Zero until each file calls new PrismaClient()"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The rule: one client per process. new PrismaClient() inside a handler is a pool per request — the process falls over in minutes.</p><p><i>VI: Luật: một client mỗi tiến trình. new PrismaClient() trong handler là một pool mỗi request — tiến trình sập trong vài phút.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The server log after a deploy: <code>POST /api/v1/notes 201 91.7ms</code>, then <code>201 3.9ms</code>. Why is the first one 24× slower?</p><p style=\"opacity:.75;font-size:.92em\"><i>Log server sau deploy: <code>POST /api/v1/notes 201 91.7ms</code>, rồi <code>201 3.9ms</code>. Vì sao lần đầu chậm 24 lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express compiles the route on the first request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prisma connects lazily: the first query pays the connection handshake"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The note had a longer title"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The first INSERT creates the table"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A health check that touches the database warms the pool before real users do.</p><p><i>VI: Health check có chạm CSDL làm ấm pool trước khi người dùng thật tới.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A 2024 blog post imports PrismaClient from <code>@prisma/client</code>, never passes an adapter and never loads dotenv. On Prisma 7 what breaks?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bài blog 2024 import PrismaClient từ <code>@prisma/client</code>, không truyền adapter và không nạp dotenv. Trên Prisma 7 cái gì hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only dotenv, because Prisma now reads .env files from node_modules"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: Prisma 7 keeps full backwards compatibility with Prisma 5 code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the import path changes; driver adapters are still entirely optional"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All three: client output path, a required adapter, and no auto-loaded .env"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>And pin the major version: unpinned installs mixed an 8.0.0 RC CLI with client 7.10.1 on 1 Nov 2026.</p><p><i>VI: Và ghim phiên bản chính: cài không ghim đã trộn CLI 8.0.0 RC với client 7.10.1 ngày 1/11/2026.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“The database is slow, raise the pool size” — the usual way a database is taken down.|||\"CSDL chậm, tăng pool lên\" — cách quen thuộc để đánh sập CSDL."
+        },
+        {
+          "loi": "Creating new PrismaClient() inside a request handler.|||Tạo new PrismaClient() trong handler của request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connection pool",
+          "vi": "nhóm kết nối",
+          "giaiThich": "Giữ N kết nối mở để dùng lại."
+        },
+        {
+          "en": "max_connections",
+          "vi": "max_connections",
+          "giaiThich": "Trần kết nối của PostgreSQL (mặc định 100)."
+        },
+        {
+          "en": "driver adapter",
+          "vi": "bộ chuyển trình điều khiển",
+          "giaiThich": "Lớp giữ socket — chính là pool."
+        }
+      ]
+    },
+    {
+      "title": "7.1 · 2 — Write connectionBudget(cfg): do the arithmetic nobody does until 2 a.m.",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "connection pool",
+        "capacity planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Total connections = (number of processes) × (pool size per process) — plus your migrations job, plus the psql session you left open, plus any background worker.” And PostgreSQL keeps a few slots for superusers: the lesson measured 97 for a normal role out of <code>max_connections = 100</code>. Write <code>connectionBudget(cfg)</code>:</p>\n<ul><li><code>cfg = { containers, clientsPerContainer, poolSize, extras = 0, maxConnections = 100, reserved = 3 }</code>.</li>\n<li>Return <code>{ total, available, ok, maxPoolPerClient }</code>: <code>total = containers × clientsPerContainer × poolSize + extras</code>; <code>available = maxConnections − reserved</code>; <code>ok = total ≤ available</code>; <code>maxPoolPerClient</code> = the largest integer pool size that would still fit = <code>⌊(available − extras) / (containers × clientsPerContainer)⌋</code>.</li></ul>\n<p>The lesson’s incident: 3 containers × 4 clients × pool 10 = 120 > 97 ⇒ <code>53300 sorry, too many clients already</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use the defaults when a field is missing.</li>\n  <li><code>ok</code> is true when total equals available exactly.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Tổng kết nối = (số tiến trình) × (kích thước pool mỗi tiến trình) — cộng job migration, cộng phiên psql bạn để mở, cộng mọi worker nền.\" Và PostgreSQL giữ vài chỗ cho superuser: bài đo được 97 cho vai trò thường trên <code>max_connections = 100</code>. Viết <code>connectionBudget(cfg)</code>:</p>\n<ul><li><code>cfg = { containers, clientsPerContainer, poolSize, extras = 0, maxConnections = 100, reserved = 3 }</code>.</li>\n<li>Trả <code>{ total, available, ok, maxPoolPerClient }</code>: <code>total = containers × clientsPerContainer × poolSize + extras</code>; <code>available = maxConnections − reserved</code>; <code>ok = total ≤ available</code>; <code>maxPoolPerClient</code> = kích thước pool nguyên lớn nhất vẫn vừa = <code>⌊(available − extras) / (containers × clientsPerContainer)⌋</code>.</li></ul>\n<p>Sự cố của bài: 3 container × 4 client × pool 10 = 120 > 97 ⇒ <code>53300 sorry, too many clients already</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng giá trị mặc định khi thiếu trường.</li>\n  <li><code>ok</code> là true khi total bằng đúng available.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "connectionBudget({\"containers\":3,\"clientsPerContainer\":4,\"poolSize\":10})",
+          "output": "{\"total\":120,\"available\":97,\"ok\":false,\"maxPoolPerClient\":8}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Destructure with defaults: <code>const { extras = 0, maxConnections = 100, reserved = 3 } = cfg</code>.|||Destructure kèm mặc định: <code>const { extras = 0, maxConnections = 100, reserved = 3 } = cfg</code>.",
+        "<code>Math.floor</code> for the largest pool that still fits.|||<code>Math.floor</code> cho pool lớn nhất còn vừa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function connectionBudget(cfg) {\n  // Write your solution here\n  const total = cfg.containers * cfg.poolSize;\n  return { total, available: 100, ok: total <= 100, maxPoolPerClient: 10 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function connectionBudget(cfg) {\n  const { containers, clientsPerContainer, poolSize, extras = 0, maxConnections = 100, reserved = 3 } = cfg;\n  // total = processes × clients per process × pool per client — plus migrations, workers, a forgotten psql\n  const total = containers * clientsPerContainer * poolSize + extras;\n  // a normal role cannot use the superuser-reserved slots: 100 - 3 = 97 in the lesson\n  const available = maxConnections - reserved;\n  // the biggest pool each client could have and still fit\n  const maxPoolPerClient = Math.floor((available - extras) / (containers * clientsPerContainer));\n  return { total, available, ok: total <= available, maxPoolPerClient };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A full database refuses every new connection, including your health check, so the whole service looks dead. The budget has to be computed before the deploy, for the worst moment — every container plus the migration job — not for the average.</p>",
+      "solutionExplanationHtmlVi": "<p>CSDL đầy từ chối mọi kết nối mới, kể cả health check, nên cả dịch vụ trông như chết. Ngân sách phải tính trước deploy, cho lúc tệ nhất — mọi container cộng job migration — không phải lúc trung bình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s incident: 120 > 97",
+              "vi": "Sự cố của bài: 120 > 97"
+            },
+            "goi": "connectionBudget({\"containers\":3,\"clientsPerContainer\":4,\"poolSize\":10})",
+            "mongDoi": {
+              "total": 120,
+              "available": 97,
+              "ok": false,
+              "maxPoolPerClient": 8
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: connectionBudget({\"containers\":3,\"clientsPerContainer\":1,\"poolSize\":10,\"extra...",
+              "vi": "Ca 2"
+            },
+            "goi": "connectionBudget({\"containers\":3,\"clientsPerContainer\":1,\"poolSize\":10,\"extras\":2})",
+            "mongDoi": {
+              "total": 32,
+              "available": 97,
+              "ok": true,
+              "maxPoolPerClient": 31
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "connectionBudget({\"containers\":4,\"clientsPerContainer\":1,\"poolSize\":24,\"extras\":1})",
+            "mongDoi": {
+              "total": 97,
+              "available": 97,
+              "ok": true,
+              "maxPoolPerClient": 24
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "connectionBudget({\"containers\":2,\"clientsPerContainer\":2,\"poolSize\":50,\"maxConnections\":200,\"reserved\":0})",
+            "mongDoi": {
+              "total": 200,
+              "available": 200,
+              "ok": true,
+              "maxPoolPerClient": 50
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "connectionBudget({\"containers\":1,\"clientsPerContainer\":1,\"poolSize\":97})",
+            "mongDoi": {
+              "total": 97,
+              "available": 97,
+              "ok": true,
+              "maxPoolPerClient": 97
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing with 100 instead of 97: the last 3 slots refuse a normal role.|||So với 100 thay vì 97: 3 chỗ cuối từ chối vai trò thường."
+        },
+        {
+          "loi": "Forgetting the extras — the migration job runs during the deploy, exactly when every container restarts.|||Quên phần cộng thêm — job migration chạy đúng lúc deploy, khi mọi container khởi động lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "superuser reserved connections",
+          "vi": "kết nối dành cho superuser",
+          "giaiThich": "superuser_reserved_connections (mặc định 3)."
+        },
+        {
+          "en": "53300",
+          "vi": "mã 53300",
+          "giaiThich": "too many clients already."
+        }
+      ]
+    },
+    {
+      "title": "7.1 · 3 — Write createLazyClient(connect): connect on the first query, exactly once",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "lazy connection",
+        "promises"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Prisma connects lazily — the first query opens the connection, which is why the first request after a deploy took 91.7 ms and the next one 3.9 ms. Build that behaviour. <code>connect()</code> is a fake that resolves after 8 virtual ms with a connection <code>{ id, query(sql) }</code> (a query takes 1 ms). Write <code>createLazyClient(connect)</code> returning:</p>\n<ul><li><code>query(sql)</code> — opens the connection on first use, then reuses it forever; resolves to what <code>conn.query(sql)</code> resolves.</li>\n<li><code>$connect()</code> — opens it now (warm-up at boot); resolves to <code>undefined</code>; a later query does not connect again.</li>\n<li><code>connectCount()</code> — how many times <code>connect()</code> was called.</li></ul>\n<p>The trap: five requests arrive at the same instant right after boot. All five must share <b>one</b> connect — not open five. If <code>connect()</code> rejects, the next query may try again.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>At most one connect in flight at any time.</li>\n  <li>Never connect at construction — only on the first query or $connect().</li>\n</ul>",
+      "problemHtmlVi": "<p>Prisma kết nối lười — truy vấn đầu mở kết nối, nên request đầu sau deploy mất 91,7 ms và request sau 3,9 ms. Hãy dựng hành vi đó. <code>connect()</code> là hàm GIẢ resolve sau 8 ms ảo với một kết nối <code>{ id, query(sql) }</code> (truy vấn mất 1 ms). Viết <code>createLazyClient(connect)</code> trả về:</p>\n<ul><li><code>query(sql)</code> — mở kết nối ở lần dùng đầu, rồi dùng lại mãi; resolve đúng thứ <code>conn.query(sql)</code> resolve.</li>\n<li><code>$connect()</code> — mở ngay (làm ấm lúc khởi động); resolve <code>undefined</code>; truy vấn sau không kết nối lại.</li>\n<li><code>connectCount()</code> — số lần đã gọi <code>connect()</code>.</li></ul>\n<p>Cái bẫy: năm request tới cùng lúc ngay sau khởi động. Cả năm phải dùng chung <b>một</b> lần connect — không được mở năm cái. Nếu <code>connect()</code> reject, truy vấn sau được thử lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tại mọi thời điểm có tối đa một lần connect đang chạy.</li>\n  <li>Không kết nối lúc tạo — chỉ ở truy vấn đầu hoặc $connect().</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const c = createLazyClient(mkPg()); const a = await c.query('SELECT 1'); const t1 = t(); const b = await c.query('SELECT 1'); return [a, b, t1, t() - t1, c.connectCount()]; })()",
+          "output": "[{\"conn\":1,\"sql\":\"SELECT 1\"},{\"conn\":1,\"sql\":\"SELECT 1\"},9,1,1]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep two variables: <code>conn</code> (ready) and <code>connecting</code> (the Promise of the connect in progress).|||Giữ hai biến: <code>conn</code> (đã sẵn sàng) và <code>connecting</code> (Promise của lần connect đang chạy).",
+        "Whoever arrives while <code>connecting</code> is set simply awaits that same Promise.|||Ai tới khi <code>connecting</code> đã có thì chỉ việc await đúng Promise đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createLazyClient(connect) {\n  let conn = null;\n  let connects = 0;\n  return {\n    // Write your solution here\n    $connect: async () => {},\n    query: async (sql) => { if (!conn) { connects++; conn = await connect(); } return conn.query(sql); },\n    connectCount: () => connects,\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createLazyClient(connect) {\n  let conn = null;          // the open connection, once we have it\n  let connecting = null;    // the in-flight connect() — shared by everyone who arrives while it runs\n  let connects = 0;\n  function ensure() {\n    if (conn) return Promise.resolve(conn);\n    if (!connecting) {\n      connects++;\n      connecting = connect().then((c) => { conn = c; return c; }, (err) => { connecting = null; throw err; });  // a failed connect may be retried\n    }\n    return connecting;\n  }\n  return {\n    $connect: () => ensure().then(() => undefined),          // warm the pool at boot instead of on a user's request\n    query: async (sql) => (await ensure()).query(sql),\n    connectCount: () => connects,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Caching the Promise rather than the result is the standard way to deduplicate concurrent async work: the first caller starts it, everyone else awaits the same object. The result is the lesson’s log line — the first query pays 8 ms of handshake, the next ones pay 1 ms — and $connect() moves that cost from a user to the boot sequence.</p>",
+      "solutionExplanationHtmlVi": "<p>Cache Promise thay vì kết quả là cách chuẩn để khử trùng việc bất đồng bộ chạy đồng thời: người gọi đầu khởi động, mọi người khác await cùng một object. Kết quả là đúng dòng log của bài — truy vấn đầu trả 8 ms bắt tay, các truy vấn sau trả 1 ms — và $connect() dời chi phí đó từ người dùng sang lúc khởi động.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First query 9 ms (handshake), second 1 ms",
+              "vi": "Truy vấn đầu 9 ms (bắt tay), lần hai 1 ms"
+            },
+            "goi": "await (async () => { const c = createLazyClient(mkPg()); const a = await c.query('SELECT 1'); const t1 = t(); const b = await c.query('SELECT 1'); return [a, b, t1, t() - t1, c.connectCount()]; })()",
+            "chuanBi": "const mkPg = (connectMs = 8, queryMs = 1) => { let opened = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened; ok({ id, query: (sql) => new Promise((r) => setTimeout(() => r({ conn: id, sql }), queryMs)) }); }, connectMs));\n  connect.opened = () => opened; return connect; };\nconst t = () => Date.now() - 1767225600000;",
+            "mongDoi": [
+              {
+                "conn": 1,
+                "sql": "SELECT 1"
+              },
+              {
+                "conn": 1,
+                "sql": "SELECT 1"
+              },
+              9,
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Five simultaneous first queries ⇒ one connect",
+              "vi": "Năm truy vấn đầu đồng thời ⇒ một lần connect"
+            },
+            "goi": "await (async () => { const pg = mkPg(); const c = createLazyClient(pg); const rs = await Promise.all([1, 2, 3, 4, 5].map((i) => c.query('q' + i))); return [rs.map((r) => r.conn), pg.opened(), c.connectCount()]; })()",
+            "chuanBi": "const mkPg = (connectMs = 8, queryMs = 1) => { let opened = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened; ok({ id, query: (sql) => new Promise((r) => setTimeout(() => r({ conn: id, sql }), queryMs)) }); }, connectMs));\n  connect.opened = () => opened; return connect; };\nconst t = () => Date.now() - 1767225600000;",
+            "mongDoi": [
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "$connect warms: the first query then costs 1 ms",
+              "vi": "$connect làm ấm: truy vấn đầu sau đó chỉ 1 ms"
+            },
+            "goi": "await (async () => { const pg = mkPg(); const c = createLazyClient(pg); const before = pg.opened(); const w = await c.$connect(); const t1 = t(); await c.query('x'); return [before, w, t() - t1, pg.opened()]; })()",
+            "chuanBi": "const mkPg = (connectMs = 8, queryMs = 1) => { let opened = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened; ok({ id, query: (sql) => new Promise((r) => setTimeout(() => r({ conn: id, sql }), queryMs)) }); }, connectMs));\n  connect.opened = () => opened; return connect; };\nconst t = () => Date.now() - 1767225600000;",
+            "mongDoi": [
+              0,
+              {
+                "$js": "undefined"
+              },
+              1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { let n = 0; const connect = () => new Promise((ok, no) => setTimeout(() => (++n === 1 ? no(new Error('ECONNREFUSED')) : ok({ query: (s) => Promise.resolve('ok ' + s) })), 5)); const c = createLazyClient(connect); let first; try { await c.query('a'); } catch (e) { first = e.message; } return [first, await c.query('b'), c.connectCount()]; })()",
+            "chuanBi": "const mkPg = (connectMs = 8, queryMs = 1) => { let opened = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened; ok({ id, query: (sql) => new Promise((r) => setTimeout(() => r({ conn: id, sql }), queryMs)) }); }, connectMs));\n  connect.opened = () => opened; return connect; };\nconst t = () => Date.now() - 1767225600000;",
+            "mongDoi": [
+              "ECONNREFUSED",
+              "ok b",
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const pg = mkPg(); const c = createLazyClient(pg); await Promise.all([c.$connect(), c.query('a'), c.$connect()]); return [pg.opened(), c.connectCount()]; })()",
+            "chuanBi": "const mkPg = (connectMs = 8, queryMs = 1) => { let opened = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened; ok({ id, query: (sql) => new Promise((r) => setTimeout(() => r({ conn: id, sql }), queryMs)) }); }, connectMs));\n  connect.opened = () => opened; return connect; };\nconst t = () => Date.now() - 1767225600000;",
+            "mongDoi": [
+              1,
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>if (!conn) conn = await connect()</code>: five simultaneous first queries all see <code>conn === null</code> and open five connections.|||<code>if (!conn) conn = await connect()</code>: năm truy vấn đầu đồng thời đều thấy <code>conn === null</code> và mở năm kết nối."
+        },
+        {
+          "loi": "Calling <code>connect()</code> inside every <code>query</code> — the 8 ms per query of measurement A, a pool per request.|||Gọi <code>connect()</code> trong mọi <code>query</code> — đúng 8 ms mỗi truy vấn của phép đo A, mỗi request một pool."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lazy",
+          "vi": "lười",
+          "giaiThich": "Chỉ làm khi thật sự cần."
+        },
+        {
+          "en": "warm-up",
+          "vi": "làm ấm",
+          "giaiThich": "Mở kết nối trước khi có request thật."
+        }
+      ]
+    },
+    {
+      "title": "7.1 · 4 — Write createPool({ max, connect }): reuse, queue, and measure the diminishing returns",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "connection pool",
+        "queues"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measurement 2 of the lesson: twenty 100 ms queries fired at once with <code>Promise.all</code>, against pools of size 1, 5, 10, 20. Build the pool and reproduce the shape. <code>connect()</code> is a fake (8 ms) returning <code>{ id, query(sql) }</code> where a query takes 100 virtual ms. Write <code>createPool({ max, connect })</code> returning:</p>\n<ul><li><code>query(sql)</code>: take an idle connection if there is one; otherwise open a new one if fewer than <code>max</code> are open; otherwise <b>wait in a FIFO queue</b>. Run the query, then give the connection back — handing it directly to the first waiter, or putting it back as idle. Resolve/reject like the query.</li>\n<li><code>stats()</code>: <code>{ opened, idle, waiting }</code>.</li></ul>\n<p>Expected with the fake: max 1 ⇒ 20 × 100 ms ≈ 2008 ms with 1 backend; max 5 ⇒ 408 ms; max 20 ⇒ 108 ms with 20 backends. Never more backends than <code>max</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Open connections lazily and never more than <code>max</code>.</li>\n  <li>Waiters are served in arrival order.</li>\n  <li>Release in <code>finally</code> so a failing query still returns its connection.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép đo 2 của bài: hai mươi truy vấn 100 ms bắn cùng lúc bằng <code>Promise.all</code>, với pool cỡ 1, 5, 10, 20. Hãy dựng pool và tái hiện hình dạng đó. <code>connect()</code> là hàm GIẢ (8 ms) trả <code>{ id, query(sql) }</code>, mỗi truy vấn mất 100 ms ảo. Viết <code>createPool({ max, connect })</code> trả về:</p>\n<ul><li><code>query(sql)</code>: lấy một kết nối rảnh nếu có; không thì mở kết nối mới nếu đang mở ít hơn <code>max</code>; không nữa thì <b>chờ trong hàng đợi FIFO</b>. Chạy truy vấn, rồi trả kết nối — trao thẳng cho người chờ đầu tiên, hoặc đặt lại vào danh sách rảnh. Resolve/reject theo truy vấn.</li>\n<li><code>stats()</code>: <code>{ opened, idle, waiting }</code>.</li></ul>\n<p>Mong đợi với hàm giả: max 1 ⇒ 20 × 100 ms ≈ 2008 ms với 1 backend; max 5 ⇒ 408 ms; max 20 ⇒ 108 ms với 20 backend. Không bao giờ quá <code>max</code> backend.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mở kết nối lười và không bao giờ quá <code>max</code>.</li>\n  <li>Người chờ được phục vụ theo thứ tự tới.</li>\n  <li>Trả kết nối trong <code>finally</code> để truy vấn hỏng vẫn trả lại kết nối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await burst(5, 20)",
+          "output": "{\"max\":5,\"ms\":408,\"backends\":5,\"peak\":5,\"stats\":{\"opened\":5,\"idle\":5,\"waiting\":0}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three pieces of state: <code>idle</code> (array), <code>waiting</code> (array of resolve functions), <code>opened</code> (count).|||Ba mẩu trạng thái: <code>idle</code> (mảng), <code>waiting</code> (mảng hàm resolve), <code>opened</code> (số đếm).",
+        "A waiter is just <code>new Promise((resolve) => waiting.push(resolve))</code>; release calls <code>waiting.shift()(conn)</code>.|||Người chờ chỉ là <code>new Promise((resolve) => waiting.push(resolve))</code>; release gọi <code>waiting.shift()(conn)</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createPool({ max, connect }) {\n  let opened = 0;\n  return {\n    // Write your solution here\n    async query(sql) { opened++; const conn = await connect(); return conn.query(sql); },\n    stats: () => ({ opened, idle: 0, waiting: 0 }),\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createPool({ max, connect }) {\n  const idle = [];          // open connections nobody is using\n  const waiting = [];       // resolvers of callers waiting for a connection, FIFO\n  let opened = 0;\n  async function acquire() {\n    if (idle.length) return idle.pop();\n    if (opened < max) { opened++; return connect(); }       // open lazily, never more than max\n    return new Promise((resolve) => waiting.push(resolve));  // pool full: queue\n  }\n  function release(conn) {\n    const next = waiting.shift();\n    if (next) next(conn);                                    // hand the connection straight to the next in line\n    else idle.push(conn);\n  }\n  return {\n    async query(sql) {\n      const conn = await acquire();\n      try { return await conn.query(sql); }\n      finally { release(conn); }                             // always give it back, even if the query failed\n    },\n    stats: () => ({ opened, idle: idle.length, waiting: waiting.length }),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With max slots, n equal queries run in ⌈n / max⌉ waves, so the time is connect + ⌈n / max⌉ × 100 ms: 2008, 408, 208, 108 ms for 1, 5, 10, 20. Going 1 → 5 saves 1.6 s; going 10 → 20 saves 100 ms. That curve, set against a database process per connection, is why the lesson starts at 5–10 per process.</p>",
+      "solutionExplanationHtmlVi": "<p>Với max chỗ, n truy vấn như nhau chạy thành ⌈n / max⌉ đợt, nên thời gian là connect + ⌈n / max⌉ × 100 ms: 2008, 408, 208, 108 ms cho 1, 5, 10, 20. Từ 1 → 5 tiết kiệm 1,6 s; từ 10 → 20 tiết kiệm 100 ms. Đường cong đó, đặt cạnh một tiến trình CSDL cho mỗi kết nối, là lý do bài bắt đầu ở 5–10 mỗi tiến trình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Pool 5, 20 queries × 100 ms",
+              "vi": "Pool 5, 20 truy vấn × 100 ms"
+            },
+            "goi": "await burst(5, 20)",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst burst = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };",
+            "mongDoi": {
+              "max": 5,
+              "ms": 408,
+              "backends": 5,
+              "peak": 5,
+              "stats": {
+                "opened": 5,
+                "idle": 5,
+                "waiting": 0
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Pool 1 vs pool 20",
+              "vi": "Pool 1 so với pool 20"
+            },
+            "goi": "[await burst(1, 20), await burst(20, 20)]",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst burst = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };",
+            "mongDoi": [
+              {
+                "max": 1,
+                "ms": 2008,
+                "backends": 1,
+                "peak": 1,
+                "stats": {
+                  "opened": 1,
+                  "idle": 1,
+                  "waiting": 0
+                }
+              },
+              {
+                "max": 20,
+                "ms": 108,
+                "backends": 20,
+                "peak": 20,
+                "stats": {
+                  "opened": 20,
+                  "idle": 20,
+                  "waiting": 0
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "FIFO order, all connections idle at the end",
+              "vi": "Thứ tự FIFO, cuối cùng mọi kết nối đều rảnh"
+            },
+            "goi": "await (async () => { const pg = mkPgSleep(); const pool = createPool({ max: 2, connect: pg }); const order = []; await Promise.all([1, 2, 3, 4, 5].map((i) => pool.query('q').then(() => order.push(i)))); return [order, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst burst = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              {
+                "opened": 2,
+                "idle": 2,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await burst(10, 20), await burst(3, 7)]",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst burst = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };",
+            "mongDoi": [
+              {
+                "max": 10,
+                "ms": 208,
+                "backends": 10,
+                "peak": 10,
+                "stats": {
+                  "opened": 10,
+                  "idle": 10,
+                  "waiting": 0
+                }
+              },
+              {
+                "max": 3,
+                "ms": 308,
+                "backends": 3,
+                "peak": 3,
+                "stats": {
+                  "opened": 3,
+                  "idle": 3,
+                  "waiting": 0
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A failed query still releases",
+              "vi": "Truy vấn hỏng vẫn trả kết nối"
+            },
+            "goi": "await (async () => { const pg = mkPgSleep(); const pool = createPool({ max: 1, connect: pg }); let e; try { await pool.query('FAIL'); } catch (x) { e = x.message; } const r = await pool.query('ok'); return [e, r, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst burst = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };",
+            "mongDoi": [
+              "query failed",
+              1,
+              {
+                "opened": 1,
+                "idle": 1,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening a new connection for every query when the pool is “busy” — that is no pool, and 20 requests become 20 backends regardless of max.|||Mở kết nối mới cho mọi truy vấn khi pool \"bận\" — vậy là không có pool, và 20 request thành 20 backend bất kể max."
+        },
+        {
+          "loi": "Releasing only on success: one failed query and that slot is gone forever (exercise 5 measures the result).|||Chỉ trả khi thành công: một truy vấn hỏng là mất chỗ đó mãi (bài 5 đo hậu quả)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FIFO",
+          "vi": "vào trước ra trước",
+          "giaiThich": "Hàng đợi công bằng."
+        },
+        {
+          "en": "backend",
+          "vi": "tiến trình backend",
+          "giaiThich": "Một tiến trình PostgreSQL phục vụ một kết nối."
+        }
+      ]
+    },
+    {
+      "title": "7.1 · 5 — Write createTimedPool(): give up after acquireTimeoutMs (P2024), never leak a slot",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "connection pool",
+        "timeouts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>When every slot is held — say ten transactions waiting on a slow external API (lesson 7.3) — queued requests must not wait forever. Prisma fails them with <code>P2024: Timed out fetching a new connection from the connection pool</code>. Extend exercise 4: <code>createTimedPool({ max, connect, acquireTimeoutMs })</code> returns <code>{ query(sql), stats() }</code>:</p>\n<ul><li>Same reuse / lazy open / FIFO queue as before.</li>\n<li>A caller that has waited <code>acquireTimeoutMs</code> virtual ms without getting a connection ⇒ its promise rejects with an <code>Error</code> whose <code>code</code> is <code>\"P2024\"</code> and message <code>\"Timed out fetching a new connection from the connection pool\"</code>. It must also <b>leave the queue</b>, so a connection released later goes to a live waiter (or back to idle), never to a caller that already gave up.</li>\n<li>A caller that gets a connection in time must not be rejected later (clear its timer).</li>\n<li><code>stats()</code> = <code>{ opened, inUse, idle, waiting }</code>; after all work is done <code>inUse</code> is 0 — a failing query still returns its connection.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Timeout ⇒ reject with <code>code: \"P2024\"</code> and remove the waiter.</li>\n  <li>Clear the timer of a waiter that was served.</li>\n  <li>Release in <code>finally</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi mọi chỗ đều bị giữ — ví dụ mười transaction chờ một API ngoài chậm (bài 7.3) — các request đang xếp hàng không được chờ mãi. Prisma đánh hỏng chúng với <code>P2024: Timed out fetching a new connection from the connection pool</code>. Mở rộng bài 4: <code>createTimedPool({ max, connect, acquireTimeoutMs })</code> trả <code>{ query(sql), stats() }</code>:</p>\n<ul><li>Dùng lại / mở lười / hàng đợi FIFO như trước.</li>\n<li>Người gọi đã chờ <code>acquireTimeoutMs</code> ms ảo mà chưa có kết nối ⇒ promise của nó reject với một <code>Error</code> có <code>code</code> là <code>\"P2024\"</code> và message <code>\"Timed out fetching a new connection from the connection pool\"</code>. Nó cũng phải <b>rời hàng đợi</b>, để kết nối được trả sau đó tới một người chờ còn sống (hoặc về danh sách rảnh), không bao giờ tới người đã bỏ cuộc.</li>\n<li>Người gọi nhận được kết nối kịp thời thì không được bị reject sau đó (xoá hẹn giờ của nó).</li>\n<li><code>stats()</code> = <code>{ opened, inUse, idle, waiting }</code>; khi mọi việc xong <code>inUse</code> là 0 — truy vấn hỏng vẫn trả kết nối.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hết giờ ⇒ reject với <code>code: \"P2024\"</code> và gỡ người chờ.</li>\n  <li>Xoá hẹn giờ của người chờ đã được phục vụ.</li>\n  <li>Trả kết nối trong <code>finally</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 300), acquireTimeoutMs: 100 }); const r = await Promise.all([caught(pool.query('long')), caught(pool.query('waits too long'))]); return [r, pool.stats()]; })()",
+          "output": "[[1,{\"code\":\"P2024\",\"message\":\"Timed out fetching a new connection from the connection pool\"}],{\"opened\":1,\"inUse\":0,\"idle\":1,\"waiting\":0}]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Store waiters as objects <code>{ resolve, timer }</code> so the timer can find and remove its own entry: <code>waiting.splice(waiting.indexOf(w), 1)</code>.|||Lưu người chờ dạng object <code>{ resolve, timer }</code> để hẹn giờ tìm và gỡ đúng mục của nó: <code>waiting.splice(waiting.indexOf(w), 1)</code>.",
+        "Wrap the resolver: <code>w.resolve = (c) => { clearTimeout(w.timer); inUse++; resolve(c); }</code>.|||Bọc hàm resolve: <code>w.resolve = (c) => { clearTimeout(w.timer); inUse++; resolve(c); }</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createTimedPool({ max, connect, acquireTimeoutMs }) {\n  // Write your solution here (start from your createPool of exercise 4)\n  const idle = [], waiting = [];\n  let opened = 0, inUse = 0;\n  async function query(sql) {\n    let conn;\n    if (idle.length) conn = idle.pop();\n    else if (opened < max) { opened++; conn = await connect(); }\n    else conn = await new Promise((resolve) => waiting.push(resolve));\n    inUse++;\n    const r = await conn.query(sql);\n    inUse--;\n    const next = waiting.shift();\n    if (next) next(conn); else idle.push(conn);\n    return r;\n  }\n  return { query, stats: () => ({ opened, inUse, idle: idle.length, waiting: waiting.length }) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createTimedPool({ max, connect, acquireTimeoutMs }) {\n  const idle = [];\n  const waiting = [];       // { resolve, timer }\n  let opened = 0, inUse = 0;\n  function acquire() {\n    if (idle.length) { inUse++; return Promise.resolve(idle.pop()); }\n    if (opened < max) { opened++; inUse++; return connect(); }\n    return new Promise((resolve, reject) => {\n      const w = { resolve: (c) => { clearTimeout(w.timer); inUse++; resolve(c); } };\n      // waited too long: give up AND leave the queue, or a dead waiter will swallow a connection later\n      w.timer = setTimeout(() => {\n        waiting.splice(waiting.indexOf(w), 1);\n        const err = new Error('Timed out fetching a new connection from the connection pool');\n        err.code = 'P2024';\n        reject(err);\n      }, acquireTimeoutMs);\n      waiting.push(w);\n    });\n  }\n  function release(conn) {\n    inUse--;\n    const next = waiting.shift();\n    if (next) next.resolve(conn);\n    else idle.push(conn);\n  }\n  return {\n    async query(sql) {\n      const conn = await acquire();\n      try { return await conn.query(sql); }\n      finally { release(conn); }\n    },\n    stats: () => ({ opened, inUse, idle: idle.length, waiting: waiting.length }),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A bounded wait turns “every request in the process queues forever behind ten slow transactions” into a fast, visible error — the incident that “looks like the database is down while the database is idle”. The two bookkeeping rules (leave the queue on timeout, release in finally) are what keep the pool’s count of free slots true; every pool library has had a bug in exactly one of them.</p>",
+      "solutionExplanationHtmlVi": "<p>Chờ có hạn biến \"mọi request trong tiến trình xếp hàng mãi sau mười transaction chậm\" thành một lỗi nhanh, nhìn thấy được — đúng sự cố \"trông như CSDL chết trong khi CSDL rảnh\". Hai luật sổ sách (rời hàng khi hết giờ, trả trong finally) giữ cho số chỗ trống của pool luôn đúng; thư viện pool nào cũng từng có lỗi ở đúng một trong hai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Second caller times out after 100 ms ⇒ P2024",
+              "vi": "Người gọi thứ hai hết giờ sau 100 ms ⇒ P2024"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 300), acquireTimeoutMs: 100 }); const r = await Promise.all([caught(pool.query('long')), caught(pool.query('waits too long'))]); return [r, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              [
+                1,
+                {
+                  "code": "P2024",
+                  "message": "Timed out fetching a new connection from the connection pool"
+                }
+              ],
+              {
+                "opened": 1,
+                "inUse": 0,
+                "idle": 1,
+                "waiting": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Served in time ⇒ no rejection",
+              "vi": "Được phục vụ kịp ⇒ không bị reject"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 50), acquireTimeoutMs: 100 }); const r = await Promise.all([pool.query('a'), pool.query('b')]); return [r, t(), pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              [
+                1,
+                1
+              ],
+              108,
+              {
+                "opened": 1,
+                "inUse": 0,
+                "idle": 1,
+                "waiting": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A dead waiter must not swallow the released connection",
+              "vi": "Người chờ đã bỏ cuộc không được nuốt kết nối được trả"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 300), acquireTimeoutMs: 100 }); const r = await Promise.all([caught(pool.query('long')), caught(pool.query('gives up'))]); const after = await caught(pool.query('later')); return [r, after, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              [
+                1,
+                {
+                  "code": "P2024",
+                  "message": "Timed out fetching a new connection from the connection pool"
+                }
+              ],
+              1,
+              {
+                "opened": 1,
+                "inUse": 0,
+                "idle": 1,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 100), acquireTimeoutMs: 1000 }); const r = await Promise.all([caught(pool.query('FAIL')), caught(pool.query('ok'))]); return [r, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              [
+                {
+                  "code": {
+                    "$js": "undefined"
+                  },
+                  "message": "query failed"
+                },
+                1
+              ],
+              {
+                "opened": 1,
+                "inUse": 0,
+                "idle": 1,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A served waiter’s old timer must not touch the queue",
+              "vi": "Hẹn giờ cũ của người chờ đã được phục vụ không được đụng vào hàng đợi"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 1, connect: mkPgSleep(8, 60), acquireTimeoutMs: 100 }); const p1 = caught(pool.query('a')); const p2 = caught(pool.query('b')); await new Promise((r) => setTimeout(r, 50)); const p3 = caught(pool.query('c')); return [await p1, await p2, await p3, t(), pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              1,
+              1,
+              1,
+              188,
+              {
+                "opened": 1,
+                "inUse": 0,
+                "idle": 1,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const pool = createTimedPool({ max: 2, connect: mkPgSleep(8, 100), acquireTimeoutMs: 150 }); const r = await Promise.all([1, 2, 3, 4, 5, 6].map((i) => caught(pool.query('q' + i)))); return [r, pool.stats()]; })()",
+            "chuanBi": "const mkPgSleep = (connectMs = 8, queryMs = 100) => { let opened = 0, live = 0, peak = 0;\n  const connect = () => new Promise((ok) => setTimeout(() => { opened++; const id = opened;\n    ok({ id, query: (sql) => { live++; peak = Math.max(peak, live); return new Promise((r, no) => setTimeout(() => { live--; sql === 'FAIL' ? no(new Error('query failed')) : r(id); }, queryMs)); } }); }, connectMs));\n  connect.opened = () => opened; connect.peak = () => peak; return connect; };\nconst t = () => Date.now() - 1767225600000;\nconst _b = async (max, n) => { const pg = mkPgSleep(); const pool = createPool({ max, connect: pg }); const t0 = t(); await Promise.all(Array.from({ length: n }, () => pool.query('SELECT 1 FROM pg_sleep(0.1)'))); return { max, ms: t() - t0, backends: pg.opened(), peak: pg.peak(), stats: pool.stats() }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              [
+                1,
+                2,
+                1,
+                2,
+                {
+                  "code": "P2024",
+                  "message": "Timed out fetching a new connection from the connection pool"
+                },
+                {
+                  "code": "P2024",
+                  "message": "Timed out fetching a new connection from the connection pool"
+                }
+              ],
+              {
+                "opened": 2,
+                "inUse": 0,
+                "idle": 2,
+                "waiting": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rejecting on timeout but leaving the waiter queued: the next release hands a connection to a promise nobody awaits — the slot is lost and inUse never returns to 0.|||Reject khi hết giờ nhưng vẫn để người chờ trong hàng: lần trả sau trao kết nối cho promise không ai chờ — mất chỗ và inUse không bao giờ về 0."
+        },
+        {
+          "loi": "Raising the timeout instead of fixing the long transaction — lesson 7.3: “usually the wrong fix”.|||Tăng thời gian chờ thay vì sửa transaction dài — bài 7.3: \"thường là cách sửa sai\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "acquire timeout",
+          "vi": "hạn chờ lấy kết nối"
+        },
+        {
+          "en": "P2024",
+          "vi": "P2024",
+          "giaiThich": "Prisma: hết giờ chờ kết nối từ pool."
+        },
+        {
+          "en": "leak",
+          "vi": "rò rỉ",
+          "giaiThich": "Chỗ trong pool bị mất vĩnh viễn."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,842 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-9-lab-harden-notes-api",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-9-lab-harden-notes-api"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9 · 1 — Put the perimeter in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "middleware",
+        "SSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 9.1: \"helmet() and cors() only affect responses that pass through them. Mount them before your routes, and mount your error handler last — otherwise an error response can go out with none of these headers.\" Put the pieces in order.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 9.1: \"helmet() và cors() chỉ tác động lên phản hồi đi qua chúng. Gắn chúng trước route, và gắn error handler sau cùng — không thì phản hồi lỗi có thể đi ra mà không có header nào.\" Sắp các phần theo đúng thứ tự.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask for each piece: \"what must already have happened for this to work?\"|||Hỏi với mỗi phần: \"điều gì phải xảy ra trước để cái này chạy được?\"",
+        "An error handler only receives errors from middleware mounted before it.|||Error handler chỉ nhận lỗi từ middleware gắn trước nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9 · 1 — Put the perimeter in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the middleware of the Notes API exactly as cuongthai.com mounts them in src/index.ts (first → last).Sắp middleware của Notes API đúng thứ tự cuongthai.com gắn trong src/index.ts (đầu → cuối).\n2. The link-preview route receives ?url=…. Order the steps of a safe fetch (lesson 9.3).Route xem trước link nhận ?url=…. Sắp các bước của một lần fetch an toàn (bài 9.3).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9 · 1 — Put the perimeter in the right order — answer key\n\n1. Order the middleware of the Notes API exactly as cuongthai.com mounts them in src/index.ts (first → last).Sắp middleware của Notes API đúng thứ tự cuongthai.com gắn trong src/index.ts (đầu → cuối).\n   Answer: m5) request-id (so even the earliest failure has an id)  →  m4) helmet (security headers)  →  m6) CORS with an explicit allow-list  →  m3) body parsers with a size limit  →  m2) the routes (POST /notes, GET /feed…)  →  m1) the error handler (opaque 5xx + request id)\n   Request id first so every log line and every error has it; headers and CORS before anything can fail; parsers before the routes that read req.body; the error handler last because Express sends next(err) to the handlers mounted AFTER the failing one.VI: Request id đầu tiên để mọi dòng log và mọi lỗi đều có; header và CORS trước bất cứ thứ gì có thể hỏng; parser trước các route đọc req.body; error handler sau cùng vì Express chuyển next(err) tới handler gắn SAU chỗ hỏng.\n\n2. The link-preview route receives ?url=…. Order the steps of a safe fetch (lesson 9.3).Route xem trước link nhận ?url=…. Sắp các bước của một lần fetch an toàn (bài 9.3).\n   Answer: m1) Parse the URL with new URL() (reject what does not parse)  →  m2) Require https: and an allow-listed hostname  →  m5) fetch it with redirect: 'manual'  →  m4) On a 3xx, resolve Location and go back to the check  →  m3) Only on a non-3xx answer, read the body and return\n   Parse before you judge (127.1 and 2130706433 only reveal themselves after parsing); check before every request; manual redirects so each hop returns to the check.VI: Phân tích trước khi phán (127.1 và 2130706433 chỉ lộ mặt sau khi phân tích); kiểm trước mọi request; tự xử lý chuyển hướng để mỗi bước quay lại phép kiểm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Request id first so every log line and every error has it; headers and CORS before anything can fail; parsers before the routes that read req.body; the error handler last because Express sends next(err) to the handlers mounted AFTER the failing one.</p><p><i>VI: Request id đầu tiên để mọi dòng log và mọi lỗi đều có; header và CORS trước bất cứ thứ gì có thể hỏng; parser trước các route đọc req.body; error handler sau cùng vì Express chuyển next(err) tới handler gắn SAU chỗ hỏng.</i></p><p>Parse before you judge (127.1 and 2130706433 only reveal themselves after parsing); check before every request; manual redirects so each hop returns to the check.</p><p><i>VI: Phân tích trước khi phán (127.1 và 2130706433 chỉ lộ mặt sau khi phân tích); kiểm trước mọi request; tự xử lý chuyển hướng để mỗi bước quay lại phép kiểm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the middleware of the Notes API exactly as cuongthai.com mounts them in src/index.ts (first → last).</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp middleware của Notes API đúng thứ tự cuongthai.com gắn trong src/index.ts (đầu → cuối).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "the error handler (opaque 5xx + request id)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "the routes (POST /notes, GET /feed…)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "body parsers with a size limit"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "helmet (security headers)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "request-id (so even the earliest failure has an id)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "CORS with an explicit allow-list"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m4",
+              "m6",
+              "m3",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>Request id first so every log line and every error has it; headers and CORS before anything can fail; parsers before the routes that read req.body; the error handler last because Express sends next(err) to the handlers mounted AFTER the failing one.</p><p><i>VI: Request id đầu tiên để mọi dòng log và mọi lỗi đều có; header và CORS trước bất cứ thứ gì có thể hỏng; parser trước các route đọc req.body; error handler sau cùng vì Express chuyển next(err) tới handler gắn SAU chỗ hỏng.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>The link-preview route receives <code>?url=…</code>. Order the steps of a safe fetch (lesson 9.3).</p><p style=\"opacity:.75;font-size:.92em\"><i>Route xem trước link nhận <code>?url=…</code>. Sắp các bước của một lần fetch an toàn (bài 9.3).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Parse the URL with new URL() (reject what does not parse)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Require https: and an allow-listed hostname"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Only on a non-3xx answer, read the body and return"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "On a 3xx, resolve Location and go back to the check"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "fetch it with redirect: 'manual'"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m5",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Parse before you judge (127.1 and 2130706433 only reveal themselves after parsing); check before every request; manual redirects so each hop returns to the check.</p><p><i>VI: Phân tích trước khi phán (127.1 và 2130706433 chỉ lộ mặt sau khi phân tích); kiểm trước mọi request; tự xử lý chuyển hướng để mỗi bước quay lại phép kiểm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Mounting helmet after the routes: every response the routes send goes out without headers.|||Gắn helmet sau route: mọi phản hồi route gửi đi đều không có header."
+        },
+        {
+          "loi": "Checking the URL once, then letting fetch follow redirects.|||Kiểm URL một lần rồi để fetch tự đi theo chuyển hướng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware order",
+          "vi": "thứ tự middleware",
+          "giaiThich": "Express chạy theo đúng thứ tự app.use"
+        }
+      ]
+    },
+    {
+      "title": "Lab 9 · 2 — Build the middleware chain that makes order matter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "middleware",
+        "error handling",
+        "async"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Order only matters because of how Express walks the chain. Write <code>compose(middlewares, errorHandler)</code> → <code>async app(req, res)</code> with Express’s rules:</p>\n<ul><li>run <code>middlewares</code> in order; each gets <code>(req, res, next)</code>; <code>next()</code> runs the following one;</li>\n<li><code>next(err)</code> — or a middleware that <b>throws</b>, or an async one that <b>rejects</b> — skips everything left and calls <code>errorHandler(err, req, res, next)</code> once;</li>\n<li>a middleware that neither calls <code>next</code> nor throws stops the chain (it answered, or it is waiting);</li>\n<li>if the chain runs past the last middleware and <code>res.ended</code> is still false → <code>res.status(404).json({ error: 'NOT_FOUND' })</code>;</li>\n<li><code>app</code> resolves only after the whole chain (including async middleware and the error handler) has finished.</li></ul>\n<p>The tests use small middlewares that push their name into <code>trace</code>, and <code>call(app, { method, url })</code> which builds a fake request.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not use real Express; write the chain walker yourself.</li>\n  <li>The error handler runs at most once per request.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thứ tự chỉ quan trọng vì cách Express đi qua chuỗi. Viết <code>compose(middlewares, errorHandler)</code> → <code>async app(req, res)</code> theo luật của Express:</p>\n<ul><li>chạy <code>middlewares</code> theo thứ tự; mỗi cái nhận <code>(req, res, next)</code>; <code>next()</code> chạy cái tiếp theo;</li>\n<li><code>next(err)</code> — hoặc middleware <b>ném lỗi</b>, hoặc middleware async bị <b>reject</b> — bỏ qua mọi thứ còn lại và gọi <code>errorHandler(err, req, res, next)</code> một lần;</li>\n<li>middleware không gọi <code>next</code> cũng không ném lỗi thì chuỗi dừng (nó đã trả lời, hoặc đang chờ);</li>\n<li>nếu chuỗi chạy quá middleware cuối mà <code>res.ended</code> vẫn false → <code>res.status(404).json({ error: 'NOT_FOUND' })</code>;</li>\n<li><code>app</code> chỉ xong khi cả chuỗi (kể cả middleware async và error handler) đã chạy xong.</li></ul>\n<p>Bộ kiểm dùng các middleware nhỏ đẩy tên vào <code>trace</code>, và <code>call(app, { method, url })</code> dựng request giả.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không dùng Express thật; tự viết bộ đi chuỗi.</li>\n  <li>Error handler chạy nhiều nhất một lần mỗi request.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await call(compose([mark(\"a\"), mark(\"b\"), (req, res) => res.json({ ok: true })], onErr), { url: \"/notes\" }), trace]",
+          "output": "[{\"status\":200,\"headers\":{\"content-type\":\"application/json; charset=utf-8\"},\"body\":{\"ok\":true}},[\"a\",\"b\"]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write <code>run(i)</code> that calls <code>middlewares[i]</code> with a <code>next</code> that calls <code>run(i + 1)</code>.|||Viết <code>run(i)</code> gọi <code>middlewares[i]</code> với <code>next</code> gọi <code>run(i + 1)</code>.",
+        "Wrap the call in <code>try { await … } catch (err) { … }</code> — that catches both a throw and a rejected promise.|||Bọc lời gọi trong <code>try { await … } catch (err) { … }</code> — bắt được cả ném lỗi lẫn promise bị reject.",
+        "Keep the promise returned by <code>next</code> and await it after the middleware returns, so <code>app</code> waits for the rest of the chain.|||Giữ promise mà <code>next</code> trả về và await nó sau khi middleware trả về, để <code>app</code> chờ phần còn lại của chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Walk middlewares like Express: next(), next(err), throws, async, final 404. */\nfunction compose(middlewares, errorHandler) {\n  return async function app(req, res) {\n    // Write your solution here\n    for (const mw of middlewares) {\n      await mw(req, res, () => {});\n    }\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction compose(middlewares, errorHandler) {\n  return async function app(req, res) {\n    let failed = false;\n    const fail = async (err) => {\n      if (failed) return;              // one error handler run per request\n      failed = true;\n      await errorHandler(err, req, res, () => {});\n    };\n    const run = async (i) => {\n      if (i === middlewares.length) {\n        // Fell off the end and nobody answered: that is a 404, not a hang.\n        if (!res.ended) res.status(404).json({ error: 'NOT_FOUND' });\n        return;\n      }\n      let nextP = null;\n      const next = (err) => {\n        // next(err) jumps straight to the error handler; next() runs the following middleware.\n        nextP = err !== undefined ? fail(err) : run(i + 1);\n        return nextP;\n      };\n      try {\n        await middlewares[i](req, res, next);   // async middleware: a rejected promise is an error too\n      } catch (err) {\n        return fail(err);                         // a THROW (sync or async) is treated like next(err)\n      }\n      if (nextP) await nextP;                     // wait for the rest of the chain before resolving\n    };\n    await run(0);\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the mechanism behind every rule of chapter 9: headers set by an early middleware are already on <code>res</code> when a later route throws, so the error response carries them; an error handler mounted last receives every failure; parsers must run before the routes that read <code>req.body</code>. Treating a throw and a rejection like <code>next(err)</code> is what Express 5 does for async handlers.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là cơ chế đứng sau mọi luật của chương 9: header do middleware sớm đặt đã nằm trên <code>res</code> khi một route sau ném lỗi, nên phản hồi lỗi mang chúng; error handler gắn cuối nhận mọi lỗi; parser phải chạy trước route đọc <code>req.body</code>. Coi ném lỗi và reject như <code>next(err)</code> là điều Express 5 làm với handler async.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Normal chain",
+              "vi": "Chuỗi bình thường"
+            },
+            "goi": "[await call(compose([mark(\"a\"), mark(\"b\"), (req, res) => res.json({ ok: true })], onErr), { url: \"/notes\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 200,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "ok": true
+                }
+              },
+              [
+                "a",
+                "b"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A route throws: error handler, and the header is still there",
+              "vi": "Route ném lỗi: error handler, và header vẫn còn"
+            },
+            "goi": "[await call(compose([headers, mark(\"auth\"), (req, res) => { throw new Error(\"boom\"); }, mark(\"never\")], onErr), { url: \"/feed\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 500,
+                "headers": {
+                  "x-content-type-options": "nosniff",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "INTERNAL"
+                }
+              },
+              [
+                "auth",
+                "error:boom"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nobody answers: 404",
+              "vi": "Không ai trả lời: 404"
+            },
+            "goi": "[await call(compose([mark(\"a\"), mark(\"b\")], onErr), { url: \"/nope\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 404,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "NOT_FOUND"
+                }
+              },
+              [
+                "a",
+                "b"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await call(compose([async (req, res, next) => { await wait(50); trace.push(\"db\"); next(); }, async (req, res) => { await wait(20); throw new Error(\"async boom\"); }, mark(\"never\")], onErr), { url: \"/x\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 500,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "INTERNAL"
+                }
+              },
+              [
+                "db",
+                "error:async boom"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await call(compose([mark(\"a\"), (req, res, next) => next(new Error(\"forbidden\")), mark(\"never\"), (req, res) => res.json({})], onErr), { url: \"/x\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 500,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "INTERNAL"
+                }
+              },
+              [
+                "a",
+                "error:forbidden"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await call(compose([(req, res) => { res.status(204).end(); }, mark(\"never\")], onErr), { url: \"/x\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 204,
+                "headers": {},
+                "body": null
+              },
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[await call(compose([async (req, res, next) => { await wait(10); next(); }, async (req, res, next) => { await wait(10); res.json({ late: true }); }], onErr), { url: \"/x\" }), trace]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nconst trace = [];\nconst mark = (name) => (req, res, next) => { trace.push(name); next(); };\nconst headers = (req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); next(); };\nconst onErr = (err, req, res, next) => { trace.push('error:' + err.message); res.status(500).json({ error: 'INTERNAL' }); };\nconst wait = (ms) => new Promise((r) => setTimeout(r, ms));\n",
+            "mongDoi": [
+              {
+                "status": 200,
+                "headers": {
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "late": true
+                }
+              },
+              []
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "A plain loop over the middlewares: it ignores whether next() was called and runs routes after an error.|||Một vòng lặp thường qua các middleware: bỏ qua việc next() có được gọi không và chạy route cả sau khi lỗi."
+        },
+        {
+          "loi": "Not awaiting async middleware: a rejection becomes an unhandled promise instead of a 500.|||Không await middleware async: reject thành promise không ai bắt thay vì lỗi 500."
+        },
+        {
+          "loi": "Forgetting the final 404: an unknown route hangs until the client times out.|||Quên 404 cuối: route không tồn tại treo tới khi client hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error-handling middleware",
+          "vi": "middleware xử lý lỗi",
+          "giaiThich": "hàm 4 tham số (err, req, res, next)"
+        },
+        {
+          "en": "chain",
+          "vi": "chuỗi",
+          "giaiThich": "danh sách middleware chạy nối tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Lab 9 · 3 — Harden the Notes API (one hole per lesson)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 40,
+      "concepts": [
+        "security headers",
+        "XSS",
+        "SSRF",
+        "validation",
+        "error handling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The starter is the Notes API \"before chapter 9\": it works, and it has a hole from every lesson. Rewrite <code>notesApp({ store, newId, log })</code> → <code>async app(req, res)</code> so that it meets this brief:</p>\n<p><b>Every response</b> (including 404, 413 and 500):</p>\n<ul><li><code>X-Request-ID</code> = <code>req.headers['x-request-id']</code> if it matches <code>/^[A-Za-z0-9-]{1,64}$/</code>, otherwise <code>newId()</code>;</li>\n<li>no <code>X-Powered-By</code>; the five headers of 9.1 with helmet’s values (HSTS <code>max-age=31536000; includeSubDomains</code>, <code>nosniff</code>, <code>SAMEORIGIN</code>, <code>no-referrer</code>, <code>X-XSS-Protection: 0</code>);</li>\n<li>CORS: <code>Vary: Origin</code>; <code>Access-Control-Allow-Origin</code> + <code>Access-Control-Allow-Credentials: true</code> only for <code>https://cuongthai.com</code> and <code>https://www.cuongthai.com</code>.</li></ul>\n<p><b>Routes</b>:</p>\n<ul><li><code>POST /notes</code> — no <code>req.user</code> → 401 <code>{ error:'UNAUTHENTICATED' }</code>; declared <code>content-length</code> or real <code>rawBody</code> over 10240 → 413 <code>{ error:'TOO_LARGE' }</code>; invalid JSON → 400 <code>{ error:'BAD_JSON' }</code>; invalid note → 400 <code>{ error:'VALIDATION' }</code> (rules of 9.3: title string ≤ 200 and non-empty after trim; tags optional array ≤ 20 of <code>/^[a-z0-9-]+$/</code> ≤ 30 chars); then <code>store.create({ ownerId: req.user.id, title: trimmed, tags })</code> and 201 <code>{ id, title, tags }</code>. Nothing else from the body reaches the store.</li>\n<li><code>GET /feed</code> — <code>Content-Type: text/html; charset=utf-8</code>, body <code>&lt;ul&gt;</code> + one <code>&lt;li&gt;</code> per note with the <b>escaped</b> title + <code>&lt;/ul&gt;</code> (send with <code>res.send</code>).</li>\n<li><code>GET /preview?url=</code> — only <code>https://media.cuongthai.com</code> URLs, with <code>redirect:'manual'</code> and every hop re-checked (at most 3 redirects); not allowed → 400 <code>{ error:'URL_NOT_ALLOWED' }</code> (unparseable → <code>BAD_URL</code>, too many hops → <code>TOO_MANY_REDIRECTS</code>); success → 200 <code>{ status, length }</code> (length of the body text).</li>\n<li>anything else → 404 <code>{ error:'NOT_FOUND' }</code>.</li></ul>\n<p><b>Failures</b> (the store throws): push <code>{ requestId, message }</code> to <code>log</code> and answer 500 <code>{ error:'INTERNAL', requestId }</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Keep the signature notesApp({ store, newId, log }) → async (req, res).</li>\n  <li>You may reuse your code from 9.1–9.4 (escapeHtml, validateNote, safeFetch…).</li>\n</ul>",
+      "problemHtmlVi": "<p>Code khởi đầu là Notes API \"trước chương 9\": chạy được, và có một lỗ hổng từ mỗi bài. Viết lại <code>notesApp({ store, newId, log })</code> → <code>async app(req, res)</code> cho đúng bản yêu cầu sau:</p>\n<p><b>Mọi phản hồi</b> (kể cả 404, 413 và 500):</p>\n<ul><li><code>X-Request-ID</code> = <code>req.headers['x-request-id']</code> nếu khớp <code>/^[A-Za-z0-9-]{1,64}$/</code>, không thì <code>newId()</code>;</li>\n<li>không có <code>X-Powered-By</code>; năm header của 9.1 với giá trị của helmet (HSTS <code>max-age=31536000; includeSubDomains</code>, <code>nosniff</code>, <code>SAMEORIGIN</code>, <code>no-referrer</code>, <code>X-XSS-Protection: 0</code>);</li>\n<li>CORS: <code>Vary: Origin</code>; <code>Access-Control-Allow-Origin</code> + <code>Access-Control-Allow-Credentials: true</code> chỉ cho <code>https://cuongthai.com</code> và <code>https://www.cuongthai.com</code>.</li></ul>\n<p><b>Route</b>:</p>\n<ul><li><code>POST /notes</code> — không có <code>req.user</code> → 401 <code>{ error:'UNAUTHENTICATED' }</code>; <code>content-length</code> khai báo hoặc <code>rawBody</code> thật quá 10240 → 413 <code>{ error:'TOO_LARGE' }</code>; JSON hỏng → 400 <code>{ error:'BAD_JSON' }</code>; ghi chú sai luật → 400 <code>{ error:'VALIDATION' }</code> (luật 9.3: title là chuỗi ≤ 200 và không rỗng sau trim; tags tuỳ chọn, mảng ≤ 20 phần tử khớp <code>/^[a-z0-9-]+$/</code> ≤ 30 ký tự); rồi <code>store.create({ ownerId: req.user.id, title: bản_đã_trim, tags })</code> và 201 <code>{ id, title, tags }</code>. Không gì khác từ body tới được store.</li>\n<li><code>GET /feed</code> — <code>Content-Type: text/html; charset=utf-8</code>, thân <code>&lt;ul&gt;</code> + mỗi ghi chú một <code>&lt;li&gt;</code> chứa title <b>đã escape</b> + <code>&lt;/ul&gt;</code> (gửi bằng <code>res.send</code>).</li>\n<li><code>GET /preview?url=</code> — chỉ URL <code>https://media.cuongthai.com</code>, với <code>redirect:'manual'</code> và kiểm lại mỗi bước (tối đa 3 lần chuyển hướng); không được phép → 400 <code>{ error:'URL_NOT_ALLOWED' }</code> (không phân tích được → <code>BAD_URL</code>, quá số bước → <code>TOO_MANY_REDIRECTS</code>); thành công → 200 <code>{ status, length }</code> (độ dài chữ của thân).</li>\n<li>còn lại → 404 <code>{ error:'NOT_FOUND' }</code>.</li></ul>\n<p><b>Sự cố</b> (store ném lỗi): đẩy <code>{ requestId, message }</code> vào <code>log</code> và trả 500 <code>{ error:'INTERNAL', requestId }</code>.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giữ chữ ký notesApp({ store, newId, log }) → async (req, res).</li>\n  <li>Được dùng lại code của bạn ở 9.1–9.4 (escapeHtml, validateNote, safeFetch…).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"  Buy milk \", tags: [\"home\"] }, { id: 7 }))",
+          "output": "{\"status\":201,\"headers\":{\"x-request-id\":\"req-1\",\"strict-transport-security\":\"max-age=31536000; includeSubDomains\",\"x-content-type-options\":\"nosniff\",\"x-frame-options\":\"SAMEORIGIN\",\"referrer-policy\":\"no-referrer\",\"x-xss-protection\":\"0\",\"vary\":\"Origin\",\"content-type\":\"application/json; charset=utf-8\"},\"body\":{\"id\":1,\"title\":\"Buy milk\",\"tags\":[\"home\"]}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Set the request id, the security headers and CORS at the very top of <code>app</code>, before any route can fail — that is what puts them on the 500 too.|||Đặt request id, header bảo mật và CORS ngay đầu <code>app</code>, trước khi route nào có thể hỏng — đó là điều đưa chúng lên cả lỗi 500.",
+        "Wrap the routes in one try/catch whose catch is the opaque 9.4 handler.|||Bọc các route trong một try/catch, phần catch là handler mờ của 9.4.",
+        "For POST /notes, build the object passed to store.create from validated variables only: <code>{ ownerId: req.user.id, title, tags }</code>.|||Với POST /notes, dựng object truyền vào store.create chỉ từ biến đã kiểm: <code>{ ownerId: req.user.id, title, tags }</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The Notes API as it was before chapter 9. It works — and it has a hole from every lesson. Harden it. */\nfunction notesApp({ store, newId, log }) {\n  // Write your solution here\n  return async function app(req, res) {\n    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');   // 9.1: reflects any origin\n    res.setHeader('Access-Control-Allow-Credentials', 'true');\n    try {\n      if (req.method === 'POST' && req.path === '/notes') {\n        const body = JSON.parse(req.rawBody || '{}');                          // 9.3: no limit at all\n        const note = await store.create({ ownerId: req.user && req.user.id, ...body });   // mass assignment\n        return res.status(201).json(note);\n      }\n      if (req.method === 'GET' && req.path === '/feed') {\n        const notes = await store.list();\n        res.setHeader('Content-Type', 'text/html; charset=utf-8');\n        return res.send('<ul>' + notes.map((n) => '<li>' + n.title + '</li>').join('') + '</ul>');   // 9.2: raw HTML\n      }\n      if (req.method === 'GET' && req.path === '/preview') {\n        const r = await fetch(req.query.url);                                   // 9.3: SSRF\n        return res.json({ status: r.status, length: (await r.text()).length });\n      }\n      return res.status(404).json({ error: 'NOT_FOUND' });\n    } catch (err) {\n      return res.status(500).json({ error: err.message, stack: String(err.stack).split('\\n').slice(0, 2) });   // 9.4: leaks\n    }\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction notesApp({ store, newId, log }) {\n  /* ---- 9.1 headers + CORS ---- */\n  const ORIGINS = new Set(['https://cuongthai.com', 'https://www.cuongthai.com']);\n  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;');\n  const json = (res, status, body) => res.status(status).json(body);\n\n  /* ---- 9.3 validation (cap first, strip unknown keys) ---- */\n  function validate(b) {\n    if (typeof b !== 'object' || b === null || Array.isArray(b)) return null;\n    if (typeof b.title !== 'string' || b.title.length > 200 || !b.title.trim()) return null;\n    const tags = b.tags === undefined ? [] : b.tags;\n    if (!Array.isArray(tags) || tags.length > 20 || !tags.every((t) => typeof t === 'string' && t.length <= 30 && /^[a-z0-9-]+$/.test(t))) return null;\n    return { title: b.title.trim(), tags: tags.slice() };\n  }\n\n  /* ---- 9.3 SSRF: allow-list + manual redirects ---- */\n  async function preview(raw) {\n    let current = raw;\n    for (let hop = 0; hop <= 3; hop++) {\n      let u;\n      try { u = new URL(current); } catch { return { error: 'BAD_URL' }; }\n      if (u.protocol !== 'https:' || u.hostname !== 'media.cuongthai.com') return { error: 'URL_NOT_ALLOWED' };\n      const r = await fetch(u.href, { redirect: 'manual' });\n      if ([301, 302, 303, 307, 308].includes(r.status)) { current = new URL(r.headers.get('location') || '', u).href; continue; }\n      return { status: r.status, length: (await r.text()).length };\n    }\n    return { error: 'TOO_MANY_REDIRECTS' };\n  }\n\n  return async function app(req, res) {\n    // request id first: every response and every log line gets one\n    const id = /^[A-Za-z0-9-]{1,64}$/.test(req.headers['x-request-id'] || '') ? req.headers['x-request-id'] : newId();\n    res.setHeader('X-Request-ID', id);\n    // security headers before anything can fail\n    res.removeHeader('X-Powered-By');\n    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');\n    res.setHeader('X-Content-Type-Options', 'nosniff');\n    res.setHeader('X-Frame-Options', 'SAMEORIGIN');\n    res.setHeader('Referrer-Policy', 'no-referrer');\n    res.setHeader('X-XSS-Protection', '0');\n    // CORS: allow-list, Vary, never reflect\n    res.vary('Origin');\n    const origin = req.headers.origin;\n    if (origin && ORIGINS.has(origin)) { res.setHeader('Access-Control-Allow-Origin', origin); res.setHeader('Access-Control-Allow-Credentials', 'true'); }\n    try {\n      if (req.method === 'POST' && req.path === '/notes') {\n        if (!req.user) return json(res, 401, { error: 'UNAUTHENTICATED' });\n        // body limit 10kb (declared AND real size), then parse\n        const raw = String(req.rawBody || '');\n        if (Number(req.headers['content-length'] || 0) > 10240 || raw.length > 10240) return json(res, 413, { error: 'TOO_LARGE' });\n        let body;\n        try { body = JSON.parse(raw || '{}'); } catch { return json(res, 400, { error: 'BAD_JSON' }); }\n        const v = validate(body);\n        if (!v) return json(res, 400, { error: 'VALIDATION' });\n        // ownerId comes from the session, never from the body\n        const note = await store.create({ ownerId: req.user.id, title: v.title, tags: v.tags });\n        return json(res, 201, { id: note.id, title: note.title, tags: note.tags });\n      }\n      if (req.method === 'GET' && req.path === '/feed') {\n        const notes = await store.list();\n        res.setHeader('Content-Type', 'text/html; charset=utf-8');\n        // 9.2: plain-text fields are ESCAPED on output\n        return res.send('<ul>' + notes.map((n) => '<li>' + esc(n.title) + '</li>').join('') + '</ul>');\n      }\n      if (req.method === 'GET' && req.path === '/preview') {\n        const r = await preview(String(req.query.url || ''));\n        return r.error ? json(res, 400, { error: r.error }) : json(res, 200, r);\n      }\n      return json(res, 404, { error: 'NOT_FOUND' });\n    } catch (err) {\n      // 9.4: full detail to the log, opaque answer to the client\n      log.push({ requestId: id, message: String(err && err.message) });\n      return json(res, 500, { error: 'INTERNAL', requestId: id });\n    }\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each fix sits at the layer the chapter assigned it to: headers and CORS on every response (9.1), escaping at the render boundary (9.2), size caps, schema validation and a URL allow-list with manual redirects at the input boundary (9.3), and an opaque error with a request id at the exit (9.4). Putting the cross-cutting parts before the try block is the \"order matters\" lesson of 9.1 in code: an error can no longer leave without the headers.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi bản vá nằm đúng tầng chương đã giao: header và CORS trên mọi phản hồi (9.1), escape ở ranh giới render (9.2), giới hạn cỡ, kiểm schema và danh sách trắng URL với chuyển hướng thủ công ở ranh giới đầu vào (9.3), và lỗi mờ kèm request id ở lối ra (9.4). Đặt các phần dùng chung trước khối try là bài \"thứ tự quan trọng\" của 9.1 viết thành mã: lỗi không còn đi ra mà thiếu header.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "POST /notes: 201, headers on",
+              "vi": "POST /notes: 201, có header"
+            },
+            "goi": "await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"  Buy milk \", tags: [\"home\"] }, { id: 7 }))",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": {
+              "status": 201,
+              "headers": {
+                "x-request-id": "req-1",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "x-content-type-options": "nosniff",
+                "x-frame-options": "SAMEORIGIN",
+                "referrer-policy": "no-referrer",
+                "x-xss-protection": "0",
+                "vary": "Origin",
+                "content-type": "application/json; charset=utf-8"
+              },
+              "body": {
+                "id": 1,
+                "title": "Buy milk",
+                "tags": [
+                  "home"
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Mass assignment: ownerId from the session only",
+              "vi": "Gán hàng loạt: ownerId chỉ từ phiên"
+            },
+            "goi": "await (async () => { const store = makeStore(); const r = await call(notesApp({ store, newId, log }), POST({ title: \"Hi\", ownerId: 1, isAdmin: true }, { id: 7 })); return [r.status, store.rows]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              201,
+              [
+                {
+                  "id": 1,
+                  "ownerId": 7,
+                  "title": "Hi",
+                  "tags": []
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "GET /feed escapes; evil origin gets no ACAO",
+              "vi": "GET /feed escape; origin lạ không có ACAO"
+            },
+            "goi": "await call(notesApp({ store: makeStore([{ ownerId: 2, title: \"<img src=x onerror=alert(1)>\" }]), newId, log }), { url: \"/feed\", headers: { origin: \"https://evil.example\" } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": {
+              "status": 200,
+              "headers": {
+                "x-request-id": "req-1",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "x-content-type-options": "nosniff",
+                "x-frame-options": "SAMEORIGIN",
+                "referrer-policy": "no-referrer",
+                "x-xss-protection": "0",
+                "vary": "Origin",
+                "content-type": "text/html; charset=utf-8"
+              },
+              "body": "<ul><li>&lt;img src=x onerror=alert(1)&gt;</li></ul>"
+            }
+          },
+          {
+            "moTa": {
+              "en": "SSRF to the internal service is refused",
+              "vi": "SSRF tới dịch vụ nội bộ bị chặn"
+            },
+            "goi": "[await call(notesApp({ store: makeStore(), newId, log }), { url: \"/preview?url=http%3A%2F%2F127.0.0.1%3A4404%2Fadmin%2Fconfig\" }), __fetchDaGoi.length]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-1",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "URL_NOT_ALLOWED"
+                }
+              },
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The store fails: opaque 500 with the request id and the headers",
+              "vi": "Store hỏng: 500 mờ có request id và header"
+            },
+            "goi": "await (async () => { const store = makeStore(); store.failWith(\"connect ECONNREFUSED 10.0.0.5:5432\"); const r = await call(notesApp({ store, newId, log }), { url: \"/feed\", headers: { \"x-request-id\": \"abc-123\" } }); return [r, log]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 500,
+                "headers": {
+                  "x-request-id": "abc-123",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "INTERNAL",
+                  "requestId": "abc-123"
+                }
+              },
+              [
+                {
+                  "requestId": "abc-123",
+                  "message": "connect ECONNREFUSED 10.0.0.5:5432"
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"x\" })), await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"a\".repeat(201) }, { id: 1 })), await call(notesApp({ store: makeStore(), newId, log }), POST(\"{bad\", { id: 1 })), await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"x\", tags: [\"Bad Tag\"] }, { id: 1 }))]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 401,
+                "headers": {
+                  "x-request-id": "req-1",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "UNAUTHENTICATED"
+                }
+              },
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-2",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "VALIDATION"
+                }
+              },
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-3",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "BAD_JSON"
+                }
+              },
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-4",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "VALIDATION"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"x\", pad: \"a\".repeat(11000) }, { id: 1 })), await call(notesApp({ store: makeStore(), newId, log }), POST({ title: \"x\" }, { id: 1 }, { \"content-length\": \"999999\" }))]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 413,
+                "headers": {
+                  "x-request-id": "req-1",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "TOO_LARGE"
+                }
+              },
+              {
+                "status": 413,
+                "headers": {
+                  "x-request-id": "req-2",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "TOO_LARGE"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "[await call(notesApp({ store: makeStore(), newId, log }), { url: \"/preview?url=https%3A%2F%2Fmedia.cuongthai.com%2Fcat.png\" }), __fetchDaGoi.map((c) => c.url)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-1",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "URL_NOT_ALLOWED"
+                }
+              },
+              [
+                "https://media.cuongthai.com/cat.png"
+              ]
+            ],
+            "fetchGia": {
+              "https://media.cuongthai.com/cat.png": {
+                "status": 302,
+                "headers": {
+                  "location": "http://127.0.0.1:4404/admin/config"
+                }
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "[await call(notesApp({ store: makeStore(), newId, log }), { url: \"/preview?url=https%3A%2F%2Fmedia.cuongthai.com%2Fa.png\" }), await call(notesApp({ store: makeStore(), newId, log }), { url: \"/preview?url=%20nope\" }), await call(notesApp({ store: makeStore(), newId, log }), { method: \"DELETE\", url: \"/notes/1\", headers: { origin: \"https://www.cuongthai.com\", \"x-request-id\": \"bad id!\" } })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nasync function call(app, init) {\n  const u = new URL(init.url || '/', 'https://api.cuongthai.com');\n  const req = { method: init.method || 'GET', url: u.pathname + u.search, path: u.pathname, query: Object.fromEntries(u.searchParams), headers: init.headers || {}, rawBody: init.rawBody, user: init.user };\n  const res = makeRes(); res.setHeader('X-Powered-By', 'Express'); await app(req, res);\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body };\n}\nfunction makeStore(seed) {\n  const rows = (seed || []).map((x, i) => ({ id: i + 1, ...x })); let fail = null;\n  return { rows, failWith(m) { fail = m; },\n    async create(data) { if (fail) throw new Error(fail); const row = { id: rows.length + 1, ...data }; rows.push(row); return row; },\n    async list() { if (fail) throw new Error(fail); return rows.map((r) => ({ ...r })); } };\n}\nconst log = []; let n = 0; const newId = () => 'req-' + (++n);\nconst POST = (body, user, extra) => ({ method: 'POST', url: '/notes', headers: Object.assign({ 'content-type': 'application/json' }, extra || {}), rawBody: typeof body === 'string' ? body : JSON.stringify(body), user });\n",
+            "mongDoi": [
+              {
+                "status": 200,
+                "headers": {
+                  "x-request-id": "req-1",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "status": 200,
+                  "length": 7
+                }
+              },
+              {
+                "status": 400,
+                "headers": {
+                  "x-request-id": "req-2",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "BAD_URL"
+                }
+              },
+              {
+                "status": 404,
+                "headers": {
+                  "x-request-id": "req-3",
+                  "strict-transport-security": "max-age=31536000; includeSubDomains",
+                  "x-content-type-options": "nosniff",
+                  "x-frame-options": "SAMEORIGIN",
+                  "referrer-policy": "no-referrer",
+                  "x-xss-protection": "0",
+                  "vary": "Origin",
+                  "access-control-allow-origin": "https://www.cuongthai.com",
+                  "access-control-allow-credentials": "true",
+                  "content-type": "application/json; charset=utf-8"
+                },
+                "body": {
+                  "error": "NOT_FOUND"
+                }
+              }
+            ],
+            "fetchGia": {
+              "https://media.cuongthai.com/a.png": {
+                "status": 301,
+                "headers": {
+                  "location": "/b.png"
+                }
+              },
+              "https://media.cuongthai.com/b.png": {
+                "text": "PNGDATA"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Spreading the body into store.create — <code>ownerId</code> and <code>isAdmin</code> from the client win.|||Trải body vào store.create — <code>ownerId</code> và <code>isAdmin</code> của client thắng."
+        },
+        {
+          "loi": "Setting headers only on successful responses (inside each route).|||Chỉ đặt header cho phản hồi thành công (trong từng route)."
+        },
+        {
+          "loi": "Escaping on write (in POST) instead of on output: the stored row is mangled and other readers of the API get HTML entities.|||Escape lúc ghi (trong POST) thay vì lúc xuất: dòng lưu bị biến dạng và các bên đọc API khác nhận thực thể HTML."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hardening",
+          "vi": "gia cố",
+          "giaiThich": "đóng các lỗ hổng đã biết"
+        },
+        {
+          "en": "mass assignment",
+          "vi": "gán hàng loạt",
+          "giaiThich": "trải body của client vào bản ghi"
+        }
+      ]
+    }
+  ]
+}

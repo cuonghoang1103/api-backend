@@ -1,0 +1,673 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-7-lab-notes-postgres",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-7-6-hop-dong-api-voi-du-lieu-that"
+  },
+  "exercises": [
+    {
+      "title": "Lab 7 · 1 — The P3018 drill: put the recovery steps in the only safe order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "migrations",
+        "incident response"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lab’s deploy failed: <code>migrate deploy</code> printed P3018 for <code>20260727170000_add_slug</code> (23502: column \"slug\" contains null values), and the retry printed P3009. Order the steps the way lesson 7.2 and this project’s own rules require.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lần deploy của lab hỏng: <code>migrate deploy</code> in P3018 cho <code>20260727170000_add_slug</code> (23502: cột \"slug\" có giá trị null), và lần chạy lại in P3009. Sắp các bước theo đúng thứ tự mà bài 7.2 và luật của chính dự án này yêu cầu.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nothing changes before you know the state.|||Không thay đổi gì trước khi biết trạng thái.",
+        "resolve only records a fact; the fact must be checked first.|||resolve chỉ ghi lại một sự thật; sự thật phải được kiểm trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 1 — The P3018 drill: put the recovery steps in the only safe order\n\nAnswer in the answer panel (no code needed).\n\n1. Recovery orderThứ tự cứu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 1 — The P3018 drill: put the recovery steps in the only safe order — answer key\n\n1. Recovery orderThứ tự cứu\n   Answer: m5) Stop: do not retry, do not edit the database, write down the exact error and migration name  →  m2) Check how much applied: the columns of \"Note\", and finished_at / applied_steps_count in _prisma_migrations  →  m4) Seeing no slug column and applied_steps_count = 0, run prisma migrate resolve --rolled-back for that migration  →  m1) Rewrite the migration as nullable → backfill → SET NOT NULL → unique index  →  m3) Run prisma migrate deploy again and confirm with migrate status and a SELECT of the slugs\n   Stop first, because every reflex (retry, resolve --applied, an IF NOT EXISTS hack) can make the history lie. Check before resolving: --rolled-back is only honest when nothing applied. Fix the migration, deploy, verify. Both attempts stay in the history — an audit trail, not a cover-up.VI: Dừng trước, vì mọi phản xạ (chạy lại, resolve --applied, mẹo IF NOT EXISTS) đều có thể làm lịch sử nói dối. Kiểm trước khi resolve: --rolled-back chỉ trung thực khi chưa có gì được áp dụng. Sửa migration, deploy, kiểm lại. Cả hai lần thử nằm lại trong lịch sử — dấu vết kiểm toán, không phải che giấu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stop first, because every reflex (retry, resolve --applied, an IF NOT EXISTS hack) can make the history lie. Check before resolving: --rolled-back is only honest when nothing applied. Fix the migration, deploy, verify. Both attempts stay in the history — an audit trail, not a cover-up.</p><p><i>VI: Dừng trước, vì mọi phản xạ (chạy lại, resolve --applied, mẹo IF NOT EXISTS) đều có thể làm lịch sử nói dối. Kiểm trước khi resolve: --rolled-back chỉ trung thực khi chưa có gì được áp dụng. Sửa migration, deploy, kiểm lại. Cả hai lần thử nằm lại trong lịch sử — dấu vết kiểm toán, không phải che giấu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Recovery order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự cứu</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Rewrite the migration as nullable → backfill → SET NOT NULL → unique index"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Check how much applied: the columns of \"Note\", and finished_at / applied_steps_count in _prisma_migrations"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Run prisma migrate deploy again and confirm with migrate status and a SELECT of the slugs"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Seeing no slug column and applied_steps_count = 0, run prisma migrate resolve --rolled-back for that migration"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Stop: do not retry, do not edit the database, write down the exact error and migration name"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m2",
+              "m4",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Stop first, because every reflex (retry, resolve --applied, an IF NOT EXISTS hack) can make the history lie. Check before resolving: --rolled-back is only honest when nothing applied. Fix the migration, deploy, verify. Both attempts stay in the history — an audit trail, not a cover-up.</p><p><i>VI: Dừng trước, vì mọi phản xạ (chạy lại, resolve --applied, mẹo IF NOT EXISTS) đều có thể làm lịch sử nói dối. Kiểm trước khi resolve: --rolled-back chỉ trung thực khi chưa có gì được áp dụng. Sửa migration, deploy, kiểm lại. Cả hai lần thử nằm lại trong lịch sử — dấu vết kiểm toán, không phải che giấu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Running resolve --applied “to make the red go away”.|||Chạy resolve --applied \"cho hết đỏ\"."
+        },
+        {
+          "loi": "Editing the already-recorded migration file and re-running before resolving.|||Sửa tệp migration đã được ghi nhận rồi chạy lại trước khi resolve."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "P3018",
+          "vi": "P3018",
+          "giaiThich": "Migration hỏng khi áp dụng."
+        },
+        {
+          "en": "P3009",
+          "vi": "P3009",
+          "giaiThich": "Có migration hỏng ⇒ chặn mọi migration."
+        }
+      ]
+    },
+    {
+      "title": "Lab 7 · 2 — Build createNotesService(prisma): the whole chapter on one service",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 40,
+      "concepts": [
+        "Prisma",
+        "transactions",
+        "pagination",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lab’s service layer, behind the same routes as chapter 6. Every note belongs to <code>AUTHOR_ID = 1</code>. <code>AppError</code> is in <code>helpers.js</code>; the grader’s fake Prisma behaves like Prisma 7 (codes, lazy errors, rollback, unique slug). Write <code>createNotesService(prisma)</code> returning:</p>\n<ul>\n<li><b>list({ cursor, limit = 20 })</b> ⇒ <code>{ items, nextCursor }</code> — lesson 7.6’s final shape: author 1 only, <code>id &lt; cursor</code> when given, <code>orderBy: { id: 'desc' }</code>, <code>take: min(limit, 50) + 1</code>, <code>omit: { body: true }</code>, no count.</li>\n<li><b>create({ title, body = '', tags = [] })</b> ⇒ the note. Inside <b>one</b> <code>prisma.$transaction(async (tx) =&gt; …)</code>: <code>tx.note.create({ data: { title, body, slug, authorId: 1 } })</code> with <code>slug</code> = title lower-cased, every run of characters other than <code>a-z0-9</code> replaced by <code>-</code>, leading/trailing <code>-</code> removed; then for each tag name <code>tx.tag.upsert({ where: { name }, create: { name }, update: {} })</code> and <code>tx.noteTag.create({ data: { noteId, tagId } })</code>. <code>P2002</code> ⇒ <code>AppError(409, 'DUPLICATE', '&lt;fields or index or value&gt; already exists')</code> (read <code>meta.driverAdapterError.cause.constraint</code> as in 7.6); any other error propagates — and nothing of that note may remain.</li>\n<li><b>update(id, version, patch)</b> ⇒ the fresh note; ignore <code>id</code>, <code>version</code>, <code>authorId</code>, <code>slug</code> in the patch; <code>updateMany</code> with the version check and <code>{ increment: 1 }</code>; 0 rows ⇒ 404 <code>NOTE_NOT_FOUND</code> if the note is gone, else 409 <code>STALE_VERSION</code>.</li>\n<li><b>remove(id)</b> ⇒ <code>true</code>, or <code>false</code> on <code>P2025</code>; other errors propagate.</li>\n</ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Lessons 7.3 (P2025, tx), 7.4 (omit body), 7.6 (cursor, P2002, version) — all in one service.</li>\n  <li>Inside the transaction callback, only <code>tx</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tầng service của lab, đằng sau đúng các route của chương 6. Mọi ghi chú thuộc <code>AUTHOR_ID = 1</code>. <code>AppError</code> có trong <code>helpers.js</code>; Prisma GIẢ của máy chấm cư xử như Prisma 7 (mã lỗi, lỗi lười, hoàn tác, slug duy nhất). Viết <code>createNotesService(prisma)</code> trả về:</p>\n<ul>\n<li><b>list({ cursor, limit = 20 })</b> ⇒ <code>{ items, nextCursor }</code> — hình dạng cuối của bài 7.6: chỉ tác giả 1, <code>id &lt; cursor</code> khi có, <code>orderBy: { id: 'desc' }</code>, <code>take: min(limit, 50) + 1</code>, <code>omit: { body: true }</code>, không đếm.</li>\n<li><b>create({ title, body = '', tags = [] })</b> ⇒ ghi chú. Trong <b>một</b> <code>prisma.$transaction(async (tx) =&gt; …)</code>: <code>tx.note.create({ data: { title, body, slug, authorId: 1 } })</code> với <code>slug</code> = title chữ thường, mỗi cụm ký tự ngoài <code>a-z0-9</code> thay bằng <code>-</code>, bỏ <code>-</code> ở đầu/cuối; rồi với mỗi tên tag <code>tx.tag.upsert({ where: { name }, create: { name }, update: {} })</code> và <code>tx.noteTag.create({ data: { noteId, tagId } })</code>. <code>P2002</code> ⇒ <code>AppError(409, 'DUPLICATE', '&lt;fields hoặc index hoặc value&gt; already exists')</code> (đọc <code>meta.driverAdapterError.cause.constraint</code> như bài 7.6); lỗi khác lan ra — và không được còn sót gì của ghi chú đó.</li>\n<li><b>update(id, version, patch)</b> ⇒ ghi chú mới; bỏ qua <code>id</code>, <code>version</code>, <code>authorId</code>, <code>slug</code> trong patch; <code>updateMany</code> có kiểm version và <code>{ increment: 1 }</code>; 0 dòng ⇒ 404 <code>NOTE_NOT_FOUND</code> nếu ghi chú đã mất, không thì 409 <code>STALE_VERSION</code>.</li>\n<li><b>remove(id)</b> ⇒ <code>true</code>, hoặc <code>false</code> khi <code>P2025</code>; lỗi khác lan ra.</li>\n</ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bài 7.3 (P2025, tx), 7.4 (omit body), 7.6 (cursor, P2002, version) — tất cả trong một service.</li>\n  <li>Trong callback transaction, chỉ dùng <code>tx</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const p = mkPrisma(); const s = createNotesService(p); const n = await s.create({ title: 'Learning Prisma!', tags: ['work', 'db'] }); return [n, counts(p), p.log]; })()",
+          "output": "[{\"id\":1,\"version\":1,\"title\":\"Learning Prisma!\",\"body\":\"\",\"slug\":\"learning-prisma\",\"authorId\":1},{\"notes\":1,\"tags\":2,\"links\":2},[\"BEGIN\",\"tx.note.create\",\"COMMIT\"]]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reuse your solutions of 7.3 · 2, 7.6 · 2, 7.6 · 3, 7.6 · 4 — the lab is their composition.|||Dùng lại lời giải của 7.3 · 2, 7.6 · 2, 7.6 · 3, 7.6 · 4 — lab là sự ghép chúng lại.",
+        "Wrap the WHOLE <code>$transaction</code> in try/catch for P2002: the error surfaces from the transaction after its rollback.|||Bọc CẢ <code>$transaction</code> trong try/catch để bắt P2002: lỗi nổi lên từ transaction sau khi đã hoàn tác.",
+        "slugify: <code>t.toLowerCase().replace(/[^a-z0-9]+/g, \"-\").replace(/^-+|-+$/g, \"\")</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNotesService(prisma) {\n  // Write your solution here\n  return {\n    async list({ cursor, limit = 20 } = {}) {\n      return { items: await prisma.note.findMany({ where: { authorId: 1 }, orderBy: { id: 'desc' }, take: limit }), nextCursor: null };\n    },\n    async create({ title, body = '', tags = [] }) {\n      const note = await prisma.note.create({ data: { title, body, slug: title, authorId: 1 } });\n      for (const name of tags) { const tag = await prisma.tag.upsert({ where: { name }, create: { name }, update: {} }); await prisma.noteTag.create({ data: { noteId: note.id, tagId: tag.id } }); }\n      return note;\n    },\n    async update(id, version, patch) { await prisma.note.updateMany({ where: { id }, data: patch }); return prisma.note.findUnique({ where: { id } }); },\n    async remove(id) { await prisma.note.delete({ where: { id } }); return true; },\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNotesService(prisma) {\n  const AUTHOR_ID = 1;                                             // chapter 8 replaces this with the logged-in user\n  const slugify = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');\n  const conflict = (err) => {\n    const c = err.meta?.driverAdapterError?.cause?.constraint;\n    return new AppError(409, 'DUPLICATE', (c?.fields?.join(', ') ?? c?.index ?? 'value') + ' already exists');\n  };\n  return {\n    async list({ cursor, limit = 20 } = {}) {\n      const take = Math.min(limit, 50);\n      const items = await prisma.note.findMany({\n        where: { authorId: AUTHOR_ID, ...(cursor ? { id: { lt: cursor } } : {}) },\n        orderBy: { id: 'desc' }, take: take + 1, omit: { body: true },\n      });\n      const hasMore = items.length > take;\n      if (hasMore) items.pop();\n      return { items, nextCursor: hasMore ? items.at(-1).id : null };\n    },\n    async create({ title, body = '', tags = [] }) {\n      try {\n        // a note and its tag links belong together: all of it, or none of it — and every query uses tx\n        return await prisma.$transaction(async (tx) => {\n          const note = await tx.note.create({ data: { title, body, slug: slugify(title), authorId: AUTHOR_ID } });\n          for (const name of tags) {\n            const tag = await tx.tag.upsert({ where: { name }, create: { name }, update: {} });\n            await tx.noteTag.create({ data: { noteId: note.id, tagId: tag.id } });\n          }\n          return note;\n        });\n      } catch (err) {\n        if (err.code === 'P2002') throw conflict(err);\n        throw err;\n      }\n    },\n    async update(id, version, patch) {\n      const { id: _i, version: _v, authorId: _a, slug: _s, ...safe } = patch;\n      const r = await prisma.note.updateMany({ where: { id, version }, data: { ...safe, version: { increment: 1 } } });\n      if (r.count === 0) {\n        if (!await prisma.note.findUnique({ where: { id } })) throw new AppError(404, 'NOTE_NOT_FOUND', 'Note ' + id + ' does not exist');\n        throw new AppError(409, 'STALE_VERSION', 'Someone else edited this note. Reload and try again.');\n      }\n      return prisma.note.findUnique({ where: { id } });\n    },\n    async remove(id) {\n      try { await prisma.note.delete({ where: { id } }); return true; }\n      catch (err) { if (err.code === 'P2025') return false; throw err; }\n    },\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every rule here was paid for by a measurement or an incident in chapter 7: the cursor and take + 1 by the 108 ms deep offset and the 41.7 ms count, omit by the 322 KB list, P2002 → 409 by the race that check-then-insert loses, the version by the lost update, tx by the orphan row. Routes did not change at all — that was the promise of lesson 5.5.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi luật ở đây đã được trả giá bằng một phép đo hay một sự cố của chương 7: cursor và take + 1 bởi offset sâu 108 ms và count 41,7 ms, omit bởi danh sách 322 KB, P2002 → 409 bởi cuộc đua mà kiểm-rồi-thêm thua, version bởi mất cập nhật, tx bởi dòng mồ côi. Route không đổi gì cả — đó là lời hứa của bài 5.5.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "create: one transaction, tags upserted and linked",
+              "vi": "create: một transaction, tag được upsert và liên kết"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const s = createNotesService(p); const n = await s.create({ title: 'Learning Prisma!', tags: ['work', 'db'] }); return [n, counts(p), p.log]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              {
+                "id": 1,
+                "version": 1,
+                "title": "Learning Prisma!",
+                "body": "",
+                "slug": "learning-prisma",
+                "authorId": 1
+              },
+              {
+                "notes": 1,
+                "tags": 2,
+                "links": 2
+              },
+              [
+                "BEGIN",
+                "tx.note.create",
+                "COMMIT"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Same slug ⇒ 409 DUPLICATE, nothing left behind",
+              "vi": "Trùng slug ⇒ 409 DUPLICATE, không sót gì"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const s = createNotesService(p); await s.create({ title: 'Learning Prisma' }); return [await caught(s.create({ title: 'learning   prisma' })), counts(p)]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "status": 409,
+                "code": "DUPLICATE",
+                "message": "Note_slug_key already exists"
+              },
+              {
+                "notes": 1,
+                "tags": 0,
+                "links": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "list: author 1 only, cursor, no body, no count",
+              "vi": "list: chỉ tác giả 1, cursor, không body, không đếm"
+            },
+            "goi": "await (async () => { const p = mkPrisma(7); const s = createNotesService(p); const a = await s.list({ limit: 2 }); const b = await s.list({ limit: 2, cursor: a.nextCursor }); return [a, b.items.map((n) => n.id), p.log.filter((l) => /count/.test(l))]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              {
+                "items": [
+                  {
+                    "id": 7,
+                    "title": "Seed 7",
+                    "slug": "seed-7",
+                    "authorId": 1,
+                    "version": 1
+                  },
+                  {
+                    "id": 5,
+                    "title": "Seed 5",
+                    "slug": "seed-5",
+                    "authorId": 1,
+                    "version": 1
+                  }
+                ],
+                "nextCursor": 5
+              },
+              [
+                4,
+                2
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "update: version check ⇒ 409, missing ⇒ 404",
+              "vi": "update: kiểm version ⇒ 409, không có ⇒ 404"
+            },
+            "goi": "await (async () => { const p = mkPrisma(2); const s = createNotesService(p); const a = await caught(s.update(1, 1, { body: 'A sửa' })); const b = await caught(s.update(1, 1, { body: 'B sửa' })); const c = await caught(s.update(99, 1, {})); return [a.version, b, c]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              2,
+              {
+                "thrown": "AppError",
+                "status": 409,
+                "code": "STALE_VERSION"
+              },
+              {
+                "thrown": "AppError",
+                "status": 404,
+                "code": "NOTE_NOT_FOUND"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A too-long tag rolls back the note AND the first tags",
+              "vi": "Tag quá dài hoàn tác cả ghi chú LẪN các tag đầu"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const s = createNotesService(p); const r = await caught(s.create({ title: 'Tagged', tags: ['ok', 'fine', 'x'.repeat(60)] })); return [r, counts(p), p.log.slice(-2)]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              {
+                "thrown": "PrismaClientKnownRequestError",
+                "status": {
+                  "$js": "undefined"
+                },
+                "code": "P2000"
+              },
+              {
+                "notes": 0,
+                "tags": 0,
+                "links": 0
+              },
+              [
+                "tx.note.create",
+                "ROLLBACK"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const p = mkPrisma(3); const s = createNotesService(p); await s.create({ title: 'One', tags: ['work'] }); await s.create({ title: 'Two', tags: ['work'] }); return [await s.remove(4), await s.remove(4), counts(p)]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              true,
+              false,
+              {
+                "notes": 4,
+                "tags": 1,
+                "links": 1
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "await (async () => { const p = mkPrisma(60); const s = createNotesService(p); const r = await s.list({ limit: 500 }); const n = await s.update(1, 1, { title: 'T', slug: 'hijack', version: 50, authorId: 2 }); return [r.items.length, r.nextCursor, p.log.filter((l) => /findMany/.test(l)), n]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              40,
+              null,
+              [
+                "note.findMany take=51 omit"
+              ],
+              {
+                "id": 1,
+                "title": "T",
+                "slug": "seed-1",
+                "body": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "authorId": 1,
+                "version": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const s = createNotesService(p); return [(await s.create({ title: '  --Hello, World!-- ' })).slug, (await s.create({ title: 'Chương 7: Prisma' })).slug]; })()",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst mkPrisma = (seed = 0) => {\n  let db = { note: [], tag: [], noteTag: [], seq: { note: 0, tag: 0 } }; const log = [];\n  for (let i = 1; i <= seed; i++) db.note.push({ id: ++db.seq.note, title: 'Seed ' + i, slug: 'seed-' + i, body: 'b'.repeat(200), authorId: i % 3 === 0 ? 2 : 1, version: 1 });\n  const wait = (fn) => new Promise((ok, no) => setTimeout(() => { try { ok(fn()); } catch (e) { no(e); } }, 1));\n  const strip = (r, omit) => { const c = { ...r }; for (const k of Object.keys(omit || {})) if (omit[k]) delete c[k]; return c; };\n  const P2002 = (index) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed on the constraint: ' + index, { modelName: 'Note', driverAdapterError: { cause: { originalCode: '23505', constraint: { index } } } });\n  const api = (d, where) => ({\n    note: {\n      findMany: (a) => wait(() => { log.push(where + 'note.findMany take=' + a.take + (a.omit ? ' omit' : '')); let r = d().note.filter((n) => (a.where.authorId === undefined || n.authorId === a.where.authorId) && (!a.where.id || n.id < a.where.id.lt)); r.sort((x, y) => (a.orderBy && a.orderBy.id === 'desc' ? y.id - x.id : x.id - y.id)); return r.slice(0, a.take).map((n) => strip(n, a.omit)); }),\n      findUnique: (a) => wait(() => { const n = d().note.find((x) => x.id === a.where.id); return n ? { ...n } : null; }),\n      count: () => wait(() => { log.push(where + 'count'); return d().note.length; }),\n      create: (a) => wait(() => { log.push(where + 'note.create'); if (d().note.some((n) => n.slug === a.data.slug)) throw P2002('Note_slug_key'); const n = { id: ++d().seq.note, version: 1, ...a.data }; d().note.push(n); return { ...n }; }),\n      updateMany: (a) => wait(() => { let count = 0; for (const n of d().note) if (n.id === a.where.id && n.version === a.where.version) { for (const [k, v] of Object.entries(a.data)) n[k] = v && typeof v === 'object' && 'increment' in v ? n[k] + v.increment : v; count++; } return { count }; }),\n      update: () => { throw new Error('use updateMany for the version check'); },\n      delete: (a) => wait(() => { const i = d().note.findIndex((n) => n.id === a.where.id); if (i < 0) throw new PrismaClientKnownRequestError('P2025', 'Record to delete does not exist.'); d().noteTag = d().noteTag.filter((x) => x.noteId !== a.where.id); return d().note.splice(i, 1)[0]; }),\n    },\n    tag: { upsert: (a) => wait(() => { if (a.where.name.length > 40) throw new PrismaClientKnownRequestError('P2000', 'The provided value for the column is too long'); let t = d().tag.find((x) => x.name === a.where.name); if (!t) { t = { id: ++d().seq.tag, name: a.where.name }; d().tag.push(t); } return { ...t }; }) },\n    noteTag: { create: (a) => wait(() => { d().noteTag.push({ ...a.data }); return { ...a.data }; }) },\n  });\n  const prisma = { log, get db() { return db; }, ...api(() => db, ''),\n    $transaction: async (fn) => { if (typeof fn !== 'function') throw new Error('use the callback form here'); const staged = JSON.parse(JSON.stringify(db)); log.push('BEGIN');\n      try { const r = await fn(api(() => staged, 'tx.')); db = staged; log.push('COMMIT'); return r; } catch (e) { log.push('ROLLBACK'); throw e; } } };\n  return prisma; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, ...(e.code === 'DUPLICATE' ? { message: e.message } : {}) }; } };\nconst counts = (p) => ({ notes: p.db.note.length, tags: p.db.tag.length, links: p.db.noteTag.length });",
+            "mongDoi": [
+              "hello-world",
+              "ch-ng-7-prisma"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<code>prisma.tag.upsert</code> inside the callback: when the third tag is too long, the first two tags stay committed.|||<code>prisma.tag.upsert</code> trong callback: khi tag thứ ba quá dài, hai tag đầu vẫn được commit."
+        },
+        {
+          "loi": "Catching every error in create and answering 409: a too-long tag (P2000) becomes “already exists”.|||Bắt mọi lỗi trong create và trả 409: tag quá dài (P2000) thành \"already exists\"."
+        },
+        {
+          "loi": "Letting <code>slug</code> through the patch of update — two notes can then share a slug the unique index would have refused at create time.|||Để <code>slug</code> lọt qua patch của update — hai ghi chú có thể chung slug mà chỉ mục unique đã từ chối lúc tạo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "service layer",
+          "vi": "tầng service"
+        },
+        {
+          "en": "orphan row",
+          "vi": "dòng mồ côi",
+          "giaiThich": "Dòng còn lại khi phần đi kèm đã hỏng."
+        }
+      ]
+    },
+    {
+      "title": "Lab 7 · 3 — One deploy file: the slug migration, the feed index, and the feed query",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "migrations",
+        "indexes",
+        "cursor pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>The production database of the lab: <code>\"Note\"</code> has <b>1,510 rows</b> (10 sample notes + 1,500 bulk notes of authors 1–3), no <code>slug</code> column and no index besides the primary key. Write one file that the deploy runs, in this order:</p>\n<ol><li><b>add_slug</b> — <code>\"slug\" TEXT</code>, backfilled as <code>'note-' || \"id\"</code>, then <code>NOT NULL</code>, then the unique index <code>\"Note_slug_key\"</code>.</li>\n<li><b>The feed index</b> — <code>\"Note_authorId_createdAt_idx\"</code> on <code>(\"authorId\", \"createdAt\" DESC)</code>.</li>\n<li><b>The feed query</b> (last statement of the file) — for author <b>1</b>, the 5 notes right after the cursor <code>(\"createdAt\" = '2026-07-28 08:30', id = 4)</code>, newest first, columns <code>id, slug, \"createdAt\"</code>, using a row-value comparison and <code>ORDER BY \"createdAt\" DESC, id DESC</code>.</li></ol>\n<p>The grader checks the data and constraints after your file, the plan of the feed query (index, no Sort) with <code>enable_seqscan = off</code>, and the result of your final SELECT — also on different data (hidden).</p>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 notes</li></ul><p>Plus 1,500 bulk notes (“Bulk 1” … “Bulk 1500”, authors 1–3, one per hour from 2026-06-01). <code>ANALYZE</code> already run.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>No BEGIN/COMMIT — the grader runs your file in a transaction, like migrate deploy.</li>\n  <li>The feed query is the LAST statement.</li>\n</ul>",
+      "problemHtmlVi": "<p>CSDL production của lab: <code>\"Note\"</code> có <b>1.510 dòng</b> (10 ghi chú mẫu + 1.500 ghi chú hàng loạt của tác giả 1–3), chưa có cột <code>slug</code> và không có chỉ mục nào ngoài khoá chính. Viết một tệp mà lần deploy chạy, theo thứ tự:</p>\n<ol><li><b>add_slug</b> — <code>\"slug\" TEXT</code>, điền bằng <code>'note-' || \"id\"</code>, rồi <code>NOT NULL</code>, rồi chỉ mục unique <code>\"Note_slug_key\"</code>.</li>\n<li><b>Chỉ mục bảng tin</b> — <code>\"Note_authorId_createdAt_idx\"</code> trên <code>(\"authorId\", \"createdAt\" DESC)</code>.</li>\n<li><b>Truy vấn bảng tin</b> (câu cuối của tệp) — với tác giả <b>1</b>, 5 ghi chú ngay sau cursor <code>(\"createdAt\" = '2026-07-28 08:30', id = 4)</code>, mới nhất trước, các cột <code>id, slug, \"createdAt\"</code>, dùng so sánh bộ giá trị và <code>ORDER BY \"createdAt\" DESC, id DESC</code>.</li></ol>\n<p>Máy chấm kiểm dữ liệu và ràng buộc sau tệp của bạn, kế hoạch của truy vấn bảng tin (chỉ mục, không Sort) với <code>enable_seqscan = off</code>, và kết quả câu SELECT cuối — cả trên dữ liệu khác (ẩn).</p>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 ghi chú</li></ul><p>Thêm 1.500 ghi chú hàng loạt (\"Bulk 1\" … \"Bulk 1500\", tác giả 1–3, mỗi giờ một cái từ 2026-06-01). Đã chạy <code>ANALYZE</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không BEGIN/COMMIT — máy chấm chạy tệp trong transaction, như migrate deploy.</li>\n  <li>Truy vấn bảng tin là câu CUỐI.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "ok   | total | nullable\n-----+-------+---------\n1510 | 1510  | NO      ",
+          "explanation": "Expected result of check \"Every row has slug = note-ID, and it is NOT NULL\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Mọi dòng có slug = note-ID, và NOT NULL\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Part 1 is exercise 7.2 · 2, part 2 is 7.5 · 3, part 3 is 7.6 · 6 plus <code>\"authorId\" = 1</code>.|||Phần 1 là bài 7.2 · 2, phần 2 là 7.5 · 3, phần 3 là 7.6 · 6 thêm <code>\"authorId\" = 1</code>.",
+        "The feed query must be the last statement — the result check reads the last SELECT.|||Truy vấn bảng tin phải là câu cuối — kiểm kết quả đọc câu SELECT cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- deploy of lab 7 — write the three parts here\nALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT NOT NULL;\nCREATE UNIQUE INDEX \"Note_slug_key\" ON \"Note\"(\"slug\");\nSELECT id, slug, \"createdAt\" FROM \"Note\" WHERE \"authorId\" = 1 AND \"createdAt\" < '2026-07-28 08:30' ORDER BY \"createdAt\" DESC LIMIT 5;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk ' || g, '', false, (g % 3) + 1, timestamp '2026-06-01' + g * interval '1 hour', timestamp '2026-06-01' + g * interval '1 hour' FROM generate_series(1, 1500) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- ── deploy of lab 7 ──────────────────────────────────────────────────────────\n-- 1. add_slug, in the three steps that survive a table with rows\nALTER TABLE \"Note\" ADD COLUMN \"slug\" TEXT;\nUPDATE \"Note\" SET \"slug\" = 'note-' || \"id\" WHERE \"slug\" IS NULL;\nALTER TABLE \"Note\" ALTER COLUMN \"slug\" SET NOT NULL;\nCREATE UNIQUE INDEX \"Note_slug_key\" ON \"Note\"(\"slug\");\n\n-- 2. the index for \"newest notes of one author\" (equality column first, then the sort column)\nCREATE INDEX \"Note_authorId_createdAt_idx\" ON \"Note\"(\"authorId\", \"createdAt\" DESC);\n\n-- 3. the feed query the API runs: author 1, after the cursor ('2026-07-28 08:30', 4), newest first, 5 rows\nSELECT id, slug, \"createdAt\"\nFROM \"Note\"\nWHERE \"authorId\" = 1 AND (\"createdAt\", id) < (timestamp '2026-07-28 08:30', 4)\nORDER BY \"createdAt\" DESC, id DESC\nLIMIT 5;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk ' || g, '', false, (g % 3) + 1, timestamp '2026-06-01' + g * interval '1 hour', timestamp '2026-06-01' + g * interval '1 hour' FROM generate_series(1, 1500) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A deploy is migrations plus the queries that will run on the new schema — and each part has a failure mode the chapter measured: the NOT NULL that dies on existing rows, the index whose column order decides whether a Sort survives, and the cursor that skips rows on a tie. Testing all three against a copy of production-sized data is the rehearsal the lesson asks for.</p>",
+      "solutionExplanationHtmlVi": "<p>Một lần deploy là migration cộng các truy vấn sẽ chạy trên lược đồ mới — và mỗi phần có một kiểu hỏng mà chương đã đo: NOT NULL chết trên dòng có sẵn, chỉ mục mà thứ tự cột quyết định Sort có còn không, và cursor bỏ sót dòng khi có hoà. Kiểm cả ba trên bản sao dữ liệu cỡ production chính là buổi diễn tập mà bài yêu cầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Note\" (title, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk ' || g, '', false, (g % 3) + 1, timestamp '2026-06-01' + g * interval '1 hour', timestamp '2026-06-01' + g * interval '1 hour' FROM generate_series(1, 1500) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "timeoutMs": 12000,
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Every row has slug = note-ID, and it is NOT NULL|||Mọi dòng có slug = note-ID, và NOT NULL",
+            "kiemTra": "SELECT count(*) FILTER (WHERE slug = 'note-' || id) AS ok, count(*) AS total, (SELECT is_nullable FROM information_schema.columns WHERE table_name = 'Note' AND column_name = 'slug') AS nullable FROM \"Note\"",
+            "mongDoi": {
+              "cot": [
+                "ok",
+                "total",
+                "nullable"
+              ],
+              "hang": [
+                [
+                  1510,
+                  1510,
+                  "NO"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A duplicate slug is refused|||slug trùng bị từ chối",
+            "thu": "INSERT INTO \"Note\" (title, slug, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('dup', 'note-1', 1, now(), now())",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The feed index exists with the right column order|||Chỉ mục bảng tin có đúng thứ tự cột",
+            "kiemTra": "SELECT indexname FROM pg_indexes WHERE tablename = 'Note' AND indexdef ~ '\\(\"authorId\", \"createdAt\"( DESC)?\\)'",
+            "mongDoi": {
+              "cot": [
+                "indexname"
+              ],
+              "hang": [
+                [
+                  "Note_authorId_createdAt_idx"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The feed query uses the index and needs no Sort|||Truy vấn bảng tin dùng chỉ mục và không cần Sort",
+            "kiemTra": "SET LOCAL enable_seqscan = off; SELECT position('Sort' in plan_nodes($q$SELECT id FROM \"Note\" WHERE \"authorId\" = 1 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) = 0 AS no_sort, position('Index Cond' in plan_text($q$SELECT id FROM \"Note\" WHERE \"authorId\" = 1 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) > 0 AS index_cond",
+            "mongDoi": {
+              "cot": [
+                "no_sort",
+                "index_cond"
+              ],
+              "hang": [
+                [
+                  true,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "The 5 notes after the cursor|||5 ghi chú sau cursor",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  1384,
+                  "note-1384",
+                  "2026-07-28 06:00:00"
+                ],
+                [
+                  1381,
+                  "note-1381",
+                  "2026-07-28 03:00:00"
+                ],
+                [
+                  1378,
+                  "note-1378",
+                  "2026-07-28 00:00:00"
+                ],
+                [
+                  1375,
+                  "note-1375",
+                  "2026-07-27 21:00:00"
+                ],
+                [
+                  1372,
+                  "note-1372",
+                  "2026-07-27 18:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a note of author 1 at the cursor’s exact time with a lower id|||Ẩn: một ghi chú của tác giả 1 đúng thời điểm cursor với id nhỏ hơn",
+            "an": true,
+            "themCsdl": "UPDATE \"Note\" SET \"createdAt\" = '2026-07-28 08:30' WHERE id = 2;",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  2,
+                  "note-2",
+                  "2026-07-28 08:30:00"
+                ],
+                [
+                  1384,
+                  "note-1384",
+                  "2026-07-28 06:00:00"
+                ],
+                [
+                  1381,
+                  "note-1381",
+                  "2026-07-28 03:00:00"
+                ],
+                [
+                  1378,
+                  "note-1378",
+                  "2026-07-28 00:00:00"
+                ],
+                [
+                  1375,
+                  "note-1375",
+                  "2026-07-27 21:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: notes of other authors never appear|||Ẩn: ghi chú của tác giả khác không bao giờ xuất hiện",
+            "an": true,
+            "themCsdl": "INSERT INTO \"Note\" (title, body, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('Other author', '', 2, '2026-07-28 07:00', now()), ('Mine', '', 1, '2026-07-28 07:30', now()), ('Mine too', '', 1, '2026-07-28 08:31', now());",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  1512,
+                  "note-1512",
+                  "2026-07-28 07:30:00"
+                ],
+                [
+                  1384,
+                  "note-1384",
+                  "2026-07-28 06:00:00"
+                ],
+                [
+                  1381,
+                  "note-1381",
+                  "2026-07-28 03:00:00"
+                ],
+                [
+                  1378,
+                  "note-1378",
+                  "2026-07-28 00:00:00"
+                ],
+                [
+                  1375,
+                  "note-1375",
+                  "2026-07-27 21:00:00"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "The generated one-line add_slug: 23502 on 1,510 rows, and the whole deploy file stops there.|||add_slug một dòng do máy sinh: 23502 trên 1.510 dòng, và cả tệp deploy dừng tại đó."
+        },
+        {
+          "loi": "An index on \"authorId\" only: the feed is found but sorted every time (Bitmap scan + Sort).|||Chỉ mục chỉ trên \"authorId\": bảng tin tìm được nhưng lần nào cũng phải sắp (Bitmap scan + Sort)."
+        },
+        {
+          "loi": "Forgetting the author filter in the feed query — every user sees every note (chapter 8 makes that an IDOR).|||Quên lọc tác giả trong truy vấn bảng tin — mọi người thấy mọi ghi chú (chương 8 gọi đó là IDOR)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deploy",
+          "vi": "triển khai"
+        },
+        {
+          "en": "rehearsal",
+          "vi": "diễn tập"
+        }
+      ]
+    }
+  ]
+}

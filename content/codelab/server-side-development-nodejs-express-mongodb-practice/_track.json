@@ -1,0 +1,193 @@
+{
+  "groupSlug": "fptu",
+  "slug": "server-side-development-nodejs-express-mongodb-practice",
+  "name": "SDN302 — Luyện tập",
+  "language": "javascript",
+  "color": "#15803d",
+  "docsUrl": "https://expressjs.com/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn SDN302 (Node.js, Express & MongoDB): mỗi bài học một bộ đề dễ → khó chấm ngay trong trình duyệt (handler Express, schema và model giả lập kiểu Mongoose, JWT, mã trạng thái), mỗi chương một Lab.",
+  "modules": [
+    {
+      "slug": "sdn302-gioi-thieu",
+      "name": "0.1 About SDN302 & the back-end architecture map",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: How a request flows through your server · The trust boundary: what the server must never do · Never send a password back: toPublicUser(user) · Never trust the client: accept a registration body"
+    },
+    {
+      "slug": "sdn302-dieu-kien-qua-mon",
+      "name": "0.2 Passing requirements & grading",
+      "level": "ADVANCED",
+      "description": "4 đề: Two gates, one average: who passes SDN302? · Compute the weighted average · passStatus: check the gates and explain why · What do I need on the final? minFinalToPass(s)"
+    },
+    {
+      "slug": "sdn302-chuan-dau-ra",
+      "name": "0.3 Learning outcomes (CLOs)",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: CLOs and the chapters that teach them · Which Progress Test checks which CLO? · Which CLO does this piece of work demonstrate? · Which CLOs does my project still miss? missingClos(features)"
+    },
+    {
+      "slug": "sdn302-cong-cu",
+      "name": "0.4 Tools & environment setup",
+      "level": "ADVANCED",
+      "description": "4 đề: Five tools and what each one is for · Is this Node version new enough? isSupportedNode(version) · Read a .env file like dotenv: parseEnv(text) · Lint your package.json before the first commit: checkPackageJson(pkg)"
+    },
+    {
+      "slug": "sdn302-ngan-hang-de-tai",
+      "name": "0.5 Project topic bank & how to choose",
+      "level": "ADVANCED",
+      "description": "4 đề: Score a project topic before committing · Which rubric test does each topic fail? · Automate the 6-test rubric: scoreTopic(topic) · Model first, routes follow: planApi(model)"
+    },
+    {
+      "slug": "sdn302-chong-mat-diem",
+      "name": "0.6 Why students lose marks & the formula for a high grade",
+      "level": "ADVANCED",
+      "description": "4 đề: The 7 ways to lose marks — and the fix for each · Loss #1 — the async bug: a Query is not data · Loss #2 + #4 — validation and status codes in one route · Loss #5 — the fat controller: split it into layers"
+    },
+    {
+      "slug": "sdn302-1-1-node-event-loop",
+      "name": "1.1 Node.js, the event loop & modules",
+      "level": "ADVANCED",
+      "description": "5 đề: One thread, non-blocking I/O, and two module systems · Predict the output: sync code, promises and timers · From readFileSync to a non-blocking fs.readFile · Wrap a callback API in a Promise: readJson(path) · Sequential vs parallel: load three files with Promise.all"
+    },
+    {
+      "slug": "sdn302-1-2-http-server",
+      "name": "1.2 APIs, HTTP & a first Node server",
+      "level": "ADVANCED",
+      "description": "5 đề: Anatomy of a request: method and status for each intention · The raw Node server of the lesson: GET /api/hello · Parse the URL by hand: /api/products/:id and ?minPrice= · Read a JSON body chunk by chunk (what express.json() does) · REST methods mean something: safe, idempotent, cacheable"
+    },
+    {
+      "slug": "sdn302-1-lab-raw-notes-server",
+      "name": "Lab 1 — Notes API without a framework",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 1 · warm-up — what the lab server does on one thread · Lab 1 — Notes API with Node's http module only"
+    },
+    {
+      "slug": "sdn302-2-1-express-routing",
+      "name": "2.1 Express routing & your first app",
+      "level": "ADVANCED",
+      "description": "5 đề: Your first Express app: GET a list and GET one by :id · Express basics and the Express Generator skeleton · One router per resource: full CRUD on /api/products · The route-order bug: /search must come before /:id · Query strings: filter by price, sort and paginate"
+    },
+    {
+      "slug": "sdn302-2-2-middleware",
+      "name": "2.2 Middleware: the heart of Express",
+      "level": "ADVANCED",
+      "description": "6 đề: Put the middleware chain in the right order · The four kinds of middleware and the arity trap · A request logger with timing (res.on(\"finish\")) · A guard middleware, scoped to one router · Central error handling: a JSON 404 and a 4-argument error handler · Express 4 and async handlers: write wrap() so errors reach the handler"
+    },
+    {
+      "slug": "sdn302-2-lab-express-tasks-api",
+      "name": "Lab 2 — Tasks API with Express",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 2 · warm-up — plan the middleware chain · Lab 2 — Tasks API with Express routing and middleware"
+    },
+    {
+      "slug": "sdn302-3-1-mongodb-crud",
+      "name": "3.1 NoSQL, MongoDB & CRUD",
+      "level": "ADVANCED",
+      "description": "6 đề: Relational vs document: translate the vocabulary · Embed or reference? The key modelling decision · The four CRUD operations, mongosh style · Query operators: write the filters · Update operators: $inc, $addToSet, $pull and updateMany · The no-schema trap: find and repair inconsistent documents"
+    },
+    {
+      "slug": "sdn302-3-2-mongoose",
+      "name": "3.2 Mongoose: schemas, models & population",
+      "level": "ADVANCED",
+      "description": "6 đề: The lesson's productSchema: required, min, a reference and timestamps · Mongoose concepts: ODM, Query objects, populate, select: false · Validation rules: enum, match, minlength, default, lowercase, custom messages · Async CRUD with Mongoose: await everything, { new: true, runValidators: true } · Populate — Mongoose's answer to JOIN (and select only what you need) · A post page: Query ≠ data, two populates and a count"
+    },
+    {
+      "slug": "sdn302-3-lab-mongoose-blog",
+      "name": "Lab 3 — Blog data layer with Mongoose",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 3 · warm-up — model the blog before writing queries · Lab 3 — The data layer of a blog with Mongoose"
+    },
+    {
+      "slug": "sdn302-4-1-rest-mvc",
+      "name": "4.1 A full REST API with Express, Mongoose & MVC",
+      "level": "ADVANCED",
+      "description": "6 đề: Status codes — the REST vocabulary · MVC layers: who does what, and who may call whom · The create controller, done right (and list) · getById, update, remove: 400 for a bad id, 404 when missing, 204 on delete · The service layer: business rules, no HTTP · Wire the whole API: router → controller → service → model + one error handler"
+    },
+    {
+      "slug": "sdn302-4-2-templating",
+      "name": "4.2 Server-side templating with EJS & Handlebars",
+      "level": "ADVANCED",
+      "description": "5 đề: EJS: render the product list of the lesson · API-first or server-rendered? EJS vs Handlebars? XSS? · EJS with logic: empty state, formatting and the raw tag · Handlebars: logic-less templates with {{#each}}, {{#if}} and a helper · Controller + view: res.render() with a prepared view model"
+    },
+    {
+      "slug": "sdn302-4-lab-bookstore-mvc",
+      "name": "Lab 4 — Bookstore API in MVC + EJS admin page",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 4 · warm-up — which layer owns which line? · Lab 4 — Bookstore API in MVC + an EJS admin page"
+    },
+    {
+      "slug": "sdn302-5-1-passwords-sessions",
+      "name": "5.1 Passwords, bcrypt, sessions & Passport",
+      "level": "ADVANCED",
+      "description": "6 đề: Hashing passwords: what bcrypt does and why · Register: hash with bcrypt, never return the password, 409 on a taken email · Login: select('+password'), bcrypt.compare and one generic error · Passport-local: write the verify callback (done(null, false) vs done(null, user)) · Hash in a pre('save') hook — but only when the password changed · Sessions & cookies: log in, remember the user, log out"
+    },
+    {
+      "slug": "sdn302-5-2-jwt-cors",
+      "name": "5.2 JWT, HTTPS, CORS & file upload/download",
+      "level": "ADVANCED",
+      "description": "6 đề: JWT, HTTPS and CORS: what each one really protects · Sign a JWT at login: the payload, the secret from env, expiresIn · requireAuth (Bearer JWT) and requireRole — 401 vs 403 · Write the CORS middleware yourself: an allow-list, Vary and preflight · File upload with Multer: field name, type filter, size limit, clean errors · Downloads without path traversal, and the HTTP → HTTPS redirect"
+    },
+    {
+      "slug": "sdn302-5-lab-auth-notes",
+      "name": "Lab 5 — Private notes API: bcrypt, JWT, ownership, CORS",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 5 · warm-up — 401, 403 or 404? · Lab 5 — Private notes API: bcrypt, JWT, ownership, CORS"
+    },
+    {
+      "slug": "sdn302-6-1-react-deploy",
+      "name": "6.1 Connect React, deploy & BaaS",
+      "level": "ADVANCED",
+      "description": "5 đề: Deploying and BaaS: config in the environment, not in code · Deployment steps, in order · Config via env: loadConfig(env) that fails loudly · The React side: fetchProducts(apiUrl, token) · A small API client for the whole app: apiRequest(path, options)"
+    },
+    {
+      "slug": "sdn302-project-checklist",
+      "name": "Project — the server-side app checklist",
+      "level": "ADVANCED",
+      "description": "4 đề: The project gate: what the graders look for · The presentation: demo order · checkProject(spec): which checklist items are still open? · Automate the demo: runDemo(app) plays your Postman collection"
+    },
+    {
+      "slug": "sdn302-7-1-exam-question-bank",
+      "name": "7.1 Exam formats, starter snippet & CLO question bank",
+      "level": "INTERMEDIATE",
+      "description": "5 đề: The 85-minute plan and the starter skeleton · Question bank: the theory questions (CLO1–8) · Type the starter snippet from memory (Items API) · Question bank: a PUT that validates input and returns 404 when the id is missing · Question bank: GET all posts with their author populated (+ optional filter)"
+    },
+    {
+      "slug": "sdn302-7-pe-luyen-vet-clinic",
+      "name": "PE practice — Vet Clinic API (Practical Exam style)",
+      "level": "ADVANCED",
+      "description": "2 đề: Before the PE: the rules that cost the whole paper · PE practice — Vet Clinic API (85 minutes, 10 marks)"
+    },
+    {
+      "slug": "sdn302-8-1-nestjs-hono",
+      "name": "8.1 NestJS, Hono & the aggregation pipeline",
+      "level": "ADVANCED",
+      "description": "5 đề: Express, NestJS or Hono? Freedom vs guardrails · Aggregation: total paid amount per user, biggest first · Aggregation with $lookup: top customers by name, and revenue per month · NestJS-style layers without decorators: DI and Nest's error format · Port an Express router to Hono (and test it with app.request)"
+    },
+    {
+      "slug": "sdn302-8-2-production",
+      "name": "8.2 Production hardening: env, validation, rate limits & indexes",
+      "level": "ADVANCED",
+      "description": "5 đề: Five habits that turn a demo into a production API · Validate at the edge: a validateBody(schema) middleware · Rate limiting per IP: a fixed-window limiter with 429 and Retry-After · Unique emails: clean the duplicates, build the index, answer 409 · Harden the app: security headers, no X-Powered-By, safe errors, limits"
+    },
+    {
+      "slug": "sdn302-8-lab-hardened-orders",
+      "name": "Lab 8 — A hardened Orders API",
+      "level": "ADVANCED",
+      "description": "2 đề: Lab 8 · warm-up — what must the server never trust? · Lab 8 — A hardened Orders API"
+    },
+    {
+      "slug": "sdn302-final-exam-pe",
+      "name": "Practical Exam — 25%, 85 minutes (rehearsal plan)",
+      "level": "ADVANCED",
+      "description": "4 đề: PE rehearsal 1 — the skeleton in 10 minutes: .env, Mongoose, port 9999 · PE rehearsal 2 — a resource from empty to five CRUD routes · PE rehearsal 3 — populate a reference and filter/search a collection · PE rehearsal 4 — hash, issue a token, protect one route"
+    },
+    {
+      "slug": "sdn302-final-exam-fe",
+      "name": "Final Exam — 25%, 60 minutes, gate ≥ 4 (revision)",
+      "level": "ADVANCED",
+      "description": "4 đề: CLO1–CLO4 in one sitting: Node, Express, Generator, MongoDB · CLO5–CLO8: REST & Mongoose, authentication, BaaS, templating · Code reading: trace the request through the middleware · What is the response? Status codes for code you read"
+    }
+  ]
+}

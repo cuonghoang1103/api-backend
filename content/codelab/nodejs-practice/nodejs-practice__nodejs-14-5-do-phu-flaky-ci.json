@@ -1,0 +1,704 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-14-5-do-phu-flaky-ci",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-14-5-do-phu-flaky-ci"
+  },
+  "exercises": [
+    {
+      "title": "14.5 · 100 % coverage, and the privilege escalation is still there",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "coverage",
+        "mutation testing",
+        "authorization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p><code>src/policy.js</code> decides who may edit a note: the author or an <code>ADMIN</code>; an anonymous user never. The starter tests reach <b>100 % of statements, branches, functions and lines</b> — and one of the 5 mutants, the lesson’s <code>|| user.role === 'EDITOR'</code> that lets every EDITOR edit every note, survives them. Coverage answers “was this line executed?”, not “would a test go red if this line were wrong?”. Add the tests that kill all 5.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>5</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>5</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/policy.js</code> quyết định ai được sửa một ghi chú: tác giả hoặc <code>ADMIN</code>; người vô danh thì không bao giờ. Bộ test khởi đầu đạt <b>100% câu lệnh, nhánh, hàm và dòng</b> — vậy mà một trong 5 đột biến, đúng cái <code>|| user.role === 'EDITOR'</code> của bài cho mọi EDITOR sửa mọi ghi chú, vẫn sống sót qua chúng. Độ phủ trả lời \"dòng này đã chạy chưa?\", không trả lời \"nếu dòng này sai thì có test nào đỏ không?\". Thêm các test diệt cả 5.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>5</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>5</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n</ul>",
+      "inputSpec": "src/policy.test.js (Vitest).",
+      "outputSpec": "Green on the correct policy; red on each mutant.|||Xanh với chính sách đúng; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: return note.authorId === user.id || user.role === 'EDITOR';|||Đột biến: return note.authorId === user.id || user.role === 'EDITOR';",
+          "output": "Killed by: expect(canEdit({ id: 2, role: 'EDITOR' }, { authorId: 1 })).toBe(false)|||Bị diệt bởi: expect(canEdit({ id: 2, role: 'EDITOR' }, { authorId: 1 })).toBe(false)",
+          "explanation": "Branch coverage records that both sides of || were EVALUATED, not that the outcome where the second side is true ever occurred. Only a test with an EDITOR who is not the author produces it.|||Độ phủ nhánh ghi rằng cả hai vế của || đã được TÍNH, không ghi rằng kết cục vế thứ hai đúng đã từng xảy ra. Chỉ test với một EDITOR không phải tác giả mới tạo ra nó."
+        }
+      ],
+      "hintsJson": [
+        "List the roles that exist (USER, EDITOR, ADMIN, anonymous) and the two relations (author / not author). Each mutant lives in one cell of that table.|||Liệt kê các vai trò có thật (USER, EDITOR, ADMIN, vô danh) và hai quan hệ (là tác giả / không phải). Mỗi đột biến sống trong một ô của bảng đó.",
+        "The decisive test is the one nobody writes: an EDITOR who is not the author must get false.|||Test quyết định là cái không ai viết: một EDITOR không phải tác giả phải nhận false."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/policy.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { canEdit } from './policy.js';\n\n// 100 % statements, branches, functions and lines. Submit and see what survives.\ndescribe('canEdit', () => {\n  it('rejects an anonymous user', () => {\n    expect(canEdit(null, { authorId: 1 })).toBe(false);\n  });\n\n  it('allows an admin', () => {\n    expect(canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 })).toBe(true);\n  });\n\n  it('allows the author', () => {\n    expect(canEdit({ id: 1, role: 'USER' }, { authorId: 1 })).toBe(true);\n  });\n\n  it('rejects another user', () => {\n    expect(canEdit({ id: 2, role: 'USER' }, { authorId: 1 })).toBe(false);\n  });\n\n  it('allows an author who is an editor', () => {\n    expect(canEdit({ id: 3, role: 'EDITOR' }, { authorId: 3 })).toBe(true);\n  });\n});\n"
+        },
+        {
+          "name": "src/policy.js",
+          "language": "javascript",
+          "code": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (user.role === 'ADMIN') return true;\n  return note.authorId === user.id;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/policy.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { canEdit } from './policy.js';\n\nconst note = { authorId: 1 };\n\ndescribe('canEdit — the author or an ADMIN, nobody else', () => {\n  it('rejects an anonymous user (and does not crash)', () => {\n    expect(canEdit(null, note)).toBe(false);\n    expect(canEdit(undefined, note)).toBe(false);\n  });\n\n  it('allows an admin on somebody else\\'s note', () => {\n    expect(canEdit({ id: 9, role: 'ADMIN' }, note)).toBe(true);\n  });\n\n  it('allows the author', () => {\n    expect(canEdit({ id: 1, role: 'USER' }, note)).toBe(true);\n  });\n\n  it('rejects another user', () => {\n    expect(canEdit({ id: 2, role: 'USER' }, note)).toBe(false);\n  });\n\n  // the case nobody wrote — kills the EDITOR escalation that survived 100 % coverage\n  it('rejects an EDITOR who is not the author', () => {\n    expect(canEdit({ id: 2, role: 'EDITOR' }, note)).toBe(false);\n  });\n\n  // role names are exact — kills a lowercase 'admin' check\n  it('treats the role name exactly', () => {\n    expect(canEdit({ id: 9, role: 'admin' }, note)).toBe(false);\n  });\n});\n"
+        },
+        {
+          "name": "src/policy.js",
+          "language": "javascript",
+          "code": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (user.role === 'ADMIN') return true;\n  return note.authorId === user.id;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Coverage is a smoke detector: a low number is information, a high number is not a certificate. The question that matters — would a test go red if this line were wrong? — is exactly what mutation testing asks, by changing the line. The surviving mutant here is the lesson’s real escalation; one test with a non-author EDITOR kills it.</p>",
+      "solutionExplanationHtmlVi": "<p>Độ phủ là cái báo khói: con số thấp là thông tin, con số cao không phải chứng chỉ. Câu hỏi quan trọng — nếu dòng này sai thì có test nào đỏ không? — chính là thứ kiểm thử đột biến hỏi, bằng cách đổi dòng đó. Đột biến sống sót ở đây là lỗ leo thang có thật của bài; một test với EDITOR không phải tác giả là diệt được nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (user.role === 'ADMIN') return true;\n  return note.authorId === user.id;\n}\n"
+        },
+        "toiThieuTest": 5,
+        "timeoutMs": 4000,
+        "tepTest": "src/policy.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 5 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: every EDITOR may edit every note",
+            "goiY": "an EDITOR who is NOT the author must get false · một EDITOR KHÔNG phải tác giả phải nhận false",
+            "ma": {
+              "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (user.role === 'ADMIN') return true;\n  return note.authorId === user.id || user.role === 'EDITOR';\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: no guard for anonymous users",
+            "goiY": "canEdit(null, note) must answer false, not throw · canEdit(null, note) phải trả false, không ném lỗi",
+            "ma": {
+              "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (user.role === 'ADMIN') return true;\n  return note.authorId === user.id;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: admins can no longer edit others’ notes",
+            "goiY": "an ADMIN on somebody else’s note → true · ADMIN với ghi chú của người khác → true",
+            "ma": {
+              "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  return note.authorId === user.id;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: author check inverted",
+            "goiY": "the author → true AND another user → false · tác giả → true VÀ người khác → false",
+            "ma": {
+              "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (user.role === 'ADMIN') return true;\n  return note.authorId !== user.id;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: role compared case-insensitively",
+            "goiY": "a role 'admin' (lowercase) is not ADMIN · vai 'admin' (chữ thường) không phải ADMIN",
+            "an": true,
+            "ma": {
+              "src/policy.js": "/**\n * Who may edit a note. The rule: the author, or an ADMIN. Anonymous users never.\n * (The lesson's version also let every EDITOR edit every note — at 100 % coverage, with no test noticing.)\n */\nexport function canEdit(user, note) {\n  if (!user) return false;\n  if (String(user.role).toUpperCase() === 'ADMIN') return true;\n  return note.authorId === user.id;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at 100 % coverage: every line ran, the escalation is still there.|||Dừng ở độ phủ 100%: mọi dòng đã chạy, lỗ leo thang vẫn còn đó."
+        },
+        {
+          "loi": "Testing only “allowed” cases: a policy that says yes to everyone passes all of them.|||Chỉ test các ca \"được phép\": chính sách nói có với mọi người qua hết."
+        },
+        {
+          "loi": "Forgetting the anonymous user: a version without the null guard throws TypeError instead of answering false.|||Quên người vô danh: bản thiếu chốt null ném TypeError thay vì trả false."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "branch coverage",
+          "vi": "độ phủ nhánh",
+          "giaiThich": "mỗi vế của một điều kiện đã được TÍNH — không phải mỗi kết cục đã xảy ra"
+        }
+      ]
+    },
+    {
+      "title": "14.5 · Flaky tests, retries, and what CI is for",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "flaky tests",
+        "CI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Three things stand between a suite that exists and a suite that protects you: knowing what it does not check, knowing which failures are lies, and running it somewhere that is not your laptop.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba thứ đứng giữa một bộ test tồn tại và một bộ test bảo vệ bạn: biết nó không kiểm gì, biết lần đỏ nào là nói dối, và chạy nó ở nơi không phải máy của bạn.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A flaky test is worse than no test: it trains the team to re-run CI instead of reading it.|||Test chập chờn tệ hơn không có test: nó dạy cả đội bấm chạy lại CI thay vì đọc nó.",
+        "What does CI have that your laptop does not? Nothing — that is the point.|||CI có gì mà máy bạn không có? Không có gì — đó chính là điểm mấu chốt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.5 · Flaky tests, retries, and what CI is for\n\nAnswer in the answer panel (no code needed).\n\n1. A test fails 30 % of the time. Someone adds retry: 3. How often does it fail now, and is that a fix?Một test đỏ 30% số lần. Ai đó thêm retry: 3. Giờ nó đỏ bao nhiêu, và đó có phải cách chữa?\n2. Ten runs of a suite: PASS=0 FAIL=10. Another suite: PASS=7 FAIL=3. Which is flaky?Mười lần chạy một bộ test: PASS=0 FAIL=10. Bộ khác: PASS=7 FAIL=3. Bộ nào chập chờn?\n3. Which is NOT one of the four flaky-test causes measured in chapter 14?Cái nào KHÔNG thuộc bốn nguyên nhân test chập chờn đã đo trong chương 14?\n4. Why does CI run npm ci and not npm install?Vì sao CI chạy npm ci mà không phải npm install?\n5. The site’s deploy ends with a smoke test that curls core GET routes and fails on any 404. What class of bug does it catch that no unit test can?Deploy của website kết thúc bằng một smoke test curl các route GET cốt lõi và hỏng nếu có 404. Nó bắt loại lỗi nào mà không unit test nào bắt được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.5 · Flaky tests, retries, and what CI is for — answer key\n\n1. A test fails 30 % of the time. Someone adds retry: 3. How often does it fail now, and is that a fix?Một test đỏ 30% số lần. Ai đó thêm retry: 3. Giờ nó đỏ bao nhiêu, và đó có phải cách chữa?\n   Answer: c) About 2.7 % (0.3³) — and no: it hides the shared state until it causes an incident\n   Retries have one legitimate use: a test that genuinely depends on an external system you do not control. Everything else gets isolated, not retried.VI: Thử lại chỉ có một công dụng chính đáng: test thật sự phụ thuộc vào hệ thống bên ngoài mà bạn không kiểm soát. Mọi thứ khác phải được cô lập, không phải thử lại.\n\n2. Ten runs of a suite: PASS=0 FAIL=10. Another suite: PASS=7 FAIL=3. Which is flaky?Mười lần chạy một bộ test: PASS=0 FAIL=10. Bộ khác: PASS=7 FAIL=3. Bộ nào chập chờn?\n   Answer: a) The second — the first is not flaky, it is reliably broken\n   Run in a loop: probabilistic flakiness shows up as a frequency. Then --sequence.shuffle exposes order dependence in one run.VI: Chạy lặp: chập chờn theo xác suất lộ ra thành tần suất. Rồi --sequence.shuffle phơi bày sự phụ thuộc thứ tự chỉ trong một lần chạy.\n\n3. Which is NOT one of the four flaky-test causes measured in chapter 14?Cái nào KHÔNG thuộc bốn nguyên nhân test chập chờn đã đo trong chương 14?\n   Answer: a) Using const instead of let for test fixtures\n   The four: shared state, leftover garbage, real time at a boundary, non-deterministic concurrency — each measured somewhere in 14.2–14.4.VI: Bốn cái: trạng thái dùng chung, rác còn sót, giờ thật ở ranh giới, đồng thời không tất định — mỗi cái đã đo ở đâu đó trong 14.2–14.4.\n\n4. Why does CI run npm ci and not npm install?Vì sao CI chạy npm ci mà không phải npm install?\n   Answer: a) npm ci installs exactly what the lockfile says\n   The value of CI is a machine with none of your local state: no leftover rows, no node_modules from three branches ago, no variable you exported in October.VI: Giá trị của CI là một cái máy không có chút trạng thái cục bộ nào của bạn: không dòng sót, không node_modules từ ba nhánh trước, không biến bạn export hồi tháng Mười.\n\n5. The site’s deploy ends with a smoke test that curls core GET routes and fails on any 404. What class of bug does it catch that no unit test can?Deploy của website kết thúc bằng một smoke test curl các route GET cốt lõi và hỏng nếu có 404. Nó bắt loại lỗi nào mà không unit test nào bắt được?\n   Answer: b) A stale image in which a route was never mounted\n   An end-to-end test wearing a shell script’s clothes — the GIF picker outage of 2026-07-02 was exactly a route that 404’d in a stale image.VI: Một test end-to-end khoác áo script shell — sự cố bộ chọn GIF ngày 2026-07-02 đúng là một route trả 404 trong ảnh cũ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> About 2.7 % (0.3³) — and no: it hides the shared state until it causes an incident</p><p>Retries have one legitimate use: a test that genuinely depends on an external system you do not control. Everything else gets isolated, not retried.</p><p><i>VI: Thử lại chỉ có một công dụng chính đáng: test thật sự phụ thuộc vào hệ thống bên ngoài mà bạn không kiểm soát. Mọi thứ khác phải được cô lập, không phải thử lại.</i></p></li><li><p><b>a)</b> The second — the first is not flaky, it is reliably broken</p><p>Run in a loop: probabilistic flakiness shows up as a frequency. Then --sequence.shuffle exposes order dependence in one run.</p><p><i>VI: Chạy lặp: chập chờn theo xác suất lộ ra thành tần suất. Rồi --sequence.shuffle phơi bày sự phụ thuộc thứ tự chỉ trong một lần chạy.</i></p></li><li><p><b>a)</b> Using const instead of let for test fixtures</p><p>The four: shared state, leftover garbage, real time at a boundary, non-deterministic concurrency — each measured somewhere in 14.2–14.4.</p><p><i>VI: Bốn cái: trạng thái dùng chung, rác còn sót, giờ thật ở ranh giới, đồng thời không tất định — mỗi cái đã đo ở đâu đó trong 14.2–14.4.</i></p></li><li><p><b>a)</b> npm ci installs exactly what the lockfile says</p><p>The value of CI is a machine with none of your local state: no leftover rows, no node_modules from three branches ago, no variable you exported in October.</p><p><i>VI: Giá trị của CI là một cái máy không có chút trạng thái cục bộ nào của bạn: không dòng sót, không node_modules từ ba nhánh trước, không biến bạn export hồi tháng Mười.</i></p></li><li><p><b>b)</b> A stale image in which a route was never mounted</p><p>An end-to-end test wearing a shell script’s clothes — the GIF picker outage of 2026-07-02 was exactly a route that 404’d in a stale image.</p><p><i>VI: Một test end-to-end khoác áo script shell — sự cố bộ chọn GIF ngày 2026-07-02 đúng là một route trả 404 trong ảnh cũ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A test fails 30 % of the time. Someone adds retry: 3. How often does it fail now, and is that a fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một test đỏ 30% số lần. Ai đó thêm retry: 3. Giờ nó đỏ bao nhiêu, và đó có phải cách chữa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Still 30 %, because retries are not counted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10 %, because each retry divides the rate by three"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 2.7 % (0.3³) — and no: it hides the shared state until it causes an incident"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never, because three attempts always include a green one"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Retries have one legitimate use: a test that genuinely depends on an external system you do not control. Everything else gets isolated, not retried.</p><p><i>VI: Thử lại chỉ có một công dụng chính đáng: test thật sự phụ thuộc vào hệ thống bên ngoài mà bạn không kiểm soát. Mọi thứ khác phải được cô lập, không phải thử lại.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Ten runs of a suite: PASS=0 FAIL=10. Another suite: PASS=7 FAIL=3. Which is flaky?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mười lần chạy một bộ test: PASS=0 FAIL=10. Bộ khác: PASS=7 FAIL=3. Bộ nào chập chờn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The second — the first is not flaky, it is reliably broken"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both — any failure in ten runs is flakiness"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The first — it fails more often"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither — flakiness needs at least 100 runs to show"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Run in a loop: probabilistic flakiness shows up as a frequency. Then --sequence.shuffle exposes order dependence in one run.</p><p><i>VI: Chạy lặp: chập chờn theo xác suất lộ ra thành tần suất. Rồi --sequence.shuffle phơi bày sự phụ thuộc thứ tự chỉ trong một lần chạy.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which is NOT one of the four flaky-test causes measured in chapter 14?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào KHÔNG thuộc bốn nguyên nhân test chập chờn đã đo trong chương 14?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Using const instead of let for test fixtures"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Non-deterministic concurrency: the 23505 race, 0/5 cold, 4/5 warm"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Shared state: four files TRUNCATE the same table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Leftover garbage: one row left by another script"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The four: shared state, leftover garbage, real time at a boundary, non-deterministic concurrency — each measured somewhere in 14.2–14.4.</p><p><i>VI: Bốn cái: trạng thái dùng chung, rác còn sót, giờ thật ở ranh giới, đồng thời không tất định — mỗi cái đã đo ở đâu đó trong 14.2–14.4.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does CI run npm ci and not npm install?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao CI chạy npm ci mà không phải npm install?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "npm ci installs exactly what the lockfile says"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm install does not install devDependencies in CI"
+              },
+              {
+                "ma": "c",
+                "noiDung": "npm ci runs the tests automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "npm ci is the only command that works without a network"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The value of CI is a machine with none of your local state: no leftover rows, no node_modules from three branches ago, no variable you exported in October.</p><p><i>VI: Giá trị của CI là một cái máy không có chút trạng thái cục bộ nào của bạn: không dòng sót, không node_modules từ ba nhánh trước, không biến bạn export hồi tháng Mười.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The site’s deploy ends with a smoke test that curls core GET routes and fails on any 404. What class of bug does it catch that no unit test can?</p><p style=\"opacity:.75;font-size:.92em\"><i>Deploy của website kết thúc bằng một smoke test curl các route GET cốt lõi và hỏng nếu có 404. Nó bắt loại lỗi nào mà không unit test nào bắt được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Missing tests for new routes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A stale image in which a route was never mounted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Wrong HALF_UP rounding in money.ts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Slow SQL queries on the production database"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An end-to-end test wearing a shell script’s clothes — the GIF picker outage of 2026-07-02 was exactly a route that 404’d in a stale image.</p><p><i>VI: Một test end-to-end khoác áo script shell — sự cố bộ chọn GIF ngày 2026-07-02 đúng là một route trả 404 trong ảnh cũ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reaching for --no-file-parallelism or retries as the fix for shared state.|||Với tay tới --no-file-parallelism hay retry làm cách chữa cho trạng thái dùng chung."
+        },
+        {
+          "loi": "Calling a reliably broken test “flaky” and re-running it.|||Gọi một test hỏng chắc chắn là \"chập chờn\" rồi chạy lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flaky test",
+          "vi": "test chập chờn",
+          "giaiThich": "lúc xanh lúc đỏ mà code không đổi"
+        },
+        {
+          "en": "merge gate",
+          "vi": "cổng chặn merge",
+          "giaiThich": "các kiểm phải xanh trước khi được merge"
+        }
+      ]
+    },
+    {
+      "title": "14.5 · What should block a merge?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Every gate a developer cannot fix in under a minute is a gate they will eventually learn to bypass. Decide, for each check of a Notes API pipeline, whether it blocks the merge or is informational — following the lesson and the site’s ci-lint.yml.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi cổng mà lập trình viên không sửa được trong dưới một phút là một cổng họ sẽ dần học cách lách qua. Với mỗi bước kiểm của pipeline Notes API, quyết định nó chặn merge hay chỉ để tham khảo — theo bài và theo ci-lint.yml của website.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does a failure mean the software is wrong, or only untidy?|||Một lần đỏ có nghĩa phần mềm sai, hay chỉ lộn xộn?",
+        "Recall what 100 % coverage proved in this lesson.|||Nhớ lại độ phủ 100% đã chứng minh được gì trong bài này."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.5 · What should block a merge?\n\nAnswer in the answer panel (no code needed).\n\n1. CI step → gateBước CI → loại cổng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.5 · What should block a merge? — answer key\n\n1. CI step → gateBước CI → loại cổng\n   - r1.g: Blocks the merge\n   - r2.g: Blocks the merge\n   - r3.g: Blocks the merge\n   - r4.g: Advisory (does not block)\n   - r5.g: Advisory (does not block)\n   - r6.g: Blocks the merge\n   Block: the type check, tests whose failure means something is wrong rather than untidy (including the deterministic golden sets), and a migration that applies on an empty schema. Advisory: style opinions, lint warnings (continue-on-error: true in the site’s workflow) and coverage thresholds — 100 % coverage did not stop the EDITOR escalation, and a red lint blocking a hotfix teaches the team to ignore CI.VI: Chặn: kiểm kiểu, các test mà đỏ nghĩa là có gì đó sai chứ không phải chỉ lộn xộn (kể cả các bộ vàng tất định), và migration chạy được trên lược đồ rỗng. Tham khảo: ý kiến về phong cách, cảnh báo lint (continue-on-error: true trong workflow của website) và ngưỡng độ phủ — độ phủ 100% không ngăn được lỗ leo thang EDITOR, và lint đỏ chặn một bản vá nóng sẽ dạy cả đội lờ CI đi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Block: the type check, tests whose failure means something is wrong rather than untidy (including the deterministic golden sets), and a migration that applies on an empty schema. Advisory: style opinions, lint warnings (continue-on-error: true in the site’s workflow) and coverage thresholds — 100 % coverage did not stop the EDITOR escalation, and a red lint blocking a hotfix teaches the team to ignore CI.</p><p><i>VI: Chặn: kiểm kiểu, các test mà đỏ nghĩa là có gì đó sai chứ không phải chỉ lộn xộn (kể cả các bộ vàng tất định), và migration chạy được trên lược đồ rỗng. Tham khảo: ý kiến về phong cách, cảnh báo lint (continue-on-error: true trong workflow của website) và ngưỡng độ phủ — độ phủ 100% không ngăn được lỗ leo thang EDITOR, và lint đỏ chặn một bản vá nóng sẽ dạy cả đội lờ CI đi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CI step → gate</p><p style=\"opacity:.75;font-size:.92em\"><i>Bước CI → loại cổng</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Step"
+              },
+              {
+                "ma": "g",
+                "ten": "Gate",
+                "luaChon": [
+                  "Blocks the merge",
+                  "Advisory (does not block)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "npx tsc --noEmit"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "npm test (unit + HTTP tests)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The migrations apply cleanly on an empty schema (once the suite touches the DB)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "npm run lint (eslint style rules)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Coverage must stay above 90 %"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The golden-set grader eval (no DB, no LLM key needed)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.g": "Blocks the merge",
+              "r2.g": "Blocks the merge",
+              "r3.g": "Blocks the merge",
+              "r4.g": "Advisory (does not block)",
+              "r5.g": "Advisory (does not block)",
+              "r6.g": "Blocks the merge"
+            },
+            "giaiThich": "<p>Block: the type check, tests whose failure means something is wrong rather than untidy (including the deterministic golden sets), and a migration that applies on an empty schema. Advisory: style opinions, lint warnings (continue-on-error: true in the site’s workflow) and coverage thresholds — 100 % coverage did not stop the EDITOR escalation, and a red lint blocking a hotfix teaches the team to ignore CI.</p><p><i>VI: Chặn: kiểm kiểu, các test mà đỏ nghĩa là có gì đó sai chứ không phải chỉ lộn xộn (kể cả các bộ vàng tất định), và migration chạy được trên lược đồ rỗng. Tham khảo: ý kiến về phong cách, cảnh báo lint (continue-on-error: true trong workflow của website) và ngưỡng độ phủ — độ phủ 100% không ngăn được lỗ leo thang EDITOR, và lint đỏ chặn một bản vá nóng sẽ dạy cả đội lờ CI đi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Making coverage a blocking gate: people write assertion-free tests to reach the number.|||Biến độ phủ thành cổng chặn: người ta viết test không khẳng định gì để đạt con số."
+        },
+        {
+          "loi": "Letting lint block hotfixes: the fastest way to make a team bypass CI.|||Để lint chặn bản vá nóng: cách nhanh nhất làm cả đội lách CI."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blocking check",
+          "vi": "kiểm chặn",
+          "giaiThich": "đỏ thì không được merge"
+        },
+        {
+          "en": "advisory check",
+          "vi": "kiểm tham khảo",
+          "giaiThich": "hiện kết quả nhưng không chặn (continue-on-error)"
+        }
+      ]
+    },
+    {
+      "title": "14.5 · Build a tiny mutation tester",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "mutation testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Change the production code on purpose and check that a test goes red” — automated, that is mutation testing (Stryker in Node). Write <code>mutationScore(tests, original, mutants)</code>:</p><ul><li><code>tests</code> — <code>[{ name, run(impl) }]</code>; a test FAILS when <code>run</code> throws or returns a rejected promise;</li><li><code>original</code> — the correct implementation (any object); <code>mutants</code> — <code>[{ label, impl }]</code>;</li><li>first run every test against <code>original</code>. If any fails, the suite is invalid: resolve to <code>{ valid: false, failing: [names], killed: [], survived: [], score: 0 }</code>;</li><li>otherwise, a mutant is <b>killed</b> if at least one test fails against it, else it <b>survived</b>. <code>score</code> = <code>Math.round(killed / mutants × 100)</code> (100 when there are no mutants).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>A test fails by throwing OR by rejecting (await it).</li>\n  <li>An invalid suite (red on the correct code) kills nothing.</li>\n  <li>killed / survived keep the order of mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Cố ý đổi code production rồi kiểm xem có test nào chuyển đỏ\" — tự động hoá việc đó là kiểm thử đột biến (Stryker trong Node). Viết <code>mutationScore(tests, original, mutants)</code>:</p><ul><li><code>tests</code> — <code>[{ name, run(impl) }]</code>; một test HỎNG khi <code>run</code> ném lỗi hoặc trả promise bị reject;</li><li><code>original</code> — bản cài đặt đúng (object bất kỳ); <code>mutants</code> — <code>[{ label, impl }]</code>;</li><li>trước tiên chạy mọi test với <code>original</code>. Nếu có cái hỏng, bộ test không hợp lệ: resolve ra <code>{ valid: false, failing: [tên], killed: [], survived: [], score: 0 }</code>;</li><li>ngược lại, đột biến bị <b>diệt</b> nếu ít nhất một test hỏng với nó, không thì nó <b>sống sót</b>. <code>score</code> = <code>Math.round(killed / mutants × 100)</code> (100 khi không có đột biến nào).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Test hỏng khi ném lỗi HOẶC khi reject (hãy await nó).</li>\n  <li>Bộ test không hợp lệ (đỏ với code đúng) không diệt được gì.</li>\n  <li>killed / survived giữ thứ tự của mutants.</li>\n</ul>",
+      "inputSpec": "tests — [{ name, run(impl) }] · original — impl · mutants — [{ label, impl }]",
+      "outputSpec": "Promise<{ valid, failing, killed, survived, score }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];\nawait mutationScore(coverageSuite, right, M)",
+          "output": "{\"valid\":true,\"failing\":[],\"killed\":[\"no admin\",\"no null guard\"],\"survived\":[\"EDITOR escalation\"],\"score\":67}",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const fails = async (t, impl) => { try { await t.run(impl); return false; } catch (e) { return true; } };",
+        "For each mutant: let dead = false; for (const t of tests) if (await fails(t, m.impl)) { dead = true; break; }|||Với mỗi đột biến: let dead = false; for (const t of tests) if (await fails(t, m.impl)) { dead = true; break; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run the suite against the original and against each mutant. */\nasync function mutationScore(tests, original, mutants) {\n  // Write your solution here\n  const killed = [], survived = [];\n  for (const m of mutants) {\n    let dead = false;\n    for (const t of tests) { try { t.run(m.impl); } catch (e) { dead = true; } }\n    (dead ? killed : survived).push(m.label);\n  }\n  return { valid: true, failing: [], killed, survived, score: Math.round((killed.length / mutants.length) * 100) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run the suite against the original and against each mutant. */\nasync function mutationScore(tests, original, mutants) {\n  const fails = async (t, impl) => {\n    try { await t.run(impl); return false; }      // await: a rejected promise is a failure too\n    catch (e) { return true; }\n  };\n  const failing = [];\n  for (const t of tests) if (await fails(t, original)) failing.push(t.name);\n  if (failing.length) return { valid: false, failing, killed: [], survived: [], score: 0 };   // red on correct code proves nothing\n\n  const killed = [], survived = [];\n  for (const m of mutants) {\n    let dead = false;\n    for (const t of tests) if (await fails(t, m.impl)) { dead = true; break; }   // one red test is enough\n    (dead ? killed : survived).push(m.label);\n  }\n  const score = mutants.length ? Math.round((killed.length / mutants.length) * 100) : 100;\n  return { valid: true, failing, killed, survived, score };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A mutant is a hypothesis “this line could be wrong”; a killed mutant is evidence that some test watches that line. The validity check first is essential: a suite that is red on the correct code proves nothing about the mutants. This is the question coverage cannot answer — the reason canEdit stayed escalatable at 100 %.</p>",
+      "solutionExplanationHtmlVi": "<p>Một đột biến là giả thuyết \"dòng này có thể sai\"; đột biến bị diệt là bằng chứng có test đang canh dòng đó. Kiểm tính hợp lệ trước là thiết yếu: bộ test đỏ với code đúng chẳng chứng minh gì về các đột biến. Đây là câu hỏi mà độ phủ không trả lời được — lý do canEdit vẫn leo thang được ở mức 100%.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The coverage suite: EDITOR escalation survives",
+              "vi": "Bộ test theo độ phủ: lỗ EDITOR sống sót"
+            },
+            "goi": "await mutationScore(coverageSuite, right, M)",
+            "chuanBi": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];",
+            "mongDoi": {
+              "valid": true,
+              "failing": [],
+              "killed": [
+                "no admin",
+                "no null guard"
+              ],
+              "survived": [
+                "EDITOR escalation"
+              ],
+              "score": 67
+            }
+          },
+          {
+            "moTa": {
+              "en": "One more test kills it: 100 %",
+              "vi": "Thêm một test là diệt được: 100%"
+            },
+            "goi": "await mutationScore([...coverageSuite, { name: 'editor not author', run: (i) => eq(i.canEdit({ id: 2, role: 'EDITOR' }, { authorId: 1 }), false) }], right, M)",
+            "chuanBi": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];",
+            "mongDoi": {
+              "valid": true,
+              "failing": [],
+              "killed": [
+                "EDITOR escalation",
+                "no admin",
+                "no null guard"
+              ],
+              "survived": [],
+              "score": 100
+            }
+          },
+          {
+            "moTa": {
+              "en": "A suite red on the correct code is invalid",
+              "vi": "Bộ test đỏ với code đúng là không hợp lệ"
+            },
+            "goi": "await mutationScore([{ name: 'wrong expectation', run: (i) => eq(i.canEdit(null, {}), true) }, ...coverageSuite], right, M)",
+            "chuanBi": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];",
+            "mongDoi": {
+              "valid": false,
+              "failing": [
+                "wrong expectation"
+              ],
+              "killed": [],
+              "survived": [],
+              "score": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Async tests: a rejection counts as a failure",
+              "vi": "Test async: reject được tính là hỏng"
+            },
+            "goi": "await mutationScore([{ name: 'async', run: async (i) => { await new Promise((ok) => setTimeout(ok, 5)); eq(i.canEdit({ id: 2, role: 'EDITOR' }, { authorId: 1 }), false); } }], right, M)",
+            "chuanBi": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];",
+            "mongDoi": {
+              "valid": true,
+              "failing": [],
+              "killed": [
+                "EDITOR escalation"
+              ],
+              "survived": [
+                "no admin",
+                "no null guard"
+              ],
+              "score": 33
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await mutationScore(coverageSuite, right, []), await mutationScore([], right, M)]",
+            "chuanBi": "const eq = (a, b) => { if (a !== b) throw new Error('expected ' + b + ', got ' + a); };\nconst right = { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id) };\nconst M = [\n  { label: 'EDITOR escalation', impl: { canEdit: (u, n) => !!u && (u.role === 'ADMIN' || n.authorId === u.id || u.role === 'EDITOR') } },\n  { label: 'no admin', impl: { canEdit: (u, n) => !!u && n.authorId === u.id } },\n  { label: 'no null guard', impl: { canEdit: (u, n) => u.role === 'ADMIN' || n.authorId === u.id } },\n];\nconst coverageSuite = [\n  { name: 'anonymous', run: (i) => eq(i.canEdit(null, { authorId: 1 }), false) },\n  { name: 'admin', run: (i) => eq(i.canEdit({ id: 9, role: 'ADMIN' }, { authorId: 1 }), true) },\n  { name: 'author', run: (i) => eq(i.canEdit({ id: 1, role: 'USER' }, { authorId: 1 }), true) },\n];",
+            "mongDoi": [
+              {
+                "valid": true,
+                "failing": [],
+                "killed": [],
+                "survived": [],
+                "score": 100
+              },
+              {
+                "valid": true,
+                "failing": [],
+                "killed": [],
+                "survived": [
+                  "EDITOR escalation",
+                  "no admin",
+                  "no null guard"
+                ],
+                "score": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling t.run(impl) without await: a test that rejects counts as passing — the async version of 14.2’s silent green test.|||Gọi t.run(impl) thiếu await: test reject lại bị tính là qua — bản async của test xanh câm ở 14.2."
+        },
+        {
+          "loi": "Scoring mutants of an invalid suite: a test that is red on the correct code “kills” every mutant and the score reads 100 %.|||Chấm đột biến của bộ test không hợp lệ: test đỏ với code đúng \"diệt\" mọi đột biến và điểm hiện 100%."
+        },
+        {
+          "loi": "Dividing by zero when there are no mutants.|||Chia cho không khi không có đột biến nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "mutation score",
+          "vi": "điểm đột biến",
+          "giaiThich": "phần trăm đột biến bị diệt"
+        }
+      ]
+    }
+  ]
+}

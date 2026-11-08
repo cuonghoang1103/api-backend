@@ -1,0 +1,658 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-16-3-nen-va-duong-truyen",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-16-3-nen-va-duong-truyen"
+  },
+  "exercises": [
+    {
+      "title": "The compression trade, who compresses, and the stream that stopped streaming",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "compression",
+        "HTTP",
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 16.3 (one 145,119-byte JSON response of 500 varied notes, Node’s built-in zlib).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 16.3 (một response JSON 145.119 byte gồm 500 ghi chú đa dạng, zlib có sẵn của Node).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare bytes AND time for each pair of rows.|||So cả byte LẪN thời gian cho từng cặp dòng.",
+        "Content-Encoding is set by whoever compressed first.|||Content-Encoding do bên nén đầu tiên đặt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The compression trade, who compresses, and the stream that stopped streaming\n\nAnswer in the answer panel (no code needed).\n\n1. gzip 6: 26,564 B in 3.31 ms. gzip 9: 26,377 B in 5.03 ms. What does level 9 buy?gzip 6: 26.564 B trong 3,31 ms. gzip 9: 26.377 B trong 5,03 ms. Mức 9 mua được gì?\n2. On highly repetitive JSON, brotli 4 gave 1,322 B in 0.13 ms and brotli 11 gave 1,434 B in 131.34 ms. Conclusion?Trên JSON lặp lại nhiều, brotli 4 cho 1.322 B trong 0,13 ms còn brotli 11 cho 1.434 B trong 131,34 ms. Kết luận?\n3. The website sits behind nginx with gzip on, yet API responses come back with content-encoding: br. Who compressed them?Website nằm sau nginx có bật gzip, vậy mà response API trả về content-encoding: br. Ai đã nén?\n4. A dashboard route uses Server-Sent Events. It worked locally, then stopped updating after the compression middleware was added. Why?Một route dashboard dùng Server-Sent Events. Chạy tốt ở máy, rồi ngừng cập nhật sau khi thêm middleware nén. Vì sao?\n5. Keep-alive, measured on loopback. Which statements are true? (choose all that apply)Keep-alive, đo trên loopback. Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The compression trade, who compresses, and the stream that stopped streaming — answer key\n\n1. gzip 6: 26,564 B in 3.31 ms. gzip 9: 26,377 B in 5.03 ms. What does level 9 buy?gzip 6: 26.564 B trong 3,31 ms. gzip 9: 26.377 B trong 5,03 ms. Mức 9 mua được gì?\n   Answer: c) 0.7% fewer bytes for about 1.5× the CPU time\n   gzip 9 is the worst gzip. Decompression is nearly free for the client either way (0.15 ms) — the server pays for the level.VI: gzip 9 là gzip tệ nhất. Giải nén gần như miễn phí với client trong mọi trường hợp (0,15 ms) — server mới trả giá cho mức nén.\n\n2. On highly repetitive JSON, brotli 4 gave 1,322 B in 0.13 ms and brotli 11 gave 1,434 B in 131.34 ms. Conclusion?Trên JSON lặp lại nhiều, brotli 4 cho 1.322 B trong 0,13 ms còn brotli 11 cho 1.434 B trong 131,34 ms. Kết luận?\n   Answer: b) “Higher is better” is not even safe: here 11 was bigger and about 1,000× slower\n   On varied data 11 was 30% smaller and 148× slower; on repetitive data 8% bigger and 984× slower. Measure your own responses.VI: Trên dữ liệu đa dạng, 11 nhỏ hơn 30% và chậm 148 lần; trên dữ liệu lặp lại thì to hơn 8% và chậm 984 lần. Hãy đo response của chính bạn.\n\n3. The website sits behind nginx with gzip on, yet API responses come back with content-encoding: br. Who compressed them?Website nằm sau nginx có bật gzip, vậy mà response API trả về content-encoding: br. Ai đã nén?\n   Answer: b) Node: app.use(compression({ level: 6, … })), brotli quality 4 by default; nginx passes it through\n   nginx does not compress twice: if Node already set Content-Encoding, nginx forwards it. “nginx has gzip on” says nothing about who really compressed your JSON.VI: nginx không nén hai lần: nếu Node đã đặt Content-Encoding, nginx chuyển tiếp nguyên vẹn. “nginx bật gzip” không nói gì về việc ai thật sự nén JSON của bạn.\n\n4. A dashboard route uses Server-Sent Events. It worked locally, then stopped updating after the compression middleware was added. Why?Một route dashboard dùng Server-Sent Events. Chạy tốt ở máy, rồi ngừng cập nhật sau khi thêm middleware nén. Vì sao?\n   Answer: a) The middleware buffers output, so events arrive all at once at the end\n   Exclude text/event-stream in the filter (else fall back to compression.filter), or call res.flush() after each res.write(chunk).VI: Loại text/event-stream trong filter (không thì dùng compression.filter), hoặc gọi res.flush() sau mỗi res.write(chunk).\n\n5. Keep-alive, measured on loopback. Which statements are true? (choose all that apply)Keep-alive, đo trên loopback. Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: b) In Node 22 http.globalAgent keeps connections alive by default + c) On loopback 2 sockets beat 20, but with 50 ms of latency the ranking reverses + d) 500 sequential calls: agent: false 89 ms, globalAgent 36 ms — reuse is 2.5× faster\n   The mistake today is code that sets agent: false or an old HTTP library. And a benchmark on 127.0.0.1 answers a different question than production does.VI: Sai lầm ngày nay là mã đặt agent: false hoặc thư viện HTTP cũ. Và benchmark trên 127.0.0.1 trả lời một câu hỏi khác với production.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 0.7% fewer bytes for about 1.5× the CPU time</p><p>gzip 9 is the worst gzip. Decompression is nearly free for the client either way (0.15 ms) — the server pays for the level.</p><p><i>VI: gzip 9 là gzip tệ nhất. Giải nén gần như miễn phí với client trong mọi trường hợp (0,15 ms) — server mới trả giá cho mức nén.</i></p></li><li><p><b>b)</b> “Higher is better” is not even safe: here 11 was bigger and about 1,000× slower</p><p>On varied data 11 was 30% smaller and 148× slower; on repetitive data 8% bigger and 984× slower. Measure your own responses.</p><p><i>VI: Trên dữ liệu đa dạng, 11 nhỏ hơn 30% và chậm 148 lần; trên dữ liệu lặp lại thì to hơn 8% và chậm 984 lần. Hãy đo response của chính bạn.</i></p></li><li><p><b>b)</b> Node: app.use(compression({ level: 6, … })), brotli quality 4 by default; nginx passes it through</p><p>nginx does not compress twice: if Node already set Content-Encoding, nginx forwards it. “nginx has gzip on” says nothing about who really compressed your JSON.</p><p><i>VI: nginx không nén hai lần: nếu Node đã đặt Content-Encoding, nginx chuyển tiếp nguyên vẹn. “nginx bật gzip” không nói gì về việc ai thật sự nén JSON của bạn.</i></p></li><li><p><b>a)</b> The middleware buffers output, so events arrive all at once at the end</p><p>Exclude text/event-stream in the filter (else fall back to compression.filter), or call res.flush() after each res.write(chunk).</p><p><i>VI: Loại text/event-stream trong filter (không thì dùng compression.filter), hoặc gọi res.flush() sau mỗi res.write(chunk).</i></p></li><li><p><b>b)</b> In Node 22 http.globalAgent keeps connections alive by default + <b>c)</b> On loopback 2 sockets beat 20, but with 50 ms of latency the ranking reverses + <b>d)</b> 500 sequential calls: agent: false 89 ms, globalAgent 36 ms — reuse is 2.5× faster</p><p>The mistake today is code that sets agent: false or an old HTTP library. And a benchmark on 127.0.0.1 answers a different question than production does.</p><p><i>VI: Sai lầm ngày nay là mã đặt agent: false hoặc thư viện HTTP cũ. Và benchmark trên 127.0.0.1 trả lời một câu hỏi khác với production.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>gzip 6: 26,564 B in 3.31 ms. gzip 9: 26,377 B in 5.03 ms. What does level 9 buy?</p><p style=\"opacity:.75;font-size:.92em\"><i>gzip 6: 26.564 B trong 3,31 ms. gzip 9: 26.377 B trong 5,03 ms. Mức 9 mua được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "30% fewer bytes for the same CPU time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: level 9 produces exactly the same bytes as 6"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0.7% fewer bytes for about 1.5× the CPU time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Faster decompression on the client, which saves battery"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>gzip 9 is the worst gzip. Decompression is nearly free for the client either way (0.15 ms) — the server pays for the level.</p><p><i>VI: gzip 9 là gzip tệ nhất. Giải nén gần như miễn phí với client trong mọi trường hợp (0,15 ms) — server mới trả giá cho mức nén.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>On highly repetitive JSON, brotli 4 gave 1,322 B in 0.13 ms and brotli 11 gave 1,434 B in 131.34 ms. Conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên JSON lặp lại nhiều, brotli 4 cho 1.322 B trong 0,13 ms còn brotli 11 cho 1.434 B trong 131,34 ms. Kết luận?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "brotli is broken on repetitive data; switch to gzip 9 instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "“Higher is better” is not even safe: here 11 was bigger and about 1,000× slower"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Repetitive data cannot be compressed, so both numbers are noise"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Quality 11 is always smaller, so it is worth it for repetitive data"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>On varied data 11 was 30% smaller and 148× slower; on repetitive data 8% bigger and 984× slower. Measure your own responses.</p><p><i>VI: Trên dữ liệu đa dạng, 11 nhỏ hơn 30% và chậm 148 lần; trên dữ liệu lặp lại thì to hơn 8% và chậm 984 lần. Hãy đo response của chính bạn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The website sits behind nginx with gzip on, yet API responses come back with content-encoding: br. Who compressed them?</p><p style=\"opacity:.75;font-size:.92em\"><i>Website nằm sau nginx có bật gzip, vậy mà response API trả về content-encoding: br. Ai đã nén?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nginx: it upgrades every gzip response to brotli before sending it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node: app.use(compression({ level: 6, … })), brotli quality 4 by default; nginx passes it through"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The browser: it asks for br, so the response is compressed client-side"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cloudflare: the CDN re-compresses every response with brotli 11"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>nginx does not compress twice: if Node already set Content-Encoding, nginx forwards it. “nginx has gzip on” says nothing about who really compressed your JSON.</p><p><i>VI: nginx không nén hai lần: nếu Node đã đặt Content-Encoding, nginx chuyển tiếp nguyên vẹn. “nginx bật gzip” không nói gì về việc ai thật sự nén JSON của bạn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A dashboard route uses Server-Sent Events. It worked locally, then stopped updating after the compression middleware was added. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một route dashboard dùng Server-Sent Events. Chạy tốt ở máy, rồi ngừng cập nhật sau khi thêm middleware nén. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The middleware buffers output, so events arrive all at once at the end"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Compression changes the MIME type to application/gzip"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Browsers refuse compressed event streams and close the connection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SSE needs HTTP/2, which the middleware disables"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Exclude text/event-stream in the filter (else fall back to compression.filter), or call res.flush() after each res.write(chunk).</p><p><i>VI: Loại text/event-stream trong filter (không thì dùng compression.filter), hoặc gọi res.flush() sau mỗi res.write(chunk).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Keep-alive, measured on loopback. Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Keep-alive, đo trên loopback. Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keep-alive only matters for HTTP/1.0 clients, so modern servers can switch it off"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In Node 22 http.globalAgent keeps connections alive by default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "On loopback 2 sockets beat 20, but with 50 ms of latency the ranking reverses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "500 sequential calls: agent: false 89 ms, globalAgent 36 ms — reuse is 2.5× faster"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The mistake today is code that sets agent: false or an old HTTP library. And a benchmark on 127.0.0.1 answers a different question than production does.</p><p><i>VI: Sai lầm ngày nay là mã đặt agent: false hoặc thư viện HTTP cũ. Và benchmark trên 127.0.0.1 trả lời một câu hỏi khác với production.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Copying a static-asset build setting (brotli 11) into a dynamic API: 24 req/s.|||Chép cấu hình build tài nguyên tĩnh (brotli 11) vào API động: 24 req/s."
+        },
+        {
+          "loi": "Assuming the proxy compresses because its config says gzip on.|||Cho rằng proxy nén vì cấu hình của nó ghi gzip on."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "compression level",
+          "vi": "mức nén"
+        },
+        {
+          "en": "Content-Encoding",
+          "vi": "Content-Encoding"
+        },
+        {
+          "en": "keep-alive",
+          "vi": "giữ kết nối"
+        },
+        {
+          "en": "SSE",
+          "vi": "Server-Sent Events"
+        }
+      ]
+    },
+    {
+      "title": "compressionTrade(bytes, compressedBytes, cpuMs, mbps): milliseconds on the wire vs milliseconds of CPU",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "compression",
+        "networking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Compression openly trades CPU for bandwidth. Write <code>compressionTrade(bytes, compressedBytes, cpuMs, mbps)</code>: the time on a <code>mbps</code> Mbit/s link is <code>bytes × 8 / (mbps × 10<sup>6</sup>)</code> seconds. Return <code>{ wireBeforeMs, wireAfterMs, savedMs, netMs, worth }</code>: wire times before/after, <code>savedMs</code> = before − after, <code>netMs</code> = saved − <code>cpuMs</code> (all rounded to 1 decimal at the end), <code>worth</code> = saved &gt; cpuMs (unrounded).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nén công khai đổi CPU lấy băng thông. Viết <code>compressionTrade(bytes, compressedBytes, cpuMs, mbps)</code>: thời gian trên đường truyền <code>mbps</code> Mbit/s là <code>bytes × 8 / (mbps × 10<sup>6</sup>)</code> giây. Trả về <code>{ wireBeforeMs, wireAfterMs, savedMs, netMs, worth }</code>: thời gian truyền trước/sau, <code>savedMs</code> = trước − sau, <code>netMs</code> = tiết kiệm − <code>cpuMs</code> (tất cả làm tròn 1 chữ số ở cuối), <code>worth</code> = tiết kiệm &gt; cpuMs (chưa làm tròn).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "compressionTrade(145361, 33500, 0.57, 10)",
+          "output": "{\"wireBeforeMs\":116.3,\"wireAfterMs\":26.8,\"savedMs\":89.5,\"netMs\":88.9,\"worth\":true}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Bytes → bits (× 8), Mbit/s → bit/s (× 10^6), seconds → ms (× 1000).|||Byte → bit (× 8), Mbit/s → bit/s (× 10^6), giây → ms (× 1000).",
+        "Compute with full precision and round only the returned numbers.|||Tính với độ chính xác đầy đủ và chỉ làm tròn các số trả về."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** wire time saved vs CPU spent */\nfunction compressionTrade(bytes, compressedBytes, cpuMs, mbps) {\n  // Write your solution here\n  const wire = (b) => b / (mbps * 1e6) * 1000;\n  const saved = wire(bytes) - wire(compressedBytes);\n  return { wireBeforeMs: wire(bytes), wireAfterMs: wire(compressedBytes), savedMs: saved, netMs: saved - cpuMs, worth: saved > cpuMs };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction compressionTrade(bytes, compressedBytes, cpuMs, mbps) {\n  // Thời gian trên đường truyền = bit ÷ băng thông. 10 Mbit/s = 10.000.000 bit/s. (Phép tính, không phải phép đo.)\n  const wire = (b) => ((b * 8) / (mbps * 1e6)) * 1000;\n  const r1 = (x) => Number(x.toFixed(1));\n  const saved = wire(bytes) - wire(compressedBytes);\n  return { wireBeforeMs: r1(wire(bytes)), wireAfterMs: r1(wire(compressedBytes)), savedMs: r1(saved), netMs: r1(saved - cpuMs), worth: saved > cpuMs };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On 10 Mbit/s the uncompressed 145,361 B take 116 ms; gzip 1 or brotli 4 bring that to ~27 / 25 ms — about 90 ms saved for ~0.6–1 ms of CPU, usually worth it for a phone. brotli 11 at 147.79 ms costs more CPU than it saves on the wire.</p>",
+      "solutionExplanationHtmlVi": "<p>Ở 10 Mbit/s, 145.361 B chưa nén mất 116 ms; gzip 1 hay brotli 4 đưa về ~27 / 25 ms — tiết kiệm khoảng 90 ms đổi lấy ~0,6–1 ms CPU, thường đáng với điện thoại. brotli 11 tốn 147,79 ms CPU, nhiều hơn phần tiết kiệm trên đường truyền.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "gzip level 1 on 10 Mbit/s",
+              "vi": "gzip mức 1 trên 10 Mbit/s"
+            },
+            "goi": "compressionTrade(145361, 33500, 0.57, 10)",
+            "mongDoi": {
+              "wireBeforeMs": 116.3,
+              "wireAfterMs": 26.8,
+              "savedMs": 89.5,
+              "netMs": 88.9,
+              "worth": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "brotli quality 11 on 10 Mbit/s",
+              "vi": "brotli quality 11 trên 10 Mbit/s"
+            },
+            "goi": "compressionTrade(145361, 21734, 147.79, 10)",
+            "mongDoi": {
+              "wireBeforeMs": 116.3,
+              "wireAfterMs": 17.4,
+              "savedMs": 98.9,
+              "netMs": -48.9,
+              "worth": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "compressionTrade(145361, 26564, 3.31, 1000)",
+            "mongDoi": {
+              "wireBeforeMs": 1.2,
+              "wireAfterMs": 0.2,
+              "savedMs": 1,
+              "netMs": -2.4,
+              "worth": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "compressionTrade(800, 700, 0.05, 10)",
+            "mongDoi": {
+              "wireBeforeMs": 0.6,
+              "wireAfterMs": 0.6,
+              "savedMs": 0.1,
+              "netMs": 0,
+              "worth": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting × 8: bytes are not bits, so every wire time is 8× too small.|||Quên × 8: byte không phải bit, nên mọi thời gian truyền nhỏ đi 8 lần."
+        },
+        {
+          "loi": "Counting the CPU once per server instead of once per response: it is paid on every request, on the same CPU that serves requests.|||Tính CPU một lần cho cả server thay vì mỗi response: nó bị trả ở mọi request, trên chính CPU đang phục vụ request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bandwidth",
+          "vi": "băng thông"
+        },
+        {
+          "en": "Mbit/s",
+          "vi": "megabit mỗi giây"
+        }
+      ]
+    },
+    {
+      "title": "chooseEncoding(req): the five-line compression policy as code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "compression",
+        "HTTP headers",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Turn the lesson’s policy for <b>dynamic</b> responses into a function. <code>chooseEncoding({ acceptEncoding, accept, contentType, bytes })</code> returns, checking in this order:</p><ol><li><code>{ encoding: \"identity\" }</code> when <code>accept</code> or <code>contentType</code> contains <code>text/event-stream</code>;</li><li><code>{ encoding: \"identity\" }</code> for already-compressed types: <code>image/*</code> except <code>image/svg+xml</code>, <code>video/*</code>, <code>audio/*</code>, <code>application/zip</code>, <code>application/gzip</code>, <code>application/pdf</code>;</li><li><code>{ encoding: \"identity\" }</code> when <code>bytes &lt; 1024</code>;</li><li><code>{ encoding: \"br\", quality: 4 }</code> if the client accepts <code>br</code>, else <code>{ encoding: \"gzip\", level: 1 }</code> if it accepts <code>gzip</code>, else identity.</li></ol><p><code>acceptEncoding</code> is a comma list such as <code>\"gzip, deflate, br;q=0\"</code>; a coding with <code>q=0</code> is <b>not</b> accepted; names are case-insensitive.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến chính sách của bài cho response <b>động</b> thành một hàm. <code>chooseEncoding({ acceptEncoding, accept, contentType, bytes })</code> trả về, xét theo thứ tự:</p><ol><li><code>{ encoding: \"identity\" }</code> khi <code>accept</code> hoặc <code>contentType</code> chứa <code>text/event-stream</code>;</li><li><code>{ encoding: \"identity\" }</code> với kiểu đã nén sẵn: <code>image/*</code> trừ <code>image/svg+xml</code>, <code>video/*</code>, <code>audio/*</code>, <code>application/zip</code>, <code>application/gzip</code>, <code>application/pdf</code>;</li><li><code>{ encoding: \"identity\" }</code> khi <code>bytes &lt; 1024</code>;</li><li><code>{ encoding: \"br\", quality: 4 }</code> nếu client nhận <code>br</code>, không thì <code>{ encoding: \"gzip\", level: 1 }</code> nếu nhận <code>gzip</code>, không thì identity.</li></ol><p><code>acceptEncoding</code> là danh sách phẩy như <code>\"gzip, deflate, br;q=0\"</code>; mã nén có <code>q=0</code> là <b>không</b> được nhận; tên không phân biệt hoa thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "chooseEncoding({ acceptEncoding: \"gzip, deflate, br\", contentType: \"application/json\", bytes: 145119 })",
+          "output": "{\"encoding\":\"br\",\"quality\":4}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on \",\", then on \";\" — the first piece is the name, a \"q=…\" piece is its weight.|||Tách theo \",\", rồi theo \";\" — mảnh đầu là tên, mảnh \"q=…\" là trọng số.",
+        "Write the three identity checks first; only then look at what the client accepts.|||Viết ba phép kiểm identity trước; chỉ sau đó mới xem client nhận gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** pick the response compression */\nfunction chooseEncoding({ acceptEncoding = '', accept = '', contentType = '', bytes }) {\n  // Write your solution here\n  if (acceptEncoding.includes('br')) return { encoding: 'br', quality: 11 };\n  if (acceptEncoding.includes('gzip')) return { encoding: 'gzip', level: 9 };\n  return { encoding: 'identity' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction chooseEncoding({ acceptEncoding = '', accept = '', contentType = '', bytes }) {\n  // 1) Luồng (SSE): không nén — middleware sẽ gom output và luồng thôi chảy.\n  if (/text\\/event-stream/i.test(accept) || /text\\/event-stream/i.test(contentType)) return { encoding: 'identity' };\n  // 2) Đã nén sẵn (jpg, png, mp4, zip…): nén lại là đốt CPU lấy ~0%.\n  if (/^(image\\/(?!svg)|video\\/|audio\\/)|application\\/(zip|gzip|x-gzip|pdf)/i.test(contentType)) return { encoding: 'identity' };\n  // 3) Dưới 1 KB: header và khung dữ liệu ăn hết phần lợi.\n  if (bytes < 1024) return { encoding: 'identity' };\n  // 4) Client chấp nhận gì? q=0 nghĩa là \"không\".\n  const ok = {};\n  for (const part of acceptEncoding.split(',')) {\n    const [name, ...params] = part.trim().toLowerCase().split(';');\n    if (!name) continue;\n    const qp = params.map((p) => p.trim()).find((p) => p.startsWith('q='));\n    ok[name] = qp ? Number(qp.slice(2)) > 0 : true;\n  }\n  if (ok.br) return { encoding: 'br', quality: 4 };      // dữ liệu động: mức thấp, đừng vặn lên\n  if (ok.gzip) return { encoding: 'gzip', level: 1 };\n  return { encoding: 'identity' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Live server, same 145 KB body: no compression 3,560 req/s, gzip 1 −28.5%, brotli 4 −36.2%, gzip 6 −69.5%, brotli 11 24 req/s. Low levels for dynamic data, nothing for tiny or already-compressed bodies, never for streams — and static bundles are pre-compressed once at build time instead.</p>",
+      "solutionExplanationHtmlVi": "<p>Server thật, cùng body 145 KB: không nén 3.560 req/s, gzip 1 −28,5%, brotli 4 −36,2%, gzip 6 −69,5%, brotli 11 còn 24 req/s. Mức thấp cho dữ liệu động, không nén body nhỏ hay đã nén sẵn, không bao giờ nén luồng — còn bundle tĩnh thì nén sẵn một lần lúc build.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A browser asking for a 145 KB JSON list",
+              "vi": "Trình duyệt xin danh sách JSON 145 KB"
+            },
+            "goi": "chooseEncoding({ acceptEncoding: \"gzip, deflate, br\", contentType: \"application/json\", bytes: 145119 })",
+            "mongDoi": {
+              "encoding": "br",
+              "quality": 4
+            }
+          },
+          {
+            "moTa": {
+              "en": "An SSE dashboard",
+              "vi": "Dashboard SSE"
+            },
+            "goi": "chooseEncoding({ acceptEncoding: \"gzip\", accept: \"text/event-stream\", contentType: \"text/event-stream\", bytes: 5000 })",
+            "mongDoi": {
+              "encoding": "identity"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[chooseEncoding({ acceptEncoding: \"gzip, br\", contentType: \"application/json\", bytes: 600 }), chooseEncoding({ acceptEncoding: \"gzip, br\", contentType: \"image/jpeg\", bytes: 900000 }), chooseEncoding({ acceptEncoding: \"gzip, br\", contentType: \"image/svg+xml\", bytes: 4096 })]",
+            "mongDoi": [
+              {
+                "encoding": "identity"
+              },
+              {
+                "encoding": "identity"
+              },
+              {
+                "encoding": "br",
+                "quality": 4
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[chooseEncoding({ acceptEncoding: \"gzip, BR;q=0\", contentType: \"application/json\", bytes: 2048 }), chooseEncoding({ acceptEncoding: \"identity\", contentType: \"text/html\", bytes: 2048 }), chooseEncoding({ acceptEncoding: \"br;q=0.5\", contentType: \"text/css\", bytes: 2048 })]",
+            "mongDoi": [
+              {
+                "encoding": "gzip",
+                "level": 1
+              },
+              {
+                "encoding": "identity"
+              },
+              {
+                "encoding": "br",
+                "quality": 4
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "chooseEncoding({ contentType: \"application/json\", bytes: 1024 })",
+            "mongDoi": {
+              "encoding": "identity"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "acceptEncoding.includes(\"br\"): \"br;q=0\" means the client refuses brotli, and includes() says yes.|||acceptEncoding.includes(\"br\"): \"br;q=0\" nghĩa là client từ chối brotli, còn includes() bảo có."
+        },
+        {
+          "loi": "Compressing SSE: the stream works locally and silently stops behind the proxy.|||Nén SSE: luồng chạy ở máy rồi âm thầm ngừng sau proxy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Accept-Encoding",
+          "vi": "Accept-Encoding",
+          "giaiThich": "which codings the client can decode"
+        },
+        {
+          "en": "q-value",
+          "vi": "trọng số q",
+          "giaiThich": "q=0 means “not acceptable”"
+        },
+        {
+          "en": "identity",
+          "vi": "identity",
+          "giaiThich": "no compression"
+        }
+      ]
+    },
+    {
+      "title": "compareLevels(rows, budgetMs): which settings are never worth choosing, and which one fits the CPU budget",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "compression",
+        "trade-offs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Each row is one measured setting <code>{ name, bytes, ms }</code> (output size, CPU time per response). Write <code>compareLevels(rows, budgetMs)</code> returning <code>{ pick, dominated }</code>:</p><ul><li><code>dominated</code> — names (in input order) of rows for which some <b>other</b> row is at least as small <b>and</b> at least as fast, and strictly better in at least one of the two;</li><li><code>pick</code> — among rows with <code>ms ≤ budgetMs</code>, the one with the fewest bytes (ties: the faster one); <code>null</code> if none fits.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một cấu hình đã đo <code>{ name, bytes, ms }</code> (kích thước đầu ra, thời gian CPU mỗi response). Viết <code>compareLevels(rows, budgetMs)</code> trả về <code>{ pick, dominated }</code>:</p><ul><li><code>dominated</code> — tên (theo thứ tự đầu vào) các dòng mà có một dòng <b>khác</b> vừa nhỏ bằng hoặc hơn <b>vừa</b> nhanh bằng hoặc hơn, và hơn hẳn ở ít nhất một trong hai;</li><li><code>pick</code> — trong các dòng có <code>ms ≤ budgetMs</code>, dòng ít byte nhất (hoà: dòng nhanh hơn); <code>null</code> nếu không dòng nào vừa.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "compareLevels([{\"name\":\"gzip-1\",\"bytes\":33500,\"ms\":0.57},{\"name\":\"gzip-6\",\"bytes\":26564,\"ms\":3.31},{\"name\":\"gzip-9\",\"bytes\":26377,\"ms\":5.03},{\"name\":\"br-4\",\"bytes\":31269,\"ms\":1},{\"name\":\"br-9\",\"bytes\":24211,\"ms\":5.5},{\"name\":\"br-11\",\"bytes\":21734,\"ms\":147.79}], 2)",
+          "output": "{\"pick\":\"br-4\",\"dominated\":[]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Dominated: rows.some(o => o !== r && o.bytes <= r.bytes && o.ms <= r.ms && (o.bytes < r.bytes || o.ms < r.ms)).|||Bị lấn át: rows.some(o => o !== r && o.bytes <= r.bytes && o.ms <= r.ms && (o.bytes < r.bytes || o.ms < r.ms)).",
+        "Filter by budget, then sort by bytes and then ms.|||Lọc theo ngân sách, rồi sắp theo byte rồi ms."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which compression settings make sense? */\nfunction compareLevels(rows, budgetMs) {\n  // Write your solution here\n  const best = rows.slice().sort((a, b) => a.bytes - b.bytes)[0];\n  return { pick: best.name, dominated: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction compareLevels(rows, budgetMs) {\n  // Dòng bị \"lấn át\": có dòng khác vừa ≤ byte vừa ≤ thời gian, và hơn hẳn ở ít nhất một mặt — không có lý do chọn nó.\n  const dominated = rows.filter((r) => rows.some((o) => o !== r && o.bytes <= r.bytes && o.ms <= r.ms && (o.bytes < r.bytes || o.ms < r.ms))).map((r) => r.name);\n  // Trong ngân sách CPU: chọn đầu ra nhỏ nhất; hoà thì nhanh hơn.\n  const fit = rows.filter((r) => r.ms <= budgetMs).sort((a, b) => a.bytes - b.bytes || a.ms - b.ms);\n  return { pick: fit.length ? fit[0].name : null, dominated };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ratio and cost move in opposite directions, so most settings are a trade — except the ones that are worse in both dimensions, like brotli 11 on repetitive data. Picking under a per-response CPU budget is the honest version of “gzip level 1 or brotli 4 for dynamic JSON”.</p>",
+      "solutionExplanationHtmlVi": "<p>Tỉ lệ nén và chi phí đi ngược chiều nhau, nên đa số cấu hình là đánh đổi — trừ những cái kém ở cả hai mặt, như brotli 11 trên dữ liệu lặp lại. Chọn theo ngân sách CPU mỗi response là phiên bản trung thực của “gzip mức 1 hoặc brotli 4 cho JSON động”.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Varied JSON, 2 ms of CPU per response",
+              "vi": "JSON đa dạng, 2 ms CPU mỗi response"
+            },
+            "goi": "compareLevels([{\"name\":\"gzip-1\",\"bytes\":33500,\"ms\":0.57},{\"name\":\"gzip-6\",\"bytes\":26564,\"ms\":3.31},{\"name\":\"gzip-9\",\"bytes\":26377,\"ms\":5.03},{\"name\":\"br-4\",\"bytes\":31269,\"ms\":1},{\"name\":\"br-9\",\"bytes\":24211,\"ms\":5.5},{\"name\":\"br-11\",\"bytes\":21734,\"ms\":147.79}], 2)",
+            "mongDoi": {
+              "pick": "br-4",
+              "dominated": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Repetitive JSON, generous budget",
+              "vi": "JSON lặp lại, ngân sách rộng"
+            },
+            "goi": "compareLevels([{\"name\":\"br-4\",\"bytes\":1322,\"ms\":0.13},{\"name\":\"br-11\",\"bytes\":1434,\"ms\":131.34}], 200)",
+            "mongDoi": {
+              "pick": "br-4",
+              "dominated": [
+                "br-11"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "compareLevels([{\"name\":\"gzip-1\",\"bytes\":33500,\"ms\":0.57},{\"name\":\"gzip-6\",\"bytes\":26564,\"ms\":3.31},{\"name\":\"gzip-9\",\"bytes\":26377,\"ms\":5.03},{\"name\":\"br-4\",\"bytes\":31269,\"ms\":1},{\"name\":\"br-9\",\"bytes\":24211,\"ms\":5.5},{\"name\":\"br-11\",\"bytes\":21734,\"ms\":147.79}], 0.1)",
+            "mongDoi": {
+              "pick": null,
+              "dominated": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "compareLevels([{\"name\":\"gzip-1\",\"bytes\":33500,\"ms\":0.57},{\"name\":\"gzip-6\",\"bytes\":26564,\"ms\":3.31},{\"name\":\"gzip-9\",\"bytes\":26377,\"ms\":5.03},{\"name\":\"br-4\",\"bytes\":31269,\"ms\":1},{\"name\":\"br-9\",\"bytes\":24211,\"ms\":5.5},{\"name\":\"br-11\",\"bytes\":21734,\"ms\":147.79},{\"name\":\"gzip-6-copy\",\"bytes\":26564,\"ms\":3.31},{\"name\":\"zstd-3\",\"bytes\":26000,\"ms\":0.9}], 6)",
+            "mongDoi": {
+              "pick": "br-9",
+              "dominated": [
+                "gzip-6",
+                "gzip-9",
+                "br-4",
+                "gzip-6-copy"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Picking the highest level because it is “the best compression”: on repetitive data brotli 11 is bigger than brotli 4.|||Chọn mức cao nhất vì “nén tốt nhất”: trên dữ liệu lặp lại brotli 11 còn to hơn brotli 4."
+        },
+        {
+          "loi": "Calling a row dominated when it is only worse on one side: gzip-9 is slower than br-4 but smaller, so it is a trade, not a loss.|||Gọi một dòng là bị lấn át khi nó chỉ kém ở một mặt: gzip-9 chậm hơn br-4 nhưng nhỏ hơn, nên đó là đánh đổi, không phải thua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dominated option",
+          "vi": "phương án bị lấn át",
+          "giaiThich": "worse or equal on every axis"
+        },
+        {
+          "en": "CPU budget",
+          "vi": "ngân sách CPU"
+        }
+      ]
+    }
+  ]
+}

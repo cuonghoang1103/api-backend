@@ -1,0 +1,1084 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-6-4-phan-trang",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-6-4-phan-trang"
+  },
+  "exercises": [
+    {
+      "title": "6.4 · 1 — Offset, cursor and the cost nobody sees",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 6.4 measured a real 1,000,000-row PostgreSQL table. Six questions about what those numbers mean for your list endpoint.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 6.4 đo trên một bảng PostgreSQL thật 1.000.000 dòng. Sáu câu hỏi về ý nghĩa của các con số đó với endpoint danh sách của bạn.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask whether the data changes WHILE the user pages through it.|||Hỏi xem dữ liệu có thay đổi TRONG LÚC người dùng lật trang không.",
+        "OFFSET = “walk N rows, then start”; cursor = “jump to this key, then start”.|||OFFSET = \"đi qua N dòng rồi mới bắt đầu\"; cursor = \"nhảy tới khoá này rồi bắt đầu\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4 · 1 — Offset, cursor and the cost nobody sees\n\nAnswer in the answer panel (no code needed).\n\n1. LIMIT 20 OFFSET 999980 took 166.8 ms and scanned 1,000,000 rows. Why?LIMIT 20 OFFSET 999980 mất 166,8 ms và quét 1.000.000 dòng. Vì sao?\n2. A user reads page 1 (ids 1000000, 999999, 999998) of a newest-first feed; someone posts note 1000001; the user opens page 2 with OFFSET 3. What do they see first?Người dùng đọc trang 1 (id 1000000, 999999, 999998) của bảng tin mới nhất trước; có người đăng ghi chú 1000001; người dùng mở trang 2 với OFFSET 3. Họ thấy gì đầu tiên?\n3. A feed sorted by createdAt alone uses WHERE \"createdAt\" < $cursor. What goes wrong?Bảng tin chỉ sắp theo createdAt dùng WHERE \"createdAt\" < $cursor. Cái gì hỏng?\n4. SELECT count(*) took 45 ms on every list request to show “page 3 of 500”. What does the lesson prefer?SELECT count(*) tốn 45 ms ở mọi request danh sách chỉ để hiện \"trang 3 / 500\". Bài ưu tiên gì?\n5. $queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`). Why can you not fix this with a placeholder?$queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`). Vì sao không sửa bằng placeholder được?\n6. Which endpoint should stay on offset pagination?Endpoint nào nên giữ phân trang offset?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4 · 1 — Offset, cursor and the cost nobody sees — answer key\n\n1. LIMIT 20 OFFSET 999980 took 166.8 ms and scanned 1,000,000 rows. Why?LIMIT 20 OFFSET 999980 mất 166,8 ms và quét 1.000.000 dòng. Vì sao?\n   Answer: c) OFFSET is a count-and-discard, not a seek: the database reads every skipped row in order and throws them away\n   Cost of page N grows linearly with N — your heaviest queries serve your least valuable traffic. Cursor: 0.015 ms, 20 rows scanned.VI: Chi phí trang N tăng tuyến tính theo N — truy vấn nặng nhất phục vụ lượt truy cập ít giá trị nhất. Cursor: 0,015 ms, quét 20 dòng.\n\n2. A user reads page 1 (ids 1000000, 999999, 999998) of a newest-first feed; someone posts note 1000001; the user opens page 2 with OFFSET 3. What do they see first?Người dùng đọc trang 1 (id 1000000, 999999, 999998) của bảng tin mới nhất trước; có người đăng ghi chú 1000001; người dùng mở trang 2 với OFFSET 3. Họ thấy gì đầu tiên?\n   Answer: c) 999998 again — the insert pushed every row down by one position\n   The cursor version (WHERE id < 999998) anchors to a ROW, not a position, so no duplicate. Deletes cause the mirror image: a row is skipped.VI: Bản cursor (WHERE id < 999998) neo vào một DÒNG, không phải vị trí, nên không trùng. Xoá gây hiện tượng ngược lại: một dòng bị bỏ qua.\n\n3. A feed sorted by createdAt alone uses WHERE \"createdAt\" < $cursor. What goes wrong?Bảng tin chỉ sắp theo createdAt dùng WHERE \"createdAt\" < $cursor. Cái gì hỏng?\n   Answer: b) Rows sharing a timestamp can be skipped or repeated\n   Always a tie-breaker: WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC.VI: Luôn có cột phá hoà: WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC.\n\n4. SELECT count(*) took 45 ms on every list request to show “page 3 of 500”. What does the lesson prefer?SELECT count(*) tốn 45 ms ở mọi request danh sách chỉ để hiện \"trang 3 / 500\". Bài ưu tiên gì?\n   Answer: c) Drop total and return hasMore, computed by fetching limit + 1 rows\n   Then the estimate (reltuples, 0.025 ms) for a “~1.2M results” label, or cache the exact count for a minute.VI: Sau đó là ước lượng (reltuples, 0,025 ms) cho nhãn \"~1,2 triệu kết quả\", hoặc cache số đếm đúng trong một phút.\n\n5. $queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`). Why can you not fix this with a placeholder?$queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`). Vì sao không sửa bằng placeholder được?\n   Answer: a) Placeholders bind VALUES, never identifiers like column names\n   Anything not on the list never reaches the query. And every sortable column needs an index.VI: Thứ gì không có trong danh sách thì không bao giờ tới truy vấn. Và mọi cột cho sắp xếp cần chỉ mục.\n\n6. Which endpoint should stay on offset pagination?Endpoint nào nên giữ phân trang offset?\n   Answer: a) An admin table where people expect page numbers, rows are few and nobody inserts mid-scroll\n   cuongthai.com: feed and messenger are cursor; admin tables stay offset on purpose. Two mechanisms, chosen per use case.VI: cuongthai.com: bảng tin và tin nhắn dùng cursor; bảng quản trị cố ý giữ offset. Hai cơ chế, chọn theo từng trường hợp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> OFFSET is a count-and-discard, not a seek: the database reads every skipped row in order and throws them away</p><p>Cost of page N grows linearly with N — your heaviest queries serve your least valuable traffic. Cursor: 0.015 ms, 20 rows scanned.</p><p><i>VI: Chi phí trang N tăng tuyến tính theo N — truy vấn nặng nhất phục vụ lượt truy cập ít giá trị nhất. Cursor: 0,015 ms, quét 20 dòng.</i></p></li><li><p><b>c)</b> 999998 again — the insert pushed every row down by one position</p><p>The cursor version (WHERE id < 999998) anchors to a ROW, not a position, so no duplicate. Deletes cause the mirror image: a row is skipped.</p><p><i>VI: Bản cursor (WHERE id < 999998) neo vào một DÒNG, không phải vị trí, nên không trùng. Xoá gây hiện tượng ngược lại: một dòng bị bỏ qua.</i></p></li><li><p><b>b)</b> Rows sharing a timestamp can be skipped or repeated</p><p>Always a tie-breaker: WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC.</p><p><i>VI: Luôn có cột phá hoà: WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC.</i></p></li><li><p><b>c)</b> Drop total and return hasMore, computed by fetching limit + 1 rows</p><p>Then the estimate (reltuples, 0.025 ms) for a “~1.2M results” label, or cache the exact count for a minute.</p><p><i>VI: Sau đó là ước lượng (reltuples, 0,025 ms) cho nhãn \"~1,2 triệu kết quả\", hoặc cache số đếm đúng trong một phút.</i></p></li><li><p><b>a)</b> Placeholders bind VALUES, never identifiers like column names</p><p>Anything not on the list never reaches the query. And every sortable column needs an index.</p><p><i>VI: Thứ gì không có trong danh sách thì không bao giờ tới truy vấn. Và mọi cột cho sắp xếp cần chỉ mục.</i></p></li><li><p><b>a)</b> An admin table where people expect page numbers, rows are few and nobody inserts mid-scroll</p><p>cuongthai.com: feed and messenger are cursor; admin tables stay offset on purpose. Two mechanisms, chosen per use case.</p><p><i>VI: cuongthai.com: bảng tin và tin nhắn dùng cursor; bảng quản trị cố ý giữ offset. Hai cơ chế, chọn theo từng trường hợp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>LIMIT 20 OFFSET 999980</code> took 166.8 ms and scanned 1,000,000 rows. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>LIMIT 20 OFFSET 999980</code> mất 166,8 ms và quét 1.000.000 dòng. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The index on id was not used because the table was too big"
+              },
+              {
+                "ma": "b",
+                "noiDung": "LIMIT is applied before OFFSET, so all rows are returned to Node first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "OFFSET is a count-and-discard, not a seek: the database reads every skipped row in order and throws them away"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL caches only the first 500,000 rows"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Cost of page N grows linearly with N — your heaviest queries serve your least valuable traffic. Cursor: 0.015 ms, 20 rows scanned.</p><p><i>VI: Chi phí trang N tăng tuyến tính theo N — truy vấn nặng nhất phục vụ lượt truy cập ít giá trị nhất. Cursor: 0,015 ms, quét 20 dòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A user reads page 1 (ids 1000000, 999999, 999998) of a newest-first feed; someone posts note 1000001; the user opens page 2 with OFFSET 3. What do they see first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng đọc trang 1 (id 1000000, 999999, 999998) của bảng tin mới nhất trước; có người đăng ghi chú 1000001; người dùng mở trang 2 với OFFSET 3. Họ thấy gì đầu tiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1000001 — new rows are appended to the current page"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An error, because the result set changed between queries"
+              },
+              {
+                "ma": "c",
+                "noiDung": "999998 again — the insert pushed every row down by one position"
+              },
+              {
+                "ma": "d",
+                "noiDung": "999997 — OFFSET always skips exactly what was shown"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The cursor version (WHERE id < 999998) anchors to a ROW, not a position, so no duplicate. Deletes cause the mirror image: a row is skipped.</p><p><i>VI: Bản cursor (WHERE id < 999998) neo vào một DÒNG, không phải vị trí, nên không trùng. Xoá gây hiện tượng ngược lại: một dòng bị bỏ qua.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A feed sorted by <code>createdAt</code> alone uses <code>WHERE \"createdAt\" &lt; $cursor</code>. What goes wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng tin chỉ sắp theo <code>createdAt</code> dùng <code>WHERE \"createdAt\" &lt; $cursor</code>. Cái gì hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The cursor must be a page number instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rows sharing a timestamp can be skipped or repeated"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing: timestamps are unique to the millisecond"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The query cannot use any index"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Always a tie-breaker: WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC.</p><p><i>VI: Luôn có cột phá hoà: WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p><code>SELECT count(*)</code> took 45 ms on every list request to show “page 3 of 500”. What does the lesson prefer?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>SELECT count(*)</code> tốn 45 ms ở mọi request danh sách chỉ để hiện \"trang 3 / 500\". Bài ưu tiên gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use OFFSET to count instead of count(*)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Run count(*) in a setTimeout so it does not block"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Drop total and return hasMore, computed by fetching limit + 1 rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cache the whole table in Node memory"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Then the estimate (reltuples, 0.025 ms) for a “~1.2M results” label, or cache the exact count for a minute.</p><p><i>VI: Sau đó là ước lượng (reltuples, 0,025 ms) cho nhãn \"~1,2 triệu kết quả\", hoặc cache số đếm đúng trong một phút.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p><code>$queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`)</code>. Why can you not fix this with a placeholder?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>$queryRawUnsafe(`SELECT * FROM notes ORDER BY ${req.query.sort}`)</code>. Vì sao không sửa bằng placeholder được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Placeholders bind VALUES, never identifiers like column names"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL does not support placeholders in SELECT"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Placeholders are slower than string concatenation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because sort is always a number"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Anything not on the list never reaches the query. And every sortable column needs an index.</p><p><i>VI: Thứ gì không có trong danh sách thì không bao giờ tới truy vấn. Và mọi cột cho sắp xếp cần chỉ mục.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Which endpoint should stay on offset pagination?</p><p style=\"opacity:.75;font-size:.92em\"><i>Endpoint nào nên giữ phân trang offset?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An admin table where people expect page numbers, rows are few and nobody inserts mid-scroll"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A chat history with millions of messages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A notification stream ordered by time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An infinite-scroll feed with new posts every second"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>cuongthai.com: feed and messenger are cursor; admin tables stay offset on purpose. Two mechanisms, chosen per use case.</p><p><i>VI: cuongthai.com: bảng tin và tin nhắn dùng cursor; bảng quản trị cố ý giữ offset. Hai cơ chế, chọn theo từng trường hợp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking OFFSET is a cheap seek because it is backed by an index.|||Nghĩ OFFSET là phép nhảy rẻ vì có chỉ mục."
+        },
+        {
+          "loi": "A cursor on createdAt alone, without the id tie-breaker.|||Cursor chỉ có createdAt, thiếu cột phá hoà id."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "offset drift",
+          "vi": "trôi offset",
+          "giaiThich": "Insert/xoá giữa hai trang làm trùng hoặc sót dòng."
+        },
+        {
+          "en": "keyset / cursor pagination",
+          "vi": "phân trang theo khoá",
+          "giaiThich": "Lấy các dòng sau một khoá ổn định."
+        },
+        {
+          "en": "tie-breaker",
+          "vi": "cột phá hoà",
+          "giaiThich": "id thêm vào thứ tự để khoá là duy nhất."
+        }
+      ]
+    },
+    {
+      "title": "6.4 · 2 — Write offsetPlan(query): page/limit → SQL, with the cap and the real cost",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "pagination",
+        "limit cap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Rule zero of lesson 6.4: a list endpoint always has a limit. Write <code>offsetPlan(query)</code> for <code>GET /notes?page=3&amp;limit=20</code> (values are strings or absent) returning <code>{ page, limit, offset, sql, rowsScanned }</code>:</p>\n<ul><li><code>page</code>: the integer part of <code>Number(query.page)</code>; missing, NaN, 0 or negative ⇒ <code>1</code>.</li>\n<li><code>limit</code>: the integer part of <code>Number(query.limit)</code>; missing/NaN/0 ⇒ <code>20</code>; then <b>clamp</b> to <code>1…50</code> (this endpoint serves your own browser app, so it clamps instead of rejecting).</li>\n<li><code>offset = (page − 1) × limit</code>; <code>sql = \"SELECT * FROM notes ORDER BY id LIMIT &lt;limit&gt; OFFSET &lt;offset&gt;\"</code>.</li>\n<li><code>rowsScanned = offset + limit</code> — what EXPLAIN ANALYZE showed: the database walks every skipped row.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Never produce a limit above 50 or below 1.</li>\n  <li>Numbers in the result are numbers, not strings.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật số 0 của bài 6.4: endpoint danh sách luôn có giới hạn. Viết <code>offsetPlan(query)</code> cho <code>GET /notes?page=3&amp;limit=20</code> (giá trị là chuỗi hoặc vắng) trả <code>{ page, limit, offset, sql, rowsScanned }</code>:</p>\n<ul><li><code>page</code>: phần nguyên của <code>Number(query.page)</code>; vắng, NaN, 0 hay âm ⇒ <code>1</code>.</li>\n<li><code>limit</code>: phần nguyên của <code>Number(query.limit)</code>; vắng/NaN/0 ⇒ <code>20</code>; rồi <b>kẹp</b> vào <code>1…50</code> (endpoint này phục vụ app trình duyệt của chính bạn, nên kẹp thay vì từ chối).</li>\n<li><code>offset = (page − 1) × limit</code>; <code>sql = \"SELECT * FROM notes ORDER BY id LIMIT &lt;limit&gt; OFFSET &lt;offset&gt;\"</code>.</li>\n<li><code>rowsScanned = offset + limit</code> — đúng như EXPLAIN ANALYZE cho thấy: CSDL đi qua mọi dòng bị bỏ.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ cho limit trên 50 hay dưới 1.</li>\n  <li>Số trong kết quả là số, không phải chuỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "offsetPlan({\"page\":\"3\",\"limit\":\"20\"})",
+          "output": "{\"page\":3,\"limit\":20,\"offset\":40,\"sql\":\"SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40\",\"rowsScanned\":60}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>Math.trunc(Number(x)) || default</code> handles missing, NaN and 0 in one go.|||<code>Math.trunc(Number(x)) || mặc định</code> xử lý cùng lúc vắng, NaN và 0.",
+        "Clamp: <code>Math.min(50, Math.max(1, asked))</code>.|||Kẹp: <code>Math.min(50, Math.max(1, asked))</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function offsetPlan(query) {\n  // Write your solution here\n  const page = Number(query.page || 1);\n  const limit = Number(query.limit || 20);\n  const offset = page * limit;\n  return { page, limit, offset, sql: 'SELECT * FROM notes ORDER BY id LIMIT ' + limit + ' OFFSET ' + offset, rowsScanned: limit };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function offsetPlan(query) {\n  // everything in req.query is a string; missing/garbage -> defaults\n  const page = Math.max(1, Math.trunc(Number(query.page)) || 1);\n  const asked = Math.trunc(Number(query.limit)) || 20;\n  const limit = Math.min(50, Math.max(1, asked));            // rule zero: a list endpoint ALWAYS has a limit (clamped here)\n  const offset = (page - 1) * limit;\n  return {\n    page, limit, offset,\n    sql: 'SELECT * FROM notes ORDER BY id LIMIT ' + limit + ' OFFSET ' + offset,\n    rowsScanned: offset + limit,                               // OFFSET is count-and-discard: O(offset + limit)\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The cap protects the process; the rowsScanned number explains why offset pages get slower the deeper you go: 20 rows on page 1, 500,020 rows on page 25,001 — for the same 20 rows of output.</p>",
+      "solutionExplanationHtmlVi": "<p>Trần bảo vệ tiến trình; con số rowsScanned giải thích vì sao trang offset càng sâu càng chậm: 20 dòng ở trang 1, 500.020 dòng ở trang 25.001 — cho cùng 20 dòng kết quả.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: offsetPlan({\"page\":\"3\",\"limit\":\"20\"})",
+              "vi": "Ca 1"
+            },
+            "goi": "offsetPlan({\"page\":\"3\",\"limit\":\"20\"})",
+            "mongDoi": {
+              "page": 3,
+              "limit": 20,
+              "offset": 40,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40",
+              "rowsScanned": 60
+            }
+          },
+          {
+            "moTa": {
+              "en": "No query ⇒ page 1, limit 20",
+              "vi": "Không có query ⇒ trang 1, limit 20"
+            },
+            "goi": "offsetPlan({})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 20,
+              "offset": 0,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 0",
+              "rowsScanned": 20
+            }
+          },
+          {
+            "moTa": {
+              "en": "Huge limit is clamped to 50",
+              "vi": "limit khổng lồ bị kẹp về 50"
+            },
+            "goi": "offsetPlan({\"page\":\"25001\",\"limit\":\"1000000\"})",
+            "mongDoi": {
+              "page": 25001,
+              "limit": 50,
+              "offset": 1250000,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 50 OFFSET 1250000",
+              "rowsScanned": 1250050
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "offsetPlan({\"page\":\"-4\",\"limit\":\"abc\"})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 20,
+              "offset": 0,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 0",
+              "rowsScanned": 20
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "offsetPlan({\"page\":\"2.9\",\"limit\":\"-5\"})",
+            "mongDoi": {
+              "page": 2,
+              "limit": 1,
+              "offset": 1,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 1 OFFSET 1",
+              "rowsScanned": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "offsetPlan({\"page\":\"50001\",\"limit\":\"20\"})",
+            "mongDoi": {
+              "page": 50001,
+              "limit": 20,
+              "offset": 1000000,
+              "sql": "SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 1000000",
+              "rowsScanned": 1000020
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No maximum: <code>?limit=1000000</code> loads the table into RAM and blocks the event loop in JSON.stringify.|||Không có trần: <code>?limit=1000000</code> nạp cả bảng vào RAM và chặn event loop trong JSON.stringify."
+        },
+        {
+          "loi": "<code>offset = page × limit</code> — page 1 skips the first page.|||<code>offset = page × limit</code> — trang 1 bỏ mất trang đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clamp",
+          "vi": "kẹp",
+          "giaiThich": "Đưa giá trị về trong khoảng cho phép."
+        },
+        {
+          "en": "OFFSET",
+          "vi": "OFFSET",
+          "giaiThich": "Bỏ qua N dòng — vẫn phải đọc chúng."
+        }
+      ]
+    },
+    {
+      "title": "6.4 · 3 — Reproduce offset drift: pageByOffset, pageByCursor and scroll()",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "pagination",
+        "offset drift"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Reproduce lesson 6.4’s bug on plain arrays of ids (a newest-first feed = sorted by id descending). Write:</p>\n<ul><li><code>pageByOffset(ids, page, limit)</code> — the page at position <code>(page − 1) × limit</code> of the sorted ids.</li>\n<li><code>pageByCursor(ids, before, limit)</code> — the first <code>limit</code> sorted ids that are <code>&lt; before</code>; <code>before = null</code> means the first page.</li>\n<li><code>scroll(mode, ids, limit, change)</code> — <code>mode</code> is <code>\"offset\"</code> or <code>\"cursor\"</code>: read page 1, then <code>const now = change(ids)</code> (a function that returns the ids after someone inserts or deletes), then read page 2 from <code>now</code> (cursor mode: <code>before</code> = the last id of page 1). Return <code>{ page1, page2, duplicates }</code>, where <code>duplicates</code> = ids of page 2 already shown on page 1.</li></ul>\n<p>Do not mutate <code>ids</code>. With the lesson’s data the offset scroll shows <code>999998</code> twice; the cursor scroll shows <code>999997, 999996, 999995</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Sort a copy, never the input array.</li>\n  <li>Cursor pages are anchored to the last id shown, not to a position.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tái hiện lỗi của bài 6.4 trên mảng id thường (bảng tin mới nhất trước = sắp theo id giảm dần). Viết:</p>\n<ul><li><code>pageByOffset(ids, page, limit)</code> — trang ở vị trí <code>(page − 1) × limit</code> của các id đã sắp.</li>\n<li><code>pageByCursor(ids, before, limit)</code> — <code>limit</code> id đầu tiên (đã sắp) mà <code>&lt; before</code>; <code>before = null</code> nghĩa là trang đầu.</li>\n<li><code>scroll(mode, ids, limit, change)</code> — <code>mode</code> là <code>\"offset\"</code> hoặc <code>\"cursor\"</code>: đọc trang 1, rồi <code>const now = change(ids)</code> (hàm trả về các id sau khi có người thêm hay xoá), rồi đọc trang 2 từ <code>now</code> (chế độ cursor: <code>before</code> = id cuối của trang 1). Trả <code>{ page1, page2, duplicates }</code>, với <code>duplicates</code> = các id của trang 2 đã hiện ở trang 1.</li></ul>\n<p>Không sửa <code>ids</code>. Với dữ liệu của bài, cuộn offset hiện <code>999998</code> hai lần; cuộn cursor hiện <code>999997, 999996, 999995</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sắp một bản sao, không sắp mảng đầu vào.</li>\n  <li>Trang cursor neo vào id cuối đã hiện, không neo vào vị trí.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "scroll('offset', [999995,999996,999997,999998,999999,1000000], 3, (ids) => [...ids, 1000001])",
+          "output": "{\"page1\":[1000000,999999,999998],\"page2\":[999998,999997,999996],\"duplicates\":[999998]}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>[...ids].sort((a, b) => b - a)</code> then <code>slice</code> for offset, <code>filter</code> + <code>slice</code> for cursor.|||<code>[...ids].sort((a, b) => b - a)</code> rồi <code>slice</code> cho offset, <code>filter</code> + <code>slice</code> cho cursor.",
+        "In <code>scroll</code>, call <code>change(ids)</code> only once, between the two page reads.|||Trong <code>scroll</code>, gọi <code>change(ids)</code> đúng một lần, giữa hai lần đọc trang."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pageByOffset(ids, page, limit) {\n  // Write your solution here\n  return ids.sort().slice(page * limit, page * limit + limit);\n}\nfunction pageByCursor(ids, before, limit) {\n  return pageByOffset(ids, 1, limit);\n}\nfunction scroll(mode, ids, limit, change) {\n  return { page1: [], page2: [], duplicates: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pageByOffset(ids, page, limit) {\n  const sorted = [...ids].sort((a, b) => b - a);          // newest first: ORDER BY id DESC\n  return sorted.slice((page - 1) * limit, page * limit);  // LIMIT limit OFFSET (page-1)*limit — a POSITION\n}\n\nfunction pageByCursor(ids, before, limit) {\n  const sorted = [...ids].sort((a, b) => b - a);\n  // WHERE id < before ORDER BY id DESC LIMIT limit — anchored to a ROW (null = first page)\n  return sorted.filter((id) => before == null || id < before).slice(0, limit);\n}\n\nfunction scroll(mode, ids, limit, changeAfterPage1) {\n  // read page 1, let the world change, read page 2 — exactly the lesson's experiment\n  const p1 = mode === 'offset' ? pageByOffset(ids, 1, limit) : pageByCursor(ids, null, limit);\n  const now = changeAfterPage1(ids);\n  const p2 = mode === 'offset' ? pageByOffset(now, 2, limit) : pageByCursor(now, p1[p1.length - 1], limit);\n  return { page1: p1, page2: p2, duplicates: p2.filter((id) => p1.includes(id)) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>OFFSET names a position in a result set that is recomputed on every request, so any insert above the window shifts it (duplicate) and any delete shifts it the other way (skip). A cursor names a row: the next page is “rows after this one”, which no insert or delete elsewhere can move. That is why the bug never reproduces on a test database where nothing is written.</p>",
+      "solutionExplanationHtmlVi": "<p>OFFSET gọi tên một vị trí trong tập kết quả được tính lại ở mỗi request, nên insert phía trên cửa sổ làm nó dịch (trùng) và xoá làm nó dịch ngược (sót). Cursor gọi tên một dòng: trang sau là \"các dòng sau dòng này\", không insert hay xoá nào ở chỗ khác dời được nó. Vì thế lỗi không bao giờ tái hiện trên CSDL thử nghiệm không ai ghi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Offset + an insert ⇒ 999998 twice",
+              "vi": "Offset + một insert ⇒ 999998 hai lần"
+            },
+            "goi": "scroll('offset', [999995,999996,999997,999998,999999,1000000], 3, (ids) => [...ids, 1000001])",
+            "mongDoi": {
+              "page1": [
+                1000000,
+                999999,
+                999998
+              ],
+              "page2": [
+                999998,
+                999997,
+                999996
+              ],
+              "duplicates": [
+                999998
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Cursor + the same insert ⇒ no duplicate",
+              "vi": "Cursor + cùng insert ⇒ không trùng"
+            },
+            "goi": "scroll('cursor', [999995,999996,999997,999998,999999,1000000], 3, (ids) => [...ids, 1000001])",
+            "mongDoi": {
+              "page1": [
+                1000000,
+                999999,
+                999998
+              ],
+              "page2": [
+                999997,
+                999996,
+                999995
+              ],
+              "duplicates": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: [pageByOffset([999995,999996,999997,999998,999999,1000000], 2, 4), pageByCurs...",
+              "vi": "Ca 3"
+            },
+            "goi": "[pageByOffset([999995,999996,999997,999998,999999,1000000], 2, 4), pageByCursor([999995,999996,999997,999998,999999,1000000], null, 2)]",
+            "mongDoi": [
+              [
+                999996,
+                999995
+              ],
+              [
+                1000000,
+                999999
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Offset + a delete ⇒ a row is skipped",
+              "vi": "Offset + một lần xoá ⇒ một dòng bị sót"
+            },
+            "goi": "scroll('offset', [999995,999996,999997,999998,999999,1000000], 2, (ids) => ids.filter((id) => id !== 999999))",
+            "mongDoi": {
+              "page1": [
+                1000000,
+                999999
+              ],
+              "page2": [
+                999997,
+                999996
+              ],
+              "duplicates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "scroll('cursor', [999995,999996,999997,999998,999999,1000000], 2, (ids) => ids.filter((id) => id !== 999999))",
+            "mongDoi": {
+              "page1": [
+                1000000,
+                999999
+              ],
+              "page2": [
+                999998,
+                999997
+              ],
+              "duplicates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Numeric sort, input untouched",
+              "vi": "Sắp theo số, đầu vào giữ nguyên"
+            },
+            "goi": "(() => { const ids = [3, 10, 2, 100]; const r = pageByOffset(ids, 1, 2); return [r, ids]; })()",
+            "mongDoi": [
+              [
+                100,
+                10
+              ],
+              [
+                3,
+                10,
+                2,
+                100
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "scroll('cursor', [5, 4, 3, 2, 1], 2, (ids) => [...ids, 6, 7, 8])",
+            "mongDoi": {
+              "page1": [
+                5,
+                4
+              ],
+              "page2": [
+                3,
+                2
+              ],
+              "duplicates": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>ids.sort()</code> without a comparator sorts as strings and mutates the input: \"1000000\" sorts before \"999995\".|||<code>ids.sort()</code> không có hàm so sánh sắp theo chuỗi và sửa luôn đầu vào: \"1000000\" đứng trước \"999995\"."
+        },
+        {
+          "loi": "Using the page number in cursor mode — then it is just offset with extra steps.|||Dùng số trang ở chế độ cursor — khi đó nó chỉ là offset đi đường vòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anchor",
+          "vi": "mỏ neo",
+          "giaiThich": "Cursor neo vào một dòng."
+        },
+        {
+          "en": "result set",
+          "vi": "tập kết quả",
+          "giaiThich": "Các dòng một truy vấn trả về."
+        }
+      ]
+    },
+    {
+      "title": "6.4 · 4 — Write orderByClause(query): sorting from the query string without SQL injection",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "SQL injection",
+        "sorting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Column names cannot be passed as query parameters — a placeholder works for values, never for identifiers.” So a sort field from the URL must go through an <b>allow-list</b>. Write <code>orderByClause(query)</code>:</p>\n<ul><li>Sortable fields and their SQL identifiers: <code>createdAt → \"createdAt\"</code>, <code>title → title</code>, <code>updatedAt → \"updatedAt\"</code> (Prisma’s camelCase columns need double quotes).</li>\n<li>Defaults: <code>sort = \"createdAt\"</code>, <code>order = \"desc\"</code>; <code>order</code> is case-insensitive (<code>ASC</code> is fine).</li>\n<li>A sort not on the list ⇒ throw <code>new AppError(422, 'INVALID_SORT', …)</code>; an order other than asc/desc ⇒ <code>AppError(422, 'INVALID_ORDER', …)</code>.</li>\n<li>Always add the tie-breaker in the same direction: <code>ORDER BY \"createdAt\" DESC, id DESC</code>.</li></ul>\n<p>Be careful with “is it on the list?”: <code>query.sort = \"constructor\"</code> or <code>\"toString\"</code> exist on every plain object.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The client value never appears in the returned SQL — only your own identifiers do.</li>\n  <li>Always end with the id tie-breaker.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Tên cột không truyền được dưới dạng tham số truy vấn — placeholder dùng cho giá trị, không bao giờ cho định danh.\" Vì vậy trường sắp xếp lấy từ URL phải đi qua <b>danh sách cho phép</b>. Viết <code>orderByClause(query)</code>:</p>\n<ul><li>Trường cho sắp xếp và định danh SQL: <code>createdAt → \"createdAt\"</code>, <code>title → title</code>, <code>updatedAt → \"updatedAt\"</code> (cột camelCase của Prisma cần ngoặc kép).</li>\n<li>Mặc định: <code>sort = \"createdAt\"</code>, <code>order = \"desc\"</code>; <code>order</code> không phân biệt hoa thường (<code>ASC</code> được).</li>\n<li>sort không có trong danh sách ⇒ ném <code>new AppError(422, 'INVALID_SORT', …)</code>; order khác asc/desc ⇒ <code>AppError(422, 'INVALID_ORDER', …)</code>.</li>\n<li>Luôn thêm cột phá hoà cùng chiều: <code>ORDER BY \"createdAt\" DESC, id DESC</code>.</li></ul>\n<p>Cẩn thận với phép \"có trong danh sách không?\": <code>query.sort = \"constructor\"</code> hay <code>\"toString\"</code> có sẵn trên mọi object thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị của client không bao giờ xuất hiện trong SQL trả về — chỉ có định danh của bạn.</li>\n  <li>Luôn kết thúc bằng cột phá hoà id.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tryIt({})",
+          "output": "\"ORDER BY \\\"createdAt\\\" DESC, id DESC\"",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a map <code>{ createdAt: '\"createdAt\"', … }</code> and check it with <code>Object.prototype.hasOwnProperty.call(map, sort)</code>.|||Giữ một bảng <code>{ createdAt: '\"createdAt\"', … }</code> và kiểm bằng <code>Object.prototype.hasOwnProperty.call(map, sort)</code>.",
+        "Lower-case the order before comparing, upper-case it when writing SQL.|||Hạ chữ thường order trước khi so, viết hoa khi ghi vào SQL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function orderByClause(query) {\n  // Write your solution here\n  return 'ORDER BY ' + (query.sort || 'createdAt') + ' ' + (query.order || 'desc');\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function orderByClause(query) {\n  // the set of sortable fields is a deliberate API decision — and the mapping to SQL identifiers is OURS\n  const SORTABLE = { createdAt: '\"createdAt\"', title: 'title', updatedAt: '\"updatedAt\"' };\n  const sort = query.sort ?? 'createdAt';                     // a stable default: without ORDER BY, pagination is lossy\n  const order = (query.order ?? 'desc').toLowerCase();\n  if (!Object.prototype.hasOwnProperty.call(SORTABLE, sort)) throw new AppError(422, 'INVALID_SORT', 'sort must be one of ' + Object.keys(SORTABLE).join(', '));\n  if (order !== 'asc' && order !== 'desc') throw new AppError(422, 'INVALID_ORDER', 'order must be asc or desc');\n  const dir = order.toUpperCase();\n  // the id tie-breaker goes in the SAME direction, so the order is total and a cursor can be built on it\n  return 'ORDER BY ' + SORTABLE[sort] + ' ' + dir + ', id ' + dir;\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Escaping is the wrong tool for identifiers; choosing is the right one. Because the returned SQL only ever contains strings you wrote, no client input can change its meaning. The tie-breaker makes the order total, which is what both offset and cursor pagination silently rely on.</p>",
+      "solutionExplanationHtmlVi": "<p>Thoát ký tự là công cụ sai cho định danh; chọn mới là công cụ đúng. Vì SQL trả về chỉ chứa chuỗi do bạn viết, không input nào của client đổi được nghĩa của nó. Cột phá hoà làm thứ tự thành toàn phần — điều mà cả phân trang offset lẫn cursor đều ngầm dựa vào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Defaults",
+              "vi": "Mặc định"
+            },
+            "goi": "tryIt({})",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": "ORDER BY \"createdAt\" DESC, id DESC"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: tryIt({ sort: 'title', order: 'ASC' })",
+              "vi": "Ca 2"
+            },
+            "goi": "tryIt({ sort: 'title', order: 'ASC' })",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": "ORDER BY title ASC, id ASC"
+          },
+          {
+            "moTa": {
+              "en": "Injection attempt ⇒ 422",
+              "vi": "Thử chèn mã ⇒ 422"
+            },
+            "goi": "tryIt({ sort: 'title; DROP TABLE \"Note\"' })",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 422,
+              "code": "INVALID_SORT"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[tryIt({ sort: 'constructor' }), tryIt({ sort: 'toString' }), tryIt({ sort: '__proto__' })]",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "status": 422,
+                "code": "INVALID_SORT"
+              },
+              {
+                "thrown": "AppError",
+                "status": 422,
+                "code": "INVALID_SORT"
+              },
+              {
+                "thrown": "AppError",
+                "status": 422,
+                "code": "INVALID_SORT"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[tryIt({ sort: 'updatedAt', order: 'Desc' }), tryIt({ order: 'sideways' })]",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              "ORDER BY \"updatedAt\" DESC, id DESC",
+              {
+                "thrown": "AppError",
+                "status": 422,
+                "code": "INVALID_ORDER"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "tryIt({ sort: 'createdAt', order: 'asc' })",
+            "chuanBi": "const tryIt = (q) => { try { return orderByClause(q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": "ORDER BY \"createdAt\" ASC, id ASC",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>\"ORDER BY \" + query.sort</code> — SQL injection with extra steps.|||<code>\"ORDER BY \" + query.sort</code> — SQL injection đi đường vòng."
+        },
+        {
+          "loi": "<code>if (map[sort])</code> — <code>\"constructor\"</code> passes because every object inherits it.|||<code>if (map[sort])</code> — <code>\"constructor\"</code> lọt qua vì object nào cũng thừa kế nó."
+        },
+        {
+          "loi": "Forgetting the tie-breaker: two rows with the same createdAt come back in any order, and pagination silently loses rows.|||Quên cột phá hoà: hai dòng cùng createdAt trả về thứ tự tuỳ ý, và phân trang lặng lẽ mất dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "identifier",
+          "vi": "định danh",
+          "giaiThich": "Tên bảng/cột trong SQL."
+        },
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        }
+      ]
+    },
+    {
+      "title": "6.4 · 5 — Write feedPage(rows, query): an opaque (createdAt, id) cursor with hasMore and no count",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "cursor pagination",
+        "keyset"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 6.4’s final design for a newest-first feed, on an in-memory array of rows <code>{ id, createdAt }</code> (ISO strings — they sort correctly as text). Write <code>feedPage(rows, query)</code> returning <code>{ items, nextCursor, hasMore }</code>:</p>\n<ul><li>Order: <code>createdAt</code> descending, then <code>id</code> descending (several rows share a timestamp).</li>\n<li><code>limit</code>: integer part of <code>Number(query.limit)</code>; missing/NaN/0 ⇒ 20; then clamped to 1…50.</li>\n<li><code>query.cursor</code> (optional) is an <b>opaque</b> string: base64url of <code>JSON.stringify({ createdAt, id })</code> of the last row of the previous page. The next page = rows strictly after it in the order above — i.e. <code>(createdAt, id) &lt; (cursor.createdAt, cursor.id)</code>.</li>\n<li>A cursor that is not valid base64url, not JSON, or lacks a string <code>createdAt</code> / integer <code>id</code> ⇒ throw <code>new AppError(400, 'INVALID_CURSOR', 'cursor is not valid')</code>.</li>\n<li>Fetch <code>limit + 1</code> rows: if you got the extra one, <code>hasMore = true</code> and <code>nextCursor</code> = cursor of the last returned item; otherwise <code>hasMore = false</code>, <code>nextCursor = null</code>.</li></ul>\n<p><code>helpers.js</code> gives you <code>utf8(str)</code>, <code>fromUtf8(bytes)</code>, <code>b64url(bytes)</code>, <code>unb64url(text)</code> (null if invalid) and <code>AppError</code> — the grader has no <code>Buffer</code>. Hidden checks walk the whole feed page by page and require every row exactly once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Compare (createdAt, id) together — never createdAt alone.</li>\n  <li>No total and no count: hasMore comes from the extra row.</li>\n  <li>The cursor is built by the server; a client-invented one is rejected with 400.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thiết kế cuối của bài 6.4 cho bảng tin mới nhất trước, trên mảng dòng <code>{ id, createdAt }</code> trong bộ nhớ (chuỗi ISO — sắp theo chữ là đúng thứ tự). Viết <code>feedPage(rows, query)</code> trả <code>{ items, nextCursor, hasMore }</code>:</p>\n<ul><li>Thứ tự: <code>createdAt</code> giảm dần, rồi <code>id</code> giảm dần (nhiều dòng cùng thời điểm).</li>\n<li><code>limit</code>: phần nguyên của <code>Number(query.limit)</code>; vắng/NaN/0 ⇒ 20; rồi kẹp vào 1…50.</li>\n<li><code>query.cursor</code> (tuỳ chọn) là chuỗi <b>mờ</b>: base64url của <code>JSON.stringify({ createdAt, id })</code> của dòng cuối trang trước. Trang sau = các dòng đứng sau nó theo thứ tự trên — tức <code>(createdAt, id) &lt; (cursor.createdAt, cursor.id)</code>.</li>\n<li>Cursor không phải base64url hợp lệ, không phải JSON, hay thiếu <code>createdAt</code> chuỗi / <code>id</code> số nguyên ⇒ ném <code>new AppError(400, 'INVALID_CURSOR', 'cursor is not valid')</code>.</li>\n<li>Lấy <code>limit + 1</code> dòng: có dòng thừa thì <code>hasMore = true</code> và <code>nextCursor</code> = cursor của phần tử cuối được trả; không thì <code>hasMore = false</code>, <code>nextCursor = null</code>.</li></ul>\n<p><code>helpers.js</code> cho sẵn <code>utf8(str)</code>, <code>fromUtf8(bytes)</code>, <code>b64url(bytes)</code>, <code>unb64url(text)</code> (null nếu sai) và <code>AppError</code> — máy chấm không có <code>Buffer</code>. Kiểm ẩn đi hết bảng tin từng trang và đòi mỗi dòng xuất hiện đúng một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So (createdAt, id) cùng nhau — không bao giờ chỉ createdAt.</li>\n  <li>Không total và không đếm: hasMore đến từ dòng thừa.</li>\n  <li>Cursor do server dựng; cursor client bịa bị từ chối với 400.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "feedPage(FEED, { limit: '3' })",
+          "output": "{\"items\":[{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"}],\"nextCursor\":\"eyJjcmVhdGVkQXQiOiIyMDI2LTA3LTI4VDA5OjAwOjAwLjAwMFoiLCJpZCI6Nn0\",\"hasMore\":true}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sort a copy with a comparator that falls back to <code>b.id - a.id</code> when the timestamps are equal.|||Sắp một bản sao với hàm so sánh rơi về <code>b.id - a.id</code> khi thời điểm bằng nhau.",
+        "After the cursor filter: <code>const w = after.slice(0, limit + 1)</code>; <code>hasMore = w.length > limit</code>; return the first <code>limit</code>.|||Sau bộ lọc cursor: <code>const w = after.slice(0, limit + 1)</code>; <code>hasMore = w.length > limit</code>; trả <code>limit</code> phần tử đầu.",
+        "Decoding: <code>unb64url</code> → null check → <code>JSON.parse(fromUtf8(bytes))</code> in try/catch → validate both fields.|||Giải mã: <code>unb64url</code> → kiểm null → <code>JSON.parse(fromUtf8(bytes))</code> trong try/catch → kiểm cả hai trường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function feedPage(rows, query) {\n  // Write your solution here\n  const limit = Number(query.limit) || 20;\n  const ordered = [...rows].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));\n  const start = query.cursor ? Number(query.cursor) : 0;\n  const items = ordered.slice(start, start + limit);\n  return { items, nextCursor: String(start + limit), hasMore: items.length === limit };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n\n// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function encodeCursor(row) {\n  // opaque to the client: base64url of JSON — the shape stays ours to change\n  return b64url(utf8(JSON.stringify({ createdAt: row.createdAt, id: row.id })));\n}\n\nfunction decodeCursor(text) {\n  const bytes = unb64url(text);\n  let c = null;\n  try { c = bytes && JSON.parse(fromUtf8(bytes)); } catch { c = null; }\n  if (!c || typeof c.createdAt !== 'string' || !Number.isInteger(c.id)) throw new AppError(400, 'INVALID_CURSOR', 'cursor is not valid');\n  return c;\n}\n\nfunction feedPage(rows, query) {\n  const limit = Math.min(50, Math.max(1, Math.trunc(Number(query.limit)) || 20));\n  // newest first, with id as the tie-breaker: ORDER BY \"createdAt\" DESC, id DESC\n  const ordered = [...rows].sort((a, b) => (a.createdAt === b.createdAt ? b.id - a.id : (a.createdAt < b.createdAt ? 1 : -1)));\n  let after = ordered;\n  if (query.cursor) {\n    const c = decodeCursor(query.cursor);\n    // WHERE (\"createdAt\", id) < ($1, $2) — a row-value comparison, both columns together\n    after = ordered.filter((r) => r.createdAt < c.createdAt || (r.createdAt === c.createdAt && r.id < c.id));\n  }\n  const window = after.slice(0, limit + 1);                 // one extra row answers \"is there more?\" — no count(*)\n  const hasMore = window.length > limit;\n  const items = hasMore ? window.slice(0, limit) : window;\n  return { items, nextCursor: hasMore ? encodeCursor(items[items.length - 1]) : null, hasMore };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\nfunction hmacSha256(key, msg) { // arrays of bytes ⇒ array of 32 bytes (RFC 2104)\n  if (key.length > 64) key = sha256(key);\n  var k = key.slice(); while (k.length < 64) k.push(0);\n  var ipad = k.map(function (b) { return b ^ 0x36; });\n  var opad = k.map(function (b) { return b ^ 0x5c; });\n  return sha256(opad.concat(sha256(ipad.concat(msg))));\n}\nfunction b64url(bytes) { // array of bytes ⇒ base64url text, no padding\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  var out = '';\n  for (var i = 0; i < bytes.length; i += 3) {\n    var n = (bytes[i] << 16) | ((bytes[i + 1] || 0) << 8) | (bytes[i + 2] || 0);\n    var left = bytes.length - i;\n    out += A[(n >> 18) & 63] + A[(n >> 12) & 63] + (left > 1 ? A[(n >> 6) & 63] : '') + (left > 2 ? A[n & 63] : '');\n  }\n  return out;\n}\nfunction unb64url(text) { // base64url text ⇒ array of bytes, or null if it is not valid base64url\n  var A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  if (typeof text !== 'string' || !/^[A-Za-z0-9_-]*$/.test(text) || text.length % 4 === 1) return null;\n  var bytes = [], bits = 0, acc = 0;\n  for (var i = 0; i < text.length; i++) {\n    acc = (acc << 6) | A.indexOf(text[i]); bits += 6;\n    if (bits >= 8) { bits -= 8; bytes.push((acc >> bits) & 255); }\n  }\n  return bytes;\n}\nfunction fromUtf8(bytes) { // array of bytes ⇒ string (valid UTF-8 assumed)\n  var s = '';\n  for (var i = 0; i < bytes.length;) {\n    var b = bytes[i], c;\n    if (b < 0x80) { c = b; i += 1; }\n    else if (b < 0xe0) { c = ((b & 31) << 6) | (bytes[i + 1] & 63); i += 2; }\n    else if (b < 0xf0) { c = ((b & 15) << 12) | ((bytes[i + 1] & 63) << 6) | (bytes[i + 2] & 63); i += 3; }\n    else { c = ((b & 7) << 18) | ((bytes[i + 1] & 63) << 12) | ((bytes[i + 2] & 63) << 6) | (bytes[i + 3] & 63); i += 4; }\n    s += String.fromCodePoint(c);\n  }\n  return s;\n}\n\n// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The pair (createdAt, id) is unique, so “strictly after this pair” is a well-defined position that inserts and deletes cannot shift — the property that makes a cursor correct, not just fast. Encoding it as opaque base64url keeps the shape yours: you can add a field later without touching any client. And limit + 1 answers hasMore with zero extra queries — the 45 ms count(*) disappears.</p>",
+      "solutionExplanationHtmlVi": "<p>Cặp (createdAt, id) là duy nhất, nên \"ngay sau cặp này\" là một vị trí xác định mà insert hay xoá không dời được — tính chất làm cursor ĐÚNG, không chỉ nhanh. Mã hoá thành base64url mờ giữ hình dạng là của bạn: sau này thêm trường không phải sửa client nào. Và limit + 1 trả lời hasMore mà không cần truy vấn thêm — count(*) 45 ms biến mất.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page, limit 3",
+              "vi": "Trang đầu, limit 3"
+            },
+            "goi": "feedPage(FEED, { limit: '3' })",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "items": [
+                {
+                  "id": 8,
+                  "createdAt": "2026-07-29T07:00:00.000Z"
+                },
+                {
+                  "id": 7,
+                  "createdAt": "2026-07-28T09:00:00.000Z"
+                },
+                {
+                  "id": 6,
+                  "createdAt": "2026-07-28T09:00:00.000Z"
+                }
+              ],
+              "nextCursor": "eyJjcmVhdGVkQXQiOiIyMDI2LTA3LTI4VDA5OjAwOjAwLjAwMFoiLCJpZCI6Nn0",
+              "hasMore": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Second page crosses the 09:00 tie",
+              "vi": "Trang hai đi qua chỗ hoà 09:00"
+            },
+            "goi": "(() => { const p1 = feedPage(FEED, { limit: '3' }); return feedPage(FEED, { limit: '3', cursor: p1.nextCursor }).items.map((r) => r.id); })()",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              5,
+              4,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Invented cursor ⇒ 400",
+              "vi": "Cursor bịa ⇒ 400"
+            },
+            "goi": "tryIt({ cursor: '%%%not-base64%%%' })",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 400,
+              "code": "INVALID_CURSOR"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Walk the feed: every row exactly once",
+              "vi": "Đi hết bảng tin: mỗi dòng đúng một lần"
+            },
+            "goi": "[walk(FEED, 2).pages, walk(FEED, 4).pages, walk(FEED, 8).pages]",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              [
+                [
+                  8,
+                  7
+                ],
+                [
+                  6,
+                  5
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  2,
+                  1
+                ]
+              ],
+              [
+                [
+                  8,
+                  7,
+                  6,
+                  5
+                ],
+                [
+                  4,
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              [
+                [
+                  8,
+                  7,
+                  6,
+                  5,
+                  4,
+                  3,
+                  2,
+                  1
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[tryIt({ cursor: b64url(utf8('{\"createdAt\":5,\"id\":1}')) }), tryIt({ cursor: b64url(utf8('not json')) }), tryIt({ cursor: b64url(utf8('{\"createdAt\":\"2026-07-28T09:00:00.000Z\",\"id\":\"6\"}')) })]",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "status": 400,
+                "code": "INVALID_CURSOR"
+              },
+              {
+                "thrown": "AppError",
+                "status": 400,
+                "code": "INVALID_CURSOR"
+              },
+              {
+                "thrown": "AppError",
+                "status": 400,
+                "code": "INVALID_CURSOR"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[feedPage(FEED, { limit: '0' }).items.length, feedPage(FEED, { limit: '1000' }).hasMore, feedPage([], {})]",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              8,
+              false,
+              {
+                "items": [],
+                "nextCursor": null,
+                "hasMore": false
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "feedPage(FEED, { limit: '2', cursor: b64url(utf8(JSON.stringify({ createdAt: '2026-07-28T09:00:00.000Z', id: 6 }))) })",
+            "chuanBi": "const FEED = [{\"id\":1,\"createdAt\":\"2026-07-27T09:00:00.000Z\"},{\"id\":2,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":3,\"createdAt\":\"2026-07-27T10:00:00.000Z\"},{\"id\":4,\"createdAt\":\"2026-07-28T08:30:00.000Z\"},{\"id\":5,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":6,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":7,\"createdAt\":\"2026-07-28T09:00:00.000Z\"},{\"id\":8,\"createdAt\":\"2026-07-29T07:00:00.000Z\"}];\nconst walk = (rows, limit) => { const seen = []; let cursor; for (let i = 0; i < 20; i++) { const p = feedPage(rows, { limit: String(limit), cursor }); seen.push(p.items.map((r) => r.id)); if (!p.hasMore) return { pages: seen, last: p }; cursor = p.nextCursor; } return { pages: seen, stuck: true }; };\nconst tryIt = (q) => { try { return feedPage(FEED, q); } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "items": [
+                {
+                  "id": 5,
+                  "createdAt": "2026-07-28T09:00:00.000Z"
+                },
+                {
+                  "id": 4,
+                  "createdAt": "2026-07-28T08:30:00.000Z"
+                }
+              ],
+              "nextCursor": "eyJjcmVhdGVkQXQiOiIyMDI2LTA3LTI4VDA4OjMwOjAwLjAwMFoiLCJpZCI6NH0",
+              "hasMore": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>r.createdAt &lt; cursor.createdAt</code> alone: rows 6 and 5 share 09:00 with row 7, so a page boundary there skips them.|||Chỉ <code>r.createdAt &lt; cursor.createdAt</code>: dòng 6 và 5 cùng 09:00 với dòng 7, nên ranh giới trang ở đó bỏ sót chúng."
+        },
+        {
+          "loi": "<code>&lt;=</code> instead of <code>&lt;</code> on id: the last row of a page reappears as the first row of the next.|||<code>&lt;=</code> thay vì <code>&lt;</code> trên id: dòng cuối trang này xuất hiện lại ở đầu trang sau."
+        },
+        {
+          "loi": "Computing hasMore as <code>items.length === limit</code>: a final page of exactly <code>limit</code> rows promises a next page that is empty.|||Tính hasMore bằng <code>items.length === limit</code>: trang cuối có đúng <code>limit</code> dòng hứa một trang sau trống rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "opaque cursor",
+          "vi": "cursor mờ",
+          "giaiThich": "Chuỗi client chỉ gửi lại, không tự dựng."
+        },
+        {
+          "en": "row-value comparison",
+          "vi": "so sánh bộ giá trị",
+          "giaiThich": "(a, b) < (x, y) trong SQL."
+        },
+        {
+          "en": "hasMore",
+          "vi": "còn nữa",
+          "giaiThich": "Có trang sau hay không."
+        }
+      ]
+    }
+  ]
+}

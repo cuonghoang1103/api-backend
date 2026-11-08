@@ -1,0 +1,861 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-5-opentelemetry-trace",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-5-opentelemetry-trace"
+  },
+  "exercises": [
+    {
+      "title": "Spans, the three silent traps, and what sampling really saves",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tracing",
+        "OpenTelemetry",
+        "ES modules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 15.5. (The import-order fact was re-run on Node 22: a static import placed AFTER a console.log still runs BEFORE it.)</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 15.5. (Chuyện thứ tự import đã chạy lại trên Node 22: một import tĩnh đặt SAU console.log vẫn chạy TRƯỚC nó.)</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "When does an imported module run, relative to the importing file’s first line?|||Một module được import chạy lúc nào so với dòng đầu của tệp import nó?",
+        "Separate “what is patched” from “what is recorded”.|||Tách “cái gì bị vá” khỏi “cái gì được ghi”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Spans, the three silent traps, and what sampling really saves\n\nAnswer in the answer panel (no code needed).\n\n1. tracing.mjs calls sdk.start() on line 1 and the file has import express from \"express\" further down. Only 2 spans arrive, no express or pg spans, no error. Why?tracing.mjs gọi sdk.start() ở dòng 1 và tệp có import express from \"express\" ở dưới. Chỉ 2 span tới, không có span express hay pg, không lỗi. Vì sao?\n2. A guide writes new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). With sdk-node 0.301, what happens?Một hướng dẫn viết new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). Với sdk-node 0.301 chuyện gì xảy ra?\n3. Your manual span service.listNotes ends up with 0 children; the pg spans sit beside it. What did the code forget?Span tự tạo service.listNotes có 0 con; các span pg nằm bên cạnh nó. Mã đã quên gì?\n4. OpenTelemetry cost −17.6% req/s. Sampler 0.01 exported 73× fewer spans. What happened to throughput and memory?OpenTelemetry làm giảm 17,6% req/s. Sampler 0.01 xuất ít hơn 73 lần span. Thông lượng và bộ nhớ ra sao?\n5. A request crosses 3 services. Which statements are true? (choose all that apply)Một request đi qua 3 dịch vụ. Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Spans, the three silent traps, and what sampling really saves — answer key\n\n1. tracing.mjs calls sdk.start() on line 1 and the file has import express from \"express\" further down. Only 2 spans arrive, no express or pg spans, no error. Why?tracing.mjs gọi sdk.start() ở dòng 1 và tệp có import express from \"express\" ở dưới. Chỉ 2 span tới, không có span express hay pg, không lỗi. Vì sao?\n   Answer: c) Static imports are hoisted: express and pg were loaded before sdk.start() could patch them\n   Every import at the top level runs before line 1 of your code. Fix: await import(\"express\") after sdk.start(), or node --import ./tracing.mjs app.js.VI: Mọi import cấp cao nhất chạy trước dòng 1 của mã bạn. Sửa: await import(\"express\") sau sdk.start(), hoặc node --import ./tracing.mjs app.js.\n\n2. A guide writes new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). With sdk-node 0.301, what happens?Một hướng dẫn viết new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). Với sdk-node 0.301 chuyện gì xảy ra?\n   Answer: b) 0 spans reach the exporter and nothing reports an error\n   3.x expects spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — plural, and an object. The old shapes are silently ignored. Pin the versions of the example you copy.VI: 3.x cần spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — số nhiều, và một object. Các dạng cũ bị bỏ qua âm thầm. Ghim phiên bản của ví dụ bạn chép.\n\n3. Your manual span service.listNotes ends up with 0 children; the pg spans sit beside it. What did the code forget?Span tự tạo service.listNotes có 0 con; các span pg nằm bên cạnh nó. Mã đã quên gì?\n   Answer: c) context.with(trace.setSpan(context.active(), span), fn) around the work\n   startSpan() creates a span that is NOT active, so every child created inside attaches to the wrong parent. The tree comes out flat — all the right spans, none of the nesting.VI: startSpan() tạo span KHÔNG hoạt động, nên mọi span con tạo bên trong gắn nhầm cha. Cây ra phẳng — đủ span, mất hết lồng nhau.\n\n4. OpenTelemetry cost −17.6% req/s. Sampler 0.01 exported 73× fewer spans. What happened to throughput and memory?OpenTelemetry làm giảm 17,6% req/s. Sampler 0.01 xuất ít hơn 73 lần span. Thông lượng và bộ nhớ ra sao?\n   Answer: a) Throughput moved about 3.4%, memory did not move (209 → 208 MB)\n   Every library call is still patched and context still propagated; only recording and exporting are skipped. Sampling saves the bill and the bandwidth, not the CPU.VI: Mọi lời gọi thư viện vẫn bị vá và ngữ cảnh vẫn được truyền; chỉ phần ghi và xuất bị bỏ. Lấy mẫu tiết kiệm hoá đơn và băng thông, không tiết kiệm CPU.\n\n5. A request crosses 3 services. Which statements are true? (choose all that apply)Một request đi qua 3 dịch vụ. Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: a) With ParentBasedSampler the entry decides once and every service follows + b) The trace id travels between the services in the traceparent header + c) With a bare 10% ratio sampler in each service it is fully recorded about 1 time in 1,000\n   0.1³ = 0.001: independent decisions produce fragments. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Span attributes have no cardinality limit (but never secrets).VI: 0,1³ = 0,001: quyết định độc lập sinh ra mảnh vụn. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Thuộc tính span không có giới hạn cardinality (nhưng không bao giờ chứa bí mật).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Static imports are hoisted: express and pg were loaded before sdk.start() could patch them</p><p>Every import at the top level runs before line 1 of your code. Fix: await import(\"express\") after sdk.start(), or node --import ./tracing.mjs app.js.</p><p><i>VI: Mọi import cấp cao nhất chạy trước dòng 1 của mã bạn. Sửa: await import(\"express\") sau sdk.start(), hoặc node --import ./tracing.mjs app.js.</i></p></li><li><p><b>b)</b> 0 spans reach the exporter and nothing reports an error</p><p>3.x expects spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — plural, and an object. The old shapes are silently ignored. Pin the versions of the example you copy.</p><p><i>VI: 3.x cần spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — số nhiều, và một object. Các dạng cũ bị bỏ qua âm thầm. Ghim phiên bản của ví dụ bạn chép.</i></p></li><li><p><b>c)</b> context.with(trace.setSpan(context.active(), span), fn) around the work</p><p>startSpan() creates a span that is NOT active, so every child created inside attaches to the wrong parent. The tree comes out flat — all the right spans, none of the nesting.</p><p><i>VI: startSpan() tạo span KHÔNG hoạt động, nên mọi span con tạo bên trong gắn nhầm cha. Cây ra phẳng — đủ span, mất hết lồng nhau.</i></p></li><li><p><b>a)</b> Throughput moved about 3.4%, memory did not move (209 → 208 MB)</p><p>Every library call is still patched and context still propagated; only recording and exporting are skipped. Sampling saves the bill and the bandwidth, not the CPU.</p><p><i>VI: Mọi lời gọi thư viện vẫn bị vá và ngữ cảnh vẫn được truyền; chỉ phần ghi và xuất bị bỏ. Lấy mẫu tiết kiệm hoá đơn và băng thông, không tiết kiệm CPU.</i></p></li><li><p><b>a)</b> With ParentBasedSampler the entry decides once and every service follows + <b>b)</b> The trace id travels between the services in the traceparent header + <b>c)</b> With a bare 10% ratio sampler in each service it is fully recorded about 1 time in 1,000</p><p>0.1³ = 0.001: independent decisions produce fragments. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Span attributes have no cardinality limit (but never secrets).</p><p><i>VI: 0,1³ = 0,001: quyết định độc lập sinh ra mảnh vụn. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Thuộc tính span không có giới hạn cardinality (nhưng không bao giờ chứa bí mật).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>tracing.mjs calls sdk.start() on line 1 and the file has import express from \"express\" further down. Only 2 spans arrive, no express or pg spans, no error. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>tracing.mjs gọi sdk.start() ở dòng 1 và tệp có import express from \"express\" ở dưới. Chỉ 2 span tới, không có span express hay pg, không lỗi. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express 5 removed the hooks OpenTelemetry uses, so only manual spans can be recorded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "OpenTelemetry needs a restart of PostgreSQL to see its queries for the first time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Static imports are hoisted: express and pg were loaded before sdk.start() could patch them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The exporter drops spans whose name does not start with “http”, so express spans vanish"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every import at the top level runs before line 1 of your code. Fix: await import(\"express\") after sdk.start(), or node --import ./tracing.mjs app.js.</p><p><i>VI: Mọi import cấp cao nhất chạy trước dòng 1 của mã bạn. Sửa: await import(\"express\") sau sdk.start(), hoặc node --import ./tracing.mjs app.js.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A guide writes new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). With sdk-node 0.301, what happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một hướng dẫn viết new NodeSDK({ spanProcessor: new BatchSpanProcessor(exporter) }). Với sdk-node 0.301 chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The SDK throws “unknown option spanProcessor” at start"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0 spans reach the exporter and nothing reports an error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "npm refuses to install the package with an ERESOLVE error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Spans are exported twice, once per processor"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>3.x expects spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — plural, and an object. The old shapes are silently ignored. Pin the versions of the example you copy.</p><p><i>VI: 3.x cần spanProcessors: [ new BatchSpanProcessor({ exporter }) ] — số nhiều, và một object. Các dạng cũ bị bỏ qua âm thầm. Ghim phiên bản của ví dụ bạn chép.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Your manual span service.listNotes ends up with 0 children; the pg spans sit beside it. What did the code forget?</p><p style=\"opacity:.75;font-size:.92em\"><i>Span tự tạo service.listNotes có 0 con; các span pg nằm bên cạnh nó. Mã đã quên gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "span.end() in a finally block, so the span is closed on errors"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A ParentBasedSampler, so children inherit the sampling decision"
+              },
+              {
+                "ma": "c",
+                "noiDung": "context.with(trace.setSpan(context.active(), span), fn) around the work"
+              },
+              {
+                "ma": "d",
+                "noiDung": "span.setAttribute(\"notes.count\", n) before the first query"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>startSpan() creates a span that is NOT active, so every child created inside attaches to the wrong parent. The tree comes out flat — all the right spans, none of the nesting.</p><p><i>VI: startSpan() tạo span KHÔNG hoạt động, nên mọi span con tạo bên trong gắn nhầm cha. Cây ra phẳng — đủ span, mất hết lồng nhau.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>OpenTelemetry cost −17.6% req/s. Sampler 0.01 exported 73× fewer spans. What happened to throughput and memory?</p><p style=\"opacity:.75;font-size:.92em\"><i>OpenTelemetry làm giảm 17,6% req/s. Sampler 0.01 xuất ít hơn 73 lần span. Thông lượng và bộ nhớ ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Throughput moved about 3.4%, memory did not move (209 → 208 MB)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Memory fell by 80 MB, because the SDK unloads unused instrumentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Throughput returned to the baseline, because no spans are built any more"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both got worse, because the sampler itself is the expensive part"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every library call is still patched and context still propagated; only recording and exporting are skipped. Sampling saves the bill and the bandwidth, not the CPU.</p><p><i>VI: Mọi lời gọi thư viện vẫn bị vá và ngữ cảnh vẫn được truyền; chỉ phần ghi và xuất bị bỏ. Lấy mẫu tiết kiệm hoá đơn và băng thông, không tiết kiệm CPU.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A request crosses 3 services. Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Một request đi qua 3 dịch vụ. Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "With ParentBasedSampler the entry decides once and every service follows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The trace id travels between the services in the traceparent header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "With a bare 10% ratio sampler in each service it is fully recorded about 1 time in 1,000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A user.id span attribute creates one new time series per user"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>0.1³ = 0.001: independent decisions produce fragments. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Span attributes have no cardinality limit (but never secrets).</p><p><i>VI: 0,1³ = 0,001: quyết định độc lập sinh ra mảnh vụn. new ParentBasedSampler({ root: new TraceIdRatioBasedSampler(0.1) }). Thuộc tính span không có giới hạn cardinality (nhưng không bao giờ chứa bí mật).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding “tracing does not work” when the SDK simply started after the imports.|||Kết luận “tracing không chạy” khi SDK chỉ đơn giản là khởi động sau các import."
+        },
+        {
+          "loi": "Expecting sampling to fix a p95 that doubled with tracing on.|||Mong lấy mẫu sửa được p95 tăng gấp đôi khi bật tracing."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "span",
+          "vi": "span",
+          "giaiThich": "a named, timed interval with attributes"
+        },
+        {
+          "en": "trace",
+          "vi": "trace",
+          "giaiThich": "the span tree of one request, joined by trace_id"
+        },
+        {
+          "en": "context propagation",
+          "vi": "truyền ngữ cảnh"
+        },
+        {
+          "en": "sampler",
+          "vi": "bộ lấy mẫu"
+        }
+      ]
+    },
+    {
+      "title": "parseTraceparent(header): read the header that carries a trace between services",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tracing",
+        "W3C Trace Context",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Context propagation between processes uses the W3C <code>traceparent</code> header: <code>00-&lt;trace-id&gt;-&lt;parent-id&gt;-&lt;flags&gt;</code>, e.g. <code>00-da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90-3d6c53080ac3f634-01</code>. Write <code>parseTraceparent(header)</code> returning <code>{ traceId, parentId, sampled }</code>, or <code>null</code> when the header is invalid. Valid means: exactly four dash-separated fields of <b>lower-case</b> hex — version 2 chars (not <code>ff</code>), trace id 32, parent id 16, flags 2; trace id and parent id not all zeros; surrounding spaces may be trimmed. <code>sampled</code> is bit 0 of the flags (<code>01</code> → true).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Truyền ngữ cảnh giữa các tiến trình dùng header W3C <code>traceparent</code>: <code>00-&lt;trace-id&gt;-&lt;parent-id&gt;-&lt;flags&gt;</code>, vd <code>00-da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90-3d6c53080ac3f634-01</code>. Viết <code>parseTraceparent(header)</code> trả về <code>{ traceId, parentId, sampled }</code>, hoặc <code>null</code> khi header không hợp lệ. Hợp lệ nghĩa là: đúng bốn trường phân tách bằng gạch ngang, hex <b>chữ thường</b> — version 2 ký tự (khác <code>ff</code>), trace id 32, parent id 16, flags 2; trace id và parent id không toàn số 0; khoảng trắng hai đầu được cắt. <code>sampled</code> là bit 0 của flags (<code>01</code> → true).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseTraceparent(\"00-da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90-3d6c53080ac3f634-01\")",
+          "output": "{\"traceId\":\"da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90\",\"parentId\":\"3d6c53080ac3f634\",\"sampled\":true}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One anchored regex with four capture groups does most of the work.|||Một regex neo hai đầu với bốn nhóm bắt làm gần hết việc.",
+        "parseInt(flags, 16) & 1 gives the sampled bit; /^0+$/ detects all zeros.|||parseInt(flags, 16) & 1 cho bit sampled; /^0+$/ phát hiện toàn số 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** parse a W3C traceparent header */\nfunction parseTraceparent(header) {\n  // Write your solution here\n  const [version, traceId, parentId, flags] = String(header).split('-');\n  return { traceId, parentId, sampled: flags === '01' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseTraceparent(header) {\n  // W3C Trace Context: version-traceid-parentid-flags, chữ thường hex, đúng độ dài.\n  if (typeof header !== 'string') return null;\n  const m = /^([0-9a-f]{2})-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})$/.exec(header.trim());\n  if (!m) return null;\n  const [, version, traceId, parentId, flags] = m;\n  if (version === 'ff') return null;                                   // phiên bản bị cấm\n  if (/^0+$/.test(traceId) || /^0+$/.test(parentId)) return null;      // toàn số 0 = không hợp lệ\n  return { traceId, parentId, sampled: (parseInt(flags, 16) & 1) === 1 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>traceparent is what lets one trace_id join the spans of several services — lesson 15.2’s request id one level up. An inbound header is attacker-controlled; when it is invalid the receiver must start a new trace instead of propagating garbage.</p>",
+      "solutionExplanationHtmlVi": "<p>traceparent là thứ cho phép một trace_id nối các span của nhiều dịch vụ — request id của bài 15.2 nâng lên một tầng. Header gửi tới do kẻ tấn công kiểm soát; khi không hợp lệ, bên nhận phải bắt đầu trace mới thay vì truyền rác đi tiếp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A sampled trace",
+              "vi": "Một trace được lấy mẫu"
+            },
+            "goi": "parseTraceparent(\"00-da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90-3d6c53080ac3f634-01\")",
+            "mongDoi": {
+              "traceId": "da3c8ecc0f6a4d1b9e2f7a1c3b5d7e90",
+              "parentId": "3d6c53080ac3f634",
+              "sampled": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Not a traceparent at all",
+              "vi": "Không phải traceparent"
+            },
+            "goi": "parseTraceparent(\"garbage\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseTraceparent(\"00-DA3C8ECC0F6A4D1B9E2F7A1C3B5D7E90-3d6c53080ac3f634-01\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseTraceparent(\"00-00000000000000000000000000000000-3d6c53080ac3f634-01\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseTraceparent(\" 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00 \")",
+            "mongDoi": {
+              "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+              "parentId": "00f067aa0ba902b7",
+              "sampled": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseTraceparent(\"ff-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseTraceparent(\"00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b-01\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting on \"-\" and trusting the pieces: an upper-case or 31-char id slips through and breaks the trace in the next service.|||Tách theo \"-\" rồi tin các mảnh: id viết hoa hay dài 31 ký tự lọt qua và làm gãy trace ở dịch vụ sau."
+        },
+        {
+          "loi": "Treating flags \"00\" as invalid: it is valid, it just means “not sampled”.|||Coi flags \"00\" là không hợp lệ: nó hợp lệ, chỉ nghĩa là “không lấy mẫu”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "traceparent",
+          "vi": "traceparent",
+          "giaiThich": "W3C header: version-trace-parent-flags"
+        },
+        {
+          "en": "trace flags",
+          "vi": "cờ trace",
+          "giaiThich": "bit 0 = sampled"
+        }
+      ]
+    },
+    {
+      "title": "buildTree(spans): from the exporter’s flat list to the tree you can diagnose",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "tracing",
+        "trees",
+        "Map"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>An exporter receives spans as a flat list <code>{ id, parentId?, name, start, end }</code> (times in ms). Write <code>buildTree(spans)</code> returning an array of root nodes <code>{ name, ms, children }</code>, where <code>ms = end − start</code> rounded to 2 decimals (<code>Number(x.toFixed(2))</code>). A span is a root when it has no <code>parentId</code> or its parent is not in the list. Children (and roots) are ordered by <code>start</code>. The input may list children before their parents.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Exporter nhận span dạng danh sách phẳng <code>{ id, parentId?, name, start, end }</code> (thời gian tính bằng ms). Viết <code>buildTree(spans)</code> trả về mảng nút gốc <code>{ name, ms, children }</code>, với <code>ms = end − start</code> làm tròn 2 chữ số (<code>Number(x.toFixed(2))</code>). Một span là gốc khi không có <code>parentId</code> hoặc cha không có trong danh sách. Con (và gốc) được sắp theo <code>start</code>. Đầu vào có thể liệt kê con trước cha.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "buildTree([{\"id\":\"a\",\"name\":\"GET /notes/:author\",\"start\":0,\"end\":41.8},{\"id\":\"b\",\"parentId\":\"a\",\"name\":\"request handler - /notes/:author\",\"start\":0.5,\"end\":41.2},{\"id\":\"d\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":26,\"end\":30.1},{\"id\":\"c\",\"parentId\":\"b\",\"name\":\"pg-pool.connect\",\"start\":1,\"end\":25.47},{\"id\":\"e\",\"parentId\":\"c\",\"name\":\"tcp.connect\",\"start\":2,\"end\":9},{\"id\":\"f\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":31,\"end\":33.5}])",
+          "output": "[{\"name\":\"GET /notes/:author\",\"ms\":41.8,\"children\":[{\"name\":\"request handler - /notes/:author\",\"ms\":40.7,\"children\":[{\"name\":\"pg-pool.connect\",\"ms\":24.47,\"children\":[{\"name\":\"tcp.connect\",\"ms\":7,\"children\":[]}]},{\"name\":\"pg.query\",\"ms\":4.1,\"children\":[]},{\"name\":\"pg.query\",\"ms\":2.5,\"children\":[]}]}]}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two passes: first create every node in a Map by id, then attach each one to its parent.|||Hai lượt: tạo mọi nút vào một Map theo id trước, rồi gắn từng nút vào cha.",
+        "Sort recursively at the end and drop the helper field start from the output.|||Sắp đệ quy ở cuối và bỏ trường phụ start khỏi kết quả."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** flat spans -> tree */\nfunction buildTree(spans) {\n  // Write your solution here\n  const out = [];\n  const byId = {};\n  for (const s of spans) {\n    const node = { name: s.name, ms: s.end - s.start, children: [] };\n    byId[s.id] = node;\n    if (s.parentId && byId[s.parentId]) byId[s.parentId].children.push(node);\n    else out.push(node);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction buildTree(spans) {\n  // Danh sách phẳng ⇒ cây: mỗi span gắn vào cha theo parentId; không có cha (hoặc cha không có trong danh sách) ⇒ gốc.\n  const nodes = new Map(spans.map((s) => [s.id, { name: s.name, ms: Number((s.end - s.start).toFixed(2)), start: s.start, children: [] }]));\n  const roots = [];\n  for (const s of spans) {\n    const n = nodes.get(s.id);\n    const p = s.parentId ? nodes.get(s.parentId) : undefined;\n    (p ? p.children : roots).push(n);\n  }\n  const tidy = (list) => list.sort((a, b) => a.start - b.start).map(({ name, ms, children }) => ({ name, ms, children: tidy(children) }));\n  return tidy(roots);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A trace is a tree, not a list: parent/child nesting is what turns 33 spans into a diagnosis. In the sample, pg-pool.connect (24.47 ms) with tcp.connect inside it is the cold-pool tax of chapter 7, visible as its own block instead of smeared into the total.</p>",
+      "solutionExplanationHtmlVi": "<p>Trace là cây, không phải danh sách: lồng cha/con là thứ biến 33 span thành một chẩn đoán. Trong mẫu, pg-pool.connect (24,47 ms) chứa tcp.connect là “thuế pool nguội” của chương 7, hiện thành một khối riêng thay vì bị trộn vào tổng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The cold first request, children listed out of order",
+              "vi": "Request đầu (pool nguội), con liệt kê lộn xộn"
+            },
+            "goi": "buildTree([{\"id\":\"a\",\"name\":\"GET /notes/:author\",\"start\":0,\"end\":41.8},{\"id\":\"b\",\"parentId\":\"a\",\"name\":\"request handler - /notes/:author\",\"start\":0.5,\"end\":41.2},{\"id\":\"d\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":26,\"end\":30.1},{\"id\":\"c\",\"parentId\":\"b\",\"name\":\"pg-pool.connect\",\"start\":1,\"end\":25.47},{\"id\":\"e\",\"parentId\":\"c\",\"name\":\"tcp.connect\",\"start\":2,\"end\":9},{\"id\":\"f\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":31,\"end\":33.5}])",
+            "mongDoi": [
+              {
+                "name": "GET /notes/:author",
+                "ms": 41.8,
+                "children": [
+                  {
+                    "name": "request handler - /notes/:author",
+                    "ms": 40.7,
+                    "children": [
+                      {
+                        "name": "pg-pool.connect",
+                        "ms": 24.47,
+                        "children": [
+                          {
+                            "name": "tcp.connect",
+                            "ms": 7,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "pg.query",
+                        "ms": 4.1,
+                        "children": []
+                      },
+                      {
+                        "name": "pg.query",
+                        "ms": 2.5,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One span",
+              "vi": "Một span"
+            },
+            "goi": "buildTree([{\"id\":\"x\",\"name\":\"GET /a\",\"start\":0,\"end\":3}])",
+            "mongDoi": [
+              {
+                "name": "GET /a",
+                "ms": 3,
+                "children": []
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "buildTree([{\"id\":\"f\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":31,\"end\":33.5},{\"id\":\"e\",\"parentId\":\"c\",\"name\":\"tcp.connect\",\"start\":2,\"end\":9},{\"id\":\"c\",\"parentId\":\"b\",\"name\":\"pg-pool.connect\",\"start\":1,\"end\":25.47},{\"id\":\"d\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":26,\"end\":30.1},{\"id\":\"b\",\"parentId\":\"a\",\"name\":\"request handler - /notes/:author\",\"start\":0.5,\"end\":41.2},{\"id\":\"a\",\"name\":\"GET /notes/:author\",\"start\":0,\"end\":41.8}])",
+            "mongDoi": [
+              {
+                "name": "GET /notes/:author",
+                "ms": 41.8,
+                "children": [
+                  {
+                    "name": "request handler - /notes/:author",
+                    "ms": 40.7,
+                    "children": [
+                      {
+                        "name": "pg-pool.connect",
+                        "ms": 24.47,
+                        "children": [
+                          {
+                            "name": "tcp.connect",
+                            "ms": 7,
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "pg.query",
+                        "ms": 4.1,
+                        "children": []
+                      },
+                      {
+                        "name": "pg.query",
+                        "ms": 2.5,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "buildTree([{\"id\":\"k\",\"parentId\":\"gone\",\"name\":\"orphan\",\"start\":5,\"end\":6.333},{\"id\":\"r\",\"name\":\"GET /b\",\"start\":1,\"end\":2}])",
+            "mongDoi": [
+              {
+                "name": "GET /b",
+                "ms": 1,
+                "children": []
+              },
+              {
+                "name": "orphan",
+                "ms": 1.33,
+                "children": []
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Attaching in one pass in input order: a child listed before its parent is lost or becomes a root.|||Gắn trong một lượt theo thứ tự đầu vào: con đứng trước cha bị mất hoặc thành gốc."
+        },
+        {
+          "loi": "Sorting the flat list by time and calling it a trace: every shape the lesson diagnoses (N+1, cold pool, gaps) is only visible as a tree.|||Sắp danh sách phẳng theo thời gian rồi gọi đó là trace: mọi hình dạng bài chẩn đoán (N+1, pool nguội, khoảng trống) chỉ thấy được khi là cây."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "root span",
+          "vi": "span gốc"
+        },
+        {
+          "en": "parent / child",
+          "vi": "cha / con"
+        }
+      ]
+    },
+    {
+      "title": "findNPlusOne(spans, min): many short identical children — the shape is the diagnosis",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tracing",
+        "N+1",
+        "grouping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Nobody wrote code to detect N+1 in the lesson: the 12 <code>pg.query</code> spans under one request were visible by their shape, while the worst single query was 6.32 ms (a slow-query log at 100 ms reports nothing). Write <code>findNPlusOne(spans, min)</code>: group spans that have a parent in the list by <b>(parent, name)</b>; return every group with at least <code>min</code> spans as <code>{ parent: &lt;parent name&gt;, name, count, totalMs, worstMs }</code> (durations <code>end − start</code>, sums and maxima rounded with <code>Number(x.toFixed(2))</code>), sorted by <code>count</code> descending.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong bài không ai viết mã phát hiện N+1: 12 span <code>pg.query</code> dưới một request hiện ra nhờ hình dạng, còn câu chậm nhất chỉ 6,32 ms (log truy vấn chậm ngưỡng 100 ms không báo gì). Viết <code>findNPlusOne(spans, min)</code>: nhóm các span có cha trong danh sách theo <b>(cha, tên)</b>; trả về mọi nhóm có ít nhất <code>min</code> span dạng <code>{ parent: &lt;tên cha&gt;, name, count, totalMs, worstMs }</code> (thời lượng <code>end − start</code>, tổng và lớn nhất làm tròn bằng <code>Number(x.toFixed(2))</code>), sắp theo <code>count</code> giảm dần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findNPlusOne([{\"id\":\"h\",\"name\":\"request handler - /notes/:author\",\"start\":0,\"end\":86.21},{\"id\":\"u\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":1,\"end\":4},{\"id\":\"hq0\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":10,\"end\":13.32},{\"id\":\"hq1\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":16,\"end\":20.32},{\"id\":\"hq2\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":22,\"end\":27.32},{\"id\":\"hq3\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":28,\"end\":31.32},{\"id\":\"hq4\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":34,\"end\":38.32},{\"id\":\"hq5\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":40,\"end\":45.32},{\"id\":\"hq6\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":46,\"end\":49.32},{\"id\":\"hq7\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":52,\"end\":56.32},{\"id\":\"hq8\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":58,\"end\":63.32},{\"id\":\"hq9\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":64,\"end\":67.32},{\"id\":\"hq10\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":70,\"end\":74.32}], 5)",
+          "output": "[{\"parent\":\"request handler - /notes/:author\",\"name\":\"pg.query\",\"count\":12,\"totalMs\":49.52,\"worstMs\":5.32}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The group key is parentId + name: the same name under two different parents is two groups.|||Khoá nhóm là parentId + tên: cùng tên dưới hai cha khác nhau là hai nhóm.",
+        "Accumulate count, total and worst in one pass, round only at the end.|||Cộng dồn count, tổng và lớn nhất trong một lượt, chỉ làm tròn ở cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** find N+1 shapes */\nfunction findNPlusOne(spans, min) {\n  // Write your solution here — this reports SLOW queries instead\n  return spans.filter((s) => s.end - s.start > 100).map((s) => ({ parent: s.parentId, name: s.name, count: 1, totalMs: s.end - s.start, worstMs: s.end - s.start }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction findNPlusOne(spans, min) {\n  // Hình dạng N+1: dưới CÙNG một cha có ≥ min span con trùng tên. Không câu nào chậm — vấn đề là SỐ LƯỢNG.\n  const byId = new Map(spans.map((s) => [s.id, s]));\n  const groups = new Map();\n  for (const s of spans) {\n    if (!s.parentId || !byId.has(s.parentId)) continue;\n    const k = `${s.parentId}\\u0000${s.name}`;\n    const g = groups.get(k) || { parent: byId.get(s.parentId).name, name: s.name, count: 0, totalMs: 0, worstMs: 0 };\n    const d = s.end - s.start;\n    g.count++; g.totalMs += d; g.worstMs = Math.max(g.worstMs, d);\n    groups.set(k, g);\n  }\n  return [...groups.values()]\n    .filter((g) => g.count >= min)\n    .map((g) => ({ ...g, totalMs: Number(g.totalMs.toFixed(2)), worstMs: Number(g.worstMs.toFixed(2)) }))\n    .sort((a, b) => b.count - a.count);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four shapes, four fixes: many short identical children = N+1 (batch with = ANY($1) or an include); one long child = one slow thing; a gap with no child = your own CPU work; a long connect at the top = cold pool. Counting identical siblings is the first of these, made automatic.</p>",
+      "solutionExplanationHtmlVi": "<p>Bốn hình dạng, bốn cách sửa: nhiều con ngắn giống nhau = N+1 (gộp bằng = ANY($1) hoặc include); một con dài = một thứ chậm; khoảng trống không con = việc CPU của chính bạn; connect dài ở đầu = pool nguội. Đếm anh em giống nhau là cái đầu tiên, được tự động hoá.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /notes/:author: 12 queries under one handler",
+              "vi": "GET /notes/:author: 12 câu dưới một handler"
+            },
+            "goi": "findNPlusOne([{\"id\":\"h\",\"name\":\"request handler - /notes/:author\",\"start\":0,\"end\":86.21},{\"id\":\"u\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":1,\"end\":4},{\"id\":\"hq0\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":10,\"end\":13.32},{\"id\":\"hq1\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":16,\"end\":20.32},{\"id\":\"hq2\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":22,\"end\":27.32},{\"id\":\"hq3\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":28,\"end\":31.32},{\"id\":\"hq4\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":34,\"end\":38.32},{\"id\":\"hq5\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":40,\"end\":45.32},{\"id\":\"hq6\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":46,\"end\":49.32},{\"id\":\"hq7\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":52,\"end\":56.32},{\"id\":\"hq8\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":58,\"end\":63.32},{\"id\":\"hq9\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":64,\"end\":67.32},{\"id\":\"hq10\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":70,\"end\":74.32}], 5)",
+            "mongDoi": [
+              {
+                "parent": "request handler - /notes/:author",
+                "name": "pg.query",
+                "count": 12,
+                "totalMs": 49.52,
+                "worstMs": 5.32
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A healthy request: no group of 5",
+              "vi": "Request khoẻ: không nhóm nào đủ 5"
+            },
+            "goi": "findNPlusOne([{\"id\":\"a\",\"name\":\"GET /notes/:author\",\"start\":0,\"end\":41.8},{\"id\":\"b\",\"parentId\":\"a\",\"name\":\"request handler - /notes/:author\",\"start\":0.5,\"end\":41.2},{\"id\":\"d\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":26,\"end\":30.1},{\"id\":\"c\",\"parentId\":\"b\",\"name\":\"pg-pool.connect\",\"start\":1,\"end\":25.47},{\"id\":\"e\",\"parentId\":\"c\",\"name\":\"tcp.connect\",\"start\":2,\"end\":9},{\"id\":\"f\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":31,\"end\":33.5}], 5)",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "findNPlusOne([{\"id\":\"h\",\"name\":\"request handler - /notes/:author\",\"start\":0,\"end\":86.21},{\"id\":\"u\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":1,\"end\":4},{\"id\":\"hq0\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":10,\"end\":13.32},{\"id\":\"hq1\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":16,\"end\":20.32},{\"id\":\"hq2\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":22,\"end\":27.32},{\"id\":\"hq3\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":28,\"end\":31.32},{\"id\":\"hq4\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":34,\"end\":38.32},{\"id\":\"hq5\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":40,\"end\":45.32},{\"id\":\"hq6\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":46,\"end\":49.32},{\"id\":\"hq7\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":52,\"end\":56.32},{\"id\":\"hq8\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":58,\"end\":63.32},{\"id\":\"hq9\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":64,\"end\":67.32},{\"id\":\"hq10\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":70,\"end\":74.32},{\"id\":\"r2\",\"name\":\"GET /feed\",\"start\":0,\"end\":30},{\"id\":\"r2q0\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":10,\"end\":10.6},{\"id\":\"r2q1\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":16,\"end\":17.6},{\"id\":\"r2q2\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":22,\"end\":24.6},{\"id\":\"r2q3\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":28,\"end\":28.6},{\"id\":\"r2q4\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":34,\"end\":35.6},{\"id\":\"r2q5\",\"parentId\":\"r2\",\"name\":\"pg.query\",\"start\":40,\"end\":42.6},{\"id\":\"rd0\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":0,\"end\":0.25},{\"id\":\"rd1\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":1,\"end\":1.25},{\"id\":\"rd2\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":2,\"end\":2.25},{\"id\":\"rd3\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":3,\"end\":3.25},{\"id\":\"rd4\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":4,\"end\":4.25},{\"id\":\"rd5\",\"parentId\":\"r2\",\"name\":\"redis.get\",\"start\":5,\"end\":5.25}], 6)",
+            "mongDoi": [
+              {
+                "parent": "request handler - /notes/:author",
+                "name": "pg.query",
+                "count": 12,
+                "totalMs": 49.52,
+                "worstMs": 5.32
+              },
+              {
+                "parent": "GET /feed",
+                "name": "pg.query",
+                "count": 6,
+                "totalMs": 9.6,
+                "worstMs": 2.6
+              },
+              {
+                "parent": "GET /feed",
+                "name": "redis.get",
+                "count": 6,
+                "totalMs": 1.5,
+                "worstMs": 0.25
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "findNPlusOne([], 2)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking for slow spans: N+1 hides precisely because each query is fast.|||Đi tìm span chậm: N+1 trốn được chính vì từng câu đều nhanh."
+        },
+        {
+          "loi": "Counting by name across the whole trace: 12 queries spread over 12 different requests is not N+1.|||Đếm theo tên trên toàn trace: 12 câu rải trên 12 request khác nhau không phải N+1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "N+1",
+          "vi": "N+1",
+          "giaiThich": "one query for the list, then one per item"
+        },
+        {
+          "en": "sibling spans",
+          "vi": "span anh em",
+          "giaiThich": "children of the same parent"
+        }
+      ]
+    },
+    {
+      "title": "selfTime(spans): find the gap with no child — time spent in your own code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "tracing",
+        "intervals",
+        "profiling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One of the four shapes is “a gap with no child”: time inside a span that no child explains — CPU work, JSON, a blocking call — so you profile it (16.1). Write <code>selfTime(spans)</code> returning <code>{ [id]: selfMs }</code> for every span: its duration minus the length of the <b>union</b> of its direct children’s intervals, each child clipped to the parent’s own interval. Children that run in parallel and overlap count once. Round with <code>Number(x.toFixed(2))</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một trong bốn hình dạng là “khoảng trống không có con”: thời gian bên trong một span mà không span con nào giải thích — việc CPU, JSON, một lời gọi chặn — nên phải profile nó (16.1). Viết <code>selfTime(spans)</code> trả về <code>{ [id]: selfMs }</code> cho mọi span: thời lượng của nó trừ độ dài phần <b>hợp</b> các khoảng của con trực tiếp, mỗi con bị cắt trong khoảng của cha. Con chạy song song chồng nhau chỉ tính một lần. Làm tròn bằng <code>Number(x.toFixed(2))</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "selfTime([{\"id\":\"h\",\"name\":\"handler\",\"start\":0,\"end\":50},{\"id\":\"q1\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":2,\"end\":6},{\"id\":\"q2\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":7,\"end\":10}])",
+          "output": "{\"h\":43,\"q1\":4,\"q2\":3}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Collect each span’s children as [start, end] pairs clipped to the parent, sort by start, then merge overlapping pairs.|||Gom con của mỗi span thành cặp [start, end] đã cắt theo cha, sắp theo start, rồi gộp các cặp chồng nhau.",
+        "Merging: keep a current interval; a pair starting after its end closes it, otherwise extend the end with Math.max.|||Gộp: giữ một khoảng hiện tại; cặp bắt đầu sau điểm cuối của nó thì đóng lại, không thì kéo dài điểm cuối bằng Math.max."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** self time of every span */\nfunction selfTime(spans) {\n  // Write your solution here\n  const out = {};\n  for (const s of spans) {\n    const kids = spans.filter((k) => k.parentId === s.id);\n    const sum = kids.reduce((t, k) => t + (k.end - k.start), 0);\n    out[s.id] = s.end - s.start - sum;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction selfTime(spans) {\n  // Thời gian tự thân = thời lượng − phần HỢP của các khoảng con (cắt trong khoảng của cha).\n  // Con chạy song song chồng lên nhau chỉ tính một lần — đó là lý do phải lấy hợp, không cộng.\n  const out = {};\n  for (const s of spans) {\n    const kids = spans.filter((k) => k.parentId === s.id)\n      .map((k) => [Math.max(k.start, s.start), Math.min(k.end, s.end)])\n      .filter(([a, b]) => b > a)\n      .sort((x, y) => x[0] - y[0]);\n    let covered = 0;\n    let curA = null;\n    let curB = null;\n    for (const [a, b] of kids) {\n      if (curB === null || a > curB) { if (curB !== null) covered += curB - curA; curA = a; curB = b; }\n      else curB = Math.max(curB, b);\n    }\n    if (curB !== null) covered += curB - curA;\n    out[s.id] = Number((s.end - s.start - covered).toFixed(2));\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Self time is what a CPU profile’s “self” column means, computed from a trace. A route handler with 40 ms of self time and three short queries is not a database problem: the time is in your own code, and no amount of query tuning will move it.</p>",
+      "solutionExplanationHtmlVi": "<p>Thời gian tự thân chính là cột “self” của CPU profile, tính từ trace. Một handler có 40 ms tự thân và ba câu truy vấn ngắn không phải vấn đề CSDL: thời gian nằm trong mã của bạn, và tối ưu truy vấn bao nhiêu cũng không xê dịch nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "43 ms not explained by any query",
+              "vi": "43 ms không câu truy vấn nào giải thích"
+            },
+            "goi": "selfTime([{\"id\":\"h\",\"name\":\"handler\",\"start\":0,\"end\":50},{\"id\":\"q1\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":2,\"end\":6},{\"id\":\"q2\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":7,\"end\":10}])",
+            "mongDoi": {
+              "h": 43,
+              "q1": 4,
+              "q2": 3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Promise.all: three overlapping children",
+              "vi": "Promise.all: ba con chồng nhau"
+            },
+            "goi": "selfTime([{\"id\":\"h\",\"name\":\"handler\",\"start\":0,\"end\":20},{\"id\":\"a\",\"parentId\":\"h\",\"name\":\"redis.get\",\"start\":1,\"end\":11},{\"id\":\"b\",\"parentId\":\"h\",\"name\":\"pg.query\",\"start\":2,\"end\":12},{\"id\":\"c\",\"parentId\":\"h\",\"name\":\"fetch\",\"start\":3,\"end\":9}])",
+            "mongDoi": {
+              "h": 9,
+              "a": 10,
+              "b": 10,
+              "c": 6
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "selfTime([{\"id\":\"a\",\"name\":\"GET /notes/:author\",\"start\":0,\"end\":41.8},{\"id\":\"b\",\"parentId\":\"a\",\"name\":\"request handler - /notes/:author\",\"start\":0.5,\"end\":41.2},{\"id\":\"d\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":26,\"end\":30.1},{\"id\":\"c\",\"parentId\":\"b\",\"name\":\"pg-pool.connect\",\"start\":1,\"end\":25.47},{\"id\":\"e\",\"parentId\":\"c\",\"name\":\"tcp.connect\",\"start\":2,\"end\":9},{\"id\":\"f\",\"parentId\":\"b\",\"name\":\"pg.query\",\"start\":31,\"end\":33.5}])",
+            "mongDoi": {
+              "a": 1.1,
+              "b": 9.63,
+              "d": 4.1,
+              "c": 17.47,
+              "e": 7,
+              "f": 2.5
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "selfTime([{\"id\":\"p\",\"name\":\"p\",\"start\":10,\"end\":20},{\"id\":\"k\",\"parentId\":\"p\",\"name\":\"late\",\"start\":15,\"end\":30},{\"id\":\"g\",\"parentId\":\"k\",\"name\":\"grand\",\"start\":16,\"end\":29}])",
+            "mongDoi": {
+              "p": 5,
+              "k": 2,
+              "g": 13
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Subtracting the SUM of children: Promise.all children overlap, so the sum exceeds the parent and self time goes negative.|||Trừ TỔNG thời lượng con: các con của Promise.all chồng nhau, nên tổng vượt cha và thời gian tự thân thành âm."
+        },
+        {
+          "loi": "Subtracting grandchildren too: they are already inside their own parent’s interval.|||Trừ cả cháu: chúng đã nằm trong khoảng của cha chúng rồi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "self time",
+          "vi": "thời gian tự thân",
+          "giaiThich": "time in the span itself, not in its children"
+        },
+        {
+          "en": "interval union",
+          "vi": "hợp các khoảng"
+        }
+      ]
+    }
+  ]
+}

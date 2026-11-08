@@ -1,0 +1,1163 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-5-4-xu-ly-loi",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-5-4-xu-ly-loi"
+  },
+  "exercises": [
+    {
+      "title": "5.4 · How an error reaches the handler (or does not)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Express",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the lesson’s proofs: Express 4.22.2 vs 5.x, the four-parameter rule, and the two errors that still kill the process. Re-measured with express 4.22.2 and 5.3.0.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu về những phép chứng minh của bài: Express 4.22.2 vs 5.x, luật bốn tham số, và hai loại lỗi vẫn giết tiến trình. Đã đo lại với express 4.22.2 và 5.3.0.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three paths: sync throw, next(err), async throw — which one did Express 4 miss?|||Ba con đường: throw đồng bộ, next(err), throw bất đồng bộ — Express 4 bỏ sót đường nào?",
+        "Order in the file is still the whole API.|||Thứ tự trong tệp vẫn là toàn bộ API."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4 · How an error reaches the handler (or does not)\n\nAnswer in the answer panel (no code needed).\n\n1. You register app.use((err, req, res) => res.status(500).json(…)) — three parameters. What happens to errors?Bạn đăng ký app.use((err, req, res) => res.status(500).json(…)) — ba tham số. Lỗi sẽ ra sao?\n2. app.get('/x', async () => { await sleep(10); throw new Error('boom') }) on Express 4.22.2 — the client gets…app.get('/x', async () => { await sleep(10); throw new Error('boom') }) trên Express 4.22.2 — client nhận…\n3. On Express 5, a handler does setTimeout(() => { throw new Error('x') }, 10). Result?Trên Express 5, một handler làm setTimeout(() => { throw new Error('x') }, 10). Kết quả?\n4. While “tidying up”, someone moves the JSON 404 handler and the error handler ABOVE app.use('/api/v1/notes', notesRouter). Symptom?Trong lúc “dọn dẹp”, ai đó dời handler 404 JSON và error handler lên TRÊN app.use('/api/v1/notes', notesRouter). Triệu chứng?\n5. In process.on('uncaughtException', …) the lesson logs and then…Trong process.on('uncaughtException', …) bài ghi log rồi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4 · How an error reaches the handler (or does not) — answer key\n\n1. You register app.use((err, req, res) => res.status(500).json(…)) — three parameters. What happens to errors?Bạn đăng ký app.use((err, req, res) => res.status(500).json(…)) — ba tham số. Lỗi sẽ ra sao?\n   Answer: a) It is treated as a normal middleware and never runs for errors — Express’s default HTML 500 answers instead\n   Express counts declared parameters (fn.length) at registration time. No warning — “if errors are not reaching the handler, count the parameters first”.VI: Express đếm số tham số khai báo (fn.length) lúc đăng ký. Không có cảnh báo — “nếu lỗi không tới handler, hãy đếm tham số trước”.\n\n2. app.get('/x', async () => { await sleep(10); throw new Error('boom') }) on Express 4.22.2 — the client gets…app.get('/x', async () => { await sleep(10); throw new Error('boom') }) trên Express 4.22.2 — client nhận…\n   Answer: d) nothing: the request hangs, the error only appears as an unhandledRejection\n   Measured again: Express 4 times out, Express 5 answers 500 through the error handler. On v4 wrap every async handler: fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next).VI: Đo lại: Express 4 hết giờ, Express 5 trả 500 qua error handler. Trên v4 phải bọc mọi handler async: fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next).\n\n3. On Express 5, a handler does setTimeout(() => { throw new Error('x') }, 10). Result?Trên Express 5, một handler làm setTimeout(() => { throw new Error('x') }, 10). Kết quả?\n   Answer: d) The process crashes — Express 5 only catches a rejected promise returned by the handler\n   By the time the callback runs, the request’s call stack is long gone. Plumb such errors through next(err).VI: Khi callback chạy, call stack của request đã mất từ lâu. Đưa những lỗi như vậy qua next(err).\n\n4. While “tidying up”, someone moves the JSON 404 handler and the error handler ABOVE app.use('/api/v1/notes', notesRouter). Symptom?Trong lúc “dọn dẹp”, ai đó dời handler 404 JSON và error handler lên TRÊN app.use('/api/v1/notes', notesRouter). Triệu chứng?\n   Answer: b) Every request becomes a 404, even endpoints nobody touched\n   app.use with no path matches everything, and the 404 handler responds — nothing below it ever runs.VI: app.use không có path khớp mọi thứ, và handler 404 phản hồi — không gì bên dưới được chạy nữa.\n\n5. In process.on('uncaughtException', …) the lesson logs and then…Trong process.on('uncaughtException', …) bài ghi log rồi…\n   Answer: a) calls process.exit(1) and lets Docker/systemd start a clean process\n   After an uncaught exception the state is unknown (half a transaction, a released lock, a corrupted cache). A server that “survives” it quietly serves wrong data.VI: Sau một uncaught exception trạng thái không xác định (nửa transaction, khoá đã nhả, cache hỏng). Server “sống sót” qua nó sẽ âm thầm phục vụ dữ liệu sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> It is treated as a normal middleware and never runs for errors — Express’s default HTML 500 answers instead</p><p>Express counts declared parameters (fn.length) at registration time. No warning — “if errors are not reaching the handler, count the parameters first”.</p><p><i>VI: Express đếm số tham số khai báo (fn.length) lúc đăng ký. Không có cảnh báo — “nếu lỗi không tới handler, hãy đếm tham số trước”.</i></p></li><li><p><b>d)</b> nothing: the request hangs, the error only appears as an unhandledRejection</p><p>Measured again: Express 4 times out, Express 5 answers 500 through the error handler. On v4 wrap every async handler: fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next).</p><p><i>VI: Đo lại: Express 4 hết giờ, Express 5 trả 500 qua error handler. Trên v4 phải bọc mọi handler async: fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next).</i></p></li><li><p><b>d)</b> The process crashes — Express 5 only catches a rejected promise returned by the handler</p><p>By the time the callback runs, the request’s call stack is long gone. Plumb such errors through next(err).</p><p><i>VI: Khi callback chạy, call stack của request đã mất từ lâu. Đưa những lỗi như vậy qua next(err).</i></p></li><li><p><b>b)</b> Every request becomes a 404, even endpoints nobody touched</p><p>app.use with no path matches everything, and the 404 handler responds — nothing below it ever runs.</p><p><i>VI: app.use không có path khớp mọi thứ, và handler 404 phản hồi — không gì bên dưới được chạy nữa.</i></p></li><li><p><b>a)</b> calls process.exit(1) and lets Docker/systemd start a clean process</p><p>After an uncaught exception the state is unknown (half a transaction, a released lock, a corrupted cache). A server that “survives” it quietly serves wrong data.</p><p><i>VI: Sau một uncaught exception trạng thái không xác định (nửa transaction, khoá đã nhả, cache hỏng). Server “sống sót” qua nó sẽ âm thầm phục vụ dữ liệu sai.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You register <code>app.use((err, req, res) =&gt; res.status(500).json(…))</code> — three parameters. What happens to errors?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn đăng ký <code>app.use((err, req, res) =&gt; res.status(500).json(…))</code> — ba tham số. Lỗi sẽ ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is treated as a normal middleware and never runs for errors — Express’s default HTML 500 answers instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It runs for errors, but next() is undefined inside it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express notices the missing next and treats it as an error handler anyway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express throws at startup because an error handler needs four parameters"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Express counts declared parameters (fn.length) at registration time. No warning — “if errors are not reaching the handler, count the parameters first”.</p><p><i>VI: Express đếm số tham số khai báo (fn.length) lúc đăng ký. Không có cảnh báo — “nếu lỗi không tới handler, hãy đếm tham số trước”.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><code>app.get('/x', async () =&gt; { await sleep(10); throw new Error('boom') })</code> on Express 4.22.2 — the client gets…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>app.get('/x', async () =&gt; { await sleep(10); throw new Error('boom') })</code> trên Express 4.22.2 — client nhận…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a 400, because the handler returned a rejected promise"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a 500 from Express’s default handler with the stack"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a 500 from the error handler, like a sync throw"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing: the request hangs, the error only appears as an unhandledRejection"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured again: Express 4 times out, Express 5 answers 500 through the error handler. On v4 wrap every async handler: fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next).</p><p><i>VI: Đo lại: Express 4 hết giờ, Express 5 trả 500 qua error handler. Trên v4 phải bọc mọi handler async: fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On Express 5, a handler does <code>setTimeout(() =&gt; { throw new Error('x') }, 10)</code>. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Express 5, một handler làm <code>setTimeout(() =&gt; { throw new Error('x') }, 10)</code>. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express converts it into next(err) when the timer fires"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The error is ignored because the response was already sent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express 5 catches it and answers 500"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The process crashes — Express 5 only catches a rejected promise returned by the handler"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>By the time the callback runs, the request’s call stack is long gone. Plumb such errors through next(err).</p><p><i>VI: Khi callback chạy, call stack của request đã mất từ lâu. Đưa những lỗi như vậy qua next(err).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>While “tidying up”, someone moves the JSON 404 handler and the error handler ABOVE <code>app.use('/api/v1/notes', notesRouter)</code>. Symptom?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong lúc “dọn dẹp”, ai đó dời handler 404 JSON và error handler lên TRÊN <code>app.use('/api/v1/notes', notesRouter)</code>. Triệu chứng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express refuses to start because of the order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every request becomes a 404, even endpoints nobody touched"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only unknown routes return 404, as before"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Errors are no longer caught, but routes still work"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>app.use with no path matches everything, and the 404 handler responds — nothing below it ever runs.</p><p><i>VI: app.use không có path khớp mọi thứ, và handler 404 phản hồi — không gì bên dưới được chạy nữa.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In <code>process.on('uncaughtException', …)</code> the lesson logs and then…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong <code>process.on('uncaughtException', …)</code> bài ghi log rồi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "calls process.exit(1) and lets Docker/systemd start a clean process"
+              },
+              {
+                "ma": "b",
+                "noiDung": "restarts the Express app inside the same process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sends a 500 to every open request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "keeps the server running so users are not affected"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>After an uncaught exception the state is unknown (half a transaction, a released lock, a corrupted cache). A server that “survives” it quietly serves wrong data.</p><p><i>VI: Sau một uncaught exception trạng thái không xác định (nửa transaction, khoá đã nhả, cache hỏng). Server “sống sót” qua nó sẽ âm thầm phục vụ dữ liệu sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting the unused next parameter of the error handler “to satisfy the linter”.|||Xoá tham số next không dùng của error handler “cho linter vui”."
+        },
+        {
+          "loi": "Catching uncaughtException and carrying on.|||Bắt uncaughtException rồi chạy tiếp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error handler",
+          "vi": "middleware xử lý lỗi (4 tham số)"
+        },
+        {
+          "en": "unhandledRejection",
+          "vi": "Promise bị reject mà không ai bắt"
+        },
+        {
+          "en": "supervisor",
+          "vi": "trình giám sát (Docker, systemd) khởi động lại tiến trình"
+        }
+      ]
+    },
+    {
+      "title": "5.4 · AppError and a JSON 404",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "errors",
+        "classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the two smallest pieces of <code>middleware/errors.js</code>:</p>\n<ul><li><code>class AppError extends Error</code> with <code>constructor(status, code, message)</code> — it keeps the message (via <code>super</code>) and stores <code>status</code> and <code>code</code>. <code>new AppError(404, 'NOTE_NOT_FOUND', 'Note 42 does not exist')</code> must still be an <code>Error</code>;</li><li><code>notFound(req, res)</code> — the JSON 404 that replaces Express’s HTML page: status 404, <code>{ error: { code: \"NOT_FOUND\", message: \"Cannot &lt;METHOD&gt; &lt;path&gt;\" } }</code> (path without the query string).</li></ul><pre>curl /api/v1/khong-co\n{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Cannot GET /api/v1/khong-co\"}}   [404]</pre><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>AppError must call super(message) first.</li>\n  <li>notFound uses req.path, not req.originalUrl.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hai mảnh nhỏ nhất của <code>middleware/errors.js</code>:</p>\n<ul><li><code>class AppError extends Error</code> với <code>constructor(status, code, message)</code> — giữ message (qua <code>super</code>) và lưu <code>status</code>, <code>code</code>. <code>new AppError(404, 'NOTE_NOT_FOUND', 'Note 42 does not exist')</code> vẫn phải là một <code>Error</code>;</li><li><code>notFound(req, res)</code> — 404 dạng JSON thay cho trang HTML của Express: status 404, <code>{ error: { code: \"NOT_FOUND\", message: \"Cannot &lt;METHOD&gt; &lt;path&gt;\" } }</code> (path không kèm query string).</li></ul><pre>curl /api/v1/khong-co\n{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Cannot GET /api/v1/khong-co\"}}   [404]</pre><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>AppError phải gọi super(message) trước.</li>\n  <li>notFound dùng req.path, không phải req.originalUrl.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const e = new AppError(404, \"NOTE_NOT_FOUND\", \"Note 42 does not exist\"); return [e instanceof Error, e.status, e.code, e.message, typeof e.stack]; })()",
+          "output": "[true,404,\"NOTE_NOT_FOUND\",\"Note 42 does not exist\",\"string\"]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "class AppError extends Error { constructor(status, code, message) { super(message); this.status = status; … } }",
+        "notFound is a normal middleware: it answers and does not call next.|||notFound là middleware thường: nó trả lời và không gọi next."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "errors.js",
+          "language": "javascript",
+          "code": "/** an Error that carries an HTTP status and a stable code */\nclass AppError {\n  // Write your solution here — this is not an Error at all\n  constructor(status, code, message) {\n    this.status = status;\n    this.code = code;\n    this.message = message;\n  }\n}\n/** the JSON 404, mounted after every route */\nfunction notFound(req, res) {\n  res.status(404).send('Not Found');\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "errors.js",
+          "language": "javascript",
+          "code": "// Reference solution — a real Error subclass, and the JSON 404\nclass AppError extends Error {\n  constructor(status, code, message) {\n    super(message);\n    this.status = status;   // for HTTP and proxies\n    this.code = code;       // a stable string the frontend can branch on forever\n  }\n}\n\nfunction notFound(req, res) {\n  // after every route, before the error handler\n  res.status(404).json({ error: { code: 'NOT_FOUND', message: `Cannot ${req.method} ${req.path}` } });\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Why both a status and a code? The status is for HTTP and proxies; the code is for your frontend, which can branch on <code>NOTE_NOT_FOUND</code> forever while the human message changes, gets translated, or is rewritten by a designer. Never make a client parse the message string.</p>",
+      "solutionExplanationHtmlVi": "<p>Vì sao cần cả status lẫn code? status dành cho HTTP và proxy; code dành cho frontend, nó rẽ nhánh theo <code>NOTE_NOT_FOUND</code> mãi mãi trong khi câu chữ cho người đọc có thể đổi, được dịch, hay bị designer viết lại. Đừng bao giờ bắt client phân tích chuỗi message.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "errors.js",
+        "tepNap": [
+          "mini-express.js",
+          "errors.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "AppError is a real Error",
+              "vi": "AppError là một Error thật"
+            },
+            "goi": "(() => { const e = new AppError(404, \"NOTE_NOT_FOUND\", \"Note 42 does not exist\"); return [e instanceof Error, e.status, e.code, e.message, typeof e.stack]; })()",
+            "chuanBi": "function appWithNotFound() { const app = express(); app.get(\"/health\", (req, res) => res.json({ status: \"ok\" })); app.use(notFound); return app; }",
+            "mongDoi": [
+              true,
+              404,
+              "NOTE_NOT_FOUND",
+              "Note 42 does not exist",
+              "string"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s JSON 404",
+              "vi": "404 JSON của bài"
+            },
+            "goi": "await (async () => { const r = await request(appWithNotFound(), \"GET\", \"/api/v1/khong-co\"); return [r.status, r.body]; })()",
+            "chuanBi": "function appWithNotFound() { const app = express(); app.get(\"/health\", (req, res) => res.json({ status: \"ok\" })); app.use(notFound); return app; }",
+            "mongDoi": [
+              404,
+              {
+                "error": {
+                  "code": "NOT_FOUND",
+                  "message": "Cannot GET /api/v1/khong-co"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "await (async () => { const r = await request(appWithNotFound(), \"DELETE\", \"/api/v1/notes/9?force=1\"); return [r.status, r.headers[\"content-type\"], r.body]; })()",
+            "chuanBi": "function appWithNotFound() { const app = express(); app.get(\"/health\", (req, res) => res.json({ status: \"ok\" })); app.use(notFound); return app; }",
+            "mongDoi": [
+              404,
+              "application/json; charset=utf-8",
+              {
+                "error": {
+                  "code": "NOT_FOUND",
+                  "message": "Cannot DELETE /api/v1/notes/9"
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => [(await request(appWithNotFound(), \"GET\", \"/health\")).status, new AppError(422, \"VALIDATION_FAILED\", \"title is required\").message])()",
+            "chuanBi": "function appWithNotFound() { const app = express(); app.get(\"/health\", (req, res) => res.json({ status: \"ok\" })); app.use(notFound); return app; }",
+            "mongDoi": [
+              200,
+              "title is required"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting super(message): this cannot be used before super() — the constructor throws.|||Quên super(message): không dùng được this trước super() — constructor ném lỗi."
+        },
+        {
+          "loi": "A plain object { status, code } instead of a class: it is not an Error, has no stack, and instanceof checks fail.|||Một object thường { status, code } thay vì lớp: nó không phải Error, không có stack, và instanceof thất bại."
+        },
+        {
+          "loi": "Putting the query string in the message: \"Cannot GET /x?token=…\" can leak secrets into logs.|||Đưa query string vào message: \"Cannot GET /x?token=…\" có thể lộ bí mật vào log."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "custom error class",
+          "vi": "lớp lỗi tự định nghĩa"
+        },
+        {
+          "en": "error code",
+          "vi": "mã lỗi ổn định cho máy đọc"
+        }
+      ]
+    },
+    {
+      "title": "5.4 · The full error handler: one shape, no leaks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the lesson’s <code>errorHandler(err, req, res, next)</code> (<code>AppError</code> is provided):</p>\n<ul><li><b>first</b> convert body-parser errors: <code>err.type === \"entity.parse.failed\"</code> → <code>new AppError(400, \"INVALID_JSON\", \"Request body is not valid JSON\")</code>; <code>\"entity.too.large\"</code> → <code>new AppError(413, \"PAYLOAD_TOO_LARGE\", \"Request body is too large\")</code>;</li><li><code>status = err.status || 500</code>;</li><li>for 5xx: <code>console.error('[500]', err.message)</code> — 4xx are normal traffic, do not log them;</li><li>respond <code>{ error: { code: err.code || \"INTERNAL\", message } }</code>, where <code>message</code> is <code>\"Internal server error\"</code> for 5xx (never echo it — internal messages leak table names and passwords) and <code>err.message</code> for 4xx.</li></ul><p>Keep the fourth parameter even though you do not use it.</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>errorHandler.length must be 4.</li>\n  <li>One response shape for every error.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>errorHandler(err, req, res, next)</code> của bài (có sẵn <code>AppError</code>):</p>\n<ul><li><b>trước tiên</b> đổi lỗi của body-parser: <code>err.type === \"entity.parse.failed\"</code> → <code>new AppError(400, \"INVALID_JSON\", \"Request body is not valid JSON\")</code>; <code>\"entity.too.large\"</code> → <code>new AppError(413, \"PAYLOAD_TOO_LARGE\", \"Request body is too large\")</code>;</li><li><code>status = err.status || 500</code>;</li><li>với 5xx: <code>console.error('[500]', err.message)</code> — 4xx là lưu lượng bình thường, đừng log;</li><li>trả <code>{ error: { code: err.code || \"INTERNAL\", message } }</code>, với <code>message</code> là <code>\"Internal server error\"</code> cho 5xx (không bao giờ gửi lại — thông điệp nội bộ lộ tên bảng và mật khẩu) và <code>err.message</code> cho 4xx.</li></ul><p>Giữ tham số thứ tư dù không dùng.</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>errorHandler.length phải là 4.</li>\n  <li>Một dạng phản hồi cho mọi lỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[s(await request(app, \"GET\", \"/app-error\")), s(await request(app, \"GET\", \"/next-error\")), __log]",
+          "output": "[[404,{\"error\":{\"code\":\"NOTE_NOT_FOUND\",\"message\":\"Không tìm thấy ghi chú\"}}],[422,{\"error\":{\"code\":\"VALIDATION_FAILED\",\"message\":\"title không được để trống\"}}],[]]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Convert first, then everything else is the generic path.|||Đổi trước, phần còn lại đi đường chung.",
+        "status >= 500 decides two things: whether to log, and which message to send.|||status >= 500 quyết định hai việc: có log không, và gửi message nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "errors.js",
+          "language": "javascript",
+          "code": "class AppError extends Error {\n  constructor(status, code, message) {\n    super(message);\n    this.status = status;   // for HTTP and proxies\n    this.code = code;       // a stable string the frontend can branch on forever\n  }\n}\n\n/** one place, one response shape */\nfunction errorHandler(err, req, res) {\n  // Write your solution here — three parameters, and it echoes every message\n  res.status(err.status || 500).json({ error: err.message });\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "errors.js",
+          "language": "javascript",
+          "code": "class AppError extends Error {\n  constructor(status, code, message) {\n    super(message);\n    this.status = status;   // for HTTP and proxies\n    this.code = code;       // a stable string the frontend can branch on forever\n  }\n}\n\n// Reference solution — convert, decide by status, log only 5xx, never echo a 500\nfunction errorHandler(err, req, res, next) {   // FOUR parameters — that is the signal\n  // library errors are converted to our own shape first\n  if (err.type === 'entity.parse.failed') err = new AppError(400, 'INVALID_JSON', 'Request body is not valid JSON');\n  if (err.type === 'entity.too.large') err = new AppError(413, 'PAYLOAD_TOO_LARGE', 'Request body is too large');\n  const status = err.status || 500;\n  if (status >= 500) console.error('[500]', err.message);    // our bug: log it (with the stack in real life)\n  res.status(status).json({\n    error: {\n      code: err.code || 'INTERNAL',\n      message: status >= 500 ? 'Internal server error' : err.message,   // never echo a 500 message\n    },\n  });\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With this in place, sync throws, <code>next(err)</code> and (on Express 5) async throws all end in one function with one response shape — the lesson’s Express 5.2.1 output <code>{\"error\":{\"code\":\"INTERNAL\",\"message\":\"…\"}}</code>. Chapter 7 adds Prisma’s P2002 → 409 and chapter 8 adds TokenExpiredError → 401 to the same conversion block.</p>",
+      "solutionExplanationHtmlVi": "<p>Có nó rồi, throw đồng bộ, <code>next(err)</code> và (trên Express 5) throw bất đồng bộ đều kết thúc ở một hàm với một dạng phản hồi — đúng output Express 5.2.1 của bài <code>{\"error\":{\"code\":\"INTERNAL\",\"message\":\"…\"}}</code>. Chương 7 thêm P2002 của Prisma → 409 và chương 8 thêm TokenExpiredError → 401 vào cùng khối chuyển đổi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "errors.js",
+        "tepNap": [
+          "mini-express.js",
+          "errors.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "AppError thrown or passed to next: 404 / 422, nothing logged",
+              "vi": "AppError ném ra hoặc qua next: 404 / 422, không log gì"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/app-error\")), s(await request(app, \"GET\", \"/next-error\")), __log]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nfunction mkApp() { const app = express(); app.use(express.json({ limit: '1kb' }));\napp.get('/app-error', () => { throw new AppError(404, 'NOTE_NOT_FOUND', 'Không tìm thấy ghi chú'); });\napp.get('/next-error', (req, res, next) => next(new AppError(422, 'VALIDATION_FAILED', 'title không được để trống')));\napp.get('/boom', () => { throw new Error('relation \"notes\" does not exist (password=hunter2)'); });\napp.get('/async', async () => { await sleep(10); throw new Error('blew up AFTER an await'); });\napp.post('/notes', (req, res) => res.status(201).json(req.body));\napp.use(errorHandler); return app; }\nconst s = (r) => [r.status, r.body ?? r.headers['content-type']];\nconst app = mkApp();",
+            "mongDoi": [
+              [
+                404,
+                {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Không tìm thấy ghi chú"
+                  }
+                }
+              ],
+              [
+                422,
+                {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title không được để trống"
+                  }
+                }
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A 500 is logged but its message is not sent",
+              "vi": "500 được log nhưng message không được gửi"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/boom\")), __log]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nfunction mkApp() { const app = express(); app.use(express.json({ limit: '1kb' }));\napp.get('/app-error', () => { throw new AppError(404, 'NOTE_NOT_FOUND', 'Không tìm thấy ghi chú'); });\napp.get('/next-error', (req, res, next) => next(new AppError(422, 'VALIDATION_FAILED', 'title không được để trống')));\napp.get('/boom', () => { throw new Error('relation \"notes\" does not exist (password=hunter2)'); });\napp.get('/async', async () => { await sleep(10); throw new Error('blew up AFTER an await'); });\napp.post('/notes', (req, res) => res.status(201).json(req.body));\napp.use(errorHandler); return app; }\nconst s = (r) => [r.status, r.body ?? r.headers['content-type']];\nconst app = mkApp();",
+            "mongDoi": [
+              [
+                500,
+                {
+                  "error": {
+                    "code": "INTERNAL",
+                    "message": "Internal server error"
+                  }
+                }
+              ],
+              [
+                "[500] relation \"notes\" does not exist (password=hunter2)"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Body-parser errors in your shape",
+              "vi": "Lỗi body-parser theo dạng của bạn"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/notes\", { body: \"{title:}\" })), s(await request(app, \"POST\", \"/notes\", { body: { t: \"x\".repeat(2000) } }))]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nfunction mkApp() { const app = express(); app.use(express.json({ limit: '1kb' }));\napp.get('/app-error', () => { throw new AppError(404, 'NOTE_NOT_FOUND', 'Không tìm thấy ghi chú'); });\napp.get('/next-error', (req, res, next) => next(new AppError(422, 'VALIDATION_FAILED', 'title không được để trống')));\napp.get('/boom', () => { throw new Error('relation \"notes\" does not exist (password=hunter2)'); });\napp.get('/async', async () => { await sleep(10); throw new Error('blew up AFTER an await'); });\napp.post('/notes', (req, res) => res.status(201).json(req.body));\napp.use(errorHandler); return app; }\nconst s = (r) => [r.status, r.body ?? r.headers['content-type']];\nconst app = mkApp();",
+            "mongDoi": [
+              [
+                400,
+                {
+                  "error": {
+                    "code": "INVALID_JSON",
+                    "message": "Request body is not valid JSON"
+                  }
+                }
+              ],
+              [
+                413,
+                {
+                  "error": {
+                    "code": "PAYLOAD_TOO_LARGE",
+                    "message": "Request body is too large"
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/async\")), errorHandler.length, __log]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nfunction mkApp() { const app = express(); app.use(express.json({ limit: '1kb' }));\napp.get('/app-error', () => { throw new AppError(404, 'NOTE_NOT_FOUND', 'Không tìm thấy ghi chú'); });\napp.get('/next-error', (req, res, next) => next(new AppError(422, 'VALIDATION_FAILED', 'title không được để trống')));\napp.get('/boom', () => { throw new Error('relation \"notes\" does not exist (password=hunter2)'); });\napp.get('/async', async () => { await sleep(10); throw new Error('blew up AFTER an await'); });\napp.post('/notes', (req, res) => res.status(201).json(req.body));\napp.use(errorHandler); return app; }\nconst s = (r) => [r.status, r.body ?? r.headers['content-type']];\nconst app = mkApp();",
+            "mongDoi": [
+              [
+                500,
+                {
+                  "error": {
+                    "code": "INTERNAL",
+                    "message": "Internal server error"
+                  }
+                }
+              ],
+              4,
+              [
+                "[500] blew up AFTER an await"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/notes\", { body: { title: \"ok\" } })), s(await request(app, \"GET\", \"/next-error\")), __log.length]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nfunction mkApp() { const app = express(); app.use(express.json({ limit: '1kb' }));\napp.get('/app-error', () => { throw new AppError(404, 'NOTE_NOT_FOUND', 'Không tìm thấy ghi chú'); });\napp.get('/next-error', (req, res, next) => next(new AppError(422, 'VALIDATION_FAILED', 'title không được để trống')));\napp.get('/boom', () => { throw new Error('relation \"notes\" does not exist (password=hunter2)'); });\napp.get('/async', async () => { await sleep(10); throw new Error('blew up AFTER an await'); });\napp.post('/notes', (req, res) => res.status(201).json(req.body));\napp.use(errorHandler); return app; }\nconst s = (r) => [r.status, r.body ?? r.headers['content-type']];\nconst app = mkApp();",
+            "mongDoi": [
+              [
+                201,
+                {
+                  "title": "ok"
+                }
+              ],
+              [
+                422,
+                {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title không được để trống"
+                  }
+                }
+              ],
+              0
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "(err, req, res) with three parameters: Express treats it as a normal middleware and its own HTML 500 answers.|||(err, req, res) với ba tham số: Express coi nó là middleware thường và trang HTML 500 của chính Express trả lời."
+        },
+        {
+          "loi": "res.status(500).json({ error: err.message }) — the client reads relation \"notes\" does not exist (password=…).|||res.status(500).json({ error: err.message }) — client đọc được relation \"notes\" does not exist (password=…)."
+        },
+        {
+          "loi": "Logging every 404 and 422: the real 500s drown in noise.|||Log mọi 404 và 422: các lỗi 500 thật chìm trong tiếng ồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "information leak",
+          "vi": "lộ thông tin"
+        },
+        {
+          "en": "4xx vs 5xx",
+          "vi": "lỗi phía client vs lỗi phía server"
+        }
+      ]
+    },
+    {
+      "title": "5.4 · wrap(): make async errors reach the handler on Express 4",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "promises",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Most of the Express code you will meet at work is still Express 4, where a throw after an <code>await</code> never reaches the error handler and the request hangs. The lesson’s fix:</p><pre>const wrap = fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next);</pre><p>Write <code>wrap(fn)</code> and fix the one edge the one-liner misses: a promise rejected with <b>nothing</b> (<code>Promise.reject()</code>, <code>throw undefined</code>) would call <code>next(undefined)</code> — which Express reads as “no error, carry on”. Pass <code>new Error('Rejected promise')</code> instead (that is exactly what Express 5 does).</p><p>The grader calls your wrapped handler the way Express 4 does: inside a <code>try/catch</code> that only sees <b>synchronous</b> throws.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần lớn code Express bạn gặp ở chỗ làm vẫn là Express 4, nơi throw sau một <code>await</code> không bao giờ tới error handler và request treo. Cách sửa của bài:</p><pre>const wrap = fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next);</pre><p>Viết <code>wrap(fn)</code> và sửa luôn cái biên mà dòng đó bỏ sót: Promise bị reject với <b>không gì cả</b> (<code>Promise.reject()</code>, <code>throw undefined</code>) sẽ gọi <code>next(undefined)</code> — Express hiểu là “không lỗi, đi tiếp”. Hãy đưa <code>new Error('Rejected promise')</code> thay vào (đúng điều Express 5 làm).</p><p>Máy chấm gọi handler đã bọc theo cách Express 4 làm: bên trong một <code>try/catch</code> chỉ thấy throw <b>đồng bộ</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "fn — a (possibly async) handler (req, res, next)|||fn — handler (có thể async) (req, res, next)",
+      "outputSpec": "a handler that forwards rejections to next|||một handler chuyển reject sang next",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await express4Call(wrap(async (req, res) => { await sleep(10); throw new Error(\"blew up AFTER an await\"); }))",
+          "output": "[[\"next\",\"Error: blew up AFTER an await\"]]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Promise.resolve(x) works whether fn returned a promise or a plain value.|||Promise.resolve(x) chạy được dù fn trả Promise hay giá trị thường.",
+        ".catch((err) => next(err || new Error(\"Rejected promise\")))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** forward async errors to next() — for Express 4 */\nfunction wrap(fn) {\n  // Write your solution here\n  return fn;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — the lesson's one-liner, plus the falsy-rejection fallback\nfunction wrap(fn) {\n  return function (req, res, next) {\n    // a sync throw is caught by Express 4 itself; a rejection must be forwarded by hand\n    Promise.resolve(fn(req, res, next)).catch((err) => next(err || new Error('Rejected promise')));\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On Express 5 you no longer need this — the router does it, including the “Rejected promise” fallback. But you will still see <code>wrap</code> (or the <code>express-async-errors</code> package) in a lot of code, and knowing why it exists is how you recognise an Express 4 codebase that “randomly hangs”.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên Express 5 bạn không cần nó nữa — router làm việc này, kể cả phương án “Rejected promise”. Nhưng bạn vẫn sẽ gặp <code>wrap</code> (hay gói <code>express-async-errors</code>) trong rất nhiều code, và hiểu vì sao nó tồn tại là cách nhận ra một codebase Express 4 hay “treo ngẫu nhiên”.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A throw after await reaches next(err)",
+              "vi": "Throw sau await tới được next(err)"
+            },
+            "goi": "await express4Call(wrap(async (req, res) => { await sleep(10); throw new Error(\"blew up AFTER an await\"); }))",
+            "chuanBi": "// what Express 4 does around a handler: it catches SYNC throws only\nfunction express4Call(handler, req) { const calls = []; const res = { json: (b) => { calls.push(['json', b]); } };\nconst next = (err) => { calls.push(['next', err ? err.name + ': ' + err.message : 'no error']); };\ntry { handler(req || {}, res, next); } catch (e) { next(e); }\nreturn new Promise((r) => setTimeout(() => r(calls), 50)); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));",
+            "mongDoi": [
+              [
+                "next",
+                "Error: blew up AFTER an await"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Success: no next() at all",
+              "vi": "Thành công: không gọi next()"
+            },
+            "goi": "await express4Call(wrap(async (req, res) => { await sleep(5); res.json({ ok: true }); }))",
+            "chuanBi": "// what Express 4 does around a handler: it catches SYNC throws only\nfunction express4Call(handler, req) { const calls = []; const res = { json: (b) => { calls.push(['json', b]); } };\nconst next = (err) => { calls.push(['next', err ? err.name + ': ' + err.message : 'no error']); };\ntry { handler(req || {}, res, next); } catch (e) { next(e); }\nreturn new Promise((r) => setTimeout(() => r(calls), 50)); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));",
+            "mongDoi": [
+              [
+                "json",
+                {
+                  "ok": true
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A sync throw still reaches next(err) once",
+              "vi": "Throw đồng bộ vẫn tới next(err) đúng một lần"
+            },
+            "goi": "await express4Call(wrap((req, res) => { throw new Error(\"sync\"); }))",
+            "chuanBi": "// what Express 4 does around a handler: it catches SYNC throws only\nfunction express4Call(handler, req) { const calls = []; const res = { json: (b) => { calls.push(['json', b]); } };\nconst next = (err) => { calls.push(['next', err ? err.name + ': ' + err.message : 'no error']); };\ntry { handler(req || {}, res, next); } catch (e) { next(e); }\nreturn new Promise((r) => setTimeout(() => r(calls), 50)); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));",
+            "mongDoi": [
+              [
+                "next",
+                "Error: sync"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await express4Call(wrap(async () => { await sleep(1); return Promise.reject(); })), await express4Call(wrap(() => Promise.reject(undefined)))]",
+            "chuanBi": "// what Express 4 does around a handler: it catches SYNC throws only\nfunction express4Call(handler, req) { const calls = []; const res = { json: (b) => { calls.push(['json', b]); } };\nconst next = (err) => { calls.push(['next', err ? err.name + ': ' + err.message : 'no error']); };\ntry { handler(req || {}, res, next); } catch (e) { next(e); }\nreturn new Promise((r) => setTimeout(() => r(calls), 50)); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));",
+            "mongDoi": [
+              [
+                [
+                  "next",
+                  "Error: Rejected promise"
+                ]
+              ],
+              [
+                [
+                  "next",
+                  "Error: Rejected promise"
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await express4Call(wrap((req, res) => { res.json({ plain: true }); return 42; })), await express4Call(wrap(async (req, res, next) => { next(new TypeError(\"explicit\")); }))]",
+            "chuanBi": "// what Express 4 does around a handler: it catches SYNC throws only\nfunction express4Call(handler, req) { const calls = []; const res = { json: (b) => { calls.push(['json', b]); } };\nconst next = (err) => { calls.push(['next', err ? err.name + ': ' + err.message : 'no error']); };\ntry { handler(req || {}, res, next); } catch (e) { next(e); }\nreturn new Promise((r) => setTimeout(() => r(calls), 50)); }\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));",
+            "mongDoi": [
+              [
+                [
+                  "json",
+                  {
+                    "plain": true
+                  }
+                ]
+              ],
+              [
+                [
+                  "next",
+                  "TypeError: explicit"
+                ]
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling next() in .then() after a successful handler: it continues the chain after the response was sent.|||Gọi next() trong .then() sau handler thành công: chuỗi đi tiếp sau khi đã phản hồi."
+        },
+        {
+          "loi": ".catch(next) as-is: Promise.reject() becomes next(undefined) — the request silently falls through to the 404.|||.catch(next) nguyên văn: Promise.reject() thành next(undefined) — request âm thầm rơi xuống 404."
+        },
+        {
+          "loi": "Wrapping only some handlers: the one you forgot is the one that hangs.|||Chỉ bọc vài handler: cái bạn quên chính là cái treo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rejection",
+          "vi": "Promise bị từ chối"
+        },
+        {
+          "en": "falsy",
+          "vi": "giá trị bị coi là false (undefined, null, 0, \"\")"
+        }
+      ]
+    },
+    {
+      "title": "5.4 · The two errors that still kill the process: log, then exit",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "process",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Express catches errors <i>inside</i> a request. Two categories live outside any request. Write <code>installCrashHandlers(proc, log)</code> (<code>proc</code> is <code>process</code>; in the grader a fake with <code>on</code> and <code>exit</code>):</p>\n<ul><li><code>'unhandledRejection'</code> → <code>log('unhandledRejection', message)</code> then <code>proc.exit(1)</code> — the reason may not be an Error: use <code>reason.message</code> for an Error, <code>String(reason)</code> otherwise;</li><li><code>'uncaughtException'</code> → <code>log('uncaughtException', err.message)</code> then <code>proc.exit(1)</code>.</li></ul><p>Do <b>not</b> keep running: after an uncaught exception the process state is unknown.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Express bắt lỗi <i>bên trong</i> một request. Hai loại lỗi sống ngoài mọi request. Viết <code>installCrashHandlers(proc, log)</code> (<code>proc</code> là <code>process</code>; trong máy chấm là bản giả có <code>on</code> và <code>exit</code>):</p>\n<ul><li><code>'unhandledRejection'</code> → <code>log('unhandledRejection', message)</code> rồi <code>proc.exit(1)</code> — lý do có thể không phải Error: dùng <code>reason.message</code> nếu là Error, <code>String(reason)</code> nếu không;</li><li><code>'uncaughtException'</code> → <code>log('uncaughtException', err.message)</code> rồi <code>proc.exit(1)</code>.</li></ul><p><b>Không</b> được chạy tiếp: sau một uncaught exception trạng thái tiến trình không xác định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "proc — an EventEmitter with exit(code); log — a function|||proc — EventEmitter có exit(code); log — một hàm",
+      "outputSpec": "nothing — it registers two listeners|||không trả gì — nó đăng ký hai listener",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const { proc, lines } = setup(); proc.emit(\"uncaughtException\", new Error(\"boom\")); return { lines, exits: proc.exits }; })()",
+          "output": "{\"lines\":[\"uncaughtException boom\"],\"exits\":[1]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two proc.on(…) calls, each ending with proc.exit(1).|||Hai lời gọi proc.on(…), mỗi cái kết thúc bằng proc.exit(1).",
+        "Promise.reject(\"nope\") gives a string as the reason — no .message.|||Promise.reject(\"nope\") cho lý do là một chuỗi — không có .message."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** log, then exit(1), for errors that live outside any request */\nfunction installCrashHandlers(proc, log) {\n  // Write your solution here — this keeps the process alive \"to protect users\"\n  proc.on('uncaughtException', (err) => log('uncaughtException', err.message));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — log, then let the supervisor restart a clean process\nfunction installCrashHandlers(proc, log) {\n  proc.on('unhandledRejection', (reason) => {\n    log('unhandledRejection', reason instanceof Error ? reason.message : String(reason));\n    proc.exit(1);           // log, then let the supervisor restart us with a clean state\n  });\n  proc.on('uncaughtException', (err) => {\n    log('uncaughtException', err.message);\n    proc.exit(1);\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exit code 1 tells Docker (<code>restart: unless-stopped</code>) or systemd that this was a failure, so it starts a clean process. Combined with graceful shutdown (lesson 5.5) and a supervisor, “crash early” is the safe default — this is why lesson 1.4 spent time on unhandledRejection.</p>",
+      "solutionExplanationHtmlVi": "<p>Mã thoát 1 báo cho Docker (<code>restart: unless-stopped</code>) hay systemd rằng đây là thất bại, nên nó khởi động một tiến trình sạch. Cùng với tắt êm (bài 5.5) và một trình giám sát, “sập sớm” là mặc định an toàn — đó là lý do bài 1.4 dành thời gian cho unhandledRejection.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "uncaughtException: log + exit(1)",
+              "vi": "uncaughtException: log + exit(1)"
+            },
+            "goi": "(() => { const { proc, lines } = setup(); proc.emit(\"uncaughtException\", new Error(\"boom\")); return { lines, exits: proc.exits }; })()",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkProc() { const p = __em({ exits: [] }); p.exit = (code) => { p.exits.push(code); }; return p; }\nfunction setup() { const proc = mkProc(); const lines = []; installCrashHandlers(proc, (...a) => lines.push(a.join(' '))); return { proc, lines }; }",
+            "mongDoi": {
+              "lines": [
+                "uncaughtException boom"
+              ],
+              "exits": [
+                1
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "unhandledRejection: log + exit(1)",
+              "vi": "unhandledRejection: log + exit(1)"
+            },
+            "goi": "(() => { const { proc, lines } = setup(); proc.emit(\"unhandledRejection\", new Error(\"db down\")); return { lines, exits: proc.exits }; })()",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkProc() { const p = __em({ exits: [] }); p.exit = (code) => { p.exits.push(code); }; return p; }\nfunction setup() { const proc = mkProc(); const lines = []; installCrashHandlers(proc, (...a) => lines.push(a.join(' '))); return { proc, lines }; }",
+            "mongDoi": {
+              "lines": [
+                "unhandledRejection db down"
+              ],
+              "exits": [
+                1
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(() => { const { proc, lines } = setup(); proc.emit(\"unhandledRejection\", \"nope\"); proc.emit(\"unhandledRejection\", 42); return { lines, exits: proc.exits, listeners: [proc.listenerCount(\"unhandledRejection\"), proc.listenerCount(\"uncaughtException\")] }; })()",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkProc() { const p = __em({ exits: [] }); p.exit = (code) => { p.exits.push(code); }; return p; }\nfunction setup() { const proc = mkProc(); const lines = []; installCrashHandlers(proc, (...a) => lines.push(a.join(' '))); return { proc, lines }; }",
+            "mongDoi": {
+              "lines": [
+                "unhandledRejection nope",
+                "unhandledRejection 42"
+              ],
+              "exits": [
+                1,
+                1
+              ],
+              "listeners": [
+                1,
+                1
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Logging and carrying on: a half-finished transaction or a corrupted cache keeps serving wrong data.|||Log rồi chạy tiếp: một transaction dở dang hay cache hỏng tiếp tục phục vụ dữ liệu sai."
+        },
+        {
+          "loi": "exit(0): the supervisor thinks the process stopped on purpose and may not restart it.|||exit(0): trình giám sát tưởng tiến trình cố ý dừng và có thể không khởi động lại."
+        },
+        {
+          "loi": "reason.message on a string reason → undefined in the log.|||reason.message trên lý do kiểu chuỗi → undefined trong log."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exit code",
+          "vi": "mã thoát"
+        },
+        {
+          "en": "crash early",
+          "vi": "sập sớm (fail fast)"
+        }
+      ]
+    },
+    {
+      "title": "5.4 · Wire it: request id, JSON 404 and the handler — in the right order",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "Express",
+        "errors",
+        "observability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The starter “tidied up” <code>createApp()</code> and now <b>every</b> endpoint answers 404. Fix it and add what this site’s error handler does on top of the lesson’s:</p>\n<ol><li><code>requestId(req, res, next)</code>: <code>req.id</code> = the incoming <code>X-Request-ID</code> header if present, else <code>\"req-1\"</code>, <code>\"req-2\"</code>… (a counter <code>requestId.count</code>, starting at 0); set the response header <code>X-Request-ID</code>; <code>next()</code>;</li>\n<li><code>errorHandler6(err, req, res, next)</code>: convert <code>entity.parse.failed</code> → <code>AppError(400, \"INVALID_JSON\", \"Request body is not valid JSON\")</code>; status = <code>err.status || 500</code>; body <code>{ error: { code, message } }</code> as in the previous exercise, and for <b>5xx only</b> add <code>requestId: req.id</code> and log <code>console.error(`[500] ${req.id} ${err.message}`)</code>;</li>\n<li><code>createApp()</code>: <code>x-powered-by</code> disabled, then <code>requestId</code>, <code>express.json()</code>, the notes router at <code>/api/v1/notes</code>, <code>notFound</code>, <code>errorHandler6</code> — in that order.</li></ol><p><code>AppError</code>, <code>notFound</code> and <code>notesRouter()</code> are provided.</p><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>notFound and the error handler come after the router; the error handler is last.</li>\n  <li>A 4xx response has no requestId field and logs nothing.</li>\n</ul>",
+      "problemHtmlVi": "<p>Code khởi đầu đã “dọn dẹp” <code>createApp()</code> và giờ <b>mọi</b> endpoint đều trả 404. Sửa nó và thêm thứ mà error handler của trang này làm thêm so với bài:</p>\n<ol><li><code>requestId(req, res, next)</code>: <code>req.id</code> = header <code>X-Request-ID</code> gửi tới nếu có, ngược lại <code>\"req-1\"</code>, <code>\"req-2\"</code>… (bộ đếm <code>requestId.count</code>, bắt đầu từ 0); đặt header phản hồi <code>X-Request-ID</code>; <code>next()</code>;</li>\n<li><code>errorHandler6(err, req, res, next)</code>: đổi <code>entity.parse.failed</code> → <code>AppError(400, \"INVALID_JSON\", \"Request body is not valid JSON\")</code>; status = <code>err.status || 500</code>; thân <code>{ error: { code, message } }</code> như bài trước, và <b>chỉ với 5xx</b> thêm <code>requestId: req.id</code> và log <code>console.error(`[500] ${req.id} ${err.message}`)</code>;</li>\n<li><code>createApp()</code>: tắt <code>x-powered-by</code>, rồi <code>requestId</code>, <code>express.json()</code>, router notes ở <code>/api/v1/notes</code>, <code>notFound</code>, <code>errorHandler6</code> — đúng thứ tự đó.</li></ol><p>Có sẵn <code>AppError</code>, <code>notFound</code> và <code>notesRouter()</code>.</p><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>notFound và error handler đứng sau router; error handler là cuối cùng.</li>\n  <li>Phản hồi 4xx không có trường requestId và không log gì.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[s(await request(app, \"GET\", \"/api/v1/notes\")), s(await request(app, \"GET\", \"/api/v1/notes/1\"))]",
+          "output": "[{\"status\":200,\"id\":\"req-1\",\"powered\":null,\"body\":{\"items\":[{\"id\":1,\"title\":\"Learning Express\"}]}},{\"status\":200,\"id\":\"req-2\",\"powered\":null,\"body\":{\"id\":1,\"title\":\"Learning Express\"}}]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Read the starter’s createApp top to bottom and ask, for GET /api/v1/notes, who answers first.|||Đọc createApp của code khởi đầu từ trên xuống và hỏi, với GET /api/v1/notes, ai trả lời trước.",
+        "requestId.count is a property on the function itself — ++requestId.count.|||requestId.count là thuộc tính trên chính hàm — ++requestId.count.",
+        "Build the body object first, then add requestId only when status >= 500.|||Dựng object thân trước, rồi chỉ thêm requestId khi status >= 500."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// ── provided: the routes (do not change) ──\nclass AppError extends Error {\n  constructor(status, code, message) {\n    super(message);\n    this.status = status;   // for HTTP and proxies\n    this.code = code;       // a stable string the frontend can branch on forever\n  }\n}\n\nfunction notFound(req, res) {\n  // after every route, before the error handler\n  res.status(404).json({ error: { code: 'NOT_FOUND', message: `Cannot ${req.method} ${req.path}` } });\n}\n\nfunction notesRouter() {\n  const r = express.Router();\n  r.get('/', (req, res) => res.json({ items: [{ id: 1, title: 'Learning Express' }] }));\n  r.get('/:id', (req, res) => { if (req.params.id !== '1') throw new AppError(404, 'NOTE_NOT_FOUND', `Note ${req.params.id} does not exist`); res.json({ id: 1, title: 'Learning Express' }); });\n  r.post('/', (req, res) => res.status(201).json({ id: 2, ...req.body }));\n  r.get('/crash/now', async () => { await new Promise((z) => setTimeout(z, 5)); throw new Error('connect ECONNREFUSED 10.0.0.5:5432'); });\n  return r;\n}\n/** stamps every request with an id */\nfunction requestId(req, res, next) {\n  // Write your solution here\n  next();\n}\nrequestId.count = 0;\n/** the error handler, with a request id on 5xx */\nfunction errorHandler6(err, req, res, next) {\n  const status = err.status || 500;\n  res.status(status).json({ error: { code: err.code || 'INTERNAL', message: status >= 500 ? 'Internal server error' : err.message } });\n}\n/** the app — tidied up, and now everything is a 404 */\nfunction createApp() {\n  const app = express();\n  app.use(requestId);\n  app.use(express.json({ limit: '100kb' }));\n  app.use(notFound);\n  app.use(errorHandler6);\n  app.use('/api/v1/notes', notesRouter());\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// ── provided: the routes (do not change) ──\nclass AppError extends Error {\n  constructor(status, code, message) {\n    super(message);\n    this.status = status;   // for HTTP and proxies\n    this.code = code;       // a stable string the frontend can branch on forever\n  }\n}\n\nfunction notFound(req, res) {\n  // after every route, before the error handler\n  res.status(404).json({ error: { code: 'NOT_FOUND', message: `Cannot ${req.method} ${req.path}` } });\n}\n\nfunction notesRouter() {\n  const r = express.Router();\n  r.get('/', (req, res) => res.json({ items: [{ id: 1, title: 'Learning Express' }] }));\n  r.get('/:id', (req, res) => { if (req.params.id !== '1') throw new AppError(404, 'NOTE_NOT_FOUND', `Note ${req.params.id} does not exist`); res.json({ id: 1, title: 'Learning Express' }); });\n  r.post('/', (req, res) => res.status(201).json({ id: 2, ...req.body }));\n  r.get('/crash/now', async () => { await new Promise((z) => setTimeout(z, 5)); throw new Error('connect ECONNREFUSED 10.0.0.5:5432'); });\n  return r;\n}\n// Reference solution — id first, router, then 404, then the handler with the id on 5xx\nfunction requestId(req, res, next) {\n  // reuse an id from the proxy if there is one, else make our own\n  req.id = req.get('x-request-id') || `req-${++requestId.count}`;\n  res.set('X-Request-ID', req.id);\n  next();\n}\n\nrequestId.count = 0;\n\nfunction errorHandler6(err, req, res, next) {\n  if (err.type === 'entity.parse.failed') err = new AppError(400, 'INVALID_JSON', 'Request body is not valid JSON');\n  const status = err.status || 500;\n  const body = { code: err.code || 'INTERNAL', message: status >= 500 ? 'Internal server error' : err.message };\n  if (status >= 500) {\n    body.requestId = req.id;                              // the id in the user's screenshot finds the stack in one grep\n    console.error(`[500] ${req.id} ${err.message}`);\n  }\n  res.status(status).json({ error: body });\n}\n\nfunction createApp() {\n  const app = express();\n  app.disable('x-powered-by');\n  app.use(requestId);                                     // first: every response gets an id\n  app.use(express.json({ limit: '100kb' }));\n  app.use('/api/v1/notes', notesRouter());\n  app.use(notFound);                                      // after the routes\n  app.use(errorHandler6);                                 // last\n  return app;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>“When someone reports ‘it failed’, the id in their screenshot finds the exact stack trace in the logs in one grep — instead of guessing which of four hundred 500s that day was theirs.” Reusing an incoming <code>X-Request-ID</code> lets the id follow a request through Nginx and other services.</p>",
+      "solutionExplanationHtmlVi": "<p>“Khi ai đó báo ‘nó lỗi’, id trong ảnh chụp màn hình của họ tìm ra đúng stack trace trong log bằng một lệnh grep — thay vì đoán xem lỗi 500 nào trong bốn trăm lỗi hôm đó là của họ.” Dùng lại <code>X-Request-ID</code> gửi tới giúp id đi theo request qua Nginx và các dịch vụ khác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "app.js",
+        "tepNap": [
+          "mini-express.js",
+          "app.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Routes answer again; ids req-1, req-2; no X-Powered-By",
+              "vi": "Route trả lời lại; id req-1, req-2; không có X-Powered-By"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/api/v1/notes\")), s(await request(app, \"GET\", \"/api/v1/notes/1\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, id: r.headers[\"x-request-id\"] || null, powered: r.headers[\"x-powered-by\"] || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 200,
+                "id": "req-1",
+                "powered": null,
+                "body": {
+                  "items": [
+                    {
+                      "id": 1,
+                      "title": "Learning Express"
+                    }
+                  ]
+                }
+              },
+              {
+                "status": 200,
+                "id": "req-2",
+                "powered": null,
+                "body": {
+                  "id": 1,
+                  "title": "Learning Express"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "404s: no requestId in the body, nothing logged",
+              "vi": "Các 404: không có requestId trong thân, không log gì"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/api/v1/notes/42\")), s(await request(app, \"GET\", \"/api/v1/khong-co\")), __log]",
+            "chuanBi": "const s = (r) => ({ status: r.status, id: r.headers[\"x-request-id\"] || null, powered: r.headers[\"x-powered-by\"] || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 404,
+                "id": "req-1",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Note 42 does not exist"
+                  }
+                }
+              },
+              {
+                "status": 404,
+                "id": "req-2",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "NOT_FOUND",
+                    "message": "Cannot GET /api/v1/khong-co"
+                  }
+                }
+              },
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A 500 carries the id, and the log line has it too",
+              "vi": "Lỗi 500 mang id, và dòng log cũng có"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/api/v1/notes/crash/now\")), __log]",
+            "chuanBi": "const s = (r) => ({ status: r.status, id: r.headers[\"x-request-id\"] || null, powered: r.headers[\"x-powered-by\"] || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 500,
+                "id": "req-1",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "INTERNAL",
+                    "message": "Internal server error",
+                    "requestId": "req-1"
+                  }
+                }
+              },
+              [
+                "[500] req-1 connect ECONNREFUSED 10.0.0.5:5432"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/api/v1/notes\", { body: \"{title:}\", headers: { \"X-Request-ID\": \"nginx-abc\" } })), s(await request(app, \"GET\", \"/api/v1/notes/crash/now\", { headers: { \"x-request-id\": \"nginx-def\" } })), __log.filter((l) => l.startsWith(\"[500]\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, id: r.headers[\"x-request-id\"] || null, powered: r.headers[\"x-powered-by\"] || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 400,
+                "id": "nginx-abc",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "INVALID_JSON",
+                    "message": "Request body is not valid JSON"
+                  }
+                }
+              },
+              {
+                "status": 500,
+                "id": "nginx-def",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "INTERNAL",
+                    "message": "Internal server error",
+                    "requestId": "nginx-def"
+                  }
+                }
+              },
+              [
+                "[500] nginx-def connect ECONNREFUSED 10.0.0.5:5432"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Second note\" } })), s(await request(app, \"DELETE\", \"/api/v1/notes\"))]",
+            "chuanBi": "const s = (r) => ({ status: r.status, id: r.headers[\"x-request-id\"] || null, powered: r.headers[\"x-powered-by\"] || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 201,
+                "id": "req-1",
+                "powered": null,
+                "body": {
+                  "id": 2,
+                  "title": "Second note"
+                }
+              },
+              {
+                "status": 404,
+                "id": "req-2",
+                "powered": null,
+                "body": {
+                  "error": {
+                    "code": "NOT_FOUND",
+                    "message": "Cannot DELETE /api/v1/notes"
+                  }
+                }
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "notFound above the router: app.use with no path matches everything.|||notFound trên router: app.use không có path khớp mọi thứ."
+        },
+        {
+          "loi": "requestId registered after the router: the 500 has no id to report.|||requestId đăng ký sau router: lỗi 500 không có id để báo."
+        },
+        {
+          "loi": "Sending the id in every error: harmless, but 4xx are the client’s problem — the id is for finding OUR stack trace.|||Gửi id trong mọi lỗi: vô hại, nhưng 4xx là chuyện của client — id dùng để tìm stack trace của MÌNH."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "request id",
+          "vi": "mã định danh request"
+        },
+        {
+          "en": "correlation",
+          "vi": "liên kết log của cùng một request"
+        }
+      ]
+    }
+  ]
+}

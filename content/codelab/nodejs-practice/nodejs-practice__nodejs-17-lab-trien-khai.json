@@ -1,0 +1,410 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-lab-trien-khai",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-lab-trien-khai"
+  },
+  "exercises": [
+    {
+      "title": "Lab 17 · 1 — One deploy, in the order the website runs it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The build-elsewhere, swap-on-the-server flow of chapter 17 (deploy-nha.sh), with every guard in its place.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luồng build ở nơi khác, chỉ tráo trên server của chương 17 (deploy-nha.sh), với mọi chốt chặn đúng chỗ.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every step that can fail must come before the steps it would make dangerous.|||Mọi bước có thể hỏng phải đứng trước các bước mà nó khiến trở nên nguy hiểm.",
+        "Migrations before the swap; the swap before the smoke test.|||Migration trước khi tráo; tráo trước smoke test."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 17 · 1 — One deploy, in the order the website runs it\n\nAnswer in the answer panel (no code needed).\n\n1. From a commit to “live and pushed”.Từ một commit tới “đã chạy và đã đẩy”.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 17 · 1 — One deploy, in the order the website runs it — answer key\n\n1. From a commit to “live and pushed”.Từ một commit tới “đã chạy và đã đẩy”.\n   Answer: m7) Lock the SHA to deploy, and build both images from that commit only  →  m4) Check the image can really start (libc ↔ Prisma engine) before pushing  →  m3) Push the images tagged with the git SHA to the registry  →  m2) On the server: pull, then run the migrations with set -euo pipefail  →  m5) Swap the containers (the proxy keeps the port) and reload nginx  →  m1) Smoke-test every module route, inside and from outside through nginx  →  m6) Only then push that SHA to main\n   A green build does not mean the image runs (18/08: API 502 for seven minutes); a failed migrate must stop the swap; a tag that never moves is what makes rollback one command; the smoke test is the check that knows which features you shipped.VI: Build xanh không có nghĩa ảnh chạy được (18/08: API 502 bảy phút); migrate hỏng phải chặn bước tráo; thẻ không bao giờ di chuyển là thứ biến quay lui thành một lệnh; smoke test là phép kiểm biết bạn đã đưa lên những tính năng nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A green build does not mean the image runs (18/08: API 502 for seven minutes); a failed migrate must stop the swap; a tag that never moves is what makes rollback one command; the smoke test is the check that knows which features you shipped.</p><p><i>VI: Build xanh không có nghĩa ảnh chạy được (18/08: API 502 bảy phút); migrate hỏng phải chặn bước tráo; thẻ không bao giờ di chuyển là thứ biến quay lui thành một lệnh; smoke test là phép kiểm biết bạn đã đưa lên những tính năng nào.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From a commit to “live and pushed”.</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ một commit tới “đã chạy và đã đẩy”.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Smoke-test every module route, inside and from outside through nginx"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "On the server: pull, then run the migrations with set -euo pipefail"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Push the images tagged with the git SHA to the registry"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Check the image can really start (libc ↔ Prisma engine) before pushing"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Swap the containers (the proxy keeps the port) and reload nginx"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Only then push that SHA to main"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Lock the SHA to deploy, and build both images from that commit only"
+              }
+            ],
+            "dapAn": [
+              "m7",
+              "m4",
+              "m3",
+              "m2",
+              "m5",
+              "m1",
+              "m6"
+            ],
+            "giaiThich": "<p>A green build does not mean the image runs (18/08: API 502 for seven minutes); a failed migrate must stop the swap; a tag that never moves is what makes rollback one command; the smoke test is the check that knows which features you shipped.</p><p><i>VI: Build xanh không có nghĩa ảnh chạy được (18/08: API 502 bảy phút); migrate hỏng phải chặn bước tráo; thẻ không bao giờ di chuyển là thứ biến quay lui thành một lệnh; smoke test là phép kiểm biết bạn đã đưa lên những tính năng nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Swapping before migrating: new code on the old schema.|||Tráo trước khi migrate: mã mới trên lược đồ cũ."
+        },
+        {
+          "loi": "Tagging only :latest.|||Chỉ gắn thẻ :latest."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "registry",
+          "vi": "kho ảnh"
+        }
+      ]
+    },
+    {
+      "title": "Lab 17 · 2 — reviewDockerfile(text, scripts): one review that covers 17.1 to 17.4",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "Docker",
+        "review",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Review a Dockerfile before it reaches the server. Ignore blank lines and <code>#</code> comments; keywords are case-insensitive; the <b>final stage</b> runs from the last <code>FROM</code>. Return the codes found, in this order:</p><ol><li><code>UNPINNED_TAG</code> — the final <code>FROM</code> tag does not start with an exact <code>x.y.z</code> and there is no <code>@sha256:</code>;</li><li><code>COPY_BEFORE_INSTALL</code> — in any stage, a <code>COPY</code> of the whole context (source <code>.</code> or <code>./</code>, flags allowed) comes before that stage’s first <code>RUN … npm ci|install|i</code>;</li><li><code>ARG_TOO_EARLY</code> — in any stage, the first <code>RUN</code> after an <code>ARG X</code> does not reference <code>$X</code> or <code>${X}</code>;</li><li><code>SECRET_IN_IMAGE</code> — in the final stage, an <code>ARG</code>/<code>ENV</code> whose name contains TOKEN, SECRET, PASSWORD, _KEY, APIKEY or DATABASE_URL, or a <code>COPY</code> of a <code>.env…</code> file (not <code>.env.example</code>);</li><li><code>NOT_EXEC_PID1</code> — PID 1 (exec-form <code>ENTRYPOINT</code> if any, else <code>CMD</code>; shell form = <code>/bin/sh -c</code>) is not <code>node</code>, <code>tini</code> or <code>dumb-init</code>, except <code>sh</code>/<code>bash</code> running a script from <code>scripts</code> whose last command starts with <code>exec node</code> (or <code>exec /…/node</code>);</li><li><code>ROOT_USER</code>, <code>NO_NODE_ENV</code> — as in 17.1;</li><li><code>HEALTHCHECK_NO_START_PERIOD</code> — a final-stage <code>HEALTHCHECK</code> (not <code>NONE</code>) without <code>--start-period=</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Soát một Dockerfile trước khi nó tới server. Bỏ dòng trống và chú thích <code>#</code>; từ khoá không phân biệt hoa thường; <b>giai đoạn cuối</b> chạy từ <code>FROM</code> cuối cùng. Trả về các mã tìm thấy, theo thứ tự:</p><ol><li><code>UNPINNED_TAG</code> — thẻ của <code>FROM</code> cuối không bắt đầu bằng <code>x.y.z</code> chính xác và không có <code>@sha256:</code>;</li><li><code>COPY_BEFORE_INSTALL</code> — ở giai đoạn bất kỳ, một <code>COPY</code> toàn bộ context (nguồn <code>.</code> hoặc <code>./</code>, có thể kèm cờ) đứng trước <code>RUN … npm ci|install|i</code> đầu tiên của giai đoạn đó;</li><li><code>ARG_TOO_EARLY</code> — ở giai đoạn bất kỳ, <code>RUN</code> đầu tiên sau một <code>ARG X</code> không dùng <code>$X</code> hay <code>${X}</code>;</li><li><code>SECRET_IN_IMAGE</code> — ở giai đoạn cuối, một <code>ARG</code>/<code>ENV</code> có tên chứa TOKEN, SECRET, PASSWORD, _KEY, APIKEY hoặc DATABASE_URL, hoặc một <code>COPY</code> tệp <code>.env…</code> (không phải <code>.env.example</code>);</li><li><code>NOT_EXEC_PID1</code> — PID 1 (<code>ENTRYPOINT</code> dạng exec nếu có, không thì <code>CMD</code>; dạng shell = <code>/bin/sh -c</code>) không phải <code>node</code>, <code>tini</code> hay <code>dumb-init</code>, trừ <code>sh</code>/<code>bash</code> chạy một script trong <code>scripts</code> mà lệnh cuối bắt đầu bằng <code>exec node</code> (hoặc <code>exec /…/node</code>);</li><li><code>ROOT_USER</code>, <code>NO_NODE_ENV</code> — như bài 17.1;</li><li><code>HEALTHCHECK_NO_START_PERIOD</code> — một <code>HEALTHCHECK</code> ở giai đoạn cuối (không phải <code>NONE</code>) thiếu <code>--start-period=</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reviewDockerfile(\"FROM node:22\\nWORKDIR /app\\nCOPY . .\\nRUN npm install\\nEXPOSE 3000\\nCMD [\\\"npm\\\", \\\"start\\\"]\")",
+          "output": "[\"UNPINNED_TAG\",\"COPY_BEFORE_INSTALL\",\"NOT_EXEC_PID1\",\"ROOT_USER\",\"NO_NODE_ENV\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split into stages first ([[FROM…, …], …]); some rules loop over every stage, the rest look at the last one.|||Chia thành các giai đoạn trước ([[FROM…, …], …]); vài luật duyệt mọi giai đoạn, số còn lại chỉ xem giai đoạn cuối.",
+        "Collect codes in a Set, then return ORDER.filter((c) => set.has(c)) so the order is fixed.|||Gom mã vào một Set, rồi trả ORDER.filter((c) => set.has(c)) để thứ tự cố định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** review a Dockerfile against chapter 17 */\nfunction reviewDockerfile(text, scripts = {}) {\n  // Write your solution here\n  const found = [];\n  if (/FROM node:\\d+(\\s|$)/.test(text)) found.push('UNPINNED_TAG');\n  if (/CMD \\[\"npm\"/.test(text)) found.push('NOT_EXEC_PID1');\n  if (!/USER /.test(text)) found.push('ROOT_USER');\n  return found;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reviewDockerfile(text, scripts = {}) {\n  const raw = text.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n  const stages = [];\n  for (const l of raw) { if (/^FROM\\s/i.test(l)) stages.push([l]); else if (stages.length) stages[stages.length - 1].push(l); }\n  const fin = stages[stages.length - 1];\n  const is = (kw) => (l) => new RegExp(`^${kw}\\\\s`, 'i').test(l);\n  const found = new Set();\n  // 17.1 — thẻ ảnh phải là phiên bản chính xác hoặc digest\n  const tag = (fin[0].split(/\\s+/)[1].split('@')[0].split(':')[1]) || 'latest';\n  if (!fin[0].includes('@sha256:') && !/^\\d+\\.\\d+\\.\\d+(-|$)/.test(tag)) found.add('UNPINNED_TAG');\n  for (const st of stages) {\n    // 17.2 — COPY toàn bộ thư mục trước khi cài ⇒ mỗi commit chạy lại npm ci\n    const inst = st.findIndex((l) => /^RUN\\s.*\\bnpm\\s+(ci|install|i)\\b/i.test(l));\n    const all = st.findIndex((l) => /^COPY\\s+(--\\S+\\s+)*\\.\\/?\\s+\\S+$/i.test(l));\n    if (inst >= 0 && all >= 0 && all < inst) found.add('COPY_BEFORE_INSTALL');\n    // 17.2 — ARG khai quá sớm: RUN đầu tiên sau nó không dùng nó\n    st.forEach((l, i) => {\n      const m = /^ARG\\s+([A-Za-z_]\\w*)/i.exec(l);\n      if (!m) return;\n      const run = st.slice(i + 1).find(is('RUN'));\n      if (run && !new RegExp(`\\\\$\\\\{?${m[1]}\\\\b`).test(run)) found.add('ARG_TOO_EARLY');\n    });\n  }\n  // 17.4 — bí mật đi theo ảnh (giai đoạn cuối)\n  const SECRET = /(TOKEN|SECRET|PASSWORD|_KEY|APIKEY|DATABASE_URL)/i;\n  if (fin.some((l) => (/^(ARG|ENV)\\s+(\\w+)/i.exec(l) || [])[2]?.match(SECRET) || /^COPY\\s+(--\\S+\\s+)*\\S*\\.env(?!\\.example)\\S*\\s/i.test(l))) found.add('SECRET_IN_IMAGE');\n  // 17.3 — ai là PID 1?\n  const arr = (l) => (l ? (l.replace(/^\\S+\\s+/, '').startsWith('[') ? JSON.parse(l.replace(/^\\S+\\s+/, '')) : ['/bin/sh', '-c']) : []);\n  const ep = arr(fin.filter(is('ENTRYPOINT')).pop());\n  const argv = ep.length ? ep : arr(fin.filter(is('CMD')).pop());\n  const prog = (argv[0] || '').split('/').pop();\n  let pidOk = prog === 'node' || prog === 'tini' || prog === 'dumb-init';\n  if ((prog === 'sh' || prog === 'bash') && argv[1] !== '-c') {\n    const body = (scripts[argv[1]] || scripts[String(argv[1]).replace(/^\\.\\//, '')] || '').split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n    pidOk = /^exec\\s+(\\S*\\/)?node\\b/.test(body[body.length - 1] || '');\n  }\n  if (!pidOk) found.add('NOT_EXEC_PID1');\n  const users = fin.filter(is('USER'));\n  if (!users.length || /^USER\\s+(root|0)\\s*$/i.test(users[users.length - 1])) found.add('ROOT_USER');\n  if (!fin.some((l) => /^ENV\\s+NODE_ENV(=|\\s+)\"?production\"?\\s*$/i.test(l))) found.add('NO_NODE_ENV');\n  // 17.3 — healthcheck không có start-period ⇒ app khởi động chậm bị đánh dấu unhealthy\n  if (fin.some((l) => is('HEALTHCHECK')(l) && !/^HEALTHCHECK\\s+NONE/i.test(l) && !/--start-period=/i.test(l))) found.add('HEALTHCHECK_NO_START_PERIOD');\n  const ORDER = ['UNPINNED_TAG', 'COPY_BEFORE_INSTALL', 'ARG_TOO_EARLY', 'SECRET_IN_IMAGE', 'NOT_EXEC_PID1', 'ROOT_USER', 'NO_NODE_ENV', 'HEALTHCHECK_NO_START_PERIOD'];\n  return ORDER.filter((c) => found.has(c));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The production file of this lab passes every rule: pinned base, install before source, ARG GIT_SHA right before its RUN, the registry token via a secret mount, tini at PID 1, a non-root user, NODE_ENV, and a liveness healthcheck written with node -e (slim has no curl) with a start period. The naive file fails five of the eight rules.</p>",
+      "solutionExplanationHtmlVi": "<p>Tệp production của lab qua mọi luật: ảnh nền đã ghim, cài trước mã nguồn, ARG GIT_SHA ngay trước RUN của nó, token registry qua secret mount, tini ở PID 1, người dùng không phải root, NODE_ENV, và healthcheck liveness viết bằng node -e (slim không có curl) có start period. Tệp ngây thơ trượt năm trong tám luật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The naive Dockerfile",
+              "vi": "Dockerfile ngây thơ"
+            },
+            "goi": "reviewDockerfile(\"FROM node:22\\nWORKDIR /app\\nCOPY . .\\nRUN npm install\\nEXPOSE 3000\\nCMD [\\\"npm\\\", \\\"start\\\"]\")",
+            "mongDoi": [
+              "UNPINNED_TAG",
+              "COPY_BEFORE_INSTALL",
+              "NOT_EXEC_PID1",
+              "ROOT_USER",
+              "NO_NODE_ENV"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lab’s production Dockerfile",
+              "vi": "Dockerfile production của lab"
+            },
+            "goi": "reviewDockerfile(\"# syntax=docker/dockerfile:1\\nFROM node:22.23.4-slim AS deps\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci --omit=dev\\nFROM node:22.23.4-slim\\nRUN apt-get update && apt-get install -y --no-install-recommends tini && rm -rf /var/lib/apt/lists/*\\nWORKDIR /app\\nENV NODE_ENV=production\\nCOPY --from=deps /app/node_modules ./node_modules\\nCOPY src ./src\\nCOPY docker-entrypoint.sh ./\\nARG GIT_SHA\\nRUN echo \\\"$GIT_SHA\\\" > version.txt\\nUSER node\\nHEALTHCHECK --interval=15s --timeout=3s --start-period=20s --retries=3 CMD node -e \\\"require('http').get('http://127.0.0.1:3000/health/live', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\\\"\\nENTRYPOINT [\\\"/usr/bin/tini\\\", \\\"--\\\", \\\"sh\\\", \\\"docker-entrypoint.sh\\\"]\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"docker-entrypoint.sh\":\"#!/bin/sh\\nset -e\\nmkdir -p /app/uploads\\nexec \\\"$@\\\"\\n\"})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "reviewDockerfile(\"# syntax=docker/dockerfile:1\\nFROM node:22.23.4-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22.23.4-slim AS deps\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\n\\nFROM node:22.23.4-slim AS runner\\nWORKDIR /app\\nENV NODE_ENV=production\\nCOPY --from=deps /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCOPY package.json ./\\nUSER node\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "reviewDockerfile(\"FROM node:22-slim\\nARG BUILD_TIME\\nARG NPM_TOKEN\\nWORKDIR /app\\nCOPY --chown=node:node ./ /app\\nRUN npm ci\\nCOPY .env.production .\\nENV NODE_ENV=production\\nUSER node\\nHEALTHCHECK CMD node -e \\\"process.exit(0)\\\"\\nCMD [\\\"sh\\\", \\\"start.sh\\\"]\", {\"start.sh\":\"npx prisma migrate deploy\\nnode dist/index.js\"})",
+            "mongDoi": [
+              "UNPINNED_TAG",
+              "COPY_BEFORE_INSTALL",
+              "ARG_TOO_EARLY",
+              "SECRET_IN_IMAGE",
+              "NOT_EXEC_PID1",
+              "HEALTHCHECK_NO_START_PERIOD"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "reviewDockerfile(\"FROM node:22.23.4-slim@sha256:0d1e\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\nCOPY src ./src\\nARG GIT_SHA\\nRUN echo ${GIT_SHA} > v.txt\\nENV NODE_ENV production\\nUSER 0\\nHEALTHCHECK NONE\\nCMD [\\\"sh\\\", \\\"./start.sh\\\"]\", {\"start.sh\":\"npx prisma migrate deploy\\nexec node src/index.js\\n\"})",
+            "mongDoi": [
+              "ROOT_USER"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reusing the 17.1 linter unchanged: it ignores the cache order, the ARG position, secrets and the health check.|||Dùng lại nguyên bộ soát 17.1: nó bỏ qua thứ tự cache, vị trí ARG, bí mật và health check."
+        },
+        {
+          "loi": "Flagging the tini ENTRYPOINT as “not node”: tini is PID 1 on purpose, it forwards SIGTERM and reaps zombies.|||Gắn cờ ENTRYPOINT tini là “không phải node”: tini ở PID 1 là cố ý, nó chuyển SIGTERM và dọn zombie."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code review",
+          "vi": "review mã"
+        },
+        {
+          "en": "start period",
+          "vi": "thời gian khởi động",
+          "giaiThich": "healthcheck failures do not count while booting"
+        }
+      ]
+    },
+    {
+      "title": "Lab 17 · 3 — afterDeploy(state): keep, roll back the image, or roll forward?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "deployment",
+        "rollback",
+        "decision"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The deploy is done; decide what happens next. <code>state = { smoke, migrations, previousTag }</code>: <code>smoke</code> are <code>{ route, status }</code> results of the smoke test, <code>migrations</code> the SQL applied by this deploy, <code>previousTag</code> the tag of the image that ran before (or <code>null</code>). <code>failing</code> = the smoke results with status 404, 502 or 503, as <code>\"&lt;route&gt; &lt;status&gt;\"</code>. Return, checking in order:</p><ol><li>no failing route → <code>{ action: \"keep\", failing }</code>;</li><li><code>previousTag</code> missing or <code>\"latest\"</code> → <code>{ action: \"rebuild-previous\", failing, reason: \"no immutable tag to return to\" }</code>;</li><li>a migration that is not additive (the four rules of 17.6: drop table/column, rename, change type, set NOT NULL / add NOT NULL column without DEFAULT) → <code>{ action: \"roll-forward\", failing, reason: &lt;why of the first such statement&gt; }</code> with the same <code>why</code> texts as 17.6;</li><li>otherwise → <code>{ action: \"rollback-image\", failing, to: previousTag }</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Deploy xong rồi; quyết định việc tiếp theo. <code>state = { smoke, migrations, previousTag }</code>: <code>smoke</code> là kết quả <code>{ route, status }</code> của smoke test, <code>migrations</code> là SQL lần deploy này đã chạy, <code>previousTag</code> là thẻ của ảnh chạy trước đó (hoặc <code>null</code>). <code>failing</code> = các kết quả smoke có status 404, 502 hoặc 503, dạng <code>\"&lt;route&gt; &lt;status&gt;\"</code>. Trả về, xét theo thứ tự:</p><ol><li>không route nào hỏng → <code>{ action: \"keep\", failing }</code>;</li><li><code>previousTag</code> thiếu hoặc là <code>\"latest\"</code> → <code>{ action: \"rebuild-previous\", failing, reason: \"no immutable tag to return to\" }</code>;</li><li>có migration không phải cộng thêm (bốn luật của 17.6: xoá bảng/cột, đổi tên, đổi kiểu, đặt NOT NULL / thêm cột NOT NULL không DEFAULT) → <code>{ action: \"roll-forward\", failing, reason: &lt;why của câu đầu tiên như thế&gt; }</code> với cùng các chuỗi <code>why</code> như 17.6;</li><li>còn lại → <code>{ action: \"rollback-image\", failing, to: previousTag }</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/system/health\",\"status\":200},{\"route\":\"/api/v1/notes\",\"status\":401},{\"route\":\"/api/v1/reports\",\"status\":404}],\"migrations\":[\"ALTER TABLE reports ADD COLUMN owner_id int;\"],\"previousTag\":\"a1f3c9e\"})",
+          "output": "{\"action\":\"rollback-image\",\"failing\":[\"/api/v1/reports 404\"],\"to\":\"a1f3c9e\"}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reuse rollbackSafety’s four rules from 17.6.|||Dùng lại bốn luật của rollbackSafety ở 17.6.",
+        "The order of the checks is the decision: no point checking migrations when there is no image to return to.|||Thứ tự các phép kiểm chính là quyết định: không cần xét migration khi không có ảnh nào để quay về."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what to do after the deploy */\nfunction afterDeploy({ smoke, migrations, previousTag }) {\n  // Write your solution here\n  const failing = smoke.filter((r) => r.status >= 400).map((r) => r.route + ' ' + r.status);\n  if (!failing.length) return { action: 'keep', failing };\n  return { action: 'rollback-image', failing, to: previousTag };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction afterDeploy({ smoke, migrations, previousTag }) {\n  // 1) smoke test: 404 = chưa gắn (build cũ / deploy dở), 502/503 = app không chạy\n  const failing = smoke.filter((r) => r.status === 404 || r.status === 502 || r.status === 503).map((r) => `${r.route} ${r.status}`);\n  if (!failing.length) return { action: 'keep', failing };\n  // 2) quay lui được bằng ảnh chỉ khi có thẻ KHÔNG DI CHUYỂN để quay về\n  if (!previousTag || previousTag === 'latest') return { action: 'rebuild-previous', failing, reason: 'no immutable tag to return to' };\n  // 3) mã quay lui được, CSDL thì không: migration phá huỷ ⇒ sửa tiến lên\n  const BAD = [[/\\bDROP\\s+(TABLE|COLUMN)\\b|^DROP\\b/i, 'drops data the old code reads'], [/\\bRENAME\\b/i, 'old code uses the old name'], [/\\bALTER\\s+COLUMN\\s+\\S+\\s+(SET\\s+DATA\\s+)?TYPE\\b/i, 'changes a type the old code expects'], [/\\bSET\\s+NOT\\s+NULL\\b|\\bADD\\s+COLUMN\\b.*\\bNOT\\s+NULL\\b(?!.*\\bDEFAULT\\b)/i, 'old code inserts rows without this column']];\n  for (const sql of migrations) {\n    const hit = BAD.find(([rx]) => rx.test(sql));\n    if (hit) return { action: 'roll-forward', failing, reason: hit[1] };\n  }\n  return { action: 'rollback-image', failing, to: previousTag };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Roll back first, investigate afterwards — but a rollback is a choice with a cost, not a free undo button: the new feature leaves with the bug, and the database does not roll back with the code. An immutable tag makes it one 0.82-second command; an additive migration makes it safe.</p>",
+      "solutionExplanationHtmlVi": "<p>Quay lui trước, điều tra sau — nhưng quay lui là một lựa chọn có giá, không phải nút hoàn tác miễn phí: tính năng mới đi theo lỗi, và CSDL không quay lui cùng mã. Thẻ bất biến biến nó thành một lệnh 0,82 giây; migration cộng thêm làm nó an toàn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Stale build, additive migration, SHA tag",
+              "vi": "Build cũ, migration cộng thêm, thẻ SHA"
+            },
+            "goi": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/system/health\",\"status\":200},{\"route\":\"/api/v1/notes\",\"status\":401},{\"route\":\"/api/v1/reports\",\"status\":404}],\"migrations\":[\"ALTER TABLE reports ADD COLUMN owner_id int;\"],\"previousTag\":\"a1f3c9e\"})",
+            "mongDoi": {
+              "action": "rollback-image",
+              "failing": [
+                "/api/v1/reports 404"
+              ],
+              "to": "a1f3c9e"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Everything mounted",
+              "vi": "Mọi thứ đã gắn"
+            },
+            "goi": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/system/health\",\"status\":200},{\"route\":\"/api/v1/notes\",\"status\":401},{\"route\":\"/api/v1/reports\",\"status\":401}],\"migrations\":[],\"previousTag\":\"a1f3c9e\"})",
+            "mongDoi": {
+              "action": "keep",
+              "failing": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/reports\",\"status\":404}],\"migrations\":[\"CREATE INDEX x ON reports(owner_id);\",\"ALTER TABLE reports DROP COLUMN legacy_owner;\"],\"previousTag\":\"7d2e801\"})",
+            "mongDoi": {
+              "action": "roll-forward",
+              "failing": [
+                "/api/v1/reports 404"
+              ],
+              "reason": "drops data the old code reads"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/feed\",\"status\":502}],\"migrations\":[],\"previousTag\":\"latest\"})",
+            "mongDoi": {
+              "action": "rebuild-previous",
+              "failing": [
+                "/api/v1/feed 502"
+              ],
+              "reason": "no immutable tag to return to"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "afterDeploy({\"smoke\":[{\"route\":\"/api/v1/feed\",\"status\":503},{\"route\":\"/api/v1/gifs\",\"status\":404}],\"migrations\":[\"ALTER TABLE notes ADD COLUMN status text NOT NULL DEFAULT 'draft';\"],\"previousTag\":\"7d2e801\"})",
+            "mongDoi": {
+              "action": "rollback-image",
+              "failing": [
+                "/api/v1/feed 503",
+                "/api/v1/gifs 404"
+              ],
+              "to": "7d2e801"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Rolling back the image after a migration that dropped a column: old code against a new schema, worse than the bug.|||Quay lui ảnh sau migration đã xoá cột: mã cũ chạy trên lược đồ mới, tệ hơn cả lỗi."
+        },
+        {
+          "loi": "Treating 401 as failing: it proves the route is mounted.|||Coi 401 là hỏng: nó chứng minh route đã gắn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "immutable tag",
+          "vi": "thẻ bất biến",
+          "giaiThich": "a tag that never moves, e.g. the git SHA"
+        }
+      ]
+    }
+  ]
+}

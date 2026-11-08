@@ -1,0 +1,1193 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-7-6-hop-dong-api-voi-du-lieu-that",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-7-6-hop-dong-api-voi-du-lieu-that"
+  },
+  "exercises": [
+    {
+      "title": "7.6 · 1 — Every chapter-6 promise, measured on 751,000 rows",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "pagination",
+        "concurrency",
+        "SQL injection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 7.6 implements chapter 6’s promises against a real table. Each one is a two-line change with a large number attached. Six questions.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 7.6 hiện thực các lời hứa của chương 6 trên một bảng thật. Mỗi lời hứa là một thay đổi hai dòng kèm một con số lớn. Sáu câu hỏi.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each answer is in the lesson’s measurement next to it.|||Câu trả lời nằm ngay ở phép đo đi kèm trong bài.",
+        "Prefer the version that is correct under concurrency, not the one that reads naturally.|||Chọn bản đúng khi chạy đồng thời, không phải bản đọc thấy tự nhiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.6 · 1 — Every chapter-6 promise, measured on 751,000 rows\n\nAnswer in the answer panel (no code needed).\n\n1. skip: 700000, take: 20 took 108.6 ms; where id < cursor, take: 20 took 0.6 ms. What does the cursor version read?skip: 700000, take: 20 mất 108,6 ms; where id < cursor, take: 20 mất 0,6 ms. Bản cursor đọc gì?\n2. How does the final list() know whether there is a next page without count(*)?list() cuối cùng biết có trang sau không mà không cần count(*) bằng cách nào?\n3. On Prisma 7.10.1 with a driver adapter, where do you find which field violated a unique constraint?Trên Prisma 7.10.1 với driver adapter, tìm trường vi phạm ràng buộc unique ở đâu?\n4. Why is findUnique then create (“check, then insert”) wrong for unique emails?Vì sao findUnique rồi create (\"kiểm rồi mới thêm\") là sai với email duy nhất?\n5. Why does the version check use updateMany and not update?Vì sao phép kiểm version dùng updateMany chứ không phải update?\n6. $queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`) with evil = \"bulk-1' OR '1'='1\" returned 751,002. The tagged-template $queryRaw returned 0. Why?$queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`) với evil = \"bulk-1' OR '1'='1\" trả 751.002. $queryRaw dạng tagged template trả 0. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.6 · 1 — Every chapter-6 promise, measured on 751,000 rows — answer key\n\n1. skip: 700000, take: 20 took 108.6 ms; where id < cursor, take: 20 took 0.6 ms. What does the cursor version read?skip: 700000, take: 20 mất 108,6 ms; where id < cursor, take: 20 mất 0,6 ms. Bản cursor đọc gì?\n   Answer: c) The index from the position you name, stopping after twenty rows\n   181× faster, and an insert cannot shift a cursor: it is a position in the data, not in a result set.VI: Nhanh gấp 181 lần, và insert không dời được cursor: nó là vị trí trong dữ liệu, không phải trong tập kết quả.\n\n2. How does the final list() know whether there is a next page without count(*)?list() cuối cùng biết có trang sau không mà không cần count(*) bằng cách nào?\n   Answer: b) It takes limit + 1 rows and checks whether the extra one arrived\n   No count(*), no second query, no 41.7 ms per request.VI: Không count(*), không truy vấn thứ hai, không 41,7 ms mỗi request.\n\n3. On Prisma 7.10.1 with a driver adapter, where do you find which field violated a unique constraint?Trên Prisma 7.10.1 với driver adapter, tìm trường vi phạm ràng buộc unique ở đâu?\n   Answer: c) err.meta.driverAdapterError.cause.constraint\n   Read both, keep a fallback, and log the whole err.meta once in development rather than trusting a blog post.VI: Đọc cả hai, có giá trị dự phòng, và log toàn bộ err.meta một lần khi phát triển thay vì tin một bài blog.\n\n4. Why is findUnique then create (“check, then insert”) wrong for unique emails?Vì sao findUnique rồi create (\"kiểm rồi mới thêm\") là sai với email duy nhất?\n   Answer: c) Two concurrent requests both find nothing and both insert; only the unique index can referee\n   The unique index is the only version that is correct under concurrency.VI: Chỉ mục unique là phiên bản duy nhất đúng khi chạy đồng thời.\n\n5. Why does the version check use updateMany and not update?Vì sao phép kiểm version dùng updateMany chứ không phải update?\n   Answer: a) Only updateMany accepts id AND version in where, and its count is the check\n   count 0 ⇒ someone else changed it ⇒ 409 STALE_VERSION. Same idea as ETag + If-Match at the HTTP layer.VI: count 0 ⇒ có người khác đã đổi ⇒ 409 STALE_VERSION. Cùng ý với ETag + If-Match ở tầng HTTP.\n\n6. $queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`) with evil = \"bulk-1' OR '1'='1\" returned 751,002. The tagged-template $queryRaw returned 0. Why?$queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`) với evil = \"bulk-1' OR '1'='1\" trả 751.002. $queryRaw dạng tagged template trả 0. Vì sao?\n   Answer: c) $queryRaw turns every ${…} into a bound parameter, so the quote is data, not SQL\n   Values never go into SQL text. Raw queries also skip type mapping: count(*) comes back as BigInt — cast ::int.VI: Giá trị không bao giờ đi vào chữ SQL. Truy vấn thô cũng bỏ qua ánh xạ kiểu: count(*) về dạng BigInt — ép ::int.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The index from the position you name, stopping after twenty rows</p><p>181× faster, and an insert cannot shift a cursor: it is a position in the data, not in a result set.</p><p><i>VI: Nhanh gấp 181 lần, và insert không dời được cursor: nó là vị trí trong dữ liệu, không phải trong tập kết quả.</i></p></li><li><p><b>b)</b> It takes limit + 1 rows and checks whether the extra one arrived</p><p>No count(*), no second query, no 41.7 ms per request.</p><p><i>VI: Không count(*), không truy vấn thứ hai, không 41,7 ms mỗi request.</i></p></li><li><p><b>c)</b> err.meta.driverAdapterError.cause.constraint</p><p>Read both, keep a fallback, and log the whole err.meta once in development rather than trusting a blog post.</p><p><i>VI: Đọc cả hai, có giá trị dự phòng, và log toàn bộ err.meta một lần khi phát triển thay vì tin một bài blog.</i></p></li><li><p><b>c)</b> Two concurrent requests both find nothing and both insert; only the unique index can referee</p><p>The unique index is the only version that is correct under concurrency.</p><p><i>VI: Chỉ mục unique là phiên bản duy nhất đúng khi chạy đồng thời.</i></p></li><li><p><b>a)</b> Only updateMany accepts id AND version in where, and its count is the check</p><p>count 0 ⇒ someone else changed it ⇒ 409 STALE_VERSION. Same idea as ETag + If-Match at the HTTP layer.</p><p><i>VI: count 0 ⇒ có người khác đã đổi ⇒ 409 STALE_VERSION. Cùng ý với ETag + If-Match ở tầng HTTP.</i></p></li><li><p><b>c)</b> $queryRaw turns every ${…} into a bound parameter, so the quote is data, not SQL</p><p>Values never go into SQL text. Raw queries also skip type mapping: count(*) comes back as BigInt — cast ::int.</p><p><i>VI: Giá trị không bao giờ đi vào chữ SQL. Truy vấn thô cũng bỏ qua ánh xạ kiểu: count(*) về dạng BigInt — ép ::int.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>skip: 700000, take: 20</code> took 108.6 ms; <code>where id &lt; cursor, take: 20</code> took 0.6 ms. What does the cursor version read?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>skip: 700000, take: 20</code> mất 108,6 ms; <code>where id &lt; cursor, take: 20</code> mất 0,6 ms. Bản cursor đọc gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the rows inserted since the last page"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A precomputed page stored by Prisma"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The index from the position you name, stopping after twenty rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The whole table, but faster because of caching"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>181× faster, and an insert cannot shift a cursor: it is a position in the data, not in a result set.</p><p><i>VI: Nhanh gấp 181 lần, và insert không dời được cursor: nó là vị trí trong dữ liệu, không phải trong tập kết quả.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How does the final list() know whether there is a next page without count(*)?</p><p style=\"opacity:.75;font-size:.92em\"><i>list() cuối cùng biết có trang sau không mà không cần count(*) bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It reads the planner’s row estimate from pg_class instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It takes limit + 1 rows and checks whether the extra one arrived"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It runs a second findMany for the next page in parallel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It always returns hasMore: true and lets the client find out"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No count(*), no second query, no 41.7 ms per request.</p><p><i>VI: Không count(*), không truy vấn thứ hai, không 41,7 ms mỗi request.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On Prisma 7.10.1 with a driver adapter, where do you find which field violated a unique constraint?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Prisma 7.10.1 với driver adapter, tìm trường vi phạm ràng buộc unique ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "err.message only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "err.meta.target, as in every tutorial"
+              },
+              {
+                "ma": "c",
+                "noiDung": "err.meta.driverAdapterError.cause.constraint"
+              },
+              {
+                "ma": "d",
+                "noiDung": "err.field"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Read both, keep a fallback, and log the whole err.meta once in development rather than trusting a blog post.</p><p><i>VI: Đọc cả hai, có giá trị dự phòng, và log toàn bộ err.meta một lần khi phát triển thay vì tin một bài blog.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why is <code>findUnique</code> then <code>create</code> (“check, then insert”) wrong for unique emails?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>findUnique</code> rồi <code>create</code> (\"kiểm rồi mới thêm\") là sai với email duy nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "findUnique is too slow on large tables"
+              },
+              {
+                "ma": "b",
+                "noiDung": "create cannot run after findUnique in the same request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two concurrent requests both find nothing and both insert; only the unique index can referee"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is right; P2002 is only for slugs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The unique index is the only version that is correct under concurrency.</p><p><i>VI: Chỉ mục unique là phiên bản duy nhất đúng khi chạy đồng thời.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why does the version check use <code>updateMany</code> and not <code>update</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phép kiểm version dùng <code>updateMany</code> chứ không phải <code>update</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only updateMany accepts id AND version in where, and its count is the check"
+              },
+              {
+                "ma": "b",
+                "noiDung": "updateMany is faster because it skips the unique index entirely"
+              },
+              {
+                "ma": "c",
+                "noiDung": "updateMany locks the row for the request, update does not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "update cannot increment a number column, updateMany can"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>count 0 ⇒ someone else changed it ⇒ 409 STALE_VERSION. Same idea as ETag + If-Match at the HTTP layer.</p><p><i>VI: count 0 ⇒ có người khác đã đổi ⇒ 409 STALE_VERSION. Cùng ý với ETag + If-Match ở tầng HTTP.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p><code>$queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`)</code> with <code>evil = \"bulk-1' OR '1'='1\"</code> returned 751,002. The tagged-template <code>$queryRaw</code> returned 0. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>$queryRawUnsafe(`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = '${evil}'`)</code> với <code>evil = \"bulk-1' OR '1'='1\"</code> trả 751.002. <code>$queryRaw</code> dạng tagged template trả 0. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "$queryRawUnsafe ignores the WHERE clause"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The tagged template runs on a read-only replica"
+              },
+              {
+                "ma": "c",
+                "noiDung": "$queryRaw turns every ${…} into a bound parameter, so the quote is data, not SQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "$queryRaw escapes the word OR"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Values never go into SQL text. Raw queries also skip type mapping: count(*) comes back as BigInt — cast ::int.</p><p><i>VI: Giá trị không bao giờ đi vào chữ SQL. Truy vấn thô cũng bỏ qua ánh xạ kiểu: count(*) về dạng BigInt — ép ::int.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading err.meta.target on Prisma 7: the message becomes \" already exists\".|||Đọc err.meta.target trên Prisma 7: thông điệp thành \" already exists\"."
+        },
+        {
+          "loi": "Keeping total in the list response and paying count(*) on every page.|||Giữ total trong phản hồi danh sách và trả count(*) ở mọi trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "P2002",
+          "vi": "P2002",
+          "giaiThich": "Prisma: vi phạm ràng buộc unique."
+        },
+        {
+          "en": "bound parameter",
+          "vi": "tham số ràng buộc",
+          "giaiThich": "Giá trị gửi riêng, không nằm trong chữ SQL."
+        }
+      ]
+    },
+    {
+      "title": "7.6 · 2 — Write the final list(): cursor, take + 1, omit body, no count",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cursor pagination",
+        "Prisma"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Every decision in that function came from a measurement in this chapter.” Write <code>list(prisma, { cursor, limit = 20, authorId })</code> returning <code>{ items, nextCursor }</code>:</p>\n<ul><li><code>take = Math.min(limit, 50)</code>.</li>\n<li><code>prisma.note.findMany({ where: { authorId, id: { lt: cursor } }, orderBy: { id: 'desc' }, take: take + 1, omit: { body: true } })</code> — the <code>id</code> condition only when a cursor was given.</li>\n<li>If more than <code>take</code> rows came back, drop the extra one and set <code>nextCursor</code> to the id of the last item kept; otherwise <code>nextCursor = null</code>.</li>\n<li>Never call <code>count</code> — the fake makes it cost 42 ms and the checks look at the call log.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>One findMany per call.</li>\n  <li>A last page of exactly <code>take</code> rows has <code>nextCursor: null</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Mọi quyết định trong hàm đó đến từ một phép đo trong chương này.\" Viết <code>list(prisma, { cursor, limit = 20, authorId })</code> trả <code>{ items, nextCursor }</code>:</p>\n<ul><li><code>take = Math.min(limit, 50)</code>.</li>\n<li><code>prisma.note.findMany({ where: { authorId, id: { lt: cursor } }, orderBy: { id: 'desc' }, take: take + 1, omit: { body: true } })</code> — điều kiện <code>id</code> chỉ khi có cursor.</li>\n<li>Nếu nhận về nhiều hơn <code>take</code> dòng, bỏ dòng thừa và đặt <code>nextCursor</code> là id của phần tử cuối được giữ; không thì <code>nextCursor = null</code>.</li>\n<li>Không bao giờ gọi <code>count</code> — hàm giả cho nó tốn 42 ms và các kiểm xem nhật ký lời gọi.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi lần gọi một findMany.</li>\n  <li>Trang cuối có đúng <code>take</code> dòng thì <code>nextCursor: null</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const p = mkPrisma(); const r = await list(p, { limit: 2, authorId: 1 }); return [r, p.log]; })()",
+          "output": "[{\"items\":[{\"id\":9,\"authorId\":1,\"title\":\"t9\"},{\"id\":7,\"authorId\":1,\"title\":\"t7\"}],\"nextCursor\":7},[{\"take\":3,\"where\":{\"authorId\":1},\"orderBy\":{\"id\":\"desc\"},\"omit\":{\"body\":true}}]]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Conditional spread: <code>{ authorId, ...(cursor ? { id: { lt: cursor } } : {}) }</code>.|||Rải có điều kiện: <code>{ authorId, ...(cursor ? { id: { lt: cursor } } : {}) }</code>.",
+        "<code>const hasMore = items.length > take; if (hasMore) items.pop();</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function list(prisma, { cursor, limit = 20, authorId }) {\n  // Write your solution here\n  const [items, total] = await Promise.all([\n    prisma.note.findMany({ where: { authorId, id: { lt: cursor } }, orderBy: { id: 'desc' }, take: limit }),\n    prisma.note.count({ where: { authorId } }),\n  ]);\n  return { items, nextCursor: items.length === limit ? items.at(-1).id : null, total };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function list(prisma, { cursor, limit = 20, authorId }) {\n  const take = Math.min(limit, 50);\n  const items = await prisma.note.findMany({\n    where: { authorId, ...(cursor ? { id: { lt: cursor } } : {}) },\n    orderBy: { id: 'desc' },\n    take: take + 1,                      // one extra row answers \"is there more?\"\n    omit: { body: true },                // lesson 7.4: 322 KB -> 50 KB\n  });\n  const hasMore = items.length > take;\n  if (hasMore) items.pop();\n  return { items, nextCursor: hasMore ? items.at(-1).id : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>take + 1 turns “is there a next page?” into a by-product of the query you were running anyway. The cursor is the last row you actually returned, so the next page starts exactly after it. With orderBy id desc and an index on id, every page costs the same 0.6 ms regardless of depth.</p>",
+      "solutionExplanationHtmlVi": "<p>take + 1 biến \"có trang sau không?\" thành phụ phẩm của chính truy vấn bạn đang chạy. Cursor là dòng cuối bạn thật sự trả về, nên trang sau bắt đầu ngay sau nó. Với orderBy id desc và chỉ mục trên id, trang nào cũng tốn cùng 0,6 ms bất kể sâu tới đâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page of author 1, limit 2",
+              "vi": "Trang đầu của tác giả 1, limit 2"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const r = await list(p, { limit: 2, authorId: 1 }); return [r, p.log]; })()",
+            "chuanBi": "const mkPrisma = (n = 9, authors = 2) => { const rows = Array.from({ length: n }, (_, i) => ({ id: i + 1, authorId: (i % authors) + 1, title: 't' + (i + 1), body: 'x'.repeat(500) })); const log = [];\n  const ok = (w) => (r) => (w.authorId === undefined || r.authorId === w.authorId) && (!w.id || (w.id.lt === undefined || r.id < w.id.lt));\n  return { log, note: {\n    findMany: (a) => { log.push({ take: a.take, where: a.where, orderBy: a.orderBy, omit: a.omit || null }); let r = rows.filter(ok(a.where || {})); if (a.orderBy && a.orderBy.id === 'desc') r.sort((x, y) => y.id - x.id); r = r.slice(0, a.take ?? 1e9).map((x) => { const c = { ...x }; if (a.omit) for (const k of Object.keys(a.omit)) if (a.omit[k]) delete c[k]; return c; }); return new Promise((res) => setTimeout(() => res(r), 1)); },\n    count: () => { log.push('count(*)'); return new Promise((res) => setTimeout(() => res(rows.length), 42)); },\n  } }; };",
+            "mongDoi": [
+              {
+                "items": [
+                  {
+                    "id": 9,
+                    "authorId": 1,
+                    "title": "t9"
+                  },
+                  {
+                    "id": 7,
+                    "authorId": 1,
+                    "title": "t7"
+                  }
+                ],
+                "nextCursor": 7
+              },
+              [
+                {
+                  "take": 3,
+                  "where": {
+                    "authorId": 1
+                  },
+                  "orderBy": {
+                    "id": "desc"
+                  },
+                  "omit": {
+                    "body": true
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Walk all pages of author 1",
+              "vi": "Đi hết các trang của tác giả 1"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const a = await list(p, { limit: 2, authorId: 1 }); const b = await list(p, { limit: 2, authorId: 1, cursor: a.nextCursor }); const c = await list(p, { limit: 2, authorId: 1, cursor: b.nextCursor }); return [a.items.map((n) => n.id), b.items.map((n) => n.id), c.items.map((n) => n.id), c.nextCursor]; })()",
+            "chuanBi": "const mkPrisma = (n = 9, authors = 2) => { const rows = Array.from({ length: n }, (_, i) => ({ id: i + 1, authorId: (i % authors) + 1, title: 't' + (i + 1), body: 'x'.repeat(500) })); const log = [];\n  const ok = (w) => (r) => (w.authorId === undefined || r.authorId === w.authorId) && (!w.id || (w.id.lt === undefined || r.id < w.id.lt));\n  return { log, note: {\n    findMany: (a) => { log.push({ take: a.take, where: a.where, orderBy: a.orderBy, omit: a.omit || null }); let r = rows.filter(ok(a.where || {})); if (a.orderBy && a.orderBy.id === 'desc') r.sort((x, y) => y.id - x.id); r = r.slice(0, a.take ?? 1e9).map((x) => { const c = { ...x }; if (a.omit) for (const k of Object.keys(a.omit)) if (a.omit[k]) delete c[k]; return c; }); return new Promise((res) => setTimeout(() => res(r), 1)); },\n    count: () => { log.push('count(*)'); return new Promise((res) => setTimeout(() => res(rows.length), 42)); },\n  } }; };",
+            "mongDoi": [
+              [
+                9,
+                7
+              ],
+              [
+                5,
+                3
+              ],
+              [
+                1
+              ],
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Exactly 4 rows ⇒ nextCursor null",
+              "vi": "Đúng 4 dòng ⇒ nextCursor null"
+            },
+            "goi": "await (async () => { const p = mkPrisma(8); const r = await list(p, { limit: 4, authorId: 2 }); return [r.items.map((n) => n.id), r.nextCursor]; })()",
+            "chuanBi": "const mkPrisma = (n = 9, authors = 2) => { const rows = Array.from({ length: n }, (_, i) => ({ id: i + 1, authorId: (i % authors) + 1, title: 't' + (i + 1), body: 'x'.repeat(500) })); const log = [];\n  const ok = (w) => (r) => (w.authorId === undefined || r.authorId === w.authorId) && (!w.id || (w.id.lt === undefined || r.id < w.id.lt));\n  return { log, note: {\n    findMany: (a) => { log.push({ take: a.take, where: a.where, orderBy: a.orderBy, omit: a.omit || null }); let r = rows.filter(ok(a.where || {})); if (a.orderBy && a.orderBy.id === 'desc') r.sort((x, y) => y.id - x.id); r = r.slice(0, a.take ?? 1e9).map((x) => { const c = { ...x }; if (a.omit) for (const k of Object.keys(a.omit)) if (a.omit[k]) delete c[k]; return c; }); return new Promise((res) => setTimeout(() => res(r), 1)); },\n    count: () => { log.push('count(*)'); return new Promise((res) => setTimeout(() => res(rows.length), 42)); },\n  } }; };",
+            "mongDoi": [
+              [
+                8,
+                6,
+                4,
+                2
+              ],
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const p = mkPrisma(200, 1); const r = await list(p, { limit: 1000, authorId: 1 }); return [r.items.length, r.nextCursor, p.log.map((l) => (typeof l === 'string' ? l : l.take))]; })()",
+            "chuanBi": "const mkPrisma = (n = 9, authors = 2) => { const rows = Array.from({ length: n }, (_, i) => ({ id: i + 1, authorId: (i % authors) + 1, title: 't' + (i + 1), body: 'x'.repeat(500) })); const log = [];\n  const ok = (w) => (r) => (w.authorId === undefined || r.authorId === w.authorId) && (!w.id || (w.id.lt === undefined || r.id < w.id.lt));\n  return { log, note: {\n    findMany: (a) => { log.push({ take: a.take, where: a.where, orderBy: a.orderBy, omit: a.omit || null }); let r = rows.filter(ok(a.where || {})); if (a.orderBy && a.orderBy.id === 'desc') r.sort((x, y) => y.id - x.id); r = r.slice(0, a.take ?? 1e9).map((x) => { const c = { ...x }; if (a.omit) for (const k of Object.keys(a.omit)) if (a.omit[k]) delete c[k]; return c; }); return new Promise((res) => setTimeout(() => res(r), 1)); },\n    count: () => { log.push('count(*)'); return new Promise((res) => setTimeout(() => res(rows.length), 42)); },\n  } }; };",
+            "mongDoi": [
+              50,
+              151,
+              [
+                51
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const r = await list(p, { authorId: 3 }); return [r, p.log]; })()",
+            "chuanBi": "const mkPrisma = (n = 9, authors = 2) => { const rows = Array.from({ length: n }, (_, i) => ({ id: i + 1, authorId: (i % authors) + 1, title: 't' + (i + 1), body: 'x'.repeat(500) })); const log = [];\n  const ok = (w) => (r) => (w.authorId === undefined || r.authorId === w.authorId) && (!w.id || (w.id.lt === undefined || r.id < w.id.lt));\n  return { log, note: {\n    findMany: (a) => { log.push({ take: a.take, where: a.where, orderBy: a.orderBy, omit: a.omit || null }); let r = rows.filter(ok(a.where || {})); if (a.orderBy && a.orderBy.id === 'desc') r.sort((x, y) => y.id - x.id); r = r.slice(0, a.take ?? 1e9).map((x) => { const c = { ...x }; if (a.omit) for (const k of Object.keys(a.omit)) if (a.omit[k]) delete c[k]; return c; }); return new Promise((res) => setTimeout(() => res(r), 1)); },\n    count: () => { log.push('count(*)'); return new Promise((res) => setTimeout(() => res(rows.length), 42)); },\n  } }; };",
+            "mongDoi": [
+              {
+                "items": [],
+                "nextCursor": null
+              },
+              [
+                {
+                  "take": 21,
+                  "where": {
+                    "authorId": 3
+                  },
+                  "orderBy": {
+                    "id": "desc"
+                  },
+                  "omit": {
+                    "body": true
+                  }
+                }
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>nextCursor = items.length === take ? … : null</code> — a final page of exactly 20 rows promises a next page that is empty.|||<code>nextCursor = items.length === take ? … : null</code> — trang cuối đúng 20 dòng hứa một trang sau trống rỗng."
+        },
+        {
+          "loi": "Using the extra row’s id as the cursor: the next page then skips it.|||Dùng id của dòng thừa làm cursor: trang sau bỏ mất nó."
+        },
+        {
+          "loi": "Leaving body in the list: 322 KB instead of 50 KB on someone’s phone.|||Để body trong danh sách: 322 KB thay vì 50 KB trên điện thoại người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "take",
+          "vi": "take",
+          "giaiThich": "Số dòng tối đa (LIMIT)."
+        },
+        {
+          "en": "omit",
+          "vi": "omit",
+          "giaiThich": "Bỏ cột khỏi kết quả."
+        }
+      ]
+    },
+    {
+      "title": "7.6 · 3 — Write createNote(): unique violations become 409, read from Prisma 7’s real meta",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "error handling",
+        "unique constraint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two requests race to create the same slug; the unique index referees and Prisma throws <code>P2002</code>. Translate it once, in the service. <code>AppError</code> is in <code>helpers.js</code>. Write <code>async createNote(prisma, data)</code>:</p>\n<ul><li>Return <code>await prisma.note.create({ data })</code>.</li>\n<li>On an error with <code>code === 'P2002'</code> throw <code>new AppError(409, 'DUPLICATE', what + ' already exists')</code>, where <code>c = err.meta?.driverAdapterError?.cause?.constraint</code> and <code>what</code> = <code>c.fields</code> joined with <code>\", \"</code>, else <code>c.index</code>, else <code>\"value\"</code>.</li>\n<li>Re-throw every other error unchanged.</li></ul>\n<p>The real shapes (re-run on Prisma 7.10.1): <code>constraint: { fields: [\"slug\"] }</code> on one run, <code>constraint: { index: \"Note_slug_key\" }</code> on another — and the old <code>err.meta.target</code> is <code>undefined</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Optional chaining all the way down — meta may be missing.</li>\n  <li>409, never 500, for a duplicate.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai request đua nhau tạo cùng slug; chỉ mục unique làm trọng tài và Prisma ném <code>P2002</code>. Dịch nó một lần, ở service. <code>AppError</code> có trong <code>helpers.js</code>. Viết <code>async createNote(prisma, data)</code>:</p>\n<ul><li>Trả <code>await prisma.note.create({ data })</code>.</li>\n<li>Lỗi có <code>code === 'P2002'</code> ⇒ ném <code>new AppError(409, 'DUPLICATE', what + ' already exists')</code>, với <code>c = err.meta?.driverAdapterError?.cause?.constraint</code> và <code>what</code> = <code>c.fields</code> nối bằng <code>\", \"</code>, không có thì <code>c.index</code>, không nữa thì <code>\"value\"</code>.</li>\n<li>Ném lại mọi lỗi khác nguyên vẹn.</li></ul>\n<p>Hình dạng thật (chạy lại trên Prisma 7.10.1): lần thì <code>constraint: { fields: [\"slug\"] }</code>, lần thì <code>constraint: { index: \"Note_slug_key\" }</code> — còn <code>err.meta.target</code> cũ là <code>undefined</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng optional chaining suốt đường — meta có thể không có.</li>\n  <li>409, không bao giờ 500, cho bản trùng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await caught(createNote(failWith(P2002({ originalCode: '23505', constraint: { fields: ['slug'] } })), { slug: 'bulk-1' }))",
+          "output": "{\"thrown\":\"AppError\",\"status\":409,\"code\":\"DUPLICATE\",\"message\":\"slug already exists\"}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const c = err.meta?.driverAdapterError?.cause?.constraint;</code>",
+        "<code>c?.fields?.join(\", \") ?? c?.index ?? \"value\"</code> — each <code>??</code> is one fallback.|||<code>c?.fields?.join(\", \") ?? c?.index ?? \"value\"</code> — mỗi <code>??</code> là một lớp dự phòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function createNote(prisma, data) {\n  // Write your solution here\n  try {\n    return await prisma.note.create({ data });\n  } catch (err) {\n    if (err.code === 'P2002') throw new AppError(409, 'DUPLICATE', err.meta.target.join(', ') + ' already exists');\n    throw err;\n  }\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function createNote(prisma, data) {\n  try {\n    return await prisma.note.create({ data });\n  } catch (err) {\n    if (err.code === 'P2002') {\n      const c = err.meta?.driverAdapterError?.cause?.constraint;\n      const what = c?.fields?.join(', ') ?? c?.index ?? 'value';   // PostgreSQL may give only the index name\n      throw new AppError(409, 'DUPLICATE', `${what} already exists`);\n    }\n    throw err;                                                     // not ours to translate\n  }\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The database is the only place that can decide uniqueness correctly under concurrency, and P2002 is how it tells you. Status code from chapter 6 (409: the data is fine, the world disagrees), source of truth from chapter 7 — and defensive reading of meta, because its shape changed between Prisma versions and may change again.</p>",
+      "solutionExplanationHtmlVi": "<p>CSDL là nơi duy nhất quyết định tính duy nhất đúng khi chạy đồng thời, và P2002 là cách nó báo bạn. Mã trạng thái từ chương 6 (409: dữ liệu ổn, thế giới không đồng ý), nguồn sự thật từ chương 7 — và đọc meta một cách phòng thủ, vì hình dạng của nó đã đổi giữa các phiên bản Prisma và có thể đổi nữa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "constraint.fields form",
+              "vi": "Dạng constraint.fields"
+            },
+            "goi": "await caught(createNote(failWith(P2002({ originalCode: '23505', constraint: { fields: ['slug'] } })), { slug: 'bulk-1' }))",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 409,
+              "code": "DUPLICATE",
+              "message": "slug already exists"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Prisma 7.10.1: index name only",
+              "vi": "Prisma 7.10.1: chỉ có tên chỉ mục"
+            },
+            "goi": "await caught(createNote(failWith(P2002({ originalCode: '23505', constraint: { index: 'Note_slug_key' } })), { slug: 'bulk-1' }))",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 409,
+              "code": "DUPLICATE",
+              "message": "Note_slug_key already exists"
+            }
+          },
+          {
+            "moTa": {
+              "en": "No conflict ⇒ the note",
+              "vi": "Không xung đột ⇒ ghi chú"
+            },
+            "goi": "await createNote(okPrisma, { slug: 'fresh', title: 'x' })",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": {
+              "id": 1251006,
+              "slug": "fresh",
+              "title": "x"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await caught(createNote(failWith(P2002(undefined)), {})), await caught(createNote(failWith(P2002({ constraint: { fields: ['email', 'tenantId'] } })), {}))]",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": [
+              {
+                "thrown": "AppError",
+                "status": 409,
+                "code": "DUPLICATE",
+                "message": "value already exists"
+              },
+              {
+                "thrown": "AppError",
+                "status": 409,
+                "code": "DUPLICATE",
+                "message": "email, tenantId already exists"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await caught(createNote(failWith(new PrismaClientKnownRequestError('P2000', 'value too long', { column_name: 'title' })), {}))",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": {
+              "thrown": "PrismaClientKnownRequestError",
+              "status": {
+                "$js": "undefined"
+              },
+              "code": "P2000",
+              "message": "value too long"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Only the old meta.target ⇒ fallback \"value\"",
+              "vi": "Chỉ có meta.target cũ ⇒ dự phòng \"value\""
+            },
+            "goi": "await caught(createNote(failWith(Object.assign(new PrismaClientKnownRequestError('P2002', 'old'), { meta: { target: ['slug'] } })), {}))",
+            "chuanBi": "class PrismaClientKnownRequestError extends Error { constructor(code, message, meta) { super(message); this.name = 'PrismaClientKnownRequestError'; this.code = code; this.meta = meta; } }\nconst failWith = (err) => ({ note: { create: () => new Promise((_, no) => setTimeout(() => no(err), 2)) } });\nconst okPrisma = { note: { create: ({ data }) => Promise.resolve({ id: 1251006, ...data }) } };\nconst P2002 = (cause) => new PrismaClientKnownRequestError('P2002', 'Unique constraint failed', cause === undefined ? undefined : { modelName: 'Note', driverAdapterError: { cause } });\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code, message: e.message }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 409,
+              "code": "DUPLICATE",
+              "message": "value already exists"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>err.meta.target.join(\", \")</code> from an older tutorial — a TypeError inside the catch, so the client gets a 500.|||<code>err.meta.target.join(\", \")</code> từ hướng dẫn cũ — TypeError ngay trong catch, client nhận 500."
+        },
+        {
+          "loi": "Reading only <code>fields</code>: on the run that gave only the index name, the message was \" already exists\".|||Chỉ đọc <code>fields</code>: ở lần chỉ có tên chỉ mục, thông điệp là \" already exists\"."
+        },
+        {
+          "loi": "A findUnique before the create to “avoid” the error — the race the unique index exists to referee.|||findUnique trước create để \"tránh\" lỗi — đúng cuộc đua mà chỉ mục unique sinh ra để phân xử."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "optional chaining",
+          "vi": "chuỗi tuỳ chọn",
+          "giaiThich": "a?.b?.c"
+        },
+        {
+          "en": "nullish coalescing",
+          "vi": "??",
+          "giaiThich": "Giá trị dự phòng khi null/undefined."
+        }
+      ]
+    },
+    {
+      "title": "7.6 · 4 — Write updateNote(): the version column that stops the lost update",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "optimistic concurrency",
+        "Prisma"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Chapter 6’s lost update, fixed in the database with one integer column and one where clause. Write <code>async updateNote(prisma, id, clientVersion, patch)</code>:</p>\n<ul><li>Drop <code>id</code>, <code>version</code> and <code>authorId</code> from <code>patch</code>.</li>\n<li><code>prisma.note.updateMany({ where: { id, version: clientVersion }, data: { ...patch, version: { increment: 1 } } })</code>.</li>\n<li><code>count === 0</code> ⇒ look the note up with <code>findUnique({ where: { id } })</code>: missing ⇒ throw <code>AppError(404, 'NOTE_NOT_FOUND', …)</code>; present ⇒ throw <code>AppError(409, 'STALE_VERSION', 'Someone else edited this note. Reload and try again.')</code>.</li>\n<li>Otherwise return the fresh note from <code>findUnique</code>.</li></ul>\n<p>The lesson’s run: both A and B loaded version 1; A ⇒ 1 row updated; B ⇒ 0 rows ⇒ 409; final body “A sửa”, version 2. The fake’s <code>update</code> throws, like the real one would refuse a non-unique where.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The version check happens inside the UPDATE — never read-then-write.</li>\n  <li>Distinguish 404 from 409 only after count is 0.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mất cập nhật của chương 6, sửa trong CSDL bằng một cột số nguyên và một điều kiện where. Viết <code>async updateNote(prisma, id, clientVersion, patch)</code>:</p>\n<ul><li>Bỏ <code>id</code>, <code>version</code> và <code>authorId</code> khỏi <code>patch</code>.</li>\n<li><code>prisma.note.updateMany({ where: { id, version: clientVersion }, data: { ...patch, version: { increment: 1 } } })</code>.</li>\n<li><code>count === 0</code> ⇒ tra ghi chú bằng <code>findUnique({ where: { id } })</code>: không có ⇒ ném <code>AppError(404, 'NOTE_NOT_FOUND', …)</code>; có ⇒ ném <code>AppError(409, 'STALE_VERSION', 'Someone else edited this note. Reload and try again.')</code>.</li>\n<li>Còn lại trả ghi chú mới từ <code>findUnique</code>.</li></ul>\n<p>Lần chạy của bài: A và B cùng tải version 1; A ⇒ 1 dòng được cập nhật; B ⇒ 0 dòng ⇒ 409; body cuối là \"A sửa\", version 2. <code>update</code> của hàm giả ném lỗi, như bản thật sẽ từ chối where không duy nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phép kiểm version nằm trong chính câu UPDATE — không đọc rồi mới ghi.</li>\n  <li>Chỉ phân biệt 404 và 409 sau khi count là 0.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const p = mkPrisma(); const a = await caught(updateNote(p, 1251006, 1, { body: 'A sửa' })); const b = await caught(updateNote(p, 1251006, 1, { body: 'B sửa' })); return { a, b, final: p.rows.get(1251006) }; })()",
+          "output": "{\"a\":{\"id\":1251006,\"title\":\"Ghi chú\",\"body\":\"A sửa\",\"authorId\":1,\"version\":2},\"b\":{\"thrown\":\"AppError\",\"status\":409,\"code\":\"STALE_VERSION\"},\"final\":{\"id\":1251006,\"title\":\"Ghi chú\",\"body\":\"A sửa\",\"authorId\":1,\"version\":2}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const { id: _i, version: _v, authorId: _a, ...safe } = patch;</code>",
+        "<code>data: { ...safe, version: { increment: 1 } }</code> — Prisma’s atomic increment.|||<code>data: { ...safe, version: { increment: 1 } }</code> — phép tăng nguyên tử của Prisma."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function updateNote(prisma, id, clientVersion, patch) {\n  // Write your solution here\n  const note = await prisma.note.findUnique({ where: { id } });\n  if (!note) throw new AppError(404, 'NOTE_NOT_FOUND', 'Note ' + id + ' does not exist');\n  await prisma.note.updateMany({ where: { id }, data: { ...patch, version: note.version + 1 } });\n  return prisma.note.findUnique({ where: { id } });\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function updateNote(prisma, id, clientVersion, patch) {\n  const { id: _i, version: _v, authorId: _a, ...safe } = patch;   // the client never sets these\n  const updated = await prisma.note.updateMany({\n    where: { id, version: clientVersion },                     // only if nothing changed since the client loaded it\n    data: { ...safe, version: { increment: 1 } },\n  });\n  if (updated.count === 0) {\n    // zero rows: either the note is gone, or someone else won the race\n    const exists = await prisma.note.findUnique({ where: { id } });\n    if (!exists) throw new AppError(404, 'NOTE_NOT_FOUND', 'Note ' + id + ' does not exist');\n    throw new AppError(409, 'STALE_VERSION', 'Someone else edited this note. Reload and try again.');\n  }\n  return prisma.note.findUnique({ where: { id } });\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>UPDATE … WHERE id = $1 AND version = $2 makes the check and the write one atomic statement, so there is no window between them. Zero rows affected means someone beat you to it; the loser is told and nobody is blocked — optimistic concurrency, the server-side twin of ETag + If-Match.</p>",
+      "solutionExplanationHtmlVi": "<p>UPDATE … WHERE id = $1 AND version = $2 biến phép kiểm và lần ghi thành một câu nguyên tử, nên không có khe hở giữa chúng. 0 dòng bị ảnh hưởng nghĩa là có người nhanh hơn bạn; người thua được báo và không ai bị chặn — đồng thời lạc quan, bản song sinh phía server của ETag + If-Match.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A then B with version 1 ⇒ 200, 409, A survives",
+              "vi": "A rồi B với version 1 ⇒ 200, 409, bản của A còn"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const a = await caught(updateNote(p, 1251006, 1, { body: 'A sửa' })); const b = await caught(updateNote(p, 1251006, 1, { body: 'B sửa' })); return { a, b, final: p.rows.get(1251006) }; })()",
+            "chuanBi": "const mkPrisma = () => { const rows = new Map([[1251006, { id: 1251006, title: 'Ghi chú', body: 'gốc', authorId: 1, version: 1 }]]); const log = [];\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { log, rows, note: {\n    updateMany: ({ where, data }) => { log.push('updateMany ' + JSON.stringify(where)); let count = 0;\n      for (const r of rows.values()) { if (Object.keys(where).every((k) => r[k] === where[k])) { for (const [k, v] of Object.entries(data)) r[k] = v && typeof v === 'object' && 'increment' in v ? r[k] + v.increment : v; count++; } }\n      return wait({ count }); },\n    findUnique: ({ where }) => { log.push('findUnique ' + where.id); return wait(rows.has(where.id) ? { ...rows.get(where.id) } : null); },\n    update: () => { throw new Error('use updateMany: update only accepts a unique key in where'); },\n  } }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "a": {
+                "id": 1251006,
+                "title": "Ghi chú",
+                "body": "A sửa",
+                "authorId": 1,
+                "version": 2
+              },
+              "b": {
+                "thrown": "AppError",
+                "status": 409,
+                "code": "STALE_VERSION"
+              },
+              "final": {
+                "id": 1251006,
+                "title": "Ghi chú",
+                "body": "A sửa",
+                "authorId": 1,
+                "version": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Unknown id ⇒ 404",
+              "vi": "Id lạ ⇒ 404"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); return caught(updateNote(p, 42, 1, { body: 'x' })); })()",
+            "chuanBi": "const mkPrisma = () => { const rows = new Map([[1251006, { id: 1251006, title: 'Ghi chú', body: 'gốc', authorId: 1, version: 1 }]]); const log = [];\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { log, rows, note: {\n    updateMany: ({ where, data }) => { log.push('updateMany ' + JSON.stringify(where)); let count = 0;\n      for (const r of rows.values()) { if (Object.keys(where).every((k) => r[k] === where[k])) { for (const [k, v] of Object.entries(data)) r[k] = v && typeof v === 'object' && 'increment' in v ? r[k] + v.increment : v; count++; } }\n      return wait({ count }); },\n    findUnique: ({ where }) => { log.push('findUnique ' + where.id); return wait(rows.has(where.id) ? { ...rows.get(where.id) } : null); },\n    update: () => { throw new Error('use updateMany: update only accepts a unique key in where'); },\n  } }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "thrown": "AppError",
+              "status": 404,
+              "code": "NOTE_NOT_FOUND"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const a = await updateNote(p, 1251006, 1, { title: 'v2' }); const b = await updateNote(p, 1251006, a.version, { title: 'v3' }); return [a.version, b.version, b.title]; })()",
+            "chuanBi": "const mkPrisma = () => { const rows = new Map([[1251006, { id: 1251006, title: 'Ghi chú', body: 'gốc', authorId: 1, version: 1 }]]); const log = [];\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { log, rows, note: {\n    updateMany: ({ where, data }) => { log.push('updateMany ' + JSON.stringify(where)); let count = 0;\n      for (const r of rows.values()) { if (Object.keys(where).every((k) => r[k] === where[k])) { for (const [k, v] of Object.entries(data)) r[k] = v && typeof v === 'object' && 'increment' in v ? r[k] + v.increment : v; count++; } }\n      return wait({ count }); },\n    findUnique: ({ where }) => { log.push('findUnique ' + where.id); return wait(rows.has(where.id) ? { ...rows.get(where.id) } : null); },\n    update: () => { throw new Error('use updateMany: update only accepts a unique key in where'); },\n  } }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              2,
+              3,
+              "v3"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); const r = await caught(updateNote(p, 1251006, 1, { body: 'x', version: 99, authorId: 2, id: 7 })); return [r, p.rows.get(1251006)]; })()",
+            "chuanBi": "const mkPrisma = () => { const rows = new Map([[1251006, { id: 1251006, title: 'Ghi chú', body: 'gốc', authorId: 1, version: 1 }]]); const log = [];\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { log, rows, note: {\n    updateMany: ({ where, data }) => { log.push('updateMany ' + JSON.stringify(where)); let count = 0;\n      for (const r of rows.values()) { if (Object.keys(where).every((k) => r[k] === where[k])) { for (const [k, v] of Object.entries(data)) r[k] = v && typeof v === 'object' && 'increment' in v ? r[k] + v.increment : v; count++; } }\n      return wait({ count }); },\n    findUnique: ({ where }) => { log.push('findUnique ' + where.id); return wait(rows.has(where.id) ? { ...rows.get(where.id) } : null); },\n    update: () => { throw new Error('use updateMany: update only accepts a unique key in where'); },\n  } }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": [
+              {
+                "id": 1251006,
+                "title": "Ghi chú",
+                "body": "x",
+                "authorId": 1,
+                "version": 2
+              },
+              {
+                "id": 1251006,
+                "title": "Ghi chú",
+                "body": "x",
+                "authorId": 1,
+                "version": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Two at the same instant: exactly one wins",
+              "vi": "Hai cái cùng lúc: đúng một cái thắng"
+            },
+            "goi": "await (async () => { const p = mkPrisma(); await Promise.all([caught(updateNote(p, 1251006, 1, { body: 'A' })), caught(updateNote(p, 1251006, 1, { body: 'B' }))]); return p.rows.get(1251006); })()",
+            "chuanBi": "const mkPrisma = () => { const rows = new Map([[1251006, { id: 1251006, title: 'Ghi chú', body: 'gốc', authorId: 1, version: 1 }]]); const log = [];\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { log, rows, note: {\n    updateMany: ({ where, data }) => { log.push('updateMany ' + JSON.stringify(where)); let count = 0;\n      for (const r of rows.values()) { if (Object.keys(where).every((k) => r[k] === where[k])) { for (const [k, v] of Object.entries(data)) r[k] = v && typeof v === 'object' && 'increment' in v ? r[k] + v.increment : v; count++; } }\n      return wait({ count }); },\n    findUnique: ({ where }) => { log.push('findUnique ' + where.id); return wait(rows.has(where.id) ? { ...rows.get(where.id) } : null); },\n    update: () => { throw new Error('use updateMany: update only accepts a unique key in where'); },\n  } }; };\nconst caught = async (p) => { try { return await p; } catch (e) { return { thrown: e.name, status: e.status, code: e.code }; } };",
+            "mongDoi": {
+              "id": 1251006,
+              "title": "Ghi chú",
+              "body": "A",
+              "authorId": 1,
+              "version": 2
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "findUnique, compare versions in JavaScript, then update: two requests both see version 1 between the read and the write.|||findUnique, so version trong JavaScript, rồi update: hai request đều thấy version 1 giữa lần đọc và lần ghi."
+        },
+        {
+          "loi": "Spreading the raw patch: a client sends <code>version: 99</code> and wins every race.|||Rải nguyên patch: client gửi <code>version: 99</code> và thắng mọi cuộc đua."
+        },
+        {
+          "loi": "Answering 409 for a deleted note — the client reloads and gets a 404 anyway; tell it now.|||Trả 409 cho ghi chú đã bị xoá — client tải lại rồi cũng nhận 404; hãy nói ngay."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version column",
+          "vi": "cột phiên bản"
+        },
+        {
+          "en": "atomic",
+          "vi": "nguyên tử",
+          "giaiThich": "Không thể bị xen giữa."
+        }
+      ]
+    },
+    {
+      "title": "7.6 · 5 — Write the sql`…` tag: values travel as parameters, never as SQL text",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "SQL injection",
+        "tagged templates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><code>$queryRaw</code> as a tagged template is safe “because Prisma turns every <code>${…}</code> into a bound parameter”. Build that tag. <code>sql(strings, ...values)</code> is called as <code>sql`SELECT … WHERE slug = ${evil}`</code> and returns <code>{ __sql: true, text, values }</code>:</p>\n<ul><li>The literal parts are copied as they are; each interpolated value is replaced by <code>$1</code>, <code>$2</code>, … in order and pushed to <code>values</code>.</li>\n<li>An <b>array</b> value becomes <code>($n, $n+1, …)</code> — one placeholder per element — for <code>IN ${ids}</code>.</li>\n<li>A <b>nested fragment</b> (a value that is itself a result of <code>sql`…`</code>, recognisable by <code>__sql: true</code>) is inlined as SQL text, with its own placeholders renumbered to follow the ones already used, and its values appended.</li></ul>\n<p>The lesson’s attacker string <code>bulk-1' OR '1'='1</code> must end up in <code>values</code>, and the <code>text</code> must contain no quote you did not write.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never put a value into <code>text</code>.</li>\n  <li>Placeholders are numbered from 1 across the whole query, nested parts included.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>$queryRaw</code> dạng tagged template an toàn \"vì Prisma biến mọi <code>${…}</code> thành tham số ràng buộc\". Hãy dựng thẻ đó. <code>sql(strings, ...values)</code> được gọi kiểu <code>sql`SELECT … WHERE slug = ${evil}`</code> và trả <code>{ __sql: true, text, values }</code>:</p>\n<ul><li>Phần chữ cố định chép nguyên; mỗi giá trị chèn vào được thay bằng <code>$1</code>, <code>$2</code>, … theo thứ tự và đẩy vào <code>values</code>.</li>\n<li>Giá trị là <b>mảng</b> thành <code>($n, $n+1, …)</code> — mỗi phần tử một placeholder — cho <code>IN ${ids}</code>.</li>\n<li><b>Mảnh lồng</b> (giá trị chính là kết quả của <code>sql`…`</code>, nhận ra nhờ <code>__sql: true</code>) được chèn như chữ SQL, các placeholder của nó đánh số lại nối tiếp những cái đã dùng, và values của nó nối vào sau.</li></ul>\n<p>Chuỗi tấn công của bài <code>bulk-1' OR '1'='1</code> phải nằm trong <code>values</code>, và <code>text</code> không được chứa dấu nháy nào bạn không tự viết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ đưa giá trị vào <code>text</code>.</li>\n  <li>Placeholder đánh số từ 1 trên cả câu, kể cả phần lồng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const evil = \"bulk-1' OR '1'='1\"; return sql`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = ${evil}`; })()",
+          "output": "{\"__sql\":true,\"text\":\"SELECT count(*)::int AS n FROM \\\"Note\\\" WHERE slug = $1\",\"values\":[\"bulk-1' OR '1'='1\"]}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A tag function gets <code>strings</code> (one more than values) and the values: interleave <code>strings[i]</code>, then the placeholder for <code>values[i]</code>.|||Hàm thẻ nhận <code>strings</code> (nhiều hơn values một phần tử) và các giá trị: xen kẽ <code>strings[i]</code>, rồi placeholder cho <code>values[i]</code>.",
+        "Renumber a nested fragment with <code>text.replace(/\\$(\\d+)/g, (_, n) => \"$\" + (params.length + Number(n)))</code> BEFORE pushing its values.|||Đánh số lại mảnh lồng bằng <code>text.replace(/\\$(\\d+)/g, (_, n) => \"$\" + (params.length + Number(n)))</code> TRƯỚC khi đẩy values của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function sql(strings, ...values) {\n  // Write your solution here\n  let text = '';\n  strings.forEach((s, i) => { text += s + (i < values.length ? \"'\" + values[i] + \"'\" : ''); });\n  return { __sql: true, text, values: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function sql(strings, ...values) {\n  // the template's TEXT parts are trusted SQL written by you; every ${value} becomes a bound parameter\n  const parts = [];\n  const params = [];\n  strings.forEach((s, i) => {\n    parts.push(s);\n    if (i >= values.length) return;\n    const v = values[i];\n    if (v && v.__sql) {\n      // a nested fragment: inline its text, renumbering its placeholders after ours\n      parts.push(v.text.replace(/\\$(\\d+)/g, (_, n) => '$' + (params.length + Number(n))));\n      params.push(...v.values);\n    } else if (Array.isArray(v)) {\n      // a list for IN (…): one placeholder per element\n      parts.push('(' + v.map((x) => { params.push(x); return '$' + params.length; }).join(', ') + ')');\n    } else {\n      params.push(v);\n      parts.push('$' + params.length);\n    }\n  });\n  return { __sql: true, text: parts.join(''), values: params };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A tagged template receives the literal pieces and the values SEPARATELY — that separation is the whole security property. Text you typed in the source becomes SQL; anything that came from a variable becomes a $n placeholder whose value is sent to PostgreSQL on its own, so a quote inside it is just a character. That is why $queryRaw returned 0 rows and $queryRawUnsafe returned the whole table.</p>",
+      "solutionExplanationHtmlVi": "<p>Tagged template nhận phần chữ cố định và các giá trị RIÊNG BIỆT — sự tách biệt đó chính là toàn bộ tính chất an ninh. Chữ bạn gõ trong mã nguồn thành SQL; thứ gì đến từ biến thành placeholder $n mà giá trị được gửi riêng tới PostgreSQL, nên dấu nháy bên trong chỉ là một ký tự. Vì thế $queryRaw trả 0 dòng còn $queryRawUnsafe trả cả bảng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s attacker string stays a value",
+              "vi": "Chuỗi tấn công của bài vẫn là giá trị"
+            },
+            "goi": "(() => { const evil = \"bulk-1' OR '1'='1\"; return sql`SELECT count(*)::int AS n FROM \"Note\" WHERE slug = ${evil}`; })()",
+            "mongDoi": {
+              "__sql": true,
+              "text": "SELECT count(*)::int AS n FROM \"Note\" WHERE slug = $1",
+              "values": [
+                "bulk-1' OR '1'='1"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A list for IN",
+              "vi": "Danh sách cho IN"
+            },
+            "goi": "sql`SELECT id FROM \"Note\" WHERE \"authorId\" = ${7} AND id IN ${[3, 5, 8]} AND pinned = ${true}`",
+            "mongDoi": {
+              "__sql": true,
+              "text": "SELECT id FROM \"Note\" WHERE \"authorId\" = $1 AND id IN ($2, $3, $4) AND pinned = $5",
+              "values": [
+                7,
+                3,
+                5,
+                8,
+                true
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A nested fragment is renumbered",
+              "vi": "Mảnh lồng được đánh số lại"
+            },
+            "goi": "(() => { const byAuthor = sql`\"authorId\" = ${2} AND title ILIKE ${'%prisma%'}`; return sql`SELECT id FROM \"Note\" WHERE id > ${10} AND ${byAuthor} ORDER BY id LIMIT ${20}`; })()",
+            "mongDoi": {
+              "__sql": true,
+              "text": "SELECT id FROM \"Note\" WHERE id > $1 AND \"authorId\" = $2 AND title ILIKE $3 ORDER BY id LIMIT $4",
+              "values": [
+                10,
+                2,
+                "%prisma%",
+                20
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[sql`SELECT 1`, sql`SELECT ${null}::text, ${''}`]",
+            "mongDoi": [
+              {
+                "__sql": true,
+                "text": "SELECT 1",
+                "values": []
+              },
+              {
+                "__sql": true,
+                "text": "SELECT $1::text, $2",
+                "values": [
+                  null,
+                  ""
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const inner = sql`id IN ${[1, 2]}`; const mid = sql`(${inner} OR slug = ${\"x'y\"})`; return sql`SELECT ${'a'} WHERE ${mid} AND ${mid}`; })()",
+            "mongDoi": {
+              "__sql": true,
+              "text": "SELECT $1 WHERE (id IN ($2, $3) OR slug = $4) AND (id IN ($5, $6) OR slug = $7)",
+              "values": [
+                "a",
+                1,
+                2,
+                "x'y",
+                1,
+                2,
+                "x'y"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Escaping quotes (<code>replace(/'/g, \"''\")</code>) and concatenating: it works until an encoding, a backslash or a number column proves otherwise. Parameters are not escaping; the value never enters the SQL parser.|||Thoát dấu nháy (<code>replace(/'/g, \"''\")</code>) rồi nối chuỗi: chạy được cho tới khi một kiểu mã hoá, một dấu gạch chéo hay một cột số chứng minh điều ngược lại. Tham số không phải thoát ký tự; giá trị không bao giờ vào bộ phân tích SQL."
+        },
+        {
+          "loi": "Joining an array into one value (<code>\"1,2,3\"</code>) for IN — PostgreSQL compares the id with the string \"1,2,3\".|||Nối mảng thành một giá trị (<code>\"1,2,3\"</code>) cho IN — PostgreSQL so id với chuỗi \"1,2,3\"."
+        },
+        {
+          "loi": "Renumbering after pushing the nested values, so every placeholder is off by the nested count.|||Đánh số lại sau khi đã đẩy values lồng, nên mọi placeholder lệch đúng số lượng lồng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tagged template",
+          "vi": "template có thẻ",
+          "giaiThich": "tag`…` — hàm nhận chữ và giá trị riêng."
+        },
+        {
+          "en": "placeholder",
+          "vi": "chỗ giữ",
+          "giaiThich": "$1, $2…"
+        }
+      ]
+    },
+    {
+      "title": "7.6 · 6 — The next page after (createdAt, id) in SQL, ties included",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "SQL",
+        "cursor pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>“Ordering by createdAt alone breaks with ties. Order by [createdAt desc, id desc] and make the cursor carry both values.” The client is on a newest-first feed and sent back the cursor of the last note it saw: <code>createdAt = '2026-07-28 09:00'</code>, <code>id = 6</code>. Note 5 has the <b>same</b> <code>createdAt</code>.</p>\n<p>Write the next page: <code>id, title, \"createdAt\"</code> of the <b>3</b> notes that come right after that cursor, newest first (<code>\"createdAt\" DESC, id DESC</code>), using a <b>row-value comparison</b> <code>(\"createdAt\", id) &lt; (…, …)</code>.</p>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 notes</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) and <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", PK on both)</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>One SELECT with ORDER BY \"createdAt\" DESC, id DESC LIMIT 3.</li>\n  <li>The cursor condition compares both columns together.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Sắp chỉ theo createdAt hỏng khi có hoà. Sắp theo [createdAt desc, id desc] và cho cursor mang cả hai giá trị.\" Client đang ở bảng tin mới nhất trước và gửi lại cursor của ghi chú cuối nó đã thấy: <code>createdAt = '2026-07-28 09:00'</code>, <code>id = 6</code>. Ghi chú 5 có <b>cùng</b> <code>createdAt</code>.</p>\n<p>Viết trang sau: <code>id, title, \"createdAt\"</code> của <b>3</b> ghi chú đứng ngay sau cursor đó, mới nhất trước (<code>\"createdAt\" DESC, id DESC</code>), dùng <b>so sánh bộ giá trị</b> <code>(\"createdAt\", id) &lt; (…, …)</code>.</p>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 ghi chú</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) và <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", khoá chính gồm cả hai)</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu SELECT với ORDER BY \"createdAt\" DESC, id DESC LIMIT 3.</li>\n  <li>Điều kiện cursor so cả hai cột cùng lúc.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | title           | createdAt          \n---+-----------------+--------------------\n5  | Gym plan        | 2026-07-28 09:00:00\n4  | Chapter 7 notes | 2026-07-28 08:30:00\n3  | Shopping list   | 2026-07-27 10:00:00",
+          "explanation": "Expected result of check \"The 3 notes after the cursor\" (row order matters).|||Kết quả mong đợi của kiểm \"3 ghi chú sau cursor\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "PostgreSQL compares row values left to right: <code>(a, b) &lt; (x, y)</code> means <code>a &lt; x OR (a = x AND b &lt; y)</code>.|||PostgreSQL so bộ giá trị từ trái sang phải: <code>(a, b) &lt; (x, y)</code> nghĩa là <code>a &lt; x OR (a = x AND b &lt; y)</code>.",
+        "Write the timestamp as <code>timestamp '2026-07-28 09:00'</code> (or just the string).|||Viết thời điểm là <code>timestamp '2026-07-28 09:00'</code> (hoặc chỉ chuỗi)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- WHERE (created_at, id) < ($1, $2) — both columns compared as one value, exactly the order of the ORDER BY\nSELECT id, title, \"createdAt\"\nFROM \"Note\"\nWHERE (\"createdAt\", id) < (timestamp '2026-07-28 09:00', 6)\nORDER BY \"createdAt\" DESC, id DESC\nLIMIT 3;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The row-value comparison is exactly the ordering of ORDER BY \"createdAt\" DESC, id DESC, turned into a condition: “strictly after this pair”. It also matches a composite index on (\"createdAt\", id), so PostgreSQL can start the scan at the cursor instead of filtering — the property that makes keyset pages cost the same at any depth.</p>",
+      "solutionExplanationHtmlVi": "<p>So sánh bộ giá trị chính là thứ tự của ORDER BY \"createdAt\" DESC, id DESC, đổi thành điều kiện: \"ngay sau cặp này\". Nó còn khớp chỉ mục ghép trên (\"createdAt\", id), nên PostgreSQL bắt đầu quét ngay tại cursor thay vì lọc — tính chất làm trang keyset tốn như nhau ở mọi độ sâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The 3 notes after the cursor|||3 ghi chú sau cursor",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  5,
+                  "Gym plan",
+                  "2026-07-28 09:00:00"
+                ],
+                [
+                  4,
+                  "Chapter 7 notes",
+                  "2026-07-28 08:30:00"
+                ],
+                [
+                  3,
+                  "Shopping list",
+                  "2026-07-27 10:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: another note at 08:00 with a high id must appear|||Ẩn: một ghi chú lúc 08:00 với id lớn phải xuất hiện",
+            "an": true,
+            "themCsdl": "INSERT INTO \"Note\" (title, slug, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('Late insert', 'late-1', 2, '2026-07-28 08:00', now());",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  5,
+                  "Gym plan",
+                  "2026-07-28 09:00:00"
+                ],
+                [
+                  4,
+                  "Chapter 7 notes",
+                  "2026-07-28 08:30:00"
+                ],
+                [
+                  11,
+                  "Late insert",
+                  "2026-07-28 08:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: more notes share 09:00 — only lower ids come after the cursor|||Ẩn: thêm ghi chú cùng 09:00 — chỉ id nhỏ hơn mới đứng sau cursor",
+            "an": true,
+            "themCsdl": "INSERT INTO \"Note\" (title, slug, \"authorId\", \"createdAt\", \"updatedAt\") VALUES ('Same time', 'same-1', 3, '2026-07-28 09:00', now()); UPDATE \"Note\" SET \"createdAt\" = '2026-07-28 09:00' WHERE id = 4;",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "createdAt"
+              ],
+              "hang": [
+                [
+                  5,
+                  "Gym plan",
+                  "2026-07-28 09:00:00"
+                ],
+                [
+                  4,
+                  "Chapter 7 notes",
+                  "2026-07-28 09:00:00"
+                ],
+                [
+                  3,
+                  "Shopping list",
+                  "2026-07-27 10:00:00"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>WHERE \"createdAt\" &lt; cursor</code>: note 5 shares the timestamp and is skipped forever.|||<code>WHERE \"createdAt\" &lt; cursor</code>: ghi chú 5 cùng thời điểm và bị bỏ qua mãi."
+        },
+        {
+          "loi": "<code>\"createdAt\" &lt;= x AND id &lt; y</code>: looks right, but drops any older note whose id is larger — an import or a back-dated note.|||<code>\"createdAt\" &lt;= x AND id &lt; y</code>: trông đúng, nhưng bỏ mọi ghi chú cũ hơn có id lớn hơn — một lần nhập dữ liệu hay ghi chú lùi ngày."
+        },
+        {
+          "loi": "ORDER BY without the id tie-breaker: the order of tied rows is undefined, so the cursor is meaningless.|||ORDER BY thiếu cột phá hoà id: thứ tự các dòng hoà không xác định, nên cursor vô nghĩa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row value",
+          "vi": "bộ giá trị",
+          "giaiThich": "(a, b) so như một khối."
+        },
+        {
+          "en": "keyset pagination",
+          "vi": "phân trang theo khoá"
+        }
+      ]
+    }
+  ]
+}

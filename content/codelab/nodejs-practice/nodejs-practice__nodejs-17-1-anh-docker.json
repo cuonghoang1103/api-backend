@@ -1,0 +1,661 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-1-anh-docker",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-1-anh-docker"
+  },
+  "exercises": [
+    {
+      "title": "What is really inside a 430 MB image",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Docker",
+        "images"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 17.1: four Dockerfiles for one 1,990-byte app.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 17.1: bốn Dockerfile cho một app 1.990 byte.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think about what the registry stores and the server pulls.|||Nghĩ về thứ registry lưu và server kéo về.",
+        "A .node file is compiled for one operating system.|||Một tệp .node được biên dịch cho đúng một hệ điều hành."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is really inside a 430 MB image\n\nAnswer in the answer panel (no code needed).\n\n1. The naive image is 430 MB to download and 1.73 GB on disk. Which size does every deploy and rollback wait for?Ảnh ngây thơ nặng 430 MB khi tải và 1,73 GB trên đĩa. Mỗi lần deploy và quay lui phải chờ kích thước nào?\n2. bcrypt was installed on a Mac. Without .dockerignore, COPY . . then RUN npm install. The build says OK; running fails with invalid ELF header. Why?bcrypt được cài trên Mac. Không có .dockerignore, COPY . . rồi RUN npm install. Build báo OK; chạy thì lỗi invalid ELF header. Vì sao?\n3. Same error, with and without ENV NODE_ENV=production in the runner. What changed?Cùng một lỗi, có và không có ENV NODE_ENV=production trong runner. Điều gì thay đổi?\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is really inside a 430 MB image — answer key\n\n1. The naive image is 430 MB to download and 1.73 GB on disk. Which size does every deploy and rollback wait for?Ảnh ngây thơ nặng 430 MB khi tải và 1,73 GB trên đĩa. Mỗi lần deploy và quay lui phải chờ kích thước nào?\n   Answer: b) The download size: the compressed layers pulled from the registry\n   On-disk size is what piles up: ten old naive versions are 17 GB, on the same disk as your database.VI: Kích thước trên đĩa là thứ chất đống: mười phiên bản ngây thơ cũ là 17 GB, trên cùng ổ với CSDL.\n\n2. bcrypt was installed on a Mac. Without .dockerignore, COPY . . then RUN npm install. The build says OK; running fails with invalid ELF header. Why?bcrypt được cài trên Mac. Không có .dockerignore, COPY . . rồi RUN npm install. Build báo OK; chạy thì lỗi invalid ELF header. Vì sao?\n   Answer: d) The Mac’s node_modules (a Mach-O binary) was copied in, and npm install saw bcrypt already there and did not rebuild it\n   One line fixes it: node_modules in .dockerignore. The image then installs its own Linux binary and runs (exit 0).VI: Một dòng sửa được: node_modules trong .dockerignore. Ảnh khi đó tự cài bản Linux của nó và chạy (exit 0).\n\n3. Same error, with and without ENV NODE_ENV=production in the runner. What changed?Cùng một lỗi, có và không có ENV NODE_ENV=production trong runner. Điều gì thay đổi?\n   Answer: b) Without it: an 889-byte stack trace that leaked a sentence with a “password”; with it: 148 bytes, Internal Server Error\n   Many libraries change behaviour on this variable — it is a behaviour line, not a size line. USER node is the other one: naive and slim ran as root.VI: Nhiều thư viện đổi hành vi theo biến này — nó là dòng về hành vi, không phải kích thước. USER node là dòng còn lại: bản ngây thơ và slim chạy bằng root.\n\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: a) node:22 is a tag, not a version: today it is v22.23.4, next month something else + b) npm ci follows the lockfile exactly and fails on drift + d) Only the last stage of a multi-stage build becomes the image\n   alpine uses musl instead of glibc: native modules such as sharp or bcrypt need a musl build or break. With native modules choose slim; the 19 MB saved is not worth “Error loading shared library”.VI: alpine dùng musl thay vì glibc: module native như sharp hay bcrypt cần bản dựng cho musl không thì hỏng. Có module native thì chọn slim; 19 MB tiết kiệm không đáng một buổi chiều “Error loading shared library”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The download size: the compressed layers pulled from the registry</p><p>On-disk size is what piles up: ten old naive versions are 17 GB, on the same disk as your database.</p><p><i>VI: Kích thước trên đĩa là thứ chất đống: mười phiên bản ngây thơ cũ là 17 GB, trên cùng ổ với CSDL.</i></p></li><li><p><b>d)</b> The Mac’s node_modules (a Mach-O binary) was copied in, and npm install saw bcrypt already there and did not rebuild it</p><p>One line fixes it: node_modules in .dockerignore. The image then installs its own Linux binary and runs (exit 0).</p><p><i>VI: Một dòng sửa được: node_modules trong .dockerignore. Ảnh khi đó tự cài bản Linux của nó và chạy (exit 0).</i></p></li><li><p><b>b)</b> Without it: an 889-byte stack trace that leaked a sentence with a “password”; with it: 148 bytes, Internal Server Error</p><p>Many libraries change behaviour on this variable — it is a behaviour line, not a size line. USER node is the other one: naive and slim ran as root.</p><p><i>VI: Nhiều thư viện đổi hành vi theo biến này — nó là dòng về hành vi, không phải kích thước. USER node là dòng còn lại: bản ngây thơ và slim chạy bằng root.</i></p></li><li><p><b>a)</b> node:22 is a tag, not a version: today it is v22.23.4, next month something else + <b>b)</b> npm ci follows the lockfile exactly and fails on drift + <b>d)</b> Only the last stage of a multi-stage build becomes the image</p><p>alpine uses musl instead of glibc: native modules such as sharp or bcrypt need a musl build or break. With native modules choose slim; the 19 MB saved is not worth “Error loading shared library”.</p><p><i>VI: alpine dùng musl thay vì glibc: module native như sharp hay bcrypt cần bản dựng cho musl không thì hỏng. Có module native thì chọn slim; 19 MB tiết kiệm không đáng một buổi chiều “Error loading shared library”.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The naive image is 430 MB to download and 1.73 GB on disk. Which size does every deploy and rollback wait for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ảnh ngây thơ nặng 430 MB khi tải và 1,73 GB trên đĩa. Mỗi lần deploy và quay lui phải chờ kích thước nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Neither: Docker only sends the layers that contain your own code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The download size: the compressed layers pulled from the registry"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The size of node_modules, since the base image is cached forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The on-disk size, because layers are unpacked before they are sent"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>On-disk size is what piles up: ten old naive versions are 17 GB, on the same disk as your database.</p><p><i>VI: Kích thước trên đĩa là thứ chất đống: mười phiên bản ngây thơ cũ là 17 GB, trên cùng ổ với CSDL.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>bcrypt was installed on a Mac. Without .dockerignore, COPY . . then RUN npm install. The build says OK; running fails with invalid ELF header. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>bcrypt được cài trên Mac. Không có .dockerignore, COPY . . rồi RUN npm install. Build báo OK; chạy thì lỗi invalid ELF header. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "bcrypt cannot be built on Linux at all, so it must be replaced by bcryptjs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm install always downloads macOS binaries when the lockfile was made on a Mac"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Docker Desktop translates binaries on the fly, but only for the amd64 platform"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The Mac’s node_modules (a Mach-O binary) was copied in, and npm install saw bcrypt already there and did not rebuild it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One line fixes it: node_modules in .dockerignore. The image then installs its own Linux binary and runs (exit 0).</p><p><i>VI: Một dòng sửa được: node_modules trong .dockerignore. Ảnh khi đó tự cài bản Linux của nó và chạy (exit 0).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Same error, with and without ENV NODE_ENV=production in the runner. What changed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng một lỗi, có và không có ENV NODE_ENV=production trong runner. Điều gì thay đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Without it, the image is 19 MB bigger because dev tools stay installed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Without it: an 889-byte stack trace that leaked a sentence with a “password”; with it: 148 bytes, Internal Server Error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing visible: NODE_ENV only changes which npm scripts can run"
+              },
+              {
+                "ma": "d",
+                "noiDung": "With it, Express disables error handling and the client gets no response"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Many libraries change behaviour on this variable — it is a behaviour line, not a size line. USER node is the other one: naive and slim ran as root.</p><p><i>VI: Nhiều thư viện đổi hành vi theo biến này — nó là dòng về hành vi, không phải kích thước. USER node là dòng còn lại: bản ngây thơ và slim chạy bằng root.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "node:22 is a tag, not a version: today it is v22.23.4, next month something else"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm ci follows the lockfile exactly and fails on drift"
+              },
+              {
+                "ma": "c",
+                "noiDung": "alpine is always the right base because it is the smallest"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the last stage of a multi-stage build becomes the image"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>alpine uses musl instead of glibc: native modules such as sharp or bcrypt need a musl build or break. With native modules choose slim; the 19 MB saved is not worth “Error loading shared library”.</p><p><i>VI: alpine dùng musl thay vì glibc: module native như sharp hay bcrypt cần bản dựng cho musl không thì hỏng. Có module native thì chọn slim; 19 MB tiết kiệm không đáng một buổi chiều “Error loading shared library”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "FROM node:22 for production: gcc, make, python, git and curl ship to the server.|||FROM node:22 cho production: gcc, make, python, git và curl được mang lên server."
+        },
+        {
+          "loi": "Trusting “build OK” — the bcrypt image built green and could not start.|||Tin “build OK” — ảnh bcrypt build xanh mà không khởi động nổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "image layer",
+          "vi": "tầng ảnh"
+        },
+        {
+          "en": "base image",
+          "vi": "ảnh nền"
+        },
+        {
+          "en": "multi-stage build",
+          "vi": "build nhiều giai đoạn"
+        },
+        {
+          "en": "musl / glibc",
+          "vi": "musl / glibc",
+          "giaiThich": "two C libraries; native binaries are built for one"
+        }
+      ]
+    },
+    {
+      "title": "Pick the base image for the situation",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "Docker"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>node:22, node:22-slim, node:22-alpine or distroless? (Lesson 17.1: 416 MB / 82.6 MB / 61.5 MB download.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>node:22, node:22-slim, node:22-alpine hay distroless? (Bài 17.1: tải 416 MB / 82,6 MB / 61,5 MB.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Native module ⇒ glibc.|||Module native ⇒ glibc.",
+        "A builder stage is thrown away, so its size does not matter.|||Giai đoạn builder bị bỏ đi, nên kích thước của nó không quan trọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the base image for the situation\n\nAnswer in the answer panel (no code needed).\n\n1. Which base for the runner stage?Ảnh nền nào cho giai đoạn runner?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the base image for the situation — answer key\n\n1. Which base for the runner stage?Ảnh nền nào cho giai đoạn runner?\n   - r1.b: node:22-slim\n   - r2.b: node:22-alpine\n   - r3.b: distroless\n   - r4.b: node:22 (full)\n   - r5.b: node:22-slim\n   The toolchain belongs in the builder only (the website installs python3, make, g++ there); the runner gets runtime libraries only. alpine’s musl breaks native modules; distroless removes the shell, so you can no longer get inside to type commands.VI: Bộ công cụ biên dịch chỉ thuộc về builder (website cài python3, make, g++ ở đó); runner chỉ nhận thư viện lúc chạy. musl của alpine làm hỏng module native; distroless bỏ shell, nên bạn không vào trong gõ lệnh được nữa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The toolchain belongs in the builder only (the website installs python3, make, g++ there); the runner gets runtime libraries only. alpine’s musl breaks native modules; distroless removes the shell, so you can no longer get inside to type commands.</p><p><i>VI: Bộ công cụ biên dịch chỉ thuộc về builder (website cài python3, make, g++ ở đó); runner chỉ nhận thư viện lúc chạy. musl của alpine làm hỏng module native; distroless bỏ shell, nên bạn không vào trong gõ lệnh được nữa.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Which base for the runner stage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ảnh nền nào cho giai đoạn runner?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Situation"
+              },
+              {
+                "ma": "b",
+                "ten": "Base",
+                "luaChon": [
+                  "node:22 (full)",
+                  "node:22-slim",
+                  "node:22-alpine",
+                  "distroless"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Production API that resizes images with sharp (native module)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Pure-JavaScript API (express, pg, zod), smallest image wanted, shell still handy for debugging"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Security first: nothing but Node and the app, no shell inside the container at all"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "The BUILDER stage that must compile a native module from source (python3, make, g++)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "A sensible default for most projects, no toolchain, glibc"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "node:22-slim",
+              "r2.b": "node:22-alpine",
+              "r3.b": "distroless",
+              "r4.b": "node:22 (full)",
+              "r5.b": "node:22-slim"
+            },
+            "giaiThich": "<p>The toolchain belongs in the builder only (the website installs python3, make, g++ there); the runner gets runtime libraries only. alpine’s musl breaks native modules; distroless removes the shell, so you can no longer get inside to type commands.</p><p><i>VI: Bộ công cụ biên dịch chỉ thuộc về builder (website cài python3, make, g++ ở đó); runner chỉ nhận thư viện lúc chạy. musl của alpine làm hỏng module native; distroless bỏ shell, nên bạn không vào trong gõ lệnh được nữa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "alpine for sharp “because it is smaller”.|||alpine cho sharp “vì nó nhỏ hơn”."
+        },
+        {
+          "loi": "The full image as the runner.|||Ảnh đầy đủ làm runner."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "distroless",
+          "vi": "distroless",
+          "giaiThich": "an image with no shell and no package manager"
+        }
+      ]
+    },
+    {
+      "title": "lintDockerfile(text): find the four tutorial lines and three missing ones",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "Docker",
+        "parsing",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write a small linter for the image that reaches the server — the <b>final stage</b> (from the last <code>FROM</code> to the end). Ignore blank lines and <code>#</code> comments; keywords are case-insensitive. Return the codes found, in this order:</p><ol><li><code>FULL_BASE</code> — the final <code>FROM</code> is <code>node:&lt;digits/dots&gt;</code> or <code>node:latest</code> (or <code>node</code> with no tag);</li><li><code>UNPINNED_TAG</code> — the tag does not start with an exact <code>x.y.z</code> version and there is no <code>@sha256:</code> digest;</li><li><code>COPY_ALL</code> — a line <code>COPY . .</code>;</li><li><code>NPM_INSTALL</code> — a <code>RUN</code> using <code>npm install</code> / <code>npm i</code> (not <code>npm ci</code>);</li><li><code>NPM_PID1</code> — the last <code>CMD</code> starts npm (<code>[\"npm\", …]</code> or shell form <code>npm …</code>);</li><li><code>ROOT_USER</code> — no <code>USER</code>, or the last one is <code>root</code>/<code>0</code>;</li><li><code>NO_NODE_ENV</code> — no <code>ENV NODE_ENV=production</code> (also <code>ENV NODE_ENV production</code>).</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết một bộ soát nhỏ cho ảnh tới được server — <b>giai đoạn cuối</b> (từ <code>FROM</code> cuối cùng tới hết). Bỏ dòng trống và chú thích <code>#</code>; từ khoá không phân biệt hoa thường. Trả về các mã tìm thấy, theo thứ tự:</p><ol><li><code>FULL_BASE</code> — <code>FROM</code> cuối là <code>node:&lt;số/dấu chấm&gt;</code> hoặc <code>node:latest</code> (hoặc <code>node</code> không thẻ);</li><li><code>UNPINNED_TAG</code> — thẻ không bắt đầu bằng phiên bản chính xác <code>x.y.z</code> và không có digest <code>@sha256:</code>;</li><li><code>COPY_ALL</code> — dòng <code>COPY . .</code>;</li><li><code>NPM_INSTALL</code> — một <code>RUN</code> dùng <code>npm install</code> / <code>npm i</code> (không phải <code>npm ci</code>);</li><li><code>NPM_PID1</code> — <code>CMD</code> cuối khởi chạy npm (<code>[\"npm\", …]</code> hoặc dạng shell <code>npm …</code>);</li><li><code>ROOT_USER</code> — không có <code>USER</code>, hoặc cái cuối là <code>root</code>/<code>0</code>;</li><li><code>NO_NODE_ENV</code> — không có <code>ENV NODE_ENV=production</code> (cũng nhận <code>ENV NODE_ENV production</code>).</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lintDockerfile(\"FROM node:22\\nWORKDIR /app\\nCOPY . .\\nRUN npm install\\nEXPOSE 3000\\nCMD [\\\"npm\\\", \\\"start\\\"]\")",
+          "output": "[\"FULL_BASE\",\"UNPINNED_TAG\",\"COPY_ALL\",\"NPM_INSTALL\",\"NPM_PID1\",\"ROOT_USER\",\"NO_NODE_ENV\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Find the index of the last FROM with lastIndexOf on a boolean map, then slice.|||Tìm chỉ số FROM cuối bằng lastIndexOf trên mảng boolean, rồi slice.",
+        "Split the image: \"node:22.23.4-slim\" → repo \"node\", tag \"22.23.4-slim\"; a missing tag means \"latest\".|||Tách ảnh: \"node:22.23.4-slim\" → repo \"node\", thẻ \"22.23.4-slim\"; thiếu thẻ nghĩa là \"latest\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** lint the stage that becomes the image */\nfunction lintDockerfile(text) {\n  // Write your solution here\n  const found = [];\n  if (text.includes('FROM node:22\\n')) found.push('FULL_BASE');\n  if (text.includes('COPY . .')) found.push('COPY_ALL');\n  if (text.includes('npm install')) found.push('NPM_INSTALL');\n  return found;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction lintDockerfile(text) {\n  const lines = text.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n  const lastFrom = lines.map((l) => /^FROM\\s/i.test(l)).lastIndexOf(true);\n  const fin = lines.slice(lastFrom);                                   // chỉ giai đoạn CUỐI thành ảnh\n  const image = fin[0].split(/\\s+/)[1];\n  const [repo, tagPart = 'latest'] = image.split('@')[0].split(':');\n  const found = [];\n  // ảnh nền: node:<số> hay node:latest = Debian đầy đủ + gcc, make, python, git, curl\n  if (repo === 'node' && /^(latest|[\\d.]+)$/.test(tagPart)) found.push('FULL_BASE');\n  // thẻ không phải phiên bản: chỉ \"x.y.z\" (có thể kèm -slim…) hoặc @sha256 mới là ghim\n  if (!image.includes('@sha256:') && !/^\\d+\\.\\d+\\.\\d+(-|$)/.test(tagPart)) found.push('UNPINNED_TAG');\n  if (fin.some((l) => /^COPY\\s+\\.\\s+\\.\\s*$/i.test(l))) found.push('COPY_ALL');\n  if (fin.some((l) => /^RUN\\s.*\\bnpm\\s+(install|i)\\b/i.test(l))) found.push('NPM_INSTALL');\n  const cmd = fin.filter((l) => /^CMD\\s/i.test(l)).pop() || '';\n  if (/^CMD\\s+(\\[\\s*\"npm\"|npm\\s)/i.test(cmd)) found.push('NPM_PID1');\n  const users = fin.filter((l) => /^USER\\s/i.test(l));\n  if (!users.length || /^USER\\s+(root|0)\\s*$/i.test(users[users.length - 1])) found.push('ROOT_USER');\n  if (!fin.some((l) => /^ENV\\s+NODE_ENV(=|\\s+)\"?production\"?\\s*$/i.test(l))) found.push('NO_NODE_ENV');\n  return found;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every line of the naive file is copied from a tutorial and is fine on a laptop; together they ship 430 MB, 36 extra packages, an npm cache and a shutdown that drops requests (17.3). The multi-stage file of the lesson passes every rule and is 81.7 MB, smaller than single-stage slim.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi dòng của tệp ngây thơ đều chép từ một hướng dẫn và chạy ổn trên laptop; gộp lại chúng mang lên 430 MB, 36 gói thừa, cache npm và một lần tắt làm rơi request (17.3). Tệp multi-stage của bài qua mọi luật và nặng 81,7 MB, nhỏ hơn cả slim một giai đoạn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The naive Dockerfile (430 MB)",
+              "vi": "Dockerfile ngây thơ (430 MB)"
+            },
+            "goi": "lintDockerfile(\"FROM node:22\\nWORKDIR /app\\nCOPY . .\\nRUN npm install\\nEXPOSE 3000\\nCMD [\\\"npm\\\", \\\"start\\\"]\")",
+            "mongDoi": [
+              "FULL_BASE",
+              "UNPINNED_TAG",
+              "COPY_ALL",
+              "NPM_INSTALL",
+              "NPM_PID1",
+              "ROOT_USER",
+              "NO_NODE_ENV"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s multi-stage file (81.7 MB)",
+              "vi": "Tệp multi-stage của bài (81,7 MB)"
+            },
+            "goi": "lintDockerfile(\"# syntax=docker/dockerfile:1\\nFROM node:22.23.4-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22.23.4-slim AS deps\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\n\\nFROM node:22.23.4-slim AS runner\\nWORKDIR /app\\nENV NODE_ENV=production\\nCOPY --from=deps /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCOPY package.json ./\\nUSER node\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "lintDockerfile(\"FROM node:22-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\nCOPY src ./src\\nENV NODE_ENV=production\\nUSER node\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\")",
+            "mongDoi": [
+              "UNPINNED_TAG"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "lintDockerfile(\"FROM node:22-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22-slim\\nWORKDIR /app\\nCOPY --from=builder /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": [
+              "UNPINNED_TAG",
+              "ROOT_USER",
+              "NO_NODE_ENV"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lintDockerfile(\"from node:latest\\nworkdir /app\\ncopy . .\\nrun npm i\\nuser root\\nenv NODE_ENV production\\ncmd npm run start:prod\")",
+            "mongDoi": [
+              "FULL_BASE",
+              "UNPINNED_TAG",
+              "COPY_ALL",
+              "NPM_INSTALL",
+              "NPM_PID1",
+              "ROOT_USER"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lintDockerfile(\"FROM node:22.23.4-alpine@sha256:abc123\\nENV NODE_ENV=\\\"production\\\"\\nUSER node\\nCMD [\\\"node\\\", \\\"index.js\\\"]\")",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Linting every stage: a builder on node:22 with npm ci is fine — it never reaches the server.|||Soát mọi giai đoạn: builder dùng node:22 với npm ci là ổn — nó không bao giờ tới server."
+        },
+        {
+          "loi": "Treating node:22-slim as pinned: it is a moving tag; next month it is another Node.|||Coi node:22-slim là đã ghim: nó là thẻ di động; tháng sau là một Node khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "final stage",
+          "vi": "giai đoạn cuối"
+        },
+        {
+          "en": "digest",
+          "vi": "digest",
+          "giaiThich": "an immutable content hash of an image"
+        },
+        {
+          "en": "lint",
+          "vi": "soát lỗi"
+        }
+      ]
+    },
+    {
+      "title": "finalStage(text): which stage ships, and do devDependencies reach the server?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "Docker",
+        "multi-stage",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Only the last stage becomes the image. Parse a (possibly multi-stage) Dockerfile and return <code>{ stages, final, copiesFrom, devDepsInImage }</code>:</p><ul><li><code>stages</code> — stage names in order (<code>FROM x AS name</code>; a stage without a name is called by its index, <code>\"0\"</code>, <code>\"1\"</code>…);</li><li><code>final</code> — the last stage’s name; <code>copiesFrom</code> — distinct <code>--from=</code> sources of its <code>COPY</code> lines, in order;</li><li><code>devDepsInImage</code> — does the final image contain devDependencies? A stage’s node_modules has them if its last <code>RUN npm ci|install|i</code> lacks <code>--omit=dev</code> / <code>--production</code> / <code>--only=prod</code>; a stage with no such RUN but a <code>COPY --from=X … node_modules</code> inherits X’s answer (follow the chain); a stage with neither has no node_modules (false).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỉ giai đoạn cuối thành ảnh. Phân tích một Dockerfile (có thể nhiều giai đoạn) và trả về <code>{ stages, final, copiesFrom, devDepsInImage }</code>:</p><ul><li><code>stages</code> — tên các giai đoạn theo thứ tự (<code>FROM x AS tên</code>; giai đoạn không tên được gọi bằng chỉ số, <code>\"0\"</code>, <code>\"1\"</code>…);</li><li><code>final</code> — tên giai đoạn cuối; <code>copiesFrom</code> — các nguồn <code>--from=</code> khác nhau trong các dòng <code>COPY</code> của nó, theo thứ tự;</li><li><code>devDepsInImage</code> — ảnh cuối có chứa devDependencies không? node_modules của một giai đoạn có chúng nếu <code>RUN npm ci|install|i</code> cuối cùng của nó thiếu <code>--omit=dev</code> / <code>--production</code> / <code>--only=prod</code>; giai đoạn không có RUN đó nhưng có <code>COPY --from=X … node_modules</code> thì nhận câu trả lời của X (đi theo chuỗi); giai đoạn không có cả hai thì không có node_modules (false).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "finalStage(\"# syntax=docker/dockerfile:1\\nFROM node:22.23.4-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22.23.4-slim AS deps\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\n\\nFROM node:22.23.4-slim AS runner\\nWORKDIR /app\\nENV NODE_ENV=production\\nCOPY --from=deps /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCOPY package.json ./\\nUSER node\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+          "output": "{\"stages\":[\"builder\",\"deps\",\"runner\"],\"final\":\"runner\",\"copiesFrom\":[\"deps\",\"builder\"],\"devDepsInImage\":false}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "First group the lines under their FROM into { name, from, lines } objects.|||Trước hết gom các dòng dưới FROM của chúng thành object { name, from, lines }.",
+        "devDeps(stage) is naturally recursive: look at its own install, else at the stage it copied node_modules from.|||devDeps(stage) tự nhiên là đệ quy: xem lệnh cài của chính nó, không thì xem giai đoạn nó chép node_modules từ đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** describe the stage that ships */\nfunction finalStage(text) {\n  // Write your solution here\n  const froms = text.split('\\n').filter((l) => /^FROM/i.test(l.trim()));\n  const names = froms.map((l, i) => (/ AS (\\S+)/i.exec(l) || [, String(i)])[1]);\n  return { stages: names, final: names[0], copiesFrom: [], devDepsInImage: /npm ci\\n/.test(text) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction finalStage(text) {\n  const lines = text.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n  const stages = [];\n  for (const l of lines) {\n    const f = /^FROM\\s+(\\S+)(?:\\s+AS\\s+(\\S+))?/i.exec(l);\n    if (f) { stages.push({ name: f[2] || String(stages.length), from: f[1], lines: [] }); continue; }\n    if (stages.length) stages[stages.length - 1].lines.push(l);\n  }\n  const byName = new Map(stages.map((s) => [s.name, s]));\n  // node_modules của một giai đoạn có devDependencies không? — tìm lệnh npm ci/install của nó\n  const devDeps = (s) => {\n    const inst = s.lines.filter((l) => /^RUN\\s.*\\bnpm\\s+(ci|install|i)\\b/i.test(l)).pop();\n    if (inst) return !/--omit=dev|--production|--only=prod/i.test(inst);\n    const c = s.lines.find((l) => /^COPY\\s+--from=(\\S+)\\s+\\S*node_modules/i.test(l));\n    if (c) { const src = byName.get(/--from=(\\S+)/i.exec(c)[1]); return src ? devDeps(src) : false; }\n    return false;                                          // không có node_modules nào\n  };\n  const fin = stages[stages.length - 1];\n  const copiesFrom = [...new Set(fin.lines.map((l) => /^COPY\\s+--from=(\\S+)/i.exec(l)).filter(Boolean).map((m) => m[1]))];\n  return { stages: stages.map((s) => s.name), final: fin.name, copiesFrom, devDepsInImage: devDeps(fin) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>builder can be 500 MB — it is thrown away after the build; deps is separate so that its install layer is cached independently and holds only production packages; runner is the only thing that reaches the server. In the naive image typescript alone was 23 MB of code never run there.</p>",
+      "solutionExplanationHtmlVi": "<p>builder có thể nặng 500 MB — nó bị bỏ sau khi build; deps tách riêng để tầng cài đặt được cache độc lập và chỉ giữ gói production; runner là thứ duy nhất tới server. Trong ảnh ngây thơ, riêng typescript đã là 23 MB mã không bao giờ chạy ở đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "builder → deps → runner",
+              "vi": "builder → deps → runner"
+            },
+            "goi": "finalStage(\"# syntax=docker/dockerfile:1\\nFROM node:22.23.4-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22.23.4-slim AS deps\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\n\\nFROM node:22.23.4-slim AS runner\\nWORKDIR /app\\nENV NODE_ENV=production\\nCOPY --from=deps /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCOPY package.json ./\\nUSER node\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": {
+              "stages": [
+                "builder",
+                "deps",
+                "runner"
+              ],
+              "final": "runner",
+              "copiesFrom": [
+                "deps",
+                "builder"
+              ],
+              "devDepsInImage": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "node_modules copied from the builder",
+              "vi": "node_modules chép từ builder"
+            },
+            "goi": "finalStage(\"FROM node:22-slim AS builder\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY . .\\nRUN npm run build\\n\\nFROM node:22-slim\\nWORKDIR /app\\nCOPY --from=builder /app/node_modules ./node_modules\\nCOPY --from=builder /app/dist ./dist\\nCMD [\\\"node\\\", \\\"dist/index.js\\\"]\")",
+            "mongDoi": {
+              "stages": [
+                "builder",
+                "1"
+              ],
+              "final": "1",
+              "copiesFrom": [
+                "builder"
+              ],
+              "devDepsInImage": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "finalStage(\"FROM node:22\\nWORKDIR /app\\nCOPY . .\\nRUN npm install\\nEXPOSE 3000\\nCMD [\\\"npm\\\", \\\"start\\\"]\")",
+            "mongDoi": {
+              "stages": [
+                "0"
+              ],
+              "final": "0",
+              "copiesFrom": [],
+              "devDepsInImage": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "finalStage(\"FROM node:22-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci --omit=dev\\nCOPY src ./src\\nENV NODE_ENV=production\\nUSER node\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\")",
+            "mongDoi": {
+              "stages": [
+                "0"
+              ],
+              "final": "0",
+              "copiesFrom": [],
+              "devDepsInImage": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "finalStage(\"FROM node:22-slim AS a\\nRUN npm ci --production\\nFROM node:22-slim AS b\\nCOPY --from=a /app/node_modules ./node_modules\\nFROM node:22-slim\\nCOPY --from=b /app/node_modules ./node_modules\\nCOPY --from=b /app/x ./x\")",
+            "mongDoi": {
+              "stages": [
+                "a",
+                "b",
+                "2"
+              ],
+              "final": "2",
+              "copiesFrom": [
+                "b"
+              ],
+              "devDepsInImage": false
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Copying node_modules from the builder (which ran a full npm ci): the compiler and the test runner ship anyway — the reason the deps stage exists.|||Chép node_modules từ builder (đã chạy npm ci đầy đủ): trình biên dịch và bộ chạy test vẫn lên server — đó là lý do có giai đoạn deps."
+        },
+        {
+          "loi": "Judging the image by its first stage.|||Đánh giá ảnh theo giai đoạn đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "devDependencies",
+          "vi": "phụ thuộc lúc phát triển"
+        },
+        {
+          "en": "--omit=dev",
+          "vi": "--omit=dev",
+          "giaiThich": "install production dependencies only"
+        }
+      ]
+    }
+  ]
+}

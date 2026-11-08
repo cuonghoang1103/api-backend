@@ -1,0 +1,904 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-6-deploy-hong-quay-lui",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-6-deploy-hong-quay-lui"
+  },
+  "exercises": [
+    {
+      "title": "Healthy is a weaker claim than it sounds",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "deployment",
+        "HTTP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 17.6 and the 2026-07-02 incident (GIF picker dead, “chats disappeared”).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 17.6 và sự cố 02/07/2026 (bộ chọn GIF chết, “tin nhắn biến mất”).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "401 = mounted and wants credentials.|||401 = đã gắn và đòi thông tin đăng nhập.",
+        "A tag is a pointer that moves.|||Thẻ là một con trỏ di chuyển được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Healthy is a weaker claim than it sounds\n\nAnswer in the answer panel (no code needed).\n\n1. Container up, health check 200, dist/routes/gifs.routes.js present in the image — and /gifs returned 404 while /messages/threads returned 401. What was wrong?Container chạy, health check 200, dist/routes/gifs.routes.js có trong ảnh — vậy mà /gifs trả 404 còn /messages/threads trả 401. Sai ở đâu?\n2. Why curl -s -o /dev/null -w \"%{http_code}\" and not the browser?Vì sao dùng curl -s -o /dev/null -w \"%{http_code}\" mà không dùng trình duyệt?\n3. Yesterday latest and a1f3c9e pointed to image 8058483267b0. After today’s build latest points to 8d4484873ed5. Which rollback is possible?Hôm qua latest và a1f3c9e cùng trỏ ảnh 8058483267b0. Sau bản build hôm nay latest trỏ 8d4484873ed5. Quay lui kiểu nào làm được?\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Healthy is a weaker claim than it sounds — answer key\n\n1. Container up, health check 200, dist/routes/gifs.routes.js present in the image — and /gifs returned 404 while /messages/threads returned 401. What was wrong?Container chạy, health check 200, dist/routes/gifs.routes.js có trong ảnh — vậy mà /gifs trả 404 còn /messages/threads trả 401. Sai ở đâu?\n   Answer: c) A stale dist/index.js that never mounted /api/v1/gifs: a 404 next to a 401 is a stale build\n   401 is good news: it proves the route exists. Every green signal was true for its own narrow question; none asked “is every feature I shipped reachable?”.VI: 401 là tin tốt: nó chứng minh route tồn tại. Mọi tín hiệu xanh đều đúng với câu hỏi hẹp của riêng nó; không cái nào hỏi “mọi tính năng tôi đưa lên có tới được không?”.\n\n2. Why curl -s -o /dev/null -w \"%{http_code}\" and not the browser?Vì sao dùng curl -s -o /dev/null -w \"%{http_code}\" mà không dùng trình duyệt?\n   Answer: a) The browser sends cookies, follows redirects, caches, and hides the code\n   You are logged in, so you never see the 401 that proves the route is mounted. curl: no cookies, no cache, no redirects — just the code.VI: Bạn đang đăng nhập nên không bao giờ thấy cái 401 chứng minh route đã gắn. curl: không cookie, không cache, không chuyển hướng — chỉ có mã.\n\n3. Yesterday latest and a1f3c9e pointed to image 8058483267b0. After today’s build latest points to 8d4484873ed5. Which rollback is possible?Hôm qua latest và a1f3c9e cùng trỏ ảnh 8058483267b0. Sau bản build hôm nay latest trỏ 8d4484873ed5. Quay lui kiểu nào làm được?\n   Answer: a) To a1f3c9e (one command); “yesterday’s latest” has no name any more\n   Tag every image with something that never moves (the git SHA); add latest too if you like. Measured: rollback by image 0.82 s, rebuilding the old code 5.05 s; the website: ~40 s re-tag vs a 15-minute rebuild.VI: Gắn thẻ mọi ảnh bằng thứ không bao giờ di chuyển (git SHA); thêm latest nếu muốn. Đo được: quay lui theo ảnh 0,82 s, build lại mã cũ 5,05 s; website: ~40 s gắn lại thẻ so với 15 phút build lại.\n\n4. Which statements are true? (choose all that apply)Những câu nào đúng? (chọn mọi câu đúng)\n   Answer: a) Reverting code does not revert the database + c) Under pressure, roll back first and investigate afterwards + d) A health check runs every 15 s forever; a smoke test runs once after the deploy\n   A GET on a POST-only route is always 404, so every deploy would fail for the wrong reason — and a check that cries wolf gets deleted within a week. Only parameter-less GETs that answer non-404 unauthenticated.VI: GET vào route chỉ có POST luôn là 404, nên mọi lần deploy sẽ hỏng vì lý do sai — và một phép kiểm báo động giả sẽ bị xoá trong một tuần. Chỉ dùng GET không tham số trả về khác 404 khi chưa đăng nhập.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A stale dist/index.js that never mounted /api/v1/gifs: a 404 next to a 401 is a stale build</p><p>401 is good news: it proves the route exists. Every green signal was true for its own narrow question; none asked “is every feature I shipped reachable?”.</p><p><i>VI: 401 là tin tốt: nó chứng minh route tồn tại. Mọi tín hiệu xanh đều đúng với câu hỏi hẹp của riêng nó; không cái nào hỏi “mọi tính năng tôi đưa lên có tới được không?”.</i></p></li><li><p><b>a)</b> The browser sends cookies, follows redirects, caches, and hides the code</p><p>You are logged in, so you never see the 401 that proves the route is mounted. curl: no cookies, no cache, no redirects — just the code.</p><p><i>VI: Bạn đang đăng nhập nên không bao giờ thấy cái 401 chứng minh route đã gắn. curl: không cookie, không cache, không chuyển hướng — chỉ có mã.</i></p></li><li><p><b>a)</b> To a1f3c9e (one command); “yesterday’s latest” has no name any more</p><p>Tag every image with something that never moves (the git SHA); add latest too if you like. Measured: rollback by image 0.82 s, rebuilding the old code 5.05 s; the website: ~40 s re-tag vs a 15-minute rebuild.</p><p><i>VI: Gắn thẻ mọi ảnh bằng thứ không bao giờ di chuyển (git SHA); thêm latest nếu muốn. Đo được: quay lui theo ảnh 0,82 s, build lại mã cũ 5,05 s; website: ~40 s gắn lại thẻ so với 15 phút build lại.</i></p></li><li><p><b>a)</b> Reverting code does not revert the database + <b>c)</b> Under pressure, roll back first and investigate afterwards + <b>d)</b> A health check runs every 15 s forever; a smoke test runs once after the deploy</p><p>A GET on a POST-only route is always 404, so every deploy would fail for the wrong reason — and a check that cries wolf gets deleted within a week. Only parameter-less GETs that answer non-404 unauthenticated.</p><p><i>VI: GET vào route chỉ có POST luôn là 404, nên mọi lần deploy sẽ hỏng vì lý do sai — và một phép kiểm báo động giả sẽ bị xoá trong một tuần. Chỉ dùng GET không tham số trả về khác 404 khi chưa đăng nhập.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Container up, health check 200, dist/routes/gifs.routes.js present in the image — and /gifs returned 404 while /messages/threads returned 401. What was wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Container chạy, health check 200, dist/routes/gifs.routes.js có trong ảnh — vậy mà /gifs trả 404 còn /messages/threads trả 401. Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The GIF route needs a token, so 404 is the normal answer without one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nginx cached an old 404 page for /gifs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A stale dist/index.js that never mounted /api/v1/gifs: a 404 next to a 401 is a stale build"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database lost the GIF table, so Express answered 404"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>401 is good news: it proves the route exists. Every green signal was true for its own narrow question; none asked “is every feature I shipped reachable?”.</p><p><i>VI: 401 là tin tốt: nó chứng minh route tồn tại. Mọi tín hiệu xanh đều đúng với câu hỏi hẹp của riêng nó; không cái nào hỏi “mọi tính năng tôi đưa lên có tới được không?”.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why curl -s -o /dev/null -w \"%{http_code}\" and not the browser?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dùng curl -s -o /dev/null -w \"%{http_code}\" mà không dùng trình duyệt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The browser sends cookies, follows redirects, caches, and hides the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The browser hides every status code below 500 from developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The browser cannot reach /api routes at all because of CORS rules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl is faster, and in an incident every second of speed counts"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>You are logged in, so you never see the 401 that proves the route is mounted. curl: no cookies, no cache, no redirects — just the code.</p><p><i>VI: Bạn đang đăng nhập nên không bao giờ thấy cái 401 chứng minh route đã gắn. curl: không cookie, không cache, không chuyển hướng — chỉ có mã.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Yesterday latest and a1f3c9e pointed to image 8058483267b0. After today’s build latest points to 8d4484873ed5. Which rollback is possible?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hôm qua latest và a1f3c9e cùng trỏ ảnh 8058483267b0. Sau bản build hôm nay latest trỏ 8d4484873ed5. Quay lui kiểu nào làm được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To a1f3c9e (one command); “yesterday’s latest” has no name any more"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To latest~1, Docker keeps the previous value of every tag"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only a git revert, because images cannot be rolled back"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither: once latest moved, yesterday’s image is deleted"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Tag every image with something that never moves (the git SHA); add latest too if you like. Measured: rollback by image 0.82 s, rebuilding the old code 5.05 s; the website: ~40 s re-tag vs a 15-minute rebuild.</p><p><i>VI: Gắn thẻ mọi ảnh bằng thứ không bao giờ di chuyển (git SHA); thêm latest nếu muốn. Đo được: quay lui theo ảnh 0,82 s, build lại mã cũ 5,05 s; website: ~40 s gắn lại thẻ so với 15 phút build lại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statements are true? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reverting code does not revert the database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A smoke test should include POST-only routes like /auth/login"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Under pressure, roll back first and investigate afterwards"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A health check runs every 15 s forever; a smoke test runs once after the deploy"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>A GET on a POST-only route is always 404, so every deploy would fail for the wrong reason — and a check that cries wolf gets deleted within a week. Only parameter-less GETs that answer non-404 unauthenticated.</p><p><i>VI: GET vào route chỉ có POST luôn là 404, nên mọi lần deploy sẽ hỏng vì lý do sai — và một phép kiểm báo động giả sẽ bị xoá trong một tuần. Chỉ dùng GET không tham số trả về khác 404 khi chưa đăng nhập.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Diagnosing a route from the browser.|||Chẩn đoán route từ trình duyệt."
+        },
+        {
+          "loi": "Deploying only :latest.|||Chỉ deploy :latest."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stale build",
+          "vi": "build cũ",
+          "giaiThich": "the running process is older than the code you shipped"
+        },
+        {
+          "en": "smoke test",
+          "vi": "smoke test",
+          "giaiThich": "one request per module, once, after the deploy"
+        },
+        {
+          "en": "rollback",
+          "vi": "quay lui"
+        }
+      ]
+    },
+    {
+      "title": "The deploy failed: check in this order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "incident response"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 17.6’s order, from the cheapest question to the decision.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thứ tự của bài 17.6, từ câu hỏi rẻ nhất tới quyết định.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cheapest, broadest question first.|||Câu hỏi rẻ nhất, rộng nhất trước.",
+        "Rolling back is the last step of the checklist, not the first move.|||Quay lui là bước cuối của danh sách, không phải nước đi đầu tiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The deploy failed: check in this order\n\nAnswer in the answer panel (no code needed).\n\n1. Users report errors after a deploy.Người dùng báo lỗi sau một lần deploy.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The deploy failed: check in this order — answer key\n\n1. Users report errors after a deploy.Người dùng báo lỗi sau một lần deploy.\n   Answer: m4) docker ps — is the container running? (exit 137 = killed: OOM or grace period)  →  m3) docker logs --tail=50 — did it say anything as it died? (a missing env variable shows here)  →  m2) curl the route — 401 vs 404: is the module mounted?  →  m5) prisma migrate status — did the migrations apply? (P3009 blocks every later deploy)  →  m1) Still nothing: roll back first, then reproduce somewhere that is not production\n   Every minute spent finding the cause in production is a minute of outage. Roll back, confirm healthy, then investigate.VI: Mỗi phút tìm nguyên nhân trên production là một phút sự cố. Quay lui, xác nhận khoẻ, rồi mới điều tra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every minute spent finding the cause in production is a minute of outage. Roll back, confirm healthy, then investigate.</p><p><i>VI: Mỗi phút tìm nguyên nhân trên production là một phút sự cố. Quay lui, xác nhận khoẻ, rồi mới điều tra.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Users report errors after a deploy.</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng báo lỗi sau một lần deploy.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Still nothing: roll back first, then reproduce somewhere that is not production"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "curl the route — 401 vs 404: is the module mounted?"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "docker logs --tail=50 — did it say anything as it died? (a missing env variable shows here)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "docker ps — is the container running? (exit 137 = killed: OOM or grace period)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "prisma migrate status — did the migrations apply? (P3009 blocks every later deploy)"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m3",
+              "m2",
+              "m5",
+              "m1"
+            ],
+            "giaiThich": "<p>Every minute spent finding the cause in production is a minute of outage. Roll back, confirm healthy, then investigate.</p><p><i>VI: Mỗi phút tìm nguyên nhân trên production là một phút sự cố. Quay lui, xác nhận khoẻ, rồi mới điều tra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with the migrations when the container is not even running.|||Bắt đầu từ migration khi container còn chưa chạy."
+        },
+        {
+          "loi": "Investigating for an hour before rolling back.|||Điều tra một tiếng rồi mới quay lui."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "P3009",
+          "vi": "P3009",
+          "giaiThich": "Prisma: a failed migration blocks the next ones"
+        }
+      ]
+    },
+    {
+      "title": "routeVerdict(status): the five-second diagnosis",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "HTTP status codes",
+        "diagnosis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>An unauthenticated curl to a route returns a status code. Write <code>routeVerdict(status)</code>: <code>200</code> → <code>\"mounted (public)\"</code>; <code>401</code> or <code>403</code> → <code>\"mounted (needs credentials)\"</code>; <code>404</code> → <code>\"NOT mounted: stale build or half-finished deploy\"</code>; <code>502</code> or <code>503</code> → <code>\"proxy alive, app not: read the container logs\"</code>; anything else → <code>\"unexpected: look closer\"</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một lệnh curl chưa đăng nhập vào một route trả về một mã trạng thái. Viết <code>routeVerdict(status)</code>: <code>200</code> → <code>\"mounted (public)\"</code>; <code>401</code> hoặc <code>403</code> → <code>\"mounted (needs credentials)\"</code>; <code>404</code> → <code>\"NOT mounted: stale build or half-finished deploy\"</code>; <code>502</code> hoặc <code>503</code> → <code>\"proxy alive, app not: read the container logs\"</code>; còn lại → <code>\"unexpected: look closer\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[routeVerdict(200), routeVerdict(401), routeVerdict(404)]",
+          "output": "[\"mounted (public)\",\"mounted (needs credentials)\",\"NOT mounted: stale build or half-finished deploy\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A chain of if statements is enough.|||Một chuỗi if là đủ.",
+        "403 behaves like 401 for this question: the route exists.|||403 cư xử như 401 với câu hỏi này: route tồn tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what does this status tell you about the route? */\nfunction routeVerdict(status) {\n  // Write your solution here\n  if (status < 400) return 'mounted (public)';\n  return 'NOT mounted: stale build or half-finished deploy';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction routeVerdict(status) {\n  if (status === 200) return 'mounted (public)';\n  if (status === 401 || status === 403) return 'mounted (needs credentials)';                 // tin tốt: route tồn tại\n  if (status === 404) return 'NOT mounted: stale build or half-finished deploy';\n  if (status === 502 || status === 503) return 'proxy alive, app not: read the container logs';\n  return 'unexpected: look closer';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Worth memorising: it costs five seconds and answers “is my code even running?”. Today the same commands return /gifs 401, /messages/threads 401, a made-up route 404, /system/health 200.</p>",
+      "solutionExplanationHtmlVi": "<p>Đáng học thuộc: tốn năm giây và trả lời “mã của tôi có đang chạy không?”. Hôm nay cùng các lệnh đó trả /gifs 401, /messages/threads 401, một route bịa 404, /system/health 200.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "/system/health, /messages/threads, /gifs on 2026-07-02",
+              "vi": "/system/health, /messages/threads, /gifs ngày 02/07/2026"
+            },
+            "goi": "[routeVerdict(200), routeVerdict(401), routeVerdict(404)]",
+            "mongDoi": [
+              "mounted (public)",
+              "mounted (needs credentials)",
+              "NOT mounted: stale build or half-finished deploy"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "11/09/2026: both domains 502",
+              "vi": "11/09/2026: cả hai tên miền 502"
+            },
+            "goi": "routeVerdict(502)",
+            "mongDoi": "proxy alive, app not: read the container logs"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[routeVerdict(403), routeVerdict(503), routeVerdict(500), routeVerdict(301)]",
+            "mongDoi": [
+              "mounted (needs credentials)",
+              "proxy alive, app not: read the container logs",
+              "unexpected: look closer",
+              "unexpected: look closer"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 401 as a failure in a smoke test: it is the proof the route is mounted.|||Coi 401 là lỗi trong smoke test: nó là bằng chứng route đã gắn."
+        },
+        {
+          "loi": "Treating 502 as “route missing”: the proxy is fine, the app behind it is not running.|||Coi 502 là “thiếu route”: proxy vẫn ổn, app phía sau không chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mounted",
+          "vi": "đã gắn",
+          "giaiThich": "the router is registered in the running process"
+        }
+      ]
+    },
+    {
+      "title": "smokeTest(list, statusOf): fail the deploy on a 404 — and refuse routes that would cry wolf",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "deployment",
+        "smoke test"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the smoke test that runs once after every swap. <code>list</code> is <code>[{ path, method? }]</code> (method defaults to GET); <code>statusOf</code> maps a path to the code a bare curl got (a path missing from it answered 404). For each entry in order, add one line:</p><ul><li>method not GET, or a path containing a parameter (<code>/:</code>) → <code>\"SKIP &lt;path&gt; — not a param-less GET\"</code> (do not request it);</li><li>status 404 → <code>\"FAIL &lt;path&gt; 404 — stale build or half-finished deploy\"</code>;</li><li>otherwise → <code>\"ok &lt;path&gt; &lt;status&gt;\"</code>.</li></ul><p>Return <code>{ lines, exitCode }</code>: <code>exitCode</code> is 1 if any line is FAIL, else 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết smoke test chạy một lần sau mỗi lần tráo. <code>list</code> là <code>[{ path, method? }]</code> (method mặc định GET); <code>statusOf</code> ánh xạ đường dẫn ⇒ mã mà curl trơn nhận được (đường dẫn không có trong đó trả 404). Với mỗi mục theo thứ tự, thêm một dòng:</p><ul><li>method không phải GET, hoặc đường dẫn có tham số (<code>/:</code>) → <code>\"SKIP &lt;path&gt; — not a param-less GET\"</code> (không gọi nó);</li><li>status 404 → <code>\"FAIL &lt;path&gt; 404 — stale build or half-finished deploy\"</code>;</li><li>còn lại → <code>\"ok &lt;path&gt; &lt;status&gt;\"</code>.</li></ul><p>Trả về <code>{ lines, exitCode }</code>: <code>exitCode</code> là 1 nếu có dòng FAIL, không thì 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "smokeTest([{\"path\":\"/api/v1/system/health\"},{\"path\":\"/api/v1/messages/threads\"},{\"path\":\"/api/v1/gifs\"},{\"path\":\"/api/v1/notes\"}], {\"/api/v1/system/health\":200,\"/api/v1/messages/threads\":401,\"/api/v1/notes\":401})",
+          "output": "{\"lines\":[\"ok /api/v1/system/health 200\",\"ok /api/v1/messages/threads 401\",\"FAIL /api/v1/gifs 404 — stale build or half-finished deploy\",\"ok /api/v1/notes 401\"],\"exitCode\":1}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "statusOf[path] ?? 404 gives the default.|||statusOf[path] ?? 404 cho giá trị mặc định.",
+        "Only a 404 fails the deploy here; 401, 200 and others are “ok”.|||Ở đây chỉ 404 làm hỏng deploy; 401, 200 và mã khác đều “ok”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** post-deploy smoke test */\nfunction smokeTest(list, statusOf) {\n  // Write your solution here\n  const lines = list.map((r) => 'ok ' + r.path + ' ' + (statusOf[r.path] ?? 404));\n  return { lines, exitCode: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction smokeTest(list, statusOf) {\n  const lines = [];\n  let fail = false;\n  for (const r of list) {\n    const method = (r.method || 'GET').toUpperCase();\n    // luật của danh sách: chỉ GET không tham số — POST-only hay /:id luôn 404 khi GET trơn ⇒ deploy nào cũng hỏng oan\n    if (method !== 'GET' || /\\/:/.test(r.path)) { lines.push(`SKIP ${r.path} — not a param-less GET`); continue; }\n    const code = statusOf[r.path] ?? 404;\n    if (code === 404) { lines.push(`FAIL ${r.path} 404 — stale build or half-finished deploy`); fail = true; }\n    else lines.push(`ok ${r.path} ${code}`);\n  }\n  return { lines, exitCode: fail ? 1 : 0 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Run against the stale container: /gifs 404 with the FAIL line, exit code 1 — the whole deploy fails loudly. The website runs this over 78 routes after every swap in deploy-nha.sh, and since 11/09 also from outside, through nginx.</p>",
+      "solutionExplanationHtmlVi": "<p>Chạy với container cũ: /gifs 404 kèm dòng FAIL, mã thoát 1 — cả lần deploy hỏng to tiếng. Website chạy đúng việc này trên 78 route sau mỗi lần tráo trong deploy-nha.sh, và từ 11/09 còn kiểm cả từ bên ngoài, qua nginx.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The stale container: /gifs missing",
+              "vi": "Container cũ: thiếu /gifs"
+            },
+            "goi": "smokeTest([{\"path\":\"/api/v1/system/health\"},{\"path\":\"/api/v1/messages/threads\"},{\"path\":\"/api/v1/gifs\"},{\"path\":\"/api/v1/notes\"}], {\"/api/v1/system/health\":200,\"/api/v1/messages/threads\":401,\"/api/v1/notes\":401})",
+            "mongDoi": {
+              "lines": [
+                "ok /api/v1/system/health 200",
+                "ok /api/v1/messages/threads 401",
+                "FAIL /api/v1/gifs 404 — stale build or half-finished deploy",
+                "ok /api/v1/notes 401"
+              ],
+              "exitCode": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "After a full rebuild",
+              "vi": "Sau khi build lại đầy đủ"
+            },
+            "goi": "smokeTest([{\"path\":\"/api/v1/system/health\"},{\"path\":\"/api/v1/messages/threads\"},{\"path\":\"/api/v1/gifs\"},{\"path\":\"/api/v1/notes\"}], {\"/api/v1/system/health\":200,\"/api/v1/messages/threads\":401,\"/api/v1/gifs\":401,\"/api/v1/notes\":401})",
+            "mongDoi": {
+              "lines": [
+                "ok /api/v1/system/health 200",
+                "ok /api/v1/messages/threads 401",
+                "ok /api/v1/gifs 401",
+                "ok /api/v1/notes 401"
+              ],
+              "exitCode": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "smokeTest([{\"path\":\"/api/v1/auth/login\",\"method\":\"POST\"},{\"path\":\"/api/v1/stickers\",\"method\":\"post\"},{\"path\":\"/api/v1/notes/:id\"},{\"path\":\"/api/v1/reports\"}], {})",
+            "mongDoi": {
+              "lines": [
+                "SKIP /api/v1/auth/login — not a param-less GET",
+                "SKIP /api/v1/stickers — not a param-less GET",
+                "SKIP /api/v1/notes/:id — not a param-less GET",
+                "FAIL /api/v1/reports 404 — stale build or half-finished deploy"
+              ],
+              "exitCode": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "smokeTest([], {})",
+            "mongDoi": {
+              "lines": [],
+              "exitCode": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "smokeTest([{\"path\":\"/api/v1/feed\",\"method\":\"get\"}], {\"/api/v1/feed\":502})",
+            "mongDoi": {
+              "lines": [
+                "ok /api/v1/feed 502"
+              ],
+              "exitCode": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Failing on 401: every authenticated module would “fail” and the check gets deleted.|||Hỏng vì 401: mọi module cần đăng nhập đều “hỏng” và phép kiểm bị xoá."
+        },
+        {
+          "loi": "Forgetting to add the new module’s route the day you add the module: the next stale build ships green.|||Quên thêm route của module mới ngay ngày thêm module: lần build cũ tiếp theo lên xanh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exit code",
+          "vi": "mã thoát",
+          "giaiThich": "0 = success, non-zero fails the script"
+        }
+      ]
+    },
+    {
+      "title": "runScript(steps, flags): what set -e and pipefail really change (checked with real bash)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "bash",
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Simulate a deploy script. Each step is <code>{ name, exit, pipedTo? }</code>; <code>pipedTo</code> means the step’s output is piped into <code>tee</code> (which exits 0). <code>flags = { e, pipefail }</code> (<code>set -e</code>, <code>set -o pipefail</code>). Rules, checked with real bash: the status of a piped step is the status of the <b>last</b> command of the pipe (0 here), unless <code>pipefail</code>, then it is the step’s own non-zero exit; with <code>e</code>, the script stops right after the first step whose status is non-zero and exits with that status; without <code>e</code> every step runs and the script exits with the status of the last step. Return <code>{ ran, exitCode }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng một script deploy. Mỗi bước là <code>{ name, exit, pipedTo? }</code>; <code>pipedTo</code> nghĩa là output của bước được nối ống vào <code>tee</code> (luôn thoát 0). <code>flags = { e, pipefail }</code> (<code>set -e</code>, <code>set -o pipefail</code>). Luật, đã kiểm bằng bash thật: trạng thái của một bước nối ống là trạng thái của lệnh <b>cuối</b> trong ống (ở đây là 0), trừ khi <code>pipefail</code>, khi đó là mã khác 0 của chính bước; với <code>e</code>, script dừng ngay sau bước đầu tiên có trạng thái khác 0 và thoát với trạng thái đó; không có <code>e</code> thì mọi bước đều chạy và script thoát với trạng thái của bước cuối. Trả về <code>{ ran, exitCode }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], {}), runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], { e: true }), runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], { e: true, pipefail: true })]",
+          "output": "[{\"ran\":[\"build\",\"migrate\",\"swap\",\"smoke-test\"],\"exitCode\":0},{\"ran\":[\"build\",\"migrate\",\"swap\",\"smoke-test\"],\"exitCode\":0},{\"ran\":[\"build\",\"migrate\"],\"exitCode\":1}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute each step’s effective status first, then decide whether to stop.|||Tính trạng thái hiệu lực của mỗi bước trước, rồi quyết định có dừng không.",
+        "Without -e the last step decides the exit code, even if an earlier one failed.|||Không có -e thì bước cuối quyết định mã thoát, kể cả khi bước trước đã hỏng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** simulate a bash deploy script */\nfunction runScript(steps, flags) {\n  // Write your solution here\n  const ran = [];\n  for (const s of steps) {\n    ran.push(s.name);\n    if (s.exit !== 0 && flags.e) return { ran, exitCode: s.exit };\n  }\n  return { ran, exitCode: steps.some((s) => s.exit !== 0) ? 1 : 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction runScript(steps, flags) {\n  // Mô phỏng bash: steps = [{ name, exit, pipedTo? }] — pipedTo: lệnh tee (luôn exit 0) nhận output của bước.\n  // Trạng thái của một pipeline = lệnh CUỐI, trừ khi pipefail (khi đó là lệnh khác 0 nằm bên phải nhất).\n  const ran = [];\n  let last = 0;\n  for (const s of steps) {\n    ran.push(s.name);\n    const status = s.pipedTo ? (flags.pipefail ? (s.exit !== 0 ? s.exit : 0) : 0) : s.exit;\n    last = status;\n    if (status !== 0 && flags.e) return { ran, exitCode: status };   // set -e: dừng ở lệnh hỏng đầu tiên\n  }\n  return { ran, exitCode: last };                                     // không -e: mã thoát của script = lệnh cuối\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Re-run for this exercise with bash: no flags → every step runs, exit 0; set -e → a piped failure is invisible, a plain one stops with 1; set -euo pipefail → stops right after the failing pipeline with 1. The most painful version is a failed migrate followed by a successful swap — every deploy script starts with set -euo pipefail.</p>",
+      "solutionExplanationHtmlVi": "<p>Đã chạy lại bằng bash cho bài này: không cờ → mọi bước đều chạy, exit 0; set -e → lỗi trong ống bị che, lỗi thường thì dừng với 1; set -euo pipefail → dừng ngay sau pipeline hỏng với 1. Trường hợp đau nhất là migrate hỏng rồi swap thành công — script deploy nào cũng bắt đầu bằng set -euo pipefail.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s three runs",
+              "vi": "Ba lượt chạy của bài"
+            },
+            "goi": "[runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], {}), runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], { e: true }), runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1,\"pipedTo\":\"tee migrate.log\"},{\"name\":\"swap\",\"exit\":0},{\"name\":\"smoke-test\",\"exit\":0}], { e: true, pipefail: true })]",
+            "mongDoi": [
+              {
+                "ran": [
+                  "build",
+                  "migrate",
+                  "swap",
+                  "smoke-test"
+                ],
+                "exitCode": 0
+              },
+              {
+                "ran": [
+                  "build",
+                  "migrate",
+                  "swap",
+                  "smoke-test"
+                ],
+                "exitCode": 0
+              },
+              {
+                "ran": [
+                  "build",
+                  "migrate"
+                ],
+                "exitCode": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "set -e, migrate not piped",
+              "vi": "set -e, migrate không nối ống"
+            },
+            "goi": "runScript([{\"name\":\"build\",\"exit\":0},{\"name\":\"migrate\",\"exit\":1},{\"name\":\"swap\",\"exit\":0}], {\"e\":true})",
+            "mongDoi": {
+              "ran": [
+                "build",
+                "migrate"
+              ],
+              "exitCode": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "runScript([{\"name\":\"a\",\"exit\":0},{\"name\":\"b\",\"exit\":2}], {})",
+            "mongDoi": {
+              "ran": [
+                "a",
+                "b"
+              ],
+              "exitCode": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "runScript([{\"name\":\"a\",\"exit\":3,\"pipedTo\":\"tee a.log\"},{\"name\":\"b\",\"exit\":0}], {\"pipefail\":true})",
+            "mongDoi": {
+              "ran": [
+                "a",
+                "b"
+              ],
+              "exitCode": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "runScript([{\"name\":\"a\",\"exit\":0,\"pipedTo\":\"tee a.log\"},{\"name\":\"b\",\"exit\":0}], {\"e\":true,\"pipefail\":true})",
+            "mongDoi": {
+              "ran": [
+                "a",
+                "b"
+              ],
+              "exitCode": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "set -e alone with migrate | tee: the pipe reports success, the script swaps containers anyway.|||Chỉ set -e với migrate | tee: ống báo thành công, script vẫn tráo container."
+        },
+        {
+          "loi": "No flags at all: migrate fails, swap runs, smoke test passes, exit 0 — new code on the old schema, “column does not exist”.|||Không cờ nào: migrate hỏng, swap vẫn chạy, smoke test qua, exit 0 — mã mới trên lược đồ cũ, “column does not exist”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "set -e",
+          "vi": "set -e",
+          "giaiThich": "exit on the first failing command"
+        },
+        {
+          "en": "pipefail",
+          "vi": "pipefail",
+          "giaiThich": "a pipe fails if any of its commands fails"
+        }
+      ]
+    },
+    {
+      "title": "rollbackSafety(migrations): is “start the previous image” safe?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "migrations",
+        "rollback",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Code rolls back in seconds; data written in the wrong shape stays written. Given the SQL statements applied <b>since</b> the version you want to return to, decide whether the old code can run on the current schema. A statement (trailing <code>;</code> ignored, case-insensitive) is a blocker when it:</p><ul><li>drops a table or a column → <code>\"drops data the old code reads\"</code>;</li><li>renames anything → <code>\"old code uses the old name\"</code>;</li><li>changes a column type (<code>ALTER COLUMN x TYPE</code> / <code>SET DATA TYPE</code>) → <code>\"changes a type the old code expects\"</code>;</li><li>sets NOT NULL, or adds a NOT NULL column <b>without</b> a DEFAULT → <code>\"old code inserts rows without this column\"</code>.</li></ul><p>Everything else (CREATE TABLE, CREATE INDEX, ADD COLUMN nullable or with a default…) is additive. Return <code>{ safe, blockers: [{ sql, why }] }</code> in input order (<code>sql</code> trimmed, without the <code>;</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã quay lui trong vài giây; dữ liệu đã ghi sai hình dạng thì vẫn nằm đó. Cho các câu SQL đã chạy <b>kể từ</b> phiên bản bạn muốn quay về, quyết định mã cũ có chạy được trên lược đồ hiện tại không. Một câu (bỏ <code>;</code> cuối, không phân biệt hoa thường) là vật cản khi nó:</p><ul><li>xoá bảng hoặc cột → <code>\"drops data the old code reads\"</code>;</li><li>đổi tên bất cứ thứ gì → <code>\"old code uses the old name\"</code>;</li><li>đổi kiểu cột (<code>ALTER COLUMN x TYPE</code> / <code>SET DATA TYPE</code>) → <code>\"changes a type the old code expects\"</code>;</li><li>đặt NOT NULL, hoặc thêm cột NOT NULL <b>không có</b> DEFAULT → <code>\"old code inserts rows without this column\"</code>.</li></ul><p>Mọi thứ khác (CREATE TABLE, CREATE INDEX, ADD COLUMN cho phép null hoặc có default…) là cộng thêm. Trả về <code>{ safe, blockers: [{ sql, why }] }</code> theo thứ tự đầu vào (<code>sql</code> đã cắt khoảng trắng, không có <code>;</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rollbackSafety([\"ALTER TABLE notes ADD COLUMN summary text;\",\"CREATE INDEX notes_author_idx ON notes(author_id);\"])",
+          "output": "{\"safe\":true,\"blockers\":[]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check the rules in the listed order and stop at the first that matches for each statement.|||Xét các luật theo thứ tự đã liệt kê và dừng ở luật khớp đầu tiên cho mỗi câu.",
+        "A negative lookahead (?!.*DEFAULT) lets ADD COLUMN … NOT NULL DEFAULT … through.|||Lookahead phủ định (?!.*DEFAULT) cho ADD COLUMN … NOT NULL DEFAULT … đi qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** can the previous image run on this schema? */\nfunction rollbackSafety(migrations) {\n  // Write your solution here\n  const blockers = migrations.filter((s) => /DROP TABLE/i.test(s)).map((s) => ({ sql: s.trim(), why: 'drops data the old code reads' }));\n  return { safe: blockers.length === 0, blockers };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rollbackSafety(migrations) {\n  // migrations: các câu đã chạy KỂ TỪ phiên bản muốn quay về. Mã cũ chỉ chạy được nếu mọi thay đổi là \"cộng thêm\".\n  const blockers = [];\n  for (const sql of migrations) {\n    const s = sql.trim().replace(/;$/, '');\n    let why = null;\n    if (/^DROP\\s+(TABLE|COLUMN)/i.test(s) || /\\bDROP\\s+COLUMN\\b/i.test(s)) why = 'drops data the old code reads';\n    else if (/\\bRENAME\\b/i.test(s)) why = 'old code uses the old name';\n    else if (/\\bALTER\\s+COLUMN\\s+\\S+\\s+(SET\\s+DATA\\s+)?TYPE\\b/i.test(s)) why = 'changes a type the old code expects';\n    else if (/\\bSET\\s+NOT\\s+NULL\\b/i.test(s) || /\\bADD\\s+COLUMN\\b.*\\bNOT\\s+NULL\\b(?!.*\\bDEFAULT\\b)/i.test(s)) why = 'old code inserts rows without this column';\n    if (why) blockers.push({ sql: s, why });\n  }\n  return { safe: blockers.length === 0, blockers };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>That is why migrations are additive: add a nullable column, write it, backfill, switch reads, and only at the very end remove — each step undoable on its own. When a blocker exists, restore the schema or roll forward with a fix; drops belong last, after nothing reads the column.</p>",
+      "solutionExplanationHtmlVi": "<p>Đó là lý do migration phải là cộng thêm: thêm cột cho phép null, ghi vào, backfill, đổi chỗ đọc, và chỉ ở cuối cùng mới xoá — mỗi bước tự hoàn tác được. Khi có vật cản, khôi phục lược đồ hoặc sửa tiến lên; xoá phải là bước cuối, sau khi không còn gì đọc cột đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Only additive changes",
+              "vi": "Chỉ thay đổi cộng thêm"
+            },
+            "goi": "rollbackSafety([\"ALTER TABLE notes ADD COLUMN summary text;\",\"CREATE INDEX notes_author_idx ON notes(author_id);\"])",
+            "mongDoi": {
+              "safe": true,
+              "blockers": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The Reports deploy dropped a column",
+              "vi": "Lần deploy Reports đã xoá một cột"
+            },
+            "goi": "rollbackSafety([\"ALTER TABLE reports ADD COLUMN owner_id int;\",\"ALTER TABLE reports DROP COLUMN legacy_owner;\"])",
+            "mongDoi": {
+              "safe": false,
+              "blockers": [
+                {
+                  "sql": "ALTER TABLE reports DROP COLUMN legacy_owner",
+                  "why": "drops data the old code reads"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "rollbackSafety([\"alter table notes rename column body to content;\",\"ALTER TABLE notes ALTER COLUMN created_at TYPE timestamptz;\",\"ALTER TABLE notes ALTER COLUMN title SET NOT NULL;\",\"  ALTER TABLE notes ADD COLUMN status text NOT NULL DEFAULT 'draft';  \",\"ALTER TABLE notes ADD COLUMN slug text NOT NULL;\"])",
+            "mongDoi": {
+              "safe": false,
+              "blockers": [
+                {
+                  "sql": "alter table notes rename column body to content",
+                  "why": "old code uses the old name"
+                },
+                {
+                  "sql": "ALTER TABLE notes ALTER COLUMN created_at TYPE timestamptz",
+                  "why": "changes a type the old code expects"
+                },
+                {
+                  "sql": "ALTER TABLE notes ALTER COLUMN title SET NOT NULL",
+                  "why": "old code inserts rows without this column"
+                },
+                {
+                  "sql": "ALTER TABLE notes ADD COLUMN slug text NOT NULL",
+                  "why": "old code inserts rows without this column"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "rollbackSafety([\"DROP TABLE old_sessions;\",\"CREATE TABLE note_shares (id serial PRIMARY KEY);\"])",
+            "mongDoi": {
+              "safe": false,
+              "blockers": [
+                {
+                  "sql": "DROP TABLE old_sessions",
+                  "why": "drops data the old code reads"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "rollbackSafety([])",
+            "mongDoi": {
+              "safe": true,
+              "blockers": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rolling back the image after a migration that dropped a column: the old code expects it, and it is worse than the bug you were escaping.|||Quay lui ảnh sau một migration đã xoá cột: mã cũ cần cột đó, và còn tệ hơn lỗi bạn đang tránh."
+        },
+        {
+          "loi": "Treating every ALTER TABLE as dangerous: ADD COLUMN nullable is exactly the additive step chapter 7 recommends.|||Coi mọi ALTER TABLE là nguy hiểm: ADD COLUMN cho phép null chính là bước cộng thêm chương 7 khuyên dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "additive migration",
+          "vi": "migration cộng thêm"
+        },
+        {
+          "en": "roll forward",
+          "vi": "sửa tiến lên",
+          "giaiThich": "deploy a fix instead of going back"
+        }
+      ]
+    }
+  ]
+}

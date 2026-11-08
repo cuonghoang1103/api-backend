@@ -1,0 +1,615 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-0-0-start-here-2",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-0-0-start-here-2"
+  },
+  "exercises": [
+    {
+      "title": "The six stages, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Six stages, eighteen chapters, each stage assuming the one before it. Put the stages in order — \"the fastest way to get stuck is to skip ahead\".</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu chặng, mười tám chương, chặng sau dựa trên chặng trước. Sắp các chặng đúng thứ tự — \"cách nhanh nhất để kẹt là nhảy cóc\".</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot protect an API you have not built yet.|||Không thể bảo vệ một API chưa dựng.",
+        "Testing and logs come before shipping.|||Kiểm thử và log đến trước khi đưa lên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The six stages, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stages.Sắp các chặng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The six stages, in order — answer key\n\n1. Order the stages.Sắp các chặng.\n   Answer: m1) Foundations (chapters 1–4)  →  m6) Building an API (5–7)  →  m5) Making it safe (8–10)  →  m3) Real systems (11–13)  →  m2) Trust and operations (14–16)  →  m4) Shipping (17–18)\n   You learn the language and the runtime, then build an API on them, then protect it, then add realtime/cache/jobs, then test and observe it, and only then ship it. Auth (stage 3) is unreadable if async (stage 1) never clicked.VI: Học ngôn ngữ và runtime, rồi dựng API trên đó, rồi bảo vệ nó, rồi thêm realtime/cache/job, rồi kiểm thử và quan sát, cuối cùng mới đưa lên. Xác thực (chặng 3) không đọc nổi nếu bất đồng bộ (chặng 1) chưa thông.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You learn the language and the runtime, then build an API on them, then protect it, then add realtime/cache/jobs, then test and observe it, and only then ship it. Auth (stage 3) is unreadable if async (stage 1) never clicked.</p><p><i>VI: Học ngôn ngữ và runtime, rồi dựng API trên đó, rồi bảo vệ nó, rồi thêm realtime/cache/job, rồi kiểm thử và quan sát, cuối cùng mới đưa lên. Xác thực (chặng 3) không đọc nổi nếu bất đồng bộ (chặng 1) chưa thông.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "<p>Order the stages.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các chặng.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Foundations (chapters 1–4)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Trust and operations (14–16)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Real systems (11–13)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Shipping (17–18)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Making it safe (8–10)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Building an API (5–7)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m6",
+              "m5",
+              "m3",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>You learn the language and the runtime, then build an API on them, then protect it, then add realtime/cache/jobs, then test and observe it, and only then ship it. Auth (stage 3) is unreadable if async (stage 1) never clicked.</p><p><i>VI: Học ngôn ngữ và runtime, rồi dựng API trên đó, rồi bảo vệ nó, rồi thêm realtime/cache/job, rồi kiểm thử và quan sát, cuối cùng mới đưa lên. Xác thực (chặng 3) không đọc nổi nếu bất đồng bộ (chặng 1) chưa thông.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting \"Making it safe\" first — there is nothing to protect yet.|||Đặt \"An toàn\" lên đầu — chưa có gì để bảo vệ."
+        },
+        {
+          "loi": "Putting \"Shipping\" before \"Trust and operations\".|||Đặt \"Đưa lên\" trước \"Tin cậy và vận hành\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measure, do not guess",
+          "vi": "đo, đừng đoán",
+          "giaiThich": "Trust a number you ran over code that merely looks right."
+        },
+        {
+          "en": "invisible failure",
+          "vi": "lỗi vô hình",
+          "giaiThich": "A backend bug that shows nothing on screen until it is expensive."
+        },
+        {
+          "en": "production example",
+          "vi": "ví dụ từ production",
+          "giaiThich": "Code taken from a real running system, not a toy snippet."
+        },
+        {
+          "en": "six stages",
+          "vi": "sáu chặng",
+          "giaiThich": "Foundations, Building an API, Making it safe, Real systems, Trust & operations, Shipping."
+        },
+        {
+          "en": "run, do not read",
+          "vi": "chạy, đừng chỉ đọc",
+          "giaiThich": "Typing and running an example teaches what reading cannot."
+        }
+      ]
+    },
+    {
+      "title": "Visible on screen, or only in a measurement?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"A frontend mistake is visible on the next reload. A backend mistake is usually invisible until it is expensive.\" For each bug, decide whether you would notice it by looking at the screen, or only by measuring.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Lỗi frontend thấy ngay lần tải lại sau. Lỗi backend thường vô hình cho tới khi đắt giá.\" Với mỗi bug, quyết định bạn thấy nó bằng mắt trên màn hình, hay chỉ thấy khi đo.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: would one user, clicking once, see anything wrong?|||Hỏi: một người dùng bấm một lần có thấy gì sai không?",
+        "Problems that grow with time, data size or load are measurement problems.|||Vấn đề lớn dần theo thời gian, cỡ dữ liệu hay tải là vấn đề phải đo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Visible on screen, or only in a measurement?\n\nAnswer in the answer panel (no code needed).\n\n1. How would you notice it?Bạn sẽ nhận ra nó bằng cách nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Visible on screen, or only in a measurement? — answer key\n\n1. How would you notice it?Bạn sẽ nhận ra nó bằng cách nào?\n   - r1.thay: looking at the screen\n   - r2.thay: only a measurement\n   - r3.thay: only a measurement\n   - r4.thay: only a measurement\n   - r5.thay: looking at the screen\n   - r6.thay: only a measurement\n   Layout and colour bugs show on the next reload. Leaks, slow queries on real data sizes, broken transactions and memory growth change nothing on screen while you test with one user — which is why the course ends chapters with numbers you run yourself: connection counts, timings, memory graphs.VI: Lỗi bố cục và màu hiện ngay lần tải lại. Rò kết nối, truy vấn chậm trên dữ liệu thật, giao dịch hỏng và bộ nhớ tăng dần không đổi gì trên màn hình khi bạn thử với một người dùng — vì vậy khoá kết thúc các chương bằng con số bạn tự chạy: số kết nối, thời gian, biểu đồ bộ nhớ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Layout and colour bugs show on the next reload. Leaks, slow queries on real data sizes, broken transactions and memory growth change nothing on screen while you test with one user — which is why the course ends chapters with numbers you run yourself: connection counts, timings, memory graphs.</p><p><i>VI: Lỗi bố cục và màu hiện ngay lần tải lại. Rò kết nối, truy vấn chậm trên dữ liệu thật, giao dịch hỏng và bộ nhớ tăng dần không đổi gì trên màn hình khi bạn thử với một người dùng — vì vậy khoá kết thúc các chương bằng con số bạn tự chạy: số kết nối, thời gian, biểu đồ bộ nhớ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "v1",
+            "de": "<p>How would you notice it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn sẽ nhận ra nó bằng cách nào?</i></p>",
+            "cot": [
+              {
+                "ma": "bug",
+                "ten": "Bug|||Bug"
+              },
+              {
+                "ma": "thay",
+                "ten": "Noticed by|||Nhận ra nhờ",
+                "luaChon": [
+                  "looking at the screen",
+                  "only a measurement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "bug": "The \"Save\" button is hidden behind the footer"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "bug": "Each request leaks one database connection; the API dies after a few hours"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "bug": "A query is instant on 50 rows and takes 9 s on 50 000 rows"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "bug": "Two writes that should be one transaction; once a week a note loses its tags"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "bug": "The note title is printed in white on a white background"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "bug": "Memory grows by 2 MB every hour until the container is killed"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.thay": "looking at the screen",
+              "r2.thay": "only a measurement",
+              "r3.thay": "only a measurement",
+              "r4.thay": "only a measurement",
+              "r5.thay": "looking at the screen",
+              "r6.thay": "only a measurement"
+            },
+            "giaiThich": "<p>Layout and colour bugs show on the next reload. Leaks, slow queries on real data sizes, broken transactions and memory growth change nothing on screen while you test with one user — which is why the course ends chapters with numbers you run yourself: connection counts, timings, memory graphs.</p><p><i>VI: Lỗi bố cục và màu hiện ngay lần tải lại. Rò kết nối, truy vấn chậm trên dữ liệu thật, giao dịch hỏng và bộ nhớ tăng dần không đổi gì trên màn hình khi bạn thử với một người dùng — vì vậy khoá kết thúc các chương bằng con số bạn tự chạy: số kết nối, thời gian, biểu đồ bộ nhớ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating \"it works when I click it\" as proof on the server.|||Coi \"tôi bấm thì chạy\" là bằng chứng ở phía server."
+        },
+        {
+          "loi": "Assuming slow queries would be visible during development (with 50 rows they are not).|||Tưởng truy vấn chậm sẽ lộ khi phát triển (với 50 dòng thì không)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measure, do not guess",
+          "vi": "đo, đừng đoán",
+          "giaiThich": "Trust a number you ran over code that merely looks right."
+        },
+        {
+          "en": "invisible failure",
+          "vi": "lỗi vô hình",
+          "giaiThich": "A backend bug that shows nothing on screen until it is expensive."
+        },
+        {
+          "en": "production example",
+          "vi": "ví dụ từ production",
+          "giaiThich": "Code taken from a real running system, not a toy snippet."
+        },
+        {
+          "en": "six stages",
+          "vi": "sáu chặng",
+          "giaiThich": "Foundations, Building an API, Making it safe, Real systems, Trust & operations, Shipping."
+        },
+        {
+          "en": "run, do not read",
+          "vi": "chạy, đừng chỉ đọc",
+          "giaiThich": "Typing and running an example teaches what reading cannot."
+        }
+      ]
+    },
+    {
+      "title": "The rules this course is built on",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Short questions on how the course works.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi ngắn về cách khoá học vận hành.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every rule in this lesson is a form of \"do not trust what merely looks right\".|||Mọi luật trong bài là một dạng của \"đừng tin thứ chỉ trông có vẻ đúng\".",
+        "Think about how the course ends its chapters.|||Nghĩ về cách khoá học kết thúc các chương."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The rules this course is built on\n\nAnswer in the answer panel (no code needed).\n\n1. Where do the examples come from?Ví dụ lấy từ đâu?\n2. Your code \"looks right\" and you got 200 OK once. On the server, what does that prove?Code \"trông đúng\" và bạn nhận 200 OK một lần. Ở server, điều đó chứng minh gì?\n3. The single study habit that decides whether you can build anything at the end?Thói quen học duy nhất quyết định cuối khoá bạn có tự dựng được gì không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The rules this course is built on — answer key\n\n1. Where do the examples come from?Ví dụ lấy từ đâu?\n   Answer: c) A production Node.js backend — this website — including its outages and fixes\n   That is why chapters end with \"what does this look like in a system that is actually running?\" and often with a measurement instead of a screenshot.VI: Vì vậy các chương kết bằng \"trong một hệ thống đang chạy thật thì trông thế nào?\" và thường bằng một phép đo thay vì ảnh chụp.\n\n2. Your code \"looks right\" and you got 200 OK once. On the server, what does that prove?Code \"trông đúng\" và bạn nhận 200 OK một lần. Ở server, điều đó chứng minh gì?\n   Answer: a) Very little — make it prove itself with numbers under realistic conditions\n   \"It works\" is a weak signal on the server. Measure, do not guess.VI: \"Nó chạy\" là tín hiệu yếu ở server. Đo, đừng đoán.\n\n3. The single study habit that decides whether you can build anything at the end?Thói quen học duy nhất quyết định cuối khoá bạn có tự dựng được gì không?\n   Answer: d) Type and run every example instead of only reading it\n   Reading feels like learning; typing and running is learning. Lesson 0.2 turns this into a five-step loop.VI: Đọc có cảm giác như học; gõ và chạy mới là học. Bài 0.2 biến điều này thành vòng năm bước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A production Node.js backend — this website — including its outages and fixes</p><p>That is why chapters end with \"what does this look like in a system that is actually running?\" and often with a measurement instead of a screenshot.</p><p><i>VI: Vì vậy các chương kết bằng \"trong một hệ thống đang chạy thật thì trông thế nào?\" và thường bằng một phép đo thay vì ảnh chụp.</i></p></li><li><p><b>a)</b> Very little — make it prove itself with numbers under realistic conditions</p><p>\"It works\" is a weak signal on the server. Measure, do not guess.</p><p><i>VI: \"Nó chạy\" là tín hiệu yếu ở server. Đo, đừng đoán.</i></p></li><li><p><b>d)</b> Type and run every example instead of only reading it</p><p>Reading feels like learning; typing and running is learning. Lesson 0.2 turns this into a five-step loop.</p><p><i>VI: Đọc có cảm giác như học; gõ và chạy mới là học. Bài 0.2 biến điều này thành vòng năm bước.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "k1",
+            "de": "<p>Where do the examples come from?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ví dụ lấy từ đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Small toy apps with three routes, written only for the course"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The official Node.js documentation, copied without changes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A production Node.js backend — this website — including its outages and fixes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Popular blog posts and tutorials collected from the internet"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>That is why chapters end with \"what does this look like in a system that is actually running?\" and often with a measurement instead of a screenshot.</p><p><i>VI: Vì vậy các chương kết bằng \"trong một hệ thống đang chạy thật thì trông thế nào?\" và thường bằng một phép đo thay vì ảnh chụp.</i></p>"
+          },
+          {
+            "ma": "k2",
+            "de": "<p>Your code \"looks right\" and you got 200 OK once. On the server, what does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>Code \"trông đúng\" và bạn nhận 200 OK một lần. Ở server, điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Very little — make it prove itself with numbers under realistic conditions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "That it is correct, because the server answered without an error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That it will scale, because one request is the hardest case"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That it has no security bugs, because the response looked normal"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"It works\" is a weak signal on the server. Measure, do not guess.</p><p><i>VI: \"Nó chạy\" là tín hiệu yếu ở server. Đo, đừng đoán.</i></p>"
+          },
+          {
+            "ma": "k3",
+            "de": "<p>The single study habit that decides whether you can build anything at the end?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thói quen học duy nhất quyết định cuối khoá bạn có tự dựng được gì không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Copy the final project from the repository"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Read every lesson twice"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Watch the videos at 2× speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Type and run every example instead of only reading it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Reading feels like learning; typing and running is learning. Lesson 0.2 turns this into a five-step loop.</p><p><i>VI: Đọc có cảm giác như học; gõ và chạy mới là học. Bài 0.2 biến điều này thành vòng năm bước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing one successful request proves correctness.|||Tin một request thành công là chứng minh đúng."
+        },
+        {
+          "loi": "Planning to \"read through\" the course first and practise later.|||Định \"đọc lướt\" cả khoá trước rồi luyện sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measure, do not guess",
+          "vi": "đo, đừng đoán",
+          "giaiThich": "Trust a number you ran over code that merely looks right."
+        },
+        {
+          "en": "invisible failure",
+          "vi": "lỗi vô hình",
+          "giaiThich": "A backend bug that shows nothing on screen until it is expensive."
+        },
+        {
+          "en": "production example",
+          "vi": "ví dụ từ production",
+          "giaiThich": "Code taken from a real running system, not a toy snippet."
+        },
+        {
+          "en": "six stages",
+          "vi": "sáu chặng",
+          "giaiThich": "Foundations, Building an API, Making it safe, Real systems, Trust & operations, Shipping."
+        },
+        {
+          "en": "run, do not read",
+          "vi": "chạy, đừng chỉ đọc",
+          "giaiThich": "Typing and running an example teaches what reading cannot."
+        }
+      ]
+    },
+    {
+      "title": "Measure, do not guess: write timeIt",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "measurement",
+        "async/await (preview)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Your first measuring tool. Write <code>async timeIt(fn)</code>: it runs the async function <code>fn</code>, waits until it has really finished, and returns <code>{ ms, result }</code> — the elapsed milliseconds (<code>Date.now()</code> after minus before) and whatever <code>fn</code> resolved to.</p><pre>const r = await timeIt(() =&gt; loadNotesOneByOne());   // { ms: 900, result: [...] }\nconst s = await timeIt(() =&gt; loadNotesTogether());   // { ms: 300, result: [...] }\n// same result, 3× faster — you know it because you measured it</pre><p>The starter forgets to wait, so it always reports <code>0</code> ms — a tool that \"looks right\" and measures nothing. In the grader <code>Date.now()</code> is a virtual clock, so the numbers are exact.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return <code>{ ms, result }</code> after <code>fn</code> has finished.</li>\n  <li>If <code>fn</code> rejects, <code>timeIt</code> rejects with the same error (a failed run has no meaningful time).</li>\n</ul>",
+      "problemHtmlVi": "<p>Công cụ đo đầu tiên. Viết async timeIt(fn): chạy hàm async fn, chờ tới khi nó THẬT SỰ xong, trả { ms, result } — số mili giây đã trôi (Date.now() sau trừ trước) và giá trị fn trả. Code khởi đầu quên chờ nên luôn báo 0 ms — công cụ \"trông đúng\" mà không đo gì. Trong máy chấm Date.now() là đồng hồ ảo nên số đo chính xác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả { ms, result } sau khi fn xong.</li>\n  <li>fn reject thì timeIt reject đúng lỗi đó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await timeIt(() => sleep(300).then(() => \"ok\"))",
+          "output": "{\"ms\":300,\"result\":\"ok\"}",
+          "explanation": "The starter reports ms: 0 and a Promise.|||Code khởi đầu báo ms: 0 và một Promise."
+        }
+      ],
+      "hintsJson": [
+        "<code>const start = Date.now();</code> before calling <code>fn</code>, then <code>const result = await fn();</code>.|||const start = Date.now(); trước khi gọi fn, rồi const result = await fn();.",
+        "Chapter 1.4 explains <code>await</code> fully; for now: it pauses the function until the work is done.|||Bài 1.4 giải thích đầy đủ await; tạm hiểu: nó dừng hàm tới khi việc xong."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function timeIt(fn) {\n  const start = Date.now();\n  const result = fn();\n  return { ms: Date.now() - start, result };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Measure, do not guess: read the clock before, WAIT for the work, read it again.\nasync function timeIt(fn) {\n  const start = Date.now();\n  const result = await fn();          // without await we would time only the start (0 ms)\n  return { ms: Date.now() - start, result };\n  // if fn rejects, the await throws and timeIt rejects with the same error\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An async function returns immediately with a Promise; the work finishes later. Only after <code>await fn()</code> has the work really ended, so the difference of the two clock readings is the true duration. A measuring tool that does not wait is the perfect example of the lesson's warning: code that looks right and proves nothing.</p>",
+      "solutionExplanationHtmlVi": "<p>Hàm async trả về ngay một Promise; việc xong sau. Chỉ sau await fn() việc mới thật sự xong, nên hiệu hai lần đọc đồng hồ là thời lượng thật. Công cụ đo mà không chờ là ví dụ hoàn hảo cho lời cảnh báo của bài: code trông đúng mà không chứng minh gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "measures a 300 ms task",
+              "vi": "đo việc 300 ms"
+            },
+            "goi": "await timeIt(() => sleep(300).then(() => \"ok\"))",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst loadOne = (id) => sleep(300).then(() => ({ id }));\nconst oneByOne = async () => [await loadOne(1), await loadOne(2), await loadOne(3)];\nconst together = () => Promise.all([loadOne(1), loadOne(2), loadOne(3)]);",
+            "mongDoi": {
+              "ms": 300,
+              "result": "ok"
+            }
+          },
+          {
+            "moTa": {
+              "en": "one by one vs together: same result, different time",
+              "vi": "lần lượt vs cùng lúc"
+            },
+            "goi": "[a.ms, b.ms, JSON.stringify(a.result) === JSON.stringify(b.result)]",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst loadOne = (id) => sleep(300).then(() => ({ id }));\nconst oneByOne = async () => [await loadOne(1), await loadOne(2), await loadOne(3)];\nconst together = () => Promise.all([loadOne(1), loadOne(2), loadOne(3)]);\nconst a = await timeIt(oneByOne); const b = await timeIt(together);",
+            "mongDoi": [
+              900,
+              300,
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "a failing task ⇒ timeIt rejects",
+              "vi": "việc lỗi ⇒ timeIt reject"
+            },
+            "goi": "await timeIt(() => sleep(10).then(() => { throw new Error('DB down'); }))",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst loadOne = (id) => sleep(300).then(() => ({ id }));\nconst oneByOne = async () => [await loadOne(1), await loadOne(2), await loadOne(3)];\nconst together = () => Promise.all([loadOne(1), loadOne(2), loadOne(3)]);",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "DB down"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await timeIt(async () => { await sleep(120); await sleep(80); return 7; })",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst loadOne = (id) => sleep(300).then(() => ({ id }));\nconst oneByOne = async () => [await loadOne(1), await loadOne(2), await loadOne(3)];\nconst together = () => Promise.all([loadOne(1), loadOne(2), loadOne(3)]);",
+            "mongDoi": {
+              "ms": 200,
+              "result": 7
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await timeIt(async () => \"instant\")",
+            "chuanBi": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst loadOne = (id) => sleep(300).then(() => ({ id }));\nconst oneByOne = async () => [await loadOne(1), await loadOne(2), await loadOne(3)];\nconst together = () => Promise.all([loadOne(1), loadOne(2), loadOne(3)]);",
+            "mongDoi": {
+              "ms": 0,
+              "result": "instant"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the clock right after calling <code>fn()</code> without <code>await</code> — you measure how long it took to <i>start</i>, which is 0.|||Đọc đồng hồ ngay sau khi gọi fn() không await — đo được thời gian BẮT ĐẦU, tức 0."
+        },
+        {
+          "loi": "Returning the Promise as <code>result</code> instead of its value.|||Trả chính Promise làm result thay vì giá trị của nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "measure, do not guess",
+          "vi": "đo, đừng đoán",
+          "giaiThich": "Trust a number you ran over code that merely looks right."
+        },
+        {
+          "en": "invisible failure",
+          "vi": "lỗi vô hình",
+          "giaiThich": "A backend bug that shows nothing on screen until it is expensive."
+        },
+        {
+          "en": "production example",
+          "vi": "ví dụ từ production",
+          "giaiThich": "Code taken from a real running system, not a toy snippet."
+        },
+        {
+          "en": "six stages",
+          "vi": "sáu chặng",
+          "giaiThich": "Foundations, Building an API, Making it safe, Real systems, Trust & operations, Shipping."
+        },
+        {
+          "en": "run, do not read",
+          "vi": "chạy, đừng chỉ đọc",
+          "giaiThich": "Typing and running an example teaches what reading cannot."
+        }
+      ]
+    }
+  ]
+}

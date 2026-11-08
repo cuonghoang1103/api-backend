@@ -1,0 +1,953 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-14-2-unit-test",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-14-2-unit-test"
+  },
+  "exercises": [
+    {
+      "title": "14.2 · Four tests that pass while checking nothing",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "test doubles",
+        "assertions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Each of these looks like a test, is counted as a test, can turn the suite green and verify nothing. The lesson ran all four under vitest 4.1.10 and under node:test.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi cái dưới đây trông như một test, được đếm là một test, có thể làm bộ test xanh mà không kiểm gì. Bài chạy cả bốn dưới vitest 4.1.10 và dưới node:test.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: did an assertion run, and could it fail?|||Hỏi: có khẳng định nào chạy không, và nó có thể đỏ không?",
+        "The habit that catches all four: break the code, watch the test go red.|||Thói quen bắt được cả bốn: làm hỏng code, nhìn test chuyển đỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.2 · Four tests that pass while checking nothing\n\nAnswer in the answer panel (no code needed).\n\n1. it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — what does vitest report, and what catches it?it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — vitest báo gì, và cái gì bắt được nó?\n2. try { expect(await computeTotal()).toBe(999); } catch { } — with expect.assertions(1) added, does the test go red?try { expect(await computeTotal()).toBe(999); } catch { } — thêm expect.assertions(1), test có đỏ không?\n3. expect(chuyenTien()).rejects.toThrow('WRONG MESSAGE') without await. vitest vs node:test (assert.rejects without await)?expect(chuyenTien()).rejects.toThrow('SAI THÔNG ĐIỆP') thiếu await. vitest so với node:test (assert.rejects thiếu await)?\n4. “A duplicate slug must not reach the database at all.” Which assertion expresses that behaviour?\"Slug trùng không được chạm tới CSDL.\" Khẳng định nào diễn đạt hành vi đó?\n5. What made createNotesService unit-testable in the first place?Điều gì khiến createNotesService test đơn vị được ngay từ đầu?\n6. Which kind of test double is a repository backed by a Map that really stores and returns notes?Một repository dựa trên Map, thật sự lưu và trả ghi chú, là loại hàng giả nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 14.2 · Four tests that pass while checking nothing — answer key\n\n1. it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — what does vitest report, and what catches it?it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — vitest báo gì, và cái gì bắt được nó?\n   Answer: d) ✓ passed — no assertion ran; expect.assertions(1) (vitest) or t.plan(1) (node:test) turns it red\n   From the runner’s point of view nothing bad happened: no assertion ran, none failed. Counting assertions is the guard.VI: Từ góc nhìn của runner chẳng có gì xấu xảy ra: không khẳng định nào chạy, không cái nào đỏ. Đếm số khẳng định là chốt chặn.\n\n2. try { expect(await computeTotal()).toBe(999); } catch { } — with expect.assertions(1) added, does the test go red?try { expect(await computeTotal()).toBe(999); } catch { } — thêm expect.assertions(1), test có đỏ không?\n   Answer: d) No — the assertion DID run (and failed); the catch swallowed it, so the counter reads 1\n   No runner flag saves you from catch {} around your own assertion. The only defence: break the code on purpose and watch the test go red.VI: Không cờ nào của runner cứu được bạn khỏi catch {} bọc quanh khẳng định của chính mình. Cách phòng duy nhất: cố ý làm hỏng code và xem test chuyển đỏ.\n\n3. expect(chuyenTien()).rejects.toThrow('WRONG MESSAGE') without await. vitest vs node:test (assert.rejects without await)?expect(chuyenTien()).rejects.toThrow('SAI THÔNG ĐIỆP') thiếu await. vitest so với node:test (assert.rejects thiếu await)?\n   Answer: a) vitest flags it (red); node:test lets assert.rejects without await pass silently\n   The one place the runners genuinely differ. In exchange, node:test ships t.plan(n), which caught the never-run callback that vitest missed.VI: Chỗ duy nhất hai runner thật sự khác nhau. Đổi lại, node:test có t.plan(n), bắt được callback không bao giờ chạy mà vitest bỏ sót.\n\n4. “A duplicate slug must not reach the database at all.” Which assertion expresses that behaviour?\"Slug trùng không được chạm tới CSDL.\" Khẳng định nào diễn đạt hành vi đó?\n   Answer: d) The 409 AND expect(repo.insert).not.toHaveBeenCalled()\n   Assert on the outcome when you can; assert on “was this called” only when the call itself is the behaviour — here, NOT inserting is the rule.VI: Khẳng định trên kết quả khi có thể; chỉ khẳng định \"có được gọi không\" khi chính lời gọi là hành vi — ở đây, KHÔNG chèn mới là luật.\n\n5. What made createNotesService unit-testable in the first place?Điều gì khiến createNotesService test đơn vị được ngay từ đầu?\n   Answer: b) It takes its repository as an argument instead of importing db.mjs — tests pass an object literal\n   Testability is something the application code allows or forbids. Production wires createNotesRepo(pool); tests wire a fake — same service, two speeds.VI: Khả năng test là thứ code ứng dụng cho phép hay cấm. Production nối createNotesRepo(pool); test nối đồ giả — cùng một service, hai tốc độ.\n\n6. Which kind of test double is a repository backed by a Map that really stores and returns notes?Một repository dựa trên Map, thật sự lưu và trả ghi chú, là loại hàng giả nào?\n   Answer: b) A fake — a miniature but genuinely working implementation\n   Dummy fills a slot, stub returns a canned value, spy records calls, mock adds an expectation about the calls, fake actually works (in memory).VI: Dummy lấp một chỗ tham số, stub trả giá trị dựng sẵn, spy ghi lại lời gọi, mock thêm kỳ vọng về lời gọi, fake thật sự chạy (trong bộ nhớ).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> ✓ passed — no assertion ran; expect.assertions(1) (vitest) or t.plan(1) (node:test) turns it red</p><p>From the runner’s point of view nothing bad happened: no assertion ran, none failed. Counting assertions is the guard.</p><p><i>VI: Từ góc nhìn của runner chẳng có gì xấu xảy ra: không khẳng định nào chạy, không cái nào đỏ. Đếm số khẳng định là chốt chặn.</i></p></li><li><p><b>d)</b> No — the assertion DID run (and failed); the catch swallowed it, so the counter reads 1</p><p>No runner flag saves you from catch {} around your own assertion. The only defence: break the code on purpose and watch the test go red.</p><p><i>VI: Không cờ nào của runner cứu được bạn khỏi catch {} bọc quanh khẳng định của chính mình. Cách phòng duy nhất: cố ý làm hỏng code và xem test chuyển đỏ.</i></p></li><li><p><b>a)</b> vitest flags it (red); node:test lets assert.rejects without await pass silently</p><p>The one place the runners genuinely differ. In exchange, node:test ships t.plan(n), which caught the never-run callback that vitest missed.</p><p><i>VI: Chỗ duy nhất hai runner thật sự khác nhau. Đổi lại, node:test có t.plan(n), bắt được callback không bao giờ chạy mà vitest bỏ sót.</i></p></li><li><p><b>d)</b> The 409 AND expect(repo.insert).not.toHaveBeenCalled()</p><p>Assert on the outcome when you can; assert on “was this called” only when the call itself is the behaviour — here, NOT inserting is the rule.</p><p><i>VI: Khẳng định trên kết quả khi có thể; chỉ khẳng định \"có được gọi không\" khi chính lời gọi là hành vi — ở đây, KHÔNG chèn mới là luật.</i></p></li><li><p><b>b)</b> It takes its repository as an argument instead of importing db.mjs — tests pass an object literal</p><p>Testability is something the application code allows or forbids. Production wires createNotesRepo(pool); tests wire a fake — same service, two speeds.</p><p><i>VI: Khả năng test là thứ code ứng dụng cho phép hay cấm. Production nối createNotesRepo(pool); test nối đồ giả — cùng một service, hai tốc độ.</i></p></li><li><p><b>b)</b> A fake — a miniature but genuinely working implementation</p><p>Dummy fills a slot, stub returns a canned value, spy records calls, mock adds an expectation about the calls, fake actually works (in memory).</p><p><i>VI: Dummy lấp một chỗ tham số, stub trả giá trị dựng sẵn, spy ghi lại lời gọi, mock thêm kỳ vọng về lời gọi, fake thật sự chạy (trong bộ nhớ).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — what does vitest report, and what catches it?</p><p style=\"opacity:.75;font-size:.92em\"><i>it('…', () => { [].forEach(() => { expect(1).toBe(2); }); }) — vitest báo gì, và cái gì bắt được nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "× failed, because an empty array is an error in forEach"
+              },
+              {
+                "ma": "b",
+                "noiDung": "× failed — vitest notices the callback was never called"
+              },
+              {
+                "ma": "c",
+                "noiDung": "✓ passed, and nothing can ever catch it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "✓ passed — no assertion ran; expect.assertions(1) (vitest) or t.plan(1) (node:test) turns it red"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>From the runner’s point of view nothing bad happened: no assertion ran, none failed. Counting assertions is the guard.</p><p><i>VI: Từ góc nhìn của runner chẳng có gì xấu xảy ra: không khẳng định nào chạy, không cái nào đỏ. Đếm số khẳng định là chốt chặn.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>try { expect(await computeTotal()).toBe(999); } catch { } — with expect.assertions(1) added, does the test go red?</p><p style=\"opacity:.75;font-size:.92em\"><i>try { expect(await computeTotal()).toBe(999); } catch { } — thêm expect.assertions(1), test có đỏ không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — vitest forbids catch blocks around expect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — expect.assertions detects the swallowed failure"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — but t.plan(1) in node:test would catch it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the assertion DID run (and failed); the catch swallowed it, so the counter reads 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>No runner flag saves you from catch {} around your own assertion. The only defence: break the code on purpose and watch the test go red.</p><p><i>VI: Không cờ nào của runner cứu được bạn khỏi catch {} bọc quanh khẳng định của chính mình. Cách phòng duy nhất: cố ý làm hỏng code và xem test chuyển đỏ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>expect(chuyenTien()).rejects.toThrow('WRONG MESSAGE') without await. vitest vs node:test (assert.rejects without await)?</p><p style=\"opacity:.75;font-size:.92em\"><i>expect(chuyenTien()).rejects.toThrow('SAI THÔNG ĐIỆP') thiếu await. vitest so với node:test (assert.rejects thiếu await)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "vitest flags it (red); node:test lets assert.rejects without await pass silently"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both fail, because a missing await is a syntax error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both pass silently"
+              },
+              {
+                "ma": "d",
+                "noiDung": "node:test flags it; vitest lets it pass"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The one place the runners genuinely differ. In exchange, node:test ships t.plan(n), which caught the never-run callback that vitest missed.</p><p><i>VI: Chỗ duy nhất hai runner thật sự khác nhau. Đổi lại, node:test có t.plan(n), bắt được callback không bao giờ chạy mà vitest bỏ sót.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>“A duplicate slug must not reach the database at all.” Which assertion expresses that behaviour?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Slug trùng không được chạm tới CSDL.\" Khẳng định nào diễn đạt hành vi đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "expect(repo).toEqual(fakeRepo())"
+              },
+              {
+                "ma": "b",
+                "noiDung": "expect(repo.findBySlug).toHaveBeenCalledTimes(1) only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "expect(svc.create(…)).toBeDefined()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The 409 AND expect(repo.insert).not.toHaveBeenCalled()"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Assert on the outcome when you can; assert on “was this called” only when the call itself is the behaviour — here, NOT inserting is the rule.</p><p><i>VI: Khẳng định trên kết quả khi có thể; chỉ khẳng định \"có được gọi không\" khi chính lời gọi là hành vi — ở đây, KHÔNG chèn mới là luật.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What made createNotesService unit-testable in the first place?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì khiến createNotesService test đơn vị được ngay từ đầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "vitest can intercept any import automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It takes its repository as an argument instead of importing db.mjs — tests pass an object literal"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The repository was moved into the same file as the service"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It was rewritten in TypeScript, which allows mocking imports"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Testability is something the application code allows or forbids. Production wires createNotesRepo(pool); tests wire a fake — same service, two speeds.</p><p><i>VI: Khả năng test là thứ code ứng dụng cho phép hay cấm. Production nối createNotesRepo(pool); test nối đồ giả — cùng một service, hai tốc độ.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Which kind of test double is a repository backed by a Map that really stores and returns notes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một repository dựa trên Map, thật sự lưu và trả ghi chú, là loại hàng giả nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A stub — it returns a canned value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A fake — a miniature but genuinely working implementation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A spy — it records calls to the real database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A dummy — it only fills a parameter slot"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Dummy fills a slot, stub returns a canned value, spy records calls, mock adds an expectation about the calls, fake actually works (in memory).</p><p><i>VI: Dummy lấp một chỗ tham số, stub trả giá trị dựng sẵn, spy ghi lại lời gọi, mock thêm kỳ vọng về lời gọi, fake thật sự chạy (trong bộ nhớ).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A new test that has never been red — it may be asserting nothing.|||Một test mới chưa từng đỏ — có thể nó không khẳng định gì."
+        },
+        {
+          "loi": "Asserting only that functions were called: a refactor that breaks the behaviour keeps it green.|||Chỉ khẳng định rằng hàm đã được gọi: một lần tái cấu trúc làm hỏng hành vi vẫn để nó xanh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test double",
+          "vi": "hàng giả trong test",
+          "giaiThich": "dummy, stub, spy, mock, fake — vật thay cho phụ thuộc thật"
+        },
+        {
+          "en": "expect.assertions(n)",
+          "vi": "đếm khẳng định",
+          "giaiThich": "test đỏ nếu số khẳng định đã chạy khác n"
+        },
+        {
+          "en": "t.plan(n)",
+          "vi": "kế hoạch khẳng định (node:test)",
+          "giaiThich": "tương đương expect.assertions"
+        }
+      ]
+    },
+    {
+      "title": "14.2 · Build a spy",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "test doubles",
+        "spy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A spy calls through for real but records the call so you can inspect it later — what <code>vi.fn(impl)</code> gives you. Write <code>createSpy(impl)</code> returning a function <code>spy</code> that:</p><ul><li>calls <code>impl(...args)</code> (default: returns <code>undefined</code>) and returns its result — or re-throws its error;</li><li>records every call in <code>spy.calls</code> as the array of arguments, and every outcome in <code>spy.results</code> as <code>{ type: 'return', value }</code> or <code>{ type: 'throw', value: error.message }</code>;</li><li>exposes <code>spy.callCount</code> (a number kept up to date) and <code>spy.calledWith(...args)</code> → <code>true</code> if some call had exactly these arguments (compare with <code>JSON.stringify</code>).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>The call is recorded even when impl throws.</li>\n  <li>The spy is transparent: same return value, same error.</li>\n  <li>Each spy has its own records.</li>\n</ul>",
+      "problemHtmlVi": "<p>Spy gọi xuyên qua hàm thật nhưng ghi lại lời gọi để bạn soi sau — thứ <code>vi.fn(impl)</code> đưa cho bạn. Viết <code>createSpy(impl)</code> trả về một hàm <code>spy</code>:</p><ul><li>gọi <code>impl(...args)</code> (mặc định: trả <code>undefined</code>) và trả kết quả của nó — hoặc ném lại lỗi của nó;</li><li>ghi mọi lời gọi vào <code>spy.calls</code> dưới dạng mảng đối số, và mọi kết cục vào <code>spy.results</code> dạng <code>{ type: 'return', value }</code> hoặc <code>{ type: 'throw', value: error.message }</code>;</li><li>có <code>spy.callCount</code> (số luôn được cập nhật) và <code>spy.calledWith(...args)</code> → <code>true</code> nếu có lời gọi đúng các đối số này (so bằng <code>JSON.stringify</code>).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lời gọi vẫn được ghi kể cả khi impl ném lỗi.</li>\n  <li>Spy trong suốt: cùng giá trị trả về, cùng lỗi.</li>\n  <li>Mỗi spy có sổ ghi riêng.</li>\n</ul>",
+      "inputSpec": "impl — function (optional)|||impl — hàm (không bắt buộc)",
+      "outputSpec": "spy — function with calls, results, callCount, calledWith|||spy — hàm có calls, results, callCount, calledWith",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const s = createSpy((a, b) => a + b); return [s(1, 2), s(3, 4), s.calls, s.callCount, s.results]; })()",
+          "output": "[3,7,[[1,2],[3,4]],2,[{\"type\":\"return\",\"value\":3},{\"type\":\"return\",\"value\":7}]]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "function spy(...args) { spy.calls.push(args); spy.callCount++; try { const value = impl(...args); spy.results.push({ type: 'return', value }); return value; } catch (e) { … throw e; } }",
+        "spy.calledWith = (...a) => spy.calls.some((c) => JSON.stringify(c) === JSON.stringify(a));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A minimal vi.fn(): calls through, records everything. */\nfunction createSpy(impl = () => undefined) {\n  // Write your solution here\n  function spy(...args) {\n    const value = impl(...args);\n    spy.calls.push(args);\n    spy.results.push({ type: 'return', value });\n    return value;\n  }\n  spy.calls = [];\n  spy.results = [];\n  spy.callCount = 0;\n  spy.calledWith = () => spy.calls.length > 0;\n  return spy;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A minimal vi.fn(): calls through, records everything, changes nothing. */\nfunction createSpy(impl = () => undefined) {\n  function spy(...args) {\n    spy.calls.push([...args]);                 // record FIRST: a throwing call is still a call\n    spy.callCount = spy.calls.length;\n    try {\n      const value = impl(...args);\n      spy.results.push({ type: 'return', value });\n      return value;                            // transparent: same value out\n    } catch (e) {\n      spy.results.push({ type: 'throw', value: e && e.message });\n      throw e;                                 // transparent: same error out\n    }\n  }\n  spy.calls = [];\n  spy.results = [];\n  spy.callCount = 0;\n  spy.calledWith = (...a) => spy.calls.some((c) => JSON.stringify(c) === JSON.stringify(a));\n  return spy;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A spy must not change behaviour — same value out, same error out — or the test measures a different program. Recording before calling and pushing the outcome in both branches is what makes interaction assertions like “insert was not called” trustworthy.</p>",
+      "solutionExplanationHtmlVi": "<p>Spy không được đổi hành vi — cùng giá trị ra, cùng lỗi ra — không thì test đo một chương trình khác. Ghi trước khi gọi và đẩy kết cục ở cả hai nhánh là thứ làm cho các khẳng định tương tác như \"insert không được gọi\" đáng tin.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Calls through and records arguments and results",
+              "vi": "Gọi xuyên qua và ghi đối số lẫn kết quả"
+            },
+            "goi": "(() => { const s = createSpy((a, b) => a + b); return [s(1, 2), s(3, 4), s.calls, s.callCount, s.results]; })()",
+            "mongDoi": [
+              3,
+              7,
+              [
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ]
+              ],
+              2,
+              [
+                {
+                  "type": "return",
+                  "value": 3
+                },
+                {
+                  "type": "return",
+                  "value": 7
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A throwing call is recorded AND re-thrown",
+              "vi": "Lời gọi ném lỗi được ghi VÀ được ném lại"
+            },
+            "goi": "(() => { const s = createSpy((x) => { if (x < 0) throw new RangeError('NEG'); return x; }); let err; try { s(-1); } catch (e) { err = e.name; } return [err, s.callCount, s.results]; })()",
+            "mongDoi": [
+              "RangeError",
+              1,
+              [
+                {
+                  "type": "throw",
+                  "value": "NEG"
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "calledWith compares the whole argument list",
+              "vi": "calledWith so toàn bộ danh sách đối số"
+            },
+            "goi": "(() => { const s = createSpy(); s({ id: 3 }, 'x'); return [s.calledWith({ id: 3 }, 'x'), s.calledWith({ id: 4 }, 'x'), s.calledWith({ id: 3 }), s()]; })()",
+            "mongDoi": [
+              true,
+              false,
+              false,
+              {
+                "$js": "undefined"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const a = createSpy(), b = createSpy(); a(1); a(2); b(3); const arr = [9]; a(arr); arr.push(10); return [a.callCount, b.callCount, a.calls[2], b.calledWith(1)]; })()",
+            "mongDoi": [
+              3,
+              1,
+              [
+                [
+                  9,
+                  10
+                ]
+              ],
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const s = createSpy(() => { throw new Error('boom'); }); try { s('a'); } catch (e) {} try { s('b'); } catch (e) {} return [s.calls, s.results.map((r) => r.type + ':' + r.value), s.calledWith('b')]; })()",
+            "mongDoi": [
+              [
+                [
+                  "a"
+                ],
+                [
+                  "b"
+                ]
+              ],
+              [
+                "throw:boom",
+                "throw:boom"
+              ],
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Recording the call after impl(...): a throwing call is never recorded, so “was it called?” lies exactly when it matters.|||Ghi lời gọi sau impl(...): lời gọi ném lỗi không bao giờ được ghi, nên \"đã được gọi chưa?\" nói dối đúng lúc cần."
+        },
+        {
+          "loi": "Swallowing the error to record it: the code under test no longer sees the failure it must handle.|||Nuốt lỗi để ghi lại: code đang test không còn thấy lỗi mà nó phải xử lý."
+        },
+        {
+          "loi": "Storing the arguments array by reference and the caller mutates it later.|||Lưu mảng đối số theo tham chiếu rồi nơi gọi sửa nó sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "spy",
+          "vi": "gián điệp",
+          "giaiThich": "gọi hàm thật nhưng ghi lại lời gọi"
+        },
+        {
+          "en": "test double",
+          "vi": "hàng giả trong test",
+          "giaiThich": "dummy, stub, spy, mock, fake — vật thay cho phụ thuộc thật"
+        }
+      ]
+    },
+    {
+      "title": "14.2 · A fake repository that really works",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "test doubles",
+        "fake"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A <b>fake</b> is a miniature but genuinely working implementation — the Map-backed repository the service tests run against at 0.0006 ms a call. Write <code>createFakeNotesRepo(seed = [])</code> with the same async methods as the real one:</p><ul><li><code>insert(note)</code> → stores <code>{ ...note, id }</code> with the next id (one more than the highest id so far, starting at 1) and resolves to a COPY;</li><li><code>findById(id)</code> / <code>findBySlug(slug)</code> → a copy or <code>null</code>;</li><li><code>update(id, patch)</code> → merges <code>patch</code> into the stored note and resolves to a copy, or <code>null</code> if the id does not exist;</li><li><code>listByAuthor(authorId)</code> → copies, sorted by id.</li></ul><p>Copies matter: a test that mutates a returned object must not change what is stored.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>All methods are async (return Promises), like the real repository.</li>\n  <li>Never hand out the stored object itself.</li>\n  <li>Ids continue after the highest seeded id.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Fake</b> là một bản cài đặt thu nhỏ nhưng chạy thật — repository dựa trên Map mà các test service chạy với nó ở mức 0,0006 ms mỗi lời gọi. Viết <code>createFakeNotesRepo(seed = [])</code> với cùng các phương thức async như repository thật:</p><ul><li><code>insert(note)</code> → lưu <code>{ ...note, id }</code> với id kế tiếp (lớn hơn id cao nhất hiện có một đơn vị, bắt đầu từ 1) và resolve ra một BẢN SAO;</li><li><code>findById(id)</code> / <code>findBySlug(slug)</code> → bản sao hoặc <code>null</code>;</li><li><code>update(id, patch)</code> → trộn <code>patch</code> vào ghi chú đã lưu và resolve ra bản sao, hoặc <code>null</code> nếu id không tồn tại;</li><li><code>listByAuthor(authorId)</code> → các bản sao, sắp theo id.</li></ul><p>Bản sao quan trọng: test sửa object được trả về không được làm đổi thứ đã lưu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mọi phương thức đều async (trả Promise), như repository thật.</li>\n  <li>Không bao giờ đưa ra chính object đã lưu.</li>\n  <li>Id tiếp nối sau id cao nhất trong dữ liệu mồi.</li>\n</ul>",
+      "inputSpec": "seed — notes with ids|||seed — các ghi chú có id",
+      "outputSpec": "{ insert, findById, findBySlug, update, listByAuthor }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);\n[await repo.insert({ title: 'New', slug: 'new', authorId: 7 }), await repo.findBySlug('new'), await repo.findBySlug('nope')]",
+          "output": "[{\"title\":\"New\",\"slug\":\"new\",\"authorId\":7,\"id\":4},{\"title\":\"New\",\"slug\":\"new\",\"authorId\":7,\"id\":4},null]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const rows = new Map(seed.map((n) => [n.id, { ...n }])); let last = Math.max(0, ...seed.map((n) => n.id));",
+        "const copy = (n) => (n ? { ...n } : null); — use it on every way out.|||const copy = (n) => (n ? { ...n } : null); — dùng nó ở mọi lối ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A Map-backed notes repository for unit tests. */\nfunction createFakeNotesRepo(seed = []) {\n  // Write your solution here\n  const rows = new Map(seed.map((n) => [n.id, n]));\n  let last = 0;\n  return {\n    async insert(note) { const n = { ...note, id: ++last }; rows.set(n.id, n); return n; },\n    async findById(id) { return rows.get(id) || null; },\n    async findBySlug(slug) { return [...rows.values()].find((n) => n.slug === slug) || null; },\n    async update(id, patch) { const n = rows.get(id); Object.assign(n, patch); return n; },\n    async listByAuthor(authorId) { return [...rows.values()].filter((n) => n.authorId === authorId); },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A Map-backed notes repository for unit tests — a FAKE: small, but genuinely working. */\nfunction createFakeNotesRepo(seed = []) {\n  const rows = new Map(seed.map((n) => [n.id, { ...n }]));\n  let last = Math.max(0, ...seed.map((n) => n.id));          // continue after the seeded ids\n  const copy = (n) => (n ? { ...n } : null);                 // never hand out the stored object\n  return {\n    async insert(note) {\n      const n = { ...note, id: ++last };\n      rows.set(n.id, n);\n      return copy(n);\n    },\n    async findById(id) { return copy(rows.get(id)); },\n    async findBySlug(slug) { return copy([...rows.values()].find((n) => n.slug === slug)); },\n    async update(id, patch) {\n      const n = rows.get(id);\n      if (!n) return null;                                    // like UPDATE … RETURNING with 0 rows\n      Object.assign(n, patch);\n      return copy(n);\n    },\n    async listByAuthor(authorId) {\n      return [...rows.values()].filter((n) => n.authorId === authorId).sort((a, b) => a.id - b.id).map(copy);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A fake earns its place by behaving like the real repository in every way the service can observe — async, ids, nulls, copies — while running in memory. Lesson 14.4 measures where it still lies: it has no unique constraint, so five concurrent duplicates all get 201 against it.</p>",
+      "solutionExplanationHtmlVi": "<p>Fake có giá trị nhờ cư xử như repository thật ở mọi khía cạnh service quan sát được — async, id, null, bản sao — trong khi chạy trong bộ nhớ. Bài 14.4 đo chỗ nó vẫn nói dối: nó không có ràng buộc duy nhất, nên năm bản trùng đồng thời đều nhận 201 khi chạy với nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "insert continues after the highest seeded id (3 → 4)",
+              "vi": "insert tiếp nối sau id mồi cao nhất (3 → 4)"
+            },
+            "goi": "[await repo.insert({ title: 'New', slug: 'new', authorId: 7 }), await repo.findBySlug('new'), await repo.findBySlug('nope')]",
+            "chuanBi": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);",
+            "mongDoi": [
+              {
+                "title": "New",
+                "slug": "new",
+                "authorId": 7,
+                "id": 4
+              },
+              {
+                "title": "New",
+                "slug": "new",
+                "authorId": 7,
+                "id": 4
+              },
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Returned objects are copies; unknown id → null",
+              "vi": "Object trả về là bản sao; id lạ → null"
+            },
+            "goi": "await (async () => { const n = await repo.findById(1); n.title = 'HACKED'; return [(await repo.findById(1)).title, await repo.update(99, { title: 'x' })]; })()",
+            "chuanBi": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);",
+            "mongDoi": [
+              "Hello",
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Methods are async; update merges",
+              "vi": "Phương thức là async; update trộn dữ liệu"
+            },
+            "goi": "[repo.findById(1) instanceof Promise, await repo.update(1, { title: 'Hi' }), (await repo.listByAuthor(7)).map((n) => n.id)]",
+            "chuanBi": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);",
+            "mongDoi": [
+              true,
+              {
+                "id": 1,
+                "title": "Hi",
+                "slug": "hello",
+                "authorId": 7
+              },
+              [
+                1
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const r = createFakeNotesRepo(); const a = await r.insert({ slug: 'a', authorId: 1 }); await r.insert({ slug: 'b', authorId: 2 }); await r.insert({ slug: 'c', authorId: 1 }); const l = await r.listByAuthor(1); l[0].slug = 'x'; return [a.id, (await r.listByAuthor(1)).map((n) => n.slug), (await r.listByAuthor(3))]; })()",
+            "chuanBi": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);",
+            "mongDoi": [
+              1,
+              [
+                "a",
+                "c"
+              ],
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const seed = [{ id: 10, slug: 's', authorId: 1 }]; const r = createFakeNotesRepo(seed); seed[0].slug = 'changed'; const u = await r.update(10, { body: 'b' }); u.slug = 'y'; return [await r.findById(10), (await r.insert({ slug: 'n' })).id]; })()",
+            "chuanBi": "const repo = createFakeNotesRepo([{ id: 1, title: 'Hello', slug: 'hello', authorId: 7 }, { id: 3, title: 'Later', slug: 'later', authorId: 8 }]);",
+            "mongDoi": [
+              {
+                "id": 10,
+                "slug": "s",
+                "authorId": 1,
+                "body": "b"
+              },
+              11
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the stored object: one test mutates it and the next test sees a different database.|||Trả chính object đã lưu: một test sửa nó và test sau thấy một CSDL khác."
+        },
+        {
+          "loi": "Synchronous methods: the service awaits them anyway, but a test that checks for a Promise (or uses .then) breaks — and the fake no longer behaves like the real thing.|||Phương thức đồng bộ: service đằng nào cũng await, nhưng test kiểm Promise (hoặc dùng .then) sẽ hỏng — và đồ giả không còn cư xử như đồ thật."
+        },
+        {
+          "loi": "Ids starting at 1 although the seed already has id 1: two notes with the same id.|||Id bắt đầu từ 1 dù dữ liệu mồi đã có id 1: hai ghi chú cùng id."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fake",
+          "vi": "đồ giả chạy thật",
+          "giaiThich": "bản cài đặt thu nhỏ nhưng thật sự hoạt động, ví dụ repo dựa trên Map"
+        },
+        {
+          "en": "test double",
+          "vi": "hàng giả trong test",
+          "giaiThich": "dummy, stub, spy, mock, fake — vật thay cho phụ thuộc thật"
+        }
+      ]
+    },
+    {
+      "title": "14.2 · Unit-test the Notes service with a fake repository",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "test doubles",
+        "dependency injection",
+        "authorization test"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p><code>src/notes.service.js</code> takes its repository as an argument. Write <code>src/notes.service.test.js</code> that drives it with a fake built from <code>vi.fn</code> and pins down its rules:</p><ul><li><code>create(actor, input)</code>: an empty slug ⇒ <code>400 EMPTY_SLUG</code>; a taken slug ⇒ <code>409 SLUG_TAKEN</code> and <b>the database is not written</b>; otherwise <code>repo.insert({ title, slug, body, authorId: actor.id })</code> — the author is always the ACTOR, never something from the input;</li><li><code>update(actor, id, patch)</code>: a missing note or somebody else’s note ⇒ <code>404 NOT_FOUND</code> (not 403), and <code>repo.update</code> is not called.</li></ul><p>Errors are <code>Error</code> objects with a <code>status</code> property — assert them with <code>await expect(promise).rejects.toMatchObject({ status: 409 })</code>. Seven mutants, plus one harmless refactor your tests must survive.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>6</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>7</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n  <li>A harmless refactor of the code must keep your tests green — assert the rules, not incidental details.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/notes.service.js</code> nhận repository qua đối số. Viết <code>src/notes.service.test.js</code> điều khiển nó bằng đồ giả dựng từ <code>vi.fn</code> và ghim chặt các luật của nó:</p><ul><li><code>create(actor, input)</code>: slug rỗng ⇒ <code>400 EMPTY_SLUG</code>; slug đã có ⇒ <code>409 SLUG_TAKEN</code> và <b>CSDL không bị ghi</b>; ngược lại <code>repo.insert({ title, slug, body, authorId: actor.id })</code> — tác giả luôn là NGƯỜI THỰC HIỆN, không bao giờ lấy từ đầu vào;</li><li><code>update(actor, id, patch)</code>: ghi chú không có hoặc của người khác ⇒ <code>404 NOT_FOUND</code> (không phải 403), và <code>repo.update</code> không được gọi.</li></ul><p>Lỗi là đối tượng <code>Error</code> có thuộc tính <code>status</code> — khẳng định bằng <code>await expect(promise).rejects.toMatchObject({ status: 409 })</code>. Bảy đột biến, cộng một lần tái cấu trúc vô hại mà test của bạn phải vẫn xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>6</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>7</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n  <li>Một lần tái cấu trúc vô hại phải giữ test của bạn xanh — khẳng định luật, không khẳng định chi tiết vụn vặt.</li>\n</ul>",
+      "inputSpec": "src/notes.service.test.js (Vitest; vi.fn for the repository).|||src/notes.service.test.js (Vitest; vi.fn cho repository).",
+      "outputSpec": "Green on the correct code and on the refactor; red on each mutant.|||Xanh với code đúng và với bản tái cấu trúc; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: update writes the change BEFORE the ownership check (still answers 404)|||Đột biến: update ghi thay đổi TRƯỚC khi kiểm chủ sở hữu (vẫn trả 404)",
+          "output": "Killed by: expect(repo.update).not.toHaveBeenCalled()|||Bị diệt bởi: expect(repo.update).not.toHaveBeenCalled()",
+          "explanation": "Checking only the 404 lets this mutant through: the answer is right, the effect is not.|||Chỉ kiểm 404 thì đột biến này lọt: câu trả lời đúng, tác dụng thì sai."
+        }
+      ],
+      "hintsJson": [
+        "A factory keeps tests short: const fakeRepo = (o = {}) => ({ findBySlug: vi.fn(async () => null), findById: vi.fn(async () => null), insert: vi.fn(async (n) => ({ id: 1, ...n })), update: vi.fn(async (id, p) => ({ id, ...p })), ...o });|||Một hàm nhà máy giữ test ngắn: const fakeRepo = (o = {}) => ({ findBySlug: vi.fn(async () => null), findById: vi.fn(async () => null), insert: vi.fn(async (n) => ({ id: 1, ...n })), update: vi.fn(async (id, p) => ({ id, ...p })), ...o });",
+        "For the author rule: call create with input { title: 'Hi', authorId: 99 } as actor { id: 7 } and expect(repo.insert).toHaveBeenCalledWith(expect.objectContaining({ authorId: 7 })).|||Cho luật tác giả: gọi create với input { title: 'Hi', authorId: 99 } dưới actor { id: 7 } và expect(repo.insert).toHaveBeenCalledWith(expect.objectContaining({ authorId: 7 })).",
+        "Status AND effect for every refusal: rejects.toMatchObject({ status }) plus expect(repo.insert / repo.update).not.toHaveBeenCalled().|||Trạng thái VÀ tác dụng cho mỗi lần từ chối: rejects.toMatchObject({ status }) cộng expect(repo.insert / repo.update).not.toHaveBeenCalled()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/notes.service.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi } from 'vitest';\nimport { createNotesService } from './notes.service.js';\n\nconst actor = { id: 7 };\nconst fakeRepo = (overrides = {}) => ({\n  findBySlug: vi.fn(async () => null),\n  findById: vi.fn(async () => null),\n  insert: vi.fn(async (n) => ({ id: 1, ...n })),\n  update: vi.fn(async (id, p) => ({ id, ...p })),\n  ...overrides,\n});\n\n// Six tests, all green — and most mutants survive them. Submit and read the table.\ndescribe('create', () => {\n  it('creates a note', async () => {\n    const repo = fakeRepo();\n    const note = await createNotesService(repo).create(actor, { title: 'Hello World' });\n    expect(note.slug).toBe('hello-world');\n  });\n\n  it('rejects a duplicate slug', async () => {\n    const repo = fakeRepo({ findBySlug: vi.fn(async () => ({ id: 3 })) });\n    await expect(createNotesService(repo).create(actor, { title: 'Hello World' })).rejects.toThrow();\n  });\n\n  it('keeps the title', async () => {\n    const note = await createNotesService(fakeRepo()).create(actor, { title: 'Hi' });\n    expect(note.title).toBe('Hi');\n  });\n});\n\ndescribe('update', () => {\n  it('updates my own note', async () => {\n    const repo = fakeRepo({ findById: vi.fn(async () => ({ id: 5, authorId: 7, title: 'a', body: '' })) });\n    const n = await createNotesService(repo).update(actor, 5, { title: 'b' });\n    expect(n.title).toBe('b');\n  });\n\n  it('refuses a missing note', async () => {\n    await expect(createNotesService(fakeRepo()).update(actor, 5, { title: 'b' })).rejects.toThrow();\n  });\n\n  it('keeps the body when only the title changes', async () => {\n    const repo = fakeRepo({ findById: vi.fn(async () => ({ id: 5, authorId: 7, title: 'a', body: 'old' })) });\n    const n = await createNotesService(repo).update(actor, 5, { title: 'b' });\n    expect(n.body).toBe('old');\n  });\n});\n"
+        },
+        {
+          "name": "src/notes.service.js",
+          "language": "javascript",
+          "code": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/notes.service.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi } from 'vitest';\nimport { createNotesService } from './notes.service.js';\n\nconst actor = { id: 7 };\nconst fakeRepo = (overrides = {}) => ({\n  findBySlug: vi.fn(async () => null),\n  findById: vi.fn(async () => null),\n  insert: vi.fn(async (n) => ({ id: 1, ...n })),\n  update: vi.fn(async (id, p) => ({ id, ...p })),\n  ...overrides,\n});\nconst mine = { id: 5, authorId: 7, title: 'a', body: 'old' };\nconst theirs = { id: 5, authorId: 99, title: 'a', body: 'old' };\n\ndescribe('create', () => {\n  it('derives the slug and stores the note under the actor', async () => {\n    const repo = fakeRepo();\n    const note = await createNotesService(repo).create(actor, { title: 'Hello World' });\n    expect(note).toMatchObject({ slug: 'hello-world', authorId: 7 });     // the fields the contract promises\n  });\n\n  // the author is the ACTOR — kills \"authorId taken from the input\" (mass assignment)\n  it('ignores an authorId sent by the client', async () => {\n    const repo = fakeRepo();\n    await createNotesService(repo).create(actor, { title: 'Hi', authorId: 99 });\n    expect(repo.insert).toHaveBeenCalledWith(expect.objectContaining({ authorId: 7 }));\n  });\n\n  // status AND effect — kills \"409 → 400\" and \"insert anyway\"\n  it('rejects a duplicate slug with 409 and does not touch the database', async () => {\n    const repo = fakeRepo({ findBySlug: vi.fn(async () => ({ id: 3 })) });\n    await expect(createNotesService(repo).create(actor, { title: 'Hello World' })).rejects.toMatchObject({ status: 409, message: 'SLUG_TAKEN' });\n    expect(repo.insert).not.toHaveBeenCalled();\n  });\n\n  // kills \"EMPTY_SLUG guard removed\"\n  it('rejects a title with nothing sluggable with 400', async () => {\n    const repo = fakeRepo();\n    await expect(createNotesService(repo).create(actor, { title: '!!!' })).rejects.toMatchObject({ status: 400 });\n    expect(repo.insert).not.toHaveBeenCalled();\n  });\n});\n\ndescribe('update', () => {\n  it('updates my own note, keeping the fields I did not send', async () => {\n    const repo = fakeRepo({ findById: vi.fn(async () => mine) });\n    const n = await createNotesService(repo).update(actor, 5, { title: 'b' });\n    expect(n).toMatchObject({ title: 'b', body: 'old' });\n  });\n\n  // the authorization test that is worth more than the rest — kills 403 and \"no ownership check\"\n  it('answers 404 (not 403) for somebody else\\'s note, and changes nothing', async () => {\n    const repo = fakeRepo({ findById: vi.fn(async () => theirs) });\n    await expect(createNotesService(repo).update(actor, 5, { title: 'hack' })).rejects.toMatchObject({ status: 404 });\n    expect(repo.update).not.toHaveBeenCalled();                            // kills \"write first, 404 after\"\n  });\n\n  it('answers 404 for a missing note', async () => {\n    const repo = fakeRepo();\n    await expect(createNotesService(repo).update(actor, 5, { title: 'b' })).rejects.toMatchObject({ status: 404 });\n    expect(repo.update).not.toHaveBeenCalled();\n  });\n});\n"
+        },
+        {
+          "name": "src/notes.service.js",
+          "language": "javascript",
+          "code": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/slug.js",
+          "language": "javascript",
+          "code": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each mutant breaks one rule the service exists to enforce: the 409, not reaching the database on a duplicate, 404-not-403, the ownership check itself, the author taken from the actor (mass assignment), and the empty-slug guard. A suite kills them only by asserting both the answer (rejects.toMatchObject) and the effect (not.toHaveBeenCalled / objectContaining) — while staying loose enough that the harmless refactor stays green.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi đột biến phá một luật mà service tồn tại để giữ: mã 409, không chạm CSDL khi trùng, 404-không-phải-403, bản thân phép kiểm chủ sở hữu, tác giả lấy từ người thực hiện (gán hàng loạt), và chốt slug rỗng. Bộ test chỉ diệt được chúng khi khẳng định cả câu trả lời (rejects.toMatchObject) lẫn tác dụng (not.toHaveBeenCalled / objectContaining) — mà vẫn đủ lỏng để bản tái cấu trúc vô hại giữ xanh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n",
+          "src/slug.js": "export function slugify(title) {\n  return String(title).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd')\n    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);\n}\n"
+        },
+        "toiThieuTest": 6,
+        "timeoutMs": 4000,
+        "tepTest": "src/notes.service.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 6 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: duplicate slug answers 400",
+            "goiY": "assert the STATUS of the duplicate: rejects.toMatchObject({ status: 409 }) · khẳng định MÃ của lỗi trùng",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 400);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: duplicate is written before the 409",
+            "goiY": "after the 409: expect(repo.insert).not.toHaveBeenCalled() · sau 409: insert không được gọi",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug); if (existing) await repo.insert({ title: input.title, slug, authorId: actor.id });\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: somebody else’s note answers 403",
+            "goiY": "another user’s note must be 404, not 403 — a 403 confirms it exists · ghi chú của người khác phải 404",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('FORBIDDEN', 403);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: no ownership check",
+            "goiY": "update a note whose authorId is NOT the actor · cập nhật một ghi chú mà authorId KHÔNG phải người thực hiện",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: update writes first, answers 404 after",
+            "goiY": "IDOR case: also expect(repo.update).not.toHaveBeenCalled() · ca IDOR: kiểm thêm update không được gọi",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id); if (note) await repo.update(id, { title: patch.title ?? note.title });\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: authorId taken from the input",
+            "goiY": "send { authorId: 99 } as actor 7 — the stored author must be 7 · gửi { authorId: 99 } dưới actor 7",
+            "an": true,
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: input.authorId ?? actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M7: empty slug accepted",
+            "goiY": "a title like \"!!!\" has no slug: 400 · tiêu đề \"!!!\" không có slug: 400",
+            "an": true,
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      \n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, body: input.body ?? '', authorId: actor.id });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: harmless refactor: field order and ?? spelled out — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "src/notes.service.js": "import { slugify } from './slug.js';\n\nconst fail = (message, status) => Object.assign(new Error(message), { status });\n\n/** The Notes service takes its repository as an ARGUMENT — that is what makes it unit-testable. */\nexport function createNotesService(repo) {\n  return {\n    async create(actor, input) {\n      const slug = slugify(input.title);\n      if (!slug) throw fail('EMPTY_SLUG', 400);\n      const existing = await repo.findBySlug(slug);\n      if (existing) throw fail('SLUG_TAKEN', 409);\n      return repo.insert({ title: input.title, slug, authorId: actor.id, body: input.body === undefined || input.body === null ? '' : input.body });\n    },\n\n    async update(actor, id, patch) {\n      const note = await repo.findById(id);\n      // somebody else's note answers 404, not 403 — a 403 would confirm that it exists (chapter 8)\n      if (!note || note.authorId !== actor.id) throw fail('NOT_FOUND', 404);\n      return repo.update(id, { title: patch.title ?? note.title, body: patch.body ?? note.body });\n    },\n  };\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "expect(svc.create(…)).rejects.toMatchObject(…) without await: vitest flags it, but the habit loses errors in other runners.|||expect(svc.create(…)).rejects.toMatchObject(…) thiếu await: vitest bắt được, nhưng thói quen đó làm mất lỗi ở runner khác."
+        },
+        {
+          "loi": "Asserting toHaveBeenCalledWith({ title, slug, body: '', authorId: 7 }) exactly, byte for byte: correct today, but a harmless refactor (or a new column) turns it red.|||Khẳng định toHaveBeenCalledWith({ title, slug, body: '', authorId: 7 }) chính xác từng byte: đúng hôm nay, nhưng một lần tái cấu trúc vô hại (hay một cột mới) làm nó đỏ."
+        },
+        {
+          "loi": "Testing only the 404 status of the IDOR case: a version that updates first and then answers 404 survives.|||Chỉ test mã 404 của ca IDOR: bản cập nhật trước rồi mới trả 404 vẫn sống sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test double",
+          "vi": "hàng giả trong test",
+          "giaiThich": "dummy, stub, spy, mock, fake — vật thay cho phụ thuộc thật"
+        },
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "mass assignment",
+          "vi": "gán hàng loạt",
+          "giaiThich": "để client đặt trường mà lẽ ra server quyết định, như authorId"
+        }
+      ]
+    },
+    {
+      "title": "14.2 · Time is a dependency: test 20 minutes in milliseconds",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "fake timers",
+        "boundary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "testing",
+        "mutation"
+      ],
+      "problemHtml": "<p><code>src/session.js</code>: a session expires exactly 15 minutes after <code>createdAt</code> (<code>isExpired</code> at 14:59.999 is false, at 15:00.000 true), and <code>startSweeper(store)</code> deletes expired sessions from a <code>Map</code> every 5 minutes, returning a <code>stop</code> function. Testing that with real time takes twenty minutes; with <code>vi.useFakeTimers()</code>, <code>vi.setSystemTime(new Date('2026-07-28T10:00:00Z'))</code> and <code>vi.advanceTimersByTime(ms)</code> it takes milliseconds — and you can assert the exact boundary. Write <code>src/session.test.js</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write at least <b>4</b> tests (<code>describe</code> / <code>it</code> / <code>expect</code> from <code>'vitest'</code>), each with at least one <code>expect</code>.</li>\n  <li>Every test must pass on the correct code — the grader runs your file against it first.</li>\n  <li>Kill all <b>5</b> mutants (copies of the code with one planted bug each). Editing the code files changes nothing: the grader always uses its own copy.</li>\n  <li>Restore real timers after each test (afterEach(() => vi.useRealTimers())).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/session.js</code>: phiên hết hạn đúng 15 phút sau <code>createdAt</code> (<code>isExpired</code> ở 14:59.999 là false, ở 15:00.000 là true), và <code>startSweeper(store)</code> xoá phiên đã hết hạn khỏi một <code>Map</code> mỗi 5 phút, trả về hàm <code>stop</code>. Test việc đó bằng giờ thật mất hai mươi phút; với <code>vi.useFakeTimers()</code>, <code>vi.setSystemTime(new Date('2026-07-28T10:00:00Z'))</code> và <code>vi.advanceTimersByTime(ms)</code> chỉ mất vài mili-giây — và bạn khẳng định được đúng cái biên. Viết <code>src/session.test.js</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết ít nhất <b>4</b> test (<code>describe</code> / <code>it</code> / <code>expect</code> từ <code>'vitest'</code>), mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Mọi test phải xanh với code đúng — máy chấm chạy tệp của bạn với nó trước.</li>\n  <li>Diệt cả <b>5</b> đột biến (các bản code mỗi bản cài một lỗi). Sửa tệp code không có tác dụng: máy chấm luôn dùng bản của nó.</li>\n  <li>Trả lại đồng hồ thật sau mỗi test (afterEach(() => vi.useRealTimers())).</li>\n</ul>",
+      "inputSpec": "src/session.test.js (Vitest fake timers).|||src/session.test.js (đồng hồ giả của Vitest).",
+      "outputSpec": "Green on the correct code; red on each mutant.|||Xanh với code đúng; đỏ với từng đột biến.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Mutant: now - createdAt > TTL_MS   (instead of >=)|||Đột biến: now - createdAt > TTL_MS   (thay cho >=)",
+          "output": "Killed by: advance TTL_MS - 1 → false, then 1 more → expect(isExpired(s)).toBe(true)|||Bị diệt bởi: tiến TTL_MS - 1 → false, rồi thêm 1 → expect(isExpired(s)).toBe(true)",
+          "explanation": "Only a test that sits exactly on 15:00.000 separates > from >=. A real-time test cannot hit that millisecond reliably.|||Chỉ test đứng đúng 15:00.000 mới tách được > khỏi >=. Test giờ thật không trúng được mili-giây đó một cách chắc chắn."
+        }
+      ],
+      "hintsJson": [
+        "beforeEach: vi.useFakeTimers(); vi.setSystemTime(new Date('2026-07-28T10:00:00Z')). afterEach: vi.useRealTimers().",
+        "Sweeper: put one session created now into a Map, advance 15 min → still there (the sweep at 15:00 runs exactly then — check what you expect), advance to 20 min → gone; a fresh session created at minute 10 must survive the sweep at minute 15.|||Sweeper: đặt một phiên tạo lúc này vào Map, tiến 15 phút → kiểm điều bạn chờ đợi (lần quét ở 15:00 chạy đúng lúc đó), tiến tới 20 phút → đã mất; một phiên mới tạo ở phút 10 phải sống qua lần quét ở phút 15.",
+        "stop(): call it, advance 30 minutes, the expired session must still be in the Map.|||stop(): gọi nó, tiến 30 phút, phiên hết hạn vẫn phải còn trong Map."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/session.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { isExpired, startSweeper, TTL_MS } from './session.js';\n\nbeforeEach(() => {\n  vi.useFakeTimers();\n  vi.setSystemTime(new Date('2026-07-28T10:00:00Z'));\n});\nafterEach(() => vi.useRealTimers());\n\ndescribe('isExpired', () => {\n  it('a new session is not expired', () => {\n    expect(isExpired({ createdAt: Date.now() })).toBe(false);\n  });\n\n  it('a session from yesterday is expired', () => {\n    expect(isExpired({ createdAt: Date.now() - 24 * 3600 * 1000 })).toBe(true);\n  });\n\n  it('TTL is a positive number', () => {\n    expect(TTL_MS).toBeGreaterThan(0);\n  });\n});\n\ndescribe('startSweeper', () => {\n  it('returns a stop function', () => {\n    const stop = startSweeper(new Map());\n    expect(typeof stop).toBe('function');\n    stop();\n  });\n});\n"
+        },
+        {
+          "name": "src/session.js",
+          "language": "javascript",
+          "code": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/session.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { isExpired, startSweeper, TTL_MS } from './session.js';\n\nconst MIN = 60 * 1000;\nbeforeEach(() => {\n  vi.useFakeTimers();\n  vi.setSystemTime(new Date('2026-07-28T10:00:00Z'));\n});\nafterEach(() => vi.useRealTimers());       // never leak a frozen clock into the next test\n\ndescribe('isExpired', () => {\n  // the exact boundary — kills \">\" and \"16 minutes\"\n  it('expires exactly at the 15 minute mark', () => {\n    const s = { createdAt: Date.now() };\n    vi.advanceTimersByTime(TTL_MS - 1);\n    expect(isExpired(s)).toBe(false);      // 14:59.999 — still alive\n    vi.advanceTimersByTime(1);\n    expect(isExpired(s)).toBe(true);       // 15:00.000 — expired\n  });\n\n  it('TTL is 15 minutes', () => {\n    expect(TTL_MS).toBe(15 * MIN);\n  });\n\n  it('accepts the clock as a parameter', () => {\n    expect(isExpired({ createdAt: 0 }, 15 * MIN)).toBe(true);\n    expect(isExpired({ createdAt: 0 }, 15 * MIN - 1)).toBe(false);\n  });\n});\n\ndescribe('startSweeper', () => {\n  // the schedule — kills \"every 6 minutes\"\n  it('removes an expired session at the next 5-minute sweep', () => {\n    const store = new Map([['old', { createdAt: Date.now() - 20 * MIN }]]);\n    const stop = startSweeper(store);\n    vi.advanceTimersByTime(5 * MIN - 1);\n    expect(store.has('old')).toBe(true);   // no sweep yet\n    vi.advanceTimersByTime(1);\n    expect(store.has('old')).toBe(false);  // swept at exactly 5:00\n    stop();\n  });\n\n  // a fresh session must survive — kills \"deletes the wrong ones\"\n  it('keeps sessions that are still valid', () => {\n    const store = new Map([['fresh', { createdAt: Date.now() }]]);\n    const stop = startSweeper(store);\n    vi.advanceTimersByTime(10 * MIN);      // two sweeps, the session is 10 minutes old\n    expect(store.has('fresh')).toBe(true);\n    stop();\n  });\n\n  // kills \"stop does nothing\"\n  it('stops sweeping after stop()', () => {\n    const store = new Map([['old', { createdAt: Date.now() - 20 * MIN }]]);\n    const stop = startSweeper(store);\n    stop();\n    vi.advanceTimersByTime(30 * MIN);\n    expect(store.has('old')).toBe(true);\n  });\n});\n"
+        },
+        {
+          "name": "src/session.js",
+          "language": "javascript",
+          "code": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fake timers make the clock an input: twenty simulated minutes cost a few milliseconds, and the test can stand on 14:59.999 and 15:00.000 — the only place > and >= differ. The sweeper needs three observations: an expired session is removed on schedule, a fresh one is not, and stop() really stops. The enabling detail is in the application: isExpired(session, now = Date.now()).</p>",
+      "solutionExplanationHtmlVi": "<p>Đồng hồ giả biến thời gian thành một đầu vào: hai mươi phút mô phỏng tốn vài mili-giây, và test đứng được ở 14:59.999 và 15:00.000 — chỗ duy nhất > và >= khác nhau. Sweeper cần ba quan sát: phiên hết hạn bị xoá đúng lịch, phiên mới thì không, và stop() thật sự dừng. Chi tiết cho phép làm điều đó nằm trong ứng dụng: isExpired(session, now = Date.now()).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+        },
+        "toiThieuTest": 4,
+        "timeoutMs": 4000,
+        "tepTest": "src/session.test.js",
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 4 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: expires one millisecond late (> instead of >=)",
+            "goiY": "stand on the boundary: advance TTL_MS - 1 (false), then 1 more (true) · đứng đúng biên",
+            "ma": {
+              "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt > TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: TTL is 16 minutes",
+            "goiY": "assert the TTL itself, or a session at exactly 15:00 · khẳng định chính TTL, hoặc một phiên đúng 15:00",
+            "ma": {
+              "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 16 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: sweeps every 6 minutes",
+            "goiY": "an expired session must be gone after exactly 5 minutes · phiên hết hạn phải mất sau đúng 5 phút",
+            "ma": {
+              "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 6 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: the sweeper deletes the valid sessions",
+            "goiY": "a FRESH session must survive a sweep · một phiên MỚI phải sống qua lần quét",
+            "ma": {
+              "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (!isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => clearInterval(timer);\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: stop() does nothing",
+            "goiY": "call stop(), advance 30 minutes, an expired session must still be there · gọi stop(), tiến 30 phút",
+            "an": true,
+            "ma": {
+              "src/session.js": "/** Sessions expire 15 minutes after creation; a sweeper removes expired ones every 5 minutes. */\nexport const TTL_MS = 15 * 60 * 1000;\n\n/** The clock is a defaulted PARAMETER — the enabling detail that makes the boundary testable. */\nexport function isExpired(session, now = Date.now()) {\n  return now - session.createdAt >= TTL_MS;\n}\n\n/** Starts the sweeper; returns a function that stops it. */\nexport function startSweeper(store, everyMs = 5 * 60 * 1000) {\n  const timer = setInterval(() => {\n    for (const [id, s] of store) if (isExpired(s)) store.delete(id);\n  }, everyMs);\n  return () => {};\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Waiting with real time (await new Promise(r => setTimeout(r, 1500))): 1.6 s for one third of the coverage, and the boundary is never hit.|||Chờ bằng giờ thật (await new Promise(r => setTimeout(r, 1500))): 1,6 s cho một phần ba độ phủ, và không bao giờ trúng cái biên."
+        },
+        {
+          "loi": "Forgetting vi.useRealTimers(): the next test file inherits a frozen clock.|||Quên vi.useRealTimers(): tệp test kế thừa một đồng hồ bị đóng băng."
+        },
+        {
+          "loi": "Testing the sweeper only with an obviously expired session: a sweeper that deletes EVERYTHING passes.|||Chỉ test sweeper với một phiên rõ ràng đã hết hạn: sweeper xoá TẤT CẢ cũng qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fake timers",
+          "vi": "đồng hồ giả",
+          "giaiThich": "vi.useFakeTimers / setSystemTime / advanceTimersByTime — thời gian thành đầu vào"
+        },
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        }
+      ]
+    }
+  ]
+}

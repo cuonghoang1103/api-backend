@@ -1,0 +1,642 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-cong-cu",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-cong-cu"
+  },
+  "exercises": [
+    {
+      "title": "Five tools and what each one is for",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "tooling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The toolkit of lesson 0.4.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ công cụ của bài 0.4.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "API requests vs database contents.|||Request tới API vs nội dung CSDL.",
+        "npm manages packages only.|||npm chỉ quản lý gói."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five tools and what each one is for\n\nAnswer in the answer panel (no code needed).\n\n1. You want to send a POST /api/products with a JSON body before any front-end exists. Which tool?Bạn muốn gửi POST /api/products kèm thân JSON khi chưa có front-end. Công cụ nào?\n2. You want to SEE the documents your API wrote into MongoDB. Which tool?Bạn muốn XEM các document API đã ghi vào MongoDB. Công cụ nào?\n3. Why does the lesson recommend MongoDB Atlas over a local install?Vì sao bài khuyên dùng MongoDB Atlas thay vì cài cục bộ?\n4. After npm init -y and npm install express mongoose, what exists? (choose all)Sau npm init -y và npm install express mongoose, có những gì? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five tools and what each one is for — answer key\n\n1. You want to send a POST /api/products with a JSON body before any front-end exists. Which tool?Bạn muốn gửi POST /api/products kèm thân JSON khi chưa có front-end. Công cụ nào?\n   Answer: a) Postman (or curl)\n   Postman sends requests and saves them in collections you can re-run.VI: Postman gửi request và lưu thành collection chạy lại được.\n\n2. You want to SEE the documents your API wrote into MongoDB. Which tool?Bạn muốn XEM các document API đã ghi vào MongoDB. Công cụ nào?\n   Answer: c) MongoDB Compass\n   Compass is a GUI for the database; Postman only sees what the API returns.VI: Compass là GUI cho CSDL; Postman chỉ thấy những gì API trả về.\n\n3. Why does the lesson recommend MongoDB Atlas over a local install?Vì sao bài khuyên dùng MongoDB Atlas thay vì cài cục bộ?\n   Answer: c) It works anywhere, mirrors production and gives a reusable connection string\n   The same URI moves to the host's environment variables at deploy time (Chapter 6).VI: Cùng URI đó chuyển vào biến môi trường của host khi deploy (Chương 6).\n\n4. After npm init -y and npm install express mongoose, what exists? (choose all)Sau npm init -y và npm install express mongoose, có những gì? (chọn hết)\n   Answer: a) package.json listing express and mongoose + b) a package-lock.json with exact versions + c) a node_modules/ folder with the packages\n   npm installs packages; it does not write your app or your configuration.VI: npm cài gói; nó không viết app hay cấu hình cho bạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Postman (or curl)</p><p>Postman sends requests and saves them in collections you can re-run.</p><p><i>VI: Postman gửi request và lưu thành collection chạy lại được.</i></p></li><li><p><b>c)</b> MongoDB Compass</p><p>Compass is a GUI for the database; Postman only sees what the API returns.</p><p><i>VI: Compass là GUI cho CSDL; Postman chỉ thấy những gì API trả về.</i></p></li><li><p><b>c)</b> It works anywhere, mirrors production and gives a reusable connection string</p><p>The same URI moves to the host's environment variables at deploy time (Chapter 6).</p><p><i>VI: Cùng URI đó chuyển vào biến môi trường của host khi deploy (Chương 6).</i></p></li><li><p><b>a)</b> <code>package.json</code> listing express and mongoose + <b>b)</b> a <code>package-lock.json</code> with exact versions + <b>c)</b> a <code>node_modules/</code> folder with the packages</p><p>npm installs packages; it does not write your app or your configuration.</p><p><i>VI: npm cài gói; nó không viết app hay cấu hình cho bạn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "u1",
+            "de": "<p>You want to send a <code>POST /api/products</code> with a JSON body before any front-end exists. Which tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn muốn gửi <code>POST /api/products</code> kèm thân JSON khi chưa có front-end. Công cụ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Postman (or curl)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm"
+              },
+              {
+                "ma": "c",
+                "noiDung": "VS Code's Prettier"
+              },
+              {
+                "ma": "d",
+                "noiDung": "MongoDB Compass"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Postman sends requests and saves them in collections you can re-run.</p><p><i>VI: Postman gửi request và lưu thành collection chạy lại được.</i></p>"
+          },
+          {
+            "ma": "u2",
+            "de": "<p>You want to SEE the documents your API wrote into MongoDB. Which tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn muốn XEM các document API đã ghi vào MongoDB. Công cụ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Postman"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Git"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MongoDB Compass"
+              },
+              {
+                "ma": "d",
+                "noiDung": "node -v"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Compass is a GUI for the database; Postman only sees what the API returns.</p><p><i>VI: Compass là GUI cho CSDL; Postman chỉ thấy những gì API trả về.</i></p>"
+          },
+          {
+            "ma": "u3",
+            "de": "<p>Why does the lesson recommend MongoDB Atlas over a local install?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bài khuyên dùng MongoDB Atlas thay vì cài cục bộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A local MongoDB install cannot store JSON documents at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Atlas also runs your Express code, so no other host is needed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It works anywhere, mirrors production and gives a reusable connection string"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is the only kind of MongoDB that Mongoose is able to connect to"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The same URI moves to the host's environment variables at deploy time (Chapter 6).</p><p><i>VI: Cùng URI đó chuyển vào biến môi trường của host khi deploy (Chương 6).</i></p>"
+          },
+          {
+            "ma": "u4",
+            "de": "<p>After <code>npm init -y</code> and <code>npm install express mongoose</code>, what exists? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau <code>npm init -y</code> và <code>npm install express mongoose</code>, có những gì? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>package.json</code> listing express and mongoose"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a <code>package-lock.json</code> with exact versions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a <code>node_modules/</code> folder with the packages"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an <code>app.js</code> with a server already running"
+              },
+              {
+                "ma": "e",
+                "noiDung": "a <code>.env</code> file containing MONGODB_URI"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>npm installs packages; it does not write your app or your configuration.</p><p><i>VI: npm cài gói; nó không viết app hay cấu hình cho bạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Compass to test endpoints.|||Dùng Compass để thử endpoint."
+        },
+        {
+          "loi": "Expecting npm to create app.js.|||Mong npm tạo app.js."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Postman collection",
+          "vi": "bộ request lưu sẵn"
+        },
+        {
+          "en": "connection string",
+          "vi": "chuỗi kết nối"
+        }
+      ]
+    },
+    {
+      "title": "Is this Node version new enough? isSupportedNode(version)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "regex",
+        "semver"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The course needs Node.js LTS <b>20.x or newer</b>. Write <code>isSupportedNode(v)</code> that receives the text printed by <code>node -v</code> (e.g. <code>\"v22.23.3\"</code>) and returns <code>true</code> when the major version is ≥ 20. Accept the text with or without the leading <code>v</code>, with surrounding spaces or a newline. Anything that is not <code>MAJOR.MINOR.PATCH</code> ⇒ <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Compare NUMBERS: <code>\"9.0.0\"</code> &lt; <code>\"20.0.0\"</code> as versions, but <code>\"9\" &gt; \"20\"</code> as strings.</li>\n  <li>Use a regular expression: <code>/^v?(\\d+)\\.(\\d+)\\.(\\d+)$/</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Môn học cần Node.js LTS <b>20.x trở lên</b>. Viết <code>isSupportedNode(v)</code> nhận chữ do <code>node -v</code> in ra (vd <code>\"v22.23.3\"</code>) và trả <code>true</code> khi phiên bản chính ≥ 20. Nhận cả khi có hoặc không có chữ <code>v</code> đầu, có khoảng trắng hay xuống dòng hai đầu. Mọi thứ không phải dạng <code>MAJOR.MINOR.PATCH</code> ⇒ <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So SỐ: <code>\"9.0.0\"</code> &lt; <code>\"20.0.0\"</code> theo phiên bản, nhưng <code>\"9\" &gt; \"20\"</code> theo chuỗi.</li>\n  <li>Dùng biểu thức chính quy: <code>/^v?(\\d+)\\.(\\d+)\\.(\\d+)$/</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isSupportedNode(\"v22.23.3\\n\")",
+          "output": "true",
+          "explanation": "Major 22 ≥ 20.|||Chính 22 ≥ 20."
+        },
+        {
+          "input": "isSupportedNode(\"v18.19.0\")",
+          "output": "false",
+          "explanation": "Major 18.|||Chính 18."
+        }
+      ],
+      "hintsJson": [
+        "<code>const m = String(v).trim().match(/^v?(\\d+)\\.(\\d+)\\.(\\d+)$/); if (!m) return false;</code>",
+        "<code>return Number(m[1]) &gt;= 20;</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isSupportedNode(v) {\n  return v >= 'v20';\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// \"v22.23.3\" ⇒ [22, 23, 3]; compare NUMBERS, never strings\nfunction isSupportedNode(v) {\n  const m = String(v).trim().match(/^v?(\\d+)\\.(\\d+)\\.(\\d+)$/);\n  if (!m) return false;                  // not MAJOR.MINOR.PATCH\n  return Number(m[1]) >= 20;             // Node 20.x LTS or newer\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Versions are tuples of numbers; parse first, then compare numerically. Anchoring the regex (<code>^…$</code>) rejects garbage such as \"v22.1.0-nightly\" or \"twenty\".</p>",
+      "solutionExplanationHtmlVi": "<p>Phiên bản là bộ số; tách trước, so theo số sau. Neo regex (<code>^…$</code>) loại bỏ rác như \"v22.1.0-nightly\" hay \"twenty\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "22 and 20 yes, 18 no",
+              "vi": "22 và 20 có, 18 không"
+            },
+            "goi": "[isSupportedNode('v22.23.3\\n'), isSupportedNode('v20.0.0'), isSupportedNode('v18.19.0')]",
+            "mongDoi": [
+              true,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "v9 is old (string comparison would say yes)",
+              "vi": "v9 là cũ (so chuỗi sẽ nói có)"
+            },
+            "goi": "isSupportedNode('v9.11.2')",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "[isSupportedNode('24.1.0'), isSupportedNode('  v100.0.0  ')]",
+            "mongDoi": [
+              true,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "[isSupportedNode('v22'), isSupportedNode('twenty'), isSupportedNode(''), isSupportedNode('v22.1.0-nightly')]",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>v &gt;= \"v20\"</code> — string comparison: \"v9.0.0\" &gt; \"v20\" is true.|||<code>v &gt;= \"v20\"</code> — so chuỗi: \"v9.0.0\" &gt; \"v20\" là đúng."
+        },
+        {
+          "loi": "<code>parseInt(v)</code> on \"v22.1.0\" is NaN because of the \"v\".|||<code>parseInt(v)</code> với \"v22.1.0\" là NaN vì có chữ \"v\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "major version",
+          "vi": "phiên bản chính"
+        },
+        {
+          "en": "LTS",
+          "vi": "bản hỗ trợ dài hạn"
+        }
+      ]
+    },
+    {
+      "title": "Read a .env file like dotenv: parseEnv(text)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        ".env",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Secrets and URLs live in a git-ignored <code>.env</code> file that <code>dotenv</code> loads into <code>process.env</code>. Write <code>parseEnv(text)</code> → an object, following dotenv's rules (checked against dotenv 16):</p>\n<ul><li>one <code>KEY=VALUE</code> per line; blank lines and lines starting with <code>#</code> are skipped; lines without <code>=</code> are skipped;</li>\n<li>an optional <code>export </code> prefix is ignored; spaces around the key and the value are trimmed;</li>\n<li>a value wrapped in matching <code>\"…\"</code> or <code>'…'</code> keeps everything inside the quotes (even <code>#</code>);</li>\n<li>otherwise a <code>#</code> starts a comment — the value stops there (then trim);</li>\n<li>the same key twice ⇒ the LAST one wins; <code>EMPTY=</code> gives <code>\"\"</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Split on the FIRST <code>=</code> only — values such as MongoDB URIs contain <code>=</code> (<code>?retryWrites=true</code>).</li>\n  <li>Lines may end with <code>\\r\\n</code> (Windows).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bí mật và URL nằm trong tệp <code>.env</code> bị git-ignore mà <code>dotenv</code> nạp vào <code>process.env</code>. Viết <code>parseEnv(text)</code> → một đối tượng, theo luật của dotenv (đã đối chiếu dotenv 16):</p>\n<ul><li>mỗi dòng một <code>KEY=VALUE</code>; bỏ dòng trống và dòng bắt đầu bằng <code>#</code>; bỏ dòng không có <code>=</code>;</li>\n<li>tiền tố <code>export </code> tuỳ chọn bị bỏ qua; khoảng trắng quanh khoá và giá trị bị cắt;</li>\n<li>giá trị bọc trong <code>\"…\"</code> hoặc <code>'…'</code> cùng loại giữ mọi thứ bên trong (kể cả <code>#</code>);</li>\n<li>ngược lại <code>#</code> bắt đầu chú thích — giá trị dừng ở đó (rồi cắt khoảng trắng);</li>\n<li>cùng khoá hai lần ⇒ cái SAU thắng; <code>EMPTY=</code> cho <code>\"\"</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ tách ở dấu <code>=</code> ĐẦU TIÊN — giá trị như URI MongoDB có chứa <code>=</code> (<code>?retryWrites=true</code>).</li>\n  <li>Dòng có thể kết thúc bằng <code>\\r\\n</code> (Windows).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseEnv(\"PORT=3000\\nMONGODB_URI=mongodb+srv://u:p@c/db?retryWrites=true\")",
+          "output": "{\"PORT\":\"3000\",\"MONGODB_URI\":\"mongodb+srv://u:p@c/db?retryWrites=true\"}",
+          "explanation": "Split at the first = only.|||Chỉ tách ở = đầu tiên."
+        },
+        {
+          "input": "parseEnv('SECRET=\"a b # c\"\\nURL=http://x/#frag')",
+          "output": "{\"SECRET\":\"a b # c\",\"URL\":\"http://x/\"}",
+          "explanation": "Quoted: # kept. Unquoted: # starts a comment.|||Có nháy: giữ #. Không nháy: # là chú thích."
+        }
+      ],
+      "hintsJson": [
+        "<code>for (const raw of text.split(/\\r?\\n/)) { const line = raw.trim(); if (!line || line.startsWith('#')) continue; … }</code>",
+        "<code>const i = line.indexOf('='); const key = line.slice(0, i).replace(/^export\\s+/, '').trim(); let value = line.slice(i + 1).trim();</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseEnv(text) {\n  const out = {};\n  for (const line of text.split('\\n')) {\n    const [key, value] = line.split('=');\n    out[key] = value;\n  }\n  return out;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseEnv(text) {\n  const out = {};\n  for (const raw of String(text).split(/\\r?\\n/)) {\n    const line = raw.trim();\n    if (!line || line.startsWith('#')) continue;            // blank line or full-line comment\n    const i = line.indexOf('=');\n    if (i < 0) continue;                                    // not KEY=VALUE\n    const key = line.slice(0, i).replace(/^export\\s+/, '').trim();\n    if (!key) continue;\n    let value = line.slice(i + 1).trim();                   // split at the FIRST \"=\" only\n    const q = value.charAt(0);\n    if ((q === '\"' || q === \"'\") && value.length >= 2 && value.endsWith(q)) {\n      value = value.slice(1, -1);                           // quoted: keep everything inside, even #\n    } else {\n      const hash = value.indexOf('#');                      // unquoted: # starts a comment\n      if (hash >= 0) value = value.slice(0, hash).trim();\n    }\n    out[key] = value;                                       // the last duplicate wins\n  }\n  return out;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A .env file is just lines of key/value text; the subtle rules are the first-<code>=</code> split, the quotes and the comment character. Writing the parser once shows why the URL of the example lost its <code>#frag</code> — and why you quote values that contain <code>#</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Tệp .env chỉ là các dòng chữ khoá/giá trị; luật tinh tế là tách ở <code>=</code> đầu, dấu nháy và ký tự chú thích. Tự viết bộ đọc một lần cho thấy vì sao URL trong ví dụ mất <code>#frag</code> — và vì sao phải đặt giá trị có <code>#</code> trong ngoặc nháy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Split at the first = only",
+              "vi": "Chỉ tách ở = đầu tiên"
+            },
+            "goi": "parseEnv('PORT=3000\\nMONGODB_URI=mongodb+srv://u:p@c/db?retryWrites=true&w=majority')",
+            "mongDoi": {
+              "PORT": "3000",
+              "MONGODB_URI": "mongodb+srv://u:p@c/db?retryWrites=true&w=majority"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Quotes and # comments",
+              "vi": "Dấu nháy và chú thích #"
+            },
+            "goi": "parseEnv(\"SECRET=\\\"a b # c\\\"\\nNAME='single'\\nURL=http://x/#frag\\nINLINE=value # comment\")",
+            "mongDoi": {
+              "SECRET": "a b # c",
+              "NAME": "single",
+              "URL": "http://x/",
+              "INLINE": "value"
+            }
+          },
+          {
+            "moTa": {
+              "en": "export, duplicates, empty, spaces",
+              "vi": "export, trùng khoá, rỗng, khoảng trắng"
+            },
+            "goi": "parseEnv('# config\\n\\nexport MODE=prod\\nPORT=3000\\nPORT=4000\\nEMPTY=\\nNOEQUALS\\n  SPACED  =  yes  ')",
+            "mongDoi": {
+              "MODE": "prod",
+              "PORT": "4000",
+              "EMPTY": "",
+              "SPACED": "yes"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "parseEnv('A=1\\r\\nB=two words\\r\\n#C=3\\r\\n')",
+            "mongDoi": {
+              "A": "1",
+              "B": "two words"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "parseEnv(\"JWT_SECRET=\\\"unterminated\\nX=\\\"ok\\\"\\nY='mixed\\\"\")",
+            "mongDoi": {
+              "JWT_SECRET": "\"unterminated",
+              "X": "ok",
+              "Y": "'mixed\""
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>line.split('=')</code> — the URI <code>…?retryWrites=true&amp;w=majority</code> is cut into pieces.|||<code>line.split('=')</code> — URI <code>…?retryWrites=true&amp;w=majority</code> bị chặt thành mảnh."
+        },
+        {
+          "loi": "Keeping the quotes: <code>\"a b\"</code> becomes the 5-character value <code>\"a b\"</code> with quotes.|||Giữ dấu nháy: <code>\"a b\"</code> thành giá trị 5 ký tự có cả dấu nháy."
+        },
+        {
+          "loi": "Committing the .env file to Git \"because the code reads it\" — add it to .gitignore and set the same keys on the host.|||Commit tệp .env lên Git \"vì mã đọc nó\" — thêm vào .gitignore và đặt cùng các khoá trên host."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dotenv",
+          "vi": "gói nạp .env vào process.env"
+        },
+        {
+          "en": ".gitignore",
+          "vi": "danh sách tệp Git bỏ qua"
+        }
+      ]
+    },
+    {
+      "title": "Lint your package.json before the first commit: checkPackageJson(pkg)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "package.json",
+        "deploy readiness"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>checkPackageJson(pkg, { usesRequire })</code> that returns the list of problems (strings, in this order) for the project of this course:</p>\n<ol><li><code>\"missing start script\"</code> — <code>scripts.start</code> absent (hosts run <code>npm start</code>);</li>\n<li><code>\"express must be a dependency\"</code> / <code>\"mongoose must be a dependency\"</code> — absent from <code>dependencies</code> (being only in <code>devDependencies</code> counts as absent: production installs skip dev dependencies);</li>\n<li><code>\"engines.node must require 20 or newer\"</code> — <code>engines.node</code> absent, or its first number is below 20 (e.g. <code>\"&gt;=18\"</code>, <code>\"16.x\"</code>);</li>\n<li><code>\"type module conflicts with require()\"</code> — <code>pkg.type === 'module'</code> while <code>usesRequire</code> is true.</li></ol>\n<p>No problem ⇒ <code>[]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Guard every nested read: <code>(pkg.scripts || {}).start</code>.</li>\n  <li>First number of a range: <code>/(\\d+)/.exec(range)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>checkPackageJson(pkg, { usesRequire })</code> trả danh sách vấn đề (chuỗi, theo thứ tự này) cho dự án của môn:</p>\n<ol><li><code>\"missing start script\"</code> — thiếu <code>scripts.start</code> (host chạy <code>npm start</code>);</li>\n<li><code>\"express must be a dependency\"</code> / <code>\"mongoose must be a dependency\"</code> — không có trong <code>dependencies</code> (chỉ có trong <code>devDependencies</code> tính là không có: bản cài production bỏ qua dev dependencies);</li>\n<li><code>\"engines.node must require 20 or newer\"</code> — thiếu <code>engines.node</code>, hoặc số đầu tiên của nó nhỏ hơn 20 (vd <code>\"&gt;=18\"</code>, <code>\"16.x\"</code>);</li>\n<li><code>\"type module conflicts with require()\"</code> — <code>pkg.type === 'module'</code> trong khi <code>usesRequire</code> là true.</li></ol>\n<p>Không vấn đề ⇒ <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phòng mọi lần đọc lồng: <code>(pkg.scripts || {}).start</code>.</li>\n  <li>Số đầu tiên của một khoảng: <code>/(\\d+)/.exec(range)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ \"scripts\": { \"dev\": \"nodemon app.js\" }, \"dependencies\": { \"express\": \"^4.21.2\" }, \"devDependencies\": { \"mongoose\": \"^8.9.0\" } }",
+          "output": "[\"missing start script\",\"mongoose must be a dependency\",\"engines.node must require 20 or newer\"]",
+          "explanation": "Three problems.|||Ba vấn đề."
+        }
+      ],
+      "hintsJson": [
+        "<code>const deps = pkg.dependencies || {}; if (!deps.express) problems.push('express must be a dependency');</code>",
+        "<code>const m = /(\\d+)/.exec((pkg.engines || {}).node || ''); if (!m || Number(m[1]) &lt; 20) …</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function checkPackageJson(pkg, opts) {\n  const problems = [];\n  if (!pkg.scripts.start) problems.push('missing start script');\n  if (!pkg.dependencies.express && !pkg.devDependencies.express) problems.push('express must be a dependency');\n  return problems;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function checkPackageJson(pkg, opts = {}) {\n  const problems = [];\n  const scripts = pkg.scripts || {};\n  const deps = pkg.dependencies || {};               // devDependencies do NOT count: hosts install without them\n  if (!scripts.start) problems.push('missing start script');\n  if (!deps.express) problems.push('express must be a dependency');\n  if (!deps.mongoose) problems.push('mongoose must be a dependency');\n  const range = (pkg.engines || {}).node || '';\n  const first = /(\\d+)/.exec(range);                // \">=20.11\" ⇒ 20 · \"16.x\" ⇒ 16\n  if (!first || Number(first[1]) < 20) problems.push('engines.node must require 20 or newer');\n  if (pkg.type === 'module' && opts.usesRequire) problems.push('type module conflicts with require()');\n  return problems;\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Most \"works on my machine\" deploy failures are visible in package.json: no start script for the host, runtime packages listed as dev-only, an engine range that allows an old Node, or a module type that contradicts the code. Checking them mechanically is cheaper than discovering them in a host log.</p>",
+      "solutionExplanationHtmlVi": "<p>Phần lớn lỗi deploy \"máy tôi chạy được\" hiện ngay trong package.json: không có script start cho host, gói chạy thật chỉ ghi ở dev, khoảng engine cho phép Node cũ, hay kiểu module mâu thuẫn với mã. Kiểm chúng một cách máy móc rẻ hơn phát hiện chúng trong log của host.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The example: three problems",
+              "vi": "Ví dụ: ba vấn đề"
+            },
+            "goi": "checkPackageJson({ scripts: { dev: 'nodemon app.js' }, dependencies: { express: '^4.21.2' }, devDependencies: { mongoose: '^8.9.0' } }, { usesRequire: true })",
+            "mongDoi": [
+              "missing start script",
+              "mongoose must be a dependency",
+              "engines.node must require 20 or newer"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A good package.json → []",
+              "vi": "package.json tốt → []"
+            },
+            "goi": "checkPackageJson({ scripts: { start: 'node ./bin/www' }, dependencies: { express: '~4.16.1', mongoose: '^8.9.0' }, engines: { node: '>=20.11' } }, { usesRequire: true })",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "checkPackageJson({ type: 'module', scripts: { start: 'node app.js' }, dependencies: { express: '5', mongoose: '8' }, engines: { node: '16.x' } }, { usesRequire: true })",
+            "mongDoi": [
+              "engines.node must require 20 or newer",
+              "type module conflicts with require()"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "checkPackageJson({}, {})",
+            "mongDoi": [
+              "missing start script",
+              "express must be a dependency",
+              "mongoose must be a dependency",
+              "engines.node must require 20 or newer"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "checkPackageJson({ type: 'module', scripts: { start: 'node app.js' }, dependencies: { express: '5', mongoose: '8' }, engines: { node: '^22' } }, { usesRequire: false })",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Accepting mongoose in devDependencies — <code>npm ci --omit=dev</code> on the host leaves it out and the server crashes on start.|||Chấp nhận mongoose trong devDependencies — <code>npm ci --omit=dev</code> trên host bỏ nó ra và server sập khi khởi động."
+        },
+        {
+          "loi": "<code>pkg.scripts.start</code> when <code>scripts</code> is missing: TypeError.|||<code>pkg.scripts.start</code> khi thiếu <code>scripts</code>: TypeError."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dependencies vs devDependencies",
+          "vi": "gói chạy thật vs gói chỉ để phát triển"
+        },
+        {
+          "en": "engines",
+          "vi": "phiên bản Node yêu cầu"
+        }
+      ]
+    }
+  ]
+}

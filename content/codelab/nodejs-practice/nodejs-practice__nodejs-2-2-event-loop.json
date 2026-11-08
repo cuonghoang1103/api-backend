@@ -1,0 +1,856 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-2-2-event-loop",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-2-2-event-loop"
+  },
+  "exercises": [
+    {
+      "title": "The six phases, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One turn of the loop runs six phases in a fixed order, over and over, until there is nothing left to wait for. Put them in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một vòng của event loop chạy sáu pha theo thứ tự cố định, lặp mãi tới khi không còn gì để chờ. Sắp chúng đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The loop starts with timers and ends with cleanup.|||Vòng bắt đầu bằng timers và kết thúc bằng dọn dẹp.",
+        "check (setImmediate) comes directly after poll — that is the key to the next exercise.|||check (setImmediate) đến ngay sau poll — chìa khoá cho bài kế tiếp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The six phases, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the phases of one loop turn.Sắp các pha của một vòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The six phases, in order — answer key\n\n1. Order the phases of one loop turn.Sắp các pha của một vòng.\n   Answer: m1) timers — setTimeout / setInterval callbacks whose time has come  →  m6) pending callbacks — some system callbacks deferred from the previous turn  →  m3) idle / prepare — internal to Node  →  m2) poll — collect new I/O events, run their callbacks, wait here when idle  →  m5) check — setImmediate callbacks  →  m4) close — cleanup such as socket.on('close')\n   timers → pending → idle/prepare → poll → check → close. process.nextTick and the microtask queue are NOT phases: Node empties them between every phase (and after every callback), which is why they feel instant.VI: timers → pending → idle/prepare → poll → check → close. process.nextTick và microtask KHÔNG phải pha: Node xả chúng giữa mọi pha (và sau mỗi callback), nên chúng có vẻ chạy tức thì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>timers → pending → idle/prepare → poll → check → close. process.nextTick and the microtask queue are NOT phases: Node empties them between every phase (and after every callback), which is why they feel instant.</p><p><i>VI: timers → pending → idle/prepare → poll → check → close. process.nextTick và microtask KHÔNG phải pha: Node xả chúng giữa mọi pha (và sau mỗi callback), nên chúng có vẻ chạy tức thì.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "f1",
+            "de": "<p>Order the phases of one loop turn.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các pha của một vòng.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "timers — setTimeout / setInterval callbacks whose time has come"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "poll — collect new I/O events, run their callbacks, wait here when idle"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "idle / prepare — internal to Node"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "close — cleanup such as socket.on('close')"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "check — setImmediate callbacks"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "pending callbacks — some system callbacks deferred from the previous turn"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m6",
+              "m3",
+              "m2",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>timers → pending → idle/prepare → poll → check → close. process.nextTick and the microtask queue are NOT phases: Node empties them between every phase (and after every callback), which is why they feel instant.</p><p><i>VI: timers → pending → idle/prepare → poll → check → close. process.nextTick và microtask KHÔNG phải pha: Node xả chúng giữa mọi pha (và sau mỗi callback), nên chúng có vẻ chạy tức thì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding \"microtasks\" or \"nextTick\" as a phase.|||Thêm \"microtask\" hay \"nextTick\" như một pha."
+        },
+        {
+          "loi": "Putting check before poll.|||Đặt check trước poll."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "A loop that never stops: is any work finished? run its callback; otherwise wait."
+        },
+        {
+          "en": "phase",
+          "vi": "pha",
+          "giaiThich": "One stage of a loop turn: timers → pending → idle/prepare → poll → check → close."
+        },
+        {
+          "en": "timers phase",
+          "vi": "pha timers",
+          "giaiThich": "Runs setTimeout/setInterval callbacks whose time has come."
+        },
+        {
+          "en": "poll phase",
+          "vi": "pha poll",
+          "giaiThich": "Collects new I/O events, runs their callbacks, and waits here when idle."
+        },
+        {
+          "en": "check phase",
+          "vi": "pha check",
+          "giaiThich": "Runs setImmediate callbacks — right after poll."
+        },
+        {
+          "en": "timer drift",
+          "vi": "trôi hẹn giờ",
+          "giaiThich": "A timer fires at or AFTER its delay, never exactly on time."
+        }
+      ]
+    },
+    {
+      "title": "Which phase runs this callback?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>For each callback, choose the phase that runs it — or \"not a phase\" for the two priority queues that are emptied between phases.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi callback, chọn pha chạy nó — hoặc \"không phải pha\" cho hai hàng ưu tiên được xả giữa các pha.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Imm-ediate\" → check, right after poll.|||\"Immediate\" → check, ngay sau poll.",
+        "The code after <code>await</code> is a Promise reaction — a microtask.|||Code sau await là một phản ứng Promise — một microtask."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which phase runs this callback?\n\nAnswer in the answer panel (no code needed).\n\n1. Phase of each callback.Pha của từng callback.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which phase runs this callback? — answer key\n\n1. Phase of each callback.Pha của từng callback.\n   - r1.pha: timers\n   - r2.pha: poll\n   - r3.pha: check\n   - r4.pha: close\n   - r5.pha: not a phase (nextTick / microtask)\n   - r6.pha: not a phase (nextTick / microtask)\n   - r7.pha: timers\n   Timers phase: setTimeout and setInterval. Poll: completed I/O callbacks (files, network). Check: setImmediate. Close: close events. Promise reactions (including the rest of an async function after await) and nextTick are queues drained between phases and after each callback, not phases of their own.VI: Pha timers: setTimeout và setInterval. Poll: callback I/O đã xong (tệp, mạng). Check: setImmediate. Close: sự kiện close. Phản ứng Promise (kể cả phần sau await) và nextTick là hàng đợi được xả giữa các pha, không phải pha riêng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Timers phase: setTimeout and setInterval. Poll: completed I/O callbacks (files, network). Check: setImmediate. Close: close events. Promise reactions (including the rest of an async function after await) and nextTick are queues drained between phases and after each callback, not phases of their own.</p><p><i>VI: Pha timers: setTimeout và setInterval. Poll: callback I/O đã xong (tệp, mạng). Check: setImmediate. Close: sự kiện close. Phản ứng Promise (kể cả phần sau await) và nextTick là hàng đợi được xả giữa các pha, không phải pha riêng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "ph",
+            "de": "<p>Phase of each callback.</p><p style=\"opacity:.75;font-size:.92em\"><i>Pha của từng callback.</i></p>",
+            "cot": [
+              {
+                "ma": "cb",
+                "ten": "Callback|||Callback"
+              },
+              {
+                "ma": "pha",
+                "ten": "Phase|||Pha",
+                "luaChon": [
+                  "timers",
+                  "poll",
+                  "check",
+                  "close",
+                  "not a phase (nextTick / microtask)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cb": "setInterval(() => heartbeat(), 100)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cb": "fs.readFile(path, (err, data) => …)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cb": "setImmediate(() => nextChunk())"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cb": "socket.on('close', () => cleanup())"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cb": "Promise.resolve().then(() => …) / code after an await"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cb": "process.nextTick(() => …)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "cb": "setTimeout(() => retry(), 0)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.pha": "timers",
+              "r2.pha": "poll",
+              "r3.pha": "check",
+              "r4.pha": "close",
+              "r5.pha": "not a phase (nextTick / microtask)",
+              "r6.pha": "not a phase (nextTick / microtask)",
+              "r7.pha": "timers"
+            },
+            "giaiThich": "<p>Timers phase: setTimeout and setInterval. Poll: completed I/O callbacks (files, network). Check: setImmediate. Close: close events. Promise reactions (including the rest of an async function after await) and nextTick are queues drained between phases and after each callback, not phases of their own.</p><p><i>VI: Pha timers: setTimeout và setInterval. Poll: callback I/O đã xong (tệp, mạng). Check: setImmediate. Close: sự kiện close. Phản ứng Promise (kể cả phần sau await) và nextTick là hàng đợi được xả giữa các pha, không phải pha riêng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking setTimeout(…, 0) runs in the check phase \"because it is immediate\".|||Nghĩ setTimeout(…, 0) chạy ở pha check \"vì nó tức thì\"."
+        },
+        {
+          "loi": "Thinking file I/O callbacks run in a phase called \"I/O\" — that is poll.|||Nghĩ callback I/O tệp chạy ở pha tên \"I/O\" — đó là poll."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "A loop that never stops: is any work finished? run its callback; otherwise wait."
+        },
+        {
+          "en": "phase",
+          "vi": "pha",
+          "giaiThich": "One stage of a loop turn: timers → pending → idle/prepare → poll → check → close."
+        },
+        {
+          "en": "timers phase",
+          "vi": "pha timers",
+          "giaiThich": "Runs setTimeout/setInterval callbacks whose time has come."
+        },
+        {
+          "en": "poll phase",
+          "vi": "pha poll",
+          "giaiThich": "Collects new I/O events, runs their callbacks, and waits here when idle."
+        },
+        {
+          "en": "check phase",
+          "vi": "pha check",
+          "giaiThich": "Runs setImmediate callbacks — right after poll."
+        },
+        {
+          "en": "timer drift",
+          "vi": "trôi hẹn giờ",
+          "giaiThich": "A timer fires at or AFTER its delay, never exactly on time."
+        }
+      ]
+    },
+    {
+      "title": "Inside an I/O callback: write the exact order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Inside an I/O callback the lesson says the answer is always the same. Order the printed lines (CommonJS file, Node 22; run 3× — identical every time).<pre>fs.readFile(__filename, () =&gt; {\n  console.log('sync in callback');\n  setTimeout(() =&gt; console.log('setTimeout 0'), 0);\n  setImmediate(() =&gt; console.log('setImmediate'));\n  Promise.resolve().then(() =&gt; console.log('Promise.then'));\n  process.nextTick(() =&gt; console.log('nextTick'));\n  console.log('sync end');\n});</pre></p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong callback I/O, bài học nói kết quả luôn như nhau. Sắp các dòng in theo thứ tự (tệp CommonJS, Node 22; chạy 3 lần — lần nào cũng giống).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First all synchronous lines, then nextTick, then Promise.|||Trước hết mọi dòng đồng bộ, rồi nextTick, rồi Promise.",
+        "Which phase are we in when the readFile callback runs? Which phase comes next?|||Callback readFile chạy ở pha nào? Pha nào đến kế tiếp?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inside an I/O callback: write the exact order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the six lines.Sắp sáu dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inside an I/O callback: write the exact order — answer key\n\n1. Order the six lines.Sắp sáu dòng.\n   Answer: m6) sync in callback  →  m5) sync end  →  m3) nextTick  →  m2) Promise.then  →  m4) setImmediate  →  m1) setTimeout 0\n   Synchronous code first, always. Then the two priority queues: nextTick, then microtasks (Promise). We are inside the poll phase, and check comes right after it, so setImmediate runs before the loop wraps round to timers — every time.VI: Code đồng bộ trước, luôn luôn. Rồi hai hàng ưu tiên: nextTick, rồi microtask (Promise). Ta đang ở pha poll, và check đến ngay sau nó, nên setImmediate chạy trước khi vòng quay lại timers — lần nào cũng vậy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Synchronous code first, always. Then the two priority queues: nextTick, then microtasks (Promise). We are inside the poll phase, and check comes right after it, so setImmediate runs before the loop wraps round to timers — every time.</p><p><i>VI: Code đồng bộ trước, luôn luôn. Rồi hai hàng ưu tiên: nextTick, rồi microtask (Promise). Ta đang ở pha poll, và check đến ngay sau nó, nên setImmediate chạy trước khi vòng quay lại timers — lần nào cũng vậy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "<p>Order the six lines.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp sáu dòng.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "setTimeout 0"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Promise.then"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "nextTick"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "setImmediate"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "sync end"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "sync in callback"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m5",
+              "m3",
+              "m2",
+              "m4",
+              "m1"
+            ],
+            "giaiThich": "<p>Synchronous code first, always. Then the two priority queues: nextTick, then microtasks (Promise). We are inside the poll phase, and check comes right after it, so setImmediate runs before the loop wraps round to timers — every time.</p><p><i>VI: Code đồng bộ trước, luôn luôn. Rồi hai hàng ưu tiên: nextTick, rồi microtask (Promise). Ta đang ở pha poll, và check đến ngay sau nó, nên setImmediate chạy trước khi vòng quay lại timers — lần nào cũng vậy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting setTimeout 0 before setImmediate because \"0 ms is sooner\".|||Đặt setTimeout 0 trước setImmediate vì \"0 ms sớm hơn\"."
+        },
+        {
+          "loi": "Putting the Promise before nextTick — that only happens at the top level of an ES module.|||Đặt Promise trước nextTick — chỉ xảy ra ở cấp cao nhất của ES module."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "A loop that never stops: is any work finished? run its callback; otherwise wait."
+        },
+        {
+          "en": "phase",
+          "vi": "pha",
+          "giaiThich": "One stage of a loop turn: timers → pending → idle/prepare → poll → check → close."
+        },
+        {
+          "en": "timers phase",
+          "vi": "pha timers",
+          "giaiThich": "Runs setTimeout/setInterval callbacks whose time has come."
+        },
+        {
+          "en": "poll phase",
+          "vi": "pha poll",
+          "giaiThich": "Collects new I/O events, runs their callbacks, and waits here when idle."
+        },
+        {
+          "en": "check phase",
+          "vi": "pha check",
+          "giaiThich": "Runs setImmediate callbacks — right after poll."
+        },
+        {
+          "en": "timer drift",
+          "vi": "trôi hẹn giờ",
+          "giaiThich": "A timer fires at or AFTER its delay, never exactly on time."
+        }
+      ]
+    },
+    {
+      "title": "Predictable or not? Timers, immediates and the ES module trap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions about the lesson's main experiment:<pre>console.log('[1] sync: first line');\nsetTimeout(()  =&gt; console.log('[5] setTimeout 0'), 0);\nsetImmediate(() =&gt; console.log('[6] setImmediate'));\nPromise.resolve().then(() =&gt; console.log('[4] Promise.then'));\nprocess.nextTick(() =&gt; console.log('[3] process.nextTick'));\nconsole.log('[2] sync: last line');</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu hỏi về thí nghiệm chính của bài.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate what the language guarantees (sync → nextTick → microtasks) from what depends on timing (timers vs check at start-up).|||Tách thứ được bảo đảm (đồng bộ → nextTick → microtask) khỏi thứ phụ thuộc thời điểm (timers vs check lúc khởi động).",
+        "ES module top level = already inside a microtask.|||Cấp cao nhất của ES module = đã ở trong một microtask."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predictable or not? Timers, immediates and the ES module trap\n\nAnswer in the answer panel (no code needed).\n\n1. Saved as order.cjs (top level, not in a callback): which part of the output is guaranteed?Lưu thành order.cjs (cấp cao nhất): phần nào của output được bảo đảm?\n2. The same code saved as order.mjs (ES module). What changes in the guaranteed part?Cùng code lưu thành order.mjs (ES module). Phần bảo đảm đổi gì?\n3. What does setTimeout(fn, 0) really mean in Node?setTimeout(fn, 0) thật ra nghĩa là gì?\n4. setTimeout(fn, 100) promises…setTimeout(fn, 100) hứa gì?\n5. When does a Node process exit on its own?Khi nào process Node tự thoát?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predictable or not? Timers, immediates and the ES module trap — answer key\n\n1. Saved as order.cjs (top level, not in a callback): which part of the output is guaranteed?Lưu thành order.cjs (cấp cao nhất): phần nào của output được bảo đảm?\n   Answer: c) [1] [2] [3] [4] always; [5] and [6] can come in either order\n   Sync, then nextTick, then microtasks is fixed. setTimeout(0) vs setImmediate at the top level depends on whether the 1 ms timer deadline has already passed when the loop first reaches the timers phase — luck of process start-up. Measured on Node 22: 1 run in 3 printed [5] before [6].VI: Đồng bộ → nextTick → microtask là cố định. setTimeout(0) vs setImmediate ở cấp cao nhất phụ thuộc hạn 1 ms của timer đã qua chưa khi vòng tới pha timers lần đầu — may rủi lúc khởi động. Đo Node 22: 1/3 lượt in [5] trước [6].\n\n2. The same code saved as order.mjs (ES module). What changes in the guaranteed part?Cùng code lưu thành order.mjs (ES module). Phần bảo đảm đổi gì?\n   Answer: b) [4] (Promise) prints before [3] (nextTick)\n   An ES module's top-level code itself runs inside a microtask, so the microtask queue is still being drained when nextTick would get its turn: [1] [2] [4] [3]. Measured on Node 22.23.3 (3 runs). In CommonJS, nextTick wins.VI: Code cấp cao nhất của ES module chạy bên trong một microtask, nên hàng microtask còn đang được xả khi tới lượt nextTick: [1] [2] [4] [3]. Đo Node 22.23.3. Ở CommonJS, nextTick thắng.\n\n3. What does setTimeout(fn, 0) really mean in Node?setTimeout(fn, 0) thật ra nghĩa là gì?\n   Answer: b) After at least 1 ms — Node raises any delay below 1 ms to 1 ms\n   There is no true 0: delays under 1 ms become 1 ms. That 1 ms is what makes the top-level race with setImmediate unpredictable.VI: Không có 0 thật: độ trễ dưới 1 ms thành 1 ms. Chính 1 ms đó làm cuộc đua với setImmediate ở cấp cao nhất không đoán được.\n\n4. setTimeout(fn, 100) promises…setTimeout(fn, 100) hứa gì?\n   Answer: c) Not earlier than 100 ms — later if the loop is busy when the deadline arrives\n   A timer callback waits its turn like everything else. Lesson 2.4 measures a 100 ms heartbeat arriving 2 873 ms late behind a blocking loop. That is why real scheduling checks the clock (cron-style) instead of trusting setInterval over hours.VI: Callback hẹn giờ chờ tới lượt như mọi thứ khác. Bài 2.4 đo một nhịp 100 ms tới muộn 2 873 ms sau một vòng lặp chặn. Vì vậy lịch thật kiểm đồng hồ (kiểu cron) thay vì tin setInterval suốt nhiều giờ.\n\n5. When does a Node process exit on its own?Khi nào process Node tự thoát?\n   Answer: a) When the loop has nothing left to wait for: no timers, no pending I/O, no open handles\n   The loop keeps turning while something can still produce a callback. A pending setTimeout or an open server socket keeps the process alive after the main file finished; when nothing is left, the loop ends and the process exits.VI: Vòng lặp còn quay khi còn thứ có thể sinh callback. Một setTimeout đang chờ hay socket server mở giữ process sống sau khi tệp chính chạy xong; hết thứ để chờ thì vòng dừng và process thoát.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> [1] [2] [3] [4] always; [5] and [6] can come in either order</p><p>Sync, then nextTick, then microtasks is fixed. setTimeout(0) vs setImmediate at the top level depends on whether the 1 ms timer deadline has already passed when the loop first reaches the timers phase — luck of process start-up. Measured on Node 22: 1 run in 3 printed [5] before [6].</p><p><i>VI: Đồng bộ → nextTick → microtask là cố định. setTimeout(0) vs setImmediate ở cấp cao nhất phụ thuộc hạn 1 ms của timer đã qua chưa khi vòng tới pha timers lần đầu — may rủi lúc khởi động. Đo Node 22: 1/3 lượt in [5] trước [6].</i></p></li><li><p><b>b)</b> [4] (Promise) prints before [3] (nextTick)</p><p>An ES module's top-level code itself runs inside a microtask, so the microtask queue is still being drained when nextTick would get its turn: [1] [2] [4] [3]. Measured on Node 22.23.3 (3 runs). In CommonJS, nextTick wins.</p><p><i>VI: Code cấp cao nhất của ES module chạy bên trong một microtask, nên hàng microtask còn đang được xả khi tới lượt nextTick: [1] [2] [4] [3]. Đo Node 22.23.3. Ở CommonJS, nextTick thắng.</i></p></li><li><p><b>b)</b> After at least 1 ms — Node raises any delay below 1 ms to 1 ms</p><p>There is no true 0: delays under 1 ms become 1 ms. That 1 ms is what makes the top-level race with setImmediate unpredictable.</p><p><i>VI: Không có 0 thật: độ trễ dưới 1 ms thành 1 ms. Chính 1 ms đó làm cuộc đua với setImmediate ở cấp cao nhất không đoán được.</i></p></li><li><p><b>c)</b> Not earlier than 100 ms — later if the loop is busy when the deadline arrives</p><p>A timer callback waits its turn like everything else. Lesson 2.4 measures a 100 ms heartbeat arriving 2 873 ms late behind a blocking loop. That is why real scheduling checks the clock (cron-style) instead of trusting setInterval over hours.</p><p><i>VI: Callback hẹn giờ chờ tới lượt như mọi thứ khác. Bài 2.4 đo một nhịp 100 ms tới muộn 2 873 ms sau một vòng lặp chặn. Vì vậy lịch thật kiểm đồng hồ (kiểu cron) thay vì tin setInterval suốt nhiều giờ.</i></p></li><li><p><b>a)</b> When the loop has nothing left to wait for: no timers, no pending I/O, no open handles</p><p>The loop keeps turning while something can still produce a callback. A pending setTimeout or an open server socket keeps the process alive after the main file finished; when nothing is left, the loop ends and the process exits.</p><p><i>VI: Vòng lặp còn quay khi còn thứ có thể sinh callback. Một setTimeout đang chờ hay socket server mở giữ process sống sau khi tệp chính chạy xong; hết thứ để chờ thì vòng dừng và process thoát.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "u1",
+            "de": "<p>Saved as <code>order.cjs</code> (top level, not in a callback): which part of the output is guaranteed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lưu thành order.cjs (cấp cao nhất): phần nào của output được bảo đảm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All six lines, always [1]…[6]"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All six lines, always [1] [2] [3] [4] [6] [5]"
+              },
+              {
+                "ma": "c",
+                "noiDung": "[1] [2] [3] [4] always; [5] and [6] can come in either order"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — every line can move"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Sync, then nextTick, then microtasks is fixed. setTimeout(0) vs setImmediate at the top level depends on whether the 1 ms timer deadline has already passed when the loop first reaches the timers phase — luck of process start-up. Measured on Node 22: 1 run in 3 printed [5] before [6].</p><p><i>VI: Đồng bộ → nextTick → microtask là cố định. setTimeout(0) vs setImmediate ở cấp cao nhất phụ thuộc hạn 1 ms của timer đã qua chưa khi vòng tới pha timers lần đầu — may rủi lúc khởi động. Đo Node 22: 1/3 lượt in [5] trước [6].</i></p>"
+          },
+          {
+            "ma": "u2",
+            "de": "<p>The same code saved as <code>order.mjs</code> (ES module). What changes in the guaranteed part?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng code lưu thành order.mjs (ES module). Phần bảo đảm đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "[5] always beats [6]"
+              },
+              {
+                "ma": "b",
+                "noiDung": "[4] (Promise) prints before [3] (nextTick)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nextTick never runs in ES modules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing changes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An ES module's top-level code itself runs inside a microtask, so the microtask queue is still being drained when nextTick would get its turn: [1] [2] [4] [3]. Measured on Node 22.23.3 (3 runs). In CommonJS, nextTick wins.</p><p><i>VI: Code cấp cao nhất của ES module chạy bên trong một microtask, nên hàng microtask còn đang được xả khi tới lượt nextTick: [1] [2] [4] [3]. Đo Node 22.23.3. Ở CommonJS, nextTick thắng.</i></p>"
+          },
+          {
+            "ma": "u3",
+            "de": "<p>What does <code>setTimeout(fn, 0)</code> really mean in Node?</p><p style=\"opacity:.75;font-size:.92em\"><i>setTimeout(fn, 0) thật ra nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Exactly now, before any other callback"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After at least 1 ms — Node raises any delay below 1 ms to 1 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After exactly 0 ms, in the check phase"
+              },
+              {
+                "ma": "d",
+                "noiDung": "At the next microtask"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>There is no true 0: delays under 1 ms become 1 ms. That 1 ms is what makes the top-level race with setImmediate unpredictable.</p><p><i>VI: Không có 0 thật: độ trễ dưới 1 ms thành 1 ms. Chính 1 ms đó làm cuộc đua với setImmediate ở cấp cao nhất không đoán được.</i></p>"
+          },
+          {
+            "ma": "u4",
+            "de": "<p><code>setTimeout(fn, 100)</code> promises…</p><p style=\"opacity:.75;font-size:.92em\"><i>setTimeout(fn, 100) hứa gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "At most 100 ms — it may fire earlier if the loop happens to be idle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Between 90 and 110 ms — a small random jitter in both directions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Not earlier than 100 ms — later if the loop is busy when the deadline arrives"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 100 ms — Node uses a hardware clock, so timers never drift"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A timer callback waits its turn like everything else. Lesson 2.4 measures a 100 ms heartbeat arriving 2 873 ms late behind a blocking loop. That is why real scheduling checks the clock (cron-style) instead of trusting setInterval over hours.</p><p><i>VI: Callback hẹn giờ chờ tới lượt như mọi thứ khác. Bài 2.4 đo một nhịp 100 ms tới muộn 2 873 ms sau một vòng lặp chặn. Vì vậy lịch thật kiểm đồng hồ (kiểu cron) thay vì tin setInterval suốt nhiều giờ.</i></p>"
+          },
+          {
+            "ma": "u5",
+            "de": "<p>When does a Node process exit on its own?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào process Node tự thoát?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When the loop has nothing left to wait for: no timers, no pending I/O, no open handles"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Right after the last line of the main file runs, even if timers are pending"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After 5 seconds with no new requests, to free memory on the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only when you call process.exit() — otherwise it keeps running forever"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The loop keeps turning while something can still produce a callback. A pending setTimeout or an open server socket keeps the process alive after the main file finished; when nothing is left, the loop ends and the process exits.</p><p><i>VI: Vòng lặp còn quay khi còn thứ có thể sinh callback. Một setTimeout đang chờ hay socket server mở giữ process sống sau khi tệp chính chạy xong; hết thứ để chờ thì vòng dừng và process thoát.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing code that depends on setTimeout(…, 0) beating setImmediate — passes on a laptop, fails on a loaded server.|||Viết code dựa vào setTimeout(…, 0) thắng setImmediate — qua trên laptop, hỏng trên server bận."
+        },
+        {
+          "loi": "Quoting the CommonJS order for an .mjs file.|||Dùng thứ tự của CommonJS cho tệp .mjs."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "A loop that never stops: is any work finished? run its callback; otherwise wait."
+        },
+        {
+          "en": "phase",
+          "vi": "pha",
+          "giaiThich": "One stage of a loop turn: timers → pending → idle/prepare → poll → check → close."
+        },
+        {
+          "en": "timers phase",
+          "vi": "pha timers",
+          "giaiThich": "Runs setTimeout/setInterval callbacks whose time has come."
+        },
+        {
+          "en": "poll phase",
+          "vi": "pha poll",
+          "giaiThich": "Collects new I/O events, runs their callbacks, and waits here when idle."
+        },
+        {
+          "en": "check phase",
+          "vi": "pha check",
+          "giaiThich": "Runs setImmediate callbacks — right after poll."
+        },
+        {
+          "en": "timer drift",
+          "vi": "trôi hẹn giờ",
+          "giaiThich": "A timer fires at or AFTER its delay, never exactly on time."
+        }
+      ]
+    },
+    {
+      "title": "Do not trust the scheduler: boot the API with await",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "await for ordering",
+        "timing-dependent bugs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson's rule: \"If two things must happen in order, express that with await — not by hoping the scheduler cooperates. Timing-dependent code passes on your laptop and fails on the server under load.\" The starter boots the Notes API like this:</p><pre>function boot(db, server) {\n  db.connect().then(() =&gt; db.migrate());          // async — each step takes a while\n  setTimeout(() =&gt; server.listen(3000), 50);      // \"surely connected and migrated after 50 ms\"\n}</pre><p>On a laptop the database answers in 10 ms and it works. On a loaded server it takes 300 ms and the API accepts requests with no database. Rewrite <code>boot(db, server)</code>:</p>\n<ul><li>Await <code>db.connect()</code>, then <code>db.migrate()</code>, then call <code>server.listen(3000)</code> — always in that order, however slow each step is.</li>\n<li>Resolve with <code>'ready'</code> once listening.</li>\n<li>If <code>connect</code> or <code>migrate</code> rejects, <code>boot</code> rejects with that error and <code>listen</code> is never called.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Order is guaranteed by <code>await</code>, not by timers: connect → migrate → listen.</li>\n  <li>Resolve <code>'ready'</code>; on failure reject and never listen.</li>\n  <li>No <code>setTimeout</code> in your code.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật của bài: \"Hai việc phải theo thứ tự thì diễn đạt bằng await — đừng mong bộ lập lịch hợp tác. Code phụ thuộc thời điểm qua trên laptop và hỏng trên server bận.\" Viết lại boot(db, server): await db.connect(), rồi db.migrate(), rồi server.listen(3000) — luôn theo thứ tự đó dù mỗi bước chậm thế nào; resolve 'ready' khi đã listen; connect hoặc migrate reject ⇒ boot reject đúng lỗi đó và không bao giờ gọi listen.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự được bảo đảm bằng await, không bằng hẹn giờ: connect → migrate → listen.</li>\n  <li>Resolve 'ready'; lỗi thì reject và không listen.</li>\n  <li>Không có setTimeout trong code của bạn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await boot(db /* connect takes 300 ms */, server); events",
+          "output": "[\"connect start\",\"connect done\",\"migrate start\",\"migrate done\",\"listen 3000 (db ready)\"]",
+          "explanation": "The starter logs \"listen 3000 (NO DB!)\" before connect is done.|||Code khởi đầu ghi \"listen 3000 (NO DB!)\" trước khi kết nối xong."
+        }
+      ],
+      "hintsJson": [
+        "Make it <code>async function boot(db, server)</code> and write the three steps as three lines.|||Biến thành async function boot(db, server) và viết ba bước thành ba dòng.",
+        "Do not catch the error inside <code>boot</code>: letting it propagate is what makes <code>boot</code> reject (and keeps <code>listen</code> from running).|||Đừng bắt lỗi trong boot: để nó lan ra chính là điều làm boot reject (và chặn listen)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function boot(db, server) {\n  db.connect().then(() => db.migrate());\n  setTimeout(() => server.listen(3000), 50); // \"surely connected and migrated after 50 ms\"\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Order comes from await, not from a guess about how long things take.\nasync function boot(db, server) {\n  await db.connect();   // however slow: the next line waits for it\n  await db.migrate();   // needs the connection, so it must come after\n  server.listen(3000);  // only now is it safe to accept requests\n  return 'ready';\n  // no try/catch: a rejection above propagates, boot rejects, listen never runs\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>await</code> encodes a real dependency: the next line cannot start until the previous Promise settled, regardless of how long it takes or how busy the loop is. A timer encodes a guess about duration, and durations change under load — which is why the starter passes the fast test and fails the slow one. A rejection propagates through the awaits and rejects <code>boot</code>, so a broken database stops the start-up loudly instead of serving errors.</p>",
+      "solutionExplanationHtmlVi": "<p>await mã hoá một phụ thuộc thật: dòng sau không bắt đầu được khi Promise trước chưa xong, bất kể nó lâu bao nhiêu hay vòng lặp bận thế nào. Hẹn giờ mã hoá một phỏng đoán về thời lượng, mà thời lượng đổi khi tải cao — vì vậy code khởi đầu qua ca nhanh và hỏng ca chậm. Reject lan qua các await và reject boot, nên CSDL hỏng làm dừng khởi động một cách ồn ào thay vì phục vụ lỗi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "laptop speed (10 ms): connect → migrate → listen (the starter passes this one!)",
+              "vi": "tốc độ laptop (10 ms): code khởi đầu QUA ca này!"
+            },
+            "goi": "events",
+            "chuanBi": "const events = [];\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkDb = (ms, fail) => { const db = { connected: false, migrated: false };\n  db.connect = () => { events.push('connect start'); return sleep(ms).then(() => { if (fail === 'connect') throw new Error('ECONNREFUSED 127.0.0.1:5432'); db.connected = true; events.push('connect done'); }); };\n  db.migrate = () => { events.push('migrate start'); return sleep(ms / 2).then(() => { if (!db.connected) throw new Error('migrate without connection'); if (fail === 'migrate') throw new Error('migration 0007 failed'); db.migrated = true; events.push('migrate done'); }); };\n  return db; };\nconst mkServer = (db) => ({ listen: (port) => { events.push('listen ' + port + (db.connected && db.migrated ? ' (db ready)' : ' (NO DB!)')); } });\nconst db = mkDb(10); await boot(db, mkServer(db)); await sleep(400);",
+            "mongDoi": [
+              "connect start",
+              "connect done",
+              "migrate start",
+              "migrate done",
+              "listen 3000 (db ready)"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "loaded server (300 ms): still in order",
+              "vi": "server bận (300 ms): vẫn đúng thứ tự"
+            },
+            "goi": "[r, events]",
+            "chuanBi": "const events = [];\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkDb = (ms, fail) => { const db = { connected: false, migrated: false };\n  db.connect = () => { events.push('connect start'); return sleep(ms).then(() => { if (fail === 'connect') throw new Error('ECONNREFUSED 127.0.0.1:5432'); db.connected = true; events.push('connect done'); }); };\n  db.migrate = () => { events.push('migrate start'); return sleep(ms / 2).then(() => { if (!db.connected) throw new Error('migrate without connection'); if (fail === 'migrate') throw new Error('migration 0007 failed'); db.migrated = true; events.push('migrate done'); }); };\n  return db; };\nconst mkServer = (db) => ({ listen: (port) => { events.push('listen ' + port + (db.connected && db.migrated ? ' (db ready)' : ' (NO DB!)')); } });\nconst db = mkDb(300); const r = await boot(db, mkServer(db)); await sleep(400);",
+            "mongDoi": [
+              "ready",
+              [
+                "connect start",
+                "connect done",
+                "migrate start",
+                "migrate done",
+                "listen 3000 (db ready)"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "connect fails ⇒ boot rejects, never listens",
+              "vi": "connect lỗi ⇒ boot reject, không listen"
+            },
+            "goi": "[m, events]",
+            "chuanBi": "const events = [];\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkDb = (ms, fail) => { const db = { connected: false, migrated: false };\n  db.connect = () => { events.push('connect start'); return sleep(ms).then(() => { if (fail === 'connect') throw new Error('ECONNREFUSED 127.0.0.1:5432'); db.connected = true; events.push('connect done'); }); };\n  db.migrate = () => { events.push('migrate start'); return sleep(ms / 2).then(() => { if (!db.connected) throw new Error('migrate without connection'); if (fail === 'migrate') throw new Error('migration 0007 failed'); db.migrated = true; events.push('migrate done'); }); };\n  return db; };\nconst mkServer = (db) => ({ listen: (port) => { events.push('listen ' + port + (db.connected && db.migrated ? ' (db ready)' : ' (NO DB!)')); } });\nconst db = mkDb(20, 'connect'); let m = ''; try { await boot(db, mkServer(db)); } catch (e) { m = e.message; } await sleep(400);",
+            "mongDoi": [
+              "ECONNREFUSED 127.0.0.1:5432",
+              [
+                "connect start"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[m, events]",
+            "chuanBi": "const events = [];\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkDb = (ms, fail) => { const db = { connected: false, migrated: false };\n  db.connect = () => { events.push('connect start'); return sleep(ms).then(() => { if (fail === 'connect') throw new Error('ECONNREFUSED 127.0.0.1:5432'); db.connected = true; events.push('connect done'); }); };\n  db.migrate = () => { events.push('migrate start'); return sleep(ms / 2).then(() => { if (!db.connected) throw new Error('migrate without connection'); if (fail === 'migrate') throw new Error('migration 0007 failed'); db.migrated = true; events.push('migrate done'); }); };\n  return db; };\nconst mkServer = (db) => ({ listen: (port) => { events.push('listen ' + port + (db.connected && db.migrated ? ' (db ready)' : ' (NO DB!)')); } });\nconst db = mkDb(1000, 'migrate'); let m = ''; try { await boot(db, mkServer(db)); } catch (e) { m = e.message; } await sleep(2000);",
+            "mongDoi": [
+              "migration 0007 failed",
+              [
+                "connect start",
+                "connect done",
+                "migrate start"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[r, Date.now() - t, events[events.length - 1]]",
+            "chuanBi": "const events = [];\nconst sleep = (ms) => new Promise((r) => setTimeout(r, ms));\nconst mkDb = (ms, fail) => { const db = { connected: false, migrated: false };\n  db.connect = () => { events.push('connect start'); return sleep(ms).then(() => { if (fail === 'connect') throw new Error('ECONNREFUSED 127.0.0.1:5432'); db.connected = true; events.push('connect done'); }); };\n  db.migrate = () => { events.push('migrate start'); return sleep(ms / 2).then(() => { if (!db.connected) throw new Error('migrate without connection'); if (fail === 'migrate') throw new Error('migration 0007 failed'); db.migrated = true; events.push('migrate done'); }); };\n  return db; };\nconst mkServer = (db) => ({ listen: (port) => { events.push('listen ' + port + (db.connected && db.migrated ? ' (db ready)' : ' (NO DB!)')); } });\nconst db = mkDb(5000); const t = Date.now(); const r = await boot(db, mkServer(db));",
+            "mongDoi": [
+              "ready",
+              7500,
+              "listen 3000 (db ready)"
+            ],
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "No setTimeout used for ordering",
+              "vi": "Không dùng setTimeout để sắp thứ tự"
+            },
+            "khop": "setTimeout",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Raising the timeout from 50 to 500 ms — it only moves the cliff; a slower day still breaks it, and every boot is now slower.|||Tăng hẹn giờ từ 50 lên 500 ms — chỉ dời vách đá; ngày chậm hơn vẫn hỏng, và mọi lần khởi động chậm đi."
+        },
+        {
+          "loi": "<code>Promise.all([db.connect(), db.migrate()])</code> — migrate needs a connection, so they must not run together.|||Promise.all([db.connect(), db.migrate()]) — migrate cần kết nối nên không được chạy cùng lúc."
+        },
+        {
+          "loi": "Wrapping in <code>try/catch</code> and logging — then <code>boot</code> resolves and the caller thinks the API is up.|||Bọc try/catch rồi chỉ log — boot resolve và bên gọi tưởng API đã lên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "A loop that never stops: is any work finished? run its callback; otherwise wait."
+        },
+        {
+          "en": "phase",
+          "vi": "pha",
+          "giaiThich": "One stage of a loop turn: timers → pending → idle/prepare → poll → check → close."
+        },
+        {
+          "en": "timers phase",
+          "vi": "pha timers",
+          "giaiThich": "Runs setTimeout/setInterval callbacks whose time has come."
+        },
+        {
+          "en": "poll phase",
+          "vi": "pha poll",
+          "giaiThich": "Collects new I/O events, runs their callbacks, and waits here when idle."
+        },
+        {
+          "en": "check phase",
+          "vi": "pha check",
+          "giaiThich": "Runs setImmediate callbacks — right after poll."
+        },
+        {
+          "en": "timer drift",
+          "vi": "trôi hẹn giờ",
+          "giaiThich": "A timer fires at or AFTER its delay, never exactly on time."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,739 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-final-exam-fe",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-final-exam-fe"
+  },
+  "exercises": [
+    {
+      "title": "CLO1–CLO4 in one sitting: Node, Express, Generator, MongoDB",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "revision"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Breadth beats depth: one or two items per CLO, each answerable in one clause.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rộng thắng sâu: mỗi CLO một hai câu, câu nào cũng trả lời được bằng một mệnh đề.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One clause per answer.|||Mỗi câu một mệnh đề.",
+        "Think about which chapter each CLO lives in.|||Nghĩ xem mỗi CLO thuộc chương nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLO1–CLO4 in one sitting: Node, Express, Generator, MongoDB\n\nAnswer in the answer panel (no code needed).\n\n1. CLO1 — What does http.createServer(handler) do?CLO1 — http.createServer(handler) làm gì?\n2. CLO1 — Which call blocks the event loop?CLO1 — Lời gọi nào chặn event loop?\n3. CLO2 — In Express, where must app.use((err, req, res, next) => …) go?CLO2 — Trong Express, app.use((err, req, res, next) => …) phải đặt ở đâu?\n4. CLO3 — Why does a generated app have both app.js and bin/www?CLO3 — Vì sao app sinh ra có cả app.js lẫn bin/www?\n5. CLO4 — A user has thousands of orders. Embed or reference?CLO4 — Một người dùng có hàng nghìn đơn hàng. Nhúng hay tham chiếu?\n6. CLO4 — db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } }) returns modifiedCount: 0. Why?CLO4 — db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } }) trả modifiedCount: 0. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLO1–CLO4 in one sitting: Node, Express, Generator, MongoDB — answer key\n\n1. CLO1 — What does http.createServer(handler) do?CLO1 — http.createServer(handler) làm gì?\n   Answer: a) Makes a server that calls handler(req, res) for each request\n   The handler receives the raw request and response streams.VI: Handler nhận luồng request và response thô.\n\n2. CLO1 — Which call blocks the event loop?CLO1 — Lời gọi nào chặn event loop?\n   Answer: d) fs.readFileSync('big.csv') inside a route\n   Sync I/O freezes the only thread for everyone.VI: I/O đồng bộ làm đứng luồng duy nhất cho mọi người.\n\n3. CLO2 — In Express, where must app.use((err, req, res, next) => …) go?CLO2 — Trong Express, app.use((err, req, res, next) => …) phải đặt ở đâu?\n   Answer: b) After all routes — it catches errors forwarded from above it\n   Middleware runs top to bottom.VI: Middleware chạy từ trên xuống.\n\n4. CLO3 — Why does a generated app have both app.js and bin/www?CLO3 — Vì sao app sinh ra có cả app.js lẫn bin/www?\n   Answer: c) app.js builds the app; bin/www creates the server and listens on PORT\n   Separation of \"what the app is\" from \"how it is served\".VI: Tách \"app là gì\" khỏi \"phục vụ nó thế nào\".\n\n5. CLO4 — A user has thousands of orders. Embed or reference?CLO4 — Một người dùng có hàng nghìn đơn hàng. Nhúng hay tham chiếu?\n   Answer: a) Reference: each order stores the user id — unbounded data is not embedded\n   Data that grows without limit is referenced.VI: Dữ liệu lớn không giới hạn thì tham chiếu.\n\n6. CLO4 — db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } }) returns modifiedCount: 0. Why?CLO4 — db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } }) trả modifiedCount: 0. Vì sao?\n   Answer: d) No document matched, or the price was already 30\n   Check matchedCount to tell the two apart.VI: Xem matchedCount để phân biệt hai trường hợp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Makes a server that calls handler(req, res) for each request</p><p>The handler receives the raw request and response streams.</p><p><i>VI: Handler nhận luồng request và response thô.</i></p></li><li><p><b>d)</b> <code>fs.readFileSync('big.csv')</code> inside a route</p><p>Sync I/O freezes the only thread for everyone.</p><p><i>VI: I/O đồng bộ làm đứng luồng duy nhất cho mọi người.</i></p></li><li><p><b>b)</b> After all routes — it catches errors forwarded from above it</p><p>Middleware runs top to bottom.</p><p><i>VI: Middleware chạy từ trên xuống.</i></p></li><li><p><b>c)</b> app.js builds the app; bin/www creates the server and listens on PORT</p><p>Separation of \"what the app is\" from \"how it is served\".</p><p><i>VI: Tách \"app là gì\" khỏi \"phục vụ nó thế nào\".</i></p></li><li><p><b>a)</b> Reference: each order stores the user id — unbounded data is not embedded</p><p>Data that grows without limit is referenced.</p><p><i>VI: Dữ liệu lớn không giới hạn thì tham chiếu.</i></p></li><li><p><b>d)</b> No document matched, or the price was already 30</p><p>Check <code>matchedCount</code> to tell the two apart.</p><p><i>VI: Xem <code>matchedCount</code> để phân biệt hai trường hợp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "a1",
+            "de": "<p>CLO1 — What does <code>http.createServer(handler)</code> do?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO1 — <code>http.createServer(handler)</code> làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Makes a server that calls handler(req, res) for each request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Opens a connection to MongoDB using the default local URI"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Creates an Express app with routing and body parsing built in"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Starts listening on port 80 immediately, without listen()"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The handler receives the raw request and response streams.</p><p><i>VI: Handler nhận luồng request và response thô.</i></p>"
+          },
+          {
+            "ma": "a2",
+            "de": "<p>CLO1 — Which call blocks the event loop?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO1 — Lời gọi nào chặn event loop?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>setTimeout(fn, 1000)</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>await fs.promises.readFile('big.csv')</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>await Product.find()</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>fs.readFileSync('big.csv')</code> inside a route"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Sync I/O freezes the only thread for everyone.</p><p><i>VI: I/O đồng bộ làm đứng luồng duy nhất cho mọi người.</i></p>"
+          },
+          {
+            "ma": "a3",
+            "de": "<p>CLO2 — In Express, where must <code>app.use((err, req, res, next) => …)</code> go?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO2 — Trong Express, <code>app.use((err, req, res, next) => …)</code> phải đặt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Inside each route"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After all routes — it catches errors forwarded from above it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Anywhere: Express sorts middleware by arity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Before all routes, so it is ready"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Middleware runs top to bottom.</p><p><i>VI: Middleware chạy từ trên xuống.</i></p>"
+          },
+          {
+            "ma": "a4",
+            "de": "<p>CLO3 — Why does a generated app have both <code>app.js</code> and <code>bin/www</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO3 — Vì sao app sinh ra có cả <code>app.js</code> lẫn <code>bin/www</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "app.js is used in development and bin/www only in production"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bin/www holds the routes while app.js holds the middleware"
+              },
+              {
+                "ma": "c",
+                "noiDung": "app.js builds the app; bin/www creates the server and listens on PORT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "bin/www is only a backup copy of app.js made by the generator"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Separation of \"what the app is\" from \"how it is served\".</p><p><i>VI: Tách \"app là gì\" khỏi \"phục vụ nó thế nào\".</i></p>"
+          },
+          {
+            "ma": "a5",
+            "de": "<p>CLO4 — A user has thousands of orders. Embed or reference?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO4 — Một người dùng có hàng nghìn đơn hàng. Nhúng hay tham chiếu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reference: each order stores the user id — unbounded data is not embedded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neither: use a SQL database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Embed: one read gets everything"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Embed the user in every order and drop the users collection"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Data that grows without limit is referenced.</p><p><i>VI: Dữ liệu lớn không giới hạn thì tham chiếu.</i></p>"
+          },
+          {
+            "ma": "a6",
+            "de": "<p>CLO4 — <code>db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } })</code> returns <code>modifiedCount: 0</code>. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO4 — <code>db.products.updateOne({ name: 'Book' }, { $set: { price: 30 } })</code> trả <code>modifiedCount: 0</code>. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "updateOne always returns 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "MongoDB updates asynchronously, so the count comes later"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The $set operator needs an array"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No document matched, or the price was already 30"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Check <code>matchedCount</code> to tell the two apart.</p><p><i>VI: Xem <code>matchedCount</code> để phân biệt hai trường hợp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Over-answering with details from one CLO.|||Trả lời quá chi tiết một CLO."
+        },
+        {
+          "loi": "Mixing CLO2 and CLO3.|||Lẫn CLO2 và CLO3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breadth",
+          "vi": "bề rộng"
+        }
+      ]
+    },
+    {
+      "title": "CLO5–CLO8: REST & Mongoose, authentication, BaaS, templating",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "revision"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Answer \"which approach\" questions with the course's choice and its reason.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả lời câu \"cách nào\" bằng lựa chọn của môn và lý do của nó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Course choice + one reason.|||Lựa chọn của môn + một lý do.",
+        "Update defaults are surprising.|||Mặc định của cập nhật hay gây bất ngờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLO5–CLO8: REST & Mongoose, authentication, BaaS, templating\n\nAnswer in the answer panel (no code needed).\n\n1. CLO5 — await Post.findById(id).populate('author', 'name') returns…CLO5 — await Post.findById(id).populate('author', 'name') trả về…\n2. CLO5 — findByIdAndUpdate(id, { price: -5 }) with min: 0 in the schema saves -5. Why?CLO5 — findByIdAndUpdate(id, { price: -5 }) với min: 0 trong schema vẫn lưu -5. Vì sao?\n3. CLO6 — Sessions or JWT for an API used by a React app on another domain? (the course's choice)CLO6 — Session hay JWT cho API dùng bởi app React ở domain khác? (lựa chọn của môn)\n4. CLO6 — What belongs in a JWT payload?CLO6 — Cái gì thuộc payload của JWT?\n5. CLO7 — What does a BaaS provide?CLO7 — BaaS cung cấp gì?\n6. CLO8 — Which template output is safe for text typed by users?CLO8 — Đầu ra template nào an toàn cho chữ người dùng gõ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CLO5–CLO8: REST & Mongoose, authentication, BaaS, templating — answer key\n\n1. CLO5 — await Post.findById(id).populate('author', 'name') returns…CLO5 — await Post.findById(id).populate('author', 'name') trả về…\n   Answer: a) The post with author replaced by { _id, name }\n   The select argument limits the populated fields.VI: Đối số select giới hạn field được populate.\n\n2. CLO5 — findByIdAndUpdate(id, { price: -5 }) with min: 0 in the schema saves -5. Why?CLO5 — findByIdAndUpdate(id, { price: -5 }) với min: 0 trong schema vẫn lưu -5. Vì sao?\n   Answer: c) Updates skip validators unless runValidators: true\n   And add { new: true } to get the updated document back.VI: Và thêm { new: true } để nhận lại document đã cập nhật.\n\n3. CLO6 — Sessions or JWT for an API used by a React app on another domain? (the course's choice)CLO6 — Session hay JWT cho API dùng bởi app React ở domain khác? (lựa chọn của môn)\n   Answer: b) JWT, because the server stays stateless (token in a header)\n   \"JWT, because the server stays stateless\" — exactly the one-clause answer style.VI: \"JWT, vì server không cần lưu trạng thái\" — đúng kiểu trả lời một mệnh đề.\n\n4. CLO6 — What belongs in a JWT payload?CLO6 — Cái gì thuộc payload của JWT?\n   Answer: c) The user id and role: the payload is readable by anyone\n   Anyone holding the token can decode the payload.VI: Ai cầm token cũng giải mã được payload.\n\n5. CLO7 — What does a BaaS provide?CLO7 — BaaS cung cấp gì?\n   Answer: d) Ready-made auth, database and storage instead of your own server\n   Firebase, Supabase, Atlas App Services.VI: Firebase, Supabase, Atlas App Services.\n\n6. CLO8 — Which template output is safe for text typed by users?CLO8 — Đầu ra template nào an toàn cho chữ người dùng gõ?\n   Answer: b) EJS <%= text %> or Handlebars {{text}}\n   The escaping forms; raw forms are for server-made HTML only.VI: Các dạng có thoát; dạng thô chỉ cho HTML do server tạo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The post with <code>author</code> replaced by <code>{ _id, name }</code></p><p>The select argument limits the populated fields.</p><p><i>VI: Đối số select giới hạn field được populate.</i></p></li><li><p><b>c)</b> Updates skip validators unless <code>runValidators: true</code></p><p>And add <code>{ new: true }</code> to get the updated document back.</p><p><i>VI: Và thêm <code>{ new: true }</code> để nhận lại document đã cập nhật.</i></p></li><li><p><b>b)</b> JWT, because the server stays stateless (token in a header)</p><p>\"JWT, because the server stays stateless\" — exactly the one-clause answer style.</p><p><i>VI: \"JWT, vì server không cần lưu trạng thái\" — đúng kiểu trả lời một mệnh đề.</i></p></li><li><p><b>c)</b> The user id and role: the payload is readable by anyone</p><p>Anyone holding the token can decode the payload.</p><p><i>VI: Ai cầm token cũng giải mã được payload.</i></p></li><li><p><b>d)</b> Ready-made auth, database and storage instead of your own server</p><p>Firebase, Supabase, Atlas App Services.</p><p><i>VI: Firebase, Supabase, Atlas App Services.</i></p></li><li><p><b>b)</b> EJS <code>&lt;%= text %&gt;</code> or Handlebars <code>{{text}}</code></p><p>The escaping forms; raw forms are for server-made HTML only.</p><p><i>VI: Các dạng có thoát; dạng thô chỉ cho HTML do server tạo.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "b1",
+            "de": "<p>CLO5 — <code>await Post.findById(id).populate('author', 'name')</code> returns…</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO5 — <code>await Post.findById(id).populate('author', 'name')</code> trả về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The post with <code>author</code> replaced by <code>{ _id, name }</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The author document only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The post with <code>author</code> still an id"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An array of posts"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The select argument limits the populated fields.</p><p><i>VI: Đối số select giới hạn field được populate.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>CLO5 — <code>findByIdAndUpdate(id, { price: -5 })</code> with <code>min: 0</code> in the schema saves -5. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO5 — <code>findByIdAndUpdate(id, { price: -5 })</code> với <code>min: 0</code> trong schema vẫn lưu -5. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Mongoose runs validators only when you call find"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The schema was never compiled into a model"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Updates skip validators unless <code>runValidators: true</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "min only works on strings, not on Number fields"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>And add <code>{ new: true }</code> to get the updated document back.</p><p><i>VI: Và thêm <code>{ new: true }</code> để nhận lại document đã cập nhật.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>CLO6 — Sessions or JWT for an API used by a React app on another domain? (the course's choice)</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO6 — Session hay JWT cho API dùng bởi app React ở domain khác? (lựa chọn của môn)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both at once on every route, to be doubly sure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JWT, because the server stays stateless (token in a header)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sessions, because session cookies are encrypted by default"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither, because React apps cannot authenticate at all"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"JWT, because the server stays stateless\" — exactly the one-clause answer style.</p><p><i>VI: \"JWT, vì server không cần lưu trạng thái\" — đúng kiểu trả lời một mệnh đề.</i></p>"
+          },
+          {
+            "ma": "b4",
+            "de": "<p>CLO6 — What belongs in a JWT payload?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO6 — Cái gì thuộc payload của JWT?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The password hash, so the server can re-check it later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The JWT secret, so the client can verify the signature"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The user id and role: the payload is readable by anyone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The full user document, to avoid querying the database"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Anyone holding the token can decode the payload.</p><p><i>VI: Ai cầm token cũng giải mã được payload.</i></p>"
+          },
+          {
+            "ma": "b5",
+            "de": "<p>CLO7 — What does a BaaS provide?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO7 — BaaS cung cấp gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A faster drop-in replacement for the Express framework"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A React component library for building admin pages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A way to run a full MongoDB server inside the browser"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ready-made auth, database and storage instead of your own server"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Firebase, Supabase, Atlas App Services.</p><p><i>VI: Firebase, Supabase, Atlas App Services.</i></p>"
+          },
+          {
+            "ma": "b6",
+            "de": "<p>CLO8 — Which template output is safe for text typed by users?</p><p style=\"opacity:.75;font-size:.92em\"><i>CLO8 — Đầu ra template nào an toàn cho chữ người dùng gõ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "String concatenation into res.send"
+              },
+              {
+                "ma": "b",
+                "noiDung": "EJS <code>&lt;%= text %&gt;</code> or Handlebars <code>{{text}}</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "EJS <code>&lt;%- text %&gt;</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Handlebars <code>{{{text}}}</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The escaping forms; raw forms are for server-made HTML only.</p><p><i>VI: Các dạng có thoát; dạng thô chỉ cho HTML do server tạo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting secrets in JWTs.|||Để bí mật trong JWT."
+        },
+        {
+          "loi": "Using raw template tags for user data.|||Dùng thẻ template thô cho dữ liệu người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stateless",
+          "vi": "không trạng thái"
+        }
+      ]
+    },
+    {
+      "title": "Code reading: trace the request through the middleware",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "code reading"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The technique of the Final Exam page: \"trace the request path — which middleware runs, in what order, and what the response would actually be.\"</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kỹ thuật của trang Final Exam: \"lần theo đường đi của request — middleware nào chạy, theo thứ tự nào, và câu trả lời thực sự là gì.\"</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Walk the file top to bottom.|||Đi tệp từ trên xuống.",
+        "A response ends the chain.|||Một câu trả lời kết thúc chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Code reading: trace the request through the middleware\n\nAnswer in the answer panel (no code needed).\n\n1. app.use(express.json()); app.use((req, res, next) => { console.log('A'); next(); }); app.use('/api', (req, res, next) => { console.log('B'); next(); }); app.get('/api/me', requireAuth, (req, res) => { console.log('D'); res.json(req.user); }); // requireAuth logs 'C' then calls next() for a valid token app.use((err, req, res, next) => { console.log('E'); res.status(500).end(); });GET /api/me with a VALID token. Order what is printed / sent.GET /api/me với token HỢP LỆ. Sắp những gì được in / gửi.\n2. app.get('/api/items/:id', (req, res) => { console.log('1'); res.json({ id: req.params.id }); }); app.get('/api/items/search', (req, res) => { console.log('2'); res.json([]); }); app.use((req, res) => { console.log('3'); res.status(404).json({ error: 'Not found' }); });Two requests: first GET /api/items/search, then GET /api/nope. Order what happens.Hai request: trước GET /api/items/search, sau GET /api/nope. Sắp những gì xảy ra.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Code reading: trace the request through the middleware — answer key\n\n1. app.use(express.json()); app.use((req, res, next) => { console.log('A'); next(); }); app.use('/api', (req, res, next) => { console.log('B'); next(); }); app.get('/api/me', requireAuth, (req, res) => { console.log('D'); res.json(req.user); }); // requireAuth logs 'C' then calls next() for a valid token app.use((err, req, res, next) => { console.log('E'); res.status(500).end(); });GET /api/me with a VALID token. Order what is printed / sent.GET /api/me với token HỢP LỆ. Sắp những gì được in / gửi.\n   Answer: m3) A  →  m4) B  →  m1) C  →  m5) D  →  m2) the JSON response (200)\n   express.json (no output) → global logger A → the /api-scoped middleware B → requireAuth C → the handler D, which sends 200. The error handler never runs because no error was passed to next.VI: express.json (không in) → logger toàn cục A → middleware giới hạn /api B → requireAuth C → handler D, gửi 200. Error handler không chạy vì không có lỗi nào được đưa vào next.\n\n2. app.get('/api/items/:id', (req, res) => { console.log('1'); res.json({ id: req.params.id }); }); app.get('/api/items/search', (req, res) => { console.log('2'); res.json([]); }); app.use((req, res) => { console.log('3'); res.status(404).json({ error: 'Not found' }); });Two requests: first GET /api/items/search, then GET /api/nope. Order what happens.Hai request: trước GET /api/items/search, sau GET /api/nope. Sắp những gì xảy ra.\n   Answer: m1) prints 1 (the :id route matched \"search\")  →  m3) sends {\"id\":\"search\"} with 200  →  m2) prints 3  →  m4) sends 404 {\"error\":\"Not found\"}\n   First match wins: \"/:id\" is declared before \"/search\", so the search route is unreachable — a classic bug to spot in code-reading items. The unknown URL falls through to the 404 middleware.VI: Khớp đầu tiên thắng: \"/:id\" khai trước \"/search\", nên route search không bao giờ tới được — lỗi kinh điển cần nhận ra trong câu đọc mã. URL lạ rơi xuống middleware 404.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>express.json (no output) → global logger A → the /api-scoped middleware B → requireAuth C → the handler D, which sends 200. The error handler never runs because no error was passed to next.</p><p><i>VI: express.json (không in) → logger toàn cục A → middleware giới hạn /api B → requireAuth C → handler D, gửi 200. Error handler không chạy vì không có lỗi nào được đưa vào next.</i></p><p>First match wins: \"/:id\" is declared before \"/search\", so the search route is unreachable — a classic bug to spot in code-reading items. The unknown URL falls through to the 404 middleware.</p><p><i>VI: Khớp đầu tiên thắng: \"/:id\" khai trước \"/search\", nên route search không bao giờ tới được — lỗi kinh điển cần nhận ra trong câu đọc mã. URL lạ rơi xuống middleware 404.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><pre>app.use(express.json());\napp.use((req, res, next) => { console.log('A'); next(); });\napp.use('/api', (req, res, next) => { console.log('B'); next(); });\napp.get('/api/me', requireAuth, (req, res) => { console.log('D'); res.json(req.user); });\n// requireAuth logs 'C' then calls next() for a valid token\napp.use((err, req, res, next) => { console.log('E'); res.status(500).end(); });</pre>GET /api/me with a VALID token. Order what is printed / sent.</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /api/me với token HỢP LỆ. Sắp những gì được in / gửi.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "C"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "the JSON response (200)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "A"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "B"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "D"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m4",
+              "m1",
+              "m5",
+              "m2"
+            ],
+            "giaiThich": "<p>express.json (no output) → global logger A → the /api-scoped middleware B → requireAuth C → the handler D, which sends 200. The error handler never runs because no error was passed to next.</p><p><i>VI: express.json (không in) → logger toàn cục A → middleware giới hạn /api B → requireAuth C → handler D, gửi 200. Error handler không chạy vì không có lỗi nào được đưa vào next.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p><pre>app.get('/api/items/:id', (req, res) => { console.log('1'); res.json({ id: req.params.id }); });\napp.get('/api/items/search', (req, res) => { console.log('2'); res.json([]); });\napp.use((req, res) => { console.log('3'); res.status(404).json({ error: 'Not found' }); });</pre>Two requests: first GET /api/items/search, then GET /api/nope. Order what happens.</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai request: trước GET /api/items/search, sau GET /api/nope. Sắp những gì xảy ra.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "prints 1 (the :id route matched \"search\")"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "prints 3"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "sends {\"id\":\"search\"} with 200"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "sends 404 {\"error\":\"Not found\"}"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>First match wins: \"/:id\" is declared before \"/search\", so the search route is unreachable — a classic bug to spot in code-reading items. The unknown URL falls through to the 404 middleware.</p><p><i>VI: Khớp đầu tiên thắng: \"/:id\" khai trước \"/search\", nên route search không bao giờ tới được — lỗi kinh điển cần nhận ra trong câu đọc mã. URL lạ rơi xuống middleware 404.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running the error handler without an error.|||Cho error handler chạy khi không có lỗi."
+        },
+        {
+          "loi": "Thinking Express picks the most specific route.|||Tưởng Express chọn route cụ thể nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trace",
+          "vi": "lần theo"
+        }
+      ]
+    },
+    {
+      "title": "What is the response? Status codes for code you read",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>For each snippet, choose the status the client actually receives.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi đoạn mã, chọn mã trạng thái client thực sự nhận.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read exactly what the code does, not what it should do.|||Đọc đúng điều mã làm, không phải điều nó nên làm.",
+        "Sync vs async throws differ in Express 4.|||Ném đồng bộ và bất đồng bộ khác nhau ở Express 4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is the response? Status codes for code you read\n\nAnswer in the answer panel (no code needed).\n\n1. Snippet → statusĐoạn mã → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is the response? Status codes for code you read — answer key\n\n1. Snippet → statusĐoạn mã → mã\n   - r1.s: 201\n   - r2.s: 200\n   - r3.s: 404\n   - r4.s: no response (hangs)\n   - r5.s: 500\n   - r6.s: 401\n   - r7.s: 204\n   Row 2 is the \"200 null\" bug: no check, so a missing item still answers 200. Row 4: Express 4 ignores rejected promises, so the request hangs; a synchronous throw (row 5) is caught and the default handler answers 500.VI: Hàng 2 là lỗi \"200 null\": không kiểm nên item không có vẫn trả 200. Hàng 4: Express 4 bỏ qua promise bị reject nên request treo; lỗi ném đồng bộ (hàng 5) được bắt và handler mặc định trả 500.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Row 2 is the \"200 null\" bug: no check, so a missing item still answers 200. Row 4: Express 4 ignores rejected promises, so the request hangs; a synchronous throw (row 5) is caught and the default handler answers 500.</p><p><i>VI: Hàng 2 là lỗi \"200 null\": không kiểm nên item không có vẫn trả 200. Hàng 4: Express 4 bỏ qua promise bị reject nên request treo; lỗi ném đồng bộ (hàng 5) được bắt và handler mặc định trả 500.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "r1",
+            "de": "<p>Snippet → status</p><p style=\"opacity:.75;font-size:.92em\"><i>Đoạn mã → mã</i></p>",
+            "cot": [
+              {
+                "ma": "ma",
+                "ten": "Snippet"
+              },
+              {
+                "ma": "s",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "201",
+                  "204",
+                  "400",
+                  "401",
+                  "404",
+                  "500",
+                  "no response (hangs)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "ma": "res.status(201).json(await Item.create(req.body)) — valid body"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "ma": "res.json(await Item.findById(id)) — id does not exist"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "ma": "if (!item) return res.status(404).json({ error }) — id does not exist"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "ma": "Express 4: app.get(x, async () => { throw new Error() }) with no wrapper"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "ma": "app.get(x, () => { throw new Error() }) — a synchronous throw, no error handler"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "ma": "requireAuth with no Authorization header"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "ma": "res.status(204).end() after a delete"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "201",
+              "r2.s": "200",
+              "r3.s": "404",
+              "r4.s": "no response (hangs)",
+              "r5.s": "500",
+              "r6.s": "401",
+              "r7.s": "204"
+            },
+            "giaiThich": "<p>Row 2 is the \"200 null\" bug: no check, so a missing item still answers 200. Row 4: Express 4 ignores rejected promises, so the request hangs; a synchronous throw (row 5) is caught and the default handler answers 500.</p><p><i>VI: Hàng 2 là lỗi \"200 null\": không kiểm nên item không có vẫn trả 200. Hàng 4: Express 4 bỏ qua promise bị reject nên request treo; lỗi ném đồng bộ (hàng 5) được bắt và handler mặc định trả 500.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 404 for row 2.|||Trả lời 404 cho hàng 2."
+        },
+        {
+          "loi": "Answering 500 for row 4.|||Trả lời 500 cho hàng 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code reading",
+          "vi": "đọc mã"
+        }
+      ]
+    }
+  ]
+}

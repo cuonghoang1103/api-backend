@@ -1,0 +1,1179 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-8-3-requireauth-phan-quyen",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-8-3-requireauth-phan-quyen"
+  },
+  "exercises": [
+    {
+      "title": "8.3 · 1 — Who are you, may you, and is it yours?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authorization",
+        "Express middleware"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Three layers, three questions, three status codes. Six situations from lesson 8.3.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba tầng, ba câu hỏi, ba mã trạng thái. Sáu tình huống của bài 8.3.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "401 = who are you, 403 = are you allowed, 404 (from the service) = is it yours.|||401 = bạn là ai, 403 = bạn có được phép, 404 (từ service) = nó có phải của bạn.",
+        "Middleware runs in declaration order.|||Middleware chạy theo thứ tự khai báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.3 · 1 — Who are you, may you, and is it yours?\n\nAnswer in the answer panel (no code needed).\n\n1. An expired access token is answered with 403. What does the frontend do?Access token hết hạn được trả 403. Frontend sẽ làm gì?\n2. requireAuth queries the User row on every request (1.010 ms vs 0.029 ms for verify only). What does that millisecond buy?requireAuth truy vấn dòng User ở mọi request (1,010 ms so với 0,029 ms nếu chỉ verify). Mili giây đó mua được gì?\n3. router.use(requireAuth) is the LAST line of the notes router. Which routes are protected?router.use(requireAuth) là dòng CUỐI của router notes. Route nào được bảo vệ?\n4. router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler). What happens?router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler). Chuyện gì xảy ra?\n5. Binh (valid token) requests GET /notes/1, which belongs to An. The lesson answers 404, not 403. Why?Bình (token hợp lệ) gọi GET /notes/1, ghi chú của An. Bài trả 404, không phải 403. Vì sao?\n6. Why is actor the FIRST parameter of every service function?Vì sao actor là tham số ĐẦU TIÊN của mọi hàm service?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.3 · 1 — Who are you, may you, and is it yours? — answer key\n\n1. An expired access token is answered with 403. What does the frontend do?Access token hết hạn được trả 403. Frontend sẽ làm gì?\n   Answer: d) Logs the user out (or shows “forbidden”) instead of refreshing\n   And the reverse — 401 for a permission problem — makes the client refresh forever against a wall.VI: Và ngược lại — 401 cho vấn đề phân quyền — khiến client làm mới mãi vào một bức tường.\n\n2. requireAuth queries the User row on every request (1.010 ms vs 0.029 ms for verify only). What does that millisecond buy?requireAuth truy vấn dòng User ở mọi request (1,010 ms so với 0,029 ms nếu chỉ verify). Mili giây đó mua được gì?\n   Answer: a) Deletion, role changes and revocation take effect at once\n   The useful question is not “stateless or not” but “how stale may an authorisation decision be?” — for roles and account status: not at all.VI: Câu hỏi hữu ích không phải \"không trạng thái hay không\" mà là \"quyết định phân quyền được cũ tới mức nào?\" — với vai trò và trạng thái tài khoản: không chút nào.\n\n3. router.use(requireAuth) is the LAST line of the notes router. Which routes are protected?router.use(requireAuth) là dòng CUỐI của router notes. Route nào được bảo vệ?\n   Answer: a) None of the ones declared above it\n   Protect at the top, let routes opt out: forgetting then fails closed (a locked door), not open.VI: Bảo vệ ở đầu, để route chủ động mở ra: quên thì cửa khoá, không phải cửa mở.\n\n4. router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler). What happens?router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler). Chuyện gì xảy ra?\n   Answer: c) Every request is 403, the admin’s too\n   Authenticate first, authorise second — in exactly that order. The message sends you hunting in the wrong place.VI: Xác thực trước, phân quyền sau — đúng thứ tự đó. Thông điệp lỗi khiến bạn đi tìm sai chỗ.\n\n5. Binh (valid token) requests GET /notes/1, which belongs to An. The lesson answers 404, not 403. Why?Bình (token hợp lệ) gọi GET /notes/1, ghi chú của An. Bài trả 404, không phải 403. Vì sao?\n   Answer: b) 403 confirms the note exists; 404 looks like it never existed\n   Use 403 when the user already knows the resource exists (a workspace they can see but not edit).VI: Dùng 403 khi người dùng đã biết tài nguyên tồn tại (không gian làm việc họ thấy được mà không sửa được).\n\n6. Why is actor the FIRST parameter of every service function?Vì sao actor là tham số ĐẦU TIÊN của mọi hàm service?\n   Answer: c) You cannot call the function without answering “on whose behalf?”\n   The alternative — reading a global “current user” — is exactly how IDOR holes appear.VI: Cách khác — đọc \"người dùng hiện tại\" toàn cục — chính là cách lỗ IDOR xuất hiện.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Logs the user out (or shows “forbidden”) instead of refreshing</p><p>And the reverse — 401 for a permission problem — makes the client refresh forever against a wall.</p><p><i>VI: Và ngược lại — 401 cho vấn đề phân quyền — khiến client làm mới mãi vào một bức tường.</i></p></li><li><p><b>a)</b> Deletion, role changes and revocation take effect at once</p><p>The useful question is not “stateless or not” but “how stale may an authorisation decision be?” — for roles and account status: not at all.</p><p><i>VI: Câu hỏi hữu ích không phải \"không trạng thái hay không\" mà là \"quyết định phân quyền được cũ tới mức nào?\" — với vai trò và trạng thái tài khoản: không chút nào.</i></p></li><li><p><b>a)</b> None of the ones declared above it</p><p>Protect at the top, let routes opt out: forgetting then fails closed (a locked door), not open.</p><p><i>VI: Bảo vệ ở đầu, để route chủ động mở ra: quên thì cửa khoá, không phải cửa mở.</i></p></li><li><p><b>c)</b> Every request is 403, the admin’s too</p><p>Authenticate first, authorise second — in exactly that order. The message sends you hunting in the wrong place.</p><p><i>VI: Xác thực trước, phân quyền sau — đúng thứ tự đó. Thông điệp lỗi khiến bạn đi tìm sai chỗ.</i></p></li><li><p><b>b)</b> 403 confirms the note exists; 404 looks like it never existed</p><p>Use 403 when the user already knows the resource exists (a workspace they can see but not edit).</p><p><i>VI: Dùng 403 khi người dùng đã biết tài nguyên tồn tại (không gian làm việc họ thấy được mà không sửa được).</i></p></li><li><p><b>c)</b> You cannot call the function without answering “on whose behalf?”</p><p>The alternative — reading a global “current user” — is exactly how IDOR holes appear.</p><p><i>VI: Cách khác — đọc \"người dùng hiện tại\" toàn cục — chính là cách lỗ IDOR xuất hiện.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An expired access token is answered with 403. What does the frontend do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Access token hết hạn được trả 403. Frontend sẽ làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Retries the same request until it works"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Refreshes the token, as intended"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing, 403 and 401 are handled the same"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Logs the user out (or shows “forbidden”) instead of refreshing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>And the reverse — 401 for a permission problem — makes the client refresh forever against a wall.</p><p><i>VI: Và ngược lại — 401 cho vấn đề phân quyền — khiến client làm mới mãi vào một bức tường.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>requireAuth queries the User row on every request (1.010 ms vs 0.029 ms for verify only). What does that millisecond buy?</p><p style=\"opacity:.75;font-size:.92em\"><i>requireAuth truy vấn dòng User ở mọi request (1,010 ms so với 0,029 ms nếu chỉ verify). Mili giây đó mua được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Deletion, role changes and revocation take effect at once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing useful; the lookup is only there for logging"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It makes the JWT signature harder to forge offline"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It refreshes the access token automatically when needed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The useful question is not “stateless or not” but “how stale may an authorisation decision be?” — for roles and account status: not at all.</p><p><i>VI: Câu hỏi hữu ích không phải \"không trạng thái hay không\" mà là \"quyết định phân quyền được cũ tới mức nào?\" — với vai trò và trạng thái tài khoản: không chút nào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>router.use(requireAuth)</code> is the LAST line of the notes router. Which routes are protected?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>router.use(requireAuth)</code> là dòng CUỐI của router notes. Route nào được bảo vệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None of the ones declared above it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All of them, because use() applies to the whole router"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only GET routes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only routes with a :id parameter"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Protect at the top, let routes opt out: forgetting then fails closed (a locked door), not open.</p><p><i>VI: Bảo vệ ở đầu, để route chủ động mở ra: quên thì cửa khoá, không phải cửa mở.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p><code>router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler)</code>. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>router.delete(\"/users/:id\", requireRole(\"ADMIN\"), requireAuth, handler)</code>. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only non-admins are blocked"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express throws at startup"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every request is 403, the admin’s too"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It works; order of middleware does not matter"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Authenticate first, authorise second — in exactly that order. The message sends you hunting in the wrong place.</p><p><i>VI: Xác thực trước, phân quyền sau — đúng thứ tự đó. Thông điệp lỗi khiến bạn đi tìm sai chỗ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Binh (valid token) requests GET /notes/1, which belongs to An. The lesson answers 404, not 403. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bình (token hợp lệ) gọi GET /notes/1, ghi chú của An. Bài trả 404, không phải 403. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "404 is cheaper to compute than 403 for a busy server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "403 confirms the note exists; 404 looks like it never existed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 403 would make the frontend log Binh out at once"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express cannot send a 403 status from inside a service"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Use 403 when the user already knows the resource exists (a workspace they can see but not edit).</p><p><i>VI: Dùng 403 khi người dùng đã biết tài nguyên tồn tại (không gian làm việc họ thấy được mà không sửa được).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Why is <code>actor</code> the FIRST parameter of every service function?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>actor</code> là tham số ĐẦU TIÊN của mọi hàm service?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For performance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So that the route can skip requireAuth"
+              },
+              {
+                "ma": "c",
+                "noiDung": "You cannot call the function without answering “on whose behalf?”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because Express passes it first"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The alternative — reading a global “current user” — is exactly how IDOR holes appear.</p><p><i>VI: Cách khác — đọc \"người dùng hiện tại\" toàn cục — chính là cách lỗ IDOR xuất hiện.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mounting requireAuth after the routes.|||Gắn requireAuth sau các route."
+        },
+        {
+          "loi": "403 for someone else’s private note.|||403 cho ghi chú riêng của người khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "authentication",
+          "vi": "xác thực",
+          "giaiThich": "401."
+        },
+        {
+          "en": "authorization",
+          "vi": "phân quyền",
+          "giaiThich": "403."
+        },
+        {
+          "en": "IDOR",
+          "vi": "IDOR",
+          "giaiThich": "Tham chiếu trực tiếp đối tượng không an toàn: đổi số trong URL."
+        }
+      ]
+    },
+    {
+      "title": "8.3 · 2 — Write readToken(req): Bearer header first, HttpOnly cookie as the fallback",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication",
+        "Express"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Header first, cookie as a fallback. Accepting both costs three lines.” Write <code>readToken(req)</code> — <code>req.get(name)</code> reads a header (case-insensitive), <code>req.cookies</code> may be missing:</p>\n<ul><li>If <code>Authorization</code> starts with exactly <code>\"Bearer \"</code> and the rest (trimmed) is not empty ⇒ return the rest, trimmed.</li>\n<li>Otherwise ⇒ <code>req.cookies.access_token</code> if it is a non-empty string, else <code>null</code>.</li></ul>\n<p>A <code>Basic …</code> header is not a bearer token; an empty <code>\"Bearer \"</code> must not count as a token.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return a string or <code>null</code> — never <code>undefined</code> or <code>\"\"</code>.</li>\n  <li>Optional chaining for the cookies.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Header trước, cookie làm dự phòng. Nhận cả hai tốn ba dòng.\" Viết <code>readToken(req)</code> — <code>req.get(name)</code> đọc header (không phân biệt hoa thường), <code>req.cookies</code> có thể không có:</p>\n<ul><li>Nếu <code>Authorization</code> bắt đầu đúng bằng <code>\"Bearer \"</code> và phần còn lại (đã trim) không rỗng ⇒ trả phần còn lại, đã trim.</li>\n<li>Không thì ⇒ <code>req.cookies.access_token</code> nếu là chuỗi không rỗng, không nữa thì <code>null</code>.</li></ul>\n<p>Header <code>Basic …</code> không phải bearer token; <code>\"Bearer \"</code> rỗng không được tính là token.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả chuỗi hoặc <code>null</code> — không bao giờ <code>undefined</code> hay <code>\"\"</code>.</li>\n  <li>Optional chaining cho cookies.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readToken(mkReq({ headers: { Authorization: 'Bearer eyJhbGciOi.abc.def' } }))",
+          "output": "\"eyJhbGciOi.abc.def\"",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const h = req.get(\"authorization\")</code>; <code>h?.startsWith(\"Bearer \")</code>.",
+        "<code>return req.cookies?.access_token || null</code> turns undefined and <code>\"\"</code> into null.|||<code>return req.cookies?.access_token || null</code> biến undefined và <code>\"\"</code> thành null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readToken(req) {\n  // Write your solution here\n  return req.get('authorization').split(' ')[1];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readToken(req) {\n  const h = req.get('authorization');\n  // header first: mobile apps and server-to-server callers have no cookie jar\n  if (typeof h === 'string' && h.startsWith('Bearer ') && h.slice(7).trim()) return h.slice(7).trim();\n  // cookie as the fallback: a browser app is safer with an HttpOnly cookie (lesson 8.4)\n  return req.cookies?.access_token || null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two transports for one token: a header for callers without a cookie jar, a cookie for browsers (where HttpOnly keeps it away from injected scripts). Normalising “nothing usable” to null gives requireAuth exactly one case to handle: NO_TOKEN.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai đường vận chuyển cho một token: header cho bên gọi không có hũ cookie, cookie cho trình duyệt (nơi HttpOnly giữ nó tránh xa script bị chèn). Quy mọi \"không dùng được\" về null cho requireAuth đúng một trường hợp phải xử lý: NO_TOKEN.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: readToken(mkReq({ headers: { Authorization: 'Bearer eyJhbGciOi.abc.def' } }))",
+              "vi": "Ca 1"
+            },
+            "goi": "readToken(mkReq({ headers: { Authorization: 'Bearer eyJhbGciOi.abc.def' } }))",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);",
+            "mongDoi": "eyJhbGciOi.abc.def"
+          },
+          {
+            "moTa": {
+              "en": "No header ⇒ the cookie",
+              "vi": "Không có header ⇒ cookie"
+            },
+            "goi": "readToken(mkReq({ cookies: { access_token: 'cookie-token' } }))",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);",
+            "mongDoi": "cookie-token"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[readToken(mkReq({ headers: { authorization: 'Basic dXNlcjpwYXNz' }, cookies: { access_token: 'c' } })), readToken(mkReq({ headers: { authorization: 'Bearer ' } })), readToken({ get: () => undefined })]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);",
+            "mongDoi": [
+              "c",
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[readToken(mkReq({ headers: { AUTHORIZATION: 'Bearer  spaced  ' }, cookies: { access_token: 'c' } })), readToken(mkReq({ headers: { authorization: 'bearer lower' }, cookies: { access_token: '' } }))]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);",
+            "mongDoi": [
+              "spaced",
+              null
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>h.split(\" \")[1]</code>: “Basic dXNlcjpwYXNz” becomes a “token”.|||<code>h.split(\" \")[1]</code>: \"Basic dXNlcjpwYXNz\" thành một \"token\"."
+        },
+        {
+          "loi": "Returning <code>\"\"</code> for <code>\"Bearer \"</code>: downstream code checks <code>=== null</code> and verifies an empty string.|||Trả <code>\"\"</code> cho <code>\"Bearer \"</code>: code phía sau kiểm <code>=== null</code> rồi đi verify một chuỗi rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Bearer token",
+          "vi": "token mang theo",
+          "giaiThich": "Authorization: Bearer <token>."
+        },
+        {
+          "en": "HttpOnly cookie",
+          "vi": "cookie HttpOnly",
+          "giaiThich": "JavaScript không đọc được."
+        }
+      ]
+    },
+    {
+      "title": "8.3 · 3 — Write makeRequireAuth(): six refusals, each with its own code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "authentication",
+        "Express middleware"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 8.3’s middleware, with its dependencies injected so the grader can fake them. <code>makeRequireAuth({ verifyAccessToken, findUser })</code> returns <code>async (req, res, next)</code>. <code>readToken</code> (exercise 2) and <code>AppError</code> are in <code>helpers.js</code>.</p>\n<ol><li>No token ⇒ <code>next(new AppError(401, 'NO_TOKEN', …))</code>.</li>\n<li><code>verifyAccessToken(token)</code> (synchronous, like jwt.verify) throws: <code>err.name === 'TokenExpiredError'</code> ⇒ 401 <code>TOKEN_EXPIRED</code>; anything else ⇒ 401 <code>TOKEN_INVALID</code> (message = the error’s message).</li>\n<li><code>await findUser(Number(payload.sub))</code> ⇒ <code>null</code> ⇒ 401 <code>USER_GONE</code>.</li>\n<li><code>user.tokenVersion !== payload.tv</code> ⇒ 401 <code>TOKEN_REVOKED</code>.</li>\n<li>Otherwise <code>req.user = { id, email, role }</code> <b>from the database row</b> (not from the token), then <code>next()</code>.</li></ol>\n<p>Exactly one <code>next</code> call per request; never call findUser for a token that did not verify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Each refusal is <code>next(AppError)</code>, never <code>res.status(…)</code> directly.</li>\n  <li>The role on req.user comes from the user row.</li>\n</ul>",
+      "problemHtmlVi": "<p>Middleware của bài 8.3, với các phụ thuộc được tiêm vào để máy chấm làm giả. <code>makeRequireAuth({ verifyAccessToken, findUser })</code> trả <code>async (req, res, next)</code>. <code>readToken</code> (bài 2) và <code>AppError</code> nằm trong <code>helpers.js</code>.</p>\n<ol><li>Không có token ⇒ <code>next(new AppError(401, 'NO_TOKEN', …))</code>.</li>\n<li><code>verifyAccessToken(token)</code> (đồng bộ, như jwt.verify) ném lỗi: <code>err.name === 'TokenExpiredError'</code> ⇒ 401 <code>TOKEN_EXPIRED</code>; còn lại ⇒ 401 <code>TOKEN_INVALID</code> (message = message của lỗi).</li>\n<li><code>await findUser(Number(payload.sub))</code> ⇒ <code>null</code> ⇒ 401 <code>USER_GONE</code>.</li>\n<li><code>user.tokenVersion !== payload.tv</code> ⇒ 401 <code>TOKEN_REVOKED</code>.</li>\n<li>Còn lại <code>req.user = { id, email, role }</code> <b>lấy từ dòng CSDL</b> (không phải từ token), rồi <code>next()</code>.</li></ol>\n<p>Mỗi request đúng một lần gọi <code>next</code>; không bao giờ gọi findUser cho token chưa verify được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi lời từ chối là <code>next(AppError)</code>, không bao giờ <code>res.status(…)</code> trực tiếp.</li>\n  <li>Role trên req.user lấy từ dòng user.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await run({ headers: { authorization: 'Bearer ok:1:0:USER' } })",
+          "output": "{\"next\":[\"next()\"],\"user\":{\"id\":1,\"email\":\"an@vd.com\",\"role\":\"USER\"},\"lookups\":1}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Wrap ONLY <code>verifyAccessToken</code> in try/catch; return from the catch.|||Chỉ bọc <code>verifyAccessToken</code> trong try/catch; return từ catch.",
+        "<code>return next(…)</code> on every refusal so the next line never runs.|||<code>return next(…)</code> ở mọi lời từ chối để dòng sau không bao giờ chạy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function makeRequireAuth({ verifyAccessToken, findUser }) {\n  return async function requireAuth(req, res, next) {\n    // Write your solution here\n    const token = readToken(req);\n    try {\n      const payload = verifyAccessToken(token);\n      req.user = { id: Number(payload.sub), role: payload.role };\n      next();\n    } catch (err) {\n      next(new AppError(401, 'TOKEN_EXPIRED', err.message));\n    }\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — exercise 2 and the AppError of lesson 5.4\nfunction readToken(req) {\n  const h = req.get('authorization');\n  // header first: mobile apps and server-to-server callers have no cookie jar\n  if (typeof h === 'string' && h.startsWith('Bearer ') && h.slice(7).trim()) return h.slice(7).trim();\n  // cookie as the fallback: a browser app is safer with an HttpOnly cookie (lesson 8.4)\n  return req.cookies?.access_token || null;\n}\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function makeRequireAuth({ verifyAccessToken, findUser }) {\n  return async function requireAuth(req, res, next) {\n    const token = readToken(req);\n    if (!token) return next(new AppError(401, 'NO_TOKEN', 'Missing access token'));\n    let payload;\n    try {\n      payload = verifyAccessToken(token);\n    } catch (err) {\n      // different codes so the client reacts differently: refresh on TOKEN_EXPIRED, log in again otherwise\n      const code = err.name === 'TokenExpiredError' ? 'TOKEN_EXPIRED' : 'TOKEN_INVALID';\n      return next(new AppError(401, code, err.message));\n    }\n    // one database lookup: deletions, role changes and revocation take effect NOW, not in 15 minutes\n    const user = await findUser(Number(payload.sub));\n    if (!user) return next(new AppError(401, 'USER_GONE', 'Account no longer exists'));\n    if (user.tokenVersion !== payload.tv) return next(new AppError(401, 'TOKEN_REVOKED', 'Token has been revoked'));\n    req.user = { id: user.id, email: user.email, role: user.role };   // the role comes from the database, not the token\n    next();\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — exercise 2 and the AppError of lesson 5.4\nfunction readToken(req) {\n  const h = req.get('authorization');\n  // header first: mobile apps and server-to-server callers have no cookie jar\n  if (typeof h === 'string' && h.startsWith('Bearer ') && h.slice(7).trim()) return h.slice(7).trim();\n  // cookie as the fallback: a browser app is safer with an HttpOnly cookie (lesson 8.4)\n  return req.cookies?.access_token || null;\n}\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each refusal has its own machine-readable code because the client must react differently: TOKEN_EXPIRED ⇒ refresh once; TOKEN_INVALID, USER_GONE, TOKEN_REVOKED ⇒ real logout; NO_TOKEN ⇒ show the login screen. The single lookup is what makes deletion, demotion and revocation immediate — at a cost of one millisecond against a route that spends ten on its real query.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi lời từ chối có mã riêng máy đọc được vì client phải phản ứng khác nhau: TOKEN_EXPIRED ⇒ làm mới một lần; TOKEN_INVALID, USER_GONE, TOKEN_REVOKED ⇒ đăng xuất thật; NO_TOKEN ⇒ hiện màn đăng nhập. Một lần tra duy nhất làm việc xoá, hạ quyền và thu hồi có hiệu lực ngay — với giá một mili giây so với route tốn mười mili giây cho truy vấn thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A good token ⇒ req.user from the database",
+              "vi": "Token tốt ⇒ req.user từ CSDL"
+            },
+            "goi": "await run({ headers: { authorization: 'Bearer ok:1:0:USER' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": {
+              "next": [
+                "next()"
+              ],
+              "user": {
+                "id": 1,
+                "email": "an@vd.com",
+                "role": "USER"
+              },
+              "lookups": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "NO_TOKEN, TOKEN_INVALID (no lookup)",
+              "vi": "NO_TOKEN, TOKEN_INVALID (không tra)"
+            },
+            "goi": "[await run({}), await run({ headers: { authorization: 'Bearer bad-sig' } })]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": [
+              {
+                "next": [
+                  {
+                    "status": 401,
+                    "code": "NO_TOKEN"
+                  }
+                ],
+                "user": null,
+                "lookups": 0
+              },
+              {
+                "next": [
+                  {
+                    "status": 401,
+                    "code": "TOKEN_INVALID"
+                  }
+                ],
+                "user": null,
+                "lookups": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Expired ⇒ TOKEN_EXPIRED",
+              "vi": "Hết hạn ⇒ TOKEN_EXPIRED"
+            },
+            "goi": "await run({ cookies: { access_token: 'expired' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": {
+              "next": [
+                {
+                  "status": 401,
+                  "code": "TOKEN_EXPIRED"
+                }
+              ],
+              "user": null,
+              "lookups": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Deleted user ⇒ USER_GONE; old tv ⇒ TOKEN_REVOKED",
+              "vi": "User đã xoá ⇒ USER_GONE; tv cũ ⇒ TOKEN_REVOKED"
+            },
+            "goi": "[await run({ headers: { authorization: 'Bearer ok:5:0:USER' } }), await run({ headers: { authorization: 'Bearer ok:2:2:USER' } })]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": [
+              {
+                "next": [
+                  {
+                    "status": 401,
+                    "code": "USER_GONE"
+                  }
+                ],
+                "user": null,
+                "lookups": 1
+              },
+              {
+                "next": [
+                  {
+                    "status": 401,
+                    "code": "TOKEN_REVOKED"
+                  }
+                ],
+                "user": null,
+                "lookups": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Token says ADMIN, database says USER",
+              "vi": "Token ghi ADMIN, CSDL ghi USER"
+            },
+            "goi": "await run({ headers: { authorization: 'Bearer ok:1:0:ADMIN' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": {
+              "next": [
+                "next()"
+              ],
+              "user": {
+                "id": 1,
+                "email": "an@vd.com",
+                "role": "USER"
+              },
+              "lookups": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await run({ headers: { authorization: 'Bearer garbage' } }), await run({ headers: { authorization: 'Bearer ok:9:0:ADMIN' } })]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nclass JsonWebTokenError extends Error { constructor(m) { super(m); this.name = 'JsonWebTokenError'; } }\nclass TokenExpiredError extends JsonWebTokenError { constructor(m) { super(m); this.name = 'TokenExpiredError'; } }\n// fake verify: tokens look like \"ok:<sub>:<tv>:<role>\", \"expired\", \"bad-sig\", anything else = malformed\nconst verifyAccessToken = (t) => { if (t === 'expired') throw new TokenExpiredError('jwt expired'); if (t === 'bad-sig') throw new JsonWebTokenError('invalid signature');\n  const m = /^ok:(\\d+):(\\d+):(\\w+)$/.exec(t); if (!m) throw new JsonWebTokenError('jwt malformed'); return { sub: m[1], tv: Number(m[2]), role: m[3] }; };\nconst USERS = [{ id: 1, email: 'an@vd.com', name: 'An', role: 'USER', tokenVersion: 0 }, { id: 2, email: 'binh@vd.com', name: 'Binh', role: 'USER', tokenVersion: 3 }, { id: 9, email: 'admin@vd.com', name: 'Admin', role: 'ADMIN', tokenVersion: 0 }];\nlet lookups = 0;\nconst findUser = (id) => new Promise((ok) => setTimeout(() => { lookups++; ok(USERS.find((u) => u.id === id) || null); }, 1));\nconst run = async (o) => { const req = mkReq(o); const next = mkNext(); await makeRequireAuth({ verifyAccessToken, findUser })(req, mkRes(), next);\n  return { next: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code })), user: req.user ?? null, lookups }; };",
+            "mongDoi": [
+              {
+                "next": [
+                  {
+                    "status": 401,
+                    "code": "TOKEN_INVALID"
+                  }
+                ],
+                "user": null,
+                "lookups": 0
+              },
+              {
+                "next": [
+                  "next()"
+                ],
+                "user": {
+                  "id": 9,
+                  "email": "admin@vd.com",
+                  "role": "ADMIN"
+                },
+                "lookups": 1
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the role from the token: an admin demoted an hour ago is still ADMIN until the token expires.|||Lấy role từ token: admin bị hạ quyền một giờ trước vẫn là ADMIN tới khi token hết hạn."
+        },
+        {
+          "loi": "Mapping every verify error to TOKEN_EXPIRED — a forged token makes the client refresh instead of logging out.|||Gộp mọi lỗi verify thành TOKEN_EXPIRED — token giả khiến client làm mới thay vì đăng xuất."
+        },
+        {
+          "loi": "Skipping the tokenVersion comparison: “log out everywhere” stops working (lesson 8.4).|||Bỏ phép so tokenVersion: \"đăng xuất mọi thiết bị\" ngừng hoạt động (bài 8.4)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tokenVersion",
+          "vi": "phiên bản token",
+          "giaiThich": "Bộ đếm trên user, chép vào token là tv."
+        },
+        {
+          "en": "fail closed",
+          "vi": "hỏng thì đóng"
+        }
+      ]
+    },
+    {
+      "title": "8.3 · 4 — Write requireRole(...roles) and requirePermission(perm): 403, after authentication",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authorization",
+        "RBAC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two middleware factories. <code>AppError</code> is in <code>helpers.js</code>.</p>\n<ul><li><code>requireRole(...roles)</code> ⇒ <code>(req, res, next)</code>: <code>next()</code> if <code>req.user?.role</code> is one of <code>roles</code>, else <code>next(new AppError(403, 'FORBIDDEN', 'Requires role ADMIN or MODERATOR'))</code> (roles joined with <code>\" or \"</code>).</li>\n<li>The next step the lesson names — permissions instead of more roles. Write the table <code>PERMISSIONS</code>: <code>USER</code> = <code>note:read:own</code>, <code>note:write:own</code>, <code>note:delete:own</code>; <code>MODERATOR</code> = USER’s plus <code>note:read:any</code>, <code>note:delete:any</code>; <code>ADMIN</code> = USER’s plus <code>note:read:any</code>, <code>note:write:any</code>, <code>note:delete:any</code>, <code>user:delete</code>. Then <code>requirePermission(perm)</code>: <code>next()</code> if the user’s role grants <code>perm</code>, else 403 <code>FORBIDDEN</code> with message <code>\"Missing permission &lt;perm&gt;\"</code>. Unknown role or no user ⇒ no permissions.</li></ul>\n<p>One check runs them in the wrong order — before requireAuth set <code>req.user</code> — to show what the admin sees then.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Always <code>next()</code> or <code>next(err)</code>, exactly once.</li>\n  <li>Read <code>req.user?.role</code> — never crash on a missing user.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai hàm tạo middleware. <code>AppError</code> có trong <code>helpers.js</code>.</p>\n<ul><li><code>requireRole(...roles)</code> ⇒ <code>(req, res, next)</code>: <code>next()</code> nếu <code>req.user?.role</code> là một trong <code>roles</code>, không thì <code>next(new AppError(403, 'FORBIDDEN', 'Requires role ADMIN or MODERATOR'))</code> (các vai trò nối bằng <code>\" or \"</code>).</li>\n<li>Bước tiếp theo mà bài nhắc — quyền thay vì thêm vai trò. Viết bảng <code>PERMISSIONS</code> như bản tiếng Anh, rồi <code>requirePermission(perm)</code>: <code>next()</code> nếu vai trò của user cấp <code>perm</code>, không thì 403 <code>FORBIDDEN</code> với message <code>\"Missing permission &lt;perm&gt;\"</code>. Vai trò lạ hoặc không có user ⇒ không có quyền nào.</li></ul>\n<p>Một kiểm chạy chúng sai thứ tự — trước khi requireAuth đặt <code>req.user</code> — để thấy admin nhận được gì khi đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luôn <code>next()</code> hoặc <code>next(err)</code>, đúng một lần.</li>\n  <li>Đọc <code>req.user?.role</code> — không bao giờ sập khi thiếu user.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[call(requireRole('ADMIN'), U('ADMIN')), call(requireRole('ADMIN'), U('USER'))]",
+          "output": "[[\"next()\"],[{\"status\":403,\"code\":\"FORBIDDEN\",\"message\":\"Requires role ADMIN\"}]]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A factory: <code>const requireRole = (...roles) =&gt; (req, res, next) =&gt; …</code>.|||Hàm tạo: <code>const requireRole = (...roles) =&gt; (req, res, next) =&gt; …</code>.",
+        "<code>(PERMISSIONS[req.user?.role] || []).includes(perm)</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const requireRole = (...roles) => (req, res, next) => {\n  // Write your solution here\n  if (req.user.role === roles[0]) return next();\n  next(new AppError(401, 'UNAUTHORIZED', 'Not allowed'));\n};\nconst PERMISSIONS = {};\nconst requirePermission = (perm) => (req, res, next) => next();\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nconst requireRole = (...roles) => (req, res, next) =>\n  roles.includes(req.user?.role)\n    ? next()\n    : next(new AppError(403, 'FORBIDDEN', 'Requires role ' + roles.join(' or ')));\n\nconst PERMISSIONS = {\n  \"USER\": [\n    \"note:read:own\",\n    \"note:write:own\",\n    \"note:delete:own\"\n  ],\n  \"MODERATOR\": [\n    \"note:read:own\",\n    \"note:write:own\",\n    \"note:delete:own\",\n    \"note:read:any\",\n    \"note:delete:any\"\n  ],\n  \"ADMIN\": [\n    \"note:read:own\",\n    \"note:write:own\",\n    \"note:delete:own\",\n    \"note:read:any\",\n    \"note:write:any\",\n    \"note:delete:any\",\n    \"user:delete\"\n  ]\n};\n\n// adding a role = editing ONE table, not every route\nconst requirePermission = (perm) => (req, res, next) =>\n  (PERMISSIONS[req.user?.role] || []).includes(perm)\n    ? next()\n    : next(new AppError(403, 'FORBIDDEN', 'Missing permission ' + perm));\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A role check asks “is this KIND of user allowed?”; it cannot know which row they want, so it is a middleware for a group of routes. Permissions push the role→capability mapping into one table: a new MODERATOR role is one entry, not an edit to every route that ever said requireRole(\"ADMIN\").</p>",
+      "solutionExplanationHtmlVi": "<p>Kiểm vai trò hỏi \"LOẠI người dùng này có được phép?\"; nó không biết họ muốn dòng nào, nên nó là middleware cho một nhóm route. Quyền đẩy ánh xạ vai trò→khả năng vào một bảng: vai trò MODERATOR mới là một mục, không phải sửa mọi route từng ghi requireRole(\"ADMIN\").</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "ADMIN passes, USER gets 403",
+              "vi": "ADMIN qua, USER nhận 403"
+            },
+            "goi": "[call(requireRole('ADMIN'), U('ADMIN')), call(requireRole('ADMIN'), U('USER'))]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst call = (mw, user) => { const req = mkReq({ user }); const next = mkNext(); try { mw(req, mkRes(), next); } catch (e) { return { crashed: e.name }; } return next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, message: e.message })); };\nconst U = (role) => ({ id: 1, role });",
+            "mongDoi": [
+              [
+                "next()"
+              ],
+              [
+                {
+                  "status": 403,
+                  "code": "FORBIDDEN",
+                  "message": "Requires role ADMIN"
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Wrong order: no req.user yet ⇒ 403 (not a crash)",
+              "vi": "Sai thứ tự: chưa có req.user ⇒ 403 (không sập)"
+            },
+            "goi": "call(requireRole('ADMIN', 'MODERATOR'), undefined)",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst call = (mw, user) => { const req = mkReq({ user }); const next = mkNext(); try { mw(req, mkRes(), next); } catch (e) { return { crashed: e.name }; } return next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, message: e.message })); };\nconst U = (role) => ({ id: 1, role });",
+            "mongDoi": [
+              {
+                "status": 403,
+                "code": "FORBIDDEN",
+                "message": "Requires role ADMIN or MODERATOR"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: [call(requirePermission('note:delete:any'), U('MODERATOR')), call(requirePerm...",
+              "vi": "Ca 3"
+            },
+            "goi": "[call(requirePermission('note:delete:any'), U('MODERATOR')), call(requirePermission('note:write:any'), U('MODERATOR')), call(requirePermission('user:delete'), U('ADMIN'))]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst call = (mw, user) => { const req = mkReq({ user }); const next = mkNext(); try { mw(req, mkRes(), next); } catch (e) { return { crashed: e.name }; } return next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, message: e.message })); };\nconst U = (role) => ({ id: 1, role });",
+            "mongDoi": [
+              [
+                "next()"
+              ],
+              [
+                {
+                  "status": 403,
+                  "code": "FORBIDDEN",
+                  "message": "Missing permission note:write:any"
+                }
+              ],
+              [
+                "next()"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[call(requireRole('MODERATOR', 'ADMIN'), U('MODERATOR')), call(requirePermission('note:read:own'), U('USER')), call(requirePermission('note:read:any'), U('USER')), call(requirePermission('note:read:own'), U('GUEST')), call(requirePermission('note:read:own'), undefined)]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst call = (mw, user) => { const req = mkReq({ user }); const next = mkNext(); try { mw(req, mkRes(), next); } catch (e) { return { crashed: e.name }; } return next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, message: e.message })); };\nconst U = (role) => ({ id: 1, role });",
+            "mongDoi": [
+              [
+                "next()"
+              ],
+              [
+                "next()"
+              ],
+              [
+                {
+                  "status": 403,
+                  "code": "FORBIDDEN",
+                  "message": "Missing permission note:read:any"
+                }
+              ],
+              [
+                {
+                  "status": 403,
+                  "code": "FORBIDDEN",
+                  "message": "Missing permission note:read:own"
+                }
+              ],
+              [
+                {
+                  "status": 403,
+                  "code": "FORBIDDEN",
+                  "message": "Missing permission note:read:own"
+                }
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The permission table",
+              "vi": "Bảng quyền"
+            },
+            "goi": "Object.fromEntries(Object.entries(PERMISSIONS).map(([r, ps]) => [r, [...ps].sort()]))",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst call = (mw, user) => { const req = mkReq({ user }); const next = mkNext(); try { mw(req, mkRes(), next); } catch (e) { return { crashed: e.name }; } return next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, message: e.message })); };\nconst U = (role) => ({ id: 1, role });",
+            "mongDoi": {
+              "USER": [
+                "note:delete:own",
+                "note:read:own",
+                "note:write:own"
+              ],
+              "MODERATOR": [
+                "note:delete:any",
+                "note:delete:own",
+                "note:read:any",
+                "note:read:own",
+                "note:write:own"
+              ],
+              "ADMIN": [
+                "note:delete:any",
+                "note:delete:own",
+                "note:read:any",
+                "note:read:own",
+                "note:write:any",
+                "note:write:own",
+                "user:delete"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>req.user.role</code> without <code>?.</code>: in the wrong order the server throws a TypeError (500) instead of a 403.|||<code>req.user.role</code> không có <code>?.</code>: sai thứ tự thì server ném TypeError (500) thay vì 403."
+        },
+        {
+          "loi": "Answering 401 when the role is wrong — the client refreshes forever.|||Trả 401 khi sai vai trò — client làm mới mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RBAC",
+          "vi": "phân quyền theo vai trò"
+        },
+        {
+          "en": "permission",
+          "vi": "quyền",
+          "giaiThich": "note:delete:any"
+        }
+      ]
+    },
+    {
+      "title": "8.3 · 5 — Delete AUTHOR_ID = 1: write createNotesService(db) with actor first and one canTouch",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "authorization",
+        "IDOR",
+        "mass assignment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lie at the top of the chapter-7 service — <code>const AUTHOR_ID = 1</code> — is gone. Every function now takes the <b>actor</b> (<code>{ id, role }</code>, i.e. <code>req.user</code>) as its first parameter. <code>db</code> is a fake repository: <code>findNote(id)</code>, <code>findNotes({ authorId, q? })</code>, <code>updateNote(id, data)</code>, <code>deleteNote(id)</code> (all async). Write <code>createNotesService(db)</code> returning:</p>\n<ul><li><code>list(actor, { q })</code> ⇒ only the actor’s notes (<code>findNotes({ authorId: actor.id, q })</code>, <code>q</code> only when given) — for an ADMIN too: “my notes”.</li>\n<li><code>get(actor, id)</code> ⇒ the note if the actor <b>owns it or is ADMIN</b>; otherwise — missing <b>or someone else’s</b> — <code>null</code> (the route answers 404).</li>\n<li><code>update(actor, id, patch)</code> ⇒ decides through <code>get</code>; <code>null</code> if not allowed; drops <code>id</code> and <code>authorId</code> from the patch; returns <code>updateNote(id, safe)</code>.</li>\n<li><code>remove(actor, id)</code> ⇒ through <code>get</code>; <code>false</code> if not allowed, else delete and <code>true</code>.</li></ul>\n<p>The hidden checks replay the lesson: Binh reads, deletes and lists An’s note, tries to hand his note to An through the body, and the admin reads note 1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One <code>canTouch</code>, used by get; update and remove go through get.</li>\n  <li>Someone else’s note looks exactly like a missing one.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lời nói dối ở đầu service chương 7 — <code>const AUTHOR_ID = 1</code> — đã bị xoá. Mọi hàm giờ nhận <b>actor</b> (<code>{ id, role }</code>, tức <code>req.user</code>) làm tham số đầu. <code>db</code> là kho GIẢ: <code>findNote(id)</code>, <code>findNotes({ authorId, q? })</code>, <code>updateNote(id, data)</code>, <code>deleteNote(id)</code> (đều async). Viết <code>createNotesService(db)</code> trả về:</p>\n<ul><li><code>list(actor, { q })</code> ⇒ chỉ ghi chú của actor (<code>findNotes({ authorId: actor.id, q })</code>, <code>q</code> chỉ khi có) — với ADMIN cũng vậy: \"ghi chú của tôi\".</li>\n<li><code>get(actor, id)</code> ⇒ ghi chú nếu actor <b>là chủ hoặc là ADMIN</b>; không thì — không có <b>hoặc của người khác</b> — <code>null</code> (route trả 404).</li>\n<li><code>update(actor, id, patch)</code> ⇒ quyết định qua <code>get</code>; <code>null</code> nếu không được phép; bỏ <code>id</code> và <code>authorId</code> khỏi patch; trả <code>updateNote(id, safe)</code>.</li>\n<li><code>remove(actor, id)</code> ⇒ qua <code>get</code>; <code>false</code> nếu không được phép, không thì xoá và <code>true</code>.</li></ul>\n<p>Các kiểm ẩn diễn lại bài: Bình đọc, xoá và liệt kê ghi chú của An, thử chuyển ghi chú của mình cho An qua body, và admin đọc ghi chú 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một <code>canTouch</code>, dùng trong get; update và remove đi qua get.</li>\n  <li>Ghi chú của người khác trông y như ghi chú không tồn tại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const s = createNotesService(mkDb()); return [await s.get(an, 1), await s.get(an, 2), await s.get(an, 99)]; })()",
+          "output": "[{\"id\":1,\"title\":\"Ghi chu cua An\",\"authorId\":1},null,null]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const canTouch = (note, actor) =&gt; note.authorId === actor.id || actor.role === \"ADMIN\";</code>",
+        "<code>const { id: _i, authorId: _a, ...safe } = patch;</code> — an explicit denylist; chapter 6’s schema is the stronger allowlist.|||<code>const { id: _i, authorId: _a, ...safe } = patch;</code> — danh sách cấm tường minh; lược đồ của chương 6 là danh sách cho phép mạnh hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNotesService(db) {\n  // Write your solution here (this is the chapter-7 version)\n  const AUTHOR_ID = 1;\n  return {\n    list: (actor, { q } = {}) => db.findNotes({ q }),\n    get: (actor, id) => db.findNote(id),\n    update: (actor, id, patch) => db.updateNote(id, patch),\n    remove: async (actor, id) => { await db.deleteNote(id); return true; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNotesService(db) {\n  // the permission rule lives in EXACTLY ONE PLACE: the owner, or an ADMIN\n  const canTouch = (note, actor) => note.authorId === actor.id || actor.role === 'ADMIN';\n  async function get(actor, id) {\n    const note = await db.findNote(id);\n    if (!note || !canTouch(note, actor)) return null;          // 404, NOT 403: do not confirm someone else's row exists\n    return note;\n  }\n  return {\n    async list(actor, { q } = {}) {\n      // the authorId clause is the only thing between \"my notes\" and \"everyone's notes\"\n      return db.findNotes({ authorId: actor.id, ...(q ? { q } : {}) });\n    },\n    get,\n    async update(actor, id, patch) {\n      if (!await get(actor, id)) return null;                   // the permission decision goes through get()\n      const { id: _i, authorId: _a, ...safe } = patch;          // the owner cannot be changed through the body\n      return db.updateNote(id, safe);\n    },\n    async remove(actor, id) {\n      if (!await get(actor, id)) return false;\n      await db.deleteNote(id);\n      return true;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>IDOR needs no exploit code: a valid user types another number in the URL. The defence is structural — the actor is a required parameter, the rule lives in one function, and every operation passes through it — so changing the rule (shares, teams, moderators) is one edit and there is no fourth call site to forget. 404 for other people’s rows means ids cannot be used to map the database.</p>",
+      "solutionExplanationHtmlVi": "<p>IDOR không cần code tấn công: một người dùng hợp lệ gõ số khác vào URL. Cách chống mang tính cấu trúc — actor là tham số bắt buộc, luật nằm trong một hàm, và mọi thao tác đi qua nó — nên đổi luật (chia sẻ, nhóm, người kiểm duyệt) là một chỗ sửa và không có nơi gọi thứ tư để quên. 404 cho dòng của người khác nghĩa là không dùng id để vẽ bản đồ CSDL được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An: own note, Binh’s note (null), missing (null)",
+              "vi": "An: ghi chú của mình, của Bình (null), không có (null)"
+            },
+            "goi": "await (async () => { const s = createNotesService(mkDb()); return [await s.get(an, 1), await s.get(an, 2), await s.get(an, 99)]; })()",
+            "chuanBi": "const mkDb = () => { const notes = new Map([[1, { id: 1, title: 'Ghi chu cua An', authorId: 1 }], [2, { id: 2, title: 'Ghi chu cua Binh', authorId: 2 }], [3, { id: 3, title: 'An again', authorId: 1 }]]);\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { notes,\n    findNote: (id) => wait(notes.has(id) ? { ...notes.get(id) } : null),\n    findNotes: (where) => wait([...notes.values()].filter((n) => (where.authorId === undefined || n.authorId === where.authorId) && (!where.q || n.title.toLowerCase().includes(where.q.toLowerCase()))).map((n) => ({ ...n }))),\n    updateNote: (id, data) => wait(Object.assign(notes.get(id), data) && { ...notes.get(id) }),\n    deleteNote: (id) => wait(notes.delete(id)) }; };\nconst an = { id: 1, role: 'USER' }, binh = { id: 2, role: 'USER' }, admin = { id: 9, role: 'ADMIN' };",
+            "mongDoi": [
+              {
+                "id": 1,
+                "title": "Ghi chu cua An",
+                "authorId": 1
+              },
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "list: only An’s notes",
+              "vi": "list: chỉ ghi chú của An"
+            },
+            "goi": "await (async () => { const s = createNotesService(mkDb()); return [await s.list(an), await s.list(an, { q: 'again' })]; })()",
+            "chuanBi": "const mkDb = () => { const notes = new Map([[1, { id: 1, title: 'Ghi chu cua An', authorId: 1 }], [2, { id: 2, title: 'Ghi chu cua Binh', authorId: 2 }], [3, { id: 3, title: 'An again', authorId: 1 }]]);\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { notes,\n    findNote: (id) => wait(notes.has(id) ? { ...notes.get(id) } : null),\n    findNotes: (where) => wait([...notes.values()].filter((n) => (where.authorId === undefined || n.authorId === where.authorId) && (!where.q || n.title.toLowerCase().includes(where.q.toLowerCase()))).map((n) => ({ ...n }))),\n    updateNote: (id, data) => wait(Object.assign(notes.get(id), data) && { ...notes.get(id) }),\n    deleteNote: (id) => wait(notes.delete(id)) }; };\nconst an = { id: 1, role: 'USER' }, binh = { id: 2, role: 'USER' }, admin = { id: 9, role: 'ADMIN' };",
+            "mongDoi": [
+              [
+                {
+                  "id": 1,
+                  "title": "Ghi chu cua An",
+                  "authorId": 1
+                },
+                {
+                  "id": 3,
+                  "title": "An again",
+                  "authorId": 1
+                }
+              ],
+              [
+                {
+                  "id": 3,
+                  "title": "An again",
+                  "authorId": 1
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Lesson steps 6–6d: Binh vs An’s note, then the admin",
+              "vi": "Bước 6–6d của bài: Bình với ghi chú của An, rồi admin"
+            },
+            "goi": "await (async () => { const db = mkDb(); const s = createNotesService(db); return [await s.get(binh, 1), await s.remove(binh, 1), await s.list(binh, { q: 'An' }), db.notes.has(1), await s.get(admin, 1)]; })()",
+            "chuanBi": "const mkDb = () => { const notes = new Map([[1, { id: 1, title: 'Ghi chu cua An', authorId: 1 }], [2, { id: 2, title: 'Ghi chu cua Binh', authorId: 2 }], [3, { id: 3, title: 'An again', authorId: 1 }]]);\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { notes,\n    findNote: (id) => wait(notes.has(id) ? { ...notes.get(id) } : null),\n    findNotes: (where) => wait([...notes.values()].filter((n) => (where.authorId === undefined || n.authorId === where.authorId) && (!where.q || n.title.toLowerCase().includes(where.q.toLowerCase()))).map((n) => ({ ...n }))),\n    updateNote: (id, data) => wait(Object.assign(notes.get(id), data) && { ...notes.get(id) }),\n    deleteNote: (id) => wait(notes.delete(id)) }; };\nconst an = { id: 1, role: 'USER' }, binh = { id: 2, role: 'USER' }, admin = { id: 9, role: 'ADMIN' };",
+            "mongDoi": [
+              null,
+              false,
+              [],
+              true,
+              {
+                "id": 1,
+                "title": "Ghi chu cua An",
+                "authorId": 1
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Step 7: owner change through the body is blocked; Binh cannot update An’s",
+              "vi": "Bước 7: đổi chủ qua body bị chặn; Bình không sửa được của An"
+            },
+            "goi": "await (async () => { const db = mkDb(); const s = createNotesService(db); const r = await s.update(binh, 2, { title: 'mine', authorId: 1, id: 7 }); const x = await s.update(binh, 1, { title: 'hacked' }); return [r, x, db.notes.get(1).title]; })()",
+            "chuanBi": "const mkDb = () => { const notes = new Map([[1, { id: 1, title: 'Ghi chu cua An', authorId: 1 }], [2, { id: 2, title: 'Ghi chu cua Binh', authorId: 2 }], [3, { id: 3, title: 'An again', authorId: 1 }]]);\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { notes,\n    findNote: (id) => wait(notes.has(id) ? { ...notes.get(id) } : null),\n    findNotes: (where) => wait([...notes.values()].filter((n) => (where.authorId === undefined || n.authorId === where.authorId) && (!where.q || n.title.toLowerCase().includes(where.q.toLowerCase()))).map((n) => ({ ...n }))),\n    updateNote: (id, data) => wait(Object.assign(notes.get(id), data) && { ...notes.get(id) }),\n    deleteNote: (id) => wait(notes.delete(id)) }; };\nconst an = { id: 1, role: 'USER' }, binh = { id: 2, role: 'USER' }, admin = { id: 9, role: 'ADMIN' };",
+            "mongDoi": [
+              {
+                "id": 2,
+                "title": "mine",
+                "authorId": 2
+              },
+              null,
+              "Ghi chu cua An"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const db = mkDb(); const s = createNotesService(db); return [await s.list(admin), await s.update(admin, 2, { title: 'moderated' }), await s.remove(admin, 3), [...db.notes.keys()]]; })()",
+            "chuanBi": "const mkDb = () => { const notes = new Map([[1, { id: 1, title: 'Ghi chu cua An', authorId: 1 }], [2, { id: 2, title: 'Ghi chu cua Binh', authorId: 2 }], [3, { id: 3, title: 'An again', authorId: 1 }]]);\n  const wait = (v) => new Promise((ok) => setTimeout(() => ok(v), 1));\n  return { notes,\n    findNote: (id) => wait(notes.has(id) ? { ...notes.get(id) } : null),\n    findNotes: (where) => wait([...notes.values()].filter((n) => (where.authorId === undefined || n.authorId === where.authorId) && (!where.q || n.title.toLowerCase().includes(where.q.toLowerCase()))).map((n) => ({ ...n }))),\n    updateNote: (id, data) => wait(Object.assign(notes.get(id), data) && { ...notes.get(id) }),\n    deleteNote: (id) => wait(notes.delete(id)) }; };\nconst an = { id: 1, role: 'USER' }, binh = { id: 2, role: 'USER' }, admin = { id: 9, role: 'ADMIN' };",
+            "mongDoi": [
+              [],
+              {
+                "id": 2,
+                "title": "moderated",
+                "authorId": 2
+              },
+              true,
+              [
+                1,
+                2
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking ownership in get but not in update/remove: Binh cannot read An’s note, and deletes it anyway.|||Kiểm quyền sở hữu ở get mà không ở update/remove: Bình không đọc được ghi chú của An, nhưng vẫn xoá được."
+        },
+        {
+          "loi": "Dropping authorId from list’s where while adding the search filter — every user sees every note, no error, no failing test unless you wrote one.|||Làm mất authorId trong where của list khi thêm bộ lọc tìm kiếm — mọi người thấy mọi ghi chú, không lỗi, không test nào đỏ trừ khi bạn viết."
+        },
+        {
+          "loi": "Returning a \"FORBIDDEN\" marker for someone else’s note so the route can send 403 — it confirms the id exists.|||Trả dấu \"FORBIDDEN\" cho ghi chú người khác để route gửi 403 — nó xác nhận id có tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "actor",
+          "vi": "chủ thể",
+          "giaiThich": "Người đang thực hiện thao tác."
+        },
+        {
+          "en": "ownership check",
+          "vi": "kiểm quyền sở hữu"
+        },
+        {
+          "en": "IDOR",
+          "vi": "IDOR"
+        }
+      ]
+    },
+    {
+      "title": "8.3 · 6 — Write auditRouter(stack): find the routes that mounting order left open",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Express middleware",
+        "security review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“<code>router.use(requireAuth)</code> only protects routes declared after it … with no error, no warning, and a test suite that still passes.” Audit a router statically. <code>stack</code> lists what was declared, in order: <code>{ type: 'use', name }</code> or <code>{ type: 'route', method, path, middleware: [names…], public?: true }</code> (the handler is not listed). Return <code>[{ route: \"METHOD path\", problem }]</code> in stack order:</p>\n<ul><li><code>UNPROTECTED</code> — a route that is not <code>public</code>, declared before any <code>use</code> of <code>requireAuth</code>, and without <code>requireAuth</code> in its own chain.</li>\n<li><code>ROLE_BEFORE_AUTH</code> — a route whose chain contains a name starting with <code>requireRole</code> or <code>requirePermission</code>, while no router-level <code>requireAuth</code> was mounted before it and its own <code>requireAuth</code> is missing or comes <b>after</b> that role check.</li></ul>\n<p>A route can have both problems (UNPROTECTED first).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Respect declaration order.</li>\n  <li>Public routes are never UNPROTECTED.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"<code>router.use(requireAuth)</code> chỉ bảo vệ các route khai báo sau nó … không lỗi, không cảnh báo, và bộ test vẫn qua.\" Hãy soát một router mà không chạy. <code>stack</code> liệt kê những gì đã khai báo, theo thứ tự: <code>{ type: 'use', name }</code> hoặc <code>{ type: 'route', method, path, middleware: [tên…], public?: true }</code> (handler không được liệt kê). Trả <code>[{ route: \"METHOD path\", problem }]</code> theo thứ tự stack:</p>\n<ul><li><code>UNPROTECTED</code> — route không <code>public</code>, khai báo trước mọi <code>use</code> của <code>requireAuth</code>, và không có <code>requireAuth</code> trong chuỗi riêng.</li>\n<li><code>ROLE_BEFORE_AUTH</code> — route có trong chuỗi một tên bắt đầu bằng <code>requireRole</code> hoặc <code>requirePermission</code>, trong khi chưa có <code>requireAuth</code> cấp router nào được gắn trước nó và <code>requireAuth</code> riêng của nó thiếu hoặc đứng <b>sau</b> phép kiểm vai trò đó.</li></ul>\n<p>Một route có thể mắc cả hai (UNPROTECTED trước).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tôn trọng thứ tự khai báo.</li>\n  <li>Route public không bao giờ là UNPROTECTED.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "auditRouter([{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/notes\"},{\"type\":\"route\",\"method\":\"POST\",\"path\":\"/notes\"},{\"type\":\"use\",\"name\":\"requireAuth\"}])",
+          "output": "[{\"route\":\"GET /notes\",\"problem\":\"UNPROTECTED\"},{\"route\":\"POST /notes\",\"problem\":\"UNPROTECTED\"}]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a flag <code>authMounted</code> that becomes true when you pass <code>{ type: \"use\", name: \"requireAuth\" }</code>.|||Giữ cờ <code>authMounted</code> thành true khi đi qua <code>{ type: \"use\", name: \"requireAuth\" }</code>.",
+        "For the role rule, compare <code>chain.indexOf(\"requireAuth\")</code> with the index of the first role/permission check.|||Với luật vai trò, so <code>chain.indexOf(\"requireAuth\")</code> với vị trí phép kiểm vai trò/quyền đầu tiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function auditRouter(stack) {\n  // Write your solution here\n  const authAnywhere = stack.some((l) => l.type === 'use' && l.name === 'requireAuth');\n  return stack.filter((l) => l.type === 'route' && !authAnywhere && !l.public).map((l) => ({ route: l.method + ' ' + l.path, problem: 'UNPROTECTED' }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function auditRouter(stack) {\n  // walk the stack in declaration order, exactly like Express does\n  let authMounted = false;\n  const problems = [];\n  for (const layer of stack) {\n    if (layer.type === 'use') { if (layer.name === 'requireAuth') authMounted = true; continue; }\n    const chain = layer.middleware || [];\n    const route = layer.method + ' ' + layer.path;\n    const authAt = chain.indexOf('requireAuth');\n    const authed = authMounted || authAt >= 0;\n    if (!authed && !layer.public) problems.push({ route, problem: 'UNPROTECTED' });\n    // requireRole/requirePermission read req.user: they must come after authentication\n    const roleAt = chain.findIndex((m) => /^require(Role|Permission)\\b/.test(m));\n    if (roleAt >= 0 && !authMounted && (authAt < 0 || authAt > roleAt)) problems.push({ route, problem: 'ROLE_BEFORE_AUTH' });\n  }\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Express has no notion of “this router is protected”: it walks layers in order and a route answers as soon as it matches. So protection is a property of position. Mounting requireAuth at the top makes forgetting fail closed; an audit like this one, run in CI, catches the cases where someone added a route above the line — cuongthai.com found routes where requireAdmin had simply been forgotten.</p>",
+      "solutionExplanationHtmlVi": "<p>Express không có khái niệm \"router này được bảo vệ\": nó duyệt các lớp theo thứ tự và route trả lời ngay khi khớp. Nên bảo vệ là tính chất của vị trí. Gắn requireAuth ở đầu làm việc quên thành hỏng-thì-đóng; một phép soát như thế này chạy trong CI bắt được trường hợp ai đó thêm route phía trên dòng đó — cuongthai.com từng tìm ra route mà requireAdmin bị quên hẳn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "requireAuth mounted at the bottom",
+              "vi": "requireAuth gắn ở cuối"
+            },
+            "goi": "auditRouter([{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/notes\"},{\"type\":\"route\",\"method\":\"POST\",\"path\":\"/notes\"},{\"type\":\"use\",\"name\":\"requireAuth\"}])",
+            "mongDoi": [
+              {
+                "route": "GET /notes",
+                "problem": "UNPROTECTED"
+              },
+              {
+                "route": "POST /notes",
+                "problem": "UNPROTECTED"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Protected at the top: no problems",
+              "vi": "Bảo vệ ở đầu: không có vấn đề"
+            },
+            "goi": "auditRouter([{\"type\":\"use\",\"name\":\"requireAuth\"},{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/notes\"},{\"type\":\"route\",\"method\":\"DELETE\",\"path\":\"/users/:id\",\"middleware\":[\"requireRole(ADMIN)\"]}])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Role before auth in the chain",
+              "vi": "Vai trò trước xác thực trong chuỗi"
+            },
+            "goi": "auditRouter([{\"type\":\"route\",\"method\":\"DELETE\",\"path\":\"/users/:id\",\"middleware\":[\"requireRole(ADMIN)\",\"requireAuth\"]},{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/health\",\"public\":true}])",
+            "mongDoi": [
+              {
+                "route": "DELETE /users/:id",
+                "problem": "ROLE_BEFORE_AUTH"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "auditRouter([{\"type\":\"use\",\"name\":\"json\"},{\"type\":\"route\",\"method\":\"POST\",\"path\":\"/auth/login\",\"public\":true},{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/admin/stats\",\"middleware\":[\"requirePermission(user:delete)\"]},{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/me\",\"middleware\":[\"requireAuth\"]},{\"type\":\"use\",\"name\":\"requireAuth\"},{\"type\":\"route\",\"method\":\"PATCH\",\"path\":\"/notes/:id\",\"middleware\":[\"requireRole(USER)\"]}])",
+            "mongDoi": [
+              {
+                "route": "GET /admin/stats",
+                "problem": "UNPROTECTED"
+              },
+              {
+                "route": "GET /admin/stats",
+                "problem": "ROLE_BEFORE_AUTH"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "auditRouter([{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/x\",\"middleware\":[\"requireAuth\",\"requireRole(ADMIN)\"]},{\"type\":\"route\",\"method\":\"GET\",\"path\":\"/y\",\"public\":true,\"middleware\":[\"requireRole(ADMIN)\"]},{\"type\":\"use\",\"name\":\"logger\"}])",
+            "mongDoi": [
+              {
+                "route": "GET /y",
+                "problem": "ROLE_BEFORE_AUTH"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a router.use(requireAuth) at the bottom as protecting everything above it.|||Coi router.use(requireAuth) ở cuối là bảo vệ mọi thứ phía trên."
+        },
+        {
+          "loi": "Missing <code>requirePermission(...)</code> because you only looked for requireRole.|||Bỏ sót <code>requirePermission(...)</code> vì chỉ tìm requireRole."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware stack",
+          "vi": "chồng middleware"
+        },
+        {
+          "en": "fail closed",
+          "vi": "hỏng thì đóng"
+        }
+      ]
+    }
+  ]
+}

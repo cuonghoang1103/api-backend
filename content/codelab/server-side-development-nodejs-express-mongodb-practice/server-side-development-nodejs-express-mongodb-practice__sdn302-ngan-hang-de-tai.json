@@ -1,0 +1,676 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-ngan-hang-de-tai",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-ngan-hang-de-tai"
+  },
+  "exercises": [
+    {
+      "title": "Score a project topic before committing",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "project scoping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The 6-test rubric of lesson 0.5: right size, real relationships, full CRUD, needs auth, has validation, demoable.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thang 6 phép kiểm của bài 0.5: đúng cỡ, quan hệ thật, CRUD đủ, cần đăng nhập, có luật kiểm tra, demo được.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which CLO needs references?|||CLO nào cần tham chiếu?",
+        "3–5 resources.|||3–5 tài nguyên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Score a project topic before committing\n\nAnswer in the answer panel (no code needed).\n\n1. \"A notes API\": one resource, notes. Which test fails first, and why does it matter?\"API ghi chú\": một tài nguyên, notes. Phép kiểm nào trượt trước, và vì sao quan trọng?\n2. \"A full e-learning platform\" with 15 resources (courses, lessons, quizzes, payments, chats…). Verdict?\"Một nền tảng e-learning đầy đủ\" với 15 tài nguyên (khoá học, bài học, quiz, thanh toán, chat…). Kết luận?\n3. What does the ★ note recommend doing FIRST?Ghi chú ★ khuyên làm gì TRƯỚC TIÊN?\n4. Which topics from the bank pass \"real relationships\"? (choose all)Đề tài nào trong ngân hàng qua phép \"quan hệ thật\"? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Score a project topic before committing — answer key\n\n1. \"A notes API\": one resource, notes. Which test fails first, and why does it matter?\"API ghi chú\": một tài nguyên, notes. Phép kiểm nào trượt trước, và vì sao quan trọng?\n   Answer: b) Real relationships — nothing to populate, so CLO5 cannot be shown\n   Population is a headline outcome the project must show; one collection has nothing to populate.VI: Population là chuẩn đầu ra chính mà project phải thể hiện; một collection thì không có gì để populate.\n\n2. \"A full e-learning platform\" with 15 resources (courses, lessons, quizzes, payments, chats…). Verdict?\"Một nền tảng e-learning đầy đủ\" với 15 tài nguyên (khoá học, bài học, quiz, thanh toán, chat…). Kết luận?\n   Answer: c) Fails \"right size\" (3–5 resources): finish small and rich instead\n   \"Small enough to finish, rich enough to show every CLO.\"VI: \"Đủ nhỏ để làm xong, đủ giàu để thể hiện mọi CLO.\"\n\n3. What does the ★ note recommend doing FIRST?Ghi chú ★ khuyên làm gì TRƯỚC TIÊN?\n   Answer: a) Sketch the Mongoose schemas and their references, then write the routes\n   Model-first: once the data is right, one resource → one router with GET/POST/PUT/DELETE.VI: Mô hình trước: dữ liệu đúng rồi thì một tài nguyên → một router với GET/POST/PUT/DELETE.\n\n4. Which topics from the bank pass \"real relationships\"? (choose all)Đề tài nào trong ngân hàng qua phép \"quan hệ thật\"? (chọn hết)\n   Answer: b) Job board — application → job & candidate + c) Event booking — booking → event & user + d) Blog API — comment → user & post\n   Each has a child document referencing two parents — perfect for populate.VI: Mỗi cái có một document con tham chiếu hai cha — rất hợp với populate.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Real relationships — nothing to populate, so CLO5 cannot be shown</p><p>Population is a headline outcome the project must show; one collection has nothing to populate.</p><p><i>VI: Population là chuẩn đầu ra chính mà project phải thể hiện; một collection thì không có gì để populate.</i></p></li><li><p><b>c)</b> Fails \"right size\" (3–5 resources): finish small and rich instead</p><p>\"Small enough to finish, rich enough to show every CLO.\"</p><p><i>VI: \"Đủ nhỏ để làm xong, đủ giàu để thể hiện mọi CLO.\"</i></p></li><li><p><b>a)</b> Sketch the Mongoose schemas and their references, then write the routes</p><p>Model-first: once the data is right, one resource → one router with GET/POST/PUT/DELETE.</p><p><i>VI: Mô hình trước: dữ liệu đúng rồi thì một tài nguyên → một router với GET/POST/PUT/DELETE.</i></p></li><li><p><b>b)</b> Job board — application → job & candidate + <b>c)</b> Event booking — booking → event & user + <b>d)</b> Blog API — comment → user & post</p><p>Each has a child document referencing two parents — perfect for <code>populate</code>.</p><p><i>VI: Mỗi cái có một document con tham chiếu hai cha — rất hợp với <code>populate</code>.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "<p>\"A notes API\": one resource, notes. Which test fails first, and why does it matter?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"API ghi chú\": một tài nguyên, notes. Phép kiểm nào trượt trước, và vì sao quan trọng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Needs auth — notes are never private, so login is pointless"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Real relationships — nothing to populate, so CLO5 cannot be shown"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Demoable — notes cannot be shown in a Postman collection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Full CRUD — a notes API has no way to delete a note"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Population is a headline outcome the project must show; one collection has nothing to populate.</p><p><i>VI: Population là chuẩn đầu ra chính mà project phải thể hiện; một collection thì không có gì để populate.</i></p>"
+          },
+          {
+            "ma": "r2",
+            "de": "<p>\"A full e-learning platform\" with 15 resources (courses, lessons, quizzes, payments, chats…). Verdict?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Một nền tảng e-learning đầy đủ\" với 15 tài nguyên (khoá học, bài học, quiz, thanh toán, chat…). Kết luận?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Perfect: more resources always means a higher project grade"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fine, as long as you skip authentication to save some time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fails \"right size\" (3–5 resources): finish small and rich instead"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fails only \"demoable\", because the demo would be too long"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>\"Small enough to finish, rich enough to show every CLO.\"</p><p><i>VI: \"Đủ nhỏ để làm xong, đủ giàu để thể hiện mọi CLO.\"</i></p>"
+          },
+          {
+            "ma": "r3",
+            "de": "<p>What does the ★ note recommend doing FIRST?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ghi chú ★ khuyên làm gì TRƯỚC TIÊN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sketch the Mongoose schemas and their references, then write the routes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Write all the routes, then add the schemas that make them work"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pick the hosting provider"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Design the React pages first"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Model-first: once the data is right, one resource → one router with GET/POST/PUT/DELETE.</p><p><i>VI: Mô hình trước: dữ liệu đúng rồi thì một tài nguyên → một router với GET/POST/PUT/DELETE.</i></p>"
+          },
+          {
+            "ma": "r4",
+            "de": "<p>Which topics from the bank pass \"real relationships\"? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Đề tài nào trong ngân hàng qua phép \"quan hệ thật\"? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A counter API that stores one number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Job board — application → job & candidate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Event booking — booking → event & user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Blog API — comment → user & post"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Each has a child document referencing two parents — perfect for <code>populate</code>.</p><p><i>VI: Mỗi cái có một document con tham chiếu hai cha — rất hợp với <code>populate</code>.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing a one-collection topic.|||Chọn đề tài một collection."
+        },
+        {
+          "loi": "Choosing a 15-resource topic.|||Chọn đề tài 15 tài nguyên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "resource",
+          "vi": "tài nguyên",
+          "giaiThich": "một loại đối tượng của API: users, posts…"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang chấm"
+        }
+      ]
+    },
+    {
+      "title": "Which rubric test does each topic fail?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "project scoping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Four topics, each with exactly one weakness. Name the failed test.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn đề tài, mỗi cái đúng một điểm yếu. Gọi tên phép kiểm trượt.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for the one thing the description says is missing.|||Tìm thứ duy nhất mà mô tả nói là thiếu.",
+        "\"anyone can edit\" = no auth.|||\"ai cũng sửa được\" = không có đăng nhập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which rubric test does each topic fail?\n\nAnswer in the answer panel (no code needed).\n\n1. Topic → failed testĐề tài → phép kiểm trượt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which rubric test does each topic fail? — answer key\n\n1. Topic → failed testĐề tài → phép kiểm trượt\n   - r1.t: needs auth\n   - r2.t: has validation\n   - r3.t: full CRUD\n   - r4.t: demoable\n   Owner-only actions are the reason to log in (CLO6); rules such as \"unique email, price > 0\" are the reason for validation; create/read/update/delete must all be demoable; and a judge must be able to see it run end-to-end.VI: Hành động chỉ-chủ-sở-hữu là lý do để đăng nhập (CLO6); luật như \"email duy nhất, giá > 0\" là lý do để kiểm tra; tạo/đọc/sửa/xoá đều phải demo được; và giám khảo phải xem được nó chạy từ đầu tới cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Owner-only actions are the reason to log in (CLO6); rules such as \"unique email, price > 0\" are the reason for validation; create/read/update/delete must all be demoable; and a judge must be able to see it run end-to-end.</p><p><i>VI: Hành động chỉ-chủ-sở-hữu là lý do để đăng nhập (CLO6); luật như \"email duy nhất, giá > 0\" là lý do để kiểm tra; tạo/đọc/sửa/xoá đều phải demo được; và giám khảo phải xem được nó chạy từ đầu tới cuối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "t1",
+            "de": "<p>Topic → failed test</p><p style=\"opacity:.75;font-size:.92em\"><i>Đề tài → phép kiểm trượt</i></p>",
+            "cot": [
+              {
+                "ma": "de",
+                "ten": "Topic"
+              },
+              {
+                "ma": "t",
+                "ten": "Failed test",
+                "luaChon": [
+                  "right size",
+                  "real relationships",
+                  "full CRUD",
+                  "needs auth",
+                  "has validation",
+                  "demoable"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "de": "Recipe sharing: users, recipes, favourites — but anyone can edit or delete any recipe without logging in"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "de": "Expense tracker: users, wallets, transactions — amounts can be negative or text, emails can repeat"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "de": "Movie reviews: movies, reviews, users — reviews can be created and listed, never edited or removed"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "de": "Fitness log: users, workouts, exercises — works only from the student's laptop, no Postman collection, no page"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "needs auth",
+              "r2.t": "has validation",
+              "r3.t": "full CRUD",
+              "r4.t": "demoable"
+            },
+            "giaiThich": "<p>Owner-only actions are the reason to log in (CLO6); rules such as \"unique email, price > 0\" are the reason for validation; create/read/update/delete must all be demoable; and a judge must be able to see it run end-to-end.</p><p><i>VI: Hành động chỉ-chủ-sở-hữu là lý do để đăng nhập (CLO6); luật như \"email duy nhất, giá > 0\" là lý do để kiểm tra; tạo/đọc/sửa/xoá đều phải demo được; và giám khảo phải xem được nó chạy từ đầu tới cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing validation with auth.|||Lẫn kiểm tra với đăng nhập."
+        },
+        {
+          "loi": "Ignoring the demo test.|||Bỏ qua phép kiểm demo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "owner-only action",
+          "vi": "hành động chỉ chủ sở hữu làm được"
+        }
+      ]
+    },
+    {
+      "title": "Automate the 6-test rubric: scoreTopic(topic)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "predicates",
+        "Set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>A topic is described as</p>\n<pre>{ name, resources: [{ name, refs: ['User', …] }, …], crud: true|false, ownerOnlyActions: true|false,\n  rules: ['unique email', …], demo: { postman: true|false, page: true|false } }</pre>\n<p>Write <code>scoreTopic(topic)</code> → <code>{ score, failed }</code> where <code>score</code> is the number of passed tests (0–6) and <code>failed</code> the names of the failed tests, in this order:</p>\n<ol><li><code>\"right size\"</code> — 3 to 5 resources;</li>\n<li><code>\"real relationships\"</code> — at least one resource has a ref to <b>another resource of the topic</b>;</li>\n<li><code>\"full CRUD\"</code> — <code>crud === true</code>;</li>\n<li><code>\"needs auth\"</code> — <code>ownerOnlyActions === true</code>;</li>\n<li><code>\"has validation\"</code> — at least one rule;</li>\n<li><code>\"demoable\"</code> — Postman AND a small page.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>A ref to a model that is not in <code>resources</code> (e.g. <code>\"Payment\"</code> missing) does not count — and a resource referencing ITSELF does not count either.</li>\n  <li>Missing fields count as failing (<code>refs</code>, <code>rules</code>, <code>demo</code> may be absent).</li>\n</ul>",
+      "problemHtmlVi": "<p>Một đề tài được mô tả là</p>\n<pre>{ name, resources: [{ name, refs: ['User', …] }, …], crud: true|false, ownerOnlyActions: true|false,\n  rules: ['unique email', …], demo: { postman: true|false, page: true|false } }</pre>\n<p>Viết <code>scoreTopic(topic)</code> → <code>{ score, failed }</code> với <code>score</code> là số phép kiểm đạt (0–6) và <code>failed</code> là tên các phép trượt, theo thứ tự:</p>\n<ol><li><code>\"right size\"</code> — 3 tới 5 tài nguyên;</li>\n<li><code>\"real relationships\"</code> — ít nhất một tài nguyên có ref tới <b>một tài nguyên khác của đề tài</b>;</li>\n<li><code>\"full CRUD\"</code> — <code>crud === true</code>;</li>\n<li><code>\"needs auth\"</code> — <code>ownerOnlyActions === true</code>;</li>\n<li><code>\"has validation\"</code> — ít nhất một luật;</li>\n<li><code>\"demoable\"</code> — có Postman VÀ một trang nhỏ.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ref tới model không có trong <code>resources</code> (vd thiếu <code>\"Payment\"</code>) không tính — và tài nguyên tham chiếu CHÍNH NÓ cũng không tính.</li>\n  <li>Field thiếu tính là trượt (<code>refs</code>, <code>rules</code>, <code>demo</code> có thể vắng).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Blog API: User, Post (refs User), Comment (refs User, Post), crud, owner-only, rules [\"unique email\"], demo both",
+          "output": "{\"score\":6,\"failed\":[]}",
+          "explanation": "Passes everything.|||Qua hết."
+        },
+        {
+          "input": "Notes API: one resource, crud, no auth, no rules, Postman only",
+          "output": "{\"score\":1,\"failed\":[\"right size\",\"real relationships\",\"needs auth\",\"has validation\",\"demoable\"]}",
+          "explanation": "Only CRUD passes.|||Chỉ CRUD qua."
+        }
+      ],
+      "hintsJson": [
+        "<code>const names = new Set(resources.map((r) => r.name));</code> then <code>resources.some((r) => (r.refs || []).some((x) => x !== r.name && names.has(x)))</code>|||<code>const names = new Set(resources.map((r) => r.name));</code> rồi <code>resources.some((r) => (r.refs || []).some((x) => x !== r.name && names.has(x)))</code>",
+        "Build an array of [name, passed] pairs, then derive both outputs from it.|||Dựng mảng các cặp [tên, đạt], rồi suy ra cả hai đầu ra từ nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function scoreTopic(topic) {\n  const failed = [];\n  if (topic.resources.length < 3) failed.push('right size');\n  if (!topic.resources.some((r) => r.refs.length)) failed.push('real relationships');\n  if (!topic.crud) failed.push('full CRUD');\n  return { score: 6 - failed.length, failed };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function scoreTopic(topic) {\n  const resources = topic.resources || [];\n  const names = new Set(resources.map((r) => r.name));\n  const demo = topic.demo || {};\n  // [test name, passed?] — one table drives both outputs\n  const tests = [\n    ['right size', resources.length >= 3 && resources.length <= 5],\n    ['real relationships', resources.some((r) => (r.refs || []).some((x) => x !== r.name && names.has(x)))],\n    ['full CRUD', topic.crud === true],\n    ['needs auth', topic.ownerOnlyActions === true],\n    ['has validation', Array.isArray(topic.rules) && topic.rules.length > 0],\n    ['demoable', demo.postman === true && demo.page === true],\n  ];\n  const failed = tests.filter(([, ok]) => !ok).map(([name]) => name);\n  return { score: tests.length - failed.length, failed };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The rubric becomes six independent predicates evaluated in a fixed order; the score and the failure list come from the same table, so they can never disagree. The relationship test checks the reference graph against the topic's own models, which is exactly what <code>populate</code> will need.</p>",
+      "solutionExplanationHtmlVi": "<p>Thang chấm thành sáu mệnh đề độc lập đánh giá theo thứ tự cố định; điểm và danh sách trượt lấy từ cùng một bảng nên không bao giờ mâu thuẫn. Phép kiểm quan hệ đối chiếu đồ thị tham chiếu với chính các model của đề tài — đúng thứ <code>populate</code> sẽ cần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The Blog API passes all six",
+              "vi": "Blog API qua cả sáu"
+            },
+            "goi": "scoreTopic(blog)",
+            "chuanBi": "const blog = { name: 'Blog API', resources: [{ name: 'User', refs: [] }, { name: 'Post', refs: ['User'] }, { name: 'Comment', refs: ['User', 'Post'] }], crud: true, ownerOnlyActions: true, rules: ['unique email'], demo: { postman: true, page: true } };",
+            "mongDoi": {
+              "score": 6,
+              "failed": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The notes API passes only CRUD",
+              "vi": "API ghi chú chỉ qua CRUD"
+            },
+            "goi": "scoreTopic({ name: 'Notes', resources: [{ name: 'Note' }], crud: true, demo: { postman: true } })",
+            "chuanBi": "const blog = { name: 'Blog API', resources: [{ name: 'User', refs: [] }, { name: 'Post', refs: ['User'] }, { name: 'Comment', refs: ['User', 'Post'] }], crud: true, ownerOnlyActions: true, rules: ['unique email'], demo: { postman: true, page: true } };",
+            "mongDoi": {
+              "score": 1,
+              "failed": [
+                "right size",
+                "real relationships",
+                "needs auth",
+                "has validation",
+                "demoable"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "scoreTopic({ ...blog, resources: [{ name: 'Order', refs: ['Payment'] }, { name: 'Item', refs: ['Item'] }, { name: 'User' }] })",
+            "chuanBi": "const blog = { name: 'Blog API', resources: [{ name: 'User', refs: [] }, { name: 'Post', refs: ['User'] }, { name: 'Comment', refs: ['User', 'Post'] }], crud: true, ownerOnlyActions: true, rules: ['unique email'], demo: { postman: true, page: true } };",
+            "mongDoi": {
+              "score": 5,
+              "failed": [
+                "real relationships"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "scoreTopic({ ...blog, resources: [1, 2, 3, 4, 5, 6].map((i) => ({ name: 'R' + i, refs: i > 1 ? ['R1'] : [] })), crud: 'yes', rules: [] })",
+            "chuanBi": "const blog = { name: 'Blog API', resources: [{ name: 'User', refs: [] }, { name: 'Post', refs: ['User'] }, { name: 'Comment', refs: ['User', 'Post'] }], crud: true, ownerOnlyActions: true, rules: ['unique email'], demo: { postman: true, page: true } };",
+            "mongDoi": {
+              "score": 3,
+              "failed": [
+                "right size",
+                "full CRUD",
+                "has validation"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "scoreTopic({ name: 'Empty' })",
+            "chuanBi": "const blog = { name: 'Blog API', resources: [{ name: 'User', refs: [] }, { name: 'Post', refs: ['User'] }, { name: 'Comment', refs: ['User', 'Post'] }], crud: true, ownerOnlyActions: true, rules: ['unique email'], demo: { postman: true, page: true } };",
+            "mongDoi": {
+              "score": 0,
+              "failed": [
+                "right size",
+                "real relationships",
+                "full CRUD",
+                "needs auth",
+                "has validation",
+                "demoable"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting refs to models that do not exist in the topic — populate would fail with MissingSchemaError.|||Đếm ref tới model không có trong đề tài — populate sẽ hỏng với MissingSchemaError."
+        },
+        {
+          "loi": "<code>if (topic.crud)</code> passing for the string \"no\".|||<code>if (topic.crud)</code> đạt với chuỗi \"no\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reference graph",
+          "vi": "đồ thị tham chiếu"
+        }
+      ]
+    },
+    {
+      "title": "Model first, routes follow: planApi(model)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "data modelling",
+        "REST conventions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The ★ advice: design the data model, and \"the routes almost write themselves\". Write <code>planApi(model)</code> where <code>model</code> maps a model name to its reference fields, e.g.</p>\n<pre>{ User: {}, Post: { author: 'User' }, Comment: { user: 'User', post: 'Post' } }</pre>\n<p>Return</p>\n<pre>{ routes: ['GET /api/users', 'POST /api/users', 'GET /api/users/:id', 'PUT /api/users/:id', 'DELETE /api/users/:id', …],\n  populate: ['Comment.post → Post', 'Comment.user → User', 'Post.author → User'],\n  dangling: ['Order.payment → Payment'] }</pre>\n<ul><li>routes: for every model in input order, the five CRUD routes on the plural, lower-case path (add <code>s</code>; a name ending in <code>y</code> after a consonant becomes <code>ies</code>: <code>Category</code> → <code>categories</code>);</li>\n<li>populate: every reference whose target model exists, as <code>\"Model.field → Target\"</code>, sorted alphabetically;</li>\n<li>dangling: references to models that do not exist, same format, sorted.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>The order of the five routes is exactly: GET list, POST, GET one, PUT, DELETE.</li>\n  <li>Use the arrow character <code>→</code> with one space on each side.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lời khuyên ★: thiết kế mô hình dữ liệu, và \"route gần như tự viết ra\". Viết <code>planApi(model)</code> với <code>model</code> ánh xạ tên model tới các field tham chiếu của nó, vd</p>\n<pre>{ User: {}, Post: { author: 'User' }, Comment: { user: 'User', post: 'Post' } }</pre>\n<p>Trả</p>\n<pre>{ routes: ['GET /api/users', 'POST /api/users', 'GET /api/users/:id', 'PUT /api/users/:id', 'DELETE /api/users/:id', …],\n  populate: ['Comment.post → Post', 'Comment.user → User', 'Post.author → User'],\n  dangling: ['Order.payment → Payment'] }</pre>\n<ul><li>routes: với mỗi model theo thứ tự đầu vào, năm route CRUD trên đường số nhiều, chữ thường (thêm <code>s</code>; tên kết thúc bằng <code>y</code> sau phụ âm thành <code>ies</code>: <code>Category</code> → <code>categories</code>);</li>\n<li>populate: mọi tham chiếu có model đích tồn tại, dạng <code>\"Model.field → Target\"</code>, sắp theo bảng chữ cái;</li>\n<li>dangling: tham chiếu tới model không tồn tại, cùng dạng, có sắp.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự năm route đúng là: GET danh sách, POST, GET một, PUT, DELETE.</li>\n  <li>Dùng ký tự mũi tên <code>→</code> với một khoảng trắng mỗi bên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "planApi({ Category: {}, Product: { category: 'Category' } })",
+          "output": "{\"routes\":[\"GET /api/categories\",\"POST /api/categories\",\"GET /api/categories/:id\",\"PUT /api/categories/:id\",\"DELETE /api/categories/:id\",\"GET /api/products\",…],\"populate\":[\"Product.category → Category\"],\"dangling\":[]}",
+          "explanation": "Category → categories.|||Category → categories."
+        }
+      ],
+      "hintsJson": [
+        "<code>const plural = (n) => { const s = n.toLowerCase(); return /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's'; };</code>",
+        "<code>Object.entries(model).forEach(([name, refs]) => Object.entries(refs).forEach(([field, target]) => …))</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function planApi(model) {\n  const routes = [];\n  for (const name of Object.keys(model)) {\n    const path = '/api/' + name.toLowerCase() + 's';\n    routes.push('GET ' + path, 'POST ' + path);\n  }\n  return { routes, populate: [], dangling: [] };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const plural = (name) => {\n  const s = name.toLowerCase();\n  return /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's';   // category ⇒ categories, survey ⇒ surveys\n};\n\nfunction planApi(model) {\n  const routes = [];\n  const populate = [];\n  const dangling = [];\n  for (const [name, refs] of Object.entries(model)) {\n    const path = '/api/' + plural(name);\n    // one resource ⇒ one router with the five CRUD routes\n    routes.push('GET ' + path, 'POST ' + path, 'GET ' + path + '/:id', 'PUT ' + path + '/:id', 'DELETE ' + path + '/:id');\n    for (const [field, target] of Object.entries(refs || {})) {\n      const line = name + '.' + field + ' → ' + target;\n      (Object.prototype.hasOwnProperty.call(model, target) ? populate : dangling).push(line);\n    }\n  }\n  populate.sort();\n  dangling.sort();\n  return { routes, populate, dangling };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Once the models and their references are known, the API surface is mechanical: five routes per resource, and one populate per reference. Dangling references are design bugs found before a single route is written — the whole argument for model-first design.</p>",
+      "solutionExplanationHtmlVi": "<p>Khi đã biết các model và tham chiếu, bề mặt API là việc máy móc: năm route cho mỗi tài nguyên, một populate cho mỗi tham chiếu. Tham chiếu treo là lỗi thiết kế được phát hiện trước khi viết route nào — toàn bộ lý lẽ cho thiết kế mô hình trước.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The blog model",
+              "vi": "Mô hình blog"
+            },
+            "goi": "planApi({ User: {}, Post: { author: 'User' }, Comment: { user: 'User', post: 'Post' } })",
+            "mongDoi": {
+              "routes": [
+                "GET /api/users",
+                "POST /api/users",
+                "GET /api/users/:id",
+                "PUT /api/users/:id",
+                "DELETE /api/users/:id",
+                "GET /api/posts",
+                "POST /api/posts",
+                "GET /api/posts/:id",
+                "PUT /api/posts/:id",
+                "DELETE /api/posts/:id",
+                "GET /api/comments",
+                "POST /api/comments",
+                "GET /api/comments/:id",
+                "PUT /api/comments/:id",
+                "DELETE /api/comments/:id"
+              ],
+              "populate": [
+                "Comment.post → Post",
+                "Comment.user → User",
+                "Post.author → User"
+              ],
+              "dangling": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Category → categories",
+              "vi": "Category → categories"
+            },
+            "goi": "planApi({ Category: {}, Product: { category: 'Category' } }).routes.slice(0, 6)",
+            "mongDoi": [
+              "GET /api/categories",
+              "POST /api/categories",
+              "GET /api/categories/:id",
+              "PUT /api/categories/:id",
+              "DELETE /api/categories/:id",
+              "GET /api/products"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "planApi({ User: {}, Order: { user: 'User', payment: 'Payment' }, Survey: { owner: 'User', template: 'Template' } })",
+            "mongDoi": {
+              "routes": [
+                "GET /api/users",
+                "POST /api/users",
+                "GET /api/users/:id",
+                "PUT /api/users/:id",
+                "DELETE /api/users/:id",
+                "GET /api/orders",
+                "POST /api/orders",
+                "GET /api/orders/:id",
+                "PUT /api/orders/:id",
+                "DELETE /api/orders/:id",
+                "GET /api/surveys",
+                "POST /api/surveys",
+                "GET /api/surveys/:id",
+                "PUT /api/surveys/:id",
+                "DELETE /api/surveys/:id"
+              ],
+              "populate": [
+                "Order.user → User",
+                "Survey.owner → User"
+              ],
+              "dangling": [
+                "Order.payment → Payment",
+                "Survey.template → Template"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "planApi({})",
+            "mongDoi": {
+              "routes": [],
+              "populate": [],
+              "dangling": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>Category</code> → <code>categorys</code>."
+        },
+        {
+          "loi": "Listing a populate path to a model that does not exist — that is the MissingSchemaError of lesson 3.2 waiting to happen.|||Liệt kê đường populate tới model không tồn tại — đó là MissingSchemaError của bài 3.2 đang chờ xảy ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dangling reference",
+          "vi": "tham chiếu treo",
+          "giaiThich": "trỏ tới model không có"
+        },
+        {
+          "en": "model-first",
+          "vi": "mô hình trước"
+        }
+      ]
+    }
+  ]
+}

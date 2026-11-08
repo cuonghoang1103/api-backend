@@ -1,0 +1,832 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-3-ghep-noi-ranh-gioi",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-3-ghep-noi-ranh-gioi"
+  },
+  "exercises": [
+    {
+      "title": "Healthy, painful, circular, hidden",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "coupling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 18.3 (the website’s import graph, code files only).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 18.3 (đồ thị import của website, chỉ tệp mã).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the hub depend on anything above it?|||Hub có phụ thuộc vào thứ gì phía trên nó không?",
+        "Where can two modules meet without importing each other?|||Hai module có thể gặp nhau ở đâu mà không import nhau?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Healthy, painful, circular, hidden\n\nAnswer in the answer panel (no code needed).\n\n1. work/permissions is imported by 143 files; pro.service by 39 and it imports no service at all. What kind of coupling is that?work/permissions được 143 tệp import; pro.service được 39 tệp import và nó không import service nào. Đó là kiểu ghép nối gì?\n2. Feature A adds users.passwordResetToken. Feature B’s admin export selects every column of users and now ships the token in a CSV. Neither file imports the other. Which coupling bit?Tính năng A thêm users.passwordResetToken. Bản xuất admin của tính năng B chọn mọi cột của users và giờ đưa token vào CSV. Không tệp nào import tệp kia. Ghép nối nào đã cắn?\n3. Which boundary is enforced by the compiler, without becoming a separate process?Ranh giới nào được trình biên dịch cưỡng chế, mà không thành một tiến trình riêng?\n4. Ways to reduce coupling WITHOUT splitting anything? (choose all that apply)Những cách giảm ghép nối mà KHÔNG tách gì ra? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Healthy, painful, circular, hidden — answer key\n\n1. work/permissions is imported by 143 files; pro.service by 39 and it imports no service at all. What kind of coupling is that?work/permissions được 143 tệp import; pro.service được 39 tệp import và nó không import service nào. Đó là kiểu ghép nối gì?\n   Answer: a) Healthy: many places depend on a stable concept that depends on nothing above it\n   Like a wall socket with twenty devices plugged into it: fine, because the socket does not change. Painful is many places depending on something that keeps changing.VI: Như một ổ điện tường cắm hai mươi thiết bị: ổn, vì ổ không thay đổi. Đau là khi nhiều nơi phụ thuộc vào thứ liên tục thay đổi.\n\n2. Feature A adds users.passwordResetToken. Feature B’s admin export selects every column of users and now ships the token in a CSV. Neither file imports the other. Which coupling bit?Tính năng A thêm users.passwordResetToken. Bản xuất admin của tính năng B chọn mọi cột của users và giờ đưa token vào CSV. Không tệp nào import tệp kia. Ghép nối nào đã cắn?\n   Answer: b) Hidden coupling through a shared table — invisible to any dependency scanner\n   Two “independent” modules sharing a table are one module with two names. prisma.user is queried from 57 places here — and 57 is a floor (each folder counts once, raw SQL is not counted).VI: Hai module “độc lập” dùng chung một bảng là một module mang hai tên. prisma.user bị truy vấn từ 57 chỗ ở đây — và 57 là mức sàn (mỗi thư mục tính một lần, SQL thô không tính).\n\n3. Which boundary is enforced by the compiler, without becoming a separate process?Ranh giới nào được trình biên dịch cưỡng chế, mà không thành một tiến trình riêng?\n   Answer: b) A separate package: importing its inside is a compile error, but you now manage versions\n   folder < module < package < service < database. A folder anything can import from is not a boundary, it is a wish. Pick the level for what you need enforced.VI: thư mục < module < package < service < CSDL. Một thư mục mà gì cũng import được thì không phải ranh giới, chỉ là mong ước. Chọn mức theo thứ bạn cần cưỡng chế.\n\n4. Ways to reduce coupling WITHOUT splitting anything? (choose all that apply)Những cách giảm ghép nối mà KHÔNG tách gì ra? (chọn mọi câu đúng)\n   Answer: a) Push a shared concept (“is this user Pro?”) down into a layer below both features + b) Publish an event (“note shared”) when the caller needs no answer + d) Depend on a shape: share(note, to, notify) receives a notify function\n   And dare to delete unused code: an unused feature still constrains every schema change and every refactor. Record why it was removed, or it will come back.VI: Và dám xoá mã không dùng: một tính năng không ai dùng vẫn ràng buộc mọi thay đổi lược đồ và mọi lần tái cấu trúc. Ghi lại vì sao xoá, không thì nó sẽ quay lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Healthy: many places depend on a stable concept that depends on nothing above it</p><p>Like a wall socket with twenty devices plugged into it: fine, because the socket does not change. Painful is many places depending on something that keeps changing.</p><p><i>VI: Như một ổ điện tường cắm hai mươi thiết bị: ổn, vì ổ không thay đổi. Đau là khi nhiều nơi phụ thuộc vào thứ liên tục thay đổi.</i></p></li><li><p><b>b)</b> Hidden coupling through a shared table — invisible to any dependency scanner</p><p>Two “independent” modules sharing a table are one module with two names. prisma.user is queried from 57 places here — and 57 is a floor (each folder counts once, raw SQL is not counted).</p><p><i>VI: Hai module “độc lập” dùng chung một bảng là một module mang hai tên. prisma.user bị truy vấn từ 57 chỗ ở đây — và 57 là mức sàn (mỗi thư mục tính một lần, SQL thô không tính).</i></p></li><li><p><b>b)</b> A separate package: importing its inside is a compile error, but you now manage versions</p><p>folder < module < package < service < database. A folder anything can import from is not a boundary, it is a wish. Pick the level for what you need enforced.</p><p><i>VI: thư mục < module < package < service < CSDL. Một thư mục mà gì cũng import được thì không phải ranh giới, chỉ là mong ước. Chọn mức theo thứ bạn cần cưỡng chế.</i></p></li><li><p><b>a)</b> Push a shared concept (“is this user Pro?”) down into a layer below both features + <b>b)</b> Publish an event (“note shared”) when the caller needs no answer + <b>d)</b> Depend on a shape: share(note, to, notify) receives a notify function</p><p>And dare to delete unused code: an unused feature still constrains every schema change and every refactor. Record why it was removed, or it will come back.</p><p><i>VI: Và dám xoá mã không dùng: một tính năng không ai dùng vẫn ràng buộc mọi thay đổi lược đồ và mọi lần tái cấu trúc. Ghi lại vì sao xoá, không thì nó sẽ quay lại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>work/permissions is imported by 143 files; pro.service by 39 and it imports no service at all. What kind of coupling is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>work/permissions được 143 tệp import; pro.service được 39 tệp import và nó không import service nào. Đó là kiểu ghép nối gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Healthy: many places depend on a stable concept that depends on nothing above it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Painful: 143 importers means every change breaks 143 files"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Circular: a hub always ends up importing its importers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hidden: the import graph cannot see who uses permissions"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Like a wall socket with twenty devices plugged into it: fine, because the socket does not change. Painful is many places depending on something that keeps changing.</p><p><i>VI: Như một ổ điện tường cắm hai mươi thiết bị: ổn, vì ổ không thay đổi. Đau là khi nhiều nơi phụ thuộc vào thứ liên tục thay đổi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Feature A adds users.passwordResetToken. Feature B’s admin export selects every column of users and now ships the token in a CSV. Neither file imports the other. Which coupling bit?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính năng A thêm users.passwordResetToken. Bản xuất admin của tính năng B chọn mọi cột của users và giờ đưa token vào CSV. Không tệp nào import tệp kia. Ghép nối nào đã cắn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Circular coupling, because A and B both depend on Prisma"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hidden coupling through a shared table — invisible to any dependency scanner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No coupling: the bug is only a missing select clause"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Healthy coupling, because the users table is a stable concept"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two “independent” modules sharing a table are one module with two names. prisma.user is queried from 57 places here — and 57 is a floor (each folder counts once, raw SQL is not counted).</p><p><i>VI: Hai module “độc lập” dùng chung một bảng là một module mang hai tên. prisma.user bị truy vấn từ 57 chỗ ở đây — và 57 là mức sàn (mỗi thư mục tính một lần, SQL thô không tính).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which boundary is enforced by the compiler, without becoming a separate process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ranh giới nào được trình biên dịch cưỡng chế, mà không thành một tiến trình riêng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A module with explicit exports: people cannot import its insides"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A separate package: importing its inside is a compile error, but you now manage versions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A folder named domain/: nothing can import through it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A comment at the top of the file saying “internal”"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>folder < module < package < service < database. A folder anything can import from is not a boundary, it is a wish. Pick the level for what you need enforced.</p><p><i>VI: thư mục < module < package < service < CSDL. Một thư mục mà gì cũng import được thì không phải ranh giới, chỉ là mong ước. Chọn mức theo thứ bạn cần cưỡng chế.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Ways to reduce coupling WITHOUT splitting anything? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những cách giảm ghép nối mà KHÔNG tách gì ra? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Push a shared concept (“is this user Pro?”) down into a layer below both features"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Publish an event (“note shared”) when the caller needs no answer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Copy the email module into the notes folder so notes owns its own copy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Depend on a shape: share(note, to, notify) receives a notify function"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>And dare to delete unused code: an unused feature still constrains every schema change and every refactor. Record why it was removed, or it will come back.</p><p><i>VI: Và dám xoá mã không dùng: một tính năng không ai dùng vẫn ràng buộc mọi thay đổi lược đồ và mọi lần tái cấu trúc. Ghi lại vì sao xoá, không thì nó sẽ quay lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every heavily imported module a problem.|||Gọi mọi module được import nhiều là vấn đề."
+        },
+        {
+          "loi": "Trusting a dependency scanner to find table coupling.|||Tin trình quét phụ thuộc tìm được ghép nối qua bảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "coupling",
+          "vi": "ghép nối"
+        },
+        {
+          "en": "fan-in / fan-out",
+          "vi": "số nơi phụ thuộc vào / số thứ nó phụ thuộc"
+        },
+        {
+          "en": "hub",
+          "vi": "hub",
+          "giaiThich": "a module many others import"
+        }
+      ]
+    },
+    {
+      "title": "hubs(edges, k): the most-imported modules, and whether they depend back",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "coupling",
+        "graphs",
+        "Map"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><code>edges</code> are <code>[from, to]</code> pairs meaning “<code>from</code> imports <code>to</code>” (duplicates and self-imports may appear: count distinct modules, ignore self-imports). Write <code>hubs(edges, k)</code>: for every module that appears, compute <code>fanIn</code> (distinct modules importing it) and <code>fanOut</code> (distinct modules it imports); return the <code>k</code> modules with the highest fan-in (ties by name A→Z) as <code>{ module, fanIn, fanOut, healthy }</code>, where <code>healthy</code> means <code>fanOut === 0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>edges</code> là các cặp <code>[from, to]</code> nghĩa là “<code>from</code> import <code>to</code>” (có thể trùng và có tự-import: đếm module khác nhau, bỏ tự-import). Viết <code>hubs(edges, k)</code>: với mỗi module xuất hiện, tính <code>fanIn</code> (số module khác nhau import nó) và <code>fanOut</code> (số module khác nhau nó import); trả về <code>k</code> module có fan-in cao nhất (hoà theo tên A→Z) dạng <code>{ module, fanIn, fanOut, healthy }</code>, với <code>healthy</code> nghĩa là <code>fanOut === 0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hubs([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]], 3)",
+          "output": "[{\"module\":\"services/pro\",\"fanIn\":5,\"fanOut\":0,\"healthy\":true},{\"module\":\"services/notes\",\"fanIn\":3,\"fanOut\":2,\"healthy\":false},{\"module\":\"services/email\",\"fanIn\":2,\"fanOut\":1,\"healthy\":false}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two Maps of Sets, keyed by module.|||Hai Map chứa Set, khoá theo module.",
+        "Register both ends of every edge, so a module with no importers still appears with fanIn 0.|||Ghi nhận cả hai đầu của mọi cạnh, để module không ai import vẫn xuất hiện với fanIn 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** most-imported modules */\nfunction hubs(edges, k) {\n  // Write your solution here\n  const n = {};\n  for (const [a, b] of edges) n[b] = (n[b] || 0) + 1;\n  return Object.entries(n).sort((x, y) => y[1] - x[1]).slice(0, k).map(([module, fanIn]) => ({ module, fanIn, fanOut: 0, healthy: true }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hubs(edges, k) {\n  // edges: [from, to] = \"from import to\". fan-in = số tệp import nó; fan-out = số thứ nó import.\n  const fanIn = new Map();\n  const fanOut = new Map();\n  const touch = (m) => { if (!fanIn.has(m)) { fanIn.set(m, new Set()); fanOut.set(m, new Set()); } };\n  for (const [a, b] of edges) { touch(a); touch(b); if (a !== b) { fanIn.get(b).add(a); fanOut.get(a).add(b); } }\n  return [...fanIn.keys()]\n    .map((m) => ({ module: m, fanIn: fanIn.get(m).size, fanOut: fanOut.get(m).size }))\n    .sort((x, y) => y.fanIn - x.fanIn || (x.module < y.module ? -1 : 1))\n    .slice(0, k)\n    .map((h) => ({ ...h, healthy: h.fanOut === 0 }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A healthy hub is a stable concept that depends on nothing above it — pro.service: 39 importers, 0 imports. The combination that makes change slow is a big, changing module with many importers; fan-out alone is not bad (a command registry wiring 54 commands touches many places).</p>",
+      "solutionExplanationHtmlVi": "<p>Hub lành là một khái niệm ổn định không phụ thuộc gì phía trên nó — pro.service: 39 nơi import, 0 import. Thứ làm thay đổi chậm là một module lớn, hay đổi, nhiều nơi import; fan-out riêng nó không xấu (registry nối 54 lệnh tất nhiên chạm nhiều chỗ).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A slice of the Notes backend",
+              "vi": "Một lát của backend Notes"
+            },
+            "goi": "hubs([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]], 3)",
+            "mongDoi": [
+              {
+                "module": "services/pro",
+                "fanIn": 5,
+                "fanOut": 0,
+                "healthy": true
+              },
+              {
+                "module": "services/notes",
+                "fanIn": 3,
+                "fanOut": 2,
+                "healthy": false
+              },
+              {
+                "module": "services/email",
+                "fanIn": 2,
+                "fanOut": 1,
+                "healthy": false
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Both ends are modules",
+              "vi": "Cả hai đầu đều là module"
+            },
+            "goi": "hubs([[\"a\",\"b\"]], 5)",
+            "mongDoi": [
+              {
+                "module": "b",
+                "fanIn": 1,
+                "fanOut": 0,
+                "healthy": true
+              },
+              {
+                "module": "a",
+                "fanIn": 0,
+                "fanOut": 1,
+                "healthy": false
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "hubs([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"],[\"services/pro\",\"services/pro\"],[\"x\",\"services/email\"],[\"y\",\"services/email\"]], 2)",
+            "mongDoi": [
+              {
+                "module": "services/pro",
+                "fanIn": 5,
+                "fanOut": 0,
+                "healthy": true
+              },
+              {
+                "module": "services/email",
+                "fanIn": 4,
+                "fanOut": 1,
+                "healthy": false
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hubs([], 3)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting duplicate edges: two imports from the same file are one dependency.|||Đếm cạnh trùng: hai lần import từ cùng một tệp là một phụ thuộc."
+        },
+        {
+          "loi": "Ranking by size: social.service is 2,503 lines with only 4 importers — large but not a hub.|||Xếp theo kích thước: social.service dài 2.503 dòng mà chỉ 4 nơi import — lớn nhưng không phải hub."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fan-in",
+          "vi": "fan-in"
+        },
+        {
+          "en": "fan-out",
+          "vi": "fan-out"
+        }
+      ]
+    },
+    {
+      "title": "mutualPairs(edges): the 28 pairs that are one unit living in two files",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "coupling",
+        "cycles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A pair of modules that import each other can be neither tested nor understood alone. Write <code>mutualPairs(edges)</code> (<code>[from, to]</code> pairs, duplicates possible): return every pair where <code>a</code> imports <code>b</code> and <code>b</code> imports <code>a</code>, once, written <code>\"&lt;smaller&gt; &lt;-&gt; &lt;larger&gt;\"</code> (by string comparison), the list sorted A→Z. Self-imports are not pairs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một cặp module import lẫn nhau thì không kiểm thử riêng được và cũng không hiểu riêng được. Viết <code>mutualPairs(edges)</code> (cặp <code>[from, to]</code>, có thể trùng): trả về mọi cặp mà <code>a</code> import <code>b</code> và <code>b</code> import <code>a</code>, mỗi cặp một lần, viết <code>\"&lt;nhỏ hơn&gt; &lt;-&gt; &lt;lớn hơn&gt;\"</code> (so chuỗi), danh sách sắp A→Z. Tự-import không phải cặp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "mutualPairs([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]])",
+          "output": "[\"services/email <-> services/notes\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Put every edge into a Set as a string key; then for each edge look up the reverse key.|||Cho mọi cạnh vào một Set dưới dạng khoá chuỗi; rồi với mỗi cạnh tra khoá ngược.",
+        "Normalise the pair (smaller name first) so it is added once.|||Chuẩn hoá cặp (tên nhỏ trước) để chỉ thêm một lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** pairs that import each other */\nfunction mutualPairs(edges) {\n  // Write your solution here\n  const out = [];\n  for (const [a, b] of edges) if (edges.some(([x, y]) => x === b && y === a)) out.push(a + ' <-> ' + b);\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction mutualPairs(edges) {\n  const set = new Set(edges.map(([a, b]) => `${a}\\u0000${b}`));\n  const out = new Set();\n  for (const [a, b] of edges) {\n    if (a !== b && set.has(`${b}\\u0000${a}`)) out.add(a < b ? `${a} <-> ${b}` : `${b} <-> ${a}`);   // mỗi cặp một lần, tên nhỏ trước\n  }\n  return [...out].sort();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the website: 28 such pairs among 705 service files, 19 inside work/ and 6 inside agent/ — e.g. agent/turn ⇄ agent/compact, one unit that must be changed and tested together. Break a pair with an injected function or an event, not by moving code.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên website: 28 cặp như vậy trong 705 tệp service, 19 trong work/ và 6 trong agent/ — vd agent/turn ⇄ agent/compact, một khối phải sửa và kiểm thử cùng nhau. Phá cặp bằng một hàm tiêm vào hoặc một sự kiện, không phải bằng cách dời mã.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "notes ⇄ email",
+              "vi": "notes ⇄ email"
+            },
+            "goi": "mutualPairs([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]])",
+            "mongDoi": [
+              "services/email <-> services/notes"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "agent/turn ⇄ agent/compact",
+              "vi": "agent/turn ⇄ agent/compact"
+            },
+            "goi": "mutualPairs([[\"agent/turn\",\"agent/compact\"],[\"agent/compact\",\"agent/turn\"],[\"work/a\",\"work/b\"]])",
+            "mongDoi": [
+              "agent/compact <-> agent/turn"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "mutualPairs([[\"z\",\"a\"],[\"a\",\"z\"],[\"a\",\"z\"],[\"m\",\"m\"],[\"b\",\"c\"],[\"c\",\"b\"],[\"c\",\"d\"]])",
+            "mongDoi": [
+              "a <-> z",
+              "b <-> c"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "mutualPairs([])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting each pair twice (a ⇄ b and b ⇄ a).|||Báo mỗi cặp hai lần (a ⇄ b và b ⇄ a)."
+        },
+        {
+          "loi": "Ignoring cycles because “it works”: with ES modules a cycle can leave a value undefined at load time, depending on import order.|||Bỏ qua vòng vì “nó vẫn chạy”: với ES module, một vòng có thể để một giá trị là undefined lúc nạp, tuỳ thứ tự import."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "circular import",
+          "vi": "import vòng"
+        }
+      ]
+    },
+    {
+      "title": "hiddenCoupling(tableAccess, edges): the coupling the import graph cannot see",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "coupling",
+        "databases",
+        "Set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><code>tableAccess</code> maps a module to the tables it queries directly (Prisma or raw SQL); <code>edges</code> are import pairs <code>[from, to]</code>. Write <code>hiddenCoupling(tableAccess, edges)</code> returning <code>{ pairs, mostShared }</code>:</p><ul><li><code>pairs</code> — for every pair of modules (names sorted A→Z, pairs in that order: first by the first name, then by the second) that share at least one table and do <b>not</b> import each other in either direction: <code>{ pair: \"&lt;a&gt; + &lt;b&gt;\", tables }</code> with the shared tables sorted and distinct;</li><li><code>mostShared</code> — <code>[table, number of modules querying it]</code> for the table queried by the most modules (ties by table name A→Z), or <code>null</code> if there are no tables.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>tableAccess</code> ánh xạ module ⇒ các bảng nó truy vấn trực tiếp (Prisma hoặc SQL thô); <code>edges</code> là các cặp import <code>[from, to]</code>. Viết <code>hiddenCoupling(tableAccess, edges)</code> trả về <code>{ pairs, mostShared }</code>:</p><ul><li><code>pairs</code> — với mọi cặp module (tên sắp A→Z, các cặp theo thứ tự đó: trước theo tên thứ nhất, rồi tên thứ hai) dùng chung ít nhất một bảng và <b>không</b> import nhau theo chiều nào: <code>{ pair: \"&lt;a&gt; + &lt;b&gt;\", tables }</code> với các bảng chung đã sắp và không trùng;</li><li><code>mostShared</code> — <code>[bảng, số module truy vấn nó]</code> cho bảng được nhiều module truy vấn nhất (hoà theo tên bảng A→Z), hoặc <code>null</code> nếu không có bảng nào.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hiddenCoupling({\"services/notes\":[\"note\",\"user\"],\"services/stats\":[\"note\"],\"services/admin-export\":[\"user\",\"course\"],\"services/auth\":[\"user\",\"session\"],\"services/courses\":[\"course\"]}, [[\"services/notes\",\"services/auth\"]])",
+          "output": "{\"pairs\":[{\"pair\":\"services/admin-export + services/auth\",\"tables\":[\"user\"]},{\"pair\":\"services/admin-export + services/courses\",\"tables\":[\"course\"]},{\"pair\":\"services/admin-export + services/notes\",\"tables\":[\"user\"]},{\"pair\":\"services/notes + services/stats\",\"tables\":[\"note\"]}],\"mostShared\":[\"user\",3]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A Set of “a|b” strings in both directions answers “do they import each other?”.|||Một Set các chuỗi “a|b” theo cả hai chiều trả lời “chúng có import nhau không?”.",
+        "Two nested loops over the sorted module names give the pairs in the required order.|||Hai vòng lặp lồng nhau trên tên module đã sắp cho các cặp đúng thứ tự yêu cầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** modules coupled through shared tables */\nfunction hiddenCoupling(tableAccess, edges) {\n  // Write your solution here\n  const mods = Object.keys(tableAccess);\n  const pairs = [];\n  for (let i = 0; i < mods.length; i++) for (let j = i + 1; j < mods.length; j++) {\n    const shared = tableAccess[mods[i]].filter((t) => tableAccess[mods[j]].includes(t));\n    if (shared.length) pairs.push({ pair: mods[i] + ' + ' + mods[j], tables: shared });\n  }\n  return { pairs, mostShared: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hiddenCoupling(tableAccess, edges) {\n  // tableAccess: { module: [bảng nó truy vấn trực tiếp] }. Hai module chung bảng mà KHÔNG import nhau = ghép nối ẩn.\n  const imports = new Set(edges.flatMap(([a, b]) => [`${a}|${b}`, `${b}|${a}`]));\n  const mods = Object.keys(tableAccess).sort();\n  const out = [];\n  for (let i = 0; i < mods.length; i++) {\n    for (let j = i + 1; j < mods.length; j++) {\n      const shared = tableAccess[mods[i]].filter((t) => tableAccess[mods[j]].includes(t));\n      if (shared.length && !imports.has(`${mods[i]}|${mods[j]}`)) out.push({ pair: `${mods[i]} + ${mods[j]}`, tables: [...new Set(shared)].sort() });\n    }\n  }\n  const touches = {};\n  for (const m of mods) for (const t of new Set(tableAccess[m])) touches[t] = (touches[t] || 0) + 1;\n  return { pairs: out, mostShared: Object.entries(touches).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0] || null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>prisma/schema.prisma has 608 models and 243 migrations behind 126 route-mounting lines: every feature that never imports another is still coupled to it if one adds a column, renames a table, or holds a lock the other waits on. The cure in 18.4 is table owners: only the courses module queries course tables.</p>",
+      "solutionExplanationHtmlVi": "<p>prisma/schema.prisma có 608 model và 243 migration đứng sau 126 dòng gắn route: mọi tính năng không bao giờ import nhau vẫn ghép nối với nhau nếu một bên thêm cột, đổi tên bảng, hay giữ một khoá mà bên kia phải chờ. Thuốc chữa ở 18.4 là chủ sở hữu bảng: chỉ module courses truy vấn bảng course.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Notes, stats, the admin export and auth",
+              "vi": "Notes, stats, bản xuất admin và auth"
+            },
+            "goi": "hiddenCoupling({\"services/notes\":[\"note\",\"user\"],\"services/stats\":[\"note\"],\"services/admin-export\":[\"user\",\"course\"],\"services/auth\":[\"user\",\"session\"],\"services/courses\":[\"course\"]}, [[\"services/notes\",\"services/auth\"]])",
+            "mongDoi": {
+              "pairs": [
+                {
+                  "pair": "services/admin-export + services/auth",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/admin-export + services/courses",
+                  "tables": [
+                    "course"
+                  ]
+                },
+                {
+                  "pair": "services/admin-export + services/notes",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/notes + services/stats",
+                  "tables": [
+                    "note"
+                  ]
+                }
+              ],
+              "mostShared": [
+                "user",
+                3
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nothing shared",
+              "vi": "Không dùng chung gì"
+            },
+            "goi": "hiddenCoupling({\"a\":[\"t\"],\"b\":[\"u\"]}, [])",
+            "mongDoi": {
+              "pairs": [],
+              "mostShared": [
+                "t",
+                1
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "hiddenCoupling({\"services/notes\":[\"note\",\"user\"],\"services/stats\":[\"note\"],\"services/admin-export\":[\"user\",\"course\"],\"services/auth\":[\"user\",\"session\"],\"services/courses\":[\"course\"],\"services/feed\":[\"note\",\"user\",\"note\"]}, [[\"services/stats\",\"services/feed\"],[\"services/admin-export\",\"services/courses\"]])",
+            "mongDoi": {
+              "pairs": [
+                {
+                  "pair": "services/admin-export + services/auth",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/admin-export + services/feed",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/admin-export + services/notes",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/auth + services/feed",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/auth + services/notes",
+                  "tables": [
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/feed + services/notes",
+                  "tables": [
+                    "note",
+                    "user"
+                  ]
+                },
+                {
+                  "pair": "services/notes + services/stats",
+                  "tables": [
+                    "note"
+                  ]
+                }
+              ],
+              "mostShared": [
+                "user",
+                4
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hiddenCoupling({}, [])",
+            "mongDoi": {
+              "pairs": [],
+              "mostShared": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Relying on a dependency scanner: the two modules never import each other; they meet in the database.|||Dựa vào trình quét phụ thuộc: hai module không bao giờ import nhau; chúng gặp nhau trong CSDL."
+        },
+        {
+          "loi": "Checking the import in one direction only: if stats imports notes, the pair is already visible coupling, whichever side imports.|||Chỉ kiểm import theo một chiều: nếu stats import notes thì cặp đó đã là ghép nối nhìn thấy được, bên nào import cũng vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hidden coupling",
+          "vi": "ghép nối ẩn"
+        },
+        {
+          "en": "table owner",
+          "vi": "chủ sở hữu bảng"
+        }
+      ]
+    },
+    {
+      "title": "findCycles(edges): every import cycle, not just pairs",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "graphs",
+        "Tarjan",
+        "coupling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Pairs miss longer loops: <code>a → b → c → a</code>. Find every group of modules that can all reach each other through imports — the <b>strongly connected components</b> with at least 2 modules. Write <code>findCycles(edges)</code> (<code>[from, to]</code> pairs): return the components, each sorted A→Z, ordered by size descending, then by first name A→Z. (Tarjan’s algorithm does it in one depth-first pass; any correct method is fine.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm cặp bỏ sót các vòng dài hơn: <code>a → b → c → a</code>. Tìm mọi nhóm module mà mọi cái đều với tới nhau qua import — các <b>thành phần liên thông mạnh</b> có ít nhất 2 module. Viết <code>findCycles(edges)</code> (cặp <code>[from, to]</code>): trả về các thành phần, mỗi cái sắp A→Z, xếp theo kích thước giảm dần, rồi theo tên đầu tiên A→Z. (Thuật toán Tarjan làm việc này trong một lượt duyệt sâu; cách nào đúng cũng được.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findCycles([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]])",
+          "output": "[[\"services/email\",\"services/notes\"]]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Simple version: two modules are in the same component when each can reach the other — compute reachability with a DFS from every node.|||Bản đơn giản: hai module cùng thành phần khi mỗi cái với tới được cái kia — tính khả năng với tới bằng DFS từ mọi nút.",
+        "Tarjan: keep index and lowlink per node and a stack; when lowlink === index, pop the stack down to that node — that is one component.|||Tarjan: giữ index và lowlink cho mỗi nút cùng một ngăn xếp; khi lowlink === index, lấy ra khỏi ngăn xếp tới nút đó — đó là một thành phần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** all import cycles */\nfunction findCycles(edges) {\n  // Write your solution here — finds only 2-module cycles\n  const out = [];\n  for (const [a, b] of edges) if (a < b && edges.some(([x, y]) => x === b && y === a)) out.push([a, b]);\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction findCycles(edges) {\n  // Tarjan: các thành phần liên thông mạnh (SCC). SCC có ≥ 2 module = một vòng import (dài bao nhiêu cũng bắt được).\n  const adj = new Map();\n  for (const [a, b] of edges) { if (!adj.has(a)) adj.set(a, []); if (!adj.has(b)) adj.set(b, []); adj.get(a).push(b); }\n  let index = 0;\n  const idx = new Map();\n  const low = new Map();\n  const onStack = new Set();\n  const stack = [];\n  const out = [];\n  function strong(v) {\n    idx.set(v, index); low.set(v, index); index++;\n    stack.push(v); onStack.add(v);\n    for (const w of adj.get(v)) {\n      if (!idx.has(w)) { strong(w); low.set(v, Math.min(low.get(v), low.get(w))); }\n      else if (onStack.has(w)) low.set(v, Math.min(low.get(v), idx.get(w)));\n    }\n    if (low.get(v) === idx.get(v)) {\n      const comp = [];\n      let w;\n      do { w = stack.pop(); onStack.delete(w); comp.push(w); } while (w !== v);\n      if (comp.length > 1) out.push(comp.sort());\n    }\n  }\n  for (const v of [...adj.keys()].sort()) if (!idx.has(v)) strong(v);\n  return out.sort((x, y) => y.length - x.length || (x[0] < y[0] ? -1 : 1));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A component of several modules is one unit wearing several names: none of them can be changed, tested or extracted alone. That is why cycles are “always worth breaking” — and why the lesson counts them before deciding anything about splitting (18.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Một thành phần gồm nhiều module là một khối mang nhiều tên: không cái nào đổi, kiểm thử hay tách riêng được. Đó là lý do vòng “luôn đáng phá” — và vì sao bài đếm chúng trước khi quyết định bất cứ điều gì về việc tách (18.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "notes ⇄ email only",
+              "vi": "Chỉ notes ⇄ email"
+            },
+            "goi": "findCycles([[\"routes/notes\",\"services/notes\"],[\"routes/notes\",\"services/pro\"],[\"routes/feed\",\"services/feed\"],[\"routes/feed\",\"services/pro\"],[\"services/feed\",\"services/notes\"],[\"services/feed\",\"services/pro\"],[\"services/notes\",\"services/pro\"],[\"services/notes\",\"services/email\"],[\"services/email\",\"services/notes\"],[\"jobs/digest\",\"services/email\"],[\"jobs/digest\",\"services/pro\"],[\"routes/notes\",\"services/notes\"]])",
+            "mongDoi": [
+              [
+                "services/email",
+                "services/notes"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A three-module loop with no mutual pair",
+              "vi": "Vòng ba module không có cặp lẫn nhau"
+            },
+            "goi": "findCycles([[\"work/a\",\"work/b\"],[\"work/b\",\"work/c\"],[\"work/c\",\"work/a\"],[\"work/c\",\"work/permissions\"]])",
+            "mongDoi": [
+              [
+                "work/a",
+                "work/b",
+                "work/c"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "findCycles([[\"a\",\"b\"],[\"b\",\"a\"],[\"c\",\"d\"],[\"d\",\"e\"],[\"e\",\"c\"],[\"e\",\"f\"],[\"f\",\"g\"],[\"g\",\"f\"],[\"x\",\"y\"]])",
+            "mongDoi": [
+              [
+                "c",
+                "d",
+                "e"
+              ],
+              [
+                "a",
+                "b"
+              ],
+              [
+                "f",
+                "g"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "findCycles([[\"p\",\"q\"],[\"q\",\"r\"]])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "findCycles([[\"m1\",\"m2\"],[\"m2\",\"m3\"],[\"m3\",\"m4\"],[\"m4\",\"m1\"],[\"m2\",\"m1\"]])",
+            "mongDoi": [
+              [
+                "m1",
+                "m2",
+                "m3",
+                "m4"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only checking mutual pairs: work/a → work/b → work/c → work/a has no pair and is still one tangle.|||Chỉ kiểm cặp lẫn nhau: work/a → work/b → work/c → work/a không có cặp nào mà vẫn là một mớ rối."
+        },
+        {
+          "loi": "Reporting each cycle once per entry point: a component is one set, however you enter it.|||Báo mỗi vòng một lần cho mỗi điểm vào: một thành phần là một tập, vào từ đâu cũng vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "strongly connected component",
+          "vi": "thành phần liên thông mạnh"
+        },
+        {
+          "en": "depth-first search",
+          "vi": "duyệt theo chiều sâu"
+        }
+      ]
+    }
+  ]
+}

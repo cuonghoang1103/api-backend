@@ -1,0 +1,928 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-13-3-thu-lai-va-idempotent",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-13-3-thu-lai-va-idempotent"
+  },
+  "exercises": [
+    {
+      "title": "13.3 · Retries: what BullMQ does, and what you must add",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "retries",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A queue turns “the email failed” into “the email was late” only if you configure it to — and configuring it carelessly creates a worse bug than the one you were fixing.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàng đợi chỉ biến \"email hỏng\" thành \"email tới trễ\" nếu bạn cấu hình cho nó làm thế — và cấu hình ẩu tạo ra lỗi còn tệ hơn lỗi bạn định sửa.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of every handler: what if it runs twice?|||Hỏi với mọi handler: nếu nó chạy hai lần thì sao?",
+        "Retry only what time can fix.|||Chỉ thử lại thứ mà thời gian có thể chữa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.3 · Retries: what BullMQ does, and what you must add\n\nAnswer in the answer panel (no code needed).\n\n1. A job with no options fails once with \"SMTP 421\". What happens next?Một job không có tuỳ chọn nào hỏng một lần với \"SMTP 421\". Chuyện gì xảy ra tiếp?\n2. Why is exponential backoff the right default and a fixed 300 ms the wrong one?Vì sao backoff cấp số nhân là mặc định đúng còn cố định 300 ms là sai?\n3. The payment job debits the card, then the network drops; the retry runs again. The customer paid 300,000đ for a 100,000đ order. Whose fault is it?Job thanh toán trừ thẻ, rồi mạng rớt; lần thử lại chạy lần nữa. Khách trả 300.000đ cho đơn 100.000đ. Lỗi của ai?\n4. add() was called 5 times with jobId \"invoice-ORD-2026-777\". How many jobs run, and when does that protection end?add() được gọi 5 lần với jobId \"invoice-ORD-2026-777\". Bao nhiêu job chạy, và khi nào sự bảo vệ đó hết?\n5. queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) throws. Why?queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) ném lỗi. Vì sao?\n6. Which failure should throw UnrecoverableError (fail now, no retry)?Kiểu hỏng nào nên ném UnrecoverableError (hỏng luôn, không thử lại)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.3 · Retries: what BullMQ does, and what you must add — answer key\n\n1. A job with no options fails once with \"SMTP 421\". What happens next?Một job không có tuỳ chọn nào hỏng một lần với \"SMTP 421\". Chuyện gì xảy ra tiếp?\n   Answer: b) Nothing: attempts defaults to 1, the job sits in the failed set with its reason until someone looks\n   attemptsMade = 1, no retry. Better than the inline version — the work is recorded and replayable — but nobody is coming unless you build an alert.VI: attemptsMade = 1, không thử lại. Tốt hơn bản trong request — việc được ghi lại và chạy lại được — nhưng không ai tới xem trừ khi bạn dựng cảnh báo.\n\n2. Why is exponential backoff the right default and a fixed 300 ms the wrong one?Vì sao backoff cấp số nhân là mặc định đúng còn cố định 300 ms là sai?\n   Answer: a) Fast fixed retries add load to a service that is already drowning\n   Gaps of 288 → 417 → 826 → 1,674 ms give the other side room to recover. Add jitter so a thousand jobs that failed together do not retry together.VI: Các khoảng 288 → 417 → 826 → 1.674 ms cho bên kia chỗ để hồi phục. Thêm jitter để một nghìn job hỏng cùng lúc không thử lại cùng lúc.\n\n3. The payment job debits the card, then the network drops; the retry runs again. The customer paid 300,000đ for a 100,000đ order. Whose fault is it?Job thanh toán trừ thẻ, rồi mạng rớt; lần thử lại chạy lần nữa. Khách trả 300.000đ cho đơn 100.000đ. Lỗi của ai?\n   Answer: c) The handler’s: a queue guarantees at-least-once delivery, so the handler must be idempotent\n   Exactly-once does not exist; idempotent handlers make at-least-once indistinguishable from it. Retries, stalled jobs and double clicks all run handlers twice.VI: Chính-xác-một-lần không tồn tại; handler luỹ đẳng làm ít-nhất-một-lần trông y như vậy. Thử lại, job treo và bấm đúp đều chạy handler hai lần.\n\n4. add() was called 5 times with jobId \"invoice-ORD-2026-777\". How many jobs run, and when does that protection end?add() được gọi 5 lần với jobId \"invoice-ORD-2026-777\". Bao nhiêu job chạy, và khi nào sự bảo vệ đó hết?\n   Answer: b) One — but only while the old job still exists in Redis\n   jobId is a cheap guard against double-submit in a short window, not a substitute for an idempotent handler. Use both.VI: jobId là chốt chặn rẻ chống bấm trùng trong khoảng ngắn, không thay được handler luỹ đẳng. Dùng cả hai.\n\n5. queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) throws. Why?queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) ném lỗi. Vì sao?\n   Answer: c) A custom jobId cannot contain a colon — use invoice-ORD-777\n   Error: Custom Id cannot contain : — easy to hit, because : is the natural separator everywhere else in Redis.VI: Error: Custom Id cannot contain : — dễ dính, vì : là dấu phân cách tự nhiên ở mọi chỗ khác trong Redis.\n\n6. Which failure should throw UnrecoverableError (fail now, no retry)?Kiểu hỏng nào nên ném UnrecoverableError (hỏng luôn, không thử lại)?\n   Answer: a) The user no longer exists — it will fail identically five times\n   Retry infrastructure failures (timeout, 5xx, reset); never retry logic failures (4xx, validation, missing record) — or the queue spends its capacity on jobs that can never succeed.VI: Thử lại lỗi hạ tầng (quá giờ, 5xx, reset); đừng bao giờ thử lại lỗi logic (4xx, kiểm hợp lệ, thiếu bản ghi) — không thì hàng đợi tiêu hết sức vào những job không bao giờ thành công.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Nothing: attempts defaults to 1, the job sits in the failed set with its reason until someone looks</p><p>attemptsMade = 1, no retry. Better than the inline version — the work is recorded and replayable — but nobody is coming unless you build an alert.</p><p><i>VI: attemptsMade = 1, không thử lại. Tốt hơn bản trong request — việc được ghi lại và chạy lại được — nhưng không ai tới xem trừ khi bạn dựng cảnh báo.</i></p></li><li><p><b>a)</b> Fast fixed retries add load to a service that is already drowning</p><p>Gaps of 288 → 417 → 826 → 1,674 ms give the other side room to recover. Add jitter so a thousand jobs that failed together do not retry together.</p><p><i>VI: Các khoảng 288 → 417 → 826 → 1.674 ms cho bên kia chỗ để hồi phục. Thêm jitter để một nghìn job hỏng cùng lúc không thử lại cùng lúc.</i></p></li><li><p><b>c)</b> The handler’s: a queue guarantees at-least-once delivery, so the handler must be idempotent</p><p>Exactly-once does not exist; idempotent handlers make at-least-once indistinguishable from it. Retries, stalled jobs and double clicks all run handlers twice.</p><p><i>VI: Chính-xác-một-lần không tồn tại; handler luỹ đẳng làm ít-nhất-một-lần trông y như vậy. Thử lại, job treo và bấm đúp đều chạy handler hai lần.</i></p></li><li><p><b>b)</b> One — but only while the old job still exists in Redis</p><p>jobId is a cheap guard against double-submit in a short window, not a substitute for an idempotent handler. Use both.</p><p><i>VI: jobId là chốt chặn rẻ chống bấm trùng trong khoảng ngắn, không thay được handler luỹ đẳng. Dùng cả hai.</i></p></li><li><p><b>c)</b> A custom jobId cannot contain a colon — use invoice-ORD-777</p><p>Error: Custom Id cannot contain : — easy to hit, because : is the natural separator everywhere else in Redis.</p><p><i>VI: Error: Custom Id cannot contain : — dễ dính, vì : là dấu phân cách tự nhiên ở mọi chỗ khác trong Redis.</i></p></li><li><p><b>a)</b> The user no longer exists — it will fail identically five times</p><p>Retry infrastructure failures (timeout, 5xx, reset); never retry logic failures (4xx, validation, missing record) — or the queue spends its capacity on jobs that can never succeed.</p><p><i>VI: Thử lại lỗi hạ tầng (quá giờ, 5xx, reset); đừng bao giờ thử lại lỗi logic (4xx, kiểm hợp lệ, thiếu bản ghi) — không thì hàng đợi tiêu hết sức vào những job không bao giờ thành công.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A job with no options fails once with \"SMTP 421\". What happens next?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một job không có tuỳ chọn nào hỏng một lần với \"SMTP 421\". Chuyện gì xảy ra tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BullMQ retries 3 times with exponential backoff by default"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: attempts defaults to 1, the job sits in the failed set with its reason until someone looks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The job is deleted, because removeOnFail defaults to true"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The worker crashes and restarts the job when it comes back"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>attemptsMade = 1, no retry. Better than the inline version — the work is recorded and replayable — but nobody is coming unless you build an alert.</p><p><i>VI: attemptsMade = 1, không thử lại. Tốt hơn bản trong request — việc được ghi lại và chạy lại được — nhưng không ai tới xem trừ khi bạn dựng cảnh báo.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is exponential backoff the right default and a fixed 300 ms the wrong one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao backoff cấp số nhân là mặc định đúng còn cố định 300 ms là sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fast fixed retries add load to a service that is already drowning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fixed backoff is not supported for more than 3 attempts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exponential backoff uses less Redis memory per job"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fixed retries are executed in parallel, exponential ones in sequence"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Gaps of 288 → 417 → 826 → 1,674 ms give the other side room to recover. Add jitter so a thousand jobs that failed together do not retry together.</p><p><i>VI: Các khoảng 288 → 417 → 826 → 1.674 ms cho bên kia chỗ để hồi phục. Thêm jitter để một nghìn job hỏng cùng lúc không thử lại cùng lúc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The payment job debits the card, then the network drops; the retry runs again. The customer paid 300,000đ for a 100,000đ order. Whose fault is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Job thanh toán trừ thẻ, rồi mạng rớt; lần thử lại chạy lần nữa. Khách trả 300.000đ cho đơn 100.000đ. Lỗi của ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BullMQ’s: it should have detected that the first attempt succeeded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The payment provider’s: it should never accept a second charge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The handler’s: a queue guarantees at-least-once delivery, so the handler must be idempotent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Redis’s: the job should have been locked for the whole retry window"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Exactly-once does not exist; idempotent handlers make at-least-once indistinguishable from it. Retries, stalled jobs and double clicks all run handlers twice.</p><p><i>VI: Chính-xác-một-lần không tồn tại; handler luỹ đẳng làm ít-nhất-một-lần trông y như vậy. Thử lại, job treo và bấm đúp đều chạy handler hai lần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>add() was called 5 times with jobId \"invoice-ORD-2026-777\". How many jobs run, and when does that protection end?</p><p style=\"opacity:.75;font-size:.92em\"><i>add() được gọi 5 lần với jobId \"invoice-ORD-2026-777\". Bao nhiêu job chạy, và khi nào sự bảo vệ đó hết?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One, forever: BullMQ remembers every jobId it has ever seen"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One — but only while the old job still exists in Redis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Five, because jobId is only a label for the dashboard"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One per worker process, because dedupe is local"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>jobId is a cheap guard against double-submit in a short window, not a substitute for an idempotent handler. Use both.</p><p><i>VI: jobId là chốt chặn rẻ chống bấm trùng trong khoảng ngắn, không thay được handler luỹ đẳng. Dùng cả hai.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) throws. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>queue.add('invoice', data, { jobId: 'invoice:ORD-777' }) ném lỗi. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The data is missing a userId field"
+              },
+              {
+                "ma": "b",
+                "noiDung": "jobId must be numeric"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A custom jobId cannot contain a colon — use invoice-ORD-777"
+              },
+              {
+                "ma": "d",
+                "noiDung": "jobId must start with the queue name"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Error: Custom Id cannot contain : — easy to hit, because : is the natural separator everywhere else in Redis.</p><p><i>VI: Error: Custom Id cannot contain : — dễ dính, vì : là dấu phân cách tự nhiên ở mọi chỗ khác trong Redis.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Which failure should throw UnrecoverableError (fail now, no retry)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểu hỏng nào nên ném UnrecoverableError (hỏng luôn, không thử lại)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The user no longer exists — it will fail identically five times"
+              },
+              {
+                "ma": "b",
+                "noiDung": "HTTP 503 from the payment provider"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 30-second timeout from the image service"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A connection reset while talking to SMTP"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Retry infrastructure failures (timeout, 5xx, reset); never retry logic failures (4xx, validation, missing record) — or the queue spends its capacity on jobs that can never succeed.</p><p><i>VI: Thử lại lỗi hạ tầng (quá giờ, 5xx, reset); đừng bao giờ thử lại lỗi logic (4xx, kiểm hợp lệ, thiếu bản ghi) — không thì hàng đợi tiêu hết sức vào những job không bao giờ thành công.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "attempts: 10 on a paid API: ten bills for one piece of work.|||attempts: 10 với một API trả phí: mười hoá đơn cho một việc."
+        },
+        {
+          "loi": "Trusting jobId as the only idempotency guard.|||Tin jobId là chốt luỹ đẳng duy nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exponential backoff",
+          "vi": "lùi thời gian theo cấp số nhân",
+          "giaiThich": "khoảng chờ giữa các lần thử gấp đôi mỗi lần"
+        },
+        {
+          "en": "idempotent",
+          "vi": "luỹ đẳng",
+          "giaiThich": "chạy hai lần cho cùng kết quả như một lần"
+        },
+        {
+          "en": "at-least-once",
+          "vi": "ít nhất một lần",
+          "giaiThich": "hàng đợi có thể chạy lại một job — thử lại, job treo được nhặt lại, thêm trùng"
+        },
+        {
+          "en": "dead letter",
+          "vi": "đống job chết",
+          "giaiThich": "tập failed: giữ data + lý do để chạy lại khi đã sửa"
+        }
+      ]
+    },
+    {
+      "title": "13.3 · Compute the retry schedule",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "backoff"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>retryDelays(attempts, backoff)</code> — the waits BullMQ makes BEFORE attempts 2, 3, … <code>attempts</code>. <code>backoff</code> is <code>{ type: 'fixed' | 'exponential', delay }</code> or <code>undefined</code>:</p><ul><li>fixed: every wait is <code>delay</code>;</li><li>exponential: the wait before attempt <code>k + 1</code> (after <code>k</code> failures) is <code>delay × 2^(k − 1)</code> — 1000, 2000, 4000, 8000…;</li><li>no backoff: every wait is 0; <code>attempts</code> of 1 (or missing) means no retry at all → <code>[]</code>.</li></ul><p>Also write <code>lastRetryAt(attempts, backoff)</code>: the total of those waits — the lesson’s “attempts: 5, delay: 1000 ⇒ the last retry lands around 16 seconds later”.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>attempts counts the FIRST run too: 5 attempts = 4 waits.</li>\n  <li>The first exponential wait equals delay (2^0).</li>\n  <li>Pure functions, no timers.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>retryDelays(attempts, backoff)</code> — các khoảng chờ BullMQ dừng TRƯỚC lần thử 2, 3, … <code>attempts</code>. <code>backoff</code> là <code>{ type: 'fixed' | 'exponential', delay }</code> hoặc <code>undefined</code>:</p><ul><li>fixed: mọi khoảng chờ bằng <code>delay</code>;</li><li>exponential: khoảng chờ trước lần <code>k + 1</code> (sau <code>k</code> lần hỏng) là <code>delay × 2^(k − 1)</code> — 1000, 2000, 4000, 8000…;</li><li>không có backoff: mọi khoảng chờ là 0; <code>attempts</code> bằng 1 (hoặc thiếu) nghĩa là không thử lại → <code>[]</code>.</li></ul><p>Viết thêm <code>lastRetryAt(attempts, backoff)</code>: tổng các khoảng chờ đó — câu \"attempts: 5, delay: 1000 ⇒ lần thử cuối rơi vào khoảng 16 giây sau\" của bài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>attempts tính cả lần chạy ĐẦU: 5 lần thử = 4 khoảng chờ.</li>\n  <li>Khoảng chờ cấp số nhân đầu tiên bằng delay (2^0).</li>\n  <li>Hàm thuần, không hẹn giờ.</li>\n</ul>",
+      "inputSpec": "attempts — number | undefined · backoff — { type, delay } | undefined|||attempts — số | undefined · backoff — { type, delay } | undefined",
+      "outputSpec": "retryDelays → number[] · lastRetryAt → number|||retryDelays → number[] · lastRetryAt → số",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[retryDelays(5, { type: 'exponential', delay: 1000 }), lastRetryAt(5, { type: 'exponential', delay: 1000 })]",
+          "output": "[[1000,2000,4000,8000],15000]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Array.from({ length: Math.max(0, (attempts || 1) - 1) }, (_, i) => …) — i = 0 is the wait after the first failure.|||Array.from({ length: Math.max(0, (attempts || 1) - 1) }, (_, i) => …) — i = 0 là khoảng chờ sau lần hỏng đầu tiên.",
+        "exponential: backoff.delay * 2 ** i."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function retryDelays(attempts, backoff) {\n  // Write your solution here\n  const out = [];\n  for (let k = 1; k <= (attempts || 1); k++) out.push(backoff ? backoff.delay * 2 ** k : 0);\n  return out;\n}\n\nfunction lastRetryAt(attempts, backoff) {\n  return retryDelays(attempts, backoff).reduce((a, b) => a + b, 0);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The waits before attempts 2..attempts (attempts counts the first run). */\nfunction retryDelays(attempts, backoff) {\n  const waits = Math.max(0, (attempts || 1) - 1);          // 5 attempts ⇒ 4 waits; 1 ⇒ none\n  return Array.from({ length: waits }, (_, i) => {         // i = number of failures so far − 1\n    if (!backoff) return 0;                                 // no backoff: retry immediately\n    if (backoff.type === 'exponential') return backoff.delay * 2 ** i;   // delay, 2·delay, 4·delay…\n    return backoff.delay;                                   // fixed\n  });\n}\n\n/** When the last attempt starts, relative to the first one. */\nfunction lastRetryAt(attempts, backoff) {\n  return retryDelays(attempts, backoff).reduce((a, b) => a + b, 0);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With attempts 5 and delay 1000 the waits are 1, 2, 4, 8 s and the last attempt starts 15 s after the first — “around 16 seconds” once the attempts themselves take time. The lesson measured 288 / 417 / 826 / 1,674 ms with delay 200: the same doubling plus Redis and worker overhead.</p>",
+      "solutionExplanationHtmlVi": "<p>Với attempts 5 và delay 1000 các khoảng chờ là 1, 2, 4, 8 s và lần thử cuối bắt đầu 15 s sau lần đầu — \"khoảng 16 giây\" khi tính cả thời gian chạy của các lần thử. Bài đo 288 / 417 / 826 / 1.674 ms với delay 200: cùng phép nhân đôi cộng chi phí của Redis và worker.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "attempts 5, exponential 1000 → 1, 2, 4, 8 s; last at 15 s",
+              "vi": "attempts 5, exponential 1000 → 1, 2, 4, 8 s; lần cuối ở 15 s"
+            },
+            "goi": "[retryDelays(5, { type: 'exponential', delay: 1000 }), lastRetryAt(5, { type: 'exponential', delay: 1000 })]",
+            "mongDoi": [
+              [
+                1000,
+                2000,
+                4000,
+                8000
+              ],
+              15000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Fixed 300 ms, 4 attempts",
+              "vi": "Cố định 300 ms, 4 lần thử"
+            },
+            "goi": "retryDelays(4, { type: 'fixed', delay: 300 })",
+            "mongDoi": [
+              300,
+              300,
+              300
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Default: no retry; no backoff: immediate",
+              "vi": "Mặc định: không thử lại; không backoff: thử ngay"
+            },
+            "goi": "[retryDelays(undefined), retryDelays(1, { type: 'exponential', delay: 200 }), retryDelays(3)]",
+            "mongDoi": [
+              [],
+              [],
+              [
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[retryDelays(5, { type: 'exponential', delay: 200 }), lastRetryAt(3, { type: 'fixed', delay: 50 })]",
+            "mongDoi": [
+              [
+                200,
+                400,
+                800,
+                1600
+              ],
+              100
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lastRetryAt(10, { type: 'exponential', delay: 1000 })",
+            "mongDoi": 511000,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "delay × 2^k instead of 2^(k−1): every wait is twice too long and the first one is already 2 s.|||delay × 2^k thay cho 2^(k−1): mọi khoảng chờ dài gấp đôi và khoảng đầu đã là 2 s."
+        },
+        {
+          "loi": "attempts waits instead of attempts − 1: one phantom retry after the last attempt.|||attempts khoảng chờ thay vì attempts − 1: một lần thử ma sau lần cuối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exponential backoff",
+          "vi": "lùi thời gian theo cấp số nhân",
+          "giaiThich": "khoảng chờ giữa các lần thử gấp đôi mỗi lần"
+        },
+        {
+          "en": "attempts",
+          "vi": "số lần thử",
+          "giaiThich": "tính cả lần chạy đầu tiên"
+        }
+      ]
+    },
+    {
+      "title": "13.3 · Run a job the way a worker does: attempts, backoff, unrecoverable",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "retries",
+        "backoff"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>runJob(handler, opts = {})</code> — what a worker does with ONE job:</p><ul><li>call <code>await handler({ attemptsMade })</code> (<code>attemptsMade</code> = failures so far, starting at 0);</li><li>success → <code>{ state: 'completed', attemptsMade: &lt;runs&gt;, returnvalue, at }</code>;</li><li>failure → if the error’s <code>name</code> is <code>'UnrecoverableError'</code>, or no attempts are left (<code>opts.attempts</code>, default 1), resolve to <code>{ state: 'failed', attemptsMade, failedReason: err.message, at }</code>; otherwise wait (exponential: <code>delay × 2^(failures − 1)</code>, fixed: <code>delay</code>, none: 0) and try again;</li><li><code>at</code> = the start time of each run, in ms relative to the first one (use <code>Date.now()</code> — the grader’s clock is virtual).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>attempts defaults to 1 (BullMQ does not retry unless told to).</li>\n  <li>UnrecoverableError stops at once, whatever attempts says.</li>\n  <li>Never throw: the outcome is in the resolved object.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>runJob(handler, opts = {})</code> — việc một worker làm với MỘT job:</p><ul><li>gọi <code>await handler({ attemptsMade })</code> (<code>attemptsMade</code> = số lần hỏng tới giờ, bắt đầu từ 0);</li><li>thành công → <code>{ state: 'completed', attemptsMade: &lt;số lần chạy&gt;, returnvalue, at }</code>;</li><li>hỏng → nếu <code>name</code> của lỗi là <code>'UnrecoverableError'</code>, hoặc hết lượt thử (<code>opts.attempts</code>, mặc định 1), resolve ra <code>{ state: 'failed', attemptsMade, failedReason: err.message, at }</code>; ngược lại chờ (exponential: <code>delay × 2^(số lần hỏng − 1)</code>, fixed: <code>delay</code>, không có: 0) rồi thử lại;</li><li><code>at</code> = thời điểm bắt đầu mỗi lần chạy, tính bằng ms so với lần đầu (dùng <code>Date.now()</code> — đồng hồ máy chấm là đồng hồ ảo).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>attempts mặc định là 1 (BullMQ không thử lại trừ khi được bảo).</li>\n  <li>UnrecoverableError dừng ngay, bất kể attempts là bao nhiêu.</li>\n  <li>Không bao giờ ném: kết cục nằm trong object được resolve.</li>\n</ul>",
+      "inputSpec": "handler — async ({ attemptsMade }) => any · opts — { attempts?, backoff? }",
+      "outputSpec": "Promise<{ state, attemptsMade, returnvalue? | failedReason?, at: number[] }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };\nawait runJob(flaky(1))",
+          "output": "{\"state\":\"failed\",\"attemptsMade\":1,\"failedReason\":\"SMTP 421\",\"at\":[0]}",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const t0 = Date.now(); const at = []; for (let made = 0; ; ) { at.push(Date.now() - t0); try { … return completed } catch (err) { made++; … } }",
+        "Wait with await sleep(ms) before the next loop iteration; for exponential ms = delay * 2 ** (made - 1).|||Chờ bằng await sleep(ms) trước vòng lặp kế; với exponential ms = delay * 2 ** (made - 1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run one job like a worker: attempts + backoff + UnrecoverableError. */\nasync function runJob(handler, opts = {}) {\n  // Write your solution here — retries forever-ish, ignores backoff and UnrecoverableError\n  const attempts = opts.attempts || 3;\n  const at = [];\n  let made = 0;\n  for (;;) {\n    at.push(0);\n    try {\n      const returnvalue = await handler({ attemptsMade: made });\n      return { state: 'completed', attemptsMade: made + 1, returnvalue, at };\n    } catch (err) {\n      made++;\n      if (made >= attempts) return { state: 'failed', attemptsMade: made, failedReason: err.message, at };\n    }\n  }\n}\n"
+        },
+        {
+          "name": "fake-bullmq-errors.js",
+          "language": "javascript",
+          "code": "// fake-bullmq-errors.js — PROVIDED (loaded before answer.js).\nclass UnrecoverableError extends Error { constructor(m) { super(m); this.name = 'UnrecoverableError'; } }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run one job like a worker: attempts + backoff + UnrecoverableError. */\nasync function runJob(handler, opts = {}) {\n  const attempts = opts.attempts || 1;                 // BullMQ's default: ONE attempt, no retry\n  const b = opts.backoff;\n  const t0 = Date.now();\n  const at = [];\n  let made = 0;                                        // failures so far\n  for (;;) {\n    at.push(Date.now() - t0);\n    try {\n      const returnvalue = await handler({ attemptsMade: made });\n      return { state: 'completed', attemptsMade: made + 1, returnvalue, at };\n    } catch (err) {\n      made++;\n      const hopeless = err && err.name === 'UnrecoverableError';   // logic failure: retrying cannot help\n      if (hopeless || made >= attempts) return { state: 'failed', attemptsMade: made, failedReason: err.message, at };\n      const wait = !b ? 0 : b.type === 'exponential' ? b.delay * 2 ** (made - 1) : b.delay;\n      await sleep(wait);                               // give the downstream room to recover\n    }\n  }\n}\n"
+        },
+        {
+          "name": "fake-bullmq-errors.js",
+          "language": "javascript",
+          "code": "// fake-bullmq-errors.js — PROVIDED (loaded before answer.js).\nclass UnrecoverableError extends Error { constructor(m) { super(m); this.name = 'UnrecoverableError'; } }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the attempts/backoff loop a BullMQ worker runs for you, made visible: on the virtual clock the starts land exactly on 0, 200, 600 ms for delay 200 — the lesson measured 10 → 298 → 715 ms with real Redis overhead. UnrecoverableError is the escape hatch for logic failures that time cannot fix.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là vòng attempts/backoff mà worker BullMQ chạy hộ bạn, được làm cho nhìn thấy: trên đồng hồ ảo các lần bắt đầu rơi đúng 0, 200, 600 ms với delay 200 — bài đo 10 → 298 → 715 ms với chi phí Redis thật. UnrecoverableError là lối thoát cho lỗi logic mà thời gian không chữa được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-bullmq-errors.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No options: one attempt, failed",
+              "vi": "Không tuỳ chọn: một lần thử, hỏng"
+            },
+            "goi": "await runJob(flaky(1))",
+            "chuanBi": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };",
+            "mongDoi": {
+              "state": "failed",
+              "attemptsMade": 1,
+              "failedReason": "SMTP 421",
+              "at": [
+                0
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Recovers on attempt 3: starts at 0 / 205 / 610 ms",
+              "vi": "Hồi phục ở lần 3: bắt đầu lúc 0 / 205 / 610 ms"
+            },
+            "goi": "await runJob(flaky(2), { attempts: 5, backoff: { type: 'exponential', delay: 200 } })",
+            "chuanBi": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };",
+            "mongDoi": {
+              "state": "completed",
+              "attemptsMade": 3,
+              "returnvalue": {
+                "sent": true
+              },
+              "at": [
+                0,
+                205,
+                610
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "UnrecoverableError: failed after one attempt",
+              "vi": "UnrecoverableError: hỏng sau một lần thử"
+            },
+            "goi": "await runJob(async () => { throw new UnrecoverableError('user no longer exists'); }, { attempts: 5, backoff: { type: 'fixed', delay: 1000 } })",
+            "chuanBi": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };",
+            "mongDoi": {
+              "state": "failed",
+              "attemptsMade": 1,
+              "failedReason": "user no longer exists",
+              "at": [
+                0
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await runJob(flaky(10), { attempts: 4, backoff: { type: 'fixed', delay: 300 } })",
+            "chuanBi": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };",
+            "mongDoi": {
+              "state": "failed",
+              "attemptsMade": 4,
+              "failedReason": "SMTP 421",
+              "at": [
+                0,
+                305,
+                610,
+                915
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await runJob(async ({ attemptsMade }) => { if (attemptsMade < 3) throw new Error('timeout'); return attemptsMade; }, { attempts: 4 })",
+            "chuanBi": "const flaky = (failures, msg = 'SMTP 421') => { let n = 0; return async () => { await sleep(5); if (n++ < failures) throw new Error(msg); return { sent: true }; }; };",
+            "mongDoi": {
+              "state": "completed",
+              "attemptsMade": 4,
+              "returnvalue": 3,
+              "at": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Defaulting attempts to 3 “to be safe”: BullMQ’s default is 1, and silent retries on a payment job are not safe.|||Mặc định attempts là 3 \"cho chắc\": mặc định của BullMQ là 1, và thử lại câm trên job thanh toán không hề chắc."
+        },
+        {
+          "loi": "Retrying an UnrecoverableError: a deleted user fails five times and burns four attempts.|||Thử lại UnrecoverableError: người dùng đã xoá hỏng năm lần và đốt bốn lượt thử."
+        },
+        {
+          "loi": "Counting attemptsMade from 1 before the first run, or not counting the successful run: the reported number disagrees with BullMQ’s.|||Đếm attemptsMade từ 1 trước lần chạy đầu, hoặc không đếm lần chạy thành công: con số báo ra lệch với BullMQ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exponential backoff",
+          "vi": "lùi thời gian theo cấp số nhân",
+          "giaiThich": "khoảng chờ giữa các lần thử gấp đôi mỗi lần"
+        },
+        {
+          "en": "UnrecoverableError",
+          "vi": "lỗi không cứu được",
+          "giaiThich": "ném nó ⇒ job hỏng ngay, không thử lại"
+        }
+      ]
+    },
+    {
+      "title": "13.3 · The charge that must not run three times",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "idempotency",
+        "unique constraint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s triple charge: the handler debits the card, the network drops, the retry debits again. Write <code>handleCharge(job, { db, psp })</code> for <code>job.data = { orderId, amount }</code> so that the customer is charged exactly once, whatever runs it again — a retry, a stalled job reclaimed after a crash, or a duplicate job from a double click:</p><ol><li>claim the order with a row: <code>db.payments.create({ orderId, amount, status: 'PENDING' })</code>. A duplicate throws an error with <code>code 'P2002'</code>: then read the row — if it is already <code>'DONE'</code>, return <code>{ skipped: true, ref }</code>; if it is still PENDING (an earlier run died midway), carry on;</li><li>charge with an idempotency key the provider understands: <code>psp.charge({ orderId, amount }, { idempotencyKey: `charge-${orderId}` })</code>;</li><li>mark the row <code>{ status: 'DONE', ref: result.id }</code> and return <code>{ charged: true, ref }</code>.</li></ol><p>Any other error is re-thrown, so the worker retries.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>psp.totalCharged equals the amount once, in every scenario.</li>\n  <li>A PENDING row from a dead run does not block the charge forever.</li>\n  <li>Non-P2002 errors are re-thrown.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cú trừ tiền ba lần của bài: handler trừ thẻ, mạng rớt, lần thử lại trừ thêm. Viết <code>handleCharge(job, { db, psp })</code> với <code>job.data = { orderId, amount }</code> sao cho khách bị trừ đúng một lần, bất kể cái gì chạy lại nó — một lần thử lại, một job treo được nhặt lại sau khi sập, hay một job trùng do bấm đúp:</p><ol><li>giữ chỗ đơn hàng bằng một dòng: <code>db.payments.create({ orderId, amount, status: 'PENDING' })</code>. Trùng thì ném lỗi có <code>code 'P2002'</code>: khi đó đọc dòng — nếu đã <code>'DONE'</code> thì trả <code>{ skipped: true, ref }</code>; nếu vẫn PENDING (lần chạy trước chết giữa chừng) thì làm tiếp;</li><li>trừ tiền với khoá luỹ đẳng mà nhà cung cấp hiểu: <code>psp.charge({ orderId, amount }, { idempotencyKey: `charge-${orderId}` })</code>;</li><li>đánh dấu dòng <code>{ status: 'DONE', ref: result.id }</code> và trả <code>{ charged: true, ref }</code>.</li></ol><p>Mọi lỗi khác được ném lại, để worker thử lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>psp.totalCharged bằng đúng số tiền một lần, ở mọi tình huống.</li>\n  <li>Một dòng PENDING của lần chạy đã chết không chặn việc trừ tiền mãi mãi.</li>\n  <li>Lỗi không phải P2002 được ném lại.</li>\n</ul>",
+      "inputSpec": "job — { data: { orderId, amount } } · { db, psp } from fake-payments.js|||job — { data: { orderId, amount } } · { db, psp } trong fake-payments.js",
+      "outputSpec": "Promise<{ charged: true, ref } | { skipped: true, ref }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };\n[await handleCharge(job, deps), psp.totalCharged, (await db.payments.find('ORD-2026-777')).status]",
+          "output": "[{\"charged\":true,\"ref\":\"ch_1\"},100000,\"DONE\"]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "try { await db.payments.create(…) } catch (err) { if (err.code !== 'P2002') throw err; const row = await db.payments.find(orderId); if (row.status === 'DONE') return { skipped: true, ref: row.ref }; }",
+        "Why both guards? The row stops a second job after success; the idempotency key stops a second debit when the reply of the first one was lost.|||Vì sao cần cả hai chốt? Dòng dữ liệu chặn job thứ hai sau khi đã thành công; khoá luỹ đẳng chặn lần trừ thứ hai khi câu trả lời của lần đầu bị mất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Charge an order — must be safe to run more than once. */\nasync function handleCharge(job, { db, psp }) {\n  // Write your solution here — this is the lesson's triple charge\n  const { orderId, amount } = job.data;\n  const result = await psp.charge({ orderId, amount });\n  await db.payments.create({ orderId, amount, status: 'DONE', ref: result.id });\n  return { charged: true, ref: result.id };\n}\n"
+        },
+        {
+          "name": "fake-payments.js",
+          "language": "javascript",
+          "code": "// fake-payments.js — PROVIDED (loaded before answer.js).\n// db.payments: a table with a UNIQUE constraint on orderId (like Prisma: duplicate ⇒ error with code 'P2002')\n//   await db.payments.create({ orderId, amount, status }) · await db.payments.find(orderId) · await db.payments.update(orderId, patch)\n// psp (payment provider): await psp.charge({ orderId, amount }, { idempotencyKey }) → { id }\n//   the SAME idempotencyKey returns the first result again WITHOUT charging · psp.totalCharged (đồng)\n//   psp.failBeforeCharge = n ⇒ next n calls fail BEFORE charging · psp.dropAfterCharge = n ⇒ next n calls charge, then the reply is lost\n// runWithRetries(fn, attempts) — calls fn() until it resolves or attempts run out (like a worker with attempts)\nconst db = { payments: { rows: new Map(),\n  create(r) { return new Promise((ok, no) => setTimeout(() => { if (this.rows.has(r.orderId)) { const e = new Error('Unique constraint failed on the fields: (orderId)'); e.code = 'P2002'; no(e); } else { this.rows.set(r.orderId, { ...r }); ok({ ...r }); } }, 3)); },\n  find(orderId) { return new Promise((ok) => setTimeout(() => ok(this.rows.has(orderId) ? { ...this.rows.get(orderId) } : null), 3)); },\n  update(orderId, patch) { return new Promise((ok) => setTimeout(() => { const r = this.rows.get(orderId); Object.assign(r, patch); ok({ ...r }); }, 3)); },\n} };\nconst psp = { totalCharged: 0, calls: 0, byKey: new Map(), failBeforeCharge: 0, dropAfterCharge: 0, seq: 0,\n  charge({ orderId, amount }, opts) {\n    psp.calls++;\n    return new Promise((ok, no) => setTimeout(() => {\n      if (psp.failBeforeCharge > 0) { psp.failBeforeCharge--; return no(new Error('PSP 503')); }\n      const key = opts && opts.idempotencyKey;\n      if (key && psp.byKey.has(key)) return ok({ ...psp.byKey.get(key) });\n      psp.totalCharged += amount;\n      const res = { id: 'ch_' + (++psp.seq), orderId, amount };\n      if (key) psp.byKey.set(key, res);\n      if (psp.dropAfterCharge > 0) { psp.dropAfterCharge--; return no(new Error('ECONNRESET')); }\n      ok(res);\n    }, 20));\n  } };\nasync function runWithRetries(fn, attempts) {\n  let last;\n  for (let i = 0; i < attempts; i++) { try { return await fn(); } catch (e) { last = e; await new Promise((ok) => setTimeout(ok, 100 * 2 ** i)); } }\n  throw last;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Charge an order — safe to run any number of times (at-least-once delivery). */\nasync function handleCharge(job, { db, psp }) {\n  const { orderId, amount } = job.data;\n  try {\n    // 1) claim the order atomically: the UNIQUE constraint lets exactly one row exist\n    await db.payments.create({ orderId, amount, status: 'PENDING' });\n  } catch (err) {\n    if (err.code !== 'P2002') throw err;                       // a real error: let the worker retry\n    const row = await db.payments.find(orderId);\n    if (row.status === 'DONE') return { skipped: true, ref: row.ref };   // already paid: nothing to do\n    // still PENDING: an earlier run died midway (maybe after charging) — continue, the key below protects us\n  }\n  // 2) the provider deduplicates on the key: a lost reply + retry returns the FIRST charge, no second debit\n  const result = await psp.charge({ orderId, amount }, { idempotencyKey: `charge-${orderId}` });\n  // 3) record the outcome\n  await db.payments.update(orderId, { status: 'DONE', ref: result.id });\n  return { charged: true, ref: result.id };\n}\n"
+        },
+        {
+          "name": "fake-payments.js",
+          "language": "javascript",
+          "code": "// fake-payments.js — PROVIDED (loaded before answer.js).\n// db.payments: a table with a UNIQUE constraint on orderId (like Prisma: duplicate ⇒ error with code 'P2002')\n//   await db.payments.create({ orderId, amount, status }) · await db.payments.find(orderId) · await db.payments.update(orderId, patch)\n// psp (payment provider): await psp.charge({ orderId, amount }, { idempotencyKey }) → { id }\n//   the SAME idempotencyKey returns the first result again WITHOUT charging · psp.totalCharged (đồng)\n//   psp.failBeforeCharge = n ⇒ next n calls fail BEFORE charging · psp.dropAfterCharge = n ⇒ next n calls charge, then the reply is lost\n// runWithRetries(fn, attempts) — calls fn() until it resolves or attempts run out (like a worker with attempts)\nconst db = { payments: { rows: new Map(),\n  create(r) { return new Promise((ok, no) => setTimeout(() => { if (this.rows.has(r.orderId)) { const e = new Error('Unique constraint failed on the fields: (orderId)'); e.code = 'P2002'; no(e); } else { this.rows.set(r.orderId, { ...r }); ok({ ...r }); } }, 3)); },\n  find(orderId) { return new Promise((ok) => setTimeout(() => ok(this.rows.has(orderId) ? { ...this.rows.get(orderId) } : null), 3)); },\n  update(orderId, patch) { return new Promise((ok) => setTimeout(() => { const r = this.rows.get(orderId); Object.assign(r, patch); ok({ ...r }); }, 3)); },\n} };\nconst psp = { totalCharged: 0, calls: 0, byKey: new Map(), failBeforeCharge: 0, dropAfterCharge: 0, seq: 0,\n  charge({ orderId, amount }, opts) {\n    psp.calls++;\n    return new Promise((ok, no) => setTimeout(() => {\n      if (psp.failBeforeCharge > 0) { psp.failBeforeCharge--; return no(new Error('PSP 503')); }\n      const key = opts && opts.idempotencyKey;\n      if (key && psp.byKey.has(key)) return ok({ ...psp.byKey.get(key) });\n      psp.totalCharged += amount;\n      const res = { id: 'ch_' + (++psp.seq), orderId, amount };\n      if (key) psp.byKey.set(key, res);\n      if (psp.dropAfterCharge > 0) { psp.dropAfterCharge--; return no(new Error('ECONNRESET')); }\n      ok(res);\n    }, 20));\n  } };\nasync function runWithRetries(fn, attempts) {\n  let last;\n  for (let i = 0; i < attempts; i++) { try { return await fn(); } catch (e) { last = e; await new Promise((ok) => setTimeout(ok, 100 * 2 ** i)); } }\n  throw last;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A queue is at-least-once, so the handler must make running twice harmless. The unique row (P2002, chapter 7.3) is the atomic claim — two workers cannot both create it. The idempotency key covers the case no database can see: the provider charged, but the reply was lost, so a retry must get the first result back instead of a second debit. A PENDING row means “an earlier run died somewhere”, which is exactly when to continue rather than skip.</p>",
+      "solutionExplanationHtmlVi": "<p>Hàng đợi là ít-nhất-một-lần, nên handler phải làm cho việc chạy hai lần vô hại. Dòng duy nhất (P2002, chương 7.3) là phép giữ chỗ nguyên tử — hai worker không thể cùng tạo nó. Khoá luỹ đẳng che trường hợp CSDL không thấy được: nhà cung cấp đã trừ, nhưng câu trả lời mất, nên lần thử lại phải nhận lại kết quả đầu thay vì trừ lần hai. Dòng PENDING nghĩa là \"một lần chạy trước đã chết đâu đó\", đúng lúc phải làm tiếp thay vì bỏ qua.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-payments.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Happy path: charged once, row DONE",
+              "vi": "Đường suôn: trừ một lần, dòng DONE"
+            },
+            "goi": "[await handleCharge(job, deps), psp.totalCharged, (await db.payments.find('ORD-2026-777')).status]",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              {
+                "charged": true,
+                "ref": "ch_1"
+              },
+              100000,
+              "DONE"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The network drops after the charge; the retry does not charge again",
+              "vi": "Mạng rớt sau khi trừ; lần thử lại không trừ thêm"
+            },
+            "goi": "await (async () => { psp.dropAfterCharge = 1; const r = await runWithRetries(() => handleCharge(job, deps), 3); return [r, psp.totalCharged, psp.calls]; })()",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              {
+                "charged": true,
+                "ref": "ch_1"
+              },
+              100000,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A duplicate job after success → skipped",
+              "vi": "Job trùng sau khi đã thành công → bỏ qua"
+            },
+            "goi": "await (async () => { await handleCharge(job, deps); const again = await handleCharge({ data: { ...job.data } }, deps); return [again, psp.totalCharged]; })()",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              {
+                "skipped": true,
+                "ref": "ch_1"
+              },
+              100000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The first attempt fails BEFORE charging: the retry must still charge",
+              "vi": "Lần đầu hỏng TRƯỚC khi trừ: lần thử lại vẫn phải trừ"
+            },
+            "goi": "await (async () => { psp.failBeforeCharge = 1; const r = await runWithRetries(() => handleCharge(job, deps), 3); return [r.charged, psp.totalCharged]; })()",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              true,
+              100000
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Three workers at once: one charge",
+              "vi": "Ba worker cùng lúc: một lần trừ"
+            },
+            "goi": "await (async () => { const r = await Promise.all([handleCharge(job, deps), handleCharge(job, deps), handleCharge(job, deps)]); return [psp.totalCharged, (await db.payments.find('ORD-2026-777')).status, r.every((x) => x.ref === r[0].ref)]; })()",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              100000,
+              "DONE",
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { let err; try { await handleCharge({ data: { orderId: 'X', amount: 5 } }, { db: { payments: { create: async () => { throw new Error('connection terminated'); } } }, psp }); } catch (e) { err = e.message; } return [err, psp.totalCharged]; })()",
+            "chuanBi": "const job = { data: { orderId: 'ORD-2026-777', amount: 100000 } };\nconst deps = { db, psp };",
+            "mongDoi": [
+              "connection terminated",
+              0
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Charging first and recording after: a drop between the two is the triple charge.|||Trừ tiền trước rồi mới ghi: rớt mạng giữa hai bước chính là cú trừ ba lần."
+        },
+        {
+          "loi": "Returning “skipped” on ANY P2002: a run that died after creating the row but before charging leaves the order unpaid forever.|||Trả \"skipped\" với MỌI P2002: lần chạy chết sau khi tạo dòng nhưng trước khi trừ tiền để đơn hàng không bao giờ được trả."
+        },
+        {
+          "loi": "A check-then-act guard (find the row, then create it): two workers both see “no row” and both charge.|||Chốt kiểm-rồi-làm (tìm dòng, rồi mới tạo): hai worker cùng thấy \"không có dòng\" và cùng trừ tiền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "idempotent",
+          "vi": "luỹ đẳng",
+          "giaiThich": "chạy hai lần cho cùng kết quả như một lần"
+        },
+        {
+          "en": "idempotency key",
+          "vi": "khoá luỹ đẳng",
+          "giaiThich": "cùng khoá ⇒ bên kia trả lại kết quả cũ, không làm lần hai"
+        },
+        {
+          "en": "P2002",
+          "vi": "lỗi trùng khoá duy nhất (Prisma)",
+          "giaiThich": "ràng buộc UNIQUE từ chối dòng thứ hai"
+        }
+      ]
+    },
+    {
+      "title": "13.3 · Five clicks on “Pay”, one invoice",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "jobId",
+        "deduplication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Give the invoice job a deterministic <code>jobId</code> derived from the order, so BullMQ refuses to create a second one while the first still exists. Write:</p><ul><li><code>invoiceJobId(orderId)</code> → <code>'invoice-' + orderId</code> with every <code>':'</code> replaced by <code>'-'</code> (BullMQ throws <code>Custom Id cannot contain :</code>, and order ids from another system can contain colons);</li><li><code>requestInvoice(queue, orderId)</code> → <code>queue.add('invoice', { orderId }, { jobId })</code>; resolve to the job id.</li></ul><p>The hidden test also shows the limit the lesson warns about: once the completed job is cleaned up, the same id can be added again — jobId is a guard for a short window, not a substitute for an idempotent handler.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Same order ⇒ same jobId; no colon in it.</li>\n  <li>Five concurrent clicks ⇒ one job.</li>\n  <li>Different orders ⇒ different jobs.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đặt cho job hoá đơn một <code>jobId</code> tất định suy ra từ đơn hàng, để BullMQ từ chối tạo job thứ hai trong khi job đầu còn tồn tại. Viết:</p><ul><li><code>invoiceJobId(orderId)</code> → <code>'invoice-' + orderId</code> với mọi <code>':'</code> đổi thành <code>'-'</code> (BullMQ ném <code>Custom Id cannot contain :</code>, và mã đơn từ hệ thống khác có thể chứa dấu hai chấm);</li><li><code>requestInvoice(queue, orderId)</code> → <code>queue.add('invoice', { orderId }, { jobId })</code>; resolve ra id của job.</li></ul><p>Kiểm ẩn còn cho thấy giới hạn mà bài cảnh báo: khi job đã xong bị dọn đi, cùng id đó lại thêm được — jobId là chốt chặn cho một khoảng ngắn, không thay được handler luỹ đẳng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cùng đơn ⇒ cùng jobId; không có dấu hai chấm.</li>\n  <li>Năm lần bấm đồng thời ⇒ một job.</li>\n  <li>Đơn khác nhau ⇒ job khác nhau.</li>\n</ul>",
+      "inputSpec": "queue — fake-dedupe-queue.js · orderId — string|||queue — fake-dedupe-queue.js · orderId — chuỗi",
+      "outputSpec": "invoiceJobId → string · requestInvoice → Promise<string>|||invoiceJobId → chuỗi · requestInvoice → Promise<chuỗi>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[invoiceJobId('ORD-2026-777'), invoiceJobId('shop:42:ORD-9')]",
+          "output": "[\"invoice-ORD-2026-777\",\"invoice-shop-42-ORD-9\"]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "String(orderId).replaceAll(':', '-') — or .split(':').join('-').|||String(orderId).replaceAll(':', '-') — hoặc .split(':').join('-').",
+        "const { id } = await queue.add('invoice', { orderId }, { jobId: invoiceJobId(orderId) }); return id;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function invoiceJobId(orderId) {\n  // Write your solution here\n  return 'invoice:' + orderId;\n}\n\nasync function requestInvoice(queue, orderId) {\n  const { id } = await queue.add('invoice', { orderId }, { jobId: invoiceJobId(orderId) });\n  return id;\n}\n"
+        },
+        {
+          "name": "fake-dedupe-queue.js",
+          "language": "javascript",
+          "code": "// fake-dedupe-queue.js — PROVIDED (loaded before answer.js). jobId semantics of BullMQ:\n//   await queue.add(name, data, { jobId })  → { id } — if a job with that id still EXISTS, nothing is added and its id is returned\n//   a jobId containing ':' throws Error('Custom Id cannot contain :')\n//   queue.removeCompleted() simulates removeOnComplete cleaning up · queue.count() — jobs that exist\nconst queue = { jobs: new Map(), seq: 0,\n  add(name, data, opts) {\n    return new Promise((ok, no) => setTimeout(() => {\n      const id = opts && opts.jobId != null ? String(opts.jobId) : String(++queue.seq);\n      if (id.includes(':')) return no(new Error('Custom Id cannot contain :'));\n      if (!queue.jobs.has(id)) queue.jobs.set(id, { id, name, data, state: 'waiting' });\n      ok({ id });\n    }, 1));\n  },\n  complete(id) { queue.jobs.get(id).state = 'completed'; },\n  removeCompleted() { for (const [id, j] of queue.jobs) if (j.state === 'completed') queue.jobs.delete(id); },\n  count() { return queue.jobs.size; },\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A deterministic id for \"the invoice of this order\" — no colon, BullMQ rejects it. */\nfunction invoiceJobId(orderId) {\n  return 'invoice-' + String(orderId).split(':').join('-');\n}\n\n/** Same order ⇒ same jobId ⇒ BullMQ refuses a second job while the first still exists. */\nasync function requestInvoice(queue, orderId) {\n  const { id } = await queue.add('invoice', { orderId }, { jobId: invoiceJobId(orderId) });\n  return id;\n}\n"
+        },
+        {
+          "name": "fake-dedupe-queue.js",
+          "language": "javascript",
+          "code": "// fake-dedupe-queue.js — PROVIDED (loaded before answer.js). jobId semantics of BullMQ:\n//   await queue.add(name, data, { jobId })  → { id } — if a job with that id still EXISTS, nothing is added and its id is returned\n//   a jobId containing ':' throws Error('Custom Id cannot contain :')\n//   queue.removeCompleted() simulates removeOnComplete cleaning up · queue.count() — jobs that exist\nconst queue = { jobs: new Map(), seq: 0,\n  add(name, data, opts) {\n    return new Promise((ok, no) => setTimeout(() => {\n      const id = opts && opts.jobId != null ? String(opts.jobId) : String(++queue.seq);\n      if (id.includes(':')) return no(new Error('Custom Id cannot contain :'));\n      if (!queue.jobs.has(id)) queue.jobs.set(id, { id, name, data, state: 'waiting' });\n      ok({ id });\n    }, 1));\n  },\n  complete(id) { queue.jobs.get(id).state = 'completed'; },\n  removeCompleted() { for (const [id, j] of queue.jobs) if (j.state === 'completed') queue.jobs.delete(id); },\n  count() { return queue.jobs.size; },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Deduplication needs an id that is the same for the same intent — derived from the order, not from time. BullMQ ignores an add() whose jobId already exists, so five clicks produce one job; but the guard only lasts while that job is in Redis, which is why the charge handler of the previous exercise must still be idempotent.</p>",
+      "solutionExplanationHtmlVi": "<p>Khử trùng cần một id giống nhau cho cùng một ý định — suy ra từ đơn hàng, không từ thời gian. BullMQ bỏ qua lệnh add() có jobId đã tồn tại, nên năm lần bấm ra một job; nhưng chốt chặn chỉ kéo dài khi job đó còn trong Redis, nên handler trừ tiền của đề trước vẫn phải luỹ đẳng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-dedupe-queue.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Deterministic, colon-free ids",
+              "vi": "Id tất định, không dấu hai chấm"
+            },
+            "goi": "[invoiceJobId('ORD-2026-777'), invoiceJobId('shop:42:ORD-9')]",
+            "mongDoi": [
+              "invoice-ORD-2026-777",
+              "invoice-shop-42-ORD-9"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Five clicks → one job",
+              "vi": "Năm lần bấm → một job"
+            },
+            "goi": "await (async () => { const ids = await Promise.all(Array.from({ length: 5 }, () => requestInvoice(queue, 'ORD-2026-777'))); return [ids, queue.count()]; })()",
+            "mongDoi": [
+              [
+                "invoice-ORD-2026-777",
+                "invoice-ORD-2026-777",
+                "invoice-ORD-2026-777",
+                "invoice-ORD-2026-777",
+                "invoice-ORD-2026-777"
+              ],
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A colon in the order id does not throw; two orders, two jobs",
+              "vi": "Mã đơn có dấu hai chấm không làm ném lỗi; hai đơn, hai job"
+            },
+            "goi": "await (async () => { const a = await requestInvoice(queue, 'legacy:ORD:1'); const b = await requestInvoice(queue, 'ORD-2'); return [a, b, queue.count()]; })()",
+            "mongDoi": [
+              "invoice-legacy-ORD-1",
+              "invoice-ORD-2",
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The limit: after cleanup the same id is accepted again",
+              "vi": "Giới hạn: sau khi dọn, cùng id lại được nhận"
+            },
+            "goi": "await (async () => { const id = await requestInvoice(queue, 'ORD-7'); queue.complete(id); const again = await requestInvoice(queue, 'ORD-7'); const before = queue.count(); queue.removeCompleted(); await requestInvoice(queue, 'ORD-7'); return [again === id, before, queue.count(), queue.jobs.get(id).state]; })()",
+            "mongDoi": [
+              true,
+              1,
+              1,
+              "waiting"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[invoiceJobId(12345), invoiceJobId('a::b')]",
+            "mongDoi": [
+              "invoice-12345",
+              "invoice-a--b"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "jobId: 'invoice:' + orderId — natural for Redis keys, rejected by BullMQ.|||jobId: 'invoice:' + orderId — tự nhiên với khoá Redis, bị BullMQ từ chối."
+        },
+        {
+          "loi": "jobId: Date.now() or a random UUID: every click is “new”, so nothing is deduplicated.|||jobId: Date.now() hay một UUID ngẫu nhiên: mỗi lần bấm đều \"mới\", nên chẳng khử trùng được gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jobId",
+          "vi": "id job tự đặt",
+          "giaiThich": "id tất định — thêm lần hai khi job cũ còn tồn tại thì bị bỏ qua"
+        }
+      ]
+    }
+  ]
+}

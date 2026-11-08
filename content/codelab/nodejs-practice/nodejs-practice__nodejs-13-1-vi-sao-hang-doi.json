@@ -1,0 +1,848 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-13-1-vi-sao-hang-doi",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-13-1-vi-sao-hang-doi"
+  },
+  "exercises": [
+    {
+      "title": "13.1 · What belongs on a queue, and what does not",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "background jobs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s rule: a queue is for work whose answer the user does not need right now and that may fail on someone else’s side. It is NOT for anything needed immediately, anything that must run in the same transaction as the write, or work cheaper than enqueueing it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quy tắc của bài: hàng đợi dành cho việc mà người dùng không cần câu trả lời ngay và có thể hỏng ở phía người khác. KHÔNG dành cho thứ cần ngay, thứ phải chạy cùng giao dịch với lệnh ghi, hay việc rẻ hơn cả chi phí xếp hàng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the user need the result in THIS response?|||Người dùng có cần kết quả trong CHÍNH câu trả lời này không?",
+        "Does it depend on a server you do not control?|||Nó có phụ thuộc vào máy chủ bạn không kiểm soát không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · What belongs on a queue, and what does not\n\nAnswer in the answer panel (no code needed).\n\n1. Work → where it runsViệc → chạy ở đâu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · What belongs on a queue, and what does not — answer key\n\n1. Work → where it runsViệc → chạy ở đâu\n   - r1.p: Queue it (background job)\n   - r2.p: Keep it in the request\n   - r3.p: Queue it (background job)\n   - r4.p: Keep it in the request\n   - r5.p: Queue it (background job)\n   - r6.p: Keep it in the request\n   - r7.p: Queue it (background job)\n   - r8.p: Keep it in the request\n   Queue: email/SMS/push, third-party calls, thumbnails, video, search indexes, reports, webhooks, cleanup. Request: anything whose answer is needed now (password check, reads), work inside the same transaction, and work cheaper than a Redis round trip plus a worker wake-up — enqueueing a 2 ms job makes it slower and adds a moving part.VI: Hàng đợi: email/SMS/push, gọi bên thứ ba, ảnh thu nhỏ, video, chỉ mục tìm kiếm, báo cáo, webhook, dọn dẹp. Request: thứ cần câu trả lời ngay (kiểm mật khẩu, đọc dữ liệu), việc trong cùng giao dịch, và việc rẻ hơn một vòng Redis cộng một lần đánh thức worker — xếp hàng một việc 2 ms chỉ làm nó chậm hơn và thêm một bộ phận chuyển động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Queue: email/SMS/push, third-party calls, thumbnails, video, search indexes, reports, webhooks, cleanup. Request: anything whose answer is needed now (password check, reads), work inside the same transaction, and work cheaper than a Redis round trip plus a worker wake-up — enqueueing a 2 ms job makes it slower and adds a moving part.</p><p><i>VI: Hàng đợi: email/SMS/push, gọi bên thứ ba, ảnh thu nhỏ, video, chỉ mục tìm kiếm, báo cáo, webhook, dọn dẹp. Request: thứ cần câu trả lời ngay (kiểm mật khẩu, đọc dữ liệu), việc trong cùng giao dịch, và việc rẻ hơn một vòng Redis cộng một lần đánh thức worker — xếp hàng một việc 2 ms chỉ làm nó chậm hơn và thêm một bộ phận chuyển động.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Work → where it runs</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → chạy ở đâu</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Work"
+              },
+              {
+                "ma": "p",
+                "ten": "Where",
+                "luaChon": [
+                  "Queue it (background job)",
+                  "Keep it in the request"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "Send the welcome email after sign-up"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "Check the password at login"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "Generate thumbnails for an uploaded image"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "Insert the audit row that must commit together with the note update"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "Export a 92-day usage report to CSV"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "w": "Format a 2 ms slug for the note being created"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "w": "Deliver an outbound webhook to a customer’s server"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "w": "Read the notes list the page is about to render"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "Queue it (background job)",
+              "r2.p": "Keep it in the request",
+              "r3.p": "Queue it (background job)",
+              "r4.p": "Keep it in the request",
+              "r5.p": "Queue it (background job)",
+              "r6.p": "Keep it in the request",
+              "r7.p": "Queue it (background job)",
+              "r8.p": "Keep it in the request"
+            },
+            "giaiThich": "<p>Queue: email/SMS/push, third-party calls, thumbnails, video, search indexes, reports, webhooks, cleanup. Request: anything whose answer is needed now (password check, reads), work inside the same transaction, and work cheaper than a Redis round trip plus a worker wake-up — enqueueing a 2 ms job makes it slower and adds a moving part.</p><p><i>VI: Hàng đợi: email/SMS/push, gọi bên thứ ba, ảnh thu nhỏ, video, chỉ mục tìm kiếm, báo cáo, webhook, dọn dẹp. Request: thứ cần câu trả lời ngay (kiểm mật khẩu, đọc dữ liệu), việc trong cùng giao dịch, và việc rẻ hơn một vòng Redis cộng một lần đánh thức worker — xếp hàng một việc 2 ms chỉ làm nó chậm hơn và thêm một bộ phận chuyển động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Queueing the password check “for speed” — the login cannot answer until it is done anyway.|||Đẩy kiểm mật khẩu vào hàng đợi \"cho nhanh\" — đằng nào đăng nhập cũng phải chờ nó xong mới trả lời được."
+        },
+        {
+          "loi": "Queueing work that must commit with the write: the job can run before the row exists, or after a rollback.|||Xếp hàng việc phải commit cùng lệnh ghi: job có thể chạy trước khi dòng tồn tại, hoặc sau khi rollback."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "background job",
+          "vi": "việc nền",
+          "giaiThich": "làm ngoài vòng request/response"
+        },
+        {
+          "en": "enqueue",
+          "vi": "xếp vào hàng đợi",
+          "giaiThich": "ghi lại việc cần làm rồi trả lời ngay"
+        }
+      ]
+    },
+    {
+      "title": "13.1 · Reading the 5-out-of-100 measurement",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "background jobs",
+        "outbox"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>One hundred users sign up at once; the SMTP server accepts 5 connections, takes 200 ms per message and answers 421 beyond that.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một trăm người đăng ký cùng lúc; máy chủ SMTP nhận 5 kết nối, mất 200 ms mỗi thư và trả 421 khi quá mức đó.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the third line of each block: peak connections.|||So dòng thứ ba của mỗi khối: số kết nối đỉnh.",
+        "Who reads the data, and when?|||Ai đọc dữ liệu, và vào lúc nào?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · Reading the 5-out-of-100 measurement\n\nAnswer in the answer panel (no code needed).\n\n1. Sending inline: HTTP 200 × 5, HTTP 500 × 95. Queued with concurrency 5: 202 × 100, 100 emails sent. What kind of difference is this?Gửi ngay trong request: HTTP 200 × 5, HTTP 500 × 95. Xếp hàng với concurrency 5: 202 × 100, gửi đủ 100 thư. Đây là loại khác biệt gì?\n2. Peak concurrent SMTP connections were 5 in BOTH runs. So what did the queue change?Đỉnh kết nối SMTP đồng thời là 5 ở CẢ hai lần. Vậy hàng đợi đã đổi gì?\n3. Why does the job carry { userId } and not the whole user object?Vì sao job mang { userId } mà không mang cả đối tượng user?\n4. You call queue.add() inside the database transaction, before COMMIT. What can go wrong?Bạn gọi queue.add() bên trong giao dịch CSDL, trước COMMIT. Điều gì có thể hỏng?\n5. The route still answers 201 after enqueueing the welcome email. When should it answer 202 Accepted instead?Route vẫn trả 201 sau khi xếp hàng email chào mừng. Khi nào nên trả 202 Accepted?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · Reading the 5-out-of-100 measurement — answer key\n\n1. Sending inline: HTTP 200 × 5, HTTP 500 × 95. Queued with concurrency 5: 202 × 100, 100 emails sent. What kind of difference is this?Gửi ngay trong request: HTTP 200 × 5, HTTP 500 × 95. Xếp hàng với concurrency 5: 202 × 100, gửi đủ 100 thư. Đây là loại khác biệt gì?\n   Answer: c) Correctness: inline, 95 emails were never sent and nothing remembers them\n   The synchronous version did not send slowly — it did not send at all, for 95 people, and reported 500 to each of them.VI: Bản đồng bộ không gửi chậm — nó không gửi gì cả, cho 95 người, và báo 500 cho từng người.\n\n2. Peak concurrent SMTP connections were 5 in BOTH runs. So what did the queue change?Đỉnh kết nối SMTP đồng thời là 5 ở CẢ hai lần. Vậy hàng đợi đã đổi gì?\n   Answer: d) It never asked for more than 5, and kept the rest for later\n   A queue is, first of all, a place to put things down. The drain took 4,126 ms; nothing was lost.VI: Hàng đợi, trước hết, là chỗ để đặt việc xuống. Rút cạn mất 4.126 ms; không mất gì.\n\n3. Why does the job carry { userId } and not the whole user object?Vì sao job mang { userId } mà không mang cả đối tượng user?\n   Answer: d) The worker re-reads the database, so it never acts on a stale snapshot from ten minutes ago\n   A job created ten minutes ago with a full user object will happily email an address the user has since changed.VI: Một job tạo mười phút trước mang cả đối tượng user sẽ vui vẻ gửi thư tới địa chỉ mà người dùng đã đổi.\n\n4. You call queue.add() inside the database transaction, before COMMIT. What can go wrong?Bạn gọi queue.add() bên trong giao dịch CSDL, trước COMMIT. Điều gì có thể hỏng?\n   Answer: b) The job may run before the row exists, or after a rollback\n   Enqueue after the commit. If losing the job between commit and enqueue is unacceptable, write it as a row in the same transaction and let a sweeper move it (transactional outbox).VI: Xếp hàng sau commit. Nếu không chấp nhận mất job giữa commit và xếp hàng, ghi nó thành một dòng trong cùng giao dịch và để một tiến trình quét chuyển nó đi (transactional outbox).\n\n5. The route still answers 201 after enqueueing the welcome email. When should it answer 202 Accepted instead?Route vẫn trả 201 sau khi xếp hàng email chào mừng. Khi nào nên trả 202 Accepted?\n   Answer: c) When the resource itself is not ready yet — e.g. a report that is still being generated\n   The user really was created, so 201. A report export returns 202 plus a job resource the client can poll (GET /jobs/:id).VI: Người dùng thật sự đã được tạo, nên 201. Xuất báo cáo trả 202 kèm một tài nguyên job để client hỏi lại (GET /jobs/:id).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Correctness: inline, 95 emails were never sent and nothing remembers them</p><p>The synchronous version did not send slowly — it did not send at all, for 95 people, and reported 500 to each of them.</p><p><i>VI: Bản đồng bộ không gửi chậm — nó không gửi gì cả, cho 95 người, và báo 500 cho từng người.</i></p></li><li><p><b>d)</b> It never asked for more than 5, and kept the rest for later</p><p>A queue is, first of all, a place to put things down. The drain took 4,126 ms; nothing was lost.</p><p><i>VI: Hàng đợi, trước hết, là chỗ để đặt việc xuống. Rút cạn mất 4.126 ms; không mất gì.</i></p></li><li><p><b>d)</b> The worker re-reads the database, so it never acts on a stale snapshot from ten minutes ago</p><p>A job created ten minutes ago with a full user object will happily email an address the user has since changed.</p><p><i>VI: Một job tạo mười phút trước mang cả đối tượng user sẽ vui vẻ gửi thư tới địa chỉ mà người dùng đã đổi.</i></p></li><li><p><b>b)</b> The job may run before the row exists, or after a rollback</p><p>Enqueue after the commit. If losing the job between commit and enqueue is unacceptable, write it as a row in the same transaction and let a sweeper move it (transactional outbox).</p><p><i>VI: Xếp hàng sau commit. Nếu không chấp nhận mất job giữa commit và xếp hàng, ghi nó thành một dòng trong cùng giao dịch và để một tiến trình quét chuyển nó đi (transactional outbox).</i></p></li><li><p><b>c)</b> When the resource itself is not ready yet — e.g. a report that is still being generated</p><p>The user really was created, so 201. A report export returns 202 plus a job resource the client can poll (GET /jobs/:id).</p><p><i>VI: Người dùng thật sự đã được tạo, nên 201. Xuất báo cáo trả 202 kèm một tài nguyên job để client hỏi lại (GET /jobs/:id).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Sending inline: HTTP 200 × 5, HTTP 500 × 95. Queued with concurrency 5: 202 × 100, 100 emails sent. What kind of difference is this?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gửi ngay trong request: HTTP 200 × 5, HTTP 500 × 95. Xếp hàng với concurrency 5: 202 × 100, gửi đủ 100 thư. Đây là loại khác biệt gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Performance only: the queue sends the same emails, just faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Capacity: the queue raised the SMTP limit from 5 to 100 connections"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Correctness: inline, 95 emails were never sent and nothing remembers them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cosmetic: 500 and 202 both mean the email will arrive later"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The synchronous version did not send slowly — it did not send at all, for 95 people, and reported 500 to each of them.</p><p><i>VI: Bản đồng bộ không gửi chậm — nó không gửi gì cả, cho 95 người, và báo 500 cho từng người.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Peak concurrent SMTP connections were 5 in BOTH runs. So what did the queue change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đỉnh kết nối SMTP đồng thời là 5 ở CẢ hai lần. Vậy hàng đợi đã đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It made the SMTP server faster by batching messages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It retried the 95 rejected emails in parallel"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It moved the SMTP connections into Redis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It never asked for more than 5, and kept the rest for later"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A queue is, first of all, a place to put things down. The drain took 4,126 ms; nothing was lost.</p><p><i>VI: Hàng đợi, trước hết, là chỗ để đặt việc xuống. Rút cạn mất 4.126 ms; không mất gì.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does the job carry { userId } and not the whole user object?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao job mang { userId } mà không mang cả đối tượng user?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BullMQ rejects jobs larger than 64 bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The user object contains a password hash that BullMQ encrypts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redis cannot store nested objects in a job"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The worker re-reads the database, so it never acts on a stale snapshot from ten minutes ago"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A job created ten minutes ago with a full user object will happily email an address the user has since changed.</p><p><i>VI: Một job tạo mười phút trước mang cả đối tượng user sẽ vui vẻ gửi thư tới địa chỉ mà người dùng đã đổi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You call queue.add() inside the database transaction, before COMMIT. What can go wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn gọi queue.add() bên trong giao dịch CSDL, trước COMMIT. Điều gì có thể hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The transaction deadlocks with Redis"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The job may run before the row exists, or after a rollback"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The job is silently dropped because the connection is busy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing, because BullMQ waits for the transaction to commit"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Enqueue after the commit. If losing the job between commit and enqueue is unacceptable, write it as a row in the same transaction and let a sweeper move it (transactional outbox).</p><p><i>VI: Xếp hàng sau commit. Nếu không chấp nhận mất job giữa commit và xếp hàng, ghi nó thành một dòng trong cùng giao dịch và để một tiến trình quét chuyển nó đi (transactional outbox).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The route still answers 201 after enqueueing the welcome email. When should it answer 202 Accepted instead?</p><p style=\"opacity:.75;font-size:.92em\"><i>Route vẫn trả 201 sau khi xếp hàng email chào mừng. Khi nào nên trả 202 Accepted?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only when the queue is longer than 100 jobs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Never: 202 is reserved for WebSocket upgrades"
+              },
+              {
+                "ma": "c",
+                "noiDung": "When the resource itself is not ready yet — e.g. a report that is still being generated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Always, because any background work makes the response asynchronous"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The user really was created, so 201. A report export returns 202 plus a job resource the client can poll (GET /jobs/:id).</p><p><i>VI: Người dùng thật sự đã được tạo, nên 201. Xuất báo cáo trả 202 kèm một tài nguyên job để client hỏi lại (GET /jobs/:id).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“The queue made email faster” — it made it reliable; throughput is still 5 at a time.|||\"Hàng đợi làm email nhanh hơn\" — nó làm email đáng tin; thông lượng vẫn 5 cái một lúc."
+        },
+        {
+          "loi": "Putting the whole user in job.data and emailing a stale address.|||Nhét cả user vào job.data rồi gửi thư tới địa chỉ cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "202 Accepted",
+          "vi": "đã nhận, chưa xong",
+          "giaiThich": "yêu cầu được nhận, kết quả sẽ có sau"
+        },
+        {
+          "en": "transactional outbox",
+          "vi": "hộp thư đi trong giao dịch",
+          "giaiThich": "ghi job thành dòng trong cùng giao dịch, một tiến trình quét chuyển nó vào hàng đợi"
+        }
+      ]
+    },
+    {
+      "title": "13.1 · Move the welcome email out of the request",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "background jobs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The sign-up route sends the welcome email inline: 300 ms of the user waiting, and if SMTP fails the request 500s and the email is lost. Write <code>makeRegister({ createUser, emailQueue })</code> returning the Express handler <code>async (req, res, next)</code>:</p><ol><li><code>const user = await createUser(req.body)</code> — if it throws, pass the error to <code>next(err)</code> and enqueue NOTHING;</li><li>enqueue <code>emailQueue.add('welcome', { userId: user.id }, { attempts: 5, backoff: { type: 'exponential', delay: 1000 } })</code> — the id only, never the user object (it carries the password hash and goes stale);</li><li>answer <code>201</code> with <code>{ id, email }</code> — the user really was created.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>No email is sent inside the request.</li>\n  <li>The job is enqueued only after createUser succeeded.</li>\n  <li>job.data is exactly { userId }; the response never contains passwordHash.</li>\n</ul>",
+      "problemHtmlVi": "<p>Route đăng ký gửi email chào mừng ngay trong request: người dùng chờ 300 ms, và nếu SMTP hỏng thì request 500 và email mất. Viết <code>makeRegister({ createUser, emailQueue })</code> trả về handler Express <code>async (req, res, next)</code>:</p><ol><li><code>const user = await createUser(req.body)</code> — nếu nó ném lỗi, chuyển lỗi cho <code>next(err)</code> và KHÔNG xếp hàng gì;</li><li>xếp hàng <code>emailQueue.add('welcome', { userId: user.id }, { attempts: 5, backoff: { type: 'exponential', delay: 1000 } })</code> — chỉ id, không bao giờ cả đối tượng user (nó mang hash mật khẩu và sẽ cũ đi);</li><li>trả <code>201</code> với <code>{ id, email }</code> — người dùng thật sự đã được tạo.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không gửi email nào bên trong request.</li>\n  <li>Job chỉ được xếp hàng sau khi createUser thành công.</li>\n  <li>job.data đúng bằng { userId }; câu trả lời không bao giờ chứa passwordHash.</li>\n</ul>",
+      "inputSpec": "{ createUser, emailQueue } · then (req, res, next)|||{ createUser, emailQueue } · rồi (req, res, next)",
+      "outputSpec": "handler — async (req, res, next) => void",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };\n[await call({ email: 'an@x.vn', name: 'An' }).then((r) => [r.status, r.body, r.ms < 50]), sent.length]",
+          "output": "[[201,{\"id\":42,\"email\":\"an@x.vn\"},true],0]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "try { const user = await createUser(req.body); … } catch (err) { return next(err); }",
+        "After the add: res.status(201).json({ id: user.id, email: user.email }).|||Sau lệnh add: res.status(201).json({ id: user.id, email: user.email })."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** POST /register */\nfunction makeRegister({ createUser, emailQueue }) {\n  // Write your solution here — the \"before\" version of the lesson\n  return async (req, res, next) => {\n    try {\n      const user = await createUser(req.body);\n      await sendWelcomeEmail(user.email);\n      res.status(201).json(user);\n    } catch (err) { next(err); }\n  };\n}\n"
+        },
+        {
+          "name": "fake-signup.js",
+          "language": "javascript",
+          "code": "// fake-signup.js — PROVIDED (loaded before answer.js).\n//   await createUser(body)          → { id, email } after 10 ms (throws Error('EMAIL_TAKEN') for 'taken@x.vn')\n//   await sendWelcomeEmail(email)   → 300 ms of SMTP (counts sent.length)\n//   emailQueue.add(name, data, opts) → 2 ms (one Redis round trip); emailQueue.added = [{ name, data, opts, at }]\nlet nextId = 41;\nconst sent = [];\nasync function createUser(body) {\n  await new Promise((ok) => setTimeout(ok, 10));\n  if (body.email === 'taken@x.vn') throw Object.assign(new Error('EMAIL_TAKEN'), { status: 409 });\n  return { id: ++nextId, email: body.email, name: body.name, passwordHash: '$argon2id$v=19$…' };\n}\nasync function sendWelcomeEmail(email) { await new Promise((ok) => setTimeout(ok, 300)); sent.push(email); }\nconst emailQueue = {\n  added: [],\n  add(name, data, opts) { emailQueue.added.push({ name, data: JSON.parse(JSON.stringify(data)), opts, at: Date.now() }); return new Promise((ok) => setTimeout(() => ok({ id: String(emailQueue.added.length) }), 2)); },\n};\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** POST /register — the route only RECORDS the work; a worker sends the email */\nfunction makeRegister({ createUser, emailQueue }) {\n  return async (req, res, next) => {\n    let user;\n    try {\n      user = await createUser(req.body);                 // the part the user is waiting for\n    } catch (err) {\n      return next(err);                                  // failed sign-up: nothing is enqueued\n    }\n    await emailQueue.add('welcome', { userId: user.id }, {   // the id only — the worker re-reads the row\n      attempts: 5,\n      backoff: { type: 'exponential', delay: 1000 },     // \"the email failed\" becomes \"the email was late\"\n    });\n    res.status(201).json({ id: user.id, email: user.email });   // 201: the user really was created\n  };\n}\n"
+        },
+        {
+          "name": "fake-signup.js",
+          "language": "javascript",
+          "code": "// fake-signup.js — PROVIDED (loaded before answer.js).\n//   await createUser(body)          → { id, email } after 10 ms (throws Error('EMAIL_TAKEN') for 'taken@x.vn')\n//   await sendWelcomeEmail(email)   → 300 ms of SMTP (counts sent.length)\n//   emailQueue.add(name, data, opts) → 2 ms (one Redis round trip); emailQueue.added = [{ name, data, opts, at }]\nlet nextId = 41;\nconst sent = [];\nasync function createUser(body) {\n  await new Promise((ok) => setTimeout(ok, 10));\n  if (body.email === 'taken@x.vn') throw Object.assign(new Error('EMAIL_TAKEN'), { status: 409 });\n  return { id: ++nextId, email: body.email, name: body.name, passwordHash: '$argon2id$v=19$…' };\n}\nasync function sendWelcomeEmail(email) { await new Promise((ok) => setTimeout(ok, 300)); sent.push(email); }\nconst emailQueue = {\n  added: [],\n  add(name, data, opts) { emailQueue.added.push({ name, data: JSON.parse(JSON.stringify(data)), opts, at: Date.now() }); return new Promise((ok) => setTimeout(() => ok({ id: String(emailQueue.added.length) }), 2)); },\n};\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The route now only records the work: one 2 ms Redis round trip instead of 300 ms of SMTP, and attempts + exponential backoff turn “the email failed” into “the email was late”. Carrying only the id makes the worker re-read the current address. Enqueueing after the user exists (and not at all when creation fails) is the in-request half of the outbox rule.</p>",
+      "solutionExplanationHtmlVi": "<p>Route giờ chỉ ghi lại việc cần làm: một vòng Redis 2 ms thay vì 300 ms SMTP, và attempts + backoff cấp số nhân biến \"email hỏng\" thành \"email tới trễ\". Chỉ mang id buộc worker đọc lại địa chỉ hiện tại. Xếp hàng sau khi người dùng đã tồn tại (và không xếp gì khi tạo hỏng) là nửa phần trong request của quy tắc outbox.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-signup.js",
+          "fake-http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "201 fast, no inline email",
+              "vi": "201 nhanh, không gửi thư trong request"
+            },
+            "goi": "[await call({ email: 'an@x.vn', name: 'An' }).then((r) => [r.status, r.body, r.ms < 50]), sent.length]",
+            "chuanBi": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              [
+                201,
+                {
+                  "id": 42,
+                  "email": "an@x.vn"
+                },
+                true
+              ],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One job: welcome, { userId }, attempts 5 + exponential backoff",
+              "vi": "Một job: welcome, { userId }, attempts 5 + backoff cấp số nhân"
+            },
+            "goi": "await call({ email: 'an@x.vn' }).then(() => emailQueue.added.map(({ name, data, opts }) => ({ name, data, opts })))",
+            "chuanBi": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              {
+                "name": "welcome",
+                "data": {
+                  "userId": 42
+                },
+                "opts": {
+                  "attempts": 5,
+                  "backoff": {
+                    "type": "exponential",
+                    "delay": 1000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Sign-up fails → next(err), nothing enqueued",
+              "vi": "Đăng ký hỏng → next(err), không xếp gì"
+            },
+            "goi": "[await call({ email: 'taken@x.vn' }).then((r) => r.next), emailQueue.added.length]",
+            "chuanBi": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              [
+                "next(EMAIL_TAKEN)"
+              ],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const r = await Promise.all(Array.from({ length: 20 }, (_, i) => call({ email: 'u' + i + '@x.vn' }))); return [r.every((x) => x.status === 201 && !('passwordHash' in x.body)), emailQueue.added.length, sent.length, JSON.stringify(emailQueue.added).includes('argon2')]; })()",
+            "chuanBi": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              true,
+              20,
+              0,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await call({ email: 'b@x.vn' }).then((r) => [r.body, emailQueue.added[0].data])",
+            "chuanBi": "const handler = makeRegister({ createUser, emailQueue });\nconst call = async (body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const next = mkNext(); const t0 = Date.now(); await handler(req, res, next); return { status: res.statusCode, body: res.body, next: next.calls, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              {
+                "id": 42,
+                "email": "b@x.vn"
+              },
+              {
+                "userId": 42
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await sendWelcomeEmail(user.email) in the route: the user waits for the slowest party, and an SMTP error loses the email with a 500.|||await sendWelcomeEmail(user.email) trong route: người dùng chờ bên chậm nhất, và lỗi SMTP làm mất email kèm một 500."
+        },
+        {
+          "loi": "emailQueue.add('welcome', user): the password hash sits in Redis readable by anyone with redis-cli, and the address can be stale by the time the job runs.|||emailQueue.add('welcome', user): hash mật khẩu nằm trong Redis, ai có redis-cli cũng đọc được, và địa chỉ có thể đã cũ khi job chạy."
+        },
+        {
+          "loi": "Enqueueing before createUser: a failed sign-up still sends a welcome email to an account that does not exist.|||Xếp hàng trước createUser: đăng ký hỏng mà vẫn gửi thư chào mừng tới một tài khoản không tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fire-and-respond",
+          "vi": "nhận-xếp-trả lời",
+          "giaiThich": "kiểm tra, xếp hàng, trả lời — phần chậm làm sau"
+        }
+      ]
+    },
+    {
+      "title": "13.1 · A worker pool that never asks for more than the downstream can give",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "concurrency",
+        "worker pool"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The worker side of measurement 2: 100 emails, an SMTP server that accepts 5 connections. <code>Promise.all</code> over all 100 is the inline version again — 95 answers of 421. Write <code>runPool(items, worker, concurrency)</code>:</p><ul><li>call <code>await worker(item)</code> for every item, with <b>never more than</b> <code>concurrency</code> calls in flight at the same time;</li><li>start the next item as soon as one finishes (do not wait for a whole batch of 5 to finish);</li><li>a failing item does not stop the others: resolve to an array, in the ORDER of <code>items</code>, of <code>{ ok: true, value }</code> or <code>{ ok: false, error: &lt;message&gt; }</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Peak in-flight calls ≤ concurrency.</li>\n  <li>A free slot is reused immediately (100 × 200 ms at 5 ⇒ ~4,000 ms).</li>\n  <li>Results in input order; errors captured, not thrown.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phía worker của phép đo 2: 100 email, một máy chủ SMTP nhận 5 kết nối. <code>Promise.all</code> cả 100 cái lại chính là bản gửi trong request — 95 câu trả lời 421. Viết <code>runPool(items, worker, concurrency)</code>:</p><ul><li>gọi <code>await worker(item)</code> cho mọi phần tử, <b>không bao giờ quá</b> <code>concurrency</code> lời gọi đang chạy cùng lúc;</li><li>bắt đầu phần tử kế ngay khi một cái xong (đừng chờ cả lô 5 cái xong);</li><li>một phần tử hỏng không dừng các phần tử khác: resolve ra mảng, theo ĐÚNG thứ tự <code>items</code>, gồm <code>{ ok: true, value }</code> hoặc <code>{ ok: false, error: &lt;thông điệp&gt; }</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Số lời gọi đang chạy tối đa ≤ concurrency.</li>\n  <li>Chỗ trống được dùng lại ngay (100 × 200 ms ở mức 5 ⇒ ~4.000 ms).</li>\n  <li>Kết quả theo thứ tự đầu vào; lỗi được ghi lại, không ném ra.</li>\n</ul>",
+      "inputSpec": "items — any[] · worker — async (item) => any · concurrency — number ≥ 1|||items — any[] · worker — async (item) => any · concurrency — số ≥ 1",
+      "outputSpec": "Promise<({ ok: true, value } | { ok: false, error })[]>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');\nawait (async () => { const t0 = Date.now(); const r = await runPool(emails, (e) => smtp.send(e), 5); return [r.filter((x) => x.ok).length, smtp.rejected, smtp.peak, Date.now() - t0]; })()",
+          "output": "[100,0,5,4000]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Start `concurrency` lanes; each lane loops: take the next index (let next = 0; const i = next++), run it, store the result at results[i], repeat until next >= items.length.|||Khởi `concurrency` làn; mỗi làn lặp: lấy chỉ số kế tiếp (let next = 0; const i = next++), chạy nó, lưu kết quả vào results[i], lặp tới khi next >= items.length.",
+        "await Promise.all(lanes) and return results. next++ is safe: the event loop runs one lane at a time between awaits.|||await Promise.all(lanes) rồi trả results. next++ an toàn: giữa các await event loop chỉ chạy một làn mỗi lúc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run worker(item) for every item, at most `concurrency` at a time. */\nasync function runPool(items, worker, concurrency) {\n  // Write your solution here — this is the inline version: everything at once\n  const settled = await Promise.allSettled(items.map((it) => worker(it)));\n  return settled.map((s) => (s.status === 'fulfilled' ? { ok: true, value: s.value } : { ok: false, error: s.reason.message }));\n}\n"
+        },
+        {
+          "name": "fake-smtp.js",
+          "language": "javascript",
+          "code": "// fake-smtp.js — PROVIDED (loaded before answer.js). A real SMTP server: it accepts 5 concurrent\n// connections, takes 200 ms per message, and answers \"421 Too many concurrent connections\" beyond that.\n//   await smtp.send(to)  → 'queued as <n>'      smtp.peak — highest number of concurrent connections seen\n//   smtp.sent — delivered addresses             smtp.rejected — number of 421 answers\nconst smtp = {\n  max: 5, ms: 200, open: 0, peak: 0, sent: [], rejected: 0,\n  send(to) {\n    if (smtp.open >= smtp.max) { smtp.rejected++; return Promise.reject(new Error('421 Too many concurrent connections')); }\n    smtp.open++; smtp.peak = Math.max(smtp.peak, smtp.open);\n    return new Promise((ok) => setTimeout(() => { smtp.open--; smtp.sent.push(to); ok('queued as ' + smtp.sent.length); }, smtp.ms));\n  },\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Run worker(item) for every item, at most `concurrency` at a time; results in input order. */\nasync function runPool(items, worker, concurrency) {\n  const results = new Array(items.length);\n  let next = 0;                                          // shared cursor — safe: one lane runs at a time between awaits\n  async function lane() {\n    while (next < items.length) {\n      const i = next++;                                  // claim the next item synchronously\n      try {\n        results[i] = { ok: true, value: await worker(items[i]) };\n      } catch (err) {\n        results[i] = { ok: false, error: err.message };  // one failure does not stop the pool\n      }\n    }                                                    // a lane picks the next item the moment it is free\n  }\n  const lanes = Array.from({ length: Math.min(concurrency, items.length) }, lane);\n  await Promise.all(lanes);\n  return results;\n}\n"
+        },
+        {
+          "name": "fake-smtp.js",
+          "language": "javascript",
+          "code": "// fake-smtp.js — PROVIDED (loaded before answer.js). A real SMTP server: it accepts 5 concurrent\n// connections, takes 200 ms per message, and answers \"421 Too many concurrent connections\" beyond that.\n//   await smtp.send(to)  → 'queued as <n>'      smtp.peak — highest number of concurrent connections seen\n//   smtp.sent — delivered addresses             smtp.rejected — number of 421 answers\nconst smtp = {\n  max: 5, ms: 200, open: 0, peak: 0, sent: [], rejected: 0,\n  send(to) {\n    if (smtp.open >= smtp.max) { smtp.rejected++; return Promise.reject(new Error('421 Too many concurrent connections')); }\n    smtp.open++; smtp.peak = Math.max(smtp.peak, smtp.open);\n    return new Promise((ok) => setTimeout(() => { smtp.open--; smtp.sent.push(to); ok('queued as ' + smtp.sent.length); }, smtp.ms));\n  },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is what a worker’s concurrency setting does: it bounds how many jobs are in flight, which keeps the downstream inside its limit. The lane loop reuses a slot the moment it frees up, so 100 × 200 ms at concurrency 5 takes about 4 s — the lesson’s worker drained the queue in 4,126 ms with a peak of 5 connections and zero rejections.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây chính là việc thiết lập concurrency của worker làm: chặn số job đang chạy, giữ bên dưới trong giới hạn của nó. Vòng lặp theo làn dùng lại chỗ trống ngay khi có, nên 100 × 200 ms ở mức 5 mất khoảng 4 s — worker trong bài rút cạn hàng đợi trong 4.126 ms với đỉnh 5 kết nối và không lần từ chối nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-smtp.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "100 emails, SMTP limit 5 → all sent, peak 5, ~4,000 ms",
+              "vi": "100 email, SMTP giới hạn 5 → gửi đủ, đỉnh 5, ~4.000 ms"
+            },
+            "goi": "await (async () => { const t0 = Date.now(); const r = await runPool(emails, (e) => smtp.send(e), 5); return [r.filter((x) => x.ok).length, smtp.rejected, smtp.peak, Date.now() - t0]; })()",
+            "chuanBi": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');",
+            "mongDoi": [
+              100,
+              0,
+              5,
+              4000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Results keep input order; the failure is captured",
+              "vi": "Kết quả giữ thứ tự đầu vào; lỗi được ghi lại"
+            },
+            "goi": "await runPool([1, 2, 3, 4], async (x) => { await new Promise((ok) => setTimeout(ok, (5 - x) * 10)); if (x === 3) throw new Error('bad ' + x); return x * 10; }, 2)",
+            "chuanBi": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');",
+            "mongDoi": [
+              {
+                "ok": true,
+                "value": 10
+              },
+              {
+                "ok": true,
+                "value": 20
+              },
+              {
+                "ok": false,
+                "error": "bad 3"
+              },
+              {
+                "ok": true,
+                "value": 40
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A free slot is reused at once (not batch by batch)",
+              "vi": "Chỗ trống được dùng lại ngay (không chờ theo lô)"
+            },
+            "goi": "await (async () => { const t0 = Date.now(); const ms = [500, 100, 100, 100, 100, 100]; await runPool(ms, (m) => new Promise((ok) => setTimeout(ok, m)), 2); return Date.now() - t0; })()",
+            "chuanBi": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');",
+            "mongDoi": 500
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { let open = 0, peak = 0; const r = await runPool(Array.from({ length: 37 }, (_, i) => i), async (i) => { open++; peak = Math.max(peak, open); await new Promise((ok) => setTimeout(ok, 7 + (i % 5))); open--; return i; }, 8); return [peak, r.map((x) => x.value).join(',') === Array.from({ length: 37 }, (_, i) => i).join(',')]; })()",
+            "chuanBi": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');",
+            "mongDoi": [
+              8,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await runPool([], async () => 1, 5), await runPool(['a'], async (x) => x + '!', 10)]",
+            "chuanBi": "const emails = Array.from({ length: 100 }, (_, i) => 'user' + i + '@x.vn');",
+            "mongDoi": [
+              [],
+              [
+                {
+                  "ok": true,
+                  "value": "a!"
+                }
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Promise.all(items.map(worker)): 100 connections at once against a server that takes 5 — the lesson’s 95 lost emails.|||Promise.all(items.map(worker)): 100 kết nối cùng lúc vào máy chủ chỉ nhận 5 — đúng 95 email mất của bài."
+        },
+        {
+          "loi": "Chunking into batches of 5 with await Promise.all(batch): correct but one slow message stalls the other four slots.|||Chia lô 5 cái và await Promise.all(lô): đúng nhưng một thư chậm làm treo bốn chỗ còn lại."
+        },
+        {
+          "loi": "Pushing results in completion order: result i no longer belongs to item i.|||Đẩy kết quả theo thứ tự hoàn thành: kết quả i không còn thuộc về phần tử i."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "concurrency",
+          "vi": "mức đồng thời",
+          "giaiThich": "bao nhiêu job một worker cho chạy cùng lúc"
+        },
+        {
+          "en": "backpressure",
+          "vi": "áp lực ngược",
+          "giaiThich": "không đòi bên dưới nhiều hơn nó chịu được"
+        }
+      ]
+    },
+    {
+      "title": "13.1 · The transactional outbox, step by step",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "outbox"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Losing the job between COMMIT and queue.add() is unacceptable for this sign-up (the welcome email carries the activation link). Put the steps of the transactional outbox in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mất job giữa COMMIT và queue.add() là không chấp nhận được với lượt đăng ký này (email chào mừng mang liên kết kích hoạt). Sắp các bước của transactional outbox theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Everything that must survive together goes between BEGIN and COMMIT.|||Mọi thứ phải sống sót cùng nhau nằm giữa BEGIN và COMMIT.",
+        "The queue is touched only after the commit.|||Hàng đợi chỉ được chạm sau khi commit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · The transactional outbox, step by step\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp thứ tự các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.1 · The transactional outbox, step by step — answer key\n\n1. Order the stepsSắp thứ tự các bước\n   Answer: m2) BEGIN the transaction  →  m7) INSERT the user row  →  m1) INSERT an outbox row { type: \"welcome\", userId } in the SAME transaction  →  m3) COMMIT — the user and the job record exist together, or neither does  →  m5) Answer 201 to the client  →  m4) The sweeper reads unsent outbox rows and calls queue.add() for each  →  m6) The sweeper marks those rows as sent (the job may be enqueued twice on a crash — the worker is idempotent)\n   The point is that the job is written as data inside the same transaction as the user, so a crash can never separate them; moving it to the queue happens afterwards, outside the request, and may repeat — which is why every handler must survive running twice (13.3).VI: Điểm mấu chốt: job được ghi như dữ liệu bên trong cùng giao dịch với user, nên một lần sập không bao giờ tách được chúng; việc chuyển vào hàng đợi xảy ra sau đó, ngoài request, và có thể lặp — đó là lý do mọi handler phải chịu được việc chạy hai lần (13.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The point is that the job is written as data inside the same transaction as the user, so a crash can never separate them; moving it to the queue happens afterwards, outside the request, and may repeat — which is why every handler must survive running twice (13.3).</p><p><i>VI: Điểm mấu chốt: job được ghi như dữ liệu bên trong cùng giao dịch với user, nên một lần sập không bao giờ tách được chúng; việc chuyển vào hàng đợi xảy ra sau đó, ngoài request, và có thể lặp — đó là lý do mọi handler phải chịu được việc chạy hai lần (13.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "INSERT an outbox row { type: \"welcome\", userId } in the SAME transaction"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "BEGIN the transaction"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "COMMIT — the user and the job record exist together, or neither does"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The sweeper reads unsent outbox rows and calls queue.add() for each"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Answer 201 to the client"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The sweeper marks those rows as sent (the job may be enqueued twice on a crash — the worker is idempotent)"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "INSERT the user row"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m7",
+              "m1",
+              "m3",
+              "m5",
+              "m4",
+              "m6"
+            ],
+            "giaiThich": "<p>The point is that the job is written as data inside the same transaction as the user, so a crash can never separate them; moving it to the queue happens afterwards, outside the request, and may repeat — which is why every handler must survive running twice (13.3).</p><p><i>VI: Điểm mấu chốt: job được ghi như dữ liệu bên trong cùng giao dịch với user, nên một lần sập không bao giờ tách được chúng; việc chuyển vào hàng đợi xảy ra sau đó, ngoài request, và có thể lặp — đó là lý do mọi handler phải chịu được việc chạy hai lần (13.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling queue.add() before COMMIT: the worker can read nothing, or act on a rolled-back user.|||Gọi queue.add() trước COMMIT: worker có thể đọc thấy rỗng, hoặc làm việc với một user đã rollback."
+        },
+        {
+          "loi": "Marking the outbox row sent BEFORE enqueueing: a crash in between loses the job for good.|||Đánh dấu dòng outbox đã gửi TRƯỚC khi xếp hàng: sập ở giữa là mất job vĩnh viễn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transactional outbox",
+          "vi": "hộp thư đi trong giao dịch",
+          "giaiThich": "job ghi thành dòng trong cùng giao dịch; một tiến trình quét chuyển nó vào hàng đợi"
+        }
+      ]
+    }
+  ]
+}

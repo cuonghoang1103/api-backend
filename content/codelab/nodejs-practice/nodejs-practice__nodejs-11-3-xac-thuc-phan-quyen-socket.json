@@ -1,0 +1,1078 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-11-3-xac-thuc-phan-quyen-socket",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-11-3-xac-thuc-phan-quyen-socket"
+  },
+  "exercises": [
+    {
+      "title": "Authenticated is not authorized",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "WebSocket security",
+        "authorization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>From the lesson: four tokens through the handshake, the join:unsafe hole that ran in this site’s production, a black-holed connection detected after 3,010 ms, and five messages lost during a reconnect.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ bài: bốn token qua lần bắt tay, lỗ join:unsafe từng chạy trên production của site này, một kết nối bị \"hố đen\" được phát hiện sau 3.010 ms, và năm tin mất trong lúc kết nối lại.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate the two questions: \"who are you?\" (once) and \"may you do this?\" (every event).|||Tách hai câu hỏi: \"bạn là ai?\" (một lần) và \"bạn có được làm việc này không?\" (mọi sự kiện).",
+        "For the timing question, the server pings on the interval and then waits the timeout.|||Với câu thời gian, server ping theo chu kỳ rồi chờ hết timeout."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authenticated is not authorized\n\nAnswer in the answer panel (no code needed).\n\n1. Where should a browser’s credential come from on the handshake?Thông tin xác thực của trình duyệt nên đến từ đâu lúc bắt tay?\n2. User 7 (valid token, participant of thread 42 only) emits join:unsafe with 99. What happened?Người dùng 7 (token hợp lệ, chỉ ở thread 42) gửi join:unsafe với 99. Chuyện gì xảy ra?\n3. With pingInterval: 1000, pingTimeout: 2000 a phone walks into a lift (sends nothing). Worst case before the server notices?Với pingInterval: 1000, pingTimeout: 2000 một điện thoại đi vào thang máy (không gửi gì). Trường hợp xấu nhất trước khi server nhận ra?\n4. The client was offline for a second while the server emitted 5 messages. After the automatic reconnect?Client offline một giây trong lúc server phát 5 tin. Sau khi tự kết nối lại?\n5. Which are on the lesson’s list of realtime mistakes? (choose all)Cái nào nằm trong danh sách lỗi realtime của bài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authenticated is not authorized — answer key\n\n1. Where should a browser’s credential come from on the handshake?Thông tin xác thực của trình duyệt nên đến từ đâu lúc bắt tay?\n   Answer: b) An httpOnly cookie (or handshake.auth.token) — never the query string\n   A token in the URL lands in access logs, Referer headers and your monitoring tool. This site reads handshake.auth.token first (it travels inside the first packet), then the httpOnly backend_token cookie.VI: Token trong URL nằm trong access log, header Referer và công cụ giám sát. Site này đọc handshake.auth.token trước (nó đi trong gói đầu tiên), rồi tới cookie httpOnly backend_token.\n\n2. User 7 (valid token, participant of thread 42 only) emits join:unsafe with 99. What happened?Người dùng 7 (token hợp lệ, chỉ ở thread 42) gửi join:unsafe với 99. Chuyện gì xảy ra?\n   Answer: c) It joined thread:99 and received a stranger’s private message — and nothing appeared in the REST logs\n   Every socket.on is an endpoint. Thread ids are sequential, so guessing is a for loop, and nothing alerts: no GET /threads/99, no 403.VI: Mỗi socket.on là một endpoint. Id thread tăng dần nên đoán chỉ là một vòng for, và không gì báo động: không có GET /threads/99, không có 403.\n\n3. With pingInterval: 1000, pingTimeout: 2000 a phone walks into a lift (sends nothing). Worst case before the server notices?Với pingInterval: 1000, pingTimeout: 2000 một điện thoại đi vào thang máy (không gửi gì). Trường hợp xấu nhất trước khi server nhận ra?\n   Answer: a) About 3,000 ms — pingInterval + pingTimeout (measured 3,010 ms)\n   Defaults 25,000 + 20,000 = up to 45 s of a ghost user; this site’s 25,000 + 60,000 = 85 s. Until then the ghost sits in every room.VI: Mặc định 25.000 + 20.000 = tới 45 giây một \"bóng ma\"; site này 25.000 + 60.000 = 85 giây. Trong lúc đó bóng ma nằm trong mọi room.\n\n4. The client was offline for a second while the server emitted 5 messages. After the automatic reconnect?Client offline một giây trong lúc server phát 5 tin. Sau khi tự kết nối lại?\n   Answer: a) A NEW socket id, no rooms, and 0 of the 5 messages — catch up over REST\n   By default nothing is buffered. connectionStateRecovery can replay, but in one process’s memory and not behind the classic redis adapter (measured 0/5). The socket is the signal; REST is the truth.VI: Mặc định không gì được đệm. connectionStateRecovery có thể phát lại, nhưng trong bộ nhớ một tiến trình và không chạy sau redis adapter cổ điển (đo 0/5). Socket là tín hiệu; REST là sự thật.\n\n5. Which are on the lesson’s list of realtime mistakes? (choose all)Cái nào nằm trong danh sách lỗi realtime của bài? (chọn mọi câu đúng)\n   Answer: b) No rate limit per socket + c) Trusting a userId that arrives in the event payload + d) Treating the socket as a reliable delivery channel with no REST catch-up + e) Checking permissions only at the handshake\n   Re-checking roleVersion is the careful part of this site’s handshake: a token issued before a role change is refused even though its signature is valid.VI: Kiểm lại roleVersion là phần cẩn thận trong lần bắt tay của site này: token cấp trước khi đổi vai trò bị từ chối dù chữ ký vẫn hợp lệ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> An httpOnly cookie (or handshake.auth.token) — never the query string</p><p>A token in the URL lands in access logs, Referer headers and your monitoring tool. This site reads handshake.auth.token first (it travels inside the first packet), then the httpOnly backend_token cookie.</p><p><i>VI: Token trong URL nằm trong access log, header Referer và công cụ giám sát. Site này đọc handshake.auth.token trước (nó đi trong gói đầu tiên), rồi tới cookie httpOnly backend_token.</i></p></li><li><p><b>c)</b> It joined thread:99 and received a stranger’s private message — and nothing appeared in the REST logs</p><p>Every socket.on is an endpoint. Thread ids are sequential, so guessing is a for loop, and nothing alerts: no GET /threads/99, no 403.</p><p><i>VI: Mỗi socket.on là một endpoint. Id thread tăng dần nên đoán chỉ là một vòng for, và không gì báo động: không có GET /threads/99, không có 403.</i></p></li><li><p><b>a)</b> About 3,000 ms — pingInterval + pingTimeout (measured 3,010 ms)</p><p>Defaults 25,000 + 20,000 = up to 45 s of a ghost user; this site’s 25,000 + 60,000 = 85 s. Until then the ghost sits in every room.</p><p><i>VI: Mặc định 25.000 + 20.000 = tới 45 giây một \"bóng ma\"; site này 25.000 + 60.000 = 85 giây. Trong lúc đó bóng ma nằm trong mọi room.</i></p></li><li><p><b>a)</b> A NEW socket id, no rooms, and 0 of the 5 messages — catch up over REST</p><p>By default nothing is buffered. connectionStateRecovery can replay, but in one process’s memory and not behind the classic redis adapter (measured 0/5). The socket is the signal; REST is the truth.</p><p><i>VI: Mặc định không gì được đệm. connectionStateRecovery có thể phát lại, nhưng trong bộ nhớ một tiến trình và không chạy sau redis adapter cổ điển (đo 0/5). Socket là tín hiệu; REST là sự thật.</i></p></li><li><p><b>b)</b> No rate limit per socket + <b>c)</b> Trusting a userId that arrives in the event payload + <b>d)</b> Treating the socket as a reliable delivery channel with no REST catch-up + <b>e)</b> Checking permissions only at the handshake</p><p>Re-checking roleVersion is the careful part of this site’s handshake: a token issued before a role change is refused even though its signature is valid.</p><p><i>VI: Kiểm lại roleVersion là phần cẩn thận trong lần bắt tay của site này: token cấp trước khi đổi vai trò bị từ chối dù chữ ký vẫn hợp lệ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "a1",
+            "de": "<p>Where should a browser’s credential come from on the handshake?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông tin xác thực của trình duyệt nên đến từ đâu lúc bắt tay?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A field in every event payload, checked per message"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An httpOnly cookie (or handshake.auth.token) — never the query string"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The query string, because WebSocket cannot set headers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The Origin header, which proves which site opened the socket"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A token in the URL lands in access logs, Referer headers and your monitoring tool. This site reads handshake.auth.token first (it travels inside the first packet), then the httpOnly backend_token cookie.</p><p><i>VI: Token trong URL nằm trong access log, header Referer và công cụ giám sát. Site này đọc handshake.auth.token trước (nó đi trong gói đầu tiên), rồi tới cookie httpOnly backend_token.</i></p>"
+          },
+          {
+            "ma": "a2",
+            "de": "<p>User 7 (valid token, participant of thread 42 only) emits <code>join:unsafe</code> with 99. What happened?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng 7 (token hợp lệ, chỉ ở thread 42) gửi <code>join:unsafe</code> với 99. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Socket.IO refused, because room names must match the user id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It joined, but rooms never receive messages sent before the join"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It joined thread:99 and received a stranger’s private message — and nothing appeared in the REST logs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The handshake middleware rejected the event, because it runs on every emit"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every socket.on is an endpoint. Thread ids are sequential, so guessing is a for loop, and nothing alerts: no GET /threads/99, no 403.</p><p><i>VI: Mỗi socket.on là một endpoint. Id thread tăng dần nên đoán chỉ là một vòng for, và không gì báo động: không có GET /threads/99, không có 403.</i></p>"
+          },
+          {
+            "ma": "a3",
+            "de": "<p>With <code>pingInterval: 1000, pingTimeout: 2000</code> a phone walks into a lift (sends nothing). Worst case before the server notices?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với <code>pingInterval: 1000, pingTimeout: 2000</code> một điện thoại đi vào thang máy (không gửi gì). Trường hợp xấu nhất trước khi server nhận ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 3,000 ms — pingInterval + pingTimeout (measured 3,010 ms)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2,000 ms — only the timeout counts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1,000 ms — the next ping fails immediately"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never, until TCP keepalive (2 hours) fires"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Defaults 25,000 + 20,000 = up to 45 s of a ghost user; this site’s 25,000 + 60,000 = 85 s. Until then the ghost sits in every room.</p><p><i>VI: Mặc định 25.000 + 20.000 = tới 45 giây một \"bóng ma\"; site này 25.000 + 60.000 = 85 giây. Trong lúc đó bóng ma nằm trong mọi room.</i></p>"
+          },
+          {
+            "ma": "a4",
+            "de": "<p>The client was offline for a second while the server emitted 5 messages. After the automatic reconnect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client offline một giây trong lúc server phát 5 tin. Sau khi tự kết nối lại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A NEW socket id, no rooms, and 0 of the 5 messages — catch up over REST"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A new id, but rooms are restored and the 5 messages replayed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The same socket id and all 5 messages, replayed by Socket.IO"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The same id; messages are lost but rooms are kept"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>By default nothing is buffered. connectionStateRecovery can replay, but in one process’s memory and not behind the classic redis adapter (measured 0/5). The socket is the signal; REST is the truth.</p><p><i>VI: Mặc định không gì được đệm. connectionStateRecovery có thể phát lại, nhưng trong bộ nhớ một tiến trình và không chạy sau redis adapter cổ điển (đo 0/5). Socket là tín hiệu; REST là sự thật.</i></p>"
+          },
+          {
+            "ma": "a5",
+            "de": "<p>Which are on the lesson’s list of realtime mistakes? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào nằm trong danh sách lỗi realtime của bài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Re-checking roleVersion against the database at connect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No rate limit per socket"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Trusting a userId that arrives in the event payload"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Treating the socket as a reliable delivery channel with no REST catch-up"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Checking permissions only at the handshake"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Re-checking roleVersion is the careful part of this site’s handshake: a token issued before a role change is refused even though its signature is valid.</p><p><i>VI: Kiểm lại roleVersion là phần cẩn thận trong lần bắt tay của site này: token cấp trước khi đổi vai trò bị từ chối dù chữ ký vẫn hợp lệ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A type check standing in for a permission check: <code>if (typeof threadId === \"number\") socket.join(…)</code>.|||Kiểm kiểu đứng thay kiểm quyền: <code>if (typeof threadId === \"number\") socket.join(…)</code>."
+        },
+        {
+          "loi": "Building a message queue out of a UI transport.|||Dựng một hàng đợi tin nhắn từ một kênh hiển thị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "authentication",
+          "vi": "xác thực",
+          "giaiThich": "bạn là ai — một lần lúc bắt tay"
+        },
+        {
+          "en": "authorization",
+          "vi": "phân quyền",
+          "giaiThich": "bạn được làm gì — mỗi sự kiện"
+        },
+        {
+          "en": "connect_error",
+          "vi": "lỗi kết nối",
+          "giaiThich": "sự kiện client nhận khi bắt tay bị từ chối"
+        }
+      ]
+    },
+    {
+      "title": "Find the token on the handshake — and refuse the query string",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "WebSocket security",
+        "cookies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>This site’s <code>tokenBatTay()</code> reads the credential in a fixed order. Write <code>extractToken(handshake)</code> for <code>handshake = { auth, headers, query }</code> → <code>{ token, source }</code> or <code>null</code>:</p>\n<ol><li><code>auth.token</code> (a non-empty string) → source <code>'auth'</code>;</li>\n<li>header <code>authorization: Bearer &lt;token&gt;</code> (header name and the word Bearer in any case) → <code>'header'</code>;</li>\n<li>cookie <code>backend_token=&lt;value&gt;</code> in the <code>cookie</code> header (several cookies separated by <code>;</code>, value URL-decoded, an empty value does not count) → <code>'cookie'</code>;</li>\n<li>otherwise <code>null</code> — <b>even if <code>query.token</code> is present</b>.</li></ol><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>tokenBatTay()</code> của site này đọc thông tin xác thực theo thứ tự cố định. Viết <code>extractToken(handshake)</code> với <code>handshake = { auth, headers, query }</code> → <code>{ token, source }</code> hoặc <code>null</code>:</p>\n<ol><li><code>auth.token</code> (chuỗi không rỗng) → source <code>'auth'</code>;</li>\n<li>header <code>authorization: Bearer &lt;token&gt;</code> (tên header và chữ Bearer kiểu chữ nào cũng được) → <code>'header'</code>;</li>\n<li>cookie <code>backend_token=&lt;giá trị&gt;</code> trong header <code>cookie</code> (nhiều cookie cách nhau bằng <code>;</code>, giá trị được giải mã URL, giá trị rỗng không tính) → <code>'cookie'</code>;</li>\n<li>còn lại <code>null</code> — <b>kể cả khi có <code>query.token</code></b>.</li></ol><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "extractToken({ auth: { token: 'eyJhbGciOi.AAA' }, headers: { cookie: 'backend_token=eyJhbGciOi.BBB' }, query: {} })",
+          "output": "{\"token\":\"eyJhbGciOi.AAA\",\"source\":\"auth\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Lower-case the header names, then try the three sources in order and return at the first hit.|||Viết thường tên header, rồi thử ba nguồn theo thứ tự và trả về ở nguồn đầu tiên có.",
+        "For cookies, split on <code>;</code>, then on the FIRST <code>=</code> only (values can contain =).|||Với cookie, tách theo <code>;</code>, rồi chỉ theo dấu <code>=</code> ĐẦU TIÊN (giá trị có thể chứa =)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Where is the credential on this Socket.IO handshake? */\nfunction extractToken(handshake) {\n  // Write your solution here\n  const t = handshake.query && handshake.query.token;\n  if (t) return { token: t, source: 'query' };\n  if (handshake.auth && handshake.auth.token) return { token: handshake.auth.token, source: 'auth' };\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction extractToken(handshake) {\n  const hs = handshake || {};\n  // 1) handshake.auth.token: inside the first packet on every transport, never in a URL\n  if (hs.auth && typeof hs.auth.token === 'string' && hs.auth.token) return { token: hs.auth.token, source: 'auth' };\n  const headers = {};\n  for (const k of Object.keys(hs.headers || {})) headers[k.toLowerCase()] = String(hs.headers[k]);\n  // 2) Authorization: Bearer … — for non-browser clients\n  const m = /^Bearer\\s+(\\S+)$/i.exec(headers.authorization || '');\n  if (m) return { token: m[1], source: 'header' };\n  // 3) the httpOnly cookie the browser sends on the handshake — same as the REST middleware\n  for (const part of (headers.cookie || '').split(';')) {\n    const i = part.indexOf('=');\n    if (i > 0 && part.slice(0, i).trim() === 'backend_token') {\n      const v = decodeURIComponent(part.slice(i + 1).trim());\n      if (v) return { token: v, source: 'cookie' };\n    }\n  }\n  // hs.query.token is deliberately IGNORED: a token in the URL ends up in access logs and Referer headers\n  return null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The handshake is HTTP, so the usual places work — and the order encodes a security decision: the token a JS client passes explicitly, then a header for non-browser clients, then the httpOnly cookie the browser attaches by itself. The query string is refused on purpose, because a URL is the most widely logged thing in your stack.</p>",
+      "solutionExplanationHtmlVi": "<p>Lần bắt tay là HTTP nên các chỗ quen thuộc đều dùng được — và thứ tự mã hoá một quyết định bảo mật: token client JS truyền rõ ràng, rồi header cho client không phải trình duyệt, rồi cookie httpOnly trình duyệt tự gắn. Query string bị từ chối có chủ đích, vì URL là thứ bị ghi log nhiều nhất trong hệ thống.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "auth.token wins",
+              "vi": "auth.token thắng"
+            },
+            "goi": "extractToken({ auth: { token: 'eyJhbGciOi.AAA' }, headers: { cookie: 'backend_token=eyJhbGciOi.BBB' }, query: {} })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "token": "eyJhbGciOi.AAA",
+              "source": "auth"
+            }
+          },
+          {
+            "moTa": {
+              "en": "The httpOnly cookie among others",
+              "vi": "Cookie httpOnly giữa các cookie khác"
+            },
+            "goi": "extractToken({ auth: {}, headers: { Cookie: 'theme=dark; backend_token=eyJhbGciOi.NGUOI-DUNG; lang=vi' }, query: {} })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "token": "eyJhbGciOi.NGUOI-DUNG",
+              "source": "cookie"
+            }
+          },
+          {
+            "moTa": {
+              "en": "The query string is ignored",
+              "vi": "Query string bị bỏ qua"
+            },
+            "goi": "extractToken({ auth: {}, headers: {}, query: { token: 'eyJhbGciOi.LEAKED' } })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[extractToken({ headers: { Authorization: 'bearer abc.def.ghi' } }), extractToken({ headers: { authorization: 'Basic dXNlcjpwYXNz' } }), extractToken({ auth: { token: '' }, headers: { cookie: 'backend_token=' } }), extractToken({})]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "token": "abc.def.ghi",
+                "source": "header"
+              },
+              null,
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[extractToken({ headers: { cookie: 'old_backend_token=x; backend_token=YWJj%3D%3D' } }), extractToken({ headers: { cookie: 'backend_token=a=b==' } }), extractToken({ auth: { token: 42 }, headers: { authorization: 'Bearer t1' } })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "token": "YWJj==",
+                "source": "cookie"
+              },
+              {
+                "token": "a=b==",
+                "source": "cookie"
+              },
+              {
+                "token": "t1",
+                "source": "header"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Accepting <code>?token=</code> \"for convenience\": it is in nginx’s access log forever.|||Nhận <code>?token=</code> \"cho tiện\": nó nằm mãi trong access log của nginx."
+        },
+        {
+          "loi": "Matching <code>cookie.includes(\"backend_token=\")</code>: <code>old_backend_token=x</code> also matches.|||Khớp <code>cookie.includes(\"backend_token=\")</code>: <code>old_backend_token=x</code> cũng khớp."
+        },
+        {
+          "loi": "Splitting a cookie on every <code>=</code>: a base64 value ending in <code>==</code> is cut.|||Tách cookie theo mọi dấu <code>=</code>: giá trị base64 kết thúc bằng <code>==</code> bị cắt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "handshake.auth",
+          "vi": "dữ liệu xác thực lúc bắt tay",
+          "giaiThich": "Socket.IO gửi trong gói đầu tiên"
+        },
+        {
+          "en": "Bearer token",
+          "vi": "token mang theo",
+          "giaiThich": "Authorization: Bearer …"
+        }
+      ]
+    },
+    {
+      "title": "The handshake middleware: verify, load, and re-check roleVersion",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "WebSocket security",
+        "JWT",
+        "middleware"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measurement 1: valid → connected; no token → <code>NO_TOKEN</code>; expired → <code>jwt expired</code>; wrong key → <code>invalid signature</code>. This site also \"loads the user, refuses if the account is disabled or locked, and re-checks roleVersion against the database\". Write <code>socketAuth({ verify, loadUser })</code> → <code>async (socket, next)</code> for <code>io.use</code>:</p>\n<ol><li>token = <code>socket.handshake.auth.token</code>; missing → <code>next(new Error('NO_TOKEN'))</code>;</li>\n<li><code>payload = verify(token)</code>; if it throws → <code>next(err)</code> with that same error;</li>\n<li><code>user = await loadUser(payload.userId)</code>; if it throws → <code>next(new Error('AUTH_UNAVAILABLE'))</code> (fail closed);</li>\n<li>no user → <code>USER_NOT_FOUND</code>; <code>disabled</code> or <code>locked</code> → <code>ACCOUNT_DISABLED</code>; <code>user.roleVersion !== payload.roleVersion</code> → <code>TOKEN_STALE</code>;</li>\n<li>set <code>socket.data.userId = user.id</code> and <code>socket.data.threads</code> = a copy of <code>user.threadIds</code>, then <code>next()</code> with no argument.</li></ol><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép đo 1: hợp lệ → nối được; không token → <code>NO_TOKEN</code>; hết hạn → <code>jwt expired</code>; sai khoá → <code>invalid signature</code>. Site này còn \"nạp người dùng, từ chối nếu tài khoản bị vô hiệu hoá hoặc khoá, và kiểm lại roleVersion với CSDL\". Viết <code>socketAuth({ verify, loadUser })</code> → <code>async (socket, next)</code> cho <code>io.use</code>:</p>\n<ol><li>token = <code>socket.handshake.auth.token</code>; thiếu → <code>next(new Error('NO_TOKEN'))</code>;</li>\n<li><code>payload = verify(token)</code>; nếu ném lỗi → <code>next(err)</code> với đúng lỗi đó;</li>\n<li><code>user = await loadUser(payload.userId)</code>; nếu ném lỗi → <code>next(new Error('AUTH_UNAVAILABLE'))</code> (đóng khi hỏng);</li>\n<li>không có user → <code>USER_NOT_FOUND</code>; <code>disabled</code> hoặc <code>locked</code> → <code>ACCOUNT_DISABLED</code>; <code>user.roleVersion !== payload.roleVersion</code> → <code>TOKEN_STALE</code>;</li>\n<li>gán <code>socket.data.userId = user.id</code> và <code>socket.data.threads</code> = bản sao <code>user.threadIds</code>, rồi <code>next()</code> không đối số.</li></ol><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await handshake(socketAuth({ verify, loadUser }), { token: \"ok:7:3\" })",
+          "output": "[[\"ok\"],{\"userId\":7,\"threads\":[42]}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two separate try/catch blocks: one for verify (pass its error on), one for loadUser (replace it with AUTH_UNAVAILABLE).|||Hai khối try/catch riêng: một cho verify (chuyển tiếp lỗi của nó), một cho loadUser (thay bằng AUTH_UNAVAILABLE).",
+        "Every refusal is <code>return next(new Error(CODE))</code> — the return matters.|||Mỗi lần từ chối là <code>return next(new Error(MÃ))</code> — chữ return quan trọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** io.use(socketAuth({ verify, loadUser })) */\nfunction socketAuth({ verify, loadUser }) {\n  return async function (socket, next) {\n    // Write your solution here\n    const token = socket.handshake.auth.token;\n    if (!token) next(new Error('NO_TOKEN'));\n    try {\n      const payload = verify(token);\n      socket.data.userId = payload.userId;\n    } catch (e) { next(e); }\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction socketAuth({ verify, loadUser }) {\n  return async function (socket, next) {\n    const token = socket.handshake.auth && socket.handshake.auth.token;\n    if (!token) return next(new Error('NO_TOKEN'));            // surfaces on the client as connect_error\n    let payload;\n    try {\n      payload = verify(token);\n    } catch (err) {\n      return next(err);                                         // \"jwt expired\", \"invalid signature\"…\n    }\n    let user;\n    try {\n      user = await loadUser(payload.userId);\n    } catch {\n      return next(new Error('AUTH_UNAVAILABLE'));               // fail CLOSED: no database, no socket\n    }\n    if (!user) return next(new Error('USER_NOT_FOUND'));\n    if (user.disabled || user.locked) return next(new Error('ACCOUNT_DISABLED'));\n    // the part most implementations skip: a password change or role edit bumps roleVersion,\n    // and a token issued before it is refused even though its signature is still valid\n    if (user.roleVersion !== payload.roleVersion) return next(new Error('TOKEN_STALE'));\n    socket.data.userId = user.id;                               // from now on the CLIENT is not trusted about who it is\n    socket.data.threads = user.threadIds.slice();               // loaded once, used by every handler\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The handshake is the one moment a socket proves who it is, so everything that could have invalidated the token since it was issued — the account state and the role version — is checked against the database there, and failures close the door. After it, <code>socket.data.userId</code> is the server’s own record; handlers read it instead of anything the client sends.</p>",
+      "solutionExplanationHtmlVi": "<p>Lần bắt tay là khoảnh khắc duy nhất socket chứng minh nó là ai, nên mọi thứ có thể làm token mất hiệu lực từ lúc cấp — trạng thái tài khoản và phiên bản vai trò — được kiểm với CSDL ngay tại đó, và hỏng thì đóng cửa. Sau đó <code>socket.data.userId</code> là bản ghi của chính server; các handler đọc nó thay vì thứ client gửi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A valid token connects",
+              "vi": "Token hợp lệ nối được"
+            },
+            "goi": "await handshake(socketAuth({ verify, loadUser }), { token: \"ok:7:3\" })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                "ok"
+              ],
+              {
+                "userId": 7,
+                "threads": [
+                  42
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s three refusals",
+              "vi": "Ba lần từ chối của bài"
+            },
+            "goi": "[await handshake(socketAuth({ verify, loadUser }), {}), await handshake(socketAuth({ verify, loadUser }), { token: \"expired:7:3\" }), await handshake(socketAuth({ verify, loadUser }), { token: \"forged:1:1\" })]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                [
+                  "NO_TOKEN"
+                ],
+                {}
+              ],
+              [
+                [
+                  "jwt expired"
+                ],
+                {}
+              ],
+              [
+                [
+                  "invalid signature"
+                ],
+                {}
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Token issued before a role change",
+              "vi": "Token cấp trước lần đổi vai trò"
+            },
+            "goi": "await handshake(socketAuth({ verify, loadUser }), { token: \"ok:7:2\" })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                "TOKEN_STALE"
+              ],
+              {}
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await handshake(socketAuth({ verify, loadUser }), { token: \"ok:8:1\" }), await handshake(socketAuth({ verify, loadUser }), { token: \"ok:404:1\" }), loads]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                [
+                  "ACCOUNT_DISABLED"
+                ],
+                {}
+              ],
+              [
+                [
+                  "USER_NOT_FOUND"
+                ],
+                {}
+              ],
+              [
+                8,
+                404
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { dbDown = true; return [await handshake(socketAuth({ verify, loadUser }), { token: \"ok:9:2\" })]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                [
+                  "AUTH_UNAVAILABLE"
+                ],
+                {}
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const r = await handshake(socketAuth({ verify, loadUser }), { token: \"ok:9:2\" }); r[1].threads.push(99); return [r, USERS[9].threadIds]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst USERS = { 7: { id: 7, roleVersion: 3, threadIds: [42] }, 8: { id: 8, roleVersion: 1, threadIds: [], locked: true }, 9: { id: 9, roleVersion: 2, threadIds: [5, 6] } };\n// fake jwt.verify: \"ok:<userId>:<roleVersion>\" is valid, \"expired:…\" and anything else throw like jsonwebtoken\nfunction verify(t) { const [kind, id, rv] = String(t).split(':'); if (kind === 'expired') throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' }); if (kind !== 'ok') throw Object.assign(new Error('invalid signature'), { name: 'JsonWebTokenError' }); return { userId: Number(id), roleVersion: Number(rv) }; }\nlet dbDown = false; const loads = [];\nasync function loadUser(id) { loads.push(id); await new Promise((r) => setTimeout(r, 3)); if (dbDown) throw new Error('connect ECONNREFUSED'); return USERS[id] || null; }\nasync function handshake(mw, auth) { const socket = { handshake: { auth, headers: {} }, data: {} }; const calls = []; await mw(socket, (e) => calls.push(e ? e.message : 'ok')); return [calls, socket.data]; }\n",
+            "mongDoi": [
+              [
+                [
+                  "ok"
+                ],
+                {
+                  "userId": 9,
+                  "threads": [
+                    5,
+                    6,
+                    99
+                  ]
+                }
+              ],
+              [
+                5,
+                6
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting <code>return</code> before a refusing <code>next(err)</code>: the code goes on and calls <code>next()</code> again — the socket connects.|||Quên <code>return</code> trước <code>next(err)</code> từ chối: code chạy tiếp và gọi <code>next()</code> lần nữa — socket vẫn nối được."
+        },
+        {
+          "loi": "Letting a DB outage connect the socket \"to be resilient\" — fail closed.|||Để CSDL sập mà socket vẫn nối \"cho bền\" — phải đóng khi hỏng."
+        },
+        {
+          "loi": "Skipping roleVersion: a token from before a password change keeps a live socket.|||Bỏ qua roleVersion: token từ trước lần đổi mật khẩu vẫn giữ được socket sống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "io.use",
+          "vi": "middleware của Socket.IO",
+          "giaiThich": "chạy một lần cho mỗi kết nối"
+        },
+        {
+          "en": "roleVersion",
+          "vi": "phiên bản vai trò",
+          "giaiThich": "tăng khi đổi mật khẩu/vai trò ⇒ token cũ mất hiệu lực"
+        },
+        {
+          "en": "fail closed",
+          "vi": "đóng khi hỏng",
+          "giaiThich": "lỗi ⇒ từ chối, không cho qua"
+        }
+      ]
+    },
+    {
+      "title": "Fix the production hole: authorize thread:join and thread:typing",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "WebSocket security",
+        "authorization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The handler that ran in production: <code>socket.on('thread:join', (threadId) =&gt; { if (typeof threadId === 'number') socket.join(`thread:${threadId}`); })</code> — \"a type check standing in for a permission check\". And <code>thread:typing</code> \"had the same shape\". Write <code>makeThreadHandlers({ db, log })</code> → <code>{ joinThread, typing }</code> like the fix:</p>\n<ul><li><code>async joinThread(socket, threadId, ack?)</code>: not a positive integer → <code>ack({ ok:false })</code>; already in <code>thread:&lt;id&gt;</code> → <code>ack({ ok:true })</code> <b>without a DB call</b>; otherwise <code>await db.isParticipant(threadId, socket.data.userId)</code> — if it throws, log <code>{ level:'error', msg:'participant check failed', threadId }</code> and treat it as refused (fail closed); refused → <code>socket.emit('thread:join-denied', { threadId })</code>, log <code>{ level:'warn', msg:'thread join denied', userId, threadId }</code>, <code>ack({ ok:false })</code>; allowed → join, <code>ack({ ok:true })</code>. <code>ack</code> may be missing.</li>\n<li><code>typing(socket, payload)</code>: only if the socket is already in <code>thread:&lt;payload.threadId&gt;</code>: <code>socket.to(room).emit('thread:typing', { threadId, userId: socket.data.userId })</code> and return <code>true</code>; otherwise return <code>false</code>. Never use <code>payload.userId</code>.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Handler từng chạy trên production: <code>socket.on('thread:join', (threadId) =&gt; { if (typeof threadId === 'number') socket.join(`thread:${threadId}`); })</code> — \"một phép kiểm kiểu đứng thay phép kiểm quyền\". Và <code>thread:typing</code> \"cũng cùng kiểu\". Viết <code>makeThreadHandlers({ db, log })</code> → <code>{ joinThread, typing }</code> như bản vá:</p>\n<ul><li><code>async joinThread(socket, threadId, ack?)</code>: không phải số nguyên dương → <code>ack({ ok:false })</code>; đã ở trong <code>thread:&lt;id&gt;</code> → <code>ack({ ok:true })</code> <b>không gọi CSDL</b>; còn lại <code>await db.isParticipant(threadId, socket.data.userId)</code> — ném lỗi thì log <code>{ level:'error', msg:'participant check failed', threadId }</code> và coi như bị từ chối (đóng khi hỏng); bị từ chối → <code>socket.emit('thread:join-denied', { threadId })</code>, log <code>{ level:'warn', msg:'thread join denied', userId, threadId }</code>, <code>ack({ ok:false })</code>; được phép → join, <code>ack({ ok:true })</code>. <code>ack</code> có thể không có.</li>\n<li><code>typing(socket, payload)</code>: chỉ khi socket đã ở trong <code>thread:&lt;payload.threadId&gt;</code>: <code>socket.to(room).emit('thread:typing', { threadId, userId: socket.data.userId })</code> và trả <code>true</code>; không thì trả <code>false</code>. Không bao giờ dùng <code>payload.userId</code>.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const s = fakeSocket(\"a\", { userId: 7 }); const h = makeThreadHandlers({ db, log }); await h.joinThread(s, 99, ack); return [[...s.rooms], s.emitted, acks, log]; })()",
+          "output": "[[\"a\"],[[\"thread:join-denied\",{\"threadId\":99}]],[{\"ok\":false}],[{\"level\":\"warn\",\"msg\":\"thread join denied\",\"userId\":7,\"threadId\":99}]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order: validate → already a member? → ask the DB (try/catch) → deny or join.|||Thứ tự: kiểm hợp lệ → đã là thành viên? → hỏi CSDL (try/catch) → từ chối hoặc join.",
+        "The user id always comes from <code>socket.data.userId</code>, set by the handshake middleware.|||Id người dùng luôn lấy từ <code>socket.data.userId</code>, do middleware bắt tay gán."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** The thread handlers as they ran in production — fix them. */\nfunction makeThreadHandlers({ db, log }) {\n  return {\n    async joinThread(socket, threadId, ack) {\n      // Write your solution here\n      if (typeof threadId === 'number') socket.join('thread:' + threadId);\n      if (ack) ack({ ok: true });\n    },\n    typing(socket, payload) {\n      socket.to('thread:' + payload.threadId).emit('thread:typing', { threadId: payload.threadId, userId: payload.userId });\n      return true;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction makeThreadHandlers({ db, log }) {\n  return {\n    async joinThread(socket, threadId, ack) {\n      const reply = (r) => { if (typeof ack === 'function') ack(r); };\n      const room = 'thread:' + threadId;\n      if (!Number.isInteger(threadId) || threadId <= 0) return reply({ ok: false });\n      if (socket.rooms.has(room)) return reply({ ok: true });       // auto-joined at connect: no DB round trip\n      let allowed = false;\n      try {\n        // the SAME participation query the REST layer uses — and the user id from socket.data, never from the payload\n        allowed = await db.isParticipant(threadId, socket.data.userId);\n      } catch (err) {\n        log.push({ level: 'error', msg: 'participant check failed', threadId });\n        allowed = false;                                             // fail closed\n      }\n      if (!allowed) {\n        socket.emit('thread:join-denied', { threadId });\n        log.push({ level: 'warn', msg: 'thread join denied', userId: socket.data.userId, threadId });\n        return reply({ ok: false });\n      }\n      socket.join(room);\n      reply({ ok: true });\n    },\n    typing(socket, payload) {\n      const threadId = payload && payload.threadId;\n      const room = 'thread:' + threadId;\n      if (!socket.rooms.has(room)) return false;                    // not a member ⇒ cannot type into this chat\n      socket.to(room).emit('thread:typing', { threadId, userId: socket.data.userId });   // payload.userId is ignored\n      return true;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Every socket event handler is an endpoint. It just does not look like one.\" The fix gives each handler what a REST route gets from middleware: an identity from the server (socket.data), a permission check against the same source of truth as REST, a fail-closed path when that check cannot run, and a visible refusal (an event + a log line) — which is the only alerting a socket hole will ever produce.</p>",
+      "solutionExplanationHtmlVi": "<p>\"Mỗi handler sự kiện của socket là một endpoint. Chỉ là nó không trông giống.\" Bản vá cho mỗi handler thứ một route REST nhận từ middleware: danh tính từ server (socket.data), phép kiểm quyền với cùng nguồn sự thật như REST, đường đóng khi phép kiểm không chạy được, và lời từ chối nhìn thấy được (một sự kiện + một dòng log) — thứ báo động duy nhất mà một lỗ socket từng tạo ra.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s attack: user 7 asks for thread 99",
+              "vi": "Đòn của bài: người dùng 7 xin thread 99"
+            },
+            "goi": "await (async () => { const s = fakeSocket(\"a\", { userId: 7 }); const h = makeThreadHandlers({ db, log }); await h.joinThread(s, 99, ack); return [[...s.rooms], s.emitted, acks, log]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                "a"
+              ],
+              [
+                [
+                  "thread:join-denied",
+                  {
+                    "threadId": 99
+                  }
+                ]
+              ],
+              [
+                {
+                  "ok": false
+                }
+              ],
+              [
+                {
+                  "level": "warn",
+                  "msg": "thread join denied",
+                  "userId": 7,
+                  "threadId": 99
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A participant joins",
+              "vi": "Người trong cuộc vào được"
+            },
+            "goi": "await (async () => { const s = fakeSocket(\"a\", { userId: 7 }); const h = makeThreadHandlers({ db, log }); await h.joinThread(s, 42, ack); return [[...s.rooms], acks, queries]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                "a",
+                "thread:42"
+              ],
+              [
+                {
+                  "ok": true
+                }
+              ],
+              [
+                [
+                  42,
+                  7
+                ]
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Already auto-joined: no DB call",
+              "vi": "Đã tự join: không gọi CSDL"
+            },
+            "goi": "await (async () => { const s = fakeSocket(\"a\", { userId: 7 }, [\"thread:42\"]); const h = makeThreadHandlers({ db, log }); await h.joinThread(s, 42, ack); return [acks, queries.length]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                {
+                  "ok": true
+                }
+              ],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "typing: member only, user id from the socket",
+              "vi": "typing: chỉ thành viên, id người dùng từ socket"
+            },
+            "goi": "(() => { const s = fakeSocket(\"a\", { userId: 7 }, [\"thread:42\"]); const h = makeThreadHandlers({ db, log }); return [h.typing(s, { threadId: 42, userId: 1 }), h.typing(s, { threadId: 99 }), s.sentTo]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              true,
+              false,
+              [
+                [
+                  "thread:42",
+                  "thread:typing",
+                  {
+                    "threadId": 42,
+                    "userId": 7
+                  }
+                ]
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { dbDown = true; const s = fakeSocket(\"a\", { userId: 7 }); const h = makeThreadHandlers({ db, log }); await h.joinThread(s, 42, ack); return [[...s.rooms], acks, log, s.emitted]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                "a"
+              ],
+              [
+                {
+                  "ok": false
+                }
+              ],
+              [
+                {
+                  "level": "error",
+                  "msg": "participant check failed",
+                  "threadId": 42
+                },
+                {
+                  "level": "warn",
+                  "msg": "thread join denied",
+                  "userId": 7,
+                  "threadId": 42
+                }
+              ],
+              [
+                [
+                  "thread:join-denied",
+                  {
+                    "threadId": 42
+                  }
+                ]
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const s = fakeSocket(\"a\", { userId: 9 }); const h = makeThreadHandlers({ db, log }); try { await h.joinThread(s, 5); await h.joinThread(s, \"5\"); await h.joinThread(s, 42); } catch (e) { return \"crashed \" + e.name; } return [[...s.rooms].sort(), queries, s.emitted]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction fakeSocket(id, data, rooms) { const s = { id, data, rooms: new Set([id].concat(rooms || [])), emitted: [], sentTo: [] };\n  s.join = (r) => { s.rooms.add(r); }; s.emit = (e, p) => { s.emitted.push([e, p]); }; s.to = (room) => ({ emit: (e, p) => { s.sentTo.push([room, e, p]); } }); return s; }\nconst PARTS = { 42: [7, 3], 99: [1, 2], 5: [9, 7] };\nlet dbDown = false; const queries = []; const log = [];\nconst db = { async isParticipant(threadId, userId) { queries.push([threadId, userId]); await new Promise((r) => setTimeout(r, 5)); if (dbDown) throw new Error('connect ETIMEDOUT'); return (PARTS[threadId] || []).includes(userId); } };\nconst acks = []; const ack = (r) => acks.push(r);\n",
+            "mongDoi": [
+              [
+                "a",
+                "thread:5"
+              ],
+              [
+                [
+                  5,
+                  9
+                ],
+                [
+                  42,
+                  9
+                ]
+              ],
+              [
+                [
+                  "thread:join-denied",
+                  {
+                    "threadId": 42
+                  }
+                ]
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>catch { allowed = true }</code> \"so users are not blocked when the DB is slow\" — fail open is the hole again.|||<code>catch { allowed = true }</code> \"để người dùng không bị chặn khi CSDL chậm\" — mở khi hỏng là lại lỗ hổng."
+        },
+        {
+          "loi": "Trusting <code>payload.userId</code> in typing: anyone can make \"Admin is typing…\" appear.|||Tin <code>payload.userId</code> trong typing: ai cũng làm hiện được \"Admin đang gõ…\"."
+        },
+        {
+          "loi": "Querying the DB for a room the socket was auto-joined to at connect — wasted work on every click.|||Hỏi CSDL cho room socket đã được tự join lúc connect — tốn công mỗi lần bấm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IDOR",
+          "vi": "tham chiếu đối tượng không kiểm quyền",
+          "giaiThich": "đổi một id là thấy dữ liệu người khác"
+        },
+        {
+          "en": "per-event authorization",
+          "vi": "phân quyền theo sự kiện",
+          "giaiThich": "kiểm quyền trong từng socket.on"
+        }
+      ]
+    },
+    {
+      "title": "Catch up after a reconnect: the socket is the signal, REST is the truth",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "reliability",
+        "WebSocket",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measurement 4: five messages sent while offline → 0 received after the reconnect, and the socket id changed. The fix \"is not a bigger buffer, it is a different division of labour\": the socket is the signal, REST is the truth, the client is the referee that \"merges both sources and de-duplicates by id — because the same message can arrive down both paths\". Write <code>createChatClient({ fetchSince, rejoin })</code> → <code>{ onSocketMessage, onReconnect, messages, lastSeenId }</code>:</p>\n<ul><li><code>onSocketMessage(msg)</code> — add <code>msg</code> (<code>{ id, body }</code>, integer id) unless that id is already known; return <code>true</code> if added;</li>\n<li><code>lastSeenId</code> (getter) — the highest id seen so far (0 at first);</li>\n<li><code>async onReconnect()</code> — call <code>rejoin()</code> first (a new socket has no rooms), then <code>await fetchSince(lastSeenId)</code> (the value at the moment of the call) and add every returned message that is not already known; return how many were added;</li>\n<li><code>messages()</code> — all messages sorted by id (socket messages can arrive out of order).</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép đo 4: năm tin gửi lúc offline → nhận 0 sau khi kết nối lại, và socket id đổi. Cách sửa \"không phải bộ đệm lớn hơn, mà là chia việc khác đi\": socket là tín hiệu, REST là sự thật, client là trọng tài \"gộp cả hai nguồn và bỏ trùng theo id — vì cùng một tin có thể tới bằng cả hai đường\". Viết <code>createChatClient({ fetchSince, rejoin })</code> → <code>{ onSocketMessage, onReconnect, messages, lastSeenId }</code>:</p>\n<ul><li><code>onSocketMessage(msg)</code> — thêm <code>msg</code> (<code>{ id, body }</code>, id nguyên) trừ khi id đó đã biết; trả <code>true</code> nếu đã thêm;</li>\n<li><code>lastSeenId</code> (getter) — id lớn nhất đã thấy (ban đầu 0);</li>\n<li><code>async onReconnect()</code> — gọi <code>rejoin()</code> trước (socket mới không có room), rồi <code>await fetchSince(lastSeenId)</code> (giá trị tại lúc gọi) và thêm mọi tin trả về chưa biết; trả số tin đã thêm;</li>\n<li><code>messages()</code> — mọi tin sắp theo id (tin qua socket có thể tới lệch thứ tự).</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const c = createChatClient({ fetchSince, rejoin }); c.onSocketMessage(SERVER[0]); c.onSocketMessage(SERVER[1]); /* offline: 3..7 lost */ const n = await c.onReconnect(); return [n, ids(c), fetched, order]; })()",
+          "output": "[5,[1,2,3,4,5,6,7],[2],[\"rejoin\",\"fetch\"]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A <code>Map</code> keyed by id is the de-duplicator; <code>lastSeenId</code> is the max of the keys.|||Một <code>Map</code> khoá theo id là bộ bỏ trùng; <code>lastSeenId</code> là khoá lớn nhất.",
+        "A socket message can arrive DURING the fetch — the same add() function handles both paths.|||Tin qua socket có thể tới TRONG lúc fetch — cùng một hàm add() xử lý cả hai đường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** A chat client that survives reconnects. */\nfunction createChatClient({ fetchSince, rejoin }) {\n  // Write your solution here\n  const list = [];\n  return {\n    onSocketMessage(msg) { list.push(msg); return true; },\n    async onReconnect() { const missed = await fetchSince(list.length ? list[list.length - 1].id : 0); list.push(...missed); return missed.length; },\n    messages() { return list; },\n    get lastSeenId() { return list.length ? list[list.length - 1].id : 0; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createChatClient({ fetchSince, rejoin }) {\n  const byId = new Map();\n  let lastSeenId = 0;\n  const add = (m) => {\n    if (!m || !Number.isInteger(m.id) || byId.has(m.id)) return false;   // the referee: de-duplicate by id\n    byId.set(m.id, m);\n    if (m.id > lastSeenId) lastSeenId = m.id;\n    return true;\n  };\n  return {\n    onSocketMessage(msg) { return add(msg); },                             // fast, tiny, allowed to be lost\n    async onReconnect() {\n      rejoin();                                                            // a NEW socket has no rooms: join again first\n      const since = lastSeenId;\n      const missed = await fetchSince(since);                              // GET /messages?since=<last id seen>\n      let added = 0;\n      for (const m of missed) if (add(m)) added++;                         // the same message may arrive down both paths\n      return added;\n    },\n    messages() { return [...byId.values()].sort((a, b) => a.id - b.id); },\n    get lastSeenId() { return lastSeenId; },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Design so that a lost socket message is a cosmetic delay, never lost data. The socket path is fast and lossy; the REST path is complete because it asks the database \"everything after X\"; a single de-duplicating merge by id makes the two paths safe to overlap. This is also why connectionStateRecovery is not the answer here: it lives in one process’s memory and does not survive a restart or the redis adapter.</p>",
+      "solutionExplanationHtmlVi": "<p>Thiết kế sao cho mất một tin socket chỉ là trễ hiển thị, không bao giờ mất dữ liệu. Đường socket nhanh mà có thể mất; đường REST đủ vì nó hỏi CSDL \"mọi thứ sau X\"; một phép gộp duy nhất có bỏ trùng theo id làm hai đường chồng nhau mà vẫn an toàn. Đó cũng là lý do connectionStateRecovery không phải câu trả lời ở đây: nó nằm trong bộ nhớ một tiến trình và không sống qua một lần khởi động lại hay redis adapter.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Five lost messages come back over REST",
+              "vi": "Năm tin mất quay về qua REST"
+            },
+            "goi": "await (async () => { const c = createChatClient({ fetchSince, rejoin }); c.onSocketMessage(SERVER[0]); c.onSocketMessage(SERVER[1]); /* offline: 3..7 lost */ const n = await c.onReconnect(); return [n, ids(c), fetched, order]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst SERVER = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, body: 'm' + id }));\nconst fetched = []; const order = [];\nasync function fetchSince(id) { order.push('fetch'); fetched.push(id); await new Promise((r) => setTimeout(r, 40)); return SERVER.filter((m) => m.id > id).map((m) => ({ ...m })); }\nconst rejoin = () => order.push('rejoin');\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              5,
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              [
+                2
+              ],
+              [
+                "rejoin",
+                "fetch"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Message 5 arrives on both paths: shown once",
+              "vi": "Tin 5 tới bằng cả hai đường: hiện một lần"
+            },
+            "goi": "await (async () => { const c = createChatClient({ fetchSince, rejoin }); c.onSocketMessage(SERVER[0]); const p = c.onReconnect(); c.onSocketMessage(SERVER[4]); const n = await p; return [n, ids(c)]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst SERVER = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, body: 'm' + id }));\nconst fetched = []; const order = [];\nasync function fetchSince(id) { order.push('fetch'); fetched.push(id); await new Promise((r) => setTimeout(r, 40)); return SERVER.filter((m) => m.id > id).map((m) => ({ ...m })); }\nconst rejoin = () => order.push('rejoin');\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              5,
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Out of order and duplicated",
+              "vi": "Lệch thứ tự và bị trùng"
+            },
+            "goi": "(() => { const c = createChatClient({ fetchSince, rejoin }); const r = [c.onSocketMessage(SERVER[2]), c.onSocketMessage(SERVER[0]), c.onSocketMessage(SERVER[2])]; return [r, ids(c), c.lastSeenId]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst SERVER = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, body: 'm' + id }));\nconst fetched = []; const order = [];\nasync function fetchSince(id) { order.push('fetch'); fetched.push(id); await new Promise((r) => setTimeout(r, 40)); return SERVER.filter((m) => m.id > id).map((m) => ({ ...m })); }\nconst rejoin = () => order.push('rejoin');\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              [
+                true,
+                true,
+                false
+              ],
+              [
+                1,
+                3
+              ],
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const c = createChatClient({ fetchSince, rejoin }); c.onSocketMessage(SERVER[0]); c.onSocketMessage(SERVER[1]); c.onSocketMessage(SERVER[2]); const n = await c.onReconnect(); c.onSocketMessage({ id: 8, body: \"m8\" }); return [n, fetched, ids(c), c.lastSeenId]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst SERVER = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, body: 'm' + id }));\nconst fetched = []; const order = [];\nasync function fetchSince(id) { order.push('fetch'); fetched.push(id); await new Promise((r) => setTimeout(r, 40)); return SERVER.filter((m) => m.id > id).map((m) => ({ ...m })); }\nconst rejoin = () => order.push('rejoin');\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              4,
+              [
+                3
+              ],
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ],
+              8
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const c = createChatClient({ fetchSince, rejoin }); const a = await c.onReconnect(); const b = await c.onReconnect(); return [a, b, fetched, order, c.onSocketMessage({ id: 7, body: \"dup\" }), c.onSocketMessage({ id: \"8\" }), ids(c)]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst SERVER = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, body: 'm' + id }));\nconst fetched = []; const order = [];\nasync function fetchSince(id) { order.push('fetch'); fetched.push(id); await new Promise((r) => setTimeout(r, 40)); return SERVER.filter((m) => m.id > id).map((m) => ({ ...m })); }\nconst rejoin = () => order.push('rejoin');\nconst ids = (c) => c.messages().map((m) => m.id);\n",
+            "mongDoi": [
+              7,
+              0,
+              [
+                0,
+                7
+              ],
+              [
+                "rejoin",
+                "fetch",
+                "rejoin",
+                "fetch"
+              ],
+              false,
+              false,
+              [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Appending fetched messages to an array: the one that also arrived on the socket shows twice.|||Nối tin fetch vào mảng: tin cũng tới qua socket hiện hai lần."
+        },
+        {
+          "loi": "Fetching \"since the last message in the array\" when the array is unsorted: an out-of-order frame makes you skip messages.|||Fetch \"từ tin cuối trong mảng\" khi mảng chưa sắp: một frame lệch thứ tự làm bạn bỏ sót tin."
+        },
+        {
+          "loi": "Not re-joining: the REST catch-up works once, then nothing arrives live because the new socket has no rooms.|||Không join lại: lần bù qua REST chạy một lần, rồi không gì tới trực tiếp vì socket mới không có room."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "catch-up",
+          "vi": "bù tin",
+          "giaiThich": "lấy qua REST những gì đã lỡ"
+        },
+        {
+          "en": "de-duplicate",
+          "vi": "bỏ trùng",
+          "giaiThich": "cùng id chỉ giữ một bản"
+        }
+      ]
+    }
+  ]
+}

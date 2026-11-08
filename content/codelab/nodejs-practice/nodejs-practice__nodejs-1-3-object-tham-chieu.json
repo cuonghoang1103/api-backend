@@ -1,0 +1,948 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-1-3-object-tham-chieu",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-1-3-object-tham-chieu"
+  },
+  "exercises": [
+    {
+      "title": "Predict it: copies, defaults and fallbacks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lines in the style of lesson 1.3. Decide the output first, then run it in Node to check.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các dòng theo kiểu bài 1.3. Tự quyết output trước, rồi chạy bằng Node để kiểm.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For every copy ask: was the nested value copied, or only the reference to it?|||Với mỗi lần sao chép hỏi: giá trị lồng được chép, hay chỉ tham chiếu?",
+        "Defaults and <code>??</code> look at null/undefined; <code>||</code> looks at \"falsy\" (0, \"\", false, NaN too).|||Mặc định và ?? nhìn null/undefined; || nhìn \"falsy\" (cả 0, \"\", false, NaN)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict it: copies, defaults and fallbacks\n\nAnswer in the answer panel (no code needed).\n\n1. const a = { name: 'An', tags: ['x'] }; const b = { ...a }; b.name = 'Binh'; b.tags.push('y'); console.log(a.name, JSON.stringify(a.tags));Sửa bản sao bằng spread.\n2. const { title, body = '', tags = [] } = { title: 'T', body: null }; console.log(JSON.stringify({ title, body, tags }));Client gửi body: null.\n3. What does Number(req.query.limit) || 20 give when the client sends ?limit=0?Number(req.query.limit) || 20 khi client gửi ?limit=0?\n4. const n = { createdAt: new Date('2026-01-01T00:00:00Z') }; const j = JSON.parse(JSON.stringify(n)); console.log(typeof j.createdAt);Sao chép bằng JSON.\n5. const user = { id: 1, passwordHash: 'h' }; const { passwordHash, ...safe } = user; console.log(JSON.stringify(safe), 'passwordHash' in user);Bỏ trường bí mật bằng rest.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict it: copies, defaults and fallbacks — answer key\n\n1. const a = { name: 'An', tags: ['x'] }; const b = { ...a }; b.name = 'Binh'; b.tags.push('y'); console.log(a.name, JSON.stringify(a.tags));Sửa bản sao bằng spread.\n   Answer: d) An [\"x\",\"y\"]\n   Spread copies ONE level: name is a new string slot in b, so a.name stays \"An\". tags is copied as a reference — both objects point at the same array, so the push shows through a.VI: Spread chép MỘT tầng: name là ô mới trong b nên a.name vẫn \"An\". tags được chép dạng tham chiếu — hai object trỏ cùng một mảng, nên push hiện cả qua a.\n\n2. const { title, body = '', tags = [] } = { title: 'T', body: null }; console.log(JSON.stringify({ title, body, tags }));Client gửi body: null.\n   Answer: c) {\"title\":\"T\",\"body\":null,\"tags\":[]}\n   A destructuring default fires only on undefined. body was sent as null, so you get null, not ''. tags was missing (undefined) ⇒ the default [].VI: Giá trị mặc định khi phân rã chỉ áp khi undefined. body được gửi là null nên nhận null, không phải ''. tags thiếu (undefined) ⇒ mặc định [].\n\n3. What does Number(req.query.limit) || 20 give when the client sends ?limit=0?Number(req.query.limit) || 20 khi client gửi ?limit=0?\n   Answer: d) 20 — 0 is falsy, so || replaces a legitimate value\n   Number('0') is 0, which is falsy, so || picks 20. With ?? you would keep 0. (The raw string '0' is truthy — the bug appears only after converting to a number, which is exactly what pagination code does.)VI: Number('0') là 0, giá trị falsy, nên || chọn 20. Với ?? bạn giữ 0. (Chuỗi '0' thô là truthy — bug chỉ xuất hiện sau khi đổi sang số, đúng việc code phân trang làm.)\n\n4. const n = { createdAt: new Date('2026-01-01T00:00:00Z') }; const j = JSON.parse(JSON.stringify(n)); console.log(typeof j.createdAt);Sao chép bằng JSON.\n   Answer: c) string\n   JSON has no Date type: stringify writes the ISO string and parse leaves it a string. structuredClone keeps it a real Date (and keeps Map/Set too).VI: JSON không có kiểu Date: stringify ghi chuỗi ISO và parse để nguyên chuỗi. structuredClone giữ đúng Date (và Map/Set).\n\n5. const user = { id: 1, passwordHash: 'h' }; const { passwordHash, ...safe } = user; console.log(JSON.stringify(safe), 'passwordHash' in user);Bỏ trường bí mật bằng rest.\n   Answer: a) {\"id\":1} true\n   The rest pattern builds a NEW object with every field except the named ones; the original user is untouched (still has its hash). That is why it is safe to use on a row you might still need.VI: Rest tạo object MỚI gồm mọi trường trừ những trường được gọi tên; user gốc không bị đụng (vẫn còn hash). Vì thế dùng được trên một bản ghi bạn còn cần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> An [\"x\",\"y\"]</p><p>Spread copies ONE level: <code>name</code> is a new string slot in <code>b</code>, so <code>a.name</code> stays \"An\". <code>tags</code> is copied as a reference — both objects point at the same array, so the push shows through <code>a</code>.</p><p><i>VI: Spread chép MỘT tầng: name là ô mới trong b nên a.name vẫn \"An\". tags được chép dạng tham chiếu — hai object trỏ cùng một mảng, nên push hiện cả qua a.</i></p></li><li><p><b>c)</b> {\"title\":\"T\",\"body\":null,\"tags\":[]}</p><p>A destructuring default fires only on <code>undefined</code>. <code>body</code> was sent as <code>null</code>, so you get <code>null</code>, not <code>''</code>. <code>tags</code> was missing (undefined) ⇒ the default <code>[]</code>.</p><p><i>VI: Giá trị mặc định khi phân rã chỉ áp khi undefined. body được gửi là null nên nhận null, không phải ''. tags thiếu (undefined) ⇒ mặc định [].</i></p></li><li><p><b>d)</b> 20 — 0 is falsy, so || replaces a legitimate value</p><p><code>Number('0')</code> is 0, which is falsy, so <code>||</code> picks 20. With <code>??</code> you would keep 0. (The raw string <code>'0'</code> is truthy — the bug appears only after converting to a number, which is exactly what pagination code does.)</p><p><i>VI: Number('0') là 0, giá trị falsy, nên || chọn 20. Với ?? bạn giữ 0. (Chuỗi '0' thô là truthy — bug chỉ xuất hiện sau khi đổi sang số, đúng việc code phân trang làm.)</i></p></li><li><p><b>c)</b> string</p><p>JSON has no Date type: <code>stringify</code> writes the ISO string and <code>parse</code> leaves it a string. <code>structuredClone</code> keeps it a real Date (and keeps Map/Set too).</p><p><i>VI: JSON không có kiểu Date: stringify ghi chuỗi ISO và parse để nguyên chuỗi. structuredClone giữ đúng Date (và Map/Set).</i></p></li><li><p><b>a)</b> {\"id\":1} true</p><p>The rest pattern builds a NEW object with every field except the named ones; the original <code>user</code> is untouched (still has its hash). That is why it is safe to use on a row you might still need.</p><p><i>VI: Rest tạo object MỚI gồm mọi trường trừ những trường được gọi tên; user gốc không bị đụng (vẫn còn hash). Vì thế dùng được trên một bản ghi bạn còn cần.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "<p><pre>const a = { name: 'An', tags: ['x'] };\nconst b = { ...a };\nb.name = 'Binh';\nb.tags.push('y');\nconsole.log(a.name, JSON.stringify(a.tags));</pre></p><p style=\"opacity:.75;font-size:.92em\"><i>Sửa bản sao bằng spread.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Binh [\"x\",\"y\"]"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Binh [\"x\"]"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An [\"x\"]"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An [\"x\",\"y\"]"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Spread copies ONE level: <code>name</code> is a new string slot in <code>b</code>, so <code>a.name</code> stays \"An\". <code>tags</code> is copied as a reference — both objects point at the same array, so the push shows through <code>a</code>.</p><p><i>VI: Spread chép MỘT tầng: name là ô mới trong b nên a.name vẫn \"An\". tags được chép dạng tham chiếu — hai object trỏ cùng một mảng, nên push hiện cả qua a.</i></p>"
+          },
+          {
+            "ma": "r2",
+            "de": "<p><pre>const { title, body = '', tags = [] } = { title: 'T', body: null };\nconsole.log(JSON.stringify({ title, body, tags }));</pre></p><p style=\"opacity:.75;font-size:.92em\"><i>Client gửi body: null.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"title\":\"T\",\"body\":\"\",\"tags\":[]}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TypeError: Cannot destructure null"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"title\":\"T\",\"body\":null,\"tags\":[]}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{\"title\":\"T\",\"tags\":[]}"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A destructuring default fires only on <code>undefined</code>. <code>body</code> was sent as <code>null</code>, so you get <code>null</code>, not <code>''</code>. <code>tags</code> was missing (undefined) ⇒ the default <code>[]</code>.</p><p><i>VI: Giá trị mặc định khi phân rã chỉ áp khi undefined. body được gửi là null nên nhận null, không phải ''. tags thiếu (undefined) ⇒ mặc định [].</i></p>"
+          },
+          {
+            "ma": "r3",
+            "de": "<p>What does <code>Number(req.query.limit) || 20</code> give when the client sends <code>?limit=0</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Number(req.query.limit) || 20 khi client gửi ?limit=0?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0 — || only replaces null and undefined"
+              },
+              {
+                "ma": "b",
+                "noiDung": "NaN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"0\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "20 — 0 is falsy, so || replaces a legitimate value"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p><code>Number('0')</code> is 0, which is falsy, so <code>||</code> picks 20. With <code>??</code> you would keep 0. (The raw string <code>'0'</code> is truthy — the bug appears only after converting to a number, which is exactly what pagination code does.)</p><p><i>VI: Number('0') là 0, giá trị falsy, nên || chọn 20. Với ?? bạn giữ 0. (Chuỗi '0' thô là truthy — bug chỉ xuất hiện sau khi đổi sang số, đúng việc code phân trang làm.)</i></p>"
+          },
+          {
+            "ma": "r4",
+            "de": "<p><pre>const n = { createdAt: new Date('2026-01-01T00:00:00Z') };\nconst j = JSON.parse(JSON.stringify(n));\nconsole.log(typeof j.createdAt);</pre></p><p style=\"opacity:.75;font-size:.92em\"><i>Sao chép bằng JSON.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "c",
+                "noiDung": "string"
+              },
+              {
+                "ma": "d",
+                "noiDung": "object"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>JSON has no Date type: <code>stringify</code> writes the ISO string and <code>parse</code> leaves it a string. <code>structuredClone</code> keeps it a real Date (and keeps Map/Set too).</p><p><i>VI: JSON không có kiểu Date: stringify ghi chuỗi ISO và parse để nguyên chuỗi. structuredClone giữ đúng Date (và Map/Set).</i></p>"
+          },
+          {
+            "ma": "r5",
+            "de": "<p><pre>const user = { id: 1, passwordHash: 'h' };\nconst { passwordHash, ...safe } = user;\nconsole.log(JSON.stringify(safe), 'passwordHash' in user);</pre></p><p style=\"opacity:.75;font-size:.92em\"><i>Bỏ trường bí mật bằng rest.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"id\":1} true"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"id\":1,\"passwordHash\":\"h\"} true"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"id\":1} false"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{} true"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The rest pattern builds a NEW object with every field except the named ones; the original <code>user</code> is untouched (still has its hash). That is why it is safe to use on a row you might still need.</p><p><i>VI: Rest tạo object MỚI gồm mọi trường trừ những trường được gọi tên; user gốc không bị đụng (vẫn còn hash). Vì thế dùng được trên một bản ghi bạn còn cần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing <code>{ ...obj }</code> is a full copy.|||Tin { ...obj } là bản sao đầy đủ."
+        },
+        {
+          "loi": "Expecting a destructuring default to replace <code>null</code>.|||Tưởng mặc định khi phân rã thay được null."
+        },
+        {
+          "loi": "Copying with <code>JSON.parse(JSON.stringify())</code> and losing Dates.|||Sao chép bằng JSON.parse(JSON.stringify()) rồi mất Date."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value vs reference",
+          "vi": "giá trị vs tham chiếu",
+          "giaiThich": "Primitives are copied; a variable holding an object holds a reference to it."
+        },
+        {
+          "en": "shallow copy",
+          "vi": "bản sao nông",
+          "giaiThich": "{ ...obj } copies one level; nested objects are still shared."
+        },
+        {
+          "en": "deep copy",
+          "vi": "bản sao sâu",
+          "giaiThich": "A fully independent copy — structuredClone(obj)."
+        },
+        {
+          "en": "destructuring",
+          "vi": "phân rã",
+          "giaiThich": "const { title, body = \"\" } = req.body — pull fields into variables, with defaults."
+        },
+        {
+          "en": "rest pattern",
+          "vi": "phần còn lại",
+          "giaiThich": "const { passwordHash, ...safe } = user — everything except the named fields."
+        },
+        {
+          "en": "nullish coalescing (??)",
+          "vi": "toán tử ??",
+          "giaiThich": "Falls back only on null/undefined; || also replaces 0, \"\" and false."
+        }
+      ]
+    },
+    {
+      "title": "toPublicUser: strip secrets without touching the original",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "rest destructuring",
+        "immutability",
+        "secrets in responses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Before a user row goes into a response, the secret fields must go: <code>passwordHash</code> and <code>resetToken</code>. Write <code>toPublicUser(user)</code> that returns a <b>new</b> object with every other field. The original row must keep its fields — the service may still need the hash to check a password.</p><pre>const row = { id: 7, email: 'an@example.com', passwordHash: '$2b$...', resetToken: 'abc', role: 'student' };\ntoPublicUser(row);   // { id: 7, email: 'an@example.com', role: 'student' }\nrow.passwordHash;    // still '$2b$...'</pre><p>The starter uses <code>delete</code> on the row itself — the response is right, but it destroys the caller's data.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return a new object without <code>passwordHash</code> and <code>resetToken</code>.</li>\n  <li>Keep every other field, whatever it is called.</li>\n  <li>Do not modify the argument.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi bản ghi user vào response, các trường bí mật phải bỏ: passwordHash và resetToken. Viết toPublicUser(user) trả object MỚI gồm các trường còn lại. Bản ghi gốc phải giữ nguyên — service có thể còn cần hash để kiểm mật khẩu. Code khởi đầu dùng delete trên chính bản ghi — response đúng nhưng phá dữ liệu của bên gọi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả object mới không có passwordHash và resetToken.</li>\n  <li>Giữ mọi trường khác, tên gì cũng được.</li>\n  <li>Không sửa đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toPublicUser({ id: 7, email: 'an@example.com', passwordHash: 'h', resetToken: 't', role: 'student' })",
+          "output": "{\"id\":7,\"email\":\"an@example.com\",\"role\":\"student\"}",
+          "explanation": "Secrets removed, other fields kept.|||Bỏ bí mật, giữ trường khác."
+        }
+      ],
+      "hintsJson": [
+        "The lesson line: <code>const { passwordHash, ...safeUser } = user;</code>|||Dòng trong bài: const { passwordHash, ...safeUser } = user;",
+        "You can name more than one field before the rest: <code>{ a, b, ...rest }</code>.|||Có thể gọi tên nhiều trường trước phần rest: { a, b, ...rest }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function toPublicUser(user) {\n  delete user.passwordHash;\n  delete user.resetToken;\n  return user;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Destructure the secrets OUT; \"rest\" collects every other field into a\n// NEW object. The caller's row keeps passwordHash (it may still need it).\nfunction toPublicUser(user) {\n  const { passwordHash, resetToken, ...publicUser } = user;\n  return publicUser;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The rest pattern creates a fresh object containing every own field except the ones you named, so the secrets never reach the response object and the original row is untouched. Because it is a new object, later code that adds properties to the response cannot leak back into the database row either.</p>",
+      "solutionExplanationHtmlVi": "<p>Rest tạo object mới chứa mọi trường trừ các trường đã gọi tên, nên bí mật không bao giờ vào object response và bản ghi gốc nguyên vẹn. Vì là object mới, code sau này thêm thuộc tính vào response cũng không rò ngược lại bản ghi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "secrets removed, other fields kept",
+              "vi": "bỏ bí mật, giữ trường khác"
+            },
+            "goi": "toPublicUser({ id: 7, email: 'an@example.com', passwordHash: 'h', resetToken: 't', role: 'student' })",
+            "mongDoi": {
+              "id": 7,
+              "email": "an@example.com",
+              "role": "student"
+            }
+          },
+          {
+            "moTa": {
+              "en": "the original row keeps passwordHash",
+              "vi": "bản ghi gốc giữ passwordHash"
+            },
+            "goi": "(() => { const row = { id: 1, passwordHash: 'h', resetToken: 't' }; const out = toPublicUser(row); return [row.passwordHash, row.resetToken, out === row]; })()",
+            "mongDoi": [
+              "h",
+              "t",
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "toPublicUser({ id: 2, name: 'Binh', avatarUrl: null, createdAt: '2026-01-01', passwordHash: 'x' })",
+            "mongDoi": {
+              "id": 2,
+              "name": "Binh",
+              "avatarUrl": null,
+              "createdAt": "2026-01-01"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const row = { id: 3, email: 'c@d.e' }; const out = toPublicUser(row); out.extra = 1; return [row, out]; })()",
+            "mongDoi": [
+              {
+                "id": 3,
+                "email": "c@d.e"
+              },
+              {
+                "id": 3,
+                "email": "c@d.e",
+                "extra": 1
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>delete user.passwordHash</code> — mutates the caller's object; the next line that verifies a password gets <code>undefined</code>.|||delete user.passwordHash — sửa object của bên gọi; dòng kiểm mật khẩu kế tiếp nhận undefined."
+        },
+        {
+          "loi": "Building the result by listing \"safe\" fields by hand from memory and forgetting one later — the lesson's point is to strip secrets explicitly.|||Tự liệt kê các trường \"an toàn\" theo trí nhớ rồi sau quên một trường — ý bài học là bỏ bí mật một cách tường minh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value vs reference",
+          "vi": "giá trị vs tham chiếu",
+          "giaiThich": "Primitives are copied; a variable holding an object holds a reference to it."
+        },
+        {
+          "en": "shallow copy",
+          "vi": "bản sao nông",
+          "giaiThich": "{ ...obj } copies one level; nested objects are still shared."
+        },
+        {
+          "en": "deep copy",
+          "vi": "bản sao sâu",
+          "giaiThich": "A fully independent copy — structuredClone(obj)."
+        },
+        {
+          "en": "destructuring",
+          "vi": "phân rã",
+          "giaiThich": "const { title, body = \"\" } = req.body — pull fields into variables, with defaults."
+        },
+        {
+          "en": "rest pattern",
+          "vi": "phần còn lại",
+          "giaiThich": "const { passwordHash, ...safe } = user — everything except the named fields."
+        },
+        {
+          "en": "nullish coalescing (??)",
+          "vi": "toán tử ??",
+          "giaiThich": "Falls back only on null/undefined; || also replaces 0, \"\" and false."
+        }
+      ]
+    },
+    {
+      "title": "readPagination: ?? not || (and a 0 that must survive)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "nullish coalescing",
+        "type conversion",
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson's \"really annoying pagination bug\": <code>Number(req.query.limit) || 20</code> turns a legitimate <code>limit=0</code> into 20. Write <code>readPagination(query)</code> for <code>GET /notes</code>. <code>query</code> values are <b>strings</b> (or missing), like Express's <code>req.query</code>.</p>\n<ul><li><b>limit</b>: missing or <code>''</code> ⇒ 20. A whole number ≥ 0 ⇒ that number (<code>'0'</code> ⇒ 0: the client only wants the total). Above 100 ⇒ 100. Anything else (<code>'abc'</code>, <code>'-5'</code>, <code>'2.5'</code>) ⇒ 20.</li>\n<li><b>page</b>: missing or <code>''</code> ⇒ 1. A whole number ≥ 1 ⇒ that number. Anything else ⇒ 1.</li></ul><pre>readPagination({})                          // { page: 1, limit: 20 }\nreadPagination({ page: '3', limit: '0' })   // { page: 3, limit: 0 }\nreadPagination({ limit: '500' })            // { page: 1, limit: 100 }</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Return <code>{ page, limit }</code> as numbers.</li>\n  <li><code>limit=0</code> stays 0; cap at 100; invalid ⇒ default.</li>\n  <li>Do not modify <code>query</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Bug phân trang rất khó chịu\" của bài: Number(req.query.limit) || 20 biến limit=0 hợp lệ thành 20. Viết readPagination(query) cho GET /notes; giá trị là CHUỖI (hoặc thiếu). limit: thiếu/'' ⇒ 20; số nguyên ≥ 0 ⇒ giữ ('0' ⇒ 0); > 100 ⇒ 100; còn lại ⇒ 20. page: thiếu/'' ⇒ 1; số nguyên ≥ 1 ⇒ giữ; còn lại ⇒ 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả { page, limit } dạng số.</li>\n  <li>limit=0 giữ 0; trần 100; không hợp lệ ⇒ mặc định.</li>\n  <li>Không sửa query.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readPagination({ page: '3', limit: '0' })",
+          "output": "{\"page\":3,\"limit\":0}",
+          "explanation": "The starter returns limit 20.|||Code khởi đầu trả limit 20."
+        }
+      ],
+      "hintsJson": [
+        "First decide \"missing\" (<code>undefined</code>, <code>null</code> or <code>''</code>) on the raw string, THEN convert with <code>Number()</code>.|||Quyết \"thiếu\" (undefined, null hoặc '') trên chuỗi thô TRƯỚC, RỒI mới đổi bằng Number().",
+        "<code>Number.isInteger(n)</code> is false for NaN and 2.5 — one check covers \"abc\" and decimals.|||Number.isInteger(n) false với NaN và 2.5 — một phép kiểm phủ cả \"abc\" lẫn số lẻ.",
+        "A small helper <code>toInt(raw, fallback, min)</code> used for both fields keeps it short.|||Một hàm nhỏ toInt(raw, fallback, min) dùng cho cả hai trường cho gọn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readPagination(query) {\n  const page = Number(query.page) || 1;\n  const limit = Number(query.limit) || 20;\n  return { page, limit };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Decide \"missing\" on the RAW string first: after Number() it is too late\n// (Number(undefined) is NaN, Number('') is 0).\nfunction toInt(raw, fallback, min) {\n  if (raw === undefined || raw === null || raw === '') return fallback;\n  const n = Number(raw);\n  // isInteger rejects NaN ('abc'), decimals ('2.5') and Infinity in one check\n  if (!Number.isInteger(n) || n < min) return fallback;\n  return n;\n}\n\nfunction readPagination(query) {\n  const page = toInt(query.page, 1, 1);           // page 0 or below -> 1\n  const limit = Math.min(toInt(query.limit, 20, 0), 100); // 0 is legitimate; cap 100\n  return { page, limit };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The fix is about ORDER: check for \"missing\" on the raw value, where <code>undefined</code>/<code>''</code> are still visible, and only then convert. After <code>Number()</code> the information is gone: missing became NaN, empty became 0. <code>Number.isInteger</code> then rejects NaN, decimals and Infinity in one test, and the explicit <code>&gt;= min</code> keeps a deliberate 0 for limit while refusing page 0. Nothing relies on falsiness, so no legitimate value is replaced.</p>",
+      "solutionExplanationHtmlVi": "<p>Bản sửa nằm ở THỨ TỰ: kiểm \"thiếu\" trên giá trị thô, nơi undefined/'' còn nhìn thấy, rồi mới đổi kiểu. Sau Number() thông tin đã mất: thiếu thành NaN, rỗng thành 0. Number.isInteger loại NaN, số lẻ và Infinity trong một phép, còn >= min tường minh giữ số 0 cố ý của limit nhưng từ chối page 0. Không dựa vào falsy nên không giá trị hợp lệ nào bị thay.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "nothing sent ⇒ { page: 1, limit: 20 }",
+              "vi": "không gửi gì ⇒ { page: 1, limit: 20 }"
+            },
+            "goi": "readPagination({})",
+            "mongDoi": {
+              "page": 1,
+              "limit": 20
+            }
+          },
+          {
+            "moTa": {
+              "en": "limit '0' stays 0",
+              "vi": "limit '0' giữ 0"
+            },
+            "goi": "readPagination({ page: '3', limit: '0' })",
+            "mongDoi": {
+              "page": 3,
+              "limit": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "limit is capped at 100",
+              "vi": "limit bị chặn ở 100"
+            },
+            "goi": "readPagination({ limit: '500' })",
+            "mongDoi": {
+              "page": 1,
+              "limit": 100
+            }
+          },
+          {
+            "moTa": {
+              "en": "'abc' ⇒ defaults (not NaN)",
+              "vi": "'abc' ⇒ mặc định (không NaN)"
+            },
+            "goi": "readPagination({ page: 'abc', limit: 'abc' })",
+            "mongDoi": {
+              "page": 1,
+              "limit": 20
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[readPagination({ page: '0', limit: '-5' }), readPagination({ page: '2.5', limit: '2.5' }), readPagination({ page: '', limit: '' })]",
+            "mongDoi": [
+              {
+                "page": 1,
+                "limit": 20
+              },
+              {
+                "page": 1,
+                "limit": 20
+              },
+              {
+                "page": 1,
+                "limit": 20
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[readPagination({ page: '7', limit: '100' }), readPagination({ page: '12', limit: '101' }), readPagination({ limit: '1' })]",
+            "mongDoi": [
+              {
+                "page": 7,
+                "limit": 100
+              },
+              {
+                "page": 12,
+                "limit": 100
+              },
+              {
+                "page": 1,
+                "limit": 1
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(() => { const qy = { page: '2' }; readPagination(qy); return Object.keys(qy); })()",
+            "mongDoi": [
+              "page"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>Number(q.limit) || 20</code> — the 0 becomes 20 (the lesson's bug).|||Number(q.limit) || 20 — 0 thành 20 (bug của bài)."
+        },
+        {
+          "loi": "<code>Number(q.limit) ?? 20</code> — looks fixed, but <code>Number(undefined)</code> is <code>NaN</code>, not undefined, so ?? never fires and you return NaN (measured in Node 22).|||Number(q.limit) ?? 20 — trông đã sửa, nhưng Number(undefined) là NaN chứ không phải undefined, nên ?? không bao giờ chạy và bạn trả NaN (đo trên Node 22)."
+        },
+        {
+          "loi": "Forgetting that <code>Number('')</code> is 0 — an empty <code>?limit=</code> would mean \"zero rows\" instead of the default.|||Quên Number('') là 0 — ?limit= rỗng sẽ thành \"không dòng nào\" thay vì mặc định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value vs reference",
+          "vi": "giá trị vs tham chiếu",
+          "giaiThich": "Primitives are copied; a variable holding an object holds a reference to it."
+        },
+        {
+          "en": "shallow copy",
+          "vi": "bản sao nông",
+          "giaiThich": "{ ...obj } copies one level; nested objects are still shared."
+        },
+        {
+          "en": "deep copy",
+          "vi": "bản sao sâu",
+          "giaiThich": "A fully independent copy — structuredClone(obj)."
+        },
+        {
+          "en": "destructuring",
+          "vi": "phân rã",
+          "giaiThich": "const { title, body = \"\" } = req.body — pull fields into variables, with defaults."
+        },
+        {
+          "en": "rest pattern",
+          "vi": "phần còn lại",
+          "giaiThich": "const { passwordHash, ...safe } = user — everything except the named fields."
+        },
+        {
+          "en": "nullish coalescing (??)",
+          "vi": "toán tử ??",
+          "giaiThich": "Falls back only on null/undefined; || also replaces 0, \"\" and false."
+        }
+      ]
+    },
+    {
+      "title": "updateNote: merge changes without mutating the stored note",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "spread",
+        "immutability",
+        "shallow copy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"Spread: update without mutating\" — the lesson's <code>{ ...note, title: 'New title', updatedAt: … }</code>. Write <code>updateNote(note, changes)</code> that returns a <b>new</b> note:</p>\n<ul><li>Top-level fields from <code>changes</code> replace the old ones (<code>title</code>, <code>body</code>, …).</li>\n<li><code>changes.meta</code>, if present, is <b>merged</b> into <code>note.meta</code> (keep the meta fields not mentioned) — and the result's <code>meta</code> must be a new object, not shared with the original.</li>\n<li><code>id</code> and <code>ownerId</code> can never be changed by <code>changes</code>.</li>\n<li><code>updatedAt</code> is set to <code>Date.now()</code>.</li></ul><pre>const note = { id: 1, ownerId: 9, title: 'Old', meta: { pinned: false, color: 'blue' }, updatedAt: 0 };\nupdateNote(note, { title: 'New', meta: { pinned: true }, id: 99 });\n// { id: 1, ownerId: 9, title: 'New', meta: { pinned: true, color: 'blue' }, updatedAt: &lt;now&gt; }\nnote.title;        // still 'Old'\nnote.meta.pinned;  // still false</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Return a new object; never modify <code>note</code>, <code>note.meta</code> or <code>changes</code>.</li>\n  <li>Merge <code>meta</code> one level deep; result <code>meta</code> is a new object.</li>\n  <li>Keep <code>id</code> and <code>ownerId</code>; set <code>updatedAt</code> to <code>Date.now()</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Spread: cập nhật mà không sửa gốc\". Viết updateNote(note, changes) trả note MỚI: trường cấp ngoài trong changes thay trường cũ; changes.meta (nếu có) được TRỘN vào note.meta (giữ trường meta không nhắc tới) và meta kết quả phải là object mới; id và ownerId không bao giờ bị đổi; updatedAt = Date.now().</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả object mới; không sửa note, note.meta hay changes.</li>\n  <li>Trộn meta một tầng; meta kết quả là object mới.</li>\n  <li>Giữ id và ownerId; đặt updatedAt = Date.now().</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "updateNote({ id: 1, ownerId: 9, title: 'Old', meta: { pinned: false, color: 'blue' } }, { title: 'New', meta: { pinned: true } })",
+          "output": "{\"id\":1,\"ownerId\":9,\"title\":\"New\",\"meta\":{\"pinned\":true,\"color\":\"blue\"},\"updatedAt\":1767225600000}",
+          "explanation": "Date.now() in the grader starts at 2026-01-01T00:00:00Z.|||Date.now() của máy chấm bắt đầu ở 2026-01-01T00:00:00Z."
+        }
+      ],
+      "hintsJson": [
+        "Order matters in a spread: later keys win. Put the protected fields LAST: <code>{ ...note, ...changes, id: note.id, ownerId: note.ownerId }</code>.|||Thứ tự trong spread quan trọng: khoá sau thắng. Đặt trường cần bảo vệ CUỐI.",
+        "<code>meta: { ...note.meta, ...changes.meta }</code> — spreading <code>undefined</code> is allowed and adds nothing.|||meta: { ...note.meta, ...changes.meta } — spread undefined là hợp lệ và không thêm gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function updateNote(note, changes) {\n  Object.assign(note, changes);\n  note.updatedAt = Date.now();\n  return note;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Build NEW objects at both levels; assign into nothing that already exists.\nfunction updateNote(note, changes) {\n  return {\n    ...note,                                  // start from the stored note\n    ...changes,                               // later keys win: apply the changes\n    meta: { ...note.meta, ...changes.meta },  // nested: its own spread = merged + new object\n    id: note.id,                              // protected fields LAST so changes cannot win\n    ownerId: note.ownerId,\n    updatedAt: Date.now(),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A spread builds a new top-level object, and later keys overwrite earlier ones — so writing the protected fields after <code>...changes</code> guarantees <code>id</code>/<code>ownerId</code> survive. The nested <code>meta</code> needs its own spread: that creates a second new object and merges the two levels, which is exactly the \"one level per spread\" rule from the lesson. Nothing assigns into an existing object, so the stored note is untouched.</p>",
+      "solutionExplanationHtmlVi": "<p>Spread tạo object mới ở tầng ngoài, khoá sau ghi đè khoá trước — viết trường cần bảo vệ sau ...changes bảo đảm id/ownerId còn nguyên. meta lồng bên trong cần spread riêng: tạo object mới thứ hai và trộn hai tầng, đúng luật \"mỗi spread một tầng\" của bài. Không có phép gán vào object có sẵn nào, nên note đang lưu không bị đụng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "title replaced, meta merged, id protected",
+              "vi": "thay title, trộn meta, giữ id"
+            },
+            "goi": "updateNote({ id: 1, ownerId: 9, title: 'Old', meta: { pinned: false, color: 'blue' }, updatedAt: 0 }, { title: 'New', meta: { pinned: true }, id: 99 })",
+            "mongDoi": {
+              "id": 1,
+              "ownerId": 9,
+              "title": "New",
+              "meta": {
+                "pinned": true,
+                "color": "blue"
+              },
+              "updatedAt": 1767225600000
+            }
+          },
+          {
+            "moTa": {
+              "en": "the original note and its meta are unchanged",
+              "vi": "note gốc và meta không đổi"
+            },
+            "goi": "(() => { const note = { id: 1, ownerId: 9, title: 'Old', meta: { pinned: false } }; const out = updateNote(note, { title: 'New', meta: { pinned: true } }); return [note.title, note.meta.pinned, out.meta === note.meta, out === note]; })()",
+            "mongDoi": [
+              "Old",
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "updateNote({ id: 5, ownerId: 2, body: 'x', meta: { color: 'red' } }, { ownerId: 3, body: 'y' })",
+            "chuanBi": "await new Promise((r) => setTimeout(r, 1500));",
+            "mongDoi": {
+              "id": 5,
+              "ownerId": 2,
+              "body": "y",
+              "meta": {
+                "color": "red"
+              },
+              "updatedAt": 1767225601500
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const ch = { meta: { tags: 2 } }; const note = { id: 1, ownerId: 1, meta: { a: 1 } }; const out = updateNote(note, ch); out.meta.a = 100; return [note.meta.a, ch, out.meta]; })()",
+            "mongDoi": [
+              1,
+              {
+                "meta": {
+                  "tags": 2
+                }
+              },
+              {
+                "a": 100,
+                "tags": 2
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>Object.assign(note, changes)</code> — mutates the stored note (the starter's bug); every other reference to it changes too.|||Object.assign(note, changes) — sửa note đang lưu (bug của code khởi đầu); mọi tham chiếu khác cũng đổi theo."
+        },
+        {
+          "loi": "<code>{ ...note, ...changes }</code> alone — <code>changes.meta</code> replaces the whole meta (color lost), and <code>changes.id</code> overwrites the id.|||Chỉ { ...note, ...changes } — changes.meta thay cả meta (mất color), và changes.id ghi đè id."
+        },
+        {
+          "loi": "<code>const copy = { ...note }; copy.meta.pinned = true</code> — a shallow copy shares <code>meta</code>, so the original changes.|||copy = { ...note }; copy.meta.pinned = true — bản sao nông dùng chung meta nên bản gốc đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value vs reference",
+          "vi": "giá trị vs tham chiếu",
+          "giaiThich": "Primitives are copied; a variable holding an object holds a reference to it."
+        },
+        {
+          "en": "shallow copy",
+          "vi": "bản sao nông",
+          "giaiThich": "{ ...obj } copies one level; nested objects are still shared."
+        },
+        {
+          "en": "deep copy",
+          "vi": "bản sao sâu",
+          "giaiThich": "A fully independent copy — structuredClone(obj)."
+        },
+        {
+          "en": "destructuring",
+          "vi": "phân rã",
+          "giaiThich": "const { title, body = \"\" } = req.body — pull fields into variables, with defaults."
+        },
+        {
+          "en": "rest pattern",
+          "vi": "phần còn lại",
+          "giaiThich": "const { passwordHash, ...safe } = user — everything except the named fields."
+        },
+        {
+          "en": "nullish coalescing (??)",
+          "vi": "toán tử ??",
+          "giaiThich": "Falls back only on null/undefined; || also replaces 0, \"\" and false."
+        }
+      ]
+    },
+    {
+      "title": "cloneForCache: a deep copy that keeps Dates and Maps",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "structuredClone",
+        "deep copy",
+        "cache ownership"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The Notes service keeps an in-memory cache. Whatever it hands out must be a <b>deep copy</b>, so a caller who edits the result cannot corrupt the cache. The starter uses the old-tutorial trick <code>JSON.parse(JSON.stringify(obj))</code>, which the lesson says \"destroys Date (becomes a string), undefined, Map, Set\".</p>\n<p>Write <code>cloneForCache(note)</code> and <code>getCached(cache, id)</code>:</p>\n<ul><li><code>cloneForCache(note)</code> returns a fully independent copy: nested objects/arrays are new, <code>createdAt</code> stays a real <code>Date</code>, a <code>Map</code> (e.g. <code>reactions</code>) stays a Map.</li>\n<li><code>getCached(cache, id)</code>: <code>cache</code> is a <code>Map</code> id → note. Return a clone of the stored note, or <code>null</code> when missing.</li></ul><pre>const note = { id: 1, createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], reactions: new Map([['👍', 2]]) };\nconst c = cloneForCache(note);\nc.createdAt instanceof Date;   // true\nc.reactions.get('👍');          // 2\nc.tags.push('b'); note.tags;   // ['a'] — independent</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>A deep, independent copy: changing the copy never changes the original.</li>\n  <li><code>Date</code> stays a Date; <code>Map</code> stays a Map.</li>\n  <li><code>getCached</code> returns a clone or <code>null</code>; it never returns the cached object itself.</li>\n</ul>",
+      "problemHtmlVi": "<p>Service Notes có bộ nhớ đệm trong RAM. Thứ nó đưa ra phải là bản sao SÂU để bên gọi sửa kết quả không làm hỏng cache. Code khởi đầu dùng mẹo JSON.parse(JSON.stringify()) mà bài nói \"phá Date (thành chuỗi), undefined, Map, Set\". Viết cloneForCache(note) (bản sao độc lập, giữ Date và Map) và getCached(cache, id) (trả bản sao hoặc null).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bản sao sâu, độc lập: sửa bản sao không bao giờ đổi bản gốc.</li>\n  <li>Date vẫn là Date; Map vẫn là Map.</li>\n  <li>getCached trả bản sao hoặc null; không bao giờ trả chính object trong cache.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cloneForCache({ createdAt: new Date('2026-03-01T08:00:00Z') }).createdAt instanceof Date",
+          "output": "true",
+          "explanation": "The JSON starter gives false (a string).|||Code khởi đầu JSON cho false (một chuỗi)."
+        }
+      ],
+      "hintsJson": [
+        "The lesson's tool: <code>structuredClone(value)</code> — built into Node 17+ and into this grader.|||Công cụ của bài: structuredClone(value) — có sẵn trong Node 17+ và trong máy chấm này.",
+        "<code>getCached</code>: <code>cache.has(id) ? cloneForCache(cache.get(id)) : null</code>.|||getCached: cache.has(id) ? cloneForCache(cache.get(id)) : null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function cloneForCache(note) {\n  return JSON.parse(JSON.stringify(note));\n}\n\nfunction getCached(cache, id) {\n  return cache.get(id) || null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// A deep copy that understands Date, Map, Set and nested objects/arrays.\n// JSON would turn the Date into a string and the Map into {}.\nfunction cloneForCache(note) {\n  return structuredClone(note);\n}\n\n// The cache owns its objects; callers always get their own copy.\nfunction getCached(cache, id) {\n  if (!cache.has(id)) return null;\n  return cloneForCache(cache.get(id));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>structuredClone</code> walks the whole value and rebuilds it, recognising Date, Map, Set and nested arrays/objects (and even cycles). A cache that hands out clones has a clear ownership rule: the cache owns its copy, callers own theirs. It costs more than a shallow copy, which is why the lesson says to reach for it when you need depth — a shared cache is exactly that case.</p>",
+      "solutionExplanationHtmlVi": "<p>structuredClone duyệt toàn bộ giá trị và dựng lại, nhận ra Date, Map, Set, mảng/object lồng (cả vòng tham chiếu). Cache đưa ra bản sao có luật sở hữu rõ ràng: cache giữ bản của nó, bên gọi giữ bản của mình. Tốn hơn bản sao nông — vì vậy bài nói chỉ dùng khi thật cần độ sâu, và cache dùng chung đúng là trường hợp đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "createdAt stays a Date, reactions stays a Map",
+              "vi": "createdAt vẫn là Date, reactions vẫn là Map"
+            },
+            "goi": "[c.createdAt instanceof Date, c.createdAt.toISOString(), c.reactions instanceof Map, c.reactions.get('like')]",
+            "chuanBi": "const mkNote = () => ({ id: 1, title: 'Cache me', createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], meta: { pinned: true }, reactions: new Map([['like', 2]]) });\nconst c = cloneForCache(mkNote());",
+            "mongDoi": [
+              true,
+              "2026-03-01T08:00:00.000Z",
+              true,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "editing the copy does not touch the original",
+              "vi": "sửa bản sao không đụng bản gốc"
+            },
+            "goi": "[n.tags, n.meta.pinned, n.reactions.get('like')]",
+            "chuanBi": "const mkNote = () => ({ id: 1, title: 'Cache me', createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], meta: { pinned: true }, reactions: new Map([['like', 2]]) });\nconst n = mkNote(); const c = cloneForCache(n); c.tags.push('b'); c.meta.pinned = false; c.reactions.set('like', 99);",
+            "mongDoi": [
+              [
+                "a"
+              ],
+              true,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "getCached returns a copy, or null",
+              "vi": "getCached trả bản sao, hoặc null"
+            },
+            "goi": "[cache.get(1).title, getCached(cache, 2), getCached(cache, 1) === cache.get(1)]",
+            "chuanBi": "const mkNote = () => ({ id: 1, title: 'Cache me', createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], meta: { pinned: true }, reactions: new Map([['like', 2]]) });\nconst cache = new Map([[1, mkNote()]]); const a = getCached(cache, 1); a.title = \"hacked\";",
+            "mongDoi": [
+              "Cache me",
+              null,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[cache.get(5).history[0].by.id, x.history[0].at instanceof Date, x.history[0].at.getTime()]",
+            "chuanBi": "const mkNote = () => ({ id: 1, title: 'Cache me', createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], meta: { pinned: true }, reactions: new Map([['like', 2]]) });\nconst cache = new Map([[5, { id: 5, history: [{ at: new Date('2026-05-05T00:00:00Z'), by: { id: 1 } }] }]]); const x = getCached(cache, 5); x.history[0].by.id = 666;",
+            "mongDoi": [
+              1,
+              true,
+              1777939200000
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const s = { id: 2, seenBy: new Set([1, 2]), deletedAt: undefined }; const c = cloneForCache(s); c.seenBy.add(3); return [s.seenBy.size, c.seenBy instanceof Set, 'deletedAt' in c]; })()",
+            "chuanBi": "const mkNote = () => ({ id: 1, title: 'Cache me', createdAt: new Date('2026-03-01T08:00:00Z'), tags: ['a'], meta: { pinned: true }, reactions: new Map([['like', 2]]) });",
+            "mongDoi": [
+              2,
+              true,
+              true
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "JSON round-trip: <code>createdAt</code> comes back as a string and the Map as <code>{}</code> — the starter's bug (measured in Node 22: <code>typeof</code> is \"string\", Map ⇒ <code>{}</code>).|||JSON khứ hồi: createdAt thành chuỗi, Map thành {} — bug của code khởi đầu (đo Node 22)."
+        },
+        {
+          "loi": "Returning <code>cache.get(id)</code> directly — the first caller who edits it changes what every later caller sees.|||Trả thẳng cache.get(id) — người gọi đầu tiên sửa nó là đổi thứ mọi người gọi sau thấy."
+        },
+        {
+          "loi": "<code>{ ...note }</code> — one level only; <code>tags</code> and the Map are still shared.|||{ ...note } — chỉ một tầng; tags và Map vẫn dùng chung."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "value vs reference",
+          "vi": "giá trị vs tham chiếu",
+          "giaiThich": "Primitives are copied; a variable holding an object holds a reference to it."
+        },
+        {
+          "en": "shallow copy",
+          "vi": "bản sao nông",
+          "giaiThich": "{ ...obj } copies one level; nested objects are still shared."
+        },
+        {
+          "en": "deep copy",
+          "vi": "bản sao sâu",
+          "giaiThich": "A fully independent copy — structuredClone(obj)."
+        },
+        {
+          "en": "destructuring",
+          "vi": "phân rã",
+          "giaiThich": "const { title, body = \"\" } = req.body — pull fields into variables, with defaults."
+        },
+        {
+          "en": "rest pattern",
+          "vi": "phần còn lại",
+          "giaiThich": "const { passwordHash, ...safe } = user — everything except the named fields."
+        },
+        {
+          "en": "nullish coalescing (??)",
+          "vi": "toán tử ??",
+          "giaiThich": "Falls back only on null/undefined; || also replaces 0, \"\" and false."
+        }
+      ]
+    }
+  ]
+}

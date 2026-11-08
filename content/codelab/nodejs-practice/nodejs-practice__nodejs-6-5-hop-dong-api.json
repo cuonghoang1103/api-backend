@@ -1,0 +1,929 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-6-5-hop-dong-api",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-6-5-hop-dong-api"
+  },
+  "exercises": [
+    {
+      "title": "6.5 · 1 — Breaking or safe? Changes to a contract you do not control",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "API contract",
+        "versioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A mobile app sits on phones running a version from eight months ago. For each change to the Notes API, decide whether that old app can break. Lesson 6.5’s rule: loosening is safe, tightening is not — and neither shows up in a code review as “breaking”.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một app di động nằm trên điện thoại với bản từ tám tháng trước. Với mỗi thay đổi của Notes API, quyết định app cũ đó có thể hỏng không. Luật của bài 6.5: nới lỏng thì an toàn, siết chặt thì không — và cả hai đều không hiện ra là \"phá vỡ\" khi review code.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Imagine the 8-month-old app sends exactly the request it sent yesterday. Does it still succeed, and can it still read the answer?|||Hình dung app 8 tháng tuổi gửi đúng request hôm qua nó gửi. Nó còn thành công không, và còn đọc được câu trả lời không?",
+        "A stricter validator rejects requests that worked before — that is breaking.|||Bộ kiểm chặt hơn từ chối request trước đây chạy được — đó là phá vỡ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5 · 1 — Breaking or safe? Changes to a contract you do not control\n\nAnswer in the answer panel (no code needed).\n\n1. Change → breaking or safe?Thay đổi → phá vỡ hay an toàn?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5 · 1 — Breaking or safe? Changes to a contract you do not control — answer key\n\n1. Change → breaking or safe?Thay đổi → phá vỡ hay an toàn?\n   - r1.k: safe\n   - r2.k: breaking\n   - r3.k: breaking\n   - r4.k: breaking\n   - r5.k: safe\n   - r6.k: breaking\n   - r7.k: safe\n   - r8.k: breaking\n   - r9.k: safe\n   Removing, renaming, changing a type, adding a required field, tightening validation and changing a status code all make an old client that worked yesterday fail today. Adding optional things and loosening never do — provided clients ignore unknown keys (tolerant readers are a contract requirement).VI: Xoá, đổi tên, đổi kiểu, thêm trường bắt buộc, siết kiểm tra và đổi mã trạng thái đều làm client cũ chạy được hôm qua hỏng hôm nay. Thêm thứ tuỳ chọn và nới lỏng thì không bao giờ — miễn client bỏ qua khoá lạ (đọc khoan dung là yêu cầu của hợp đồng).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Removing, renaming, changing a type, adding a required field, tightening validation and changing a status code all make an old client that worked yesterday fail today. Adding optional things and loosening never do — provided clients ignore unknown keys (tolerant readers are a contract requirement).</p><p><i>VI: Xoá, đổi tên, đổi kiểu, thêm trường bắt buộc, siết kiểm tra và đổi mã trạng thái đều làm client cũ chạy được hôm qua hỏng hôm nay. Thêm thứ tuỳ chọn và nới lỏng thì không bao giờ — miễn client bỏ qua khoá lạ (đọc khoan dung là yêu cầu của hợp đồng).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Change → breaking or safe?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi → phá vỡ hay an toàn?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Change"
+              },
+              {
+                "ma": "k",
+                "ten": "Verdict",
+                "luaChon": [
+                  "breaking",
+                  "safe"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Add an optional response field \"wordCount\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Rename response field \"body\" to \"content\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Send id as 42 instead of \"42\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Add .max(200) to title (it accepted anything before)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Add an optional request field \"color\" with a default"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Make the request field \"tags\" required"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Add a new endpoint GET /notes/:id/history"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "Return 200 instead of 201 after POST /notes"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "Raise the title limit from 200 to 500 characters"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "safe",
+              "r2.k": "breaking",
+              "r3.k": "breaking",
+              "r4.k": "breaking",
+              "r5.k": "safe",
+              "r6.k": "breaking",
+              "r7.k": "safe",
+              "r8.k": "breaking",
+              "r9.k": "safe"
+            },
+            "giaiThich": "<p>Removing, renaming, changing a type, adding a required field, tightening validation and changing a status code all make an old client that worked yesterday fail today. Adding optional things and loosening never do — provided clients ignore unknown keys (tolerant readers are a contract requirement).</p><p><i>VI: Xoá, đổi tên, đổi kiểu, thêm trường bắt buộc, siết kiểm tra và đổi mã trạng thái đều làm client cũ chạy được hôm qua hỏng hôm nay. Thêm thứ tuỳ chọn và nới lỏng thì không bao giờ — miễn client bỏ qua khoá lạ (đọc khoan dung là yêu cầu của hợp đồng).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Marking “add .max(200)” as safe because it is “just validation”.|||Đánh \"thêm .max(200)\" là an toàn vì \"chỉ là kiểm dữ liệu\"."
+        },
+        {
+          "loi": "Marking a rename as safe because the data is the same.|||Đánh đổi tên là an toàn vì dữ liệu vẫn vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breaking change",
+          "vi": "thay đổi phá vỡ",
+          "giaiThich": "Làm client cũ đang chạy bị hỏng."
+        },
+        {
+          "en": "tolerant reader",
+          "vi": "đọc khoan dung",
+          "giaiThich": "Client bỏ qua trường lạ."
+        }
+      ]
+    },
+    {
+      "title": "6.5 · 2 — Write createNoteResource(store): ETag on GET, If-Match on PATCH, 412 and 428",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "ETag",
+        "optimistic concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 6.1’s lost update, fixed with one header in each direction. <code>store</code> is a <code>Map</code> id → note <code>{ id, title, body, version }</code>. <code>etagOf(note)</code> is provided in <code>helpers.js</code> (a quoted 12-character hash, like the lesson’s). Write <code>createNoteResource(store)</code> returning <code>{ get(id), patch(id, headers, body) }</code>; each returns <code>{ status, headers, body }</code>:</p>\n<ul><li>Unknown id (both) ⇒ 404 <code>{ error: { code: \"NOTE_NOT_FOUND\" } }</code>, headers <code>{}</code>.</li>\n<li><code>get</code> ⇒ 200, body = note, headers <code>{ etag: etagOf(note) }</code>.</li>\n<li><code>patch</code>: no <code>headers['if-match']</code> ⇒ <b>428</b> <code>{ error: { code: \"PRECONDITION_REQUIRED\" } }</code>; an If-Match that differs from the current ETag ⇒ <b>412</b> <code>{ error: { code: \"PRECONDITION_FAILED\", message: \"Someone else edited this note, reload\" } }</code> (headers <code>{}</code> for both).</li>\n<li>Matching ⇒ copy only <code>title</code>/<code>body</code> that are present in <code>body</code>, <code>version + 1</code>, save, 200 with the new note and its new ETag.</li></ul>\n<p>The first check replays the lesson: A and B both hold <code>\"…\"</code> from one GET; A’s PATCH ⇒ 200, B’s ⇒ 412, C without If-Match ⇒ 428, final note = A’s edit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Compare the If-Match with the ETag of the CURRENT note, computed now.</li>\n  <li>412 and 428 never change the store.</li>\n  <li>A successful PATCH returns the new ETag.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mất cập nhật của bài 6.1, sửa bằng một header mỗi chiều. <code>store</code> là <code>Map</code> id → ghi chú <code>{ id, title, body, version }</code>. <code>etagOf(note)</code> có sẵn trong <code>helpers.js</code> (chuỗi băm 12 ký tự trong ngoặc kép, như của bài). Viết <code>createNoteResource(store)</code> trả <code>{ get(id), patch(id, headers, body) }</code>; mỗi hàm trả <code>{ status, headers, body }</code>:</p>\n<ul><li>Id không có (cả hai) ⇒ 404 <code>{ error: { code: \"NOTE_NOT_FOUND\" } }</code>, headers <code>{}</code>.</li>\n<li><code>get</code> ⇒ 200, body = ghi chú, headers <code>{ etag: etagOf(note) }</code>.</li>\n<li><code>patch</code>: không có <code>headers['if-match']</code> ⇒ <b>428</b> <code>{ error: { code: \"PRECONDITION_REQUIRED\" } }</code>; If-Match khác ETag hiện tại ⇒ <b>412</b> <code>{ error: { code: \"PRECONDITION_FAILED\", message: \"Someone else edited this note, reload\" } }</code> (cả hai headers <code>{}</code>).</li>\n<li>Khớp ⇒ chỉ chép <code>title</code>/<code>body</code> có mặt trong <code>body</code>, <code>version + 1</code>, lưu, 200 với ghi chú mới và ETag mới.</li></ul>\n<p>Kiểm đầu tiên diễn lại bài: A và B cùng giữ <code>\"…\"</code> từ một lần GET; PATCH của A ⇒ 200, của B ⇒ 412, C không có If-Match ⇒ 428, ghi chú cuối = bản sửa của A.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So If-Match với ETag của ghi chú HIỆN TẠI, tính ngay lúc đó.</li>\n  <li>412 và 428 không bao giờ đổi store.</li>\n  <li>PATCH thành công trả ETag mới.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const s = mk(); const r = createNoteResource(s); const e = r.get(1).headers.etag;\n  const a = r.patch(1, { 'if-match': e }, { title: 'A edited' });\n  const b = r.patch(1, { 'if-match': e }, { body: 'B edited' });\n  const c = r.patch(1, {}, { title: 'C' });\n  return { a: a.status, b: b.status, bBody: b.body, c: c.status, cBody: c.body, final: s.get(1) }; })()",
+          "output": "{\"a\":200,\"b\":412,\"bBody\":{\"error\":{\"code\":\"PRECONDITION_FAILED\",\"message\":\"Someone else edited this note, reload\"}},\"c\":428,\"cBody\":{\"error\":{\"code\":\"PRECONDITION_REQUIRED\"}},\"final\":{\"id\":1,\"title\":\"A edited\",\"body\":\"original content\",\"version\":2}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order inside <code>patch</code>: 404 → 428 → 412 → apply.|||Thứ tự trong <code>patch</code>: 404 → 428 → 412 → áp dụng.",
+        "Header names arrive lower-case: <code>headers[\"if-match\"]</code>.|||Tên header tới ở dạng chữ thường: <code>headers[\"if-match\"]</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNoteResource(store) {\n  return {\n    get(id) {\n      // Write your solution here\n      return { status: 200, headers: {}, body: store.get(id) };\n    },\n    patch(id, headers, body) {\n      const note = store.get(id);\n      Object.assign(note, body, { version: note.version + 1 });\n      return { status: 200, headers: {}, body: note };\n    },\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n\n// provided: the ETag of a note (quoted, 12 hex characters)\nfunction etagOf(note) {\n  // provided in helpers.js too — a short hash of the representation, quoted like a real ETag\n  return '\"' + hex(sha256(utf8(JSON.stringify(note)))).slice(0, 12) + '\"';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createNoteResource(store) {\n  const json = (status, body, etag) => ({ status, headers: etag ? { etag } : {}, body });\n  return {\n    get(id) {\n      const note = store.get(id);\n      if (!note) return json(404, { error: { code: 'NOTE_NOT_FOUND' } });\n      return json(200, note, etagOf(note));                 // set YOUR ETag — the identity of this version\n    },\n    patch(id, headers, body) {\n      const note = store.get(id);\n      if (!note) return json(404, { error: { code: 'NOTE_NOT_FOUND' } });\n      const ifMatch = headers['if-match'];\n      // 428: you sent no precondition, and this endpoint requires one — the safe path is the only path\n      if (!ifMatch) return json(428, { error: { code: 'PRECONDITION_REQUIRED' } });\n      // 412: you sent one, and someone changed the note since you loaded it\n      if (ifMatch !== etagOf(note)) return json(412, { error: { code: 'PRECONDITION_FAILED', message: 'Someone else edited this note, reload' } });\n      const next = { ...note, version: note.version + 1 };\n      for (const f of ['title', 'body']) if (f in body) next[f] = body[f];\n      store.set(id, next);\n      return json(200, next, etagOf(next));                 // the new version gets a new ETag\n    },\n  };\n}\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n\n// provided: the ETag of a note (quoted, 12 hex characters)\nfunction etagOf(note) {\n  // provided in helpers.js too — a short hash of the representation, quoted like a real ETag\n  return '\"' + hex(sha256(utf8(JSON.stringify(note)))).slice(0, 12) + '\"';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An ETag is the identity of one version of the representation. If-Match says “apply this only to the version I saw”. If someone else saved in between, the current ETag differs and the server answers 412 instead of silently destroying their work — optimistic concurrency, with no lock held while a human types. Requiring the header (428) makes the safe path the only path.</p>",
+      "solutionExplanationHtmlVi": "<p>ETag là danh tính của một phiên bản biểu diễn. If-Match nói \"chỉ áp dụng cho phiên bản tôi đã thấy\". Nếu ai đó lưu xen giữa, ETag hiện tại khác và server trả 412 thay vì lặng lẽ xoá công sức của họ — đồng thời lạc quan, không giữ khoá trong lúc người gõ. Bắt buộc header (428) khiến đường an toàn là đường duy nhất.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The two-editor scenario: 200, 412, 428",
+              "vi": "Kịch bản hai người sửa: 200, 412, 428"
+            },
+            "goi": "(() => { const s = mk(); const r = createNoteResource(s); const e = r.get(1).headers.etag;\n  const a = r.patch(1, { 'if-match': e }, { title: 'A edited' });\n  const b = r.patch(1, { 'if-match': e }, { body: 'B edited' });\n  const c = r.patch(1, {}, { title: 'C' });\n  return { a: a.status, b: b.status, bBody: b.body, c: c.status, cBody: c.body, final: s.get(1) }; })()",
+            "chuanBi": "const mk = () => new Map([[1, { id: 1, title: 'Original', body: 'original content', version: 1 }]]);",
+            "mongDoi": {
+              "a": 200,
+              "b": 412,
+              "bBody": {
+                "error": {
+                  "code": "PRECONDITION_FAILED",
+                  "message": "Someone else edited this note, reload"
+                }
+              },
+              "c": 428,
+              "cBody": {
+                "error": {
+                  "code": "PRECONDITION_REQUIRED"
+                }
+              },
+              "final": {
+                "id": 1,
+                "title": "A edited",
+                "body": "original content",
+                "version": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "GET sends the ETag; unknown id ⇒ 404",
+              "vi": "GET gửi ETag; id lạ ⇒ 404"
+            },
+            "goi": "(() => { const r = createNoteResource(mk()); const g = r.get(1); return [g.status, g.headers.etag === etagOf(g.body), r.get(9)]; })()",
+            "chuanBi": "const mk = () => new Map([[1, { id: 1, title: 'Original', body: 'original content', version: 1 }]]);",
+            "mongDoi": [
+              200,
+              true,
+              {
+                "status": 404,
+                "headers": {},
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Chained edits with the new ETag succeed",
+              "vi": "Sửa nối tiếp bằng ETag mới thành công"
+            },
+            "goi": "(() => { const r = createNoteResource(mk()); const e1 = r.get(1).headers.etag; const p = r.patch(1, { 'if-match': e1 }, { title: 'v2' }); const p2 = r.patch(1, { 'if-match': p.headers.etag }, { title: 'v3' }); return [p.status, p2.status, p2.body, p.headers.etag !== e1]; })()",
+            "chuanBi": "const mk = () => new Map([[1, { id: 1, title: 'Original', body: 'original content', version: 1 }]]);",
+            "mongDoi": [
+              200,
+              200,
+              {
+                "id": 1,
+                "title": "v3",
+                "body": "original content",
+                "version": 3
+              },
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const s = mk(); const r = createNoteResource(s); const x = r.patch(1, { 'if-match': '\"000000000000\"' }, { title: 'x' }); const y = r.patch(2, { 'if-match': '\"x\"' }, {}); return [x.status, x.headers, y.status, s.get(1).version]; })()",
+            "chuanBi": "const mk = () => new Map([[1, { id: 1, title: 'Original', body: 'original content', version: 1 }]]);",
+            "mongDoi": [
+              412,
+              {},
+              404,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const s = mk(); const r = createNoteResource(s); const e = r.get(1).headers.etag; r.patch(1, { 'if-match': e }, { version: 99, id: 5, body: '' }); return s.get(1); })()",
+            "chuanBi": "const mk = () => new Map([[1, { id: 1, title: 'Original', body: 'original content', version: 1 }]]);",
+            "mongDoi": {
+              "id": 1,
+              "title": "Original",
+              "body": "",
+              "version": 2
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a missing If-Match as “no conflict” and saving — that is exactly the lost update again.|||Coi thiếu If-Match là \"không xung đột\" rồi lưu — chính là mất cập nhật lần nữa."
+        },
+        {
+          "loi": "Computing the ETag of the note AFTER applying the patch, so every If-Match fails.|||Tính ETag của ghi chú SAU khi áp patch, nên If-Match nào cũng trượt."
+        },
+        {
+          "loi": "Mutating the stored note before the precondition passed.|||Sửa ghi chú đã lưu trước khi điều kiện qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ETag",
+          "vi": "ETag",
+          "giaiThich": "Định danh một phiên bản của tài nguyên."
+        },
+        {
+          "en": "If-Match",
+          "vi": "If-Match",
+          "giaiThich": "Chỉ làm nếu ETag còn khớp."
+        },
+        {
+          "en": "412 Precondition Failed",
+          "vi": "412",
+          "giaiThich": "Điều kiện gửi kèm không còn đúng."
+        },
+        {
+          "en": "428 Precondition Required",
+          "vi": "428",
+          "giaiThich": "Endpoint đòi phải gửi điều kiện."
+        }
+      ]
+    },
+    {
+      "title": "6.5 · 3 — Write createPaymentsRoute(charge): the Idempotency-Key that prevents the double charge",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "idempotency key",
+        "retries"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>A mobile client sends <code>POST /payments</code>, the response is lost, the SDK retries — and without protection a second payment is created. Write <code>createPaymentsRoute(charge)</code> returning <code>async handle(req)</code>, <code>req = { headers, body: { amount } }</code>, result <code>{ status, headers, body }</code>. <code>charge(amount)</code> is a fake async payment provider (100 ms) returning <code>{ id, amount, charged: true }</code>.</p>\n<ul><li>No <code>headers['idempotency-key']</code> ⇒ 400 <code>{ error: { code: \"IDEMPOTENCY_KEY_REQUIRED\" } }</code>, headers <code>{}</code>.</li>\n<li>A key seen before ⇒ the <b>saved</b> status and body, with header <code>idempotent-replay: \"true\"</code>, and <b>no new charge</b>.</li>\n<li>A new key ⇒ charge, save <code>{ status: 201, body: payment }</code> under the key, return 201 with headers <code>{}</code>.</li></ul>\n<p>The real run of the lesson: call 1 and call 2 with key <code>7f3a…</code> ⇒ the same payment id, charged ONCE; call 3 with key <code>91b2…</code> ⇒ a new payment.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The store lives inside the closure — one per route.</li>\n  <li>A replay returns the first response, not a 409.</li>\n</ul>",
+      "problemHtmlVi": "<p>Client di động gửi <code>POST /payments</code>, phản hồi bị mất, SDK thử lại — không có bảo vệ thì một khoản thanh toán thứ hai được tạo. Viết <code>createPaymentsRoute(charge)</code> trả <code>async handle(req)</code>, <code>req = { headers, body: { amount } }</code>, kết quả <code>{ status, headers, body }</code>. <code>charge(amount)</code> là cổng thanh toán GIẢ bất đồng bộ (100 ms) trả <code>{ id, amount, charged: true }</code>.</p>\n<ul><li>Không có <code>headers['idempotency-key']</code> ⇒ 400 <code>{ error: { code: \"IDEMPOTENCY_KEY_REQUIRED\" } }</code>, headers <code>{}</code>.</li>\n<li>Khoá đã thấy ⇒ mã và body <b>đã lưu</b>, kèm header <code>idempotent-replay: \"true\"</code>, và <b>không trừ tiền lần nữa</b>.</li>\n<li>Khoá mới ⇒ trừ tiền, lưu <code>{ status: 201, body: payment }</code> theo khoá, trả 201 với headers <code>{}</code>.</li></ul>\n<p>Lần chạy thật của bài: lần 1 và lần 2 với khoá <code>7f3a…</code> ⇒ cùng mã thanh toán, trừ tiền MỘT lần; lần 3 với khoá <code>91b2…</code> ⇒ thanh toán mới.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kho nằm trong closure — mỗi route một kho.</li>\n  <li>Phát lại trả phản hồi đầu tiên, không phải 409.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const c = mkCharge(); const h = createPaymentsRoute(c); const k = { 'idempotency-key': '7f3a' };\n  const r1 = await h({ headers: k, body: { amount: 250000 } }); const r2 = await h({ headers: k, body: { amount: 250000 } }); const r3 = await h({ headers: { 'idempotency-key': '91b2' }, body: { amount: 250000 } });\n  return { r1, r2, r3, charges: c.count() }; })()",
+          "output": "{\"r1\":{\"status\":201,\"headers\":{},\"body\":{\"id\":\"pay_1\",\"amount\":250000,\"charged\":true}},\"r2\":{\"status\":201,\"headers\":{\"idempotent-replay\":\"true\"},\"body\":{\"id\":\"pay_1\",\"amount\":250000,\"charged\":true}},\"r3\":{\"status\":201,\"headers\":{},\"body\":{\"id\":\"pay_2\",\"amount\":250000,\"charged\":true}},\"charges\":2}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const store = new Map()</code> outside <code>handle</code>, keyed by the header value.|||<code>const store = new Map()</code> ngoài <code>handle</code>, khoá theo giá trị header.",
+        "Save <code>{ status, body }</code> after the charge, and read it back on a repeat.|||Lưu <code>{ status, body }</code> sau khi trừ tiền, và đọc lại khi lặp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createPaymentsRoute(charge) {\n  return async function handle(req) {\n    // Write your solution here\n    const payment = await charge(req.body.amount);\n    return { status: 201, headers: {}, body: payment };\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createPaymentsRoute(charge) {\n  const store = new Map();   // demo store; production: a table or Redis key with a TTL (24h)\n  return async function handle(req) {\n    const key = req.headers['idempotency-key'];\n    if (!key) return { status: 400, headers: {}, body: { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } } };\n    if (store.has(key)) {\n      // seen it — replay the SAVED response, do NOT charge again\n      const saved = store.get(key);\n      return { status: saved.status, headers: { 'idempotent-replay': 'true' }, body: saved.body };\n    }\n    const payment = await charge(req.body.amount);\n    store.set(key, { status: 201, body: payment });           // save the RESPONSE, not just the key\n    return { status: 201, headers: {}, body: payment };\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>POST is not idempotent, so the server must recognise the repeat itself. The client-generated key names one user intent; the server stores the outcome against it and returns that same outcome to every retry of that intent. Different key, different intent, new payment.</p>",
+      "solutionExplanationHtmlVi": "<p>POST không idempotent, nên server phải tự nhận ra lần lặp. Khoá do client sinh gọi tên một ý định của người dùng; server lưu kết quả theo khoá đó và trả đúng kết quả ấy cho mọi lần thử lại của ý định đó. Khác khoá, khác ý định, thanh toán mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lesson run: same key twice, then a new key",
+              "vi": "Lần chạy của bài: cùng khoá hai lần, rồi khoá mới"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createPaymentsRoute(c); const k = { 'idempotency-key': '7f3a' };\n  const r1 = await h({ headers: k, body: { amount: 250000 } }); const r2 = await h({ headers: k, body: { amount: 250000 } }); const r3 = await h({ headers: { 'idempotency-key': '91b2' }, body: { amount: 250000 } });\n  return { r1, r2, r3, charges: c.count() }; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };",
+            "mongDoi": {
+              "r1": {
+                "status": 201,
+                "headers": {},
+                "body": {
+                  "id": "pay_1",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "r2": {
+                "status": 201,
+                "headers": {
+                  "idempotent-replay": "true"
+                },
+                "body": {
+                  "id": "pay_1",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "r3": {
+                "status": 201,
+                "headers": {},
+                "body": {
+                  "id": "pay_2",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "charges": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "No key ⇒ 400",
+              "vi": "Không có khoá ⇒ 400"
+            },
+            "goi": "await createPaymentsRoute(mkCharge())({ headers: {}, body: { amount: 1 } })",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };",
+            "mongDoi": {
+              "status": 400,
+              "headers": {},
+              "body": {
+                "error": {
+                  "code": "IDEMPOTENCY_KEY_REQUIRED"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createPaymentsRoute(c); for (let i = 0; i < 5; i++) await h({ headers: { 'idempotency-key': 'same' }, body: { amount: 9 } }); return c.count(); })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Two routes (= two processes) do not share a Map",
+              "vi": "Hai route (= hai tiến trình) không chung một Map"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const a = createPaymentsRoute(c), b = createPaymentsRoute(c); const k = { 'idempotency-key': 'k' }; await a({ headers: k, body: { amount: 1 } }); const x = await b({ headers: k, body: { amount: 1 } }); return [x.status, x.headers, c.count()]; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };",
+            "mongDoi": [
+              201,
+              {},
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 409 to the retry: the client cannot tell “lost response” from “never sent”, so it needs the same body.|||Trả 409 cho lần thử lại: client không phân biệt được \"mất phản hồi\" và \"chưa gửi\", nên nó cần cùng body."
+        },
+        {
+          "loi": "Storing only the key (a Set) — then the replay has nothing to return.|||Chỉ lưu khoá (một Set) — khi phát lại không có gì để trả."
+        },
+        {
+          "loi": "Generating the key inside the client’s retry loop: a fresh key per attempt defeats the whole mechanism.|||Sinh khoá trong vòng thử lại của client: mỗi lần một khoá mới phá hỏng cả cơ chế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Idempotency-Key",
+          "vi": "khoá idempotent",
+          "giaiThich": "Một UUID cho mỗi ý định của người dùng."
+        },
+        {
+          "en": "replay",
+          "vi": "phát lại",
+          "giaiThich": "Trả lại phản hồi đã lưu."
+        }
+      ]
+    },
+    {
+      "title": "6.5 · 4 — Guard the race: two retries with the same key arrive at the same instant",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "idempotency key",
+        "race condition",
+        "promises"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Guard the race too. Two retries can arrive simultaneously.” With the version of exercise 3, both requests check the store <i>before</i> either charge has finished — both miss, both charge. Write <code>createSafePaymentsRoute(charge)</code> with the same contract as exercise 3, plus:</p>\n<ul><li>Claim the key <b>before</b> awaiting <code>charge</code>, synchronously: a second request with the same key that arrives while the first is still in flight must <b>wait for the first outcome</b> and return it with <code>idempotent-replay: \"true\"</code> — exactly one charge.</li>\n<li>If <code>charge</code> rejects ⇒ 502 <code>{ error: { code: \"CHARGE_FAILED\" } }</code> (headers <code>{}</code>) for the first request; requests that were waiting on that key get the same status and body (with the replay header). Then <b>forget the key</b>, so a retry that comes later really tries again.</li></ul>\n<p>The grader’s fake provider takes 100 virtual ms; <code>mkFlaky()</code> fails its first call. Tests fire requests with <code>Promise.all</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly one charge per key, even with concurrent requests.</li>\n  <li>A failed charge is not remembered as a success, and not remembered forever.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Chặn cả cuộc đua. Hai lần thử lại có thể tới cùng lúc.\" Với bản của bài 3, cả hai request xem kho <i>trước khi</i> lần trừ tiền nào xong — cả hai đều trượt, cả hai đều trừ tiền. Viết <code>createSafePaymentsRoute(charge)</code> cùng hợp đồng với bài 3, thêm:</p>\n<ul><li>Giữ chỗ cho khoá <b>trước khi</b> await <code>charge</code>, đồng bộ: request thứ hai cùng khoá tới khi request đầu còn đang chạy phải <b>chờ kết quả của request đầu</b> rồi trả nó kèm <code>idempotent-replay: \"true\"</code> — đúng một lần trừ tiền.</li>\n<li><code>charge</code> reject ⇒ 502 <code>{ error: { code: \"CHARGE_FAILED\" } }</code> (headers <code>{}</code>) cho request đầu; các request đang chờ khoá đó nhận cùng mã và body (kèm header phát lại). Rồi <b>quên khoá</b>, để lần thử lại tới sau thật sự thử lại.</li></ul>\n<p>Cổng thanh toán giả mất 100 ms ảo; <code>mkFlaky()</code> hỏng ở lần gọi đầu. Kiểm gửi request bằng <code>Promise.all</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi khoá đúng một lần trừ tiền, kể cả request đồng thời.</li>\n  <li>Lần trừ tiền hỏng không được nhớ như thành công, và không bị nhớ mãi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const c = mkCharge(); const h = createSafePaymentsRoute(c); const [a, b] = await Promise.all([h(R('7f3a')), h(R('7f3a'))]); return { a, b, charges: c.count() }; })()",
+          "output": "{\"a\":{\"status\":201,\"headers\":{},\"body\":{\"id\":\"pay_1\",\"amount\":250000,\"charged\":true}},\"b\":{\"status\":201,\"headers\":{\"idempotent-replay\":\"true\"},\"body\":{\"id\":\"pay_1\",\"amount\":250000,\"charged\":true}},\"charges\":1}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Store a Promise for the outcome the moment you see a new key: <code>store.set(key, { promise })</code> — before any <code>await</code>.|||Lưu một Promise cho kết quả ngay khi thấy khoá mới: <code>store.set(key, { promise })</code> — trước mọi <code>await</code>.",
+        "Create it with an exposed resolver: <code>let finish; const promise = new Promise((ok) => { finish = ok; });</code> and call <code>finish(outcome)</code> in both the success and the catch branch.|||Tạo nó với hàm resolve lộ ra: <code>let finish; const promise = new Promise((ok) => { finish = ok; });</code> và gọi <code>finish(outcome)</code> ở cả nhánh thành công lẫn catch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createSafePaymentsRoute(charge) {\n  const store = new Map();\n  return async function handle(req) {\n    // Write your solution here\n    const key = req.headers['idempotency-key'];\n    if (!key) return { status: 400, headers: {}, body: { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } } };\n    if (store.has(key)) { const s = store.get(key); return { status: s.status, headers: { 'idempotent-replay': 'true' }, body: s.body }; }\n    const payment = await charge(req.body.amount);\n    store.set(key, { status: 201, body: payment });\n    return { status: 201, headers: {}, body: payment };\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createSafePaymentsRoute(charge) {\n  const store = new Map();   // key -> { promise } while in flight, then { status, body }\n  return async function handle(req) {\n    const key = req.headers['idempotency-key'];\n    if (!key) return { status: 400, headers: {}, body: { error: { code: 'IDEMPOTENCY_KEY_REQUIRED' } } };\n    const seen = store.get(key);\n    if (seen) {\n      // in flight or done: wait for THE one outcome, never start a second charge\n      const outcome = await seen.promise;\n      return { status: outcome.status, headers: { 'idempotent-replay': 'true' }, body: outcome.body };\n    }\n    // claim the key BEFORE doing the work — synchronously, so a second request in the same instant sees it\n    let finish;\n    const entry = { promise: new Promise((ok) => { finish = ok; }) };\n    store.set(key, entry);\n    try {\n      const payment = await charge(req.body.amount);\n      const outcome = { status: 201, body: payment };\n      finish(outcome);\n      return { status: 201, headers: {}, body: payment };\n    } catch (err) {\n      // the charge did not happen: forget the key so a later retry can really try again\n      store.delete(key);\n      const outcome = { status: 502, body: { error: { code: 'CHARGE_FAILED' } } };\n      finish(outcome);\n      return { status: 502, headers: {}, body: outcome.body };\n    }\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Node runs your handler’s synchronous part without interruption, so whatever you write to the Map before the first <code>await</code> is visible to every request that starts afterwards. Storing the in-flight Promise turns “check, then act” into “claim, then act”: the second request finds the claim and waits for the same outcome. In production the claim is an INSERT with a UNIQUE constraint — the database plays the role of the synchronous section across processes.</p>",
+      "solutionExplanationHtmlVi": "<p>Node chạy phần đồng bộ của handler không bị ngắt, nên thứ bạn ghi vào Map trước <code>await</code> đầu tiên được mọi request bắt đầu sau đó nhìn thấy. Lưu Promise đang chạy biến \"kiểm rồi làm\" thành \"giữ chỗ rồi làm\": request thứ hai thấy chỗ đã giữ và chờ cùng kết quả. Trên production, giữ chỗ là một INSERT có ràng buộc UNIQUE — CSDL đóng vai đoạn đồng bộ giữa nhiều tiến trình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two simultaneous retries ⇒ one charge",
+              "vi": "Hai lần thử lại đồng thời ⇒ một lần trừ tiền"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createSafePaymentsRoute(c); const [a, b] = await Promise.all([h(R('7f3a')), h(R('7f3a'))]); return { a, b, charges: c.count() }; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": {
+              "a": {
+                "status": 201,
+                "headers": {},
+                "body": {
+                  "id": "pay_1",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "b": {
+                "status": 201,
+                "headers": {
+                  "idempotent-replay": "true"
+                },
+                "body": {
+                  "id": "pay_1",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "charges": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Sequential replay still works",
+              "vi": "Phát lại tuần tự vẫn chạy"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createSafePaymentsRoute(c); await h(R('a')); const r = await h(R('a')); const n = await h(R('b')); return [r.status, r.headers, r.body.id, n.body.id, c.count()]; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": [
+              201,
+              {
+                "idempotent-replay": "true"
+              },
+              "pay_1",
+              "pay_2",
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: await createSafePaymentsRoute(mkCharge())(R(null))",
+              "vi": "Ca 3"
+            },
+            "goi": "await createSafePaymentsRoute(mkCharge())(R(null))",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": {
+              "status": 400,
+              "headers": {},
+              "body": {
+                "error": {
+                  "code": "IDEMPOTENCY_KEY_REQUIRED"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Failed charge: waiters get 502, a later retry charges",
+              "vi": "Trừ tiền hỏng: người chờ nhận 502, lần thử sau trừ được"
+            },
+            "goi": "await (async () => { const f = mkFlaky(); const h = createSafePaymentsRoute(f); const [a, b] = await Promise.all([h(R('k')), h(R('k'))]); const later = await h(R('k')); return { a, b, later, calls: f.calls() }; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": {
+              "a": {
+                "status": 502,
+                "headers": {},
+                "body": {
+                  "error": {
+                    "code": "CHARGE_FAILED"
+                  }
+                }
+              },
+              "b": {
+                "status": 502,
+                "headers": {
+                  "idempotent-replay": "true"
+                },
+                "body": {
+                  "error": {
+                    "code": "CHARGE_FAILED"
+                  }
+                }
+              },
+              "later": {
+                "status": 201,
+                "headers": {},
+                "body": {
+                  "id": "pay_1",
+                  "amount": 250000,
+                  "charged": true
+                }
+              },
+              "calls": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createSafePaymentsRoute(c); const rs = await Promise.all([h(R('x')), h(R('y')), h(R('x')), h(R('y')), h(R('x'))]); return [rs.map((r) => r.body.id), rs.map((r) => r.headers['idempotent-replay'] || '-'), c.count()]; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": [
+              [
+                "pay_1",
+                "pay_2",
+                "pay_1",
+                "pay_2",
+                "pay_1"
+              ],
+              [
+                "-",
+                "-",
+                "true",
+                "true",
+                "true"
+              ],
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Waiters do not add time: 100 ms total",
+              "vi": "Người chờ không cộng thêm thời gian: tổng 100 ms"
+            },
+            "goi": "await (async () => { const c = mkCharge(); const h = createSafePaymentsRoute(c); const t0 = Date.now(); await Promise.all([h(R('t')), h(R('t')), h(R('t'))]); return [Date.now() - t0, c.count()]; })()",
+            "chuanBi": "const mkCharge = () => { let n = 0; const f = (amount) => new Promise((ok) => setTimeout(() => { n++; ok({ id: 'pay_' + n, amount, charged: true }); }, 100)); f.count = () => n; return f; };\nconst mkFlaky = () => { let calls = 0, ok = 0; const f = (amount) => new Promise((res, rej) => setTimeout(() => { calls++; if (calls === 1) rej(new Error('gateway timeout')); else { ok++; res({ id: 'pay_' + ok, amount, charged: true }); } }, 100)); f.calls = () => calls; return f; };\nconst R = (key, amount = 250000) => ({ headers: key ? { 'idempotency-key': key } : {}, body: { amount } });",
+            "mongDoi": [
+              100,
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking <code>store.has(key)</code>, awaiting the charge, and only then <code>store.set</code> — the window in which both retries pass.|||Kiểm <code>store.has(key)</code>, await trừ tiền, rồi mới <code>store.set</code> — đúng khe hở cho cả hai lần thử lại lọt qua."
+        },
+        {
+          "loi": "Leaving a failed key in the store: every later retry replays the failure forever.|||Để khoá hỏng nằm lại trong kho: mọi lần thử lại sau phát lại thất bại mãi mãi."
+        },
+        {
+          "loi": "Forgetting to settle the waiting promise on failure: the second request hangs.|||Quên kết thúc promise đang chờ khi hỏng: request thứ hai treo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "race condition",
+          "vi": "tranh chấp",
+          "giaiThich": "Kết quả phụ thuộc thứ tự hai việc chạy chồng."
+        },
+        {
+          "en": "in flight",
+          "vi": "đang chạy",
+          "giaiThich": "Đã bắt đầu, chưa xong."
+        }
+      ]
+    },
+    {
+      "title": "6.5 · 5 — Write breakingChanges(before, after): catch what code review does not",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "API contract",
+        "breaking changes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Tightening validation is a breaking change … and neither shows up in a code review as ‘breaking’.” Make the computer look. A contract is <code>{ response: { field: type }, request: { field: { type, required, max? } } }</code>. Return the sorted list of breaking changes between <code>before</code> and <code>after</code>:</p>\n<ul><li>Response field removed ⇒ <code>\"response.&lt;f&gt;: removed\"</code> (a rename shows up as a removal); type changed ⇒ <code>\"response.&lt;f&gt;: type &lt;old&gt; -&gt; &lt;new&gt;\"</code>. Added response fields are safe.</li>\n<li>Request field that is required in <code>after</code> but was absent or optional before ⇒ <code>\"request.&lt;f&gt;: now required\"</code>. A new optional request field is safe. A request field removed from <code>after</code> is safe (old clients sending it are tolerated).</li>\n<li>Request type changed ⇒ <code>\"request.&lt;f&gt;: type &lt;old&gt; -&gt; &lt;new&gt;\"</code>.</li>\n<li>Request <code>max</code> lowered, or added where there was none ⇒ <code>\"request.&lt;f&gt;: max &lt;old or none&gt; -&gt; &lt;new&gt;\"</code>. Raising or removing a max is loosening — safe.</li></ul>\n<p>Return <code>list.sort()</code> (plain string sort).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Report only breaking changes.</li>\n  <li>Treat a missing <code>max</code> as “no limit”.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Siết kiểm tra là thay đổi phá vỡ … và cả hai đều không hiện ra là 'phá vỡ' khi review code.\" Hãy để máy tính nhìn. Một hợp đồng là <code>{ response: { field: type }, request: { field: { type, required, max? } } }</code>. Trả danh sách đã sắp các thay đổi phá vỡ giữa <code>before</code> và <code>after</code>:</p>\n<ul><li>Trường response bị xoá ⇒ <code>\"response.&lt;f&gt;: removed\"</code> (đổi tên hiện ra như xoá); đổi kiểu ⇒ <code>\"response.&lt;f&gt;: type &lt;cũ&gt; -&gt; &lt;mới&gt;\"</code>. Thêm trường response là an toàn.</li>\n<li>Trường request bắt buộc trong <code>after</code> nhưng trước đó vắng hoặc tuỳ chọn ⇒ <code>\"request.&lt;f&gt;: now required\"</code>. Thêm trường request tuỳ chọn là an toàn. Trường request bị bỏ khỏi <code>after</code> là an toàn (client cũ gửi lên vẫn được khoan dung).</li>\n<li>Đổi kiểu request ⇒ <code>\"request.&lt;f&gt;: type &lt;cũ&gt; -&gt; &lt;mới&gt;\"</code>.</li>\n<li><code>max</code> của request giảm, hoặc thêm mới khi trước không có ⇒ <code>\"request.&lt;f&gt;: max &lt;cũ hoặc none&gt; -&gt; &lt;mới&gt;\"</code>. Tăng hay bỏ max là nới lỏng — an toàn.</li></ul>\n<p>Trả về <code>list.sort()</code> (sắp chuỗi thường).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ báo thay đổi phá vỡ.</li>\n  <li>Coi thiếu <code>max</code> là \"không giới hạn\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\",\"wordCount\":\"number\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000},\"color\":{\"type\":\"string\",\"required\":false}}})",
+          "output": "[]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Loop over <code>before.response</code> for removals and retypes; loop over <code>after.request</code> for new requirements and tightening.|||Lặp qua <code>before.response</code> để tìm xoá và đổi kiểu; lặp qua <code>after.request</code> để tìm yêu cầu mới và siết chặt.",
+        "<code>old.max ?? Infinity</code> vs <code>rule.max ?? Infinity</code> turns “none” into a number you can compare.|||<code>old.max ?? Infinity</code> so với <code>rule.max ?? Infinity</code> biến \"none\" thành số so sánh được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function breakingChanges(before, after) {\n  // Write your solution here\n  const out = [];\n  for (const f of Object.keys(after.response)) if (!(f in before.response)) out.push('response.' + f + ': added');\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function breakingChanges(before, after) {\n  const out = [];\n  // response: a client READS these — removing or retyping breaks it; adding is safe (tolerant readers)\n  for (const [f, type] of Object.entries(before.response)) {\n    if (!(f in after.response)) out.push('response.' + f + ': removed');\n    else if (after.response[f] !== type) out.push('response.' + f + ': type ' + type + ' -> ' + after.response[f]);\n  }\n  // request: a client SENDS these — anything that rejects yesterday's request breaks it\n  for (const [f, rule] of Object.entries(after.request)) {\n    const old = before.request[f];\n    if (!old) {\n      if (rule.required) out.push('request.' + f + ': now required');    // a new REQUIRED field\n      continue;                                                           // a new optional field is safe\n    }\n    if (rule.required && !old.required) out.push('request.' + f + ': now required');\n    if (rule.type !== old.type) out.push('request.' + f + ': type ' + old.type + ' -> ' + rule.type);\n    const was = old.max ?? Infinity, now = rule.max ?? Infinity;\n    if (now < was) out.push('request.' + f + ': max ' + (old.max ?? 'none') + ' -> ' + rule.max);   // tightening\n  }\n  return out.sort();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The asymmetry is the whole rule: a client reads responses and sends requests. For what it reads, removing or retyping breaks it and adding does not. For what it sends, anything that would reject yesterday’s request — a new required field, a stricter limit, a new type — breaks it, and loosening does not. Running a check like this in CI is how “additive by default” stays true without relying on reviewers.</p>",
+      "solutionExplanationHtmlVi": "<p>Sự bất đối xứng chính là cả luật: client đọc response và gửi request. Với thứ nó đọc, xoá hay đổi kiểu làm hỏng còn thêm thì không. Với thứ nó gửi, bất cứ gì từ chối request của hôm qua — trường bắt buộc mới, giới hạn chặt hơn, kiểu mới — làm hỏng, còn nới lỏng thì không. Chạy phép kiểm này trong CI là cách giữ \"mặc định chỉ bổ sung\" mà không phải trông vào người review.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Additive changes only ⇒ []",
+              "vi": "Chỉ bổ sung ⇒ []"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\",\"wordCount\":\"number\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000},\"color\":{\"type\":\"string\",\"required\":false}}})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Rename body→content and id string→number",
+              "vi": "Đổi tên body→content và id string→number"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"number\",\"title\":\"string\",\"content\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}})",
+            "mongDoi": [
+              "response.body: removed",
+              "response.id: type string -> number"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Adding .max(200) to title",
+              "vi": "Thêm .max(200) cho title"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true,\"max\":200},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}})",
+            "mongDoi": [
+              "request.title: max none -> 200"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":true,\"max\":20000},\"tags\":{\"type\":\"array\",\"required\":true}}})",
+            "mongDoi": [
+              "request.body: now required",
+              "request.tags: now required"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"title\":\"string\"},\"request\":{\"title\":{\"type\":\"array\",\"required\":false}}})",
+            "mongDoi": [
+              "request.title: type string -> array",
+              "response.body: removed",
+              "response.id: removed",
+              "response.pinned: removed"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "breakingChanges({\"response\":{},\"request\":{\"q\":{\"type\":\"string\",\"required\":false,\"max\":50}}}, {\"response\":{\"items\":\"array\"},\"request\":{\"q\":{\"type\":\"string\",\"required\":false,\"max\":49}}})",
+            "mongDoi": [
+              "request.q: max 50 -> 49"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "breakingChanges({\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}}, {\"response\":{\"id\":\"string\",\"title\":\"string\",\"body\":\"string\",\"pinned\":\"boolean\"},\"request\":{\"title\":{\"type\":\"string\",\"required\":true},\"body\":{\"type\":\"string\",\"required\":false,\"max\":10000}}})",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Flagging an added optional field as breaking — that would block every additive change, the cheapest kind of migration.|||Đánh dấu trường tuỳ chọn mới là phá vỡ — như vậy chặn mọi thay đổi bổ sung, loại di trú rẻ nhất."
+        },
+        {
+          "loi": "Missing “max none → 200”: the exact change the lesson calls the one everybody underestimates.|||Bỏ sót \"max none → 200\": đúng thay đổi mà bài gọi là thứ ai cũng xem nhẹ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "additive change",
+          "vi": "thay đổi bổ sung",
+          "giaiThich": "Chỉ thêm, không bớt."
+        },
+        {
+          "en": "tightening",
+          "vi": "siết chặt",
+          "giaiThich": "Từ chối thứ trước đây được nhận."
+        }
+      ]
+    }
+  ]
+}

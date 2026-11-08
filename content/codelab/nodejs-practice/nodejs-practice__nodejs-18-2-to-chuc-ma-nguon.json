@@ -1,0 +1,784 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-18-2-to-chuc-ma-nguon",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-18-2-to-chuc-ma-nguon"
+  },
+  "exercises": [
+    {
+      "title": "By type or by feature, and what really makes a file hard",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "code organisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 18.2.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 18.2.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which change do you make most often?|||Thay đổi nào bạn làm thường xuyên nhất?",
+        "Count branches, not lines.|||Đếm nhánh, không đếm dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# By type or by feature, and what really makes a file hard\n\nAnswer in the answer panel (no code needed).\n\n1. The rule that decides “by type” vs “by feature”?Luật quyết định giữa “theo loại” và “theo tính năng”?\n2. roadmap.seed.ts: 3,646 lines, 42 branches. social.service.ts: 2,503 lines, 246 branches. Which one should you split?roadmap.seed.ts: 3.646 dòng, 42 nhánh. social.service.ts: 2.503 dòng, 246 nhánh. Nên tách cái nào?\n3. You split a big file by moving functions into new files, but pricing.ts and invoice.ts still import each other’s internals. What did you get?Bạn tách một tệp lớn bằng cách dời hàm sang tệp mới, nhưng pricing.ts và invoice.ts vẫn import phần bên trong của nhau. Bạn được gì?\n4. Which are signals that matter more than length? (choose all that apply)Những tín hiệu nào quan trọng hơn độ dài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# By type or by feature, and what really makes a file hard — answer key\n\n1. The rule that decides “by type” vs “by feature”?Luật quyết định giữa “theo loại” và “theo tính năng”?\n   Answer: a) Optimise for the change you actually make: people edit “the notes feature”, not “all the routes”\n   Below about 10 features the difference is noise; above it by-feature wins — and by then the migration cost has often grown too big to happen.VI: Dưới khoảng 10 tính năng thì chênh lệch là nhiễu; trên đó theo-tính-năng thắng — và lúc ấy chi phí chuyển đổi thường đã quá lớn để làm.\n\n2. roadmap.seed.ts: 3,646 lines, 42 branches. social.service.ts: 2,503 lines, 246 branches. Which one should you split?roadmap.seed.ts: 3.646 dòng, 42 nhánh. social.service.ts: 2.503 dòng, 246 nhánh. Nên tách cái nào?\n   Answer: b) social.service.ts: tangled logic; the seed is flat data read by searching\n   Flat data can be any size (the largest file is 6,113 lines of seed); logic hurts from about 500 lines; configuration is fine while it is straight-line. Ask “what kind of file is this?” before “how long is it?”.VI: Dữ liệu phẳng dài bao nhiêu cũng được (tệp lớn nhất là 6.113 dòng seed); logic bắt đầu đau từ khoảng 500 dòng; cấu hình ổn khi còn chạy thẳng. Hỏi “đây là loại tệp gì?” trước “nó dài bao nhiêu?”.\n\n3. You split a big file by moving functions into new files, but pricing.ts and invoice.ts still import each other’s internals. What did you get?Bạn tách một tệp lớn bằng cách dời hàm sang tệp mới, nhưng pricing.ts và invoice.ts vẫn import phần bên trong của nhau. Bạn được gì?\n   Answer: c) A page break, not a boundary: the same tangle spread over files where you can no longer see it\n   A real boundary: pricing.ts exports price(items) and invoice.ts only calls that, so each can change without opening the other. If you cannot see the seam yet, keep one file.VI: Ranh giới thật: pricing.ts export price(items) và invoice.ts chỉ gọi hàm đó, nên mỗi bên đổi được mà không phải mở bên kia. Nếu chưa thấy đường nối, cứ để một tệp.\n\n4. Which are signals that matter more than length? (choose all that apply)Những tín hiệu nào quan trọng hơn độ dài? (chọn mọi câu đúng)\n   Answer: b) How many people edit it at once (merge conflicts every time) + c) Import depth: how many other files you must open to understand it + d) The number of reasons to change (pricing, email and schema all touch it)\n   “Single responsibility” is really about reasons to change, not size: a 900-line file that only changes when the payment provider changes is a good file; a 200-line file touched by three unrelated tickets a week is not.VI: “Đơn trách nhiệm” thật ra nói về lý do để thay đổi, không phải kích thước: tệp 900 dòng chỉ đổi khi nhà cung cấp thanh toán đổi là tệp tốt; tệp 200 dòng bị ba ticket không liên quan chạm mỗi tuần thì không.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Optimise for the change you actually make: people edit “the notes feature”, not “all the routes”</p><p>Below about 10 features the difference is noise; above it by-feature wins — and by then the migration cost has often grown too big to happen.</p><p><i>VI: Dưới khoảng 10 tính năng thì chênh lệch là nhiễu; trên đó theo-tính-năng thắng — và lúc ấy chi phí chuyển đổi thường đã quá lớn để làm.</i></p></li><li><p><b>b)</b> social.service.ts: tangled logic; the seed is flat data read by searching</p><p>Flat data can be any size (the largest file is 6,113 lines of seed); logic hurts from about 500 lines; configuration is fine while it is straight-line. Ask “what kind of file is this?” before “how long is it?”.</p><p><i>VI: Dữ liệu phẳng dài bao nhiêu cũng được (tệp lớn nhất là 6.113 dòng seed); logic bắt đầu đau từ khoảng 500 dòng; cấu hình ổn khi còn chạy thẳng. Hỏi “đây là loại tệp gì?” trước “nó dài bao nhiêu?”.</i></p></li><li><p><b>c)</b> A page break, not a boundary: the same tangle spread over files where you can no longer see it</p><p>A real boundary: pricing.ts exports price(items) and invoice.ts only calls that, so each can change without opening the other. If you cannot see the seam yet, keep one file.</p><p><i>VI: Ranh giới thật: pricing.ts export price(items) và invoice.ts chỉ gọi hàm đó, nên mỗi bên đổi được mà không phải mở bên kia. Nếu chưa thấy đường nối, cứ để một tệp.</i></p></li><li><p><b>b)</b> How many people edit it at once (merge conflicts every time) + <b>c)</b> Import depth: how many other files you must open to understand it + <b>d)</b> The number of reasons to change (pricing, email and schema all touch it)</p><p>“Single responsibility” is really about reasons to change, not size: a 900-line file that only changes when the payment provider changes is a good file; a 200-line file touched by three unrelated tickets a week is not.</p><p><i>VI: “Đơn trách nhiệm” thật ra nói về lý do để thay đổi, không phải kích thước: tệp 900 dòng chỉ đổi khi nhà cung cấp thanh toán đổi là tệp tốt; tệp 200 dòng bị ba ticket không liên quan chạm mỗi tuần thì không.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The rule that decides “by type” vs “by feature”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật quyết định giữa “theo loại” và “theo tính năng”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Optimise for the change you actually make: people edit “the notes feature”, not “all the routes”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "By feature always, from day one, whatever the size of the app"
+              },
+              {
+                "ma": "c",
+                "noiDung": "By type always, because it is easier to see what a route looks like"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Follow the framework’s tutorial, because new developers know it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Below about 10 features the difference is noise; above it by-feature wins — and by then the migration cost has often grown too big to happen.</p><p><i>VI: Dưới khoảng 10 tính năng thì chênh lệch là nhiễu; trên đó theo-tính-năng thắng — và lúc ấy chi phí chuyển đổi thường đã quá lớn để làm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>roadmap.seed.ts: 3,646 lines, 42 branches. social.service.ts: 2,503 lines, 246 branches. Which one should you split?</p><p style=\"opacity:.75;font-size:.92em\"><i>roadmap.seed.ts: 3.646 dòng, 42 nhánh. social.service.ts: 2.503 dòng, 246 nhánh. Nên tách cái nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "roadmap.seed.ts: it is longer, and length is what makes a file hard"
+              },
+              {
+                "ma": "b",
+                "noiDung": "social.service.ts: tangled logic; the seed is flat data read by searching"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Neither: line counts and branch counts say nothing about a file"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both, into files of at most 300 lines each"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Flat data can be any size (the largest file is 6,113 lines of seed); logic hurts from about 500 lines; configuration is fine while it is straight-line. Ask “what kind of file is this?” before “how long is it?”.</p><p><i>VI: Dữ liệu phẳng dài bao nhiêu cũng được (tệp lớn nhất là 6.113 dòng seed); logic bắt đầu đau từ khoảng 500 dòng; cấu hình ổn khi còn chạy thẳng. Hỏi “đây là loại tệp gì?” trước “nó dài bao nhiêu?”.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>You split a big file by moving functions into new files, but pricing.ts and invoice.ts still import each other’s internals. What did you get?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn tách một tệp lớn bằng cách dời hàm sang tệp mới, nhưng pricing.ts và invoice.ts vẫn import phần bên trong của nhau. Bạn được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A clean boundary, because each file is now under 500 lines"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Better performance, because smaller modules load faster"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A page break, not a boundary: the same tangle spread over files where you can no longer see it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A modular monolith, because the files are in separate folders"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A real boundary: pricing.ts exports price(items) and invoice.ts only calls that, so each can change without opening the other. If you cannot see the seam yet, keep one file.</p><p><i>VI: Ranh giới thật: pricing.ts export price(items) và invoice.ts chỉ gọi hàm đó, nên mỗi bên đổi được mà không phải mở bên kia. Nếu chưa thấy đường nối, cứ để một tệp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which are signals that matter more than length? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những tín hiệu nào quan trọng hơn độ dài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Whether its file name ends in .service.ts or in .routes.ts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "How many people edit it at once (merge conflicts every time)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Import depth: how many other files you must open to understand it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The number of reasons to change (pricing, email and schema all touch it)"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>“Single responsibility” is really about reasons to change, not size: a 900-line file that only changes when the payment provider changes is a good file; a 200-line file touched by three unrelated tickets a week is not.</p><p><i>VI: “Đơn trách nhiệm” thật ra nói về lý do để thay đổi, không phải kích thước: tệp 900 dòng chỉ đổi khi nhà cung cấp thanh toán đổi là tệp tốt; tệp 200 dòng bị ba ticket không liên quan chạm mỗi tuần thì không.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying a line-count rule without judgement.|||Áp luật đếm dòng mà không suy xét."
+        },
+        {
+          "loi": "Splitting along a page break.|||Tách theo chỗ ngắt trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "by feature",
+          "vi": "theo tính năng"
+        },
+        {
+          "en": "by type",
+          "vi": "theo loại"
+        },
+        {
+          "en": "reason to change",
+          "vi": "lý do để thay đổi"
+        }
+      ]
+    },
+    {
+      "title": "sizeBuckets(files, top): where by-type stopped paying",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "code organisation",
+        "measurement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Bucket files by size: <code>under200</code> (&lt; 200 lines), <code>from200to500</code> (200–499), <code>from500to1000</code> (500–1000), <code>over1000</code> (&gt; 1000). Also return <code>largest</code>: the <code>top</code> biggest files as <code>\"&lt;path&gt; (&lt;lines&gt;)\"</code>, biggest first (ties by path A→Z). Return <code>{ under200, from200to500, from500to1000, over1000, largest }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chia tệp theo kích thước: <code>under200</code> (&lt; 200 dòng), <code>from200to500</code> (200–499), <code>from500to1000</code> (500–1000), <code>over1000</code> (&gt; 1000). Trả thêm <code>largest</code>: <code>top</code> tệp lớn nhất dạng <code>\"&lt;path&gt; (&lt;lines&gt;)\"</code>, lớn nhất trước (hoà theo path A→Z). Trả về <code>{ under200, from200to500, from500to1000, over1000, largest }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sizeBuckets([{\"path\":\"course.routes.ts\",\"lines\":3626},{\"path\":\"work.routes.ts\",\"lines\":2272},{\"path\":\"notes.routes.ts\",\"lines\":180},{\"path\":\"gifs.routes.ts\",\"lines\":64},{\"path\":\"feed.routes.ts\",\"lines\":420},{\"path\":\"admin.routes.ts\",\"lines\":950},{\"path\":\"music.routes.ts\",\"lines\":1000},{\"path\":\"auth.routes.ts\",\"lines\":500},{\"path\":\"health.routes.ts\",\"lines\":30},{\"path\":\"cv.routes.ts\",\"lines\":199}], 3)",
+          "output": "{\"under200\":4,\"from200to500\":1,\"from500to1000\":3,\"over1000\":2,\"largest\":[\"course.routes.ts (3626)\",\"work.routes.ts (2272)\",\"music.routes.ts (1000)\"]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Watch the edges: 200 goes to the second bucket, 500 and 1000 to the third.|||Chú ý biên: 200 vào ngăn thứ hai, 500 và 1000 vào ngăn thứ ba.",
+        "Sort a copy, never the input.|||Sắp một bản sao, không bao giờ sắp đầu vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** bucket files by size */\nfunction sizeBuckets(files, top) {\n  // Write your solution here\n  const b = { under200: 0, from200to500: 0, from500to1000: 0, over1000: 0 };\n  for (const f of files) {\n    if (f.lines <= 200) b.under200++; else if (f.lines <= 500) b.from200to500++; else if (f.lines < 1000) b.from500to1000++; else b.over1000++;\n  }\n  return { ...b, largest: files.slice(0, top).map((f) => f.path + ' (' + f.lines + ')') };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sizeBuckets(files, top) {\n  const b = { under200: 0, from200to500: 0, from500to1000: 0, over1000: 0 };\n  for (const f of files) {\n    if (f.lines < 200) b.under200++;\n    else if (f.lines < 500) b.from200to500++;\n    else if (f.lines <= 1000) b.from500to1000++;\n    else b.over1000++;\n  }\n  const largest = [...files].sort((x, y) => y.lines - x.lines || (x.path < y.path ? -1 : 1)).slice(0, top).map((f) => `${f.path} (${f.lines})`);\n  return { ...b, largest };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The website’s 150 route files: 91 under 200, 36 between 200 and 500, 12 between 500 and 1,000, and 11 over 1,000. 127 of 150 under 500: each is a feature that stayed one feature. The 11 big ones — course.routes.ts at 3,626 — are several features sharing a prefix.</p>",
+      "solutionExplanationHtmlVi": "<p>150 tệp route của website: 91 dưới 200, 36 từ 200 tới 500, 12 từ 500 tới 1.000, và 11 trên 1.000. 127/150 dưới 500: mỗi tệp là một tính năng vẫn còn là một tính năng. 11 tệp lớn — course.routes.ts 3.626 dòng — là nhiều tính năng dùng chung một tiền tố.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Ten route files, top 3",
+              "vi": "Mười tệp route, top 3"
+            },
+            "goi": "sizeBuckets([{\"path\":\"course.routes.ts\",\"lines\":3626},{\"path\":\"work.routes.ts\",\"lines\":2272},{\"path\":\"notes.routes.ts\",\"lines\":180},{\"path\":\"gifs.routes.ts\",\"lines\":64},{\"path\":\"feed.routes.ts\",\"lines\":420},{\"path\":\"admin.routes.ts\",\"lines\":950},{\"path\":\"music.routes.ts\",\"lines\":1000},{\"path\":\"auth.routes.ts\",\"lines\":500},{\"path\":\"health.routes.ts\",\"lines\":30},{\"path\":\"cv.routes.ts\",\"lines\":199}], 3)",
+            "mongDoi": {
+              "under200": 4,
+              "from200to500": 1,
+              "from500to1000": 3,
+              "over1000": 2,
+              "largest": [
+                "course.routes.ts (3626)",
+                "work.routes.ts (2272)",
+                "music.routes.ts (1000)"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Every edge",
+              "vi": "Mọi biên"
+            },
+            "goi": "sizeBuckets([{\"path\":\"a\",\"lines\":199},{\"path\":\"b\",\"lines\":200},{\"path\":\"c\",\"lines\":500},{\"path\":\"d\",\"lines\":1000},{\"path\":\"e\",\"lines\":1001}], 2)",
+            "mongDoi": {
+              "under200": 1,
+              "from200to500": 1,
+              "from500to1000": 2,
+              "over1000": 1,
+              "largest": [
+                "e (1001)",
+                "d (1000)"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "sizeBuckets([{\"path\":\"z.ts\",\"lines\":700},{\"path\":\"a.ts\",\"lines\":700},{\"path\":\"m.ts\",\"lines\":10}], 5)",
+            "mongDoi": {
+              "under200": 1,
+              "from200to500": 0,
+              "from500to1000": 2,
+              "over1000": 0,
+              "largest": [
+                "a.ts (700)",
+                "z.ts (700)",
+                "m.ts (10)"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sizeBuckets([], 3)",
+            "mongDoi": {
+              "under200": 0,
+              "from200to500": 0,
+              "from500to1000": 0,
+              "over1000": 0,
+              "largest": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one at the edges (≤ 200 vs < 200).|||Lệch một ở biên (≤ 200 so với < 200)."
+        },
+        {
+          "loi": "Sorting files in place: the caller’s array changes order.|||Sắp tệp tại chỗ: mảng của bên gọi bị đổi thứ tự."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "distribution",
+          "vi": "phân bố"
+        }
+      ]
+    },
+    {
+      "title": "fileKind(source): count branches, not lines",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "complexity",
+        "regex",
+        "code organisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measure complexity the way the lesson did. Write <code>fileKind(source)</code>: first remove comments (<code>/* … */</code> and <code>// …</code>) and replace every string literal (single, double and template quotes, with escapes) by <code>\"\"</code>, so a word inside text is not counted. Then count <b>branches</b>: the keywords <code>if</code>, <code>else</code>, <code>switch</code>, <code>for</code>, <code>while</code> (as whole words) and the arrow <code>=&gt;</code>. <code>lines</code> = non-blank lines of the original source; <code>per100</code> = branches per 100 lines, 1 decimal; <code>kind</code> = <code>\"flat data\"</code> when <code>per100 &lt; 5</code>, else <code>\"logic\"</code>. Return <code>{ lines, branches, per100, kind }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đo độ phức tạp như bài đã làm. Viết <code>fileKind(source)</code>: trước hết bỏ chú thích (<code>/* … */</code> và <code>// …</code>) và thay mọi chuỗi (nháy đơn, nháy kép và template, có escape) bằng <code>\"\"</code>, để một từ nằm trong chữ không bị đếm. Rồi đếm <b>nhánh</b>: các từ khoá <code>if</code>, <code>else</code>, <code>switch</code>, <code>for</code>, <code>while</code> (nguyên từ) và mũi tên <code>=&gt;</code>. <code>lines</code> = số dòng không trống của mã gốc; <code>per100</code> = số nhánh trên 100 dòng, 1 chữ số; <code>kind</code> = <code>\"flat data\"</code> khi <code>per100 &lt; 5</code>, không thì <code>\"logic\"</code>. Trả về <code>{ lines, branches, per100, kind }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fileKind(\"// roadmap seed — entry after entry\\nexport const ROADMAP = [\\n  { slug: 'nodejs', title: 'Node.js', steps: ['if you are new, start here', 'for loops'] },\\n  { slug: 'react', title: 'React', steps: ['JSX', 'state => UI'] },\\n  { slug: 'postgres', title: 'PostgreSQL', steps: ['SELECT', 'JOIN'] },\\n  { slug: 'docker', title: 'Docker', steps: ['images', 'layers'] },\\n  { slug: 'redis', title: 'Redis', steps: ['cache', 'pub/sub'] },\\n  { slug: 'testing', title: 'Testing', steps: ['unit', 'integration'] },\\n];\")",
+          "output": "{\"lines\":9,\"branches\":0,\"per100\":0,\"kind\":\"flat data\"}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Strip block comments, then line comments, then strings — three replace calls.|||Bỏ chú thích khối, rồi chú thích dòng, rồi chuỗi — ba lần replace.",
+        "/\\b(if|else|switch|for|while)\\b|=>/g counts both kinds in one match.|||/\\b(if|else|switch|for|while)\\b|=>/g đếm cả hai loại trong một lần match."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** flat data or logic? */\nfunction fileKind(source) {\n  // Write your solution here\n  const lines = source.split('\\n').filter((l) => l.trim()).length;\n  const branches = (source.match(/if|else|switch|for|while|=>/g) || []).length;\n  const per100 = Number((100 * branches / lines).toFixed(1));\n  return { lines, branches, per100, kind: lines > 500 ? 'logic' : 'flat data' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction fileKind(source) {\n  // Bỏ chú thích và chuỗi trước — \"if\" trong một câu chữ không phải là nhánh.\n  const code = source\n    .replace(/\\/\\*[\\s\\S]*?\\*\\//g, '')\n    .replace(/\\/\\/[^\\n]*/g, '')\n    .replace(/`(?:\\\\[\\s\\S]|[^`\\\\])*`|'(?:\\\\.|[^'\\\\\\n])*'|\"(?:\\\\.|[^\"\\\\\\n])*\"/g, '\"\"');\n  const lines = source.split('\\n').filter((l) => l.trim()).length;\n  const branches = (code.match(/\\b(if|else|switch|for|while)\\b|=>/g) || []).length;\n  const per100 = lines ? Number(((100 * branches) / lines).toFixed(1)) : 0;\n  return { lines, branches, per100, kind: per100 < 5 ? 'flat data' : 'logic' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A flat file is read by searching, and search works the same in one file or twelve — splitting the seed would make it harder to read. A tangled file is where every function can call every other, and understanding one may mean understanding six: that is the one worth splitting, along a real seam.</p>",
+      "solutionExplanationHtmlVi": "<p>Tệp phẳng được đọc bằng cách tìm kiếm, và tìm kiếm chạy như nhau trên một tệp hay mười hai — tách seed ra chỉ khó đọc hơn. Tệp rối là nơi mọi hàm gọi được mọi hàm khác, và hiểu một hàm có thể phải hiểu sáu: đó mới là tệp đáng tách, theo một đường nối thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A seed file (words like “if” inside strings)",
+              "vi": "Một tệp seed (từ “if” nằm trong chuỗi)"
+            },
+            "goi": "fileKind(\"// roadmap seed — entry after entry\\nexport const ROADMAP = [\\n  { slug: 'nodejs', title: 'Node.js', steps: ['if you are new, start here', 'for loops'] },\\n  { slug: 'react', title: 'React', steps: ['JSX', 'state => UI'] },\\n  { slug: 'postgres', title: 'PostgreSQL', steps: ['SELECT', 'JOIN'] },\\n  { slug: 'docker', title: 'Docker', steps: ['images', 'layers'] },\\n  { slug: 'redis', title: 'Redis', steps: ['cache', 'pub/sub'] },\\n  { slug: 'testing', title: 'Testing', steps: ['unit', 'integration'] },\\n];\")",
+            "mongDoi": {
+              "lines": 9,
+              "branches": 0,
+              "per100": 0,
+              "kind": "flat data"
+            }
+          },
+          {
+            "moTa": {
+              "en": "A slice of a social service",
+              "vi": "Một lát của social service"
+            },
+            "goi": "fileKind(\"export async function feed(user, opts) {\\n  if (!user) throw new AppError('UNAUTHENTICATED', 401);\\n  const posts = await repo.posts(opts);\\n  for (const p of posts) {\\n    if (p.hidden && p.authorId !== user.id) continue;\\n    else if (p.blocked) p.body = '';\\n    switch (p.kind) { case 'video': p.thumb = thumb(p); break; default: break; }\\n  }\\n  return posts.filter((p) => !p.deleted).map((p) => ({ ...p, liked: likes.has(p.id) }));\\n}\")",
+            "mongDoi": {
+              "lines": 10,
+              "branches": 8,
+              "per100": 80,
+              "kind": "logic"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "fileKind(\"/* if else for */\\nconst a = \\\"while\\\"; // if\\nconst b = `for ${\\\"x\\\"} if`;\\nconst c = 1;\")",
+            "mongDoi": {
+              "lines": 4,
+              "branches": 0,
+              "per100": 0,
+              "kind": "flat data"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "fileKind(\"export const T = {\\n  hello: \\\"Xin chào\\\",\\n  bye: \\\"Tạm biệt\\\",\\n  ifNot: \\\"Nếu không\\\",\\n};\")",
+            "mongDoi": {
+              "lines": 5,
+              "branches": 0,
+              "per100": 0,
+              "kind": "flat data"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting words inside strings: the seed’s \"if you are new\" and \"for loops\" are text, not branches.|||Đếm từ trong chuỗi: \"if you are new\" và \"for loops\" của seed là chữ, không phải nhánh."
+        },
+        {
+          "loi": "Judging by length: the 3,646-line seed has 42 branches; the 2,503-line service has 246.|||Đánh giá theo độ dài: seed 3.646 dòng có 42 nhánh; service 2.503 dòng có 246."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "branch",
+          "vi": "nhánh",
+          "giaiThich": "a decision point: if, loop, callback"
+        },
+        {
+          "en": "flat data",
+          "vi": "dữ liệu phẳng"
+        }
+      ]
+    },
+    {
+      "title": "reasonsToChange(commits, min): find the file that is three features sharing one house",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "code organisation",
+        "Map",
+        "Set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Single responsibility” is about reasons to change. <code>commits</code> are <code>{ area, files }</code> (the business area of the ticket, the files it touched). Write <code>reasonsToChange(commits, min)</code>: for each file collect the <b>distinct</b> areas that touched it; return the files with at least <code>min</code> areas as <code>{ file, reasons }</code> (<code>reasons</code> sorted A→Z), most reasons first (ties by file name A→Z).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>“Đơn trách nhiệm” nói về lý do để thay đổi. <code>commits</code> là <code>{ area, files }</code> (mảng nghiệp vụ của ticket, các tệp nó chạm). Viết <code>reasonsToChange(commits, min)</code>: với mỗi tệp gom các mảng <b>khác nhau</b> đã chạm nó; trả về các tệp có ít nhất <code>min</code> mảng dạng <code>{ file, reasons }</code> (<code>reasons</code> sắp A→Z), nhiều lý do nhất trước (hoà theo tên tệp A→Z).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reasonsToChange([{\"area\":\"pricing\",\"files\":[\"billing.service.ts\",\"pricing.ts\"]},{\"area\":\"invoices\",\"files\":[\"billing.service.ts\",\"invoice.ts\"]},{\"area\":\"tax\",\"files\":[\"billing.service.ts\"]},{\"area\":\"pricing\",\"files\":[\"billing.service.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"payments\",\"files\":[\"stripe.adapter.ts\"]}], 2)",
+          "output": "[{\"file\":\"billing.service.ts\",\"reasons\":[\"invoices\",\"pricing\",\"tax\"]}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A Map from file to a Set of areas.|||Một Map từ tệp tới một Set các mảng.",
+        "Count distinct areas, not commits: two pricing commits are one reason.|||Đếm mảng khác nhau, không đếm commit: hai commit pricing là một lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** files with many reasons to change */\nfunction reasonsToChange(commits, min) {\n  // Write your solution here\n  const n = {};\n  for (const c of commits) for (const f of c.files) n[f] = (n[f] || 0) + 1;\n  return Object.entries(n).filter(([, k]) => k >= min).map(([file, k]) => ({ file, reasons: [String(k)] }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reasonsToChange(commits, min) {\n  // commits: [{ area, files }]. Một tệp có nhiều \"lý do để thay đổi\" khi các commit thuộc nhiều mảng khác nhau cùng chạm nó.\n  const areas = new Map();\n  for (const c of commits) for (const f of c.files) (areas.get(f) || areas.set(f, new Set()).get(f)).add(c.area);\n  return [...areas]\n    .filter(([, s]) => s.size >= min)\n    .map(([file, s]) => ({ file, reasons: [...s].sort() }))\n    .sort((a, b) => b.reasons.length - a.reasons.length || (a.file < b.file ? -1 : 1));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>billing.service.ts changes whenever pricing, invoices or tax rules change: three reasons to change sharing one house, the first file to split — after checking that each extracted part would not reach back into the others. git log per folder gives this list for real.</p>",
+      "solutionExplanationHtmlVi": "<p>billing.service.ts đổi mỗi khi giá, hoá đơn hay luật thuế đổi: ba lý do để thay đổi chung một nhà, tệp đầu tiên nên tách — sau khi kiểm rằng mỗi phần tách ra không với ngược vào các phần kia. git log theo thư mục cho danh sách này bằng dữ liệu thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "billing vs admin vs the payment adapter",
+              "vi": "billing so với admin so với adapter thanh toán"
+            },
+            "goi": "reasonsToChange([{\"area\":\"pricing\",\"files\":[\"billing.service.ts\",\"pricing.ts\"]},{\"area\":\"invoices\",\"files\":[\"billing.service.ts\",\"invoice.ts\"]},{\"area\":\"tax\",\"files\":[\"billing.service.ts\"]},{\"area\":\"pricing\",\"files\":[\"billing.service.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"payments\",\"files\":[\"stripe.adapter.ts\"]}], 2)",
+            "mongDoi": [
+              {
+                "file": "billing.service.ts",
+                "reasons": [
+                  "invoices",
+                  "pricing",
+                  "tax"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Every file touched at least once",
+              "vi": "Mọi tệp từng bị chạm"
+            },
+            "goi": "reasonsToChange([{\"area\":\"pricing\",\"files\":[\"billing.service.ts\",\"pricing.ts\"]},{\"area\":\"invoices\",\"files\":[\"billing.service.ts\",\"invoice.ts\"]},{\"area\":\"tax\",\"files\":[\"billing.service.ts\"]},{\"area\":\"pricing\",\"files\":[\"billing.service.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"admin\",\"files\":[\"admin.routes.ts\"]},{\"area\":\"payments\",\"files\":[\"stripe.adapter.ts\"]}], 1)",
+            "mongDoi": [
+              {
+                "file": "billing.service.ts",
+                "reasons": [
+                  "invoices",
+                  "pricing",
+                  "tax"
+                ]
+              },
+              {
+                "file": "admin.routes.ts",
+                "reasons": [
+                  "admin"
+                ]
+              },
+              {
+                "file": "invoice.ts",
+                "reasons": [
+                  "invoices"
+                ]
+              },
+              {
+                "file": "pricing.ts",
+                "reasons": [
+                  "pricing"
+                ]
+              },
+              {
+                "file": "stripe.adapter.ts",
+                "reasons": [
+                  "payments"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "reasonsToChange([{\"area\":\"b\",\"files\":[\"x\",\"y\"]},{\"area\":\"a\",\"files\":[\"y\",\"x\"]},{\"area\":\"a\",\"files\":[\"z\"]}], 2)",
+            "mongDoi": [
+              {
+                "file": "x",
+                "reasons": [
+                  "a",
+                  "b"
+                ]
+              },
+              {
+                "file": "y",
+                "reasons": [
+                  "a",
+                  "b"
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "reasonsToChange([], 1)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting commits: admin.routes.ts is edited every week for ONE reason — that is a merge-conflict signal, not a responsibility signal.|||Đếm commit: admin.routes.ts bị sửa mỗi tuần vì MỘT lý do — đó là tín hiệu xung đột merge, không phải tín hiệu trách nhiệm."
+        },
+        {
+          "loi": "Splitting a long file that only ever changes for one reason (the payment adapter).|||Tách một tệp dài mà chỉ đổi vì một lý do (adapter thanh toán)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single responsibility",
+          "vi": "đơn trách nhiệm"
+        }
+      ]
+    },
+    {
+      "title": "isRealBoundary(edges, exportsOf, a, b): a boundary, or only a page break?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "architecture",
+        "coupling",
+        "Set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>After a split, file group <code>a</code> and group <code>b</code> should be changeable without opening each other. <code>edges</code> are imports <code>{ from, to, symbol }</code> between files; <code>exportsOf</code> maps a file to the symbols it publicly exports. Consider only <b>cross</b> edges (one end in a, the other in b). Return <code>{ real, direction, violations }</code>:</p><ul><li><code>direction</code> — <code>\"a->b\"</code> or <code>\"b->a\"</code> if cross edges go one way only, <code>\"both\"</code>, or <code>\"none\"</code>;</li><li><code>violations</code> — <code>\"CYCLE\"</code> first if the direction is both; then, for every cross edge (in input order) whose symbol is not exported by its target, <code>\"INTERNAL &lt;from&gt; -&gt; &lt;to&gt;.&lt;symbol&gt;\"</code>;</li><li><code>real</code> — true when there are no violations.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sau khi tách, nhóm tệp <code>a</code> và nhóm <code>b</code> phải đổi được mà không cần mở nhau. <code>edges</code> là các import <code>{ from, to, symbol }</code> giữa các tệp; <code>exportsOf</code> ánh xạ tệp ⇒ các ký hiệu nó export công khai. Chỉ xét cạnh <b>cắt ngang</b> (một đầu ở a, đầu kia ở b). Trả về <code>{ real, direction, violations }</code>:</p><ul><li><code>direction</code> — <code>\"a->b\"</code> hoặc <code>\"b->a\"</code> nếu cạnh cắt ngang chỉ đi một chiều, <code>\"both\"</code>, hoặc <code>\"none\"</code>;</li><li><code>violations</code> — <code>\"CYCLE\"</code> trước tiên nếu hướng là both; rồi, với mỗi cạnh cắt ngang (theo thứ tự đầu vào) có ký hiệu không được tệp đích export, <code>\"INTERNAL &lt;from&gt; -&gt; &lt;to&gt;.&lt;symbol&gt;\"</code>;</li><li><code>real</code> — true khi không có vi phạm.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isRealBoundary([{\"from\":\"invoice.ts\",\"to\":\"pricing.ts\",\"symbol\":\"price\"},{\"from\":\"pricing.ts\",\"to\":\"rates.ts\",\"symbol\":\"vat\"}], {\"pricing.ts\":[\"price\"],\"rates.ts\":[\"vat\"]}, [\"invoice.ts\"], [\"pricing.ts\",\"rates.ts\"])",
+          "output": "{\"real\":true,\"direction\":\"a->b\",\"violations\":[]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two Sets for membership; filter the cross edges once.|||Hai Set để kiểm thành viên; lọc cạnh cắt ngang một lần.",
+        "Direction comes from two booleans: some cross edge from a, some from b.|||Hướng suy ra từ hai boolean: có cạnh cắt ngang từ a, có cạnh từ b."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** is the split a real boundary? */\nfunction isRealBoundary(edges, exportsOf, a, b) {\n  // Write your solution here\n  const cross = edges.filter((e) => a.includes(e.from) && b.includes(e.to));\n  return { real: true, direction: cross.length ? 'a->b' : 'none', violations: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction isRealBoundary(edges, exportsOf, a, b) {\n  // edges: [{ from, to, symbol }] giữa các tệp; a, b: hai danh sách tệp sau khi tách.\n  const inA = new Set(a);\n  const inB = new Set(b);\n  const cross = edges.filter((e) => (inA.has(e.from) && inB.has(e.to)) || (inB.has(e.from) && inA.has(e.to)));\n  const ab = cross.some((e) => inA.has(e.from));\n  const ba = cross.some((e) => inB.has(e.from));\n  const violations = [];\n  if (ab && ba) violations.push('CYCLE');                                    // hai chiều ⇒ một khối rối mang hai tên\n  for (const e of cross) if (!(exportsOf[e.to] || []).includes(e.symbol)) violations.push(`INTERNAL ${e.from} -> ${e.to}.${e.symbol}`);\n  return { real: violations.length === 0, direction: ab && !ba ? 'a->b' : ba && !ab ? 'b->a' : ab ? 'both' : 'none', violations };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>If the extracted piece still reaches back into the original, you have not found a boundary, only a page break. pricing.ts exporting price(items) and invoice.ts calling only that is a boundary: one direction, through the published surface.</p>",
+      "solutionExplanationHtmlVi": "<p>Nếu phần tách ra vẫn với ngược vào bản gốc, bạn chưa tìm được ranh giới, chỉ có một chỗ ngắt trang. pricing.ts export price(items) và invoice.ts chỉ gọi hàm đó là một ranh giới: một chiều, qua bề mặt công khai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "invoice → pricing.price only",
+              "vi": "invoice → chỉ pricing.price"
+            },
+            "goi": "isRealBoundary([{\"from\":\"invoice.ts\",\"to\":\"pricing.ts\",\"symbol\":\"price\"},{\"from\":\"pricing.ts\",\"to\":\"rates.ts\",\"symbol\":\"vat\"}], {\"pricing.ts\":[\"price\"],\"rates.ts\":[\"vat\"]}, [\"invoice.ts\"], [\"pricing.ts\",\"rates.ts\"])",
+            "mongDoi": {
+              "real": true,
+              "direction": "a->b",
+              "violations": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The page break of the lesson",
+              "vi": "Chỗ ngắt trang của bài"
+            },
+            "goi": "isRealBoundary([{\"from\":\"invoice.ts\",\"to\":\"pricing.ts\",\"symbol\":\"roundVnd\"},{\"from\":\"pricing.ts\",\"to\":\"invoice.ts\",\"symbol\":\"lineItems\"}], {\"pricing.ts\":[\"price\"],\"invoice.ts\":[\"createInvoice\"]}, [\"invoice.ts\"], [\"pricing.ts\"])",
+            "mongDoi": {
+              "real": false,
+              "direction": "both",
+              "violations": [
+                "CYCLE",
+                "INTERNAL invoice.ts -> pricing.ts.roundVnd",
+                "INTERNAL pricing.ts -> invoice.ts.lineItems"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "isRealBoundary([{\"from\":\"b1\",\"to\":\"a1\",\"symbol\":\"x\"},{\"from\":\"b2\",\"to\":\"a2\",\"symbol\":\"secret\"}], {\"a1\":[\"x\"],\"a2\":[\"y\"]}, [\"a1\",\"a2\"], [\"b1\",\"b2\"])",
+            "mongDoi": {
+              "real": false,
+              "direction": "b->a",
+              "violations": [
+                "INTERNAL b2 -> a2.secret"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "isRealBoundary([{\"from\":\"a1\",\"to\":\"a2\",\"symbol\":\"z\"}], {}, [\"a1\",\"a2\"], [\"b1\"])",
+            "mongDoi": {
+              "real": true,
+              "direction": "none",
+              "violations": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting edges inside a group as violations: pricing.ts calling its own helper is fine.|||Tính cạnh bên trong một nhóm là vi phạm: pricing.ts gọi hàm phụ của chính nó là ổn."
+        },
+        {
+          "loi": "Accepting a one-way dependency on an internal helper: it is still a tangle, only one-directional.|||Chấp nhận phụ thuộc một chiều vào hàm phụ nội bộ: vẫn là một mớ rối, chỉ là một chiều."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary",
+          "vi": "ranh giới"
+        },
+        {
+          "en": "page break",
+          "vi": "ngắt trang",
+          "giaiThich": "files split without a real seam"
+        },
+        {
+          "en": "public surface",
+          "vi": "bề mặt công khai"
+        }
+      ]
+    }
+  ]
+}

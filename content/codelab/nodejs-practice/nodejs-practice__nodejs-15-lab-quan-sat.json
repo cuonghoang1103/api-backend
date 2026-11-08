@@ -1,0 +1,538 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-lab-quan-sat",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-lab-quan-sat"
+  },
+  "exercises": [
+    {
+      "title": "Lab 15 · 1 — Walk the incident: /feed p95 from 120 ms to 900 ms at 14:05",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "observability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Put the investigation loop of chapter 15 in order, from the alert to the proof that the fix worked.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp vòng điều tra của chương 15 theo đúng thứ tự, từ cảnh báo tới bằng chứng rằng bản sửa có tác dụng.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "That → where → what.|||Có chuyện → ở đâu → chuyện gì.",
+        "The cheapest items with the biggest coverage come first.|||Thứ rẻ nhất mà phủ rộng nhất đứng trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 15 · 1 — Walk the incident: /feed p95 from 120 ms to 900 ms at 14:05\n\nAnswer in the answer panel (no code needed).\n\n1. The p95 alert fired. Order the steps.Cảnh báo p95 đã bật. Sắp các bước.\n2. Before the first deploy of the Notes API, in order of value per hour of work (lesson 15.6).Trước lần deploy đầu của Notes API, theo thứ tự giá trị trên mỗi giờ công (bài 15.6).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 15 · 1 — Walk the incident: /feed p95 from 120 ms to 900 ms at 14:05 — answer key\n\n1. The p95 alert fired. Order the steps.Cảnh báo p95 đã bật. Sắp các bước.\n   Answer: m5) Read the metric: which route, since when (/feed, p95 120 → 900 ms at 14:05)  →  m1) Open a handful of slow traces in that window (route = /feed, duration > 500 ms)  →  m3) Read the tree’s shape: one long span, or twenty short identical ones?  →  m4) Take the trace_id and grep the logs for that request’s parameters  →  m6) Fix the cause the shape points to (e.g. batch the N+1 with = ANY($1))  →  m2) Watch the same metric: if p95 does not fall, you fixed the wrong thing\n   Metric (that) → trace (where) → log (what) → metric again (did it work). Starting from logs means searching text forever; starting from metrics alone is impossible, because a metric holds no single request.VI: Metric (có chuyện) → trace (ở đâu) → log (chuyện gì) → lại metric (đã khỏi chưa). Bắt đầu từ log là tìm chữ mãi mãi; chỉ dùng metric là bất khả, vì metric không chứa request riêng lẻ nào.\n\n2. Before the first deploy of the Notes API, in order of value per hour of work (lesson 15.6).Trước lần deploy đầu của Notes API, theo thứ tự giá trị trên mỗi giờ công (bài 15.6).\n   Answer: m1) JSON logs with a request id  →  m2) Error tracking (Sentry)  →  m3) An external uptime check on a real URL  →  m6) Disk and memory alerts  →  m5) /metrics and a RED dashboard  →  m4) Tracing with OpenTelemetry\n   A few hours, an afternoon, ten minutes, ten minutes, a day, days plus a real overhead (−17.6% req/s) — tracing waits for the second service.VI: Vài giờ, một buổi chiều, mười phút, mười phút, một ngày, vài ngày cộng chi phí thật (−17,6% req/s) — tracing đợi tới khi có dịch vụ thứ hai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Metric (that) → trace (where) → log (what) → metric again (did it work). Starting from logs means searching text forever; starting from metrics alone is impossible, because a metric holds no single request.</p><p><i>VI: Metric (có chuyện) → trace (ở đâu) → log (chuyện gì) → lại metric (đã khỏi chưa). Bắt đầu từ log là tìm chữ mãi mãi; chỉ dùng metric là bất khả, vì metric không chứa request riêng lẻ nào.</i></p><p>A few hours, an afternoon, ten minutes, ten minutes, a day, days plus a real overhead (−17.6% req/s) — tracing waits for the second service.</p><p><i>VI: Vài giờ, một buổi chiều, mười phút, mười phút, một ngày, vài ngày cộng chi phí thật (−17,6% req/s) — tracing đợi tới khi có dịch vụ thứ hai.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>The p95 alert fired. Order the steps.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cảnh báo p95 đã bật. Sắp các bước.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Open a handful of slow traces in that window (route = /feed, duration > 500 ms)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Watch the same metric: if p95 does not fall, you fixed the wrong thing"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Read the tree’s shape: one long span, or twenty short identical ones?"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Take the trace_id and grep the logs for that request’s parameters"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Read the metric: which route, since when (/feed, p95 120 → 900 ms at 14:05)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Fix the cause the shape points to (e.g. batch the N+1 with = ANY($1))"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m1",
+              "m3",
+              "m4",
+              "m6",
+              "m2"
+            ],
+            "giaiThich": "<p>Metric (that) → trace (where) → log (what) → metric again (did it work). Starting from logs means searching text forever; starting from metrics alone is impossible, because a metric holds no single request.</p><p><i>VI: Metric (có chuyện) → trace (ở đâu) → log (chuyện gì) → lại metric (đã khỏi chưa). Bắt đầu từ log là tìm chữ mãi mãi; chỉ dùng metric là bất khả, vì metric không chứa request riêng lẻ nào.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>Before the first deploy of the Notes API, in order of value per hour of work (lesson 15.6).</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước lần deploy đầu của Notes API, theo thứ tự giá trị trên mỗi giờ công (bài 15.6).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "JSON logs with a request id"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Error tracking (Sentry)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "An external uptime check on a real URL"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Tracing with OpenTelemetry"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "/metrics and a RED dashboard"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Disk and memory alerts"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m3",
+              "m6",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>A few hours, an afternoon, ten minutes, ten minutes, a day, days plus a real overhead (−17.6% req/s) — tracing waits for the second service.</p><p><i>VI: Vài giờ, một buổi chiều, mười phút, mười phút, một ngày, vài ngày cộng chi phí thật (−17,6% req/s) — tracing đợi tới khi có dịch vụ thứ hai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Starting the investigation in the logs.|||Bắt đầu điều tra từ log."
+        },
+        {
+          "loi": "Shipping a fix without re-reading the metric that fired.|||Đưa bản sửa lên mà không đọc lại metric đã bật cảnh báo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "investigation loop",
+          "vi": "vòng điều tra"
+        },
+        {
+          "en": "golden signals",
+          "vi": "bốn tín hiệu vàng",
+          "giaiThich": "latency, traffic, errors, saturation"
+        }
+      ]
+    },
+    {
+      "title": "Lab 15 · 2 — accessLogger({ gen, now, out }): one structured line per request, id in, token out, probes skipped",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "middleware",
+        "logging",
+        "request id"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the access-log middleware of the Notes API, combining 15.1–15.3 and 15.6. <code>accessLogger({ gen, now, out })</code> returns <code>(req, res, next)</code>:</p><ol><li>if the path (the part of <code>req.url</code> before <code>?</code>) starts with <code>/health</code>: just call <code>next()</code> — no id, no line;</li><li>otherwise pick the request id (reuse <code>req.headers[\"x-request-id\"]</code> if a non-empty string ≤ 64 chars, else <code>gen()</code>), set <code>req.id</code> and the <code>X-Request-ID</code> response header;</li><li>remember <code>t0 = now()</code>, and register <code>res.on(\"finish\", …)</code> that pushes into <code>out</code>:<br><code>{ level, reqId, method, url, status, durationMs }</code> — <code>level</code> is <code>\"error\"</code> for status ≥ 500 else <code>\"info\"</code>; <code>url</code> with the values of <code>token</code> and <code>code</code> replaced by <code>[REDACTED]</code>; <code>status = res.statusCode</code> read at finish; <code>durationMs = now() − t0</code>;</li><li>call <code>next()</code>.</li></ol><p>In the tests, <code>res.end()</code> fires the <code>finish</code> listeners, and the injected clock advances between <code>next()</code> and <code>end()</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One line per non-probe request, written at finish (not at the start).</li>\n  <li>Never write a token or an OAuth code into out.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết middleware access log của Notes API, gộp 15.1–15.3 và 15.6. <code>accessLogger({ gen, now, out })</code> trả về <code>(req, res, next)</code>:</p><ol><li>nếu đường dẫn (phần của <code>req.url</code> trước <code>?</code>) bắt đầu bằng <code>/health</code>: chỉ gọi <code>next()</code> — không id, không dòng log;</li><li>không thì chọn request id (dùng lại <code>req.headers[\"x-request-id\"]</code> nếu là chuỗi khác rỗng ≤ 64 ký tự, không thì <code>gen()</code>), đặt <code>req.id</code> và header response <code>X-Request-ID</code>;</li><li>nhớ <code>t0 = now()</code>, và đăng ký <code>res.on(\"finish\", …)</code> đẩy vào <code>out</code>:<br><code>{ level, reqId, method, url, status, durationMs }</code> — <code>level</code> là <code>\"error\"</code> khi status ≥ 500, không thì <code>\"info\"</code>; <code>url</code> với giá trị của <code>token</code> và <code>code</code> thay bằng <code>[REDACTED]</code>; <code>status = res.statusCode</code> đọc lúc finish; <code>durationMs = now() − t0</code>;</li><li>gọi <code>next()</code>.</li></ol><p>Trong các kiểm, <code>res.end()</code> kích hoạt listener <code>finish</code>, và đồng hồ tiêm vào chạy tới giữa <code>next()</code> và <code>end()</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi request không phải probe đúng một dòng, ghi lúc finish (không phải lúc bắt đầu).</li>\n  <li>Không bao giờ ghi token hay mã OAuth vào out.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ out, nexts })",
+          "output": "{\"out\":[{\"level\":\"info\",\"reqId\":\"gen1\",\"method\":\"GET\",\"url\":\"/api/v1/notes?page=2\",\"status\":200,\"durationMs\":12}],\"nexts\":[\"/api/v1/notes?page=2\",\"/health/live\"]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The status is only known at finish: a handler may call res.status(500) long after your middleware ran.|||Status chỉ biết được lúc finish: handler có thể gọi res.status(500) rất lâu sau khi middleware chạy.",
+        "Reuse your 15.1 regex: /([?&])(token|code)=([^&#]*)/g.|||Dùng lại regex bài 15.1: /([?&])(token|code)=([^&#]*)/g."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** structured access log */\nfunction accessLogger({ gen, now, out }) {\n  return (req, res, next) => {\n    // Write your solution here\n    const reqId = req.headers['x-request-id'] || gen();\n    res.setHeader('X-Request-ID', reqId);\n    out.push({ level: 'info', reqId, method: req.method, url: req.url, status: res.statusCode, durationMs: 0 });\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction accessLogger({ gen, now, out }) {\n  const TOKEN = /([?&])(token|code)=([^&#]*)/g;\n  return (req, res, next) => {\n    const path = req.url.split('?')[0];\n    if (path.startsWith('/health')) return next();            // probe: không có dòng log nào (8.640 dòng rỗng/ngày/container)\n    const inbound = req.headers['x-request-id'];\n    const reqId = typeof inbound === 'string' && inbound.length > 0 && inbound.length <= 64 ? inbound : gen();\n    req.id = reqId;\n    res.setHeader('X-Request-ID', reqId);\n    const t0 = now();\n    res.on('finish', () => {                                  // đọc status SAU khi response đã gửi xong\n      out.push({\n        level: res.statusCode >= 500 ? 'error' : 'info',\n        reqId,\n        method: req.method,\n        url: req.url.replace(TOKEN, '$1$2=[REDACTED]'),         // không bao giờ ghi token ra log\n        status: res.statusCode,\n        durationMs: now() - t0,\n      });\n    });\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the website’s morgan setup rebuilt with structure: the url token redefined so ?token= never reaches the log, probes skipped, plus the request id of 15.2 on every line so one grep rebuilds one request — and level error only where someone has to act.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là cấu hình morgan của website dựng lại có cấu trúc: token url được định nghĩa lại để ?token= không bao giờ vào log, bỏ qua probe, cộng request id của 15.2 trên mọi dòng để một lệnh grep dựng lại một request — và cấp error chỉ ở chỗ có người phải hành động.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A request and a probe",
+              "vi": "Một request và một probe"
+            },
+            "goi": "({ out, nexts })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, _l: {} };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.on = (ev, fn) => { (r._l[ev] ||= []).push(fn); return r; };\n  r.end = () => { (r._l.finish || []).forEach((fn) => fn()); return r; };\n  return r; }; let t = 1000; let n = 0; const out = []; const mw = accessLogger({ gen: () => 'gen' + (++n), now: () => t, out });\n  const nexts = []; for (const [method, url, hdr, status, ms] of [[\"GET\",\"/api/v1/notes?page=2\",{},200,12],[\"GET\",\"/health/live\",{},200,1]]) { const req = { method, url, headers: hdr }; const res = mkRes(); mw(req, res, () => nexts.push(url)); t += ms; res.status(status).end(); }",
+            "mongDoi": {
+              "out": [
+                {
+                  "level": "info",
+                  "reqId": "gen1",
+                  "method": "GET",
+                  "url": "/api/v1/notes?page=2",
+                  "status": 200,
+                  "durationMs": 12
+                }
+              ],
+              "nexts": [
+                "/api/v1/notes?page=2",
+                "/health/live"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "SSE with a token, id from nginx",
+              "vi": "SSE có token, id từ nginx"
+            },
+            "goi": "out",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, _l: {} };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.on = (ev, fn) => { (r._l[ev] ||= []).push(fn); return r; };\n  r.end = () => { (r._l.finish || []).forEach((fn) => fn()); return r; };\n  return r; }; let t = 1000; let n = 0; const out = []; const mw = accessLogger({ gen: () => 'gen' + (++n), now: () => t, out });\n  const nexts = []; for (const [method, url, hdr, status, ms] of [[\"GET\",\"/api/v1/ai/stream?token=eyJ.FAKE.sig&lesson=3\",{\"x-request-id\":\"from-nginx-7f3a\"},200,840]]) { const req = { method, url, headers: hdr }; const res = mkRes(); mw(req, res, () => nexts.push(url)); t += ms; res.status(status).end(); }",
+            "mongDoi": [
+              {
+                "level": "info",
+                "reqId": "from-nginx-7f3a",
+                "method": "GET",
+                "url": "/api/v1/ai/stream?token=[REDACTED]&lesson=3",
+                "status": 200,
+                "durationMs": 840
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "({ out, nexts })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, _l: {} };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.on = (ev, fn) => { (r._l[ev] ||= []).push(fn); return r; };\n  r.end = () => { (r._l.finish || []).forEach((fn) => fn()); return r; };\n  return r; }; let t = 1000; let n = 0; const out = []; const mw = accessLogger({ gen: () => 'gen' + (++n), now: () => t, out });\n  const nexts = []; for (const [method, url, hdr, status, ms] of [[\"POST\",\"/api/v1/notes\",{\"x-request-id\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"},500,33],[\"GET\",\"/health/ready?full=1\",{},503,800],[\"GET\",\"/api/v1/auth/google/callback?state=s&code=4/0Ab\",{},302,95]]) { const req = { method, url, headers: hdr }; const res = mkRes(); mw(req, res, () => nexts.push(url)); t += ms; res.status(status).end(); }",
+            "mongDoi": {
+              "out": [
+                {
+                  "level": "error",
+                  "reqId": "gen1",
+                  "method": "POST",
+                  "url": "/api/v1/notes",
+                  "status": 500,
+                  "durationMs": 33
+                },
+                {
+                  "level": "info",
+                  "reqId": "gen2",
+                  "method": "GET",
+                  "url": "/api/v1/auth/google/callback?state=s&code=[REDACTED]",
+                  "status": 302,
+                  "durationMs": 95
+                }
+              ],
+              "nexts": [
+                "/api/v1/notes",
+                "/health/ready?full=1",
+                "/api/v1/auth/google/callback?state=s&code=4/0Ab"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "({ out, id: req2.id, hdr: res2.headers[\"x-request-id\"] })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, _l: {} };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.on = (ev, fn) => { (r._l[ev] ||= []).push(fn); return r; };\n  r.end = () => { (r._l.finish || []).forEach((fn) => fn()); return r; };\n  return r; }; let t = 1000; let n = 0; const out = []; const mw = accessLogger({ gen: () => 'gen' + (++n), now: () => t, out });\n  const nexts = []; for (const [method, url, hdr, status, ms] of [[\"GET\",\"/api/v1/notes/7\",{},404,4]]) { const req = { method, url, headers: hdr }; const res = mkRes(); mw(req, res, () => nexts.push(url)); t += ms; res.status(status).end(); } const req2 = { method: 'GET', url: '/x', headers: {} }; const res2 = mkRes(); mw(req2, res2, () => {});",
+            "mongDoi": {
+              "out": [
+                {
+                  "level": "info",
+                  "reqId": "gen1",
+                  "method": "GET",
+                  "url": "/api/v1/notes/7",
+                  "status": 404,
+                  "durationMs": 4
+                }
+              ],
+              "id": "gen2",
+              "hdr": "gen2"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Logging at the start of the request: status and duration do not exist yet.|||Ghi log lúc request bắt đầu: khi đó status và thời lượng chưa tồn tại."
+        },
+        {
+          "loi": "Skipping probes by exact match on \"/health\" only: /health/live and /health/ready flood the log anyway.|||Bỏ probe bằng so khớp đúng \"/health\": /health/live và /health/ready vẫn làm ngập log."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "finish event",
+          "vi": "sự kiện finish",
+          "giaiThich": "emitted when the response has been sent"
+        },
+        {
+          "en": "probe",
+          "vi": "probe"
+        }
+      ]
+    },
+    {
+      "title": "Lab 15 · 3 — redReport(records, opts): Rate, Errors, Duration per route, and which alerts fire",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "metrics",
+        "RED",
+        "alerting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>From the structured lines of Lab 15 · 2 (here reduced to <code>{ route, status, durationMs }</code>) collected over <code>windowSec</code> seconds, build the RED view. For each route (sorted alphabetically) compute:</p><ul><li><code>rps</code> = requests ÷ windowSec, rounded to 2 decimals;</li><li><code>errorRatio</code> = share of responses with status ≥ 500 (4xx do not count), rounded to 4 decimals;</li><li><code>p95</code> = nearest-rank 95th percentile of <code>durationMs</code> (element at <code>ceil(0.95 × n)</code>, counting from 1, of the ascending list).</li></ul><p>Then, per route in the same order, add alert strings: <code>\"&lt;route&gt;: error ratio &lt;x&gt;% &gt; &lt;max&gt;%\"</code> when the (unrounded) ratio exceeds <code>maxErrorRatio</code> (x = ratio × 100 with 1 decimal, max = maxErrorRatio × 100), and <code>\"&lt;route&gt;: p95 &lt;p95&gt; ms &gt; SLO &lt;sloMs&gt; ms\"</code> when p95 exceeds <code>sloMs</code>. Return <code>{ routes, alerts }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ các dòng có cấu trúc của Lab 15 · 2 (ở đây rút gọn còn <code>{ route, status, durationMs }</code>) gom trong <code>windowSec</code> giây, dựng góc nhìn RED. Với mỗi route (sắp theo bảng chữ cái) tính:</p><ul><li><code>rps</code> = số request ÷ windowSec, làm tròn 2 chữ số;</li><li><code>errorRatio</code> = tỉ lệ response có status ≥ 500 (4xx không tính), làm tròn 4 chữ số;</li><li><code>p95</code> = bách phân vị 95 hạng gần nhất của <code>durationMs</code> (phần tử thứ <code>ceil(0,95 × n)</code>, đếm từ 1, của danh sách tăng dần).</li></ul><p>Rồi, theo cùng thứ tự route, thêm chuỗi cảnh báo: <code>\"&lt;route&gt;: error ratio &lt;x&gt;% &gt; &lt;max&gt;%\"</code> khi tỉ lệ (chưa làm tròn) vượt <code>maxErrorRatio</code> (x = tỉ lệ × 100 với 1 chữ số thập phân, max = maxErrorRatio × 100), và <code>\"&lt;route&gt;: p95 &lt;p95&gt; ms &gt; SLO &lt;sloMs&gt; ms\"</code> khi p95 vượt <code>sloMs</code>. Trả về <code>{ routes, alerts }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "redReport([{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/feed\",\"status\":200,\"durationMs\":100},{\"route\":\"/feed\",\"status\":200,\"durationMs\":101},{\"route\":\"/feed\",\"status\":200,\"durationMs\":102},{\"route\":\"/feed\",\"status\":200,\"durationMs\":103},{\"route\":\"/feed\",\"status\":200,\"durationMs\":104},{\"route\":\"/feed\",\"status\":200,\"durationMs\":105},{\"route\":\"/feed\",\"status\":200,\"durationMs\":106},{\"route\":\"/feed\",\"status\":200,\"durationMs\":107},{\"route\":\"/feed\",\"status\":200,\"durationMs\":108},{\"route\":\"/feed\",\"status\":200,\"durationMs\":109},{\"route\":\"/feed\",\"status\":200,\"durationMs\":110},{\"route\":\"/feed\",\"status\":200,\"durationMs\":111},{\"route\":\"/feed\",\"status\":200,\"durationMs\":112},{\"route\":\"/feed\",\"status\":200,\"durationMs\":113},{\"route\":\"/feed\",\"status\":200,\"durationMs\":114},{\"route\":\"/feed\",\"status\":200,\"durationMs\":115},{\"route\":\"/feed\",\"status\":200,\"durationMs\":116},{\"route\":\"/feed\",\"status\":200,\"durationMs\":117},{\"route\":\"/feed\",\"status\":200,\"durationMs\":118},{\"route\":\"/feed\",\"status\":200,\"durationMs\":119},{\"route\":\"/feed\",\"status\":200,\"durationMs\":120},{\"route\":\"/feed\",\"status\":200,\"durationMs\":121},{\"route\":\"/feed\",\"status\":200,\"durationMs\":122},{\"route\":\"/feed\",\"status\":200,\"durationMs\":123},{\"route\":\"/feed\",\"status\":200,\"durationMs\":124},{\"route\":\"/feed\",\"status\":200,\"durationMs\":125},{\"route\":\"/feed\",\"status\":200,\"durationMs\":126},{\"route\":\"/feed\",\"status\":200,\"durationMs\":127},{\"route\":\"/feed\",\"status\":200,\"durationMs\":128},{\"route\":\"/feed\",\"status\":200,\"durationMs\":129},{\"route\":\"/feed\",\"status\":200,\"durationMs\":130},{\"route\":\"/feed\",\"status\":200,\"durationMs\":131},{\"route\":\"/feed\",\"status\":200,\"durationMs\":132},{\"route\":\"/feed\",\"status\":200,\"durationMs\":133},{\"route\":\"/feed\",\"status\":200,\"durationMs\":134},{\"route\":\"/feed\",\"status\":200,\"durationMs\":135},{\"route\":\"/feed\",\"status\":200,\"durationMs\":136},{\"route\":\"/feed\",\"status\":200,\"durationMs\":137},{\"route\":\"/feed\",\"status\":200,\"durationMs\":138},{\"route\":\"/feed\",\"status\":200,\"durationMs\":139},{\"route\":\"/feed\",\"status\":200,\"durationMs\":140},{\"route\":\"/feed\",\"status\":200,\"durationMs\":141},{\"route\":\"/feed\",\"status\":200,\"durationMs\":142},{\"route\":\"/feed\",\"status\":200,\"durationMs\":143},{\"route\":\"/feed\",\"status\":200,\"durationMs\":144},{\"route\":\"/feed\",\"status\":200,\"durationMs\":145},{\"route\":\"/feed\",\"status\":200,\"durationMs\":146},{\"route\":\"/feed\",\"status\":200,\"durationMs\":147},{\"route\":\"/feed\",\"status\":200,\"durationMs\":148},{\"route\":\"/feed\",\"status\":200,\"durationMs\":149},{\"route\":\"/feed\",\"status\":200,\"durationMs\":450},{\"route\":\"/feed\",\"status\":200,\"durationMs\":451},{\"route\":\"/feed\",\"status\":200,\"durationMs\":452},{\"route\":\"/feed\",\"status\":200,\"durationMs\":453},{\"route\":\"/feed\",\"status\":200,\"durationMs\":454},{\"route\":\"/feed\",\"status\":200,\"durationMs\":455},{\"route\":\"/feed\",\"status\":200,\"durationMs\":456},{\"route\":\"/feed\",\"status\":200,\"durationMs\":457},{\"route\":\"/feed\",\"status\":200,\"durationMs\":458},{\"route\":\"/feed\",\"status\":200,\"durationMs\":459},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":280},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":281},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":282},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":283},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":284},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":285},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":286},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":287},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":288},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":289},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":290},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":291},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":292},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":293},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":294},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":295},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":296},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":297},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":298},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":299},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":300},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":301},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":302},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":303},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":304},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":305},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":306},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":307},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":308},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":309},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":310},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":311},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":312},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":313},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":314},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":315},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":316},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":317},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":318},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":319}], {\"windowSec\":60,\"sloMs\":300,\"maxErrorRatio\":0.02})",
+          "output": "{\"routes\":{\"/auth/login\":{\"rps\":0.67,\"errorRatio\":0.1,\"p95\":317},\"/feed\":{\"rps\":1,\"errorRatio\":0,\"p95\":456},\"/notes/:id\":{\"rps\":3.33,\"errorRatio\":0.02,\"p95\":22}},\"alerts\":[\"/auth/login: error ratio 10.0% > 2%\",\"/auth/login: p95 317 ms > SLO 300 ms\",\"/feed: p95 456 ms > SLO 300 ms\"]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Group by route first, then compute the three numbers per group.|||Nhóm theo route trước, rồi tính ba con số cho mỗi nhóm.",
+        "Sort route names with .sort() and durations with (a, b) => a - b; compare the unrounded ratio against the threshold.|||Sắp tên route bằng .sort() và thời lượng bằng (a, b) => a - b; so tỉ lệ chưa làm tròn với ngưỡng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** RED per route + alerts */\nfunction redReport(records, { windowSec, sloMs, maxErrorRatio }) {\n  // Write your solution here\n  const routes = {};\n  const alerts = [];\n  for (const r of records) {\n    const g = routes[r.route] || (routes[r.route] = { n: 0, err: 0, sum: 0 });\n    g.n++; g.sum += r.durationMs; if (r.status >= 400) g.err++;\n  }\n  for (const [route, g] of Object.entries(routes)) {\n    routes[route] = { rps: g.n / windowSec, errorRatio: g.err / g.n, p95: g.sum / g.n };\n  }\n  return { routes, alerts };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction redReport(records, { windowSec, sloMs, maxErrorRatio }) {\n  const by = {};\n  for (const r of records) (by[r.route] ||= []).push(r);\n  const routes = {};\n  const alerts = [];\n  for (const route of Object.keys(by).sort()) {\n    const rs = by[route];\n    const ds = rs.map((r) => r.durationMs).sort((a, b) => a - b);\n    const p95 = ds[Math.ceil(0.95 * ds.length) - 1];                    // hạng gần nhất\n    const errors = rs.filter((r) => r.status >= 500).length;            // chỉ 5xx — 4xx là lỗi của client\n    const errorRatio = errors / rs.length;\n    routes[route] = { rps: Number((rs.length / windowSec).toFixed(2)), errorRatio: Number(errorRatio.toFixed(4)), p95 };\n    if (errorRatio > maxErrorRatio) alerts.push(`${route}: error ratio ${(errorRatio * 100).toFixed(1)}% > ${maxErrorRatio * 100}%`);\n    if (p95 > sloMs) alerts.push(`${route}: p95 ${p95} ms > SLO ${sloMs} ms`);\n  }\n  return { routes, alerts };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rate tells you something is arriving, Errors (as a ratio of 5xx) whether it works, Duration (a percentile against an SLO) whether it is fast enough — three numbers per route from one middleware, without knowing what any route does. /auth/login is a good test: 90% of its answers are 401 and it is healthy; its 502s are what matter.</p>",
+      "solutionExplanationHtmlVi": "<p>Rate cho biết có thứ đang tới, Errors (tỉ lệ 5xx) cho biết nó có chạy không, Duration (bách phân vị so với SLO) cho biết có đủ nhanh không — ba con số mỗi route từ một middleware, không cần biết route làm gì. /auth/login là phép thử hay: 90% câu trả lời là 401 mà nó vẫn khoẻ; các 502 mới là thứ quan trọng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One minute of the Notes API",
+              "vi": "Một phút của Notes API"
+            },
+            "goi": "redReport([{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/feed\",\"status\":200,\"durationMs\":100},{\"route\":\"/feed\",\"status\":200,\"durationMs\":101},{\"route\":\"/feed\",\"status\":200,\"durationMs\":102},{\"route\":\"/feed\",\"status\":200,\"durationMs\":103},{\"route\":\"/feed\",\"status\":200,\"durationMs\":104},{\"route\":\"/feed\",\"status\":200,\"durationMs\":105},{\"route\":\"/feed\",\"status\":200,\"durationMs\":106},{\"route\":\"/feed\",\"status\":200,\"durationMs\":107},{\"route\":\"/feed\",\"status\":200,\"durationMs\":108},{\"route\":\"/feed\",\"status\":200,\"durationMs\":109},{\"route\":\"/feed\",\"status\":200,\"durationMs\":110},{\"route\":\"/feed\",\"status\":200,\"durationMs\":111},{\"route\":\"/feed\",\"status\":200,\"durationMs\":112},{\"route\":\"/feed\",\"status\":200,\"durationMs\":113},{\"route\":\"/feed\",\"status\":200,\"durationMs\":114},{\"route\":\"/feed\",\"status\":200,\"durationMs\":115},{\"route\":\"/feed\",\"status\":200,\"durationMs\":116},{\"route\":\"/feed\",\"status\":200,\"durationMs\":117},{\"route\":\"/feed\",\"status\":200,\"durationMs\":118},{\"route\":\"/feed\",\"status\":200,\"durationMs\":119},{\"route\":\"/feed\",\"status\":200,\"durationMs\":120},{\"route\":\"/feed\",\"status\":200,\"durationMs\":121},{\"route\":\"/feed\",\"status\":200,\"durationMs\":122},{\"route\":\"/feed\",\"status\":200,\"durationMs\":123},{\"route\":\"/feed\",\"status\":200,\"durationMs\":124},{\"route\":\"/feed\",\"status\":200,\"durationMs\":125},{\"route\":\"/feed\",\"status\":200,\"durationMs\":126},{\"route\":\"/feed\",\"status\":200,\"durationMs\":127},{\"route\":\"/feed\",\"status\":200,\"durationMs\":128},{\"route\":\"/feed\",\"status\":200,\"durationMs\":129},{\"route\":\"/feed\",\"status\":200,\"durationMs\":130},{\"route\":\"/feed\",\"status\":200,\"durationMs\":131},{\"route\":\"/feed\",\"status\":200,\"durationMs\":132},{\"route\":\"/feed\",\"status\":200,\"durationMs\":133},{\"route\":\"/feed\",\"status\":200,\"durationMs\":134},{\"route\":\"/feed\",\"status\":200,\"durationMs\":135},{\"route\":\"/feed\",\"status\":200,\"durationMs\":136},{\"route\":\"/feed\",\"status\":200,\"durationMs\":137},{\"route\":\"/feed\",\"status\":200,\"durationMs\":138},{\"route\":\"/feed\",\"status\":200,\"durationMs\":139},{\"route\":\"/feed\",\"status\":200,\"durationMs\":140},{\"route\":\"/feed\",\"status\":200,\"durationMs\":141},{\"route\":\"/feed\",\"status\":200,\"durationMs\":142},{\"route\":\"/feed\",\"status\":200,\"durationMs\":143},{\"route\":\"/feed\",\"status\":200,\"durationMs\":144},{\"route\":\"/feed\",\"status\":200,\"durationMs\":145},{\"route\":\"/feed\",\"status\":200,\"durationMs\":146},{\"route\":\"/feed\",\"status\":200,\"durationMs\":147},{\"route\":\"/feed\",\"status\":200,\"durationMs\":148},{\"route\":\"/feed\",\"status\":200,\"durationMs\":149},{\"route\":\"/feed\",\"status\":200,\"durationMs\":450},{\"route\":\"/feed\",\"status\":200,\"durationMs\":451},{\"route\":\"/feed\",\"status\":200,\"durationMs\":452},{\"route\":\"/feed\",\"status\":200,\"durationMs\":453},{\"route\":\"/feed\",\"status\":200,\"durationMs\":454},{\"route\":\"/feed\",\"status\":200,\"durationMs\":455},{\"route\":\"/feed\",\"status\":200,\"durationMs\":456},{\"route\":\"/feed\",\"status\":200,\"durationMs\":457},{\"route\":\"/feed\",\"status\":200,\"durationMs\":458},{\"route\":\"/feed\",\"status\":200,\"durationMs\":459},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":280},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":281},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":282},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":283},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":284},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":285},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":286},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":287},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":288},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":289},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":290},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":291},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":292},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":293},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":294},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":295},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":296},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":297},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":298},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":299},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":300},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":301},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":302},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":303},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":304},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":305},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":306},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":307},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":308},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":309},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":310},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":311},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":312},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":313},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":314},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":315},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":316},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":317},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":318},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":319}], {\"windowSec\":60,\"sloMs\":300,\"maxErrorRatio\":0.02})",
+            "mongDoi": {
+              "routes": {
+                "/auth/login": {
+                  "rps": 0.67,
+                  "errorRatio": 0.1,
+                  "p95": 317
+                },
+                "/feed": {
+                  "rps": 1,
+                  "errorRatio": 0,
+                  "p95": 456
+                },
+                "/notes/:id": {
+                  "rps": 3.33,
+                  "errorRatio": 0.02,
+                  "p95": 22
+                }
+              },
+              "alerts": [
+                "/auth/login: error ratio 10.0% > 2%",
+                "/auth/login: p95 317 ms > SLO 300 ms",
+                "/feed: p95 456 ms > SLO 300 ms"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A quiet, healthy route",
+              "vi": "Một route yên tĩnh, khoẻ"
+            },
+            "goi": "redReport([{\"route\":\"/notes\",\"status\":200,\"durationMs\":1},{\"route\":\"/notes\",\"status\":200,\"durationMs\":2},{\"route\":\"/notes\",\"status\":200,\"durationMs\":3},{\"route\":\"/notes\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes\",\"status\":200,\"durationMs\":20}], {\"windowSec\":10,\"sloMs\":300,\"maxErrorRatio\":0.02})",
+            "mongDoi": {
+              "routes": {
+                "/notes": {
+                  "rps": 2,
+                  "errorRatio": 0,
+                  "p95": 19
+                }
+              },
+              "alerts": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "redReport([{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":500,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":4},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":5},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":6},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":7},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":8},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":9},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":10},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":11},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":12},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":13},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":14},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":15},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":16},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":17},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":18},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":19},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":20},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":21},{\"route\":\"/notes/:id\",\"status\":404,\"durationMs\":22},{\"route\":\"/notes/:id\",\"status\":200,\"durationMs\":23},{\"route\":\"/feed\",\"status\":200,\"durationMs\":100},{\"route\":\"/feed\",\"status\":200,\"durationMs\":101},{\"route\":\"/feed\",\"status\":200,\"durationMs\":102},{\"route\":\"/feed\",\"status\":200,\"durationMs\":103},{\"route\":\"/feed\",\"status\":200,\"durationMs\":104},{\"route\":\"/feed\",\"status\":200,\"durationMs\":105},{\"route\":\"/feed\",\"status\":200,\"durationMs\":106},{\"route\":\"/feed\",\"status\":200,\"durationMs\":107},{\"route\":\"/feed\",\"status\":200,\"durationMs\":108},{\"route\":\"/feed\",\"status\":200,\"durationMs\":109},{\"route\":\"/feed\",\"status\":200,\"durationMs\":110},{\"route\":\"/feed\",\"status\":200,\"durationMs\":111},{\"route\":\"/feed\",\"status\":200,\"durationMs\":112},{\"route\":\"/feed\",\"status\":200,\"durationMs\":113},{\"route\":\"/feed\",\"status\":200,\"durationMs\":114},{\"route\":\"/feed\",\"status\":200,\"durationMs\":115},{\"route\":\"/feed\",\"status\":200,\"durationMs\":116},{\"route\":\"/feed\",\"status\":200,\"durationMs\":117},{\"route\":\"/feed\",\"status\":200,\"durationMs\":118},{\"route\":\"/feed\",\"status\":200,\"durationMs\":119},{\"route\":\"/feed\",\"status\":200,\"durationMs\":120},{\"route\":\"/feed\",\"status\":200,\"durationMs\":121},{\"route\":\"/feed\",\"status\":200,\"durationMs\":122},{\"route\":\"/feed\",\"status\":200,\"durationMs\":123},{\"route\":\"/feed\",\"status\":200,\"durationMs\":124},{\"route\":\"/feed\",\"status\":200,\"durationMs\":125},{\"route\":\"/feed\",\"status\":200,\"durationMs\":126},{\"route\":\"/feed\",\"status\":200,\"durationMs\":127},{\"route\":\"/feed\",\"status\":200,\"durationMs\":128},{\"route\":\"/feed\",\"status\":200,\"durationMs\":129},{\"route\":\"/feed\",\"status\":200,\"durationMs\":130},{\"route\":\"/feed\",\"status\":200,\"durationMs\":131},{\"route\":\"/feed\",\"status\":200,\"durationMs\":132},{\"route\":\"/feed\",\"status\":200,\"durationMs\":133},{\"route\":\"/feed\",\"status\":200,\"durationMs\":134},{\"route\":\"/feed\",\"status\":200,\"durationMs\":135},{\"route\":\"/feed\",\"status\":200,\"durationMs\":136},{\"route\":\"/feed\",\"status\":200,\"durationMs\":137},{\"route\":\"/feed\",\"status\":200,\"durationMs\":138},{\"route\":\"/feed\",\"status\":200,\"durationMs\":139},{\"route\":\"/feed\",\"status\":200,\"durationMs\":140},{\"route\":\"/feed\",\"status\":200,\"durationMs\":141},{\"route\":\"/feed\",\"status\":200,\"durationMs\":142},{\"route\":\"/feed\",\"status\":200,\"durationMs\":143},{\"route\":\"/feed\",\"status\":200,\"durationMs\":144},{\"route\":\"/feed\",\"status\":200,\"durationMs\":145},{\"route\":\"/feed\",\"status\":200,\"durationMs\":146},{\"route\":\"/feed\",\"status\":200,\"durationMs\":147},{\"route\":\"/feed\",\"status\":200,\"durationMs\":148},{\"route\":\"/feed\",\"status\":200,\"durationMs\":149},{\"route\":\"/feed\",\"status\":200,\"durationMs\":450},{\"route\":\"/feed\",\"status\":200,\"durationMs\":451},{\"route\":\"/feed\",\"status\":200,\"durationMs\":452},{\"route\":\"/feed\",\"status\":200,\"durationMs\":453},{\"route\":\"/feed\",\"status\":200,\"durationMs\":454},{\"route\":\"/feed\",\"status\":200,\"durationMs\":455},{\"route\":\"/feed\",\"status\":200,\"durationMs\":456},{\"route\":\"/feed\",\"status\":200,\"durationMs\":457},{\"route\":\"/feed\",\"status\":200,\"durationMs\":458},{\"route\":\"/feed\",\"status\":200,\"durationMs\":459},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":280},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":281},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":282},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":283},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":284},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":285},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":286},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":287},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":288},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":289},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":290},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":291},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":292},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":293},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":294},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":295},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":296},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":297},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":298},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":299},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":300},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":301},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":302},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":303},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":304},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":305},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":306},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":307},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":308},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":309},{\"route\":\"/auth/login\",\"status\":502,\"durationMs\":310},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":311},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":312},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":313},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":314},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":315},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":316},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":317},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":318},{\"route\":\"/auth/login\",\"status\":401,\"durationMs\":319}], {\"windowSec\":300,\"sloMs\":500,\"maxErrorRatio\":0.05})",
+            "mongDoi": {
+              "routes": {
+                "/auth/login": {
+                  "rps": 0.13,
+                  "errorRatio": 0.1,
+                  "p95": 317
+                },
+                "/feed": {
+                  "rps": 0.2,
+                  "errorRatio": 0,
+                  "p95": 456
+                },
+                "/notes/:id": {
+                  "rps": 0.67,
+                  "errorRatio": 0.02,
+                  "p95": 22
+                }
+              },
+              "alerts": [
+                "/auth/login: error ratio 10.0% > 5%"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "redReport([{\"route\":\"/b\",\"status\":503,\"durationMs\":9},{\"route\":\"/b\",\"status\":503,\"durationMs\":9},{\"route\":\"/b\",\"status\":503,\"durationMs\":9},{\"route\":\"/a\",\"status\":200,\"durationMs\":301}], {\"windowSec\":1,\"sloMs\":300,\"maxErrorRatio\":0.02})",
+            "mongDoi": {
+              "routes": {
+                "/a": {
+                  "rps": 1,
+                  "errorRatio": 0,
+                  "p95": 301
+                },
+                "/b": {
+                  "rps": 3,
+                  "errorRatio": 1,
+                  "p95": 9
+                }
+              },
+              "alerts": [
+                "/a: p95 301 ms > SLO 300 ms",
+                "/b: error ratio 100.0% > 2%"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "redReport([], {\"windowSec\":60,\"sloMs\":300,\"maxErrorRatio\":0.02})",
+            "mongDoi": {
+              "routes": {},
+              "alerts": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting 401/404 as errors: an expired token is “an ordinary Tuesday”, and the alert fires every morning.|||Tính 401/404 là lỗi: token hết hạn là “một ngày thứ Ba bình thường”, và cảnh báo bật mỗi sáng."
+        },
+        {
+          "loi": "Using the average duration: /feed’s 10 slow requests disappear into a healthy-looking mean.|||Dùng thời lượng trung bình: 10 request chậm của /feed biến mất trong một trung bình trông khoẻ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RED method",
+          "vi": "phương pháp RED"
+        },
+        {
+          "en": "SLO",
+          "vi": "mục tiêu dịch vụ"
+        }
+      ]
+    }
+  ]
+}

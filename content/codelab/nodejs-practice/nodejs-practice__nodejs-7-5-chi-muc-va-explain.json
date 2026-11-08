@@ -1,0 +1,899 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-7-5-chi-muc-va-explain",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-7-5-chi-muc-va-explain"
+  },
+  "exercises": [
+    {
+      "title": "7.5 · 1 — Read EXPLAIN ANALYZE from the inside out",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "EXPLAIN ANALYZE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><p>The plan below is lesson 7.5’s “twenty most recent notes by one author” on 751,000 rows, <b>before</b> the index:</p><pre>Limit  (cost=33881.63..33883.97 rows=20) (actual time=26.855..28.594 rows=20 loops=1)\n  Buffers: shared hit=16136 read=14097\n  ->  Gather Merge  (actual time=26.853..28.590 rows=20 loops=1)\n        Workers Launched: 2\n        ->  Sort  (actual time=25.208..25.209 rows=20 loops=3)\n              Sort Key: \"createdAt\" DESC\n              Sort Method: top-N heapsort  Memory: 26kB\n              ->  Parallel Seq Scan on \"Note\"  (actual time=6.067..24.828 rows=3340 loops=3)\n                    Filter: (\"authorId\" = 7)\n                    Rows Removed by Filter: 163660\nExecution Time: 28.618 ms</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><p>Kế hoạch dưới đây là \"hai mươi ghi chú mới nhất của một tác giả\" của bài 7.5 trên 751.000 dòng, <b>trước</b> khi có chỉ mục (xem khối kế hoạch ở bản tiếng Anh).</p></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Indentation is the tree: children run before parents.|||Thụt lề chính là cây: nút con chạy trước nút cha.",
+        "“actual” = measured; “cost” = estimated.|||\"actual\" = đo được; \"cost\" = ước lượng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5 · 1 — Read EXPLAIN ANALYZE from the inside out\n\nAnswer in the answer panel (no code needed).\n\n1. Which node runs FIRST?Nút nào chạy ĐẦU TIÊN?\n2. What does “Rows Removed by Filter: 163660” with “loops=3” mean?\"Rows Removed by Filter: 163660\" với \"loops=3\" nghĩa là gì?\n3. Buffers: shared hit=16136 read=14097 — what is “read”?Buffers: shared hit=16136 read=14097 — \"read\" là gì?\n4. Which number is the honest one?Con số nào là con số thật?\n5. After @@index([authorId, createdAt(sort: Desc)]) the plan is:Limit (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1) Buffers: shared read=5 -> Index Scan using \"Note_authorId_createdAt_idx\" on \"Note\" (actual time=0.098..0.109 rows=20 loops=1) Index Cond: (\"authorId\" = 7) Execution Time: 0.129 msWhy is there no Sort node any more?Sau @@index([authorId, createdAt(sort: Desc)]) kế hoạch như bản tiếng Anh. Vì sao không còn nút Sort?\n6. You EXPLAIN ANALYZE a DELETE to see its plan. What happens?Bạn chạy EXPLAIN ANALYZE cho một câu DELETE để xem kế hoạch. Chuyện gì xảy ra?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5 · 1 — Read EXPLAIN ANALYZE from the inside out — answer key\n\n1. Which node runs FIRST?Nút nào chạy ĐẦU TIÊN?\n   Answer: d) Parallel Seq Scan on \"Note\" — read a plan from the inside out\n   The most indented node feeds its parent; Limit is where the rows end up, not where work starts.VI: Nút thụt vào sâu nhất cung cấp dòng cho nút cha; Limit là nơi dòng kết thúc, không phải nơi việc bắt đầu.\n\n2. What does “Rows Removed by Filter: 163660” with “loops=3” mean?\"Rows Removed by Filter: 163660\" với \"loops=3\" nghĩa là gì?\n   Answer: d) Per worker: about half a million rows were examined and thrown away to find author 7’s notes\n   Three processes (leader + 2 workers) each scanned a share of the table.VI: Ba tiến trình (chính + 2 worker) mỗi cái quét một phần bảng.\n\n3. Buffers: shared hit=16136 read=14097 — what is “read”?Buffers: shared hit=16136 read=14097 — \"read\" là gì?\n   Answer: d) 8 KB pages that came from disk rather than PostgreSQL’s cache\n   And while it runs it evicts other data from the cache. Fifty requests per second = fifty full-table scans per second.VI: Và trong lúc chạy nó đẩy dữ liệu khác ra khỏi cache. Năm mươi request mỗi giây = năm mươi lần quét cả bảng mỗi giây.\n\n4. Which number is the honest one?Con số nào là con số thật?\n   Answer: b) actual time / Execution Time — cost is the planner’s guess\n   cost is in arbitrary planner units; actual time is what happened.VI: cost là đơn vị tuỳ ý của planner; actual time là chuyện thật đã xảy ra.\n\n5. After @@index([authorId, createdAt(sort: Desc)]) the plan is:Limit (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1) Buffers: shared read=5 -> Index Scan using \"Note_authorId_createdAt_idx\" on \"Note\" (actual time=0.098..0.109 rows=20 loops=1) Index Cond: (\"authorId\" = 7) Execution Time: 0.129 msWhy is there no Sort node any more?Sau @@index([authorId, createdAt(sort: Desc)]) kế hoạch như bản tiếng Anh. Vì sao không còn nút Sort?\n   Answer: d) The index already keeps each author’s createdAt in descending order\n   28.618 ms → 0.129 ms, 30,233 pages → 5. Equality column first, then the ORDER BY / range column.VI: 28,618 ms → 0,129 ms, 30.233 trang → 5. Cột so bằng trước, rồi cột ORDER BY / khoảng.\n\n6. You EXPLAIN ANALYZE a DELETE to see its plan. What happens?Bạn chạy EXPLAIN ANALYZE cho một câu DELETE để xem kế hoạch. Chuyện gì xảy ra?\n   Answer: c) It really deletes\n   Also: run ANALYZE \"Note\"; after a bulk import before you trust any plan, and measure on realistic volumes — on 100 rows every plan looks the same.VI: Thêm: chạy ANALYZE \"Note\"; sau khi nạp hàng loạt trước khi tin bất kỳ kế hoạch nào, và đo trên khối lượng thật — với 100 dòng kế hoạch nào cũng giống nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Parallel Seq Scan on \"Note\" — read a plan from the inside out</p><p>The most indented node feeds its parent; Limit is where the rows end up, not where work starts.</p><p><i>VI: Nút thụt vào sâu nhất cung cấp dòng cho nút cha; Limit là nơi dòng kết thúc, không phải nơi việc bắt đầu.</i></p></li><li><p><b>d)</b> Per worker: about half a million rows were examined and thrown away to find author 7’s notes</p><p>Three processes (leader + 2 workers) each scanned a share of the table.</p><p><i>VI: Ba tiến trình (chính + 2 worker) mỗi cái quét một phần bảng.</i></p></li><li><p><b>d)</b> 8 KB pages that came from disk rather than PostgreSQL’s cache</p><p>And while it runs it evicts other data from the cache. Fifty requests per second = fifty full-table scans per second.</p><p><i>VI: Và trong lúc chạy nó đẩy dữ liệu khác ra khỏi cache. Năm mươi request mỗi giây = năm mươi lần quét cả bảng mỗi giây.</i></p></li><li><p><b>b)</b> actual time / Execution Time — cost is the planner’s guess</p><p>cost is in arbitrary planner units; actual time is what happened.</p><p><i>VI: cost là đơn vị tuỳ ý của planner; actual time là chuyện thật đã xảy ra.</i></p></li><li><p><b>d)</b> The index already keeps each author’s createdAt in descending order</p><p>28.618 ms → 0.129 ms, 30,233 pages → 5. Equality column first, then the ORDER BY / range column.</p><p><i>VI: 28,618 ms → 0,129 ms, 30.233 trang → 5. Cột so bằng trước, rồi cột ORDER BY / khoảng.</i></p></li><li><p><b>c)</b> It really deletes</p><p>Also: run ANALYZE \"Note\"; after a bulk import before you trust any plan, and measure on realistic volumes — on 100 rows every plan looks the same.</p><p><i>VI: Thêm: chạy ANALYZE \"Note\"; sau khi nạp hàng loạt trước khi tin bất kỳ kế hoạch nào, và đo trên khối lượng thật — với 100 dòng kế hoạch nào cũng giống nhau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which node runs FIRST?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nút nào chạy ĐẦU TIÊN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sort — it decides the order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Limit — it is at the top"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Gather Merge — it starts the workers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Parallel Seq Scan on \"Note\" — read a plan from the inside out"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The most indented node feeds its parent; Limit is where the rows end up, not where work starts.</p><p><i>VI: Nút thụt vào sâu nhất cung cấp dòng cho nút cha; Limit là nơi dòng kết thúc, không phải nơi việc bắt đầu.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What does “Rows Removed by Filter: 163660” with “loops=3” mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Rows Removed by Filter: 163660\" với \"loops=3\" nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "163,660 rows were returned to Node and filtered in JavaScript"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The query deleted 163,660 rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The index removed 163,660 duplicates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Per worker: about half a million rows were examined and thrown away to find author 7’s notes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Three processes (leader + 2 workers) each scanned a share of the table.</p><p><i>VI: Ba tiến trình (chính + 2 worker) mỗi cái quét một phần bảng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>Buffers: shared hit=16136 read=14097</code> — what is “read”?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>Buffers: shared hit=16136 read=14097</code> — \"read\" là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Rows read by the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rows written to the write-ahead log"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Index entries that were cached"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8 KB pages that came from disk rather than PostgreSQL’s cache"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>And while it runs it evicts other data from the cache. Fifty requests per second = fifty full-table scans per second.</p><p><i>VI: Và trong lúc chạy nó đẩy dữ liệu khác ra khỏi cache. Năm mươi request mỗi giây = năm mươi lần quét cả bảng mỗi giây.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which number is the honest one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Con số nào là con số thật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "rows=20 in the cost section"
+              },
+              {
+                "ma": "b",
+                "noiDung": "actual time / Execution Time — cost is the planner’s guess"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Memory: 26kB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cost=33881.63 — it is the most precise"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>cost is in arbitrary planner units; actual time is what happened.</p><p><i>VI: cost là đơn vị tuỳ ý của planner; actual time là chuyện thật đã xảy ra.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>After <code>@@index([authorId, createdAt(sort: Desc)])</code> the plan is:<pre>Limit  (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1)\n  Buffers: shared read=5\n  ->  Index Scan using \"Note_authorId_createdAt_idx\" on \"Note\"\n        (actual time=0.098..0.109 rows=20 loops=1)\n        Index Cond: (\"authorId\" = 7)\nExecution Time: 0.129 ms</pre>Why is there no Sort node any more?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau <code>@@index([authorId, createdAt(sort: Desc)])</code> kế hoạch như bản tiếng Anh. Vì sao không còn nút Sort?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "LIMIT 20 is too small for PostgreSQL to bother sorting at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The planner now sorts the rows in a background worker"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The sorting step was moved into Node by the Prisma client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The index already keeps each author’s createdAt in descending order"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>28.618 ms → 0.129 ms, 30,233 pages → 5. Equality column first, then the ORDER BY / range column.</p><p><i>VI: 28,618 ms → 0,129 ms, 30.233 trang → 5. Cột so bằng trước, rồi cột ORDER BY / khoảng.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>You EXPLAIN ANALYZE a DELETE to see its plan. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn chạy EXPLAIN ANALYZE cho một câu DELETE để xem kế hoạch. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It deletes only the first 20 rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing, EXPLAIN never executes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It really deletes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL refuses EXPLAIN on DELETE"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Also: run ANALYZE \"Note\"; after a bulk import before you trust any plan, and measure on realistic volumes — on 100 rows every plan looks the same.</p><p><i>VI: Thêm: chạy ANALYZE \"Note\"; sau khi nạp hàng loạt trước khi tin bất kỳ kế hoạch nào, và đo trên khối lượng thật — với 100 dòng kế hoạch nào cũng giống nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the plan top-down as if Limit ran first.|||Đọc kế hoạch từ trên xuống như thể Limit chạy trước."
+        },
+        {
+          "loi": "Optimising by the cost number instead of the actual time.|||Tối ưu theo con số cost thay vì actual time."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Seq Scan",
+          "vi": "quét tuần tự",
+          "giaiThich": "Đọc cả bảng."
+        },
+        {
+          "en": "Index Scan",
+          "vi": "quét chỉ mục"
+        },
+        {
+          "en": "Buffers",
+          "vi": "bộ đệm",
+          "giaiThich": "Trang 8 KB đã chạm: hit = từ cache, read = từ đĩa."
+        }
+      ]
+    },
+    {
+      "title": "7.5 · 2 — Four ways an index quietly does nothing",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "indexes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Same 751,000-row table, a B-tree on <code>slug</code> (the unique index), on <code>\"authorId\", \"createdAt\" DESC</code>, and on <code>pinned</code>; no index on <code>title</code>; default collation <code>en_US.utf8</code>. For each WHERE clause, which scan did PostgreSQL choose in lesson 7.5?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cùng bảng 751.000 dòng, có B-tree trên <code>slug</code> (chỉ mục unique), trên <code>\"authorId\", \"createdAt\" DESC</code>, và trên <code>pinned</code>; không có chỉ mục trên <code>title</code>; collation mặc định <code>en_US.utf8</code>. Với mỗi mệnh đề WHERE, PostgreSQL đã chọn kiểu quét nào trong bài 7.5?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A B-tree stores the raw column value, sorted. Ask: can the condition be answered by jumping to a position in that sorted list?|||B-tree lưu giá trị gốc của cột, đã sắp. Hỏi: điều kiện có trả lời được bằng cách nhảy tới một vị trí trong danh sách đã sắp đó không?",
+        "If most rows match anyway, walking the table is cheaper than walking an index.|||Nếu đằng nào phần lớn dòng cũng khớp, đi qua bảng rẻ hơn đi qua chỉ mục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5 · 2 — Four ways an index quietly does nothing\n\nAnswer in the answer panel (no code needed).\n\n1. WHERE clause → scanMệnh đề WHERE → kiểu quét\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5 · 2 — Four ways an index quietly does nothing — answer key\n\n1. WHERE clause → scanMệnh đề WHERE → kiểu quét\n   - r1.s: Index Scan\n   - r2.s: Seq Scan\n   - r3.s: Seq Scan\n   - r4.s: Seq Scan\n   - r5.s: Index Scan\n   - r6.s: Seq Scan\n   A function around the column (lower(slug) is not slug: 1100× slower) — fix with an expression index or a normalised column. A leading wildcard cannot use a B-tree sorted by prefix. No index on title means nothing to use. Low selectivity: reading 40% of the table through an index is slower than reading it straight. Prisma’s contains compiles to LIKE '%…%' and mode: insensitive to ILIKE — both seq scans on a big table.VI: Một hàm bọc quanh cột (lower(slug) không phải slug: chậm 1100 lần) — sửa bằng chỉ mục biểu thức hoặc cột đã chuẩn hoá. Ký tự đại diện ở đầu không dùng được B-tree sắp theo tiền tố. Không có chỉ mục trên title thì không có gì để dùng. Độ chọn lọc thấp: đọc 40% bảng qua chỉ mục chậm hơn đọc thẳng. contains của Prisma dịch thành LIKE '%…%' còn mode: insensitive thành ILIKE — cả hai quét tuần tự trên bảng lớn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A function around the column (lower(slug) is not slug: 1100× slower) — fix with an expression index or a normalised column. A leading wildcard cannot use a B-tree sorted by prefix. No index on title means nothing to use. Low selectivity: reading 40% of the table through an index is slower than reading it straight. Prisma’s contains compiles to LIKE '%…%' and mode: insensitive to ILIKE — both seq scans on a big table.</p><p><i>VI: Một hàm bọc quanh cột (lower(slug) không phải slug: chậm 1100 lần) — sửa bằng chỉ mục biểu thức hoặc cột đã chuẩn hoá. Ký tự đại diện ở đầu không dùng được B-tree sắp theo tiền tố. Không có chỉ mục trên title thì không có gì để dùng. Độ chọn lọc thấp: đọc 40% bảng qua chỉ mục chậm hơn đọc thẳng. contains của Prisma dịch thành LIKE '%…%' còn mode: insensitive thành ILIKE — cả hai quét tuần tự trên bảng lớn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>WHERE clause → scan</p><p style=\"opacity:.75;font-size:.92em\"><i>Mệnh đề WHERE → kiểu quét</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "WHERE"
+              },
+              {
+                "ma": "s",
+                "ten": "Scan",
+                "luaChon": [
+                  "Index Scan",
+                  "Seq Scan"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "slug = 'bulk-4242'"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "lower(slug) = 'bulk-4242'"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "slug LIKE '%4242'"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "title = 'Ghi chú số 4242'"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "\"authorId\" = 7 ORDER BY \"createdAt\" DESC LIMIT 20"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "w": "pinned = true (40% of the rows)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "Index Scan",
+              "r2.s": "Seq Scan",
+              "r3.s": "Seq Scan",
+              "r4.s": "Seq Scan",
+              "r5.s": "Index Scan",
+              "r6.s": "Seq Scan"
+            },
+            "giaiThich": "<p>A function around the column (lower(slug) is not slug: 1100× slower) — fix with an expression index or a normalised column. A leading wildcard cannot use a B-tree sorted by prefix. No index on title means nothing to use. Low selectivity: reading 40% of the table through an index is slower than reading it straight. Prisma’s contains compiles to LIKE '%…%' and mode: insensitive to ILIKE — both seq scans on a big table.</p><p><i>VI: Một hàm bọc quanh cột (lower(slug) không phải slug: chậm 1100 lần) — sửa bằng chỉ mục biểu thức hoặc cột đã chuẩn hoá. Ký tự đại diện ở đầu không dùng được B-tree sắp theo tiền tố. Không có chỉ mục trên title thì không có gì để dùng. Độ chọn lọc thấp: đọc 40% bảng qua chỉ mục chậm hơn đọc thẳng. contains của Prisma dịch thành LIKE '%…%' còn mode: insensitive thành ILIKE — cả hai quét tuần tự trên bảng lớn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming the slug index helps lower(slug) or LIKE '%…'.|||Cho rằng chỉ mục slug giúp được lower(slug) hay LIKE '%…'."
+        },
+        {
+          "loi": "Indexing a boolean column and expecting it to be used.|||Đánh chỉ mục cột boolean và mong nó được dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "selectivity",
+          "vi": "độ chọn lọc",
+          "giaiThich": "Tỉ lệ dòng khớp điều kiện."
+        },
+        {
+          "en": "expression index",
+          "vi": "chỉ mục biểu thức",
+          "giaiThich": "Chỉ mục trên lower(slug)…"
+        }
+      ]
+    },
+    {
+      "title": "7.5 · 3 — Create the index that removes the Sort: (authorId, createdAt DESC)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "indexes",
+        "EXPLAIN"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>The most ordinary query an API ever runs:</p><pre>SELECT id, title FROM \"Note\" WHERE \"authorId\" = 7 ORDER BY \"createdAt\" DESC LIMIT 20</pre>\n<p>Without an index it is a (Parallel) Seq Scan + Sort. Write the migration line that Prisma generates for <code>@@index([authorId, createdAt(sort: Desc)])</code>: one <code>CREATE INDEX</code> on <code>\"Note\"</code> so that the plan becomes an <b>Index Scan with no Sort node</b>. Name it the way Prisma would: <code>\"Note_authorId_createdAt_idx\"</code>.</p>\n<p>The grader runs <code>EXPLAIN</code> on the query with <code>enable_seqscan = off</code> and checks the plan, and reads <code>pg_indexes</code> to see which columns your index has, in which order.</p>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 notes</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) and <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", PK on both)</li></ul><p>Plus <b>5,000 bulk notes</b> (slug <code>bulk-1</code> … <code>bulk-5000</code>) spread over 50 authors, and <code>ANALYZE</code> already run. Existing indexes: the primary keys and <code>\"Note_slug_key\"</code> (unique on slug).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One CREATE INDEX statement.</li>\n  <li>Equality column first, then the ORDER BY column.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu truy vấn bình thường nhất mà API nào cũng chạy (xem khối SQL ở bản tiếng Anh). Không có chỉ mục thì nó là (Parallel) Seq Scan + Sort. Viết dòng migration mà Prisma sinh cho <code>@@index([authorId, createdAt(sort: Desc)])</code>: một câu <code>CREATE INDEX</code> trên <code>\"Note\"</code> để kế hoạch thành <b>Index Scan không có nút Sort</b>. Đặt tên như Prisma: <code>\"Note_authorId_createdAt_idx\"</code>.</p>\n<p>Máy chấm chạy <code>EXPLAIN</code> câu truy vấn với <code>enable_seqscan = off</code> và kiểm kế hoạch, rồi đọc <code>pg_indexes</code> để xem chỉ mục của bạn có những cột nào, theo thứ tự nào.</p>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 ghi chú</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) và <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", khoá chính gồm cả hai)</li></ul><p>Thêm <b>5.000 ghi chú hàng loạt</b> (slug <code>bulk-1</code> … <code>bulk-5000</code>) chia cho 50 tác giả, và đã chạy <code>ANALYZE</code>. Chỉ mục có sẵn: các khoá chính và <code>\"Note_slug_key\"</code> (unique trên slug).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu CREATE INDEX.</li>\n  <li>Cột so bằng trước, rồi tới cột ORDER BY.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "no_sort | index_cond | query              \n--------+------------+--------------------\ntrue    | true       | author 7, newest 20",
+          "explanation": "Expected result of check \"The query uses an index and has no Sort node\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Truy vấn dùng chỉ mục và không có nút Sort\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>CREATE INDEX \"name\" ON \"Note\"(col1, col2 DESC);</code> — camelCase columns in double quotes.|||<code>CREATE INDEX \"tên\" ON \"Note\"(cột1, cột2 DESC);</code> — cột camelCase trong ngoặc kép.",
+        "Rule of thumb: columns compared with =, then the ORDER BY / range column, then anything you merely select.|||Quy tắc ngón tay cái: các cột so bằng =, rồi cột ORDER BY / khoảng, rồi những cột chỉ để SELECT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write the CREATE INDEX statement here\nCREATE INDEX \"Note_authorId_idx\" ON \"Note\"(\"authorId\");\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- CreateIndex — what migrate dev writes for @@index([authorId, createdAt(sort: Desc)])\nCREATE INDEX \"Note_authorId_createdAt_idx\" ON \"Note\"(\"authorId\", \"createdAt\" DESC);\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Inside the index, entries are ordered by authorId and, within one author, by createdAt descending. The query asks for exactly one author’s entries in exactly that order, so PostgreSQL jumps to author 7, reads 20 entries and stops: no scan of other rows, no Sort. (An ascending createdAt works too — PostgreSQL can walk a B-tree backwards — which is why the check accepts both directions.)</p>",
+      "solutionExplanationHtmlVi": "<p>Trong chỉ mục, các mục sắp theo authorId và, trong một tác giả, theo createdAt giảm dần. Truy vấn hỏi đúng các mục của một tác giả theo đúng thứ tự đó, nên PostgreSQL nhảy tới tác giả 7, đọc 20 mục rồi dừng: không quét dòng khác, không Sort. (createdAt tăng dần cũng được — PostgreSQL đi ngược B-tree được — nên kiểm chấp nhận cả hai chiều.)</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The query uses an index and has no Sort node|||Truy vấn dùng chỉ mục và không có nút Sort",
+            "kiemTra": "SET LOCAL enable_seqscan = off;\nSELECT position('Sort' in plan_nodes($q$SELECT id, title FROM \"Note\" WHERE \"authorId\" = 7 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) = 0 AS no_sort,\n       position('Index Cond' in plan_text($q$SELECT id, title FROM \"Note\" WHERE \"authorId\" = 7 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) > 0 AS index_cond,\n       'author 7, newest 20' AS query",
+            "mongDoi": {
+              "cot": [
+                "no_sort",
+                "index_cond",
+                "query"
+              ],
+              "hang": [
+                [
+                  true,
+                  true,
+                  "author 7, newest 20"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Your index starts with \"authorId\", then \"createdAt\"|||Chỉ mục của bạn bắt đầu bằng \"authorId\", rồi \"createdAt\"",
+            "kiemTra": "SELECT count(*) AS good_indexes FROM pg_indexes WHERE tablename = 'Note' AND indexdef ~ '\\(\"authorId\", \"createdAt\"( DESC)?\\)'",
+            "mongDoi": {
+              "cot": [
+                "good_indexes"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "It is named \"Note_authorId_createdAt_idx\"|||Nó tên là \"Note_authorId_createdAt_idx\"",
+            "kiemTra": "SELECT count(*) AS named FROM pg_indexes WHERE tablename = 'Note' AND indexname = 'Note_authorId_createdAt_idx'",
+            "mongDoi": {
+              "cot": [
+                "named"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: the same plan for another author|||Ẩn: cùng kế hoạch cho tác giả khác",
+            "kiemTra": "SET LOCAL enable_seqscan = off;\nSELECT position('Sort' in plan_nodes($q$SELECT id, title FROM \"Note\" WHERE \"authorId\" = 42 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) = 0 AS no_sort,\n       position('Index Cond' in plan_text($q$SELECT id, title FROM \"Note\" WHERE \"authorId\" = 42 ORDER BY \"createdAt\" DESC LIMIT 20$q$)) > 0 AS index_cond,\n       'author 42' AS query",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "no_sort",
+                "index_cond",
+                "query"
+              ],
+              "hang": [
+                [
+                  true,
+                  true,
+                  "author 42"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "An index on <code>\"authorId\"</code> alone: rows are found fast, but still have to be sorted (Bitmap scan + Sort).|||Chỉ mục chỉ trên <code>\"authorId\"</code>: tìm dòng nhanh, nhưng vẫn phải sắp (Bitmap scan + Sort)."
+        },
+        {
+          "loi": "Reversed order <code>(\"createdAt\" DESC, \"authorId\")</code>: no Sort and fast for a busy author, but it walks past everyone else’s newer notes — 3,844 pages in 30.3 ms for a quiet author, against 13 pages in 0.038 ms.|||Đảo thứ tự <code>(\"createdAt\" DESC, \"authorId\")</code>: không có Sort và nhanh với tác giả viết nhiều, nhưng đi qua mọi ghi chú mới hơn của người khác — 3.844 trang trong 30,3 ms với tác giả ít viết, so với 13 trang trong 0,038 ms."
+        },
+        {
+          "loi": "Creating the index by hand on the server instead of in a migration — drift (lesson 7.2).|||Tạo chỉ mục bằng tay trên server thay vì trong migration — lệch lược đồ (bài 7.2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composite index",
+          "vi": "chỉ mục ghép",
+          "giaiThich": "Chỉ mục trên nhiều cột, thứ tự cột quan trọng."
+        },
+        {
+          "en": "Index Cond",
+          "vi": "điều kiện chỉ mục",
+          "giaiThich": "Phần WHERE trả lời bằng chỉ mục."
+        }
+      ]
+    },
+    {
+      "title": "7.5 · 4 — Make lower(slug) = … use an index (expression index)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "indexes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs",
+        "postgresql"
+      ],
+      "problemHtml": "<p>The login of an old client looks notes up case-insensitively:</p><pre>SELECT id FROM \"Note\" WHERE lower(slug) = 'bulk-4242'</pre>\n<p>In the lesson this was a Parallel Seq Scan at 71.8 ms — 1100× slower than <code>slug = …</code> — because <code>lower(slug)</code> is not <code>slug</code>: the B-tree stores the raw value. Add an <b>expression index</b> so that the condition appears as an <code>Index Cond</code> in the plan. Keep the existing unique index.</p>\n<p><b>Sample database</b> (the Notes schema of lesson 7.2, as Prisma creates it — camelCase names must be written in double quotes):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 users: An (1), Binh (2), Chi (3), Dung (4, no notes)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 notes</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) and <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", PK on both)</li></ul><p>Plus <b>5,000 bulk notes</b> (slug <code>bulk-1</code> … <code>bulk-5000</code>) spread over 50 authors, and <code>ANALYZE</code> already run. Existing indexes: the primary keys and <code>\"Note_slug_key\"</code> (unique on slug).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One CREATE INDEX on the expression <code>lower(slug)</code>.</li>\n  <li>Do not drop <code>\"Note_slug_key\"</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một client cũ tra ghi chú không phân biệt hoa thường (xem khối SQL ở bản tiếng Anh). Trong bài đây là Parallel Seq Scan 71,8 ms — chậm hơn <code>slug = …</code> 1100 lần — vì <code>lower(slug)</code> không phải <code>slug</code>: B-tree lưu giá trị gốc. Thêm một <b>chỉ mục biểu thức</b> để điều kiện hiện thành <code>Index Cond</code> trong kế hoạch. Giữ nguyên chỉ mục unique đang có.</p>\n<p><b>CSDL mẫu</b> (lược đồ Notes của bài 7.2, đúng như Prisma tạo — tên camelCase phải đặt trong ngoặc kép):</p><ul><li><b>\"User\"</b>(id serial PK, email text UNIQUE, name varchar(80), \"createdAt\" timestamp) — 4 người: An (1), Binh (2), Chi (3), Dung (4, chưa có ghi chú)</li><li><b>\"Note\"</b>(id serial PK, title varchar(200), slug text UNIQUE, body text, pinned boolean, \"authorId\" int → \"User\".id ON DELETE CASCADE, \"createdAt\" timestamp, \"updatedAt\" timestamp, version int DEFAULT 1) — 10 ghi chú</li><li><b>\"Tag\"</b>(id, name varchar(40) UNIQUE) và <b>\"NoteTag\"</b>(\"noteId\", \"tagId\", khoá chính gồm cả hai)</li></ul><p>Thêm <b>5.000 ghi chú hàng loạt</b> (slug <code>bulk-1</code> … <code>bulk-5000</code>) chia cho 50 tác giả, và đã chạy <code>ANALYZE</code>. Chỉ mục có sẵn: các khoá chính và <code>\"Note_slug_key\"</code> (unique trên slug).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu CREATE INDEX trên biểu thức <code>lower(slug)</code>.</li>\n  <li>Đừng xoá <code>\"Note_slug_key\"</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "no_sort | index_cond | query      \n--------+------------+------------\ntrue    | true       | lower(slug)",
+          "explanation": "Expected result of check \"lower(slug) = … is answered by an index\" (row order does not matter).|||Kết quả mong đợi của kiểm \"lower(slug) = … được trả lời bằng chỉ mục\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>CREATE INDEX \"name\" ON \"Note\" (lower(slug));</code> — the parentheses around the expression are required.|||<code>CREATE INDEX \"tên\" ON \"Note\" (lower(slug));</code> — bắt buộc có ngoặc quanh biểu thức.",
+        "The index expression must match the WHERE expression exactly: lower, not upper.|||Biểu thức chỉ mục phải khớp đúng biểu thức trong WHERE: lower, không phải upper."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your CREATE INDEX here\nCREATE INDEX \"Note_slug_idx2\" ON \"Note\" (slug);\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- an index ON THE EXPRESSION: the B-tree now stores lower(slug), which is what the WHERE compares\nCREATE INDEX \"Note_slug_lower_idx\" ON \"Note\" (lower(slug));\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An expression index stores the computed value, so PostgreSQL can match lower(slug) = $1 against it exactly as it matches slug = $1 against the plain one. The alternative the lesson mentions is storing a normalised column — same idea, done at write time instead of in the index.</p>",
+      "solutionExplanationHtmlVi": "<p>Chỉ mục biểu thức lưu giá trị đã tính, nên PostgreSQL so lower(slug) = $1 với nó y như so slug = $1 với chỉ mục thường. Cách thay thế bài nhắc tới là lưu một cột đã chuẩn hoá — cùng ý, làm lúc ghi thay vì trong chỉ mục.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE \"User\" (\n  id          serial PRIMARY KEY,\n  email       text NOT NULL UNIQUE,\n  name        varchar(80) NOT NULL,\n  \"createdAt\" timestamp(3) NOT NULL DEFAULT now()\n);\nCREATE TABLE \"Note\" (\n  id          serial PRIMARY KEY,\n  title       varchar(200) NOT NULL,\n  slug        text NOT NULL UNIQUE,\n  body        text NOT NULL DEFAULT '',\n  pinned      boolean NOT NULL DEFAULT false,\n  \"authorId\"  integer NOT NULL REFERENCES \"User\"(id) ON DELETE CASCADE,\n  \"createdAt\" timestamp(3) NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  version     integer NOT NULL DEFAULT 1\n);\nCREATE TABLE \"Tag\" (\n  id   serial PRIMARY KEY,\n  name varchar(40) NOT NULL UNIQUE\n);\nCREATE TABLE \"NoteTag\" (\n  \"noteId\" integer NOT NULL REFERENCES \"Note\"(id) ON DELETE CASCADE,\n  \"tagId\"  integer NOT NULL REFERENCES \"Tag\"(id) ON DELETE CASCADE,\n  PRIMARY KEY (\"noteId\", \"tagId\")\n);\nINSERT INTO \"User\" (email, name, \"createdAt\") VALUES\n  ('an@vd.com', 'An', '2026-07-01 08:00'), ('binh@vd.com', 'Binh', '2026-07-02 08:00'),\n  ('chi@vd.com', 'Chi', '2026-07-03 08:00'), ('dung@vd.com', 'Dung', '2026-07-04 08:00');\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\") VALUES\n  ('Learning Express', 'note-1', 'body of note 1', false, 1, '2026-07-27 09:00', '2026-07-27 09:00'),\n  ('Learning Prisma', 'note-2', 'body of note 2', true, 1, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Shopping list', 'note-3', 'body of note 3', false, 2, '2026-07-27 10:00', '2026-07-27 10:00'),\n  ('Chapter 7 notes', 'note-4', 'body of note 4', false, 1, '2026-07-28 08:30', '2026-07-28 08:30'),\n  ('Gym plan', 'note-5', 'body of note 5', true, 2, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Read EXPLAIN', 'note-6', 'body of note 6', false, 3, '2026-07-28 09:00', '2026-07-28 09:00'),\n  ('Indexes', 'note-7', 'body of note 7', false, 1, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Weekend', 'note-8', 'body of note 8', false, 2, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Migrations', 'note-9', 'body of note 9', true, 3, '2026-07-29 07:00', '2026-07-29 07:00'),\n  ('Pool sizing', 'note-10', 'body of note 10', false, 1, '2026-07-30 12:00', '2026-07-30 12:00');\nINSERT INTO \"Tag\" (name) VALUES ('work'), ('prisma'), ('health'), ('db');\nINSERT INTO \"NoteTag\" (\"noteId\", \"tagId\") VALUES (1, 1), (2, 1), (2, 2), (4, 4), (5, 3), (6, 4), (9, 4), (9, 2);\nINSERT INTO \"User\" (email, name, \"createdAt\") SELECT 'u' || g || '@vd.com', 'U' || g, '2026-07-01' FROM generate_series(5, 50) g;\nINSERT INTO \"Note\" (title, slug, body, pinned, \"authorId\", \"createdAt\", \"updatedAt\")\nSELECT 'Bulk note ' || g, 'bulk-' || g, 'body ' || g, g % 10 = 0, (g % 50) + 1, timestamp '2026-01-01' + g * interval '7 minutes', timestamp '2026-01-01' + g * interval '7 minutes'\nFROM generate_series(1, 5000) g;\nANALYZE;\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "lower(slug) = … is answered by an index|||lower(slug) = … được trả lời bằng chỉ mục",
+            "kiemTra": "SET LOCAL enable_seqscan = off;\nSELECT position('Sort' in plan_nodes($q$SELECT id FROM \"Note\" WHERE lower(slug) = 'bulk-4242'$q$)) = 0 AS no_sort,\n       position('Index Cond' in plan_text($q$SELECT id FROM \"Note\" WHERE lower(slug) = 'bulk-4242'$q$)) > 0 AS index_cond,\n       'lower(slug)' AS query",
+            "mongDoi": {
+              "cot": [
+                "no_sort",
+                "index_cond",
+                "query"
+              ],
+              "hang": [
+                [
+                  true,
+                  true,
+                  "lower(slug)"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The unique index on slug is still there|||Chỉ mục unique trên slug vẫn còn",
+            "kiemTra": "SELECT count(*) AS unique_slug FROM pg_indexes WHERE tablename = 'Note' AND indexname = 'Note_slug_key'",
+            "mongDoi": {
+              "cot": [
+                "unique_slug"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: the result is right|||Ẩn: kết quả đúng",
+            "kiemTra": "SELECT id, slug FROM \"Note\" WHERE lower(slug) = 'bulk-4242'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "slug"
+              ],
+              "hang": [
+                [
+                  4252,
+                  "bulk-4242"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: an upper-case lookup also uses it|||Ẩn: tra bằng chữ hoa cũng dùng được",
+            "kiemTra": "SET LOCAL enable_seqscan = off;\nSELECT position('Sort' in plan_nodes($q$SELECT id FROM \"Note\" WHERE lower(slug) = lower('BULK-17')$q$)) = 0 AS no_sort,\n       position('Index Cond' in plan_text($q$SELECT id FROM \"Note\" WHERE lower(slug) = lower('BULK-17')$q$)) > 0 AS index_cond,\n       'lower(BULK-17)' AS query",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "no_sort",
+                "index_cond",
+                "query"
+              ],
+              "hang": [
+                [
+                  true,
+                  true,
+                  "lower(BULK-17)"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A second plain index on slug — it is the same B-tree of raw values and changes nothing.|||Thêm một chỉ mục thường thứ hai trên slug — vẫn là B-tree giá trị gốc, không đổi gì."
+        },
+        {
+          "loi": "Indexing <code>upper(slug)</code> while the query says <code>lower(slug)</code>.|||Đánh chỉ mục <code>upper(slug)</code> trong khi truy vấn viết <code>lower(slug)</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "expression index",
+          "vi": "chỉ mục biểu thức"
+        },
+        {
+          "en": "normalised column",
+          "vi": "cột đã chuẩn hoá"
+        }
+      ]
+    },
+    {
+      "title": "7.5 · 5 — Write readPlan(text): turn EXPLAIN ANALYZE output into numbers you can assert on",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "EXPLAIN",
+        "regex",
+        "testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Lift the counting idea into a test.” A test can assert on a plan only if code can read it. Write <code>readPlan(text)</code> for PostgreSQL’s text EXPLAIN (ANALYZE, BUFFERS) output, returning:</p>\n<ul><li><code>nodes</code>: the plan node names in the order they appear — the first line’s node, then every line that starts (after spaces) with <code>-&gt;</code> — with the parts <code>using &lt;index&gt;</code> and <code>on &lt;table&gt;</code> and everything from <code>(</code> removed: <code>[\"Limit\", \"Gather Merge\", \"Sort\", \"Parallel Seq Scan\"]</code>.</li>\n<li><code>scan</code>: the LAST node whose name contains <code>Scan</code> (the innermost — where rows come from), or <code>null</code>.</li>\n<li><code>index</code>: the index name after <code>using</code> (without quotes), or <code>null</code>. <code>hasSort</code>: whether a node is exactly <code>Sort</code>.</li>\n<li><code>rowsRemovedByFilter</code>, <code>executionMs</code>: numbers, or <code>null</code> if absent. <code>buffers</code>: <code>{ hit, read }</code> from the first <code>shared …</code> line, 0 when a part is missing.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Numbers are numbers (<code>28.618</code>, not <code>\"28.618\"</code>).</li>\n  <li>Detail lines (Filter, Sort Key, Buffers…) are not nodes.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Đưa ý tưởng đếm vào một bài test.\" Test chỉ khẳng định được trên kế hoạch khi code đọc được nó. Viết <code>readPlan(text)</code> cho output dạng chữ của PostgreSQL EXPLAIN (ANALYZE, BUFFERS), trả về:</p>\n<ul><li><code>nodes</code>: tên các nút kế hoạch theo thứ tự xuất hiện — nút của dòng đầu, rồi mọi dòng bắt đầu (sau khoảng trắng) bằng <code>-&gt;</code> — đã bỏ phần <code>using &lt;chỉ mục&gt;</code>, <code>on &lt;bảng&gt;</code> và mọi thứ từ <code>(</code>: <code>[\"Limit\", \"Gather Merge\", \"Sort\", \"Parallel Seq Scan\"]</code>.</li>\n<li><code>scan</code>: nút CUỐI CÙNG có tên chứa <code>Scan</code> (nút trong cùng — nơi dòng đến), hoặc <code>null</code>.</li>\n<li><code>index</code>: tên chỉ mục sau <code>using</code> (không có ngoặc kép), hoặc <code>null</code>. <code>hasSort</code>: có nút tên đúng là <code>Sort</code> không.</li>\n<li><code>rowsRemovedByFilter</code>, <code>executionMs</code>: số, hoặc <code>null</code> nếu không có. <code>buffers</code>: <code>{ hit, read }</code> từ dòng <code>shared …</code> đầu tiên, phần nào thiếu thì 0.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Số là số (<code>28.618</code>, không phải <code>\"28.618\"</code>).</li>\n  <li>Dòng chi tiết (Filter, Sort Key, Buffers…) không phải nút.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readPlan(\"Limit  (cost=33881.63..33883.97 rows=20) (actual time=26.855..28.594 rows=20 loops=1)\\n  Buffers: shared hit=16136 read=14097\\n  ->  Gather Merge  (actual time=26.853..28.590 rows=20 loops=1)\\n        Workers Launched: 2\\n        ->  Sort  (actual time=25.208..25.209 rows=20 loops=3)\\n              Sort Key: \\\"createdAt\\\" DESC\\n              Sort Method: top-N heapsort  Memory: 26kB\\n              ->  Parallel Seq Scan on \\\"Note\\\"  (actual time=6.067..24.828 rows=3340 loops=3)\\n                    Filter: (\\\"authorId\\\" = 7)\\n                    Rows Removed by Filter: 163660\\nExecution Time: 28.618 ms\")",
+          "output": "{\"nodes\":[\"Limit\",\"Gather Merge\",\"Sort\",\"Parallel Seq Scan\"],\"scan\":\"Parallel Seq Scan\",\"index\":null,\"hasSort\":true,\"rowsRemovedByFilter\":163660,\"buffers\":{\"hit\":16136,\"read\":14097},\"executionMs\":28.618}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Node lines are the first line and lines matching <code>/^\\s*-&gt;/</code>. Take the name up to <code>\" using \"</code>, <code>\" on \"</code> or <code>\"(\"</code>.|||Dòng nút là dòng đầu và các dòng khớp <code>/^\\s*-&gt;/</code>. Lấy tên tới <code>\" using \"</code>, <code>\" on \"</code> hoặc <code>\"(\"</code>.",
+        "Numbers: <code>/Rows Removed by Filter:\\s+(\\d+)/</code>, <code>/Execution Time:\\s+([\\d.]+)/</code>, <code>/shared[^\\n]*?hit=(\\d+)/</code> and the same for read.|||Số: <code>/Rows Removed by Filter:\\s+(\\d+)/</code>, <code>/Execution Time:\\s+([\\d.]+)/</code>, <code>/shared[^\\n]*?hit=(\\d+)/</code> và tương tự cho read."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readPlan(text) {\n  // Write your solution here\n  const nodes = text.split('\\n').filter((l) => l.includes('->')).map((l) => l.trim().slice(3).split('(')[0].trim());\n  return { nodes, scan: nodes[0] || null, index: null, hasSort: text.includes('Sort'), rowsRemovedByFilter: null, buffers: { hit: 0, read: 0 }, executionMs: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function readPlan(text) {\n  const lines = text.split('\\n');\n  const nodes = [];\n  for (const line of lines) {\n    // a plan node is \"->  Name (\" or the very first line; strip \"on <table>\" and \"using <index> on <table>\"\n    const m = /^\\s*(?:->\\s+)?([A-Z][A-Za-z ]+?)(?:\\s+using\\s+\\S+)?(?:\\s+on\\s+\\S+)?\\s*(?:\\(|$)/.exec(line);\n    if (m && !/^\\s*(Buffers|Filter|Rows Removed|Sort Key|Sort Method|Index Cond|Workers|Execution|Planning|Recheck)/.test(line) && (/->/.test(line) || nodes.length === 0)) nodes.push(m[1].trim());\n  }\n  const num = (re) => { const m = re.exec(text); return m ? Number(m[1]) : null; };\n  const scan = nodes.slice().reverse().find((n) => /Scan/.test(n)) ?? null;\n  const idx = /using\\s+\"?([^\"\\s]+)\"?\\s+on/.exec(text);\n  return {\n    nodes,\n    scan,                                                   // the innermost scan: where the rows come from\n    index: idx ? idx[1] : null,\n    hasSort: nodes.includes('Sort'),\n    rowsRemovedByFilter: num(/Rows Removed by Filter:\\s+(\\d+)/),\n    buffers: { hit: num(/shared[^\\n]*?hit=(\\d+)/) ?? 0, read: num(/shared[^\\n]*?read=(\\d+)/) ?? 0 },\n    executionMs: num(/Execution Time:\\s+([\\d.]+)\\s*ms/),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Once a plan is data, “this endpoint must use an index and must not sort” becomes an assertion that fails in CI the day someone drops the index or changes the ORDER BY — instead of an incident report three months later.</p>",
+      "solutionExplanationHtmlVi": "<p>Khi kế hoạch thành dữ liệu, \"endpoint này phải dùng chỉ mục và không được sắp\" thành một phép khẳng định hỏng trong CI ngay ngày ai đó xoá chỉ mục hay đổi ORDER BY — thay vì một báo cáo sự cố ba tháng sau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s plan before the index",
+              "vi": "Kế hoạch của bài trước khi có chỉ mục"
+            },
+            "goi": "readPlan(\"Limit  (cost=33881.63..33883.97 rows=20) (actual time=26.855..28.594 rows=20 loops=1)\\n  Buffers: shared hit=16136 read=14097\\n  ->  Gather Merge  (actual time=26.853..28.590 rows=20 loops=1)\\n        Workers Launched: 2\\n        ->  Sort  (actual time=25.208..25.209 rows=20 loops=3)\\n              Sort Key: \\\"createdAt\\\" DESC\\n              Sort Method: top-N heapsort  Memory: 26kB\\n              ->  Parallel Seq Scan on \\\"Note\\\"  (actual time=6.067..24.828 rows=3340 loops=3)\\n                    Filter: (\\\"authorId\\\" = 7)\\n                    Rows Removed by Filter: 163660\\nExecution Time: 28.618 ms\")",
+            "mongDoi": {
+              "nodes": [
+                "Limit",
+                "Gather Merge",
+                "Sort",
+                "Parallel Seq Scan"
+              ],
+              "scan": "Parallel Seq Scan",
+              "index": null,
+              "hasSort": true,
+              "rowsRemovedByFilter": 163660,
+              "buffers": {
+                "hit": 16136,
+                "read": 14097
+              },
+              "executionMs": 28.618
+            }
+          },
+          {
+            "moTa": {
+              "en": "After the index",
+              "vi": "Sau khi có chỉ mục"
+            },
+            "goi": "readPlan(\"Limit  (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1)\\n  Buffers: shared read=5\\n  ->  Index Scan using \\\"Note_authorId_createdAt_idx\\\" on \\\"Note\\\"\\n        (actual time=0.098..0.109 rows=20 loops=1)\\n        Index Cond: (\\\"authorId\\\" = 7)\\nExecution Time: 0.129 ms\")",
+            "mongDoi": {
+              "nodes": [
+                "Limit",
+                "Index Scan"
+              ],
+              "scan": "Index Scan",
+              "index": "Note_authorId_createdAt_idx",
+              "hasSort": false,
+              "rowsRemovedByFilter": null,
+              "buffers": {
+                "hit": 0,
+                "read": 5
+              },
+              "executionMs": 0.129
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "readPlan(\"Limit  (actual time=0.031..0.040 rows=3 loops=1)\\n  Buffers: shared hit=4\\n  ->  Sort  (actual time=0.030..0.031 rows=3 loops=1)\\n        Sort Key: title\\n        Sort Method: quicksort  Memory: 25kB\\n        ->  Bitmap Heap Scan on \\\"Note\\\"  (actual time=0.012..0.020 rows=3 loops=1)\\n              Recheck Cond: (\\\"authorId\\\" = 3)\\n              ->  Bitmap Index Scan on \\\"Note_authorId_idx\\\"  (actual time=0.008..0.008 rows=3 loops=1)\\n                    Index Cond: (\\\"authorId\\\" = 3)\\nExecution Time: 0.061 ms\")",
+            "mongDoi": {
+              "nodes": [
+                "Limit",
+                "Sort",
+                "Bitmap Heap Scan",
+                "Bitmap Index Scan"
+              ],
+              "scan": "Bitmap Index Scan",
+              "index": null,
+              "hasSort": true,
+              "rowsRemovedByFilter": null,
+              "buffers": {
+                "hit": 4,
+                "read": 0
+              },
+              "executionMs": 0.061
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "readPlan(\"Seq Scan on \\\"Note\\\"  (actual time=0.010..35.947 rows=1 loops=1)\\n  Filter: (slug ~~ '%4242'::text)\\n  Rows Removed by Filter: 751001\\nExecution Time: 35.947 ms\")",
+            "mongDoi": {
+              "nodes": [
+                "Seq Scan"
+              ],
+              "scan": "Seq Scan",
+              "index": null,
+              "hasSort": false,
+              "rowsRemovedByFilter": 751001,
+              "buffers": {
+                "hit": 0,
+                "read": 0
+              },
+              "executionMs": 35.947
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "readPlan(\"Index Scan using \\\"Note_slug_key\\\" on \\\"Note\\\"  (actual time=0.040..0.041 rows=1 loops=1)\\n  Index Cond: (slug = 'bulk-4242'::text)\\n  Buffers: shared hit=3 read=1\\nPlanning Time: 0.100 ms\\nExecution Time: 0.065 ms\")",
+            "mongDoi": {
+              "nodes": [
+                "Index Scan"
+              ],
+              "scan": "Index Scan",
+              "index": "Note_slug_key",
+              "hasSort": false,
+              "rowsRemovedByFilter": null,
+              "buffers": {
+                "hit": 3,
+                "read": 1
+              },
+              "executionMs": 0.065
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the FIRST scan instead of the innermost: with Bitmap Heap Scan over Bitmap Index Scan, the rows are located by the index scan.|||Lấy nút scan ĐẦU TIÊN thay vì nút trong cùng: với Bitmap Heap Scan trên Bitmap Index Scan, dòng được tìm bởi nút quét chỉ mục."
+        },
+        {
+          "loi": "Keeping <code>on \"Note\"</code> in the name, so <code>\"Parallel Seq Scan\"</code> never matches your assertion.|||Giữ <code>on \"Note\"</code> trong tên, nên <code>\"Parallel Seq Scan\"</code> không bao giờ khớp phép khẳng định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "plan node",
+          "vi": "nút kế hoạch"
+        },
+        {
+          "en": "innermost",
+          "vi": "trong cùng"
+        }
+      ]
+    }
+  ]
+}

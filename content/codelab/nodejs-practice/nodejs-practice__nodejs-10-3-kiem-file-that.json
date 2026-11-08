@@ -1,0 +1,942 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-10-3-kiem-file-that",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-10-3-kiem-file-that"
+  },
+  "exercises": [
+    {
+      "title": "Five files that all claim to be images",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "upload validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>From the lesson: five files through an extension check, a MIME check and magic-byte sniffing; a GIF+HTML polyglot; a real photo with HTML appended; a 758 KB PNG that costs 99 MB; and a phone photo carrying EXIF.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ bài: năm file qua phép kiểm đuôi, kiểm MIME và đọc magic bytes; một file lai GIF+HTML; một ảnh thật nối thêm HTML; một PNG 758 KB tốn 99 MB; và một ảnh điện thoại mang EXIF.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of each check: does it read the client’s strings, the first bytes, or the whole file?|||Hỏi mỗi phép kiểm: nó đọc chuỗi của client, vài byte đầu, hay cả file?",
+        "The \"bomb\" numbers: compressed size vs decoded pixels.|||Số liệu \"bom\": cỡ nén so với số điểm ảnh khi giải mã."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five files that all claim to be images\n\nAnswer in the answer panel (no code needed).\n\n1. A PHP shell renamed shell.png, sent with Content-Type: image/png. Which checks let it through?Một shell PHP đổi tên thành shell.png, gửi kèm Content-Type: image/png. Phép kiểm nào cho nó qua?\n2. GIF89a/**/=1;<script>alert(1)</script> is sniffed as image/gif. What actually rejects it?GIF89a/**/=1;<script>alert(1)</script> được đọc là image/gif. Thứ gì thật sự từ chối nó?\n3. A genuine JPEG with <script> appended still decodes perfectly. What removes the payload?Một JPEG thật nối thêm <script> vẫn giải mã ngon lành. Thứ gì loại bỏ payload?\n4. Eight 758 KB \"bomb\" PNGs (16000×16000) at once vs eight real 6.85 MB photos at once. What did the lesson measure?Tám PNG \"bom\" 758 KB (16000×16000) cùng lúc so với tám ảnh thật 6,85 MB cùng lúc. Bài đo được gì?\n5. Which statements are true? (choose all)Nhận định nào đúng? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five files that all claim to be images — answer key\n\n1. A PHP shell renamed shell.png, sent with Content-Type: image/png. Which checks let it through?Một shell PHP đổi tên thành shell.png, gửi kèm Content-Type: image/png. Phép kiểm nào cho nó qua?\n   Answer: d) The extension check and the MIME check — both are strings the attacker wrote; magic bytes caught it\n   Its first bytes are \"<?php system($_G\" — not a PNG signature. Sniffing caught 4 of the 5 files.VI: Các byte đầu là \"<?php system($_G\" — không phải chữ ký PNG. Đọc magic bytes bắt được 4 trên 5 file.\n\n2. GIF89a/**/=1;<script>alert(1)</script> is sniffed as image/gif. What actually rejects it?GIF89a/**/=1;<script>alert(1)</script> được đọc là image/gif. Thứ gì thật sự từ chối nó?\n   Answer: c) Decoding it: sharp threw \"Input buffer has corrupt header\"\n   \"The only reliable way to know a file is an image is to decode it as one.\" Sniffing reads six bytes; a decoder reads all of them.VI: \"Cách đáng tin duy nhất để biết một file là ảnh là giải mã nó như ảnh.\" Đọc magic bytes chỉ đọc sáu byte; bộ giải mã đọc hết.\n\n3. A genuine JPEG with <script> appended still decodes perfectly. What removes the payload?Một JPEG thật nối thêm <script> vẫn giải mã ngon lành. Thứ gì loại bỏ payload?\n   Answer: c) Re-encoding with sharp and storing the OUTPUT (570 KB, no <script> left)\n   JPEG readers stop at the end-of-image marker and ignore trailing bytes. A re-encode writes a new file from pixels — nothing that was not a pixel survives.VI: Bộ đọc JPEG dừng ở dấu kết thúc ảnh và bỏ qua byte phía sau. Re-encode ghi file mới từ điểm ảnh — thứ gì không phải điểm ảnh đều không sống sót.\n\n4. Eight 758 KB \"bomb\" PNGs (16000×16000) at once vs eight real 6.85 MB photos at once. What did the lesson measure?Tám PNG \"bom\" 758 KB (16000×16000) cùng lúc so với tám ảnh thật 6,85 MB cùng lúc. Bài đo được gì?\n   Answer: a) Bombs: +445 MB RSS; real photos: +17 MB — size limits, MIME checks and sniffing see none of it\n   256 MP sits just under sharp’s default limitInputPixels (268,402,689). The defence is a pixel budget for your product (this site: 100 MP) plus bounded concurrency (4 decodes).VI: 256 MP nằm ngay dưới limitInputPixels mặc định của sharp (268.402.689). Phòng thủ là ngân sách điểm ảnh theo sản phẩm (site này: 100 MP) cộng giới hạn đồng thời (4 lần giải mã).\n\n5. Which statements are true? (choose all)Nhận định nào đúng? (chọn mọi câu đúng)\n   Answer: b) evil.php.png: only the last extension matters, and only for naming, never for trust + d) SVG was blocked by sniffing only because file-type does not recognise SVG — refuse it explicitly + e) sharp drops EXIF (including GPS) by default; withMetadata() keeps all of it\n   The bomb, the polyglot and the EXIF are all images — \"image/*\" is not a safety property. Active content (HTML, SVG, JS) is refused outright.VI: Quả bom, file lai và EXIF đều là ảnh — \"image/*\" không phải tính chất an toàn. Nội dung chủ động (HTML, SVG, JS) bị từ chối thẳng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The extension check and the MIME check — both are strings the attacker wrote; magic bytes caught it</p><p>Its first bytes are \"&lt;?php system($_G\" — not a PNG signature. Sniffing caught 4 of the 5 files.</p><p><i>VI: Các byte đầu là \"&lt;?php system($_G\" — không phải chữ ký PNG. Đọc magic bytes bắt được 4 trên 5 file.</i></p></li><li><p><b>c)</b> Decoding it: sharp threw \"Input buffer has corrupt header\"</p><p>\"The only reliable way to know a file is an image is to decode it as one.\" Sniffing reads six bytes; a decoder reads all of them.</p><p><i>VI: \"Cách đáng tin duy nhất để biết một file là ảnh là giải mã nó như ảnh.\" Đọc magic bytes chỉ đọc sáu byte; bộ giải mã đọc hết.</i></p></li><li><p><b>c)</b> Re-encoding with sharp and storing the OUTPUT (570 KB, no &lt;script&gt; left)</p><p>JPEG readers stop at the end-of-image marker and ignore trailing bytes. A re-encode writes a new file from pixels — nothing that was not a pixel survives.</p><p><i>VI: Bộ đọc JPEG dừng ở dấu kết thúc ảnh và bỏ qua byte phía sau. Re-encode ghi file mới từ điểm ảnh — thứ gì không phải điểm ảnh đều không sống sót.</i></p></li><li><p><b>a)</b> Bombs: +445 MB RSS; real photos: +17 MB — size limits, MIME checks and sniffing see none of it</p><p>256 MP sits just under sharp’s default limitInputPixels (268,402,689). The defence is a pixel budget for your product (this site: 100 MP) plus bounded concurrency (4 decodes).</p><p><i>VI: 256 MP nằm ngay dưới limitInputPixels mặc định của sharp (268.402.689). Phòng thủ là ngân sách điểm ảnh theo sản phẩm (site này: 100 MP) cộng giới hạn đồng thời (4 lần giải mã).</i></p></li><li><p><b>b)</b> <code>evil.php.png</code>: only the last extension matters, and only for naming, never for trust + <b>d)</b> SVG was blocked by sniffing only because file-type does not recognise SVG — refuse it explicitly + <b>e)</b> sharp drops EXIF (including GPS) by default; withMetadata() keeps all of it</p><p>The bomb, the polyglot and the EXIF are all images — \"image/*\" is not a safety property. Active content (HTML, SVG, JS) is refused outright.</p><p><i>VI: Quả bom, file lai và EXIF đều là ảnh — \"image/*\" không phải tính chất an toàn. Nội dung chủ động (HTML, SVG, JS) bị từ chối thẳng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "f1",
+            "de": "<p>A PHP shell renamed <code>shell.png</code>, sent with <code>Content-Type: image/png</code>. Which checks let it through?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một shell PHP đổi tên thành <code>shell.png</code>, gửi kèm <code>Content-Type: image/png</code>. Phép kiểm nào cho nó qua?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the extension check; the browser corrects the MIME from the file content"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All three, because PHP files start with the same bytes as PNG"
+              },
+              {
+                "ma": "c",
+                "noiDung": "None: multer rejects files whose content does not match their extension"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The extension check and the MIME check — both are strings the attacker wrote; magic bytes caught it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Its first bytes are \"&lt;?php system($_G\" — not a PNG signature. Sniffing caught 4 of the 5 files.</p><p><i>VI: Các byte đầu là \"&lt;?php system($_G\" — không phải chữ ký PNG. Đọc magic bytes bắt được 4 trên 5 file.</i></p>"
+          },
+          {
+            "ma": "f2",
+            "de": "<p><code>GIF89a/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;</code> is sniffed as <code>image/gif</code>. What actually rejects it?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>GIF89a/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;</code> được đọc là <code>image/gif</code>. Thứ gì thật sự từ chối nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Checking that the extension is .gif and not .html"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nosniff on the response, which stops the browser decoding it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Decoding it: sharp threw \"Input buffer has corrupt header\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "A stricter sniffer that reads 16 bytes instead of 6"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>\"The only reliable way to know a file is an image is to decode it as one.\" Sniffing reads six bytes; a decoder reads all of them.</p><p><i>VI: \"Cách đáng tin duy nhất để biết một file là ảnh là giải mã nó như ảnh.\" Đọc magic bytes chỉ đọc sáu byte; bộ giải mã đọc hết.</i></p>"
+          },
+          {
+            "ma": "f3",
+            "de": "<p>A genuine JPEG with <code>&lt;script&gt;</code> appended still decodes perfectly. What removes the payload?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một JPEG thật nối thêm <code>&lt;script&gt;</code> vẫn giải mã ngon lành. Thứ gì loại bỏ payload?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Checking the magic bytes again after upload"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rejecting files larger than 5 MB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Re-encoding with sharp and storing the OUTPUT (570 KB, no &lt;script&gt; left)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Setting the stored Content-Type to image/jpeg"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>JPEG readers stop at the end-of-image marker and ignore trailing bytes. A re-encode writes a new file from pixels — nothing that was not a pixel survives.</p><p><i>VI: Bộ đọc JPEG dừng ở dấu kết thúc ảnh và bỏ qua byte phía sau. Re-encode ghi file mới từ điểm ảnh — thứ gì không phải điểm ảnh đều không sống sót.</i></p>"
+          },
+          {
+            "ma": "f4",
+            "de": "<p>Eight 758 KB \"bomb\" PNGs (16000×16000) at once vs eight real 6.85 MB photos at once. What did the lesson measure?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tám PNG \"bom\" 758 KB (16000×16000) cùng lúc so với tám ảnh thật 6,85 MB cùng lúc. Bài đo được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Bombs: +445 MB RSS; real photos: +17 MB — size limits, MIME checks and sniffing see none of it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bombs: +5.9 MB, exactly their size on the wire"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Bombs: refused by sharp’s default limit; real photos: +17 MB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both about +60 MB, because sharp streams every image"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>256 MP sits just under sharp’s default limitInputPixels (268,402,689). The defence is a pixel budget for your product (this site: 100 MP) plus bounded concurrency (4 decodes).</p><p><i>VI: 256 MP nằm ngay dưới limitInputPixels mặc định của sharp (268.402.689). Phòng thủ là ngân sách điểm ảnh theo sản phẩm (site này: 100 MP) cộng giới hạn đồng thời (4 lần giải mã).</i></p>"
+          },
+          {
+            "ma": "f5",
+            "de": "<p>Which statements are true? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhận định nào đúng? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An image endpoint should accept HTML if the extension is .jpg, since it will be served as an image"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>evil.php.png</code>: only the last extension matters, and only for naming, never for trust"
+              },
+              {
+                "ma": "c",
+                "noiDung": "image/* is safe to store as-is because it is an image"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SVG was blocked by sniffing only because file-type does not recognise SVG — refuse it explicitly"
+              },
+              {
+                "ma": "e",
+                "noiDung": "sharp drops EXIF (including GPS) by default; withMetadata() keeps all of it"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The bomb, the polyglot and the EXIF are all images — \"image/*\" is not a safety property. Active content (HTML, SVG, JS) is refused outright.</p><p><i>VI: Quả bom, file lai và EXIF đều là ảnh — \"image/*\" không phải tính chất an toàn. Nội dung chủ động (HTML, SVG, JS) bị từ chối thẳng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating magic bytes as proof of a valid image.|||Coi magic bytes là bằng chứng ảnh hợp lệ."
+        },
+        {
+          "loi": "Storing the uploaded bytes instead of the re-encoded output.|||Lưu byte đã upload thay vì bản re-encode."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "magic bytes",
+          "vi": "chữ ký đầu file",
+          "giaiThich": "vài byte đầu nhận diện định dạng"
+        },
+        {
+          "en": "polyglot",
+          "vi": "file lai",
+          "giaiThich": "hợp lệ theo hai định dạng cùng lúc"
+        },
+        {
+          "en": "decompression bomb",
+          "vi": "bom giải nén",
+          "giaiThich": "file nhỏ nở ra rất lớn khi giải mã"
+        }
+      ]
+    },
+    {
+      "title": "Sniff the magic bytes",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "magic bytes",
+        "binary data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson printed the first 16 bytes of each file. Write <code>sniff(bytes)</code> (an array of byte values) → MIME type or <code>null</code>:</p>\n<ul><li><code>FF D8 FF</code> at 0 → <code>image/jpeg</code>; <code>89 50 4E 47 0D 0A 1A 0A</code> at 0 → <code>image/png</code>;</li>\n<li><code>GIF87a</code> or <code>GIF89a</code> at 0 → <code>image/gif</code>; <code>RIFF</code> at 0 <b>and</b> <code>WEBP</code> at 8 → <code>image/webp</code>; <code>%PDF-</code> at 0 → <code>application/pdf</code>;</li>\n<li>anything else (too short, HTML, SVG, PHP…) → <code>null</code>.</li></ul>\n<p>The tests use the lesson’s exact hex: <code>3c3f7068…</code> (PHP shell), <code>3c68746d…</code> (HTML), <code>47494638…</code> (the polyglot), <code>3c737667…</code> (SVG), <code>ffd8ffdb…</code> (JPEG).</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài đã in 16 byte đầu của mỗi file. Viết <code>sniff(bytes)</code> (mảng giá trị byte) → kiểu MIME hoặc <code>null</code>:</p>\n<ul><li><code>FF D8 FF</code> ở 0 → <code>image/jpeg</code>; <code>89 50 4E 47 0D 0A 1A 0A</code> ở 0 → <code>image/png</code>;</li>\n<li><code>GIF87a</code> hoặc <code>GIF89a</code> ở 0 → <code>image/gif</code>; <code>RIFF</code> ở 0 <b>và</b> <code>WEBP</code> ở 8 → <code>image/webp</code>; <code>%PDF-</code> ở 0 → <code>application/pdf</code>;</li>\n<li>còn lại (quá ngắn, HTML, SVG, PHP…) → <code>null</code>.</li></ul>\n<p>Bộ kiểm dùng đúng hex của bài: <code>3c3f7068…</code> (shell PHP), <code>3c68746d…</code> (HTML), <code>47494638…</code> (file lai), <code>3c737667…</code> (SVG), <code>ffd8ffdb…</code> (JPEG).</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[sniff(SHELL), sniff(HTML), sniff(POLY), sniff(SVG), sniff(JPEG)]",
+          "output": "[null,null,\"image/gif\",null,\"image/jpeg\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write one helper <code>at(offset, [bytes…])</code> that compares a signature at a position.|||Viết một hàm phụ <code>at(offset, [byte…])</code> so một chữ ký tại một vị trí.",
+        "For ASCII signatures, turn the string into codes with <code>charCodeAt</code>.|||Với chữ ký ASCII, đổi chuỗi thành mã bằng <code>charCodeAt</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Detect the real type of a file from its first bytes. */\nfunction sniff(bytes) {\n  // Write your solution here\n  const text = String.fromCharCode(...bytes);\n  if (text.includes('GIF')) return 'image/gif';\n  if (bytes[0] === 0xff) return 'image/jpeg';\n  return 'image/png';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sniff(bytes) {\n  const at = (offset, sig) => sig.every((b, i) => bytes[offset + i] === b);\n  const ascii = (offset, s) => at(offset, Array.from(s, (ch) => ch.charCodeAt(0)));\n  // Order does not matter here because the signatures cannot overlap — but every check is anchored at an OFFSET.\n  if (at(0, [0xff, 0xd8, 0xff])) return 'image/jpeg';                                   // JPEG SOI marker\n  if (at(0, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) return 'image/png';      // \\x89PNG\\r\\n\\x1a\\n\n  if (ascii(0, 'GIF87a') || ascii(0, 'GIF89a')) return 'image/gif';                     // …which the polyglot also has\n  if (ascii(0, 'RIFF') && ascii(8, 'WEBP')) return 'image/webp';                       // RIFF container, WEBP at 8\n  if (ascii(0, '%PDF-')) return 'application/pdf';\n  return null;                                                                          // text formats (HTML, SVG, PHP) have no magic\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Binary formats announce themselves in fixed bytes at a fixed offset, so sniffing is a handful of anchored comparisons — cheap, and it fails fast on a renamed PHP shell or HTML page. Text formats have no magic at all, which is why SVG returned null \"by accident\". And the polyglot shows the limit: six correct bytes say nothing about the rest; only decoding does.</p>",
+      "solutionExplanationHtmlVi": "<p>Định dạng nhị phân tự xưng danh bằng byte cố định ở vị trí cố định, nên sniff chỉ là vài phép so có neo — rẻ, và loại nhanh shell PHP hay trang HTML bị đổi tên. Định dạng chữ không có magic nào, vì vậy SVG ra null \"do tình cờ\". Và file lai cho thấy giới hạn: sáu byte đúng không nói gì về phần còn lại; chỉ giải mã mới nói được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s five files",
+              "vi": "Năm file của bài"
+            },
+            "goi": "[sniff(SHELL), sniff(HTML), sniff(POLY), sniff(SVG), sniff(JPEG)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction hex(h) { const a = []; for (let i = 0; i < h.length; i += 2) a.push(parseInt(h.slice(i, i + 2), 16)); return a; }\nconst SHELL = hex('3c3f7068702073797374656d28245f47');\nconst HTML = hex('3c68746d6c3e3c7363726970743e6665');\nconst POLY = hex('4749463839612f2a2a2f3d313b3c7363');\nconst SVG = hex('3c73766720786d6c6e733d2268747470');\nconst JPEG = hex('ffd8ffdb004300030202020202030202');\n",
+            "mongDoi": [
+              null,
+              null,
+              "image/gif",
+              null,
+              "image/jpeg"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A PNG header",
+              "vi": "Một header PNG"
+            },
+            "goi": "sniff(hex(\"89504e470d0a1a0a0000000d49484452\"))",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction hex(h) { const a = []; for (let i = 0; i < h.length; i += 2) a.push(parseInt(h.slice(i, i + 2), 16)); return a; }\nconst SHELL = hex('3c3f7068702073797374656d28245f47');\nconst HTML = hex('3c68746d6c3e3c7363726970743e6665');\nconst POLY = hex('4749463839612f2a2a2f3d313b3c7363');\nconst SVG = hex('3c73766720786d6c6e733d2268747470');\nconst JPEG = hex('ffd8ffdb004300030202020202030202');\n",
+            "mongDoi": "image/png"
+          },
+          {
+            "moTa": {
+              "en": "RIFF/WEBP vs RIFF/WAVE",
+              "vi": "RIFF/WEBP so với RIFF/WAVE"
+            },
+            "goi": "[sniff(hex(\"524946462a000000574542505650384c\")), sniff(hex(\"524946462a00000057415645666d7420\"))]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction hex(h) { const a = []; for (let i = 0; i < h.length; i += 2) a.push(parseInt(h.slice(i, i + 2), 16)); return a; }\nconst SHELL = hex('3c3f7068702073797374656d28245f47');\nconst HTML = hex('3c68746d6c3e3c7363726970743e6665');\nconst POLY = hex('4749463839612f2a2a2f3d313b3c7363');\nconst SVG = hex('3c73766720786d6c6e733d2268747470');\nconst JPEG = hex('ffd8ffdb004300030202020202030202');\n",
+            "mongDoi": [
+              "image/webp",
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[sniff([]), sniff([0xff, 0xd8]), sniff(hex(\"255044462d312e37\")), sniff(hex(\"474946383761\")), sniff(hex(\"3c21444f43545950452068746d6c3e47494638396\")), sniff(hex(\"89504e470d0a1a\"))]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction hex(h) { const a = []; for (let i = 0; i < h.length; i += 2) a.push(parseInt(h.slice(i, i + 2), 16)); return a; }\nconst SHELL = hex('3c3f7068702073797374656d28245f47');\nconst HTML = hex('3c68746d6c3e3c7363726970743e6665');\nconst POLY = hex('4749463839612f2a2a2f3d313b3c7363');\nconst SVG = hex('3c73766720786d6c6e733d2268747470');\nconst JPEG = hex('ffd8ffdb004300030202020202030202');\n",
+            "mongDoi": [
+              null,
+              null,
+              "application/pdf",
+              "image/gif",
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[sniff(bytes(\"<?php echo GIF89a; ?>\")), sniff(bytes(\"GIF89a<script>\")), sniff(bytes(\"%PDF\")), sniff(hex(\"ffd8ffe000104a464946\"))]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nfunction hex(h) { const a = []; for (let i = 0; i < h.length; i += 2) a.push(parseInt(h.slice(i, i + 2), 16)); return a; }\nconst SHELL = hex('3c3f7068702073797374656d28245f47');\nconst HTML = hex('3c68746d6c3e3c7363726970743e6665');\nconst POLY = hex('4749463839612f2a2a2f3d313b3c7363');\nconst SVG = hex('3c73766720786d6c6e733d2268747470');\nconst JPEG = hex('ffd8ffdb004300030202020202030202');\n",
+            "mongDoi": [
+              null,
+              "image/gif",
+              null,
+              "image/jpeg"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Searching for \"GIF89a\" anywhere in the file (<code>includes</code>) instead of at offset 0.|||Tìm \"GIF89a\" ở bất kỳ đâu trong file (<code>includes</code>) thay vì ở vị trí 0."
+        },
+        {
+          "loi": "Calling RIFF alone WebP — WAV and AVI are RIFF too; WEBP must be at offset 8.|||Gọi RIFF một mình là WebP — WAV và AVI cũng là RIFF; WEBP phải ở vị trí 8."
+        },
+        {
+          "loi": "Believing a sniff result proves the file is a valid image (the polyglot).|||Tin rằng kết quả sniff chứng minh file là ảnh hợp lệ (file lai)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "signature",
+          "vi": "chữ ký định dạng",
+          "giaiThich": "chuỗi byte cố định đầu file"
+        },
+        {
+          "en": "offset",
+          "vi": "vị trí",
+          "giaiThich": "chỉ số byte tính từ 0"
+        }
+      ]
+    },
+    {
+      "title": "The first gate: refuse active content by type AND by name",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "upload validation",
+        "active content"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>This site’s first layer is <code>assertSafeUploadType(mimetype, originalName, bucket)</code> in <code>src/storage/uploadService.ts</code>. Write it, returning a code:</p>\n<ol><li>normalise the MIME: drop parameters after <code>;</code>, trim, lower-case;</li>\n<li>in <code>text/html, application/xhtml+xml, image/svg+xml, application/javascript, text/javascript, application/xml, text/xml, application/x-httpd-php</code> → <code>'DANGEROUS_TYPE'</code>;</li>\n<li>the name matches <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code> → <code>'DANGEROUS_EXT'</code> (a second gate, because the client controls the MIME);</li>\n<li>empty MIME or <code>application/octet-stream</code> → <code>'OK'</code> (skip the family check — the dangerous-extension gate already ran);</li>\n<li>family check: <code>images</code> → <code>image/…</code>, <code>audio</code> → <code>audio/…</code>, <code>video</code> → <code>video/…</code>, <code>documents</code> → <code>application/pdf</code>; mismatch → <code>'WRONG_FAMILY'</code>, else <code>'OK'</code>.</li></ol><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lớp đầu tiên của site này là <code>assertSafeUploadType(mimetype, originalName, bucket)</code> trong <code>src/storage/uploadService.ts</code>. Viết nó, trả về một mã:</p>\n<ol><li>chuẩn hoá MIME: bỏ tham số sau <code>;</code>, cắt khoảng trắng, viết thường;</li>\n<li>thuộc <code>text/html, application/xhtml+xml, image/svg+xml, application/javascript, text/javascript, application/xml, text/xml, application/x-httpd-php</code> → <code>'DANGEROUS_TYPE'</code>;</li>\n<li>tên khớp <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code> → <code>'DANGEROUS_EXT'</code> (cổng thứ hai, vì client điều khiển MIME);</li>\n<li>MIME rỗng hoặc <code>application/octet-stream</code> → <code>'OK'</code> (bỏ qua kiểm họ — cổng đuôi nguy hiểm đã chạy);</li>\n<li>kiểm họ: <code>images</code> → <code>image/…</code>, <code>audio</code> → <code>audio/…</code>, <code>video</code> → <code>video/…</code>, <code>documents</code> → <code>application/pdf</code>; lệch → <code>'WRONG_FAMILY'</code>, không thì <code>'OK'</code>.</li></ol><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[assertSafeUploadType('image/jpeg', 'IMG_0001.jpg', 'images'), assertSafeUploadType('text/html', 'anh.jpg', 'images'), assertSafeUploadType('image/png', 'shell.php', 'images')]",
+          "output": "[\"OK\",\"DANGEROUS_TYPE\",\"DANGEROUS_EXT\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>String(mime).split(\";\")[0].trim().toLowerCase()</code> before any comparison.|||<code>String(mime).split(\";\")[0].trim().toLowerCase()</code> trước mọi phép so.",
+        "The order of the checks is the specification: dangerous type, dangerous name, the octet-stream exception, then the family.|||Thứ tự các phép kiểm chính là đặc tả: kiểu nguy hiểm, tên nguy hiểm, ngoại lệ octet-stream, rồi mới tới họ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** First upload gate. Returns 'OK' | 'DANGEROUS_TYPE' | 'DANGEROUS_EXT' | 'WRONG_FAMILY'. */\nfunction assertSafeUploadType(mime, name, family) {\n  // Write your solution here\n  if (mime === 'text/html') return 'DANGEROUS_TYPE';\n  if (name.endsWith('.php')) return 'DANGEROUS_EXT';\n  return mime.startsWith(family.slice(0, -1)) ? 'OK' : 'WRONG_FAMILY';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction assertSafeUploadType(mime, name, family) {\n  const DANGEROUS_MIME = new Set(['text/html', 'application/xhtml+xml', 'image/svg+xml', 'application/javascript', 'text/javascript', 'application/xml', 'text/xml', 'application/x-httpd-php']);\n  const DANGEROUS_EXT = /\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i;          // anchored at the end: only the LAST extension\n  const FAMILY = { images: 'image/', audio: 'audio/', video: 'video/', documents: 'application/pdf' };\n  // \"image/svg+xml; charset=utf-8\" and \"TEXT/HTML\" are the same type: normalise first.\n  const type = String(mime || '').split(';')[0].trim().toLowerCase();\n  if (DANGEROUS_MIME.has(type)) return 'DANGEROUS_TYPE';\n  // Second gate on the NAME, on purpose: the client controls the MIME, so a .html sent as image/png must still stop here.\n  if (DANGEROUS_EXT.test(String(name || ''))) return 'DANGEROUS_EXT';\n  // Empty / octet-stream (drag-drop, some mobile browsers): skip the family check rather than reject a real photo.\n  if (type === '' || type === 'application/octet-stream') return 'OK';\n  return type.startsWith(FAMILY[family]) ? 'OK' : 'WRONG_FAMILY';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two independent gates on two attacker-controlled strings: a dangerous MIME or a dangerous final extension is refused before anything else, so the exception for blank MIMEs can never reopen HTML or SVG. The family check comes last and is allowed to be lenient, because this gate is only layer one — re-encoding and a server-chosen extension (.webp) are what make the stored file trustworthy.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai cổng độc lập trên hai chuỗi do kẻ tấn công kiểm soát: MIME nguy hiểm hay đuôi cuối nguy hiểm bị từ chối trước mọi thứ, nên ngoại lệ cho MIME trống không bao giờ mở lại HTML hay SVG. Kiểm họ đi sau cùng và được phép dễ dãi, vì cổng này chỉ là lớp một — re-encode và đuôi do máy chủ chọn (.webp) mới làm file lưu đáng tin.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A photo, HTML as .jpg, a .php sent as image/png",
+              "vi": "Một ảnh, HTML giả .jpg, .php gửi kèm image/png"
+            },
+            "goi": "[assertSafeUploadType('image/jpeg', 'IMG_0001.jpg', 'images'), assertSafeUploadType('text/html', 'anh.jpg', 'images'), assertSafeUploadType('image/png', 'shell.php', 'images')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "OK",
+              "DANGEROUS_TYPE",
+              "DANGEROUS_EXT"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "MIME with parameters and in upper case",
+              "vi": "MIME có tham số và viết hoa"
+            },
+            "goi": "[assertSafeUploadType('image/svg+xml; charset=utf-8', 'logo.svg', 'images'), assertSafeUploadType('TEXT/HTML', 'x.txt', 'documents')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "DANGEROUS_TYPE",
+              "DANGEROUS_TYPE"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Blank / octet-stream: family skipped, dangerous name still blocked",
+              "vi": "Trống / octet-stream: bỏ kiểm họ, tên nguy hiểm vẫn bị chặn"
+            },
+            "goi": "[assertSafeUploadType('', 'IMG_2024.HEIC', 'images'), assertSafeUploadType('application/octet-stream', 'drop.jpg', 'images'), assertSafeUploadType('application/octet-stream', 'page.html', 'images')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "OK",
+              "OK",
+              "DANGEROUS_EXT"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[assertSafeUploadType('video/mp4', 'clip.mp4', 'images'), assertSafeUploadType('audio/mpeg', 'a.mp3', 'audio'), assertSafeUploadType('application/pdf', 'cv.pdf', 'documents'), assertSafeUploadType('application/zip', 'cv.docx', 'documents')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "WRONG_FAMILY",
+              "OK",
+              "OK",
+              "WRONG_FAMILY"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[assertSafeUploadType('image/png', 'evil.php.png', 'images'), assertSafeUploadType('image/png', 'evil.png.PHTML', 'images'), assertSafeUploadType('image/gif', 'a.MJS', 'images'), assertSafeUploadType(' Application/XML ', 'feed.rss', 'documents'), assertSafeUploadType(undefined, 'x.xhtml', 'images')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "OK",
+              "DANGEROUS_EXT",
+              "DANGEROUS_EXT",
+              "DANGEROUS_TYPE",
+              "DANGEROUS_EXT"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A deny-list of extensions without the MIME gate (or the other way round): the client controls both strings.|||Danh sách đen đuôi mà không có cổng MIME (hoặc ngược lại): client kiểm soát cả hai chuỗi."
+        },
+        {
+          "loi": "Rejecting every empty/octet-stream MIME — real photos from drag-drop and mobile browsers fail.|||Từ chối mọi MIME rỗng/octet-stream — ảnh thật từ kéo-thả và trình duyệt di động bị trượt."
+        },
+        {
+          "loi": "Comparing <code>\"image/svg+xml; charset=utf-8\"</code> to the list without stripping the parameter.|||So <code>\"image/svg+xml; charset=utf-8\"</code> với danh sách mà không bỏ tham số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "active content",
+          "vi": "nội dung chủ động",
+          "giaiThich": "thứ trình duyệt sẽ chạy: HTML, SVG, JS"
+        },
+        {
+          "en": "octet-stream",
+          "vi": "luồng byte chung",
+          "giaiThich": "MIME \"không rõ kiểu\""
+        }
+      ]
+    },
+    {
+      "title": "Refuse the bomb from its header, before decoding",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "decompression bombs",
+        "binary data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Bomb 1 — 758 KB on the wire, 16000×16000 = 256 million pixels — sits just under sharp’s default <code>limitInputPixels</code> (268,402,689) and cost +99 MB. This site \"checks the pixel count from the header before decoding, so bomb 1 is refused as <code>TOO_MANY_PIXELS</code>\". Write <code>checkPixels(bytes, limit)</code> for PNG:</p>\n<ul><li>the first 8 bytes must be the PNG signature, else <code>{ ok:false, code:'NOT_PNG' }</code>; fewer than 24 bytes → <code>{ ok:false, code:'TRUNCATED' }</code>;</li>\n<li>width = bytes 16–19, height = bytes 20–23, <b>unsigned big-endian</b> 32-bit; <code>pixels = width × height</code>;</li>\n<li><code>pixels &gt; limit</code> → <code>{ ok:false, code:'TOO_MANY_PIXELS', width, height, pixels }</code>, otherwise <code>{ ok:true, width, height, pixels }</code>.</li></ul>\n<p>The tests build headers with <code>pngHeader(w, h)</code> and use <code>SITE_LIMIT</code> (100 MP) and <code>SHARP_DEFAULT</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bom 1 — 758 KB trên đường truyền, 16000×16000 = 256 triệu điểm ảnh — nằm ngay dưới <code>limitInputPixels</code> mặc định của sharp (268.402.689) và tốn +99 MB. Site này \"kiểm số điểm ảnh từ header trước khi giải mã, nên bom 1 bị từ chối là <code>TOO_MANY_PIXELS</code>\". Viết <code>checkPixels(bytes, limit)</code> cho PNG:</p>\n<ul><li>8 byte đầu phải là chữ ký PNG, không thì <code>{ ok:false, code:'NOT_PNG' }</code>; ít hơn 24 byte → <code>{ ok:false, code:'TRUNCATED' }</code>;</li>\n<li>rộng = byte 16–19, cao = byte 20–23, số 32-bit <b>không dấu, big-endian</b>; <code>pixels = rộng × cao</code>;</li>\n<li><code>pixels &gt; limit</code> → <code>{ ok:false, code:'TOO_MANY_PIXELS', width, height, pixels }</code>, không thì <code>{ ok:true, width, height, pixels }</code>.</li></ul>\n<p>Bộ kiểm dựng header bằng <code>pngHeader(w, h)</code> và dùng <code>SITE_LIMIT</code> (100 MP) và <code>SHARP_DEFAULT</code>.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[checkPixels(pngHeader(16000, 16000), SITE_LIMIT), checkPixels(pngHeader(16000, 16000), SHARP_DEFAULT)]",
+          "output": "[{\"ok\":false,\"code\":\"TOO_MANY_PIXELS\",\"width\":16000,\"height\":16000,\"pixels\":256000000},{\"ok\":true,\"width\":16000,\"height\":16000,\"pixels\":256000000}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Big-endian: the first byte is the most significant — <code>b[16] × 2²⁴ + b[17] × 2¹⁶ + b[18] × 2⁸ + b[19]</code>.|||Big-endian: byte đầu là byte nặng nhất — <code>b[16] × 2²⁴ + b[17] × 2¹⁶ + b[18] × 2⁸ + b[19]</code>.",
+        "Check the signature first, then the length, then read the numbers.|||Kiểm chữ ký trước, rồi độ dài, rồi mới đọc số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Read a PNG's size from its header and enforce a pixel budget. */\nfunction checkPixels(bytes, limit) {\n  // Write your solution here\n  const width = (bytes[16] << 24) | (bytes[17] << 16) | (bytes[18] << 8) | bytes[19];\n  const height = (bytes[20] << 24) | (bytes[21] << 16) | (bytes[22] << 8) | bytes[23];\n  const pixels = width * height;\n  return pixels > limit ? { ok: false, code: 'TOO_MANY_PIXELS', width, height, pixels } : { ok: true, width, height, pixels };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkPixels(bytes, limit) {\n  const SIG = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];\n  if (!SIG.every((b, i) => bytes[i] === b)) return { ok: false, code: 'NOT_PNG' };\n  if (bytes.length < 24) return { ok: false, code: 'TRUNCATED' };\n  // IHDR is always the first chunk: length (4) + \"IHDR\" (4) start at 8, so width is bytes 16–19, height 20–23,\n  // big-endian. Multiply instead of \"<< 24\": b << 24 is a SIGNED 32-bit int and goes negative from 0x80.\n  const u32 = (i) => bytes[i] * 2 ** 24 + bytes[i + 1] * 2 ** 16 + bytes[i + 2] * 2 ** 8 + bytes[i + 3];\n  const width = u32(16), height = u32(20);\n  const pixels = width * height;\n  // Decide from the HEADER — 24 bytes — before any decoder allocates width × height × 4 bytes of RAM.\n  if (pixels > limit) return { ok: false, code: 'TOO_MANY_PIXELS', width, height, pixels };\n  return { ok: true, width, height, pixels };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A decompression bomb is small on the wire and huge in memory, so neither a byte limit nor sniffing sees it. PNG writes its dimensions in the first 24 bytes, so the real cost of decoding is known before any work starts — refusing there costs nothing. The limit is chosen for the product (100 MP is above any phone or DSLR), not for the format; the second half of the defence is bounding how many decodes run at once (next exercise).</p>",
+      "solutionExplanationHtmlVi": "<p>Bom giải nén nhỏ trên đường truyền và khổng lồ trong bộ nhớ, nên cả giới hạn byte lẫn sniff đều không thấy. PNG ghi kích thước trong 24 byte đầu, nên chi phí giải mã thật được biết trước khi bắt đầu làm gì — từ chối ở đó không tốn gì. Giới hạn chọn theo sản phẩm (100 MP trên mọi điện thoại hay máy ảnh), không theo định dạng; nửa còn lại của phòng thủ là giới hạn số lần giải mã chạy cùng lúc (bài sau).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Bomb 1: refused at 100 MP, accepted by sharp’s default",
+              "vi": "Bom 1: bị chặn ở 100 MP, sharp mặc định cho qua"
+            },
+            "goi": "[checkPixels(pngHeader(16000, 16000), SITE_LIMIT), checkPixels(pngHeader(16000, 16000), SHARP_DEFAULT)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a real PNG signature + IHDR chunk for the given size (what a bomb sends in its first 24 bytes)\nfunction pngHeader(w, h) { const be = (n) => [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256]; return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, ...be(w), ...be(h), 8, 2, 0, 0, 0]; }\nconst SITE_LIMIT = 100000000;      // this site: 100 MP\nconst SHARP_DEFAULT = 268402689;   // 0x3FFF × 0x3FFF\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "code": "TOO_MANY_PIXELS",
+                "width": 16000,
+                "height": 16000,
+                "pixels": 256000000
+              },
+              {
+                "ok": true,
+                "width": 16000,
+                "height": 16000,
+                "pixels": 256000000
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A real phone photo",
+              "vi": "Một ảnh điện thoại thật"
+            },
+            "goi": "checkPixels(pngHeader(4032, 3024), SITE_LIMIT)",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a real PNG signature + IHDR chunk for the given size (what a bomb sends in its first 24 bytes)\nfunction pngHeader(w, h) { const be = (n) => [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256]; return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, ...be(w), ...be(h), 8, 2, 0, 0, 0]; }\nconst SITE_LIMIT = 100000000;      // this site: 100 MP\nconst SHARP_DEFAULT = 268402689;   // 0x3FFF × 0x3FFF\n",
+            "mongDoi": {
+              "ok": true,
+              "width": 4032,
+              "height": 3024,
+              "pixels": 12192768
+            }
+          },
+          {
+            "moTa": {
+              "en": "Not a PNG / truncated",
+              "vi": "Không phải PNG / bị cắt"
+            },
+            "goi": "[checkPixels(bytes(\"GIF89a/**/=1;<script>alert(1)</script>\"), SITE_LIMIT), checkPixels(pngHeader(1, 1).slice(0, 20), SITE_LIMIT)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a real PNG signature + IHDR chunk for the given size (what a bomb sends in its first 24 bytes)\nfunction pngHeader(w, h) { const be = (n) => [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256]; return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, ...be(w), ...be(h), 8, 2, 0, 0, 0]; }\nconst SITE_LIMIT = 100000000;      // this site: 100 MP\nconst SHARP_DEFAULT = 268402689;   // 0x3FFF × 0x3FFF\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "code": "NOT_PNG"
+              },
+              {
+                "ok": false,
+                "code": "TRUNCATED"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[checkPixels(pngHeader(2147483648, 2), SITE_LIMIT), checkPixels(pngHeader(20000, 20000), SHARP_DEFAULT), checkPixels(pngHeader(10000, 10000), SITE_LIMIT)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a real PNG signature + IHDR chunk for the given size (what a bomb sends in its first 24 bytes)\nfunction pngHeader(w, h) { const be = (n) => [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256]; return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, ...be(w), ...be(h), 8, 2, 0, 0, 0]; }\nconst SITE_LIMIT = 100000000;      // this site: 100 MP\nconst SHARP_DEFAULT = 268402689;   // 0x3FFF × 0x3FFF\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "code": "TOO_MANY_PIXELS",
+                "width": 2147483648,
+                "height": 2,
+                "pixels": 4294967296
+              },
+              {
+                "ok": false,
+                "code": "TOO_MANY_PIXELS",
+                "width": 20000,
+                "height": 20000,
+                "pixels": 400000000
+              },
+              {
+                "ok": true,
+                "width": 10000,
+                "height": 10000,
+                "pixels": 100000000
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[checkPixels(pngHeader(10000, 10001), SITE_LIMIT), checkPixels(pngHeader(0, 0), SITE_LIMIT), checkPixels(pngHeader(65536, 1), 70000)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\n// a real PNG signature + IHDR chunk for the given size (what a bomb sends in its first 24 bytes)\nfunction pngHeader(w, h) { const be = (n) => [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256]; return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, ...be(w), ...be(h), 8, 2, 0, 0, 0]; }\nconst SITE_LIMIT = 100000000;      // this site: 100 MP\nconst SHARP_DEFAULT = 268402689;   // 0x3FFF × 0x3FFF\n",
+            "mongDoi": [
+              {
+                "ok": false,
+                "code": "TOO_MANY_PIXELS",
+                "width": 10000,
+                "height": 10001,
+                "pixels": 100010000
+              },
+              {
+                "ok": true,
+                "width": 0,
+                "height": 0,
+                "pixels": 0
+              },
+              {
+                "ok": true,
+                "width": 65536,
+                "height": 1,
+                "pixels": 65536
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>b[16] &lt;&lt; 24</code>: JavaScript bit shifts are signed 32-bit, so a width of 0x80000000 becomes negative and \"passes\" the limit.|||<code>b[16] &lt;&lt; 24</code>: phép dịch bit của JavaScript là 32-bit có dấu, nên rộng 0x80000000 thành số âm và \"lọt\" giới hạn."
+        },
+        {
+          "loi": "Reading little-endian (b[19] first): 16000 becomes a completely different number.|||Đọc little-endian (b[19] trước): 16000 thành một số hoàn toàn khác."
+        },
+        {
+          "loi": "Relying on sharp’s default limit: 256 MP is under it.|||Dựa vào giới hạn mặc định của sharp: 256 MP nằm dưới nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IHDR",
+          "vi": "khối header PNG",
+          "giaiThich": "chứa rộng, cao, độ sâu màu"
+        },
+        {
+          "en": "big-endian",
+          "vi": "byte lớn trước",
+          "giaiThich": "byte nặng nhất đứng đầu"
+        },
+        {
+          "en": "pixel budget",
+          "vi": "ngân sách điểm ảnh",
+          "giaiThich": "số điểm ảnh tối đa chịu giải mã"
+        }
+      ]
+    },
+    {
+      "title": "At most four decodes at once",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "concurrency",
+        "promises",
+        "decompression bombs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"Because sharp’s work happens in libvips’ own threads rather than on the event loop, a queue is the other half of the answer: bound how many images you process concurrently instead of letting request volume decide.\" This site uses <code>MAX_CONCURRENT_DECODES = 4</code>. Write <code>createGate(max)</code> → <code>{ run(task), running, queued }</code>:</p>\n<ul><li><code>run(task)</code> returns a Promise for the result of <code>task()</code> (an async function);</li>\n<li>at most <code>max</code> tasks run at the same time; the others wait in a <b>FIFO</b> queue and start as soon as a slot frees;</li>\n<li>a task that rejects (or throws) rejects its own <code>run</code> promise <b>and still frees its slot</b>;</li>\n<li><code>running</code> / <code>queued</code> are getters with the current counts.</li></ul>\n<p>The tests start 8 fake decodes of 100 ms (virtual clock) at once — the lesson’s \"eight bombs\" — and measure the peak concurrency and the total time.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Vì việc của sharp chạy trong luồng riêng của libvips chứ không trên event loop, một hàng đợi là nửa còn lại của câu trả lời: giới hạn số ảnh xử lý cùng lúc thay vì để lượng request quyết định.\" Site này dùng <code>MAX_CONCURRENT_DECODES = 4</code>. Viết <code>createGate(max)</code> → <code>{ run(task), running, queued }</code>:</p>\n<ul><li><code>run(task)</code> trả Promise cho kết quả của <code>task()</code> (một hàm async);</li>\n<li>tối đa <code>max</code> tác vụ chạy cùng lúc; số còn lại chờ trong hàng đợi <b>FIFO</b> và bắt đầu ngay khi có chỗ trống;</li>\n<li>tác vụ bị reject (hoặc ném lỗi) làm reject promise <code>run</code> của nó <b>và vẫn trả chỗ</b>;</li>\n<li><code>running</code> / <code>queued</code> là getter cho số đếm hiện tại.</li></ul>\n<p>Bộ kiểm khởi động 8 lần giải mã giả mỗi lần 100 ms (đồng hồ ảo) cùng lúc — \"tám quả bom\" của bài — rồi đo độ đồng thời cao nhất và tổng thời gian.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await (async () => { const g = createGate(4); const t0 = Date.now(); const out = await Promise.all(Array.from({ length: 8 }, (_, i) => g.run(decode(\"bomb\" + i, 100)))); return [out, stats.max, Date.now() - t0]; })()",
+          "output": "[[\"bomb0.webp\",\"bomb1.webp\",\"bomb2.webp\",\"bomb3.webp\",\"bomb4.webp\",\"bomb5.webp\",\"bomb6.webp\",\"bomb7.webp\"],4,200]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a counter <code>running</code> and an array of waiting \"start\" functions; a <code>pump()</code> starts waiting ones while there is room.|||Giữ biến đếm <code>running</code> và một mảng các hàm \"bắt đầu\" đang chờ; hàm <code>pump()</code> khởi động những cái đang chờ khi còn chỗ.",
+        "Use <code>.finally()</code> to decrement and pump — it runs on success and on failure.|||Dùng <code>.finally()</code> để giảm đếm và pump — nó chạy cả khi thành công lẫn thất bại.",
+        "<code>Promise.resolve().then(task)</code> turns a synchronous throw into a rejection.|||<code>Promise.resolve().then(task)</code> biến lỗi ném đồng bộ thành rejection."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Allow at most `max` tasks to run at the same time. */\nfunction createGate(max) {\n  // Write your solution here\n  let running = 0;\n  return {\n    get running() { return running; },\n    get queued() { return 0; },\n    async run(task) {\n      running++;\n      const result = await task();\n      running--;\n      return result;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createGate(max) {\n  let running = 0;\n  const waiting = [];          // FIFO of callbacks that start a queued task\n  const pump = () => {\n    while (running < max && waiting.length) waiting.shift()();\n  };\n  return {\n    get running() { return running; },\n    get queued() { return waiting.length; },\n    run(task) {\n      return new Promise((resolve, reject) => {\n        waiting.push(() => {\n          running++;\n          // Promise.resolve().then(task): a task that THROWS synchronously still becomes a rejection, never a leak.\n          Promise.resolve()\n            .then(task)\n            .then(resolve, reject)\n            .finally(() => { running--; pump(); });   // free the slot on success AND on failure\n        });\n        pump();\n      });\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Peak memory of image processing is (memory per decode) × (decodes at once). The pixel budget bounds the first factor; the gate bounds the second, so eight bombs cost at most four decodes’ worth of RAM regardless of traffic — at the price of latency (200 ms instead of 100 ms for eight jobs here). Releasing the slot in <code>finally</code> is what keeps one bad file from permanently shrinking the pool.</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ nhớ đỉnh của xử lý ảnh là (bộ nhớ mỗi lần giải mã) × (số lần giải mã cùng lúc). Ngân sách điểm ảnh chặn thừa số đầu; cổng chặn thừa số sau, nên tám quả bom tốn tối đa RAM của bốn lần giải mã bất kể lưu lượng — đổi lại là độ trễ (ở đây 200 ms thay vì 100 ms cho tám việc). Trả chỗ trong <code>finally</code> là điều giữ một file xấu không làm nhỏ vĩnh viễn bể xử lý.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Eight decodes, gate of 4: peak 4, 200 ms",
+              "vi": "Tám lần giải mã, cổng 4: đỉnh 4, 200 ms"
+            },
+            "goi": "await (async () => { const g = createGate(4); const t0 = Date.now(); const out = await Promise.all(Array.from({ length: 8 }, (_, i) => g.run(decode(\"bomb\" + i, 100)))); return [out, stats.max, Date.now() - t0]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              [
+                "bomb0.webp",
+                "bomb1.webp",
+                "bomb2.webp",
+                "bomb3.webp",
+                "bomb4.webp",
+                "bomb5.webp",
+                "bomb6.webp",
+                "bomb7.webp"
+              ],
+              4,
+              200
+            ]
+          },
+          {
+            "moTa": {
+              "en": "FIFO order and the counters",
+              "vi": "Thứ tự FIFO và các bộ đếm"
+            },
+            "goi": "await (async () => { const g = createGate(2); const ps = [\"a\", \"b\", \"c\", \"d\", \"e\"].map((n) => g.run(decode(n, 50))); const snap = [g.running, g.queued]; await Promise.all(ps); await new Promise((r) => setTimeout(r, 1)); return [snap, stats.order, g.running, g.queued]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              [
+                2,
+                3
+              ],
+              [
+                "a",
+                "b",
+                "c",
+                "d",
+                "e"
+              ],
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A failing decode frees its slot",
+              "vi": "Lần giải mã lỗi vẫn trả chỗ"
+            },
+            "goi": "await (async () => { const g = createGate(1); const a = g.run(decode(\"bad\", 10, true)).catch((e) => \"rejected: \" + e.message); const b = g.run(decode(\"good\", 10)); const ra = await a, rb = await b; await new Promise((r) => setTimeout(r, 1)); return [ra, rb, g.running]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              "rejected: Input image exceeds pixel limit",
+              "good.webp",
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const g = createGate(4); const t0 = Date.now(); const rs = await Promise.allSettled(Array.from({ length: 8 }, (_, i) => g.run(decode(\"x\" + i, 100, i % 2 === 0)))); const dt = Date.now() - t0; await new Promise((r) => setTimeout(r, 1)); return [rs.map((r) => r.status), stats.max, dt, g.running]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              [
+                "rejected",
+                "fulfilled",
+                "rejected",
+                "fulfilled",
+                "rejected",
+                "fulfilled",
+                "rejected",
+                "fulfilled"
+              ],
+              4,
+              200,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const g = createGate(3); const r = await Promise.allSettled([g.run(() => { throw new Error(\"sync throw\"); }), g.run(decode(\"ok\", 30))]); await new Promise((r) => setTimeout(r, 1)); return [r.map((x) => x.status), g.running, g.queued]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              [
+                "rejected",
+                "fulfilled"
+              ],
+              0,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "await (async () => { const g = createGate(2); const t0 = Date.now(); const times = []; await Promise.all([300, 100, 100, 100].map((ms, i) => g.run(decode(\"j\" + i, ms)).then(() => times.push(Date.now() - t0)))); return [times, stats.max]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst stats = { now: 0, max: 0, order: [] };\n// a fake sharp decode: takes ms (virtual), records how many run at once\nconst decode = (name, ms, fail) => async () => { stats.now++; stats.max = Math.max(stats.max, stats.now); stats.order.push(name); await new Promise((r) => setTimeout(r, ms)); stats.now--; if (fail) throw new Error('Input image exceeds pixel limit'); return name + '.webp'; };\n",
+            "mongDoi": [
+              [
+                100,
+                200,
+                300,
+                300
+              ],
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Freeing the slot only on success: after four failures (four bombs) the gate is stuck forever.|||Chỉ trả chỗ khi thành công: sau bốn lần lỗi (bốn quả bom) cổng kẹt vĩnh viễn."
+        },
+        {
+          "loi": "<code>await Promise.all(tasks.map(t =&gt; t()))</code> — that is \"let request volume decide\".|||<code>await Promise.all(tasks.map(t =&gt; t()))</code> — đó chính là \"để lượng request quyết định\"."
+        },
+        {
+          "loi": "Starting queued tasks in LIFO order: the earliest uploader waits the longest.|||Khởi động tác vụ chờ theo LIFO: người upload sớm nhất lại chờ lâu nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "semaphore",
+          "vi": "cờ hiệu đếm",
+          "giaiThich": "cho tối đa N việc cùng chạy"
+        },
+        {
+          "en": "FIFO",
+          "vi": "vào trước ra trước",
+          "giaiThich": "hàng đợi công bằng"
+        }
+      ]
+    }
+  ]
+}

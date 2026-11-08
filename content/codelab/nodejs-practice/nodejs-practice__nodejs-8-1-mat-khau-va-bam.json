@@ -1,0 +1,1124 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-8-1-mat-khau-va-bam",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-8-1-mat-khau-va-bam"
+  },
+  "exercises": [
+    {
+      "title": "8.1 · 1 — Why almost every way of storing passwords is wrong",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "password hashing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 8.1 is measurements first, opinions second. Six questions on the threat model and the numbers.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 8.1 là số đo trước, ý kiến sau. Sáu câu hỏi về mô hình mối đe doạ và các con số.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Always reason from the offline attacker who has the table.|||Luôn suy luận từ kẻ tấn công ngoại tuyến đang giữ cả bảng.",
+        "For password hashing, ask “how many guesses per second does this allow?”.|||Với băm mật khẩu, hỏi \"cái này cho phép đoán bao nhiêu lần mỗi giây?\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1 · 1 — Why almost every way of storing passwords is wrong\n\nAnswer in the answer panel (no code needed).\n\n1. Who is the attacker you design password storage against?Kẻ tấn công mà bạn thiết kế việc lưu mật khẩu để chống là ai?\n2. Why is encrypting passwords with AES wrong?Vì sao mã hoá mật khẩu bằng AES là sai?\n3. One laptop core: 1,016,503 SHA-256 per second, 3.1 bcrypt(cost=12) per second. What does that ratio mean?Một nhân laptop: 1.016.503 SHA-256 mỗi giây, 3,1 bcrypt(cost=12) mỗi giây. Tỉ lệ đó nghĩa là gì?\n4. Why does a per-user salt stop rainbow tables?Vì sao muối riêng cho từng người chặn được bảng cầu vồng?\n5. bcrypt.compare(B, hash(A)) returned true for two different passwords. Why?bcrypt.compare(B, hash(A)) trả true cho hai mật khẩu khác nhau. Vì sao?\n6. 10 × bcrypt.hashSync in a handler: the 50 ms heartbeat was 2959 ms late. 10 × bcrypt.hash: 1 ms late. Why?10 × bcrypt.hashSync trong handler: nhịp tim 50 ms trễ 2959 ms. 10 × bcrypt.hash: trễ 1 ms. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1 · 1 — Why almost every way of storing passwords is wrong — answer key\n\n1. Who is the attacker you design password storage against?Kẻ tấn công mà bạn thiết kế việc lưu mật khẩu để chống là ai?\n   Answer: c) Someone holding a copy of the whole User table, offline, with GPUs\n   Rate limiting handles the login form (8.4). Storage is about the day the database is copied: a backup, an SQL injection, a stolen laptop.VI: Chặn tần suất lo phần form đăng nhập (8.4). Lưu trữ là chuyện ngày CSDL bị sao chép: bản sao lưu, SQL injection, laptop bị trộm.\n\n2. Why is encrypting passwords with AES wrong?Vì sao mã hoá mật khẩu bằng AES là sai?\n   Answer: a) It is reversible, and the key sits next to the table the attacker took\n   A password is never stored, it is verified.VI: Mật khẩu không bao giờ được lưu, nó được kiểm chứng.\n\n3. One laptop core: 1,016,503 SHA-256 per second, 3.1 bcrypt(cost=12) per second. What does that ratio mean?Một nhân laptop: 1.016.503 SHA-256 mỗi giây, 3,1 bcrypt(cost=12) mỗi giây. Tỉ lệ đó nghĩa là gì?\n   Answer: c) Slowness is the job: each offline guess becomes ~328,000× dearer\n   The whole 6-digit space: 1.8 s to precompute with SHA-256, 4.2 days per user with bcrypt(12).VI: Toàn bộ không gian 6 chữ số: 1,8 s để tính trước với SHA-256, 4,2 ngày mỗi người với bcrypt(12).\n\n4. Why does a per-user salt stop rainbow tables?Vì sao muối riêng cho từng người chặn được bảng cầu vồng?\n   Answer: b) Each user’s hash differs, so one precomputed table cannot be reused\n   Without salt you do not even need to crack: An and Chi share 8d969eef… — same password.VI: Không có muối thì chẳng cần bẻ: An và Chi cùng 8d969eef… — cùng mật khẩu.\n\n5. bcrypt.compare(B, hash(A)) returned true for two different passwords. Why?bcrypt.compare(B, hash(A)) trả true cho hai mật khẩu khác nhau. Vì sao?\n   Answer: c) bcrypt only reads the first 72 BYTES; both share them\n   Cap at 72 bytes with an explicit error, or pre-hash with SHA-256 + base64 — or use argon2, which has no such limit.VI: Chặn ở 72 byte kèm lỗi rõ ràng, hoặc băm trước bằng SHA-256 + base64 — hoặc dùng argon2, không có giới hạn đó.\n\n6. 10 × bcrypt.hashSync in a handler: the 50 ms heartbeat was 2959 ms late. 10 × bcrypt.hash: 1 ms late. Why?10 × bcrypt.hashSync trong handler: nhịp tim 50 ms trễ 2959 ms. 10 × bcrypt.hash: trễ 1 ms. Vì sao?\n   Answer: c) hashSync blocks the event loop; hash runs on the libuv thread pool\n   Ten logins at once and the health check times out — the load balancer removes the container.VI: Mười lần đăng nhập cùng lúc và health check hết giờ — bộ cân bằng tải gỡ container ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Someone holding a copy of the whole User table, offline, with GPUs</p><p>Rate limiting handles the login form (8.4). Storage is about the day the database is copied: a backup, an SQL injection, a stolen laptop.</p><p><i>VI: Chặn tần suất lo phần form đăng nhập (8.4). Lưu trữ là chuyện ngày CSDL bị sao chép: bản sao lưu, SQL injection, laptop bị trộm.</i></p></li><li><p><b>a)</b> It is reversible, and the key sits next to the table the attacker took</p><p>A password is never stored, it is verified.</p><p><i>VI: Mật khẩu không bao giờ được lưu, nó được kiểm chứng.</i></p></li><li><p><b>c)</b> Slowness is the job: each offline guess becomes ~328,000× dearer</p><p>The whole 6-digit space: 1.8 s to precompute with SHA-256, 4.2 days per user with bcrypt(12).</p><p><i>VI: Toàn bộ không gian 6 chữ số: 1,8 s để tính trước với SHA-256, 4,2 ngày mỗi người với bcrypt(12).</i></p></li><li><p><b>b)</b> Each user’s hash differs, so one precomputed table cannot be reused</p><p>Without salt you do not even need to crack: An and Chi share 8d969eef… — same password.</p><p><i>VI: Không có muối thì chẳng cần bẻ: An và Chi cùng 8d969eef… — cùng mật khẩu.</i></p></li><li><p><b>c)</b> bcrypt only reads the first 72 BYTES; both share them</p><p>Cap at 72 bytes with an explicit error, or pre-hash with SHA-256 + base64 — or use argon2, which has no such limit.</p><p><i>VI: Chặn ở 72 byte kèm lỗi rõ ràng, hoặc băm trước bằng SHA-256 + base64 — hoặc dùng argon2, không có giới hạn đó.</i></p></li><li><p><b>c)</b> hashSync blocks the event loop; hash runs on the libuv thread pool</p><p>Ten logins at once and the health check times out — the load balancer removes the container.</p><p><i>VI: Mười lần đăng nhập cùng lúc và health check hết giờ — bộ cân bằng tải gỡ container ra.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Who is the attacker you design password storage against?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kẻ tấn công mà bạn thiết kế việc lưu mật khẩu để chống là ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A user who forgot their password and keeps trying old ones"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Someone sniffing HTTPS traffic on the same coffee-shop Wi-Fi"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Someone holding a copy of the whole User table, offline, with GPUs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Someone guessing passwords one by one on your login form"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rate limiting handles the login form (8.4). Storage is about the day the database is copied: a backup, an SQL injection, a stolen laptop.</p><p><i>VI: Chặn tần suất lo phần form đăng nhập (8.4). Lưu trữ là chuyện ngày CSDL bị sao chép: bản sao lưu, SQL injection, laptop bị trộm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is encrypting passwords with AES wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mã hoá mật khẩu bằng AES là sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is reversible, and the key sits next to the table the attacker took"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AES is far too slow to run on every login request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Encrypted values are longer than a VARCHAR(255) column allows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AES cannot encrypt Unicode passwords such as Vietnamese text"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A password is never stored, it is verified.</p><p><i>VI: Mật khẩu không bao giờ được lưu, nó được kiểm chứng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>One laptop core: 1,016,503 SHA-256 per second, 3.1 bcrypt(cost=12) per second. What does that ratio mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một nhân laptop: 1.016.503 SHA-256 mỗi giây, 3,1 bcrypt(cost=12) mỗi giây. Tỉ lệ đó nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "bcrypt only works for passwords shorter than 12 characters"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bcrypt is badly implemented in Node and should be avoided"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Slowness is the job: each offline guess becomes ~328,000× dearer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SHA-256 is broken today and can be reversed in milliseconds"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The whole 6-digit space: 1.8 s to precompute with SHA-256, 4.2 days per user with bcrypt(12).</p><p><i>VI: Toàn bộ không gian 6 chữ số: 1,8 s để tính trước với SHA-256, 4,2 ngày mỗi người với bcrypt(12).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does a per-user salt stop rainbow tables?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao muối riêng cho từng người chặn được bảng cầu vồng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Salted hashes cannot be copied out of the database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each user’s hash differs, so one precomputed table cannot be reused"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The salt makes hashing faster on the server side"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The salt encrypts the hash, so the attacker cannot read it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Without salt you do not even need to crack: An and Chi share 8d969eef… — same password.</p><p><i>VI: Không có muối thì chẳng cần bẻ: An và Chi cùng 8d969eef… — cùng mật khẩu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p><code>bcrypt.compare(B, hash(A))</code> returned <code>true</code> for two different passwords. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>bcrypt.compare(B, hash(A))</code> trả <code>true</code> cho hai mật khẩu khác nhau. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The cost factor was too low"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The salt was reused"
+              },
+              {
+                "ma": "c",
+                "noiDung": "bcrypt only reads the first 72 BYTES; both share them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "bcrypt compares case-insensitively"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Cap at 72 bytes with an explicit error, or pre-hash with SHA-256 + base64 — or use argon2, which has no such limit.</p><p><i>VI: Chặn ở 72 byte kèm lỗi rõ ràng, hoặc băm trước bằng SHA-256 + base64 — hoặc dùng argon2, không có giới hạn đó.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>10 × <code>bcrypt.hashSync</code> in a handler: the 50 ms heartbeat was 2959 ms late. 10 × <code>bcrypt.hash</code>: 1 ms late. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>10 × <code>bcrypt.hashSync</code> trong handler: nhịp tim 50 ms trễ 2959 ms. 10 × <code>bcrypt.hash</code>: trễ 1 ms. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "hashSync silently uses a much higher cost factor than hash"
+              },
+              {
+                "ma": "b",
+                "noiDung": "hashSync writes every intermediate round to disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "hashSync blocks the event loop; hash runs on the libuv thread pool"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The async version skips the salt to save a few milliseconds"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Ten logins at once and the health check times out — the load balancer removes the container.</p><p><i>VI: Mười lần đăng nhập cùng lúc và health check hết giờ — bộ cân bằng tải gỡ container ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“SHA-256 cannot be reversed, so it is safe.” The attacker does not reverse it; they hash every guess.|||\"SHA-256 không đảo ngược được nên an toàn.\" Kẻ tấn công không đảo ngược; họ băm từng lần đoán."
+        },
+        {
+          "loi": "Storing salt and cost in separate columns — the bcrypt/argon2 string already contains them.|||Lưu muối và chi phí ở cột riêng — chuỗi bcrypt/argon2 đã chứa sẵn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "salt",
+          "vi": "muối",
+          "giaiThich": "Giá trị ngẫu nhiên riêng cho mỗi người."
+        },
+        {
+          "en": "rainbow table",
+          "vi": "bảng cầu vồng",
+          "giaiThich": "Bảng băm → mật khẩu tính trước."
+        },
+        {
+          "en": "cost factor",
+          "vi": "hệ số chi phí"
+        }
+      ]
+    },
+    {
+      "title": "8.1 · 2 — Write auditLeak(rows, table): what an unsalted leak gives away for free",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "password hashing",
+        "salt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s leaked table, unsalted SHA-256. <code>rows = [{ email, hash }]</code>; <code>table</code> is an attacker’s precomputed object <code>{ hash: guess }</code> (the lesson built one for all 1,000,000 six-digit passwords in 1.8 s). Write <code>auditLeak(rows, table)</code> returning <code>{ shared, cracked }</code>:</p>\n<ul><li><code>shared</code>: every group of ≥ 2 emails with the same hash — each group sorted alphabetically, groups sorted by their first email.</li>\n<li><code>cracked</code>: <code>{ email: password }</code> for every row whose hash is a key of <code>table</code> (own keys only — <code>table</code> may come from anywhere).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not mutate the inputs.</li>\n  <li>Use own-key checks for the table.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng bị rò của bài, SHA-256 không muối. <code>rows = [{ email, hash }]</code>; <code>table</code> là object tính trước của kẻ tấn công <code>{ hash: guess }</code> (bài dựng một bảng cho toàn bộ 1.000.000 mật khẩu 6 chữ số trong 1,8 s). Viết <code>auditLeak(rows, table)</code> trả <code>{ shared, cracked }</code>:</p>\n<ul><li><code>shared</code>: mọi nhóm ≥ 2 email có cùng hash — mỗi nhóm sắp theo bảng chữ cái, các nhóm sắp theo email đầu tiên.</li>\n<li><code>cracked</code>: <code>{ email: password }</code> cho mọi dòng có hash là khoá của <code>table</code> (chỉ khoá của chính nó — <code>table</code> có thể đến từ bất cứ đâu).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa đầu vào.</li>\n  <li>Kiểm khoá riêng của table.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "auditLeak([{\"email\":\"an@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"},{\"email\":\"binh@vd.com\",\"hash\":\"f1d7e9dcf81a76784e1b759815403aa87fd15406746862d1807c8777516f3818\"},{\"email\":\"chi@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"}], {\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\":\"123456\"})",
+          "output": "{\"shared\":[[\"an@vd.com\",\"chi@vd.com\"]],\"cracked\":{\"an@vd.com\":\"123456\",\"chi@vd.com\":\"123456\"}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Group with a <code>Map(hash → [emails])</code>, keep the groups longer than 1.|||Gom bằng <code>Map(hash → [emails])</code>, giữ các nhóm dài hơn 1.",
+        "<code>Object.prototype.hasOwnProperty.call(table, hash)</code> — a row whose “hash” is <code>\"constructor\"</code> must not crack.|||<code>Object.prototype.hasOwnProperty.call(table, hash)</code> — dòng có \"hash\" là <code>\"constructor\"</code> không được bị \"bẻ\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function auditLeak(rows, table) {\n  // Write your solution here\n  return { shared: [], cracked: {} };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function auditLeak(rows, table) {\n  // 1) without salt, equal hashes = equal passwords: no cracking needed to see who shares one\n  const byHash = new Map();\n  for (const r of rows) byHash.set(r.hash, [...(byHash.get(r.hash) || []), r.email]);\n  const shared = [...byHash.values()].filter((emails) => emails.length > 1).map((emails) => emails.sort()).sort((a, b) => (a[0] < b[0] ? -1 : 1));\n  // 2) a precomputed table (hash -> guess) cracks every unsalted hash by a lookup, ~0.002 ms each\n  const cracked = {};\n  for (const r of rows) if (Object.prototype.hasOwnProperty.call(table, r.hash)) cracked[r.email] = table[r.hash];\n  return { shared, cracked };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both results come straight from the property that makes a fast, unsalted hash useless: it is deterministic and cheap. Determinism groups identical passwords; cheapness lets an attacker precompute every guess once and look each one up in microseconds. A per-user salt breaks the first, a slow function breaks the second.</p>",
+      "solutionExplanationHtmlVi": "<p>Cả hai kết quả đến thẳng từ tính chất làm hash nhanh, không muối trở nên vô dụng: nó tất định và rẻ. Tất định gom các mật khẩu giống nhau; rẻ cho kẻ tấn công tính trước mọi lần đoán một lần rồi tra mỗi cái trong vài micro giây. Muối riêng phá cái đầu, hàm chậm phá cái sau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s three rows",
+              "vi": "Ba dòng của bài"
+            },
+            "goi": "auditLeak([{\"email\":\"an@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"},{\"email\":\"binh@vd.com\",\"hash\":\"f1d7e9dcf81a76784e1b759815403aa87fd15406746862d1807c8777516f3818\"},{\"email\":\"chi@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"}], {\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\":\"123456\"})",
+            "mongDoi": {
+              "shared": [
+                [
+                  "an@vd.com",
+                  "chi@vd.com"
+                ]
+              ],
+              "cracked": {
+                "an@vd.com": "123456",
+                "chi@vd.com": "123456"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "auditLeak([{\"email\":\"an@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"},{\"email\":\"binh@vd.com\",\"hash\":\"f1d7e9dcf81a76784e1b759815403aa87fd15406746862d1807c8777516f3818\"},{\"email\":\"chi@vd.com\",\"hash\":\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\"},{\"email\":\"dung@vd.com\",\"hash\":\"f1d7e9dcf81a76784e1b759815403aa87fd15406746862d1807c8777516f3818\"},{\"email\":\"em@vd.com\",\"hash\":\"aa\"}], {\"8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92\":\"123456\",\"f1d7e9dcf81a76784e1b759815403aa87fd15406746862d1807c8777516f3818\":\"qwerty\",\"bb\":\"x\"})",
+            "mongDoi": {
+              "shared": [
+                [
+                  "an@vd.com",
+                  "chi@vd.com"
+                ],
+                [
+                  "binh@vd.com",
+                  "dung@vd.com"
+                ]
+              ],
+              "cracked": {
+                "an@vd.com": "123456",
+                "binh@vd.com": "qwerty",
+                "chi@vd.com": "123456",
+                "dung@vd.com": "qwerty"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "auditLeak([{\"email\":\"z@vd.com\",\"hash\":\"constructor\"},{\"email\":\"a@vd.com\",\"hash\":\"toString\"}], {})",
+            "mongDoi": {
+              "shared": [],
+              "cracked": {}
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "auditLeak([{\"email\":\"c@x\",\"hash\":\"h\"},{\"email\":\"a@x\",\"hash\":\"h\"},{\"email\":\"b@x\",\"hash\":\"g\"},{\"email\":\"aa@x\",\"hash\":\"g\"}], {})",
+            "mongDoi": {
+              "shared": [
+                [
+                  "a@x",
+                  "c@x"
+                ],
+                [
+                  "aa@x",
+                  "b@x"
+                ]
+              ],
+              "cracked": {}
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking an attacker must crack before learning anything — equal hashes already say “same password”.|||Nghĩ kẻ tấn công phải bẻ mới biết gì đó — hash bằng nhau đã nói \"cùng mật khẩu\"."
+        },
+        {
+          "loi": "<code>if (table[r.hash])</code>: inherited keys of a plain object answer too.|||<code>if (table[r.hash])</code>: khoá thừa kế của object thường cũng trả lời."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deterministic",
+          "vi": "tất định",
+          "giaiThich": "Cùng đầu vào luôn ra cùng đầu ra."
+        }
+      ]
+    },
+    {
+      "title": "8.1 · 3 — Write parseBcrypt(hash): read the algorithm, cost and salt out of the stored string",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "bcrypt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“This self-describing format is why you never store the salt or cost in separate columns.” The lesson took this one apart:</p>\n<pre>$2b$10$a7vd/4xSVvoK5VKpGGzbD.x4Y05t1q0YIRcs.YQcb4WEtp1sivisK\nalgorithm $2b$ · cost 10 (2^10 = 1024 rounds) · salt 22 chars · hash 31 chars</pre>\n<p>Write <code>parseBcrypt(hash)</code> returning <code>{ algorithm, cost, rounds, salt, hash }</code> — <code>algorithm</code> without dollars (<code>\"2b\"</code>), <code>cost</code> a number, <code>rounds = 2^cost</code> — or <code>null</code> when the string is not a bcrypt hash: the prefix must be <code>$2a$</code>, <code>$2b$</code> or <code>$2y$</code>; the cost exactly two digits between 04 and 31; then exactly 22 + 31 characters from <code>./A-Za-z0-9</code>, nothing else.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return null for anything malformed — never throw.</li>\n  <li>Numbers are numbers.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Định dạng tự mô tả này là lý do bạn không bao giờ lưu muối hay chi phí ở cột riêng.\" Bài đã tháo rời chuỗi ở bản tiếng Anh. Viết <code>parseBcrypt(hash)</code> trả <code>{ algorithm, cost, rounds, salt, hash }</code> — <code>algorithm</code> không có dấu đô la (<code>\"2b\"</code>), <code>cost</code> là số, <code>rounds = 2^cost</code> — hoặc <code>null</code> khi chuỗi không phải hash bcrypt: tiền tố phải là <code>$2a$</code>, <code>$2b$</code> hoặc <code>$2y$</code>; chi phí đúng hai chữ số từ 04 tới 31; rồi đúng 22 + 31 ký tự thuộc <code>./A-Za-z0-9</code>, không gì khác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả null cho mọi thứ sai dạng — không bao giờ ném lỗi.</li>\n  <li>Số là số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseBcrypt(\"$2b$10$a7vd/4xSVvoK5VKpGGzbD.x4Y05t1q0YIRcs.YQcb4WEtp1sivisK\")",
+          "output": "{\"algorithm\":\"2b\",\"cost\":10,\"rounds\":1024,\"salt\":\"a7vd/4xSVvoK5VKpGGzbD.\",\"hash\":\"x4Y05t1q0YIRcs.YQcb4WEtp1sivisK\"}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One anchored regex: <code>/^\\$(2[aby])\\$(\\d{2})\\$([./A-Za-z0-9]{22})([./A-Za-z0-9]{31})$/</code>.|||Một regex có neo: <code>/^\\$(2[aby])\\$(\\d{2})\\$([./A-Za-z0-9]{22})([./A-Za-z0-9]{31})$/</code>.",
+        "Then check 4 ≤ cost ≤ 31; <code>2 ** cost</code> for the rounds.|||Rồi kiểm 4 ≤ cost ≤ 31; <code>2 ** cost</code> cho số vòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseBcrypt(hash) {\n  // Write your solution here\n  const parts = hash.split('$');\n  return { algorithm: parts[1], cost: parts[2], rounds: 0, salt: parts[3].slice(0, 22), hash: parts[3].slice(22) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseBcrypt(hash) {\n  // $2b$10$ + 22 chars of salt + 31 chars of hash, in bcrypt's own base64 alphabet ./A-Za-z0-9\n  const m = /^\\$(2[aby])\\$(\\d{2})\\$([./A-Za-z0-9]{22})([./A-Za-z0-9]{31})$/.exec(String(hash));\n  if (!m) return null;\n  const cost = Number(m[2]);\n  if (cost < 4 || cost > 31) return null;            // bcrypt only accepts 4..31\n  return { algorithm: m[1], cost, rounds: 2 ** cost, salt: m[3], hash: m[4] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Everything verify() needs travels in one string: which algorithm, how expensive, which salt. That is what makes migration possible later — a stored $2b$10$ keeps verifying after you raise the cost to 12, and the prefix tells you which function to call when you move to argon2 (exercise 6).</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi thứ verify() cần đi trong một chuỗi: thuật toán nào, đắt cỡ nào, muối nào. Chính điều đó làm việc chuyển đổi sau này khả thi — chuỗi $2b$10$ đã lưu vẫn kiểm được sau khi bạn tăng chi phí lên 12, và tiền tố cho biết gọi hàm nào khi chuyển sang argon2 (bài 6).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s hash",
+              "vi": "Hash của bài"
+            },
+            "goi": "parseBcrypt(\"$2b$10$a7vd/4xSVvoK5VKpGGzbD.x4Y05t1q0YIRcs.YQcb4WEtp1sivisK\")",
+            "mongDoi": {
+              "algorithm": "2b",
+              "cost": 10,
+              "rounds": 1024,
+              "salt": "a7vd/4xSVvoK5VKpGGzbD.",
+              "hash": "x4Y05t1q0YIRcs.YQcb4WEtp1sivisK"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseBcrypt(\"$2b$12$MRH7iTpyMP9El9H3RnW5fO66xOCW9YM9aVJ6zlWcPd7JckvuJwz9u\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseBcrypt(\"$2b$12$MRH7iTpyMP9El9H3RnW5fO66xOCW9YM9aVJ6zlWcPd7JckvuJwz9u\")",
+            "mongDoi": {
+              "algorithm": "2b",
+              "cost": 12,
+              "rounds": 4096,
+              "salt": "MRH7iTpyMP9El9H3RnW5fO",
+              "hash": "66xOCW9YM9aVJ6zlWcPd7JckvuJwz9u"
+            }
+          },
+          {
+            "moTa": {
+              "en": "An argon2 string is not bcrypt",
+              "vi": "Chuỗi argon2 không phải bcrypt"
+            },
+            "goi": "parseBcrypt(\"$argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHQ$abcdef\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[parseBcrypt(\"$2a$04$fjT.b90BeGd2LC7x.ZWWhOKs1pHRqQwniP96nFT6KUbT4GSjaryJ.\"), parseBcrypt(\"$2b$03$fjT.b90BeGd2LC7x.ZWWhOKs1pHRqQwniP96nFT6KUbT4GSjaryJ.\"), parseBcrypt(\"$2b$32$fjT.b90BeGd2LC7x.ZWWhOKs1pHRqQwniP96nFT6KUbT4GSjaryJ.\"), parseBcrypt(\"$2x$10$fjT.b90BeGd2LC7x.ZWWhOKs1pHRqQwniP96nFT6KUbT4GSjaryJ.\")]",
+            "mongDoi": [
+              {
+                "algorithm": "2a",
+                "cost": 4,
+                "rounds": 16,
+                "salt": "fjT.b90BeGd2LC7x.ZWWhO",
+                "hash": "Ks1pHRqQwniP96nFT6KUbT4GSjaryJ."
+              },
+              null,
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[parseBcrypt('$2b$10$a7vd/4xSVvoK5VKpGGzbD.x4Y05t1q0YIRcs.YQcb4WEtp1sivisKextra'), parseBcrypt('$2b$10$a7vd/4xSVvoK5VKpGGzbD.x4Y05t1q0YIRcs.YQcb4WEtp1sivis'), parseBcrypt('$2y$31$sGfJY1C3L.Kf7DzOZVRFqeRDj73jX4u4eRDSRSgDBrWqe7.lv.t9G'), parseBcrypt(null), parseBcrypt('')]",
+            "mongDoi": [
+              null,
+              null,
+              {
+                "algorithm": "2y",
+                "cost": 31,
+                "rounds": 2147483648,
+                "salt": "sGfJY1C3L.Kf7DzOZVRFqe",
+                "hash": "RDj73jX4u4eRDSRSgDBrWqe7.lv.t9G"
+              },
+              null,
+              null
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>hash.split(\"$\")</code>: the salt alphabet contains <code>/</code> and <code>.</code> but never <code>$</code>, so it works — until an argon2 string arrives and you index the wrong part.|||<code>hash.split(\"$\")</code>: bảng chữ của muối có <code>/</code> và <code>.</code> nhưng không có <code>$</code>, nên chạy — cho tới khi một chuỗi argon2 tới và bạn lấy nhầm phần."
+        },
+        {
+          "loi": "Forgetting the anchors: a hash with garbage appended still “parses”.|||Quên neo: hash bị nối rác phía sau vẫn \"đọc được\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "self-describing",
+          "vi": "tự mô tả",
+          "giaiThich": "Chuỗi mang theo tham số của chính nó."
+        }
+      ]
+    },
+    {
+      "title": "8.1 · 4 — Write checkPassword(pw): length that matters, and bcrypt’s 72 bytes said out loud",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "password policy",
+        "UTF-8",
+        "bcrypt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Two rules from lesson 8.1 for a system that is still on bcrypt: <b>length is the only requirement with real entropy behind it</b> (no “1 upper 1 digit 1 symbol”, allow spaces and emoji), and <b>do not leave the 72-byte truncation silent</b> — “72 bytes is not 72 characters once your users type in their own language”. Write <code>checkPassword(pw)</code> returning <code>{ ok, code?, chars, bytes }</code>:</p>\n<ul><li><code>chars</code> = number of characters as a person counts them: Unicode code points (<code>[...pw].length</code>), so 🔑 is 1, not 2.</li>\n<li><code>bytes</code> = UTF-8 length. The grader has no <code>TextEncoder</code> or <code>Buffer</code>: count per code point — 1 byte below U+0080, 2 below U+0800, 3 below U+10000, otherwise 4.</li>\n<li><code>chars &lt; 8</code> ⇒ <code>{ ok: false, code: \"TOO_SHORT\", … }</code>; else <code>bytes &gt; 72</code> ⇒ <code>{ ok: false, code: \"TOO_LONG_FOR_BCRYPT\", … }</code>; else <code>{ ok: true, chars, bytes }</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>No composition rules.</li>\n  <li>Iterate by code point (<code>for…of</code>), not by <code>.length</code> index.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai luật của bài 8.1 cho hệ thống vẫn dùng bcrypt: <b>độ dài là yêu cầu duy nhất có entropy thật đứng sau</b> (không \"1 hoa 1 số 1 ký hiệu\", cho phép khoảng trắng và emoji), và <b>đừng để việc cắt ở 72 byte diễn ra lặng lẽ</b> — \"72 byte không phải 72 ký tự khi người dùng gõ bằng tiếng mẹ đẻ\". Viết <code>checkPassword(pw)</code> trả <code>{ ok, code?, chars, bytes }</code>:</p>\n<ul><li><code>chars</code> = số ký tự theo cách người đếm: điểm mã Unicode (<code>[...pw].length</code>), nên 🔑 là 1, không phải 2.</li>\n<li><code>bytes</code> = độ dài UTF-8. Máy chấm không có <code>TextEncoder</code> hay <code>Buffer</code>: đếm theo điểm mã — 1 byte dưới U+0080, 2 dưới U+0800, 3 dưới U+10000, còn lại 4.</li>\n<li><code>chars &lt; 8</code> ⇒ <code>{ ok: false, code: \"TOO_SHORT\", … }</code>; không thì <code>bytes &gt; 72</code> ⇒ <code>{ ok: false, code: \"TOO_LONG_FOR_BCRYPT\", … }</code>; không nữa thì <code>{ ok: true, chars, bytes }</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không có luật thành phần.</li>\n  <li>Duyệt theo điểm mã (<code>for…of</code>), không theo chỉ số <code>.length</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkPassword(\"correct horse battery staple\")",
+          "output": "{\"ok\":true,\"chars\":28,\"bytes\":28}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>for (const ch of pw) { const c = ch.codePointAt(0); … }</code> visits each code point once, emoji included.|||<code>for (const ch of pw) { const c = ch.codePointAt(0); … }</code> đi qua mỗi điểm mã một lần, kể cả emoji.",
+        "Vietnamese letters with diacritics such as ậ or ẩ are U+1Exx ⇒ 3 bytes each; đ and ô are below U+0800 ⇒ 2 bytes.|||Chữ tiếng Việt có dấu như ậ hay ẩ là U+1Exx ⇒ mỗi chữ 3 byte; đ và ô dưới U+0800 ⇒ 2 byte."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function checkPassword(pw) {\n  // Write your solution here\n  if (pw.length < 8) return { ok: false, code: 'TOO_SHORT', chars: pw.length, bytes: pw.length };\n  if (!/[0-9]/.test(pw)) return { ok: false, code: 'NEEDS_DIGIT', chars: pw.length, bytes: pw.length };\n  return { ok: true, chars: pw.length, bytes: pw.length };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function utf8Bytes(str) {\n  // count UTF-8 bytes by code point: 1 (ASCII) · 2 (≤ U+07FF) · 3 (≤ U+FFFF) · 4 (emoji and other astral characters)\n  let n = 0;\n  for (const ch of str) {\n    const c = ch.codePointAt(0);\n    n += c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;\n  }\n  return n;\n}\n\nfunction checkPassword(pw) {\n  const chars = [...pw].length;           // characters as a person counts them (code points), not UTF-16 units\n  const bytes = utf8Bytes(pw);\n  if (chars < 8) return { ok: false, code: 'TOO_SHORT', chars, bytes };\n  if (bytes > 72) return { ok: false, code: 'TOO_LONG_FOR_BCRYPT', chars, bytes };   // explicit, never silent truncation\n  return { ok: true, chars, bytes };      // spaces, emoji, any script: allowed — no composition rules\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>bcrypt’s limit is in bytes, and every byte beyond 72 is ignored — so two passphrases that share their first 72 bytes are the same password to bcrypt. Counting UTF-8 bytes by code point is exactly what an encoder does. Rejecting loudly (or moving to argon2, which has no such limit) turns a silent security hole into a form error the user can act on.</p>",
+      "solutionExplanationHtmlVi": "<p>Giới hạn của bcrypt tính bằng byte, và mọi byte sau 72 bị bỏ qua — nên hai câu mật khẩu chung 72 byte đầu là cùng một mật khẩu với bcrypt. Đếm byte UTF-8 theo điểm mã đúng là việc bộ mã hoá làm. Từ chối rõ ràng (hoặc chuyển sang argon2, không có giới hạn đó) biến một lỗ hổng lặng lẽ thành lỗi form mà người dùng sửa được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A long English passphrase, no digit",
+              "vi": "Câu mật khẩu tiếng Anh dài, không có số"
+            },
+            "goi": "checkPassword(\"correct horse battery staple\")",
+            "mongDoi": {
+              "ok": true,
+              "chars": 28,
+              "bytes": 28
+            }
+          },
+          {
+            "moTa": {
+              "en": "A Vietnamese sentence of 50 characters",
+              "vi": "Một câu tiếng Việt 50 ký tự"
+            },
+            "goi": "checkPassword(\"Mật khẩu của tôi là một câu tiếng Việt khá dài nhé\")",
+            "mongDoi": {
+              "ok": true,
+              "chars": 50,
+              "bytes": 68
+            }
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s 94-byte password",
+              "vi": "Mật khẩu 94 byte của bài"
+            },
+            "goi": "checkPassword(\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-mat-khau-that-cua-toi\")",
+            "mongDoi": {
+              "ok": false,
+              "code": "TOO_LONG_FOR_BCRYPT",
+              "chars": 94,
+              "bytes": 94
+            }
+          },
+          {
+            "moTa": {
+              "en": "Emoji count as one character each",
+              "vi": "Emoji mỗi cái tính một ký tự"
+            },
+            "goi": "[checkPassword('1234567'), checkPassword('🔑🔑🔑🔑🔑🔑🔑'), checkPassword('🔑🔑🔑🔑🔑🔑🔑🔑')]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "code": "TOO_SHORT",
+                "chars": 7,
+                "bytes": 7
+              },
+              {
+                "ok": false,
+                "code": "TOO_SHORT",
+                "chars": 7,
+                "bytes": 28
+              },
+              {
+                "ok": true,
+                "chars": 8,
+                "bytes": 32
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkPassword(\"Mật khẩu của tôi là một câu tiếng Việt khá dài nhé và còn dài hơn\")",
+            "mongDoi": {
+              "ok": false,
+              "code": "TOO_LONG_FOR_BCRYPT",
+              "chars": 65,
+              "bytes": 87
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly at the 72-byte edge",
+              "vi": "Đúng ở biên 72 byte"
+            },
+            "goi": "[checkPassword('a'.repeat(72)), checkPassword('a'.repeat(71) + 'đ'), checkPassword('a'.repeat(70) + 'đ')]",
+            "mongDoi": [
+              {
+                "ok": true,
+                "chars": 72,
+                "bytes": 72
+              },
+              {
+                "ok": false,
+                "code": "TOO_LONG_FOR_BCRYPT",
+                "chars": 72,
+                "bytes": 73
+              },
+              {
+                "ok": true,
+                "chars": 71,
+                "bytes": 72
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>pw.length &gt; 72</code>: counts UTF-16 units, so a 50-character Vietnamese sentence of 64 bytes passes and one of 99 bytes passes too — bcrypt silently drops the tail.|||<code>pw.length &gt; 72</code>: đếm đơn vị UTF-16, nên câu tiếng Việt 50 ký tự 64 byte lọt qua và câu 99 byte cũng lọt — bcrypt lặng lẽ bỏ phần đuôi."
+        },
+        {
+          "loi": "Adding “must contain a digit and a symbol”: pushes everyone to Password1!, which cracking rigs know.|||Thêm \"phải có số và ký hiệu\": đẩy mọi người tới Password1!, thứ máy bẻ khoá đã biết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code point",
+          "vi": "điểm mã",
+          "giaiThich": "Một ký tự Unicode."
+        },
+        {
+          "en": "UTF-8",
+          "vi": "UTF-8",
+          "giaiThich": "Mã hoá 1–4 byte mỗi ký tự."
+        },
+        {
+          "en": "entropy",
+          "vi": "entropy",
+          "giaiThich": "Độ khó đoán."
+        }
+      ]
+    },
+    {
+      "title": "8.1 · 5 — Write login(): the same answer, in the same time, for every failure",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "authentication",
+        "timing side channel"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measurement 5: the obvious login returns early for an unknown email, skipping the 33 ms hash — 1.42 ms vs 35.52 ms, a 25× gap that tells a script which emails have accounts. Write <code>async login(users, verifyPassword, DUMMY_HASH, email, password)</code>:</p>\n<ul><li><code>await users.findByEmail(email.toLowerCase())</code> ⇒ user <code>{ id, email, passwordHash }</code> or <code>null</code>.</li>\n<li><b>Always</b> <code>await verifyPassword(hash, password)</code> exactly once, with <code>user?.passwordHash ?? DUMMY_HASH</code> — also for accounts created through Google OAuth, whose <code>passwordHash</code> is <code>null</code>.</li>\n<li>Any failure (no user, wrong password, null hash) ⇒ <code>{ status: 401, body: { error: { code: \"INVALID_CREDENTIALS\", message: \"Email or password is incorrect\" } } }</code> — never “that email does not exist”.</li>\n<li>Success ⇒ <code>{ status: 200, body: { userId } }</code>.</li></ul>\n<p>The fake <code>verifyPassword</code> takes 33 virtual ms and returns <code>false</code> for <code>null</code>; the checks compare response times.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Same status, same body, same time for every failure.</li>\n  <li>One verification per login, never zero.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép đo 5: bản đăng nhập hiển nhiên return sớm với email không có, bỏ qua lần băm 33 ms — 1,42 ms so với 35,52 ms, chênh 25 lần, đủ để một script biết email nào có tài khoản. Viết <code>async login(users, verifyPassword, DUMMY_HASH, email, password)</code>:</p>\n<ul><li><code>await users.findByEmail(email.toLowerCase())</code> ⇒ người dùng <code>{ id, email, passwordHash }</code> hoặc <code>null</code>.</li>\n<li><b>Luôn</b> <code>await verifyPassword(hash, password)</code> đúng một lần, với <code>user?.passwordHash ?? DUMMY_HASH</code> — kể cả tài khoản tạo qua Google OAuth có <code>passwordHash</code> là <code>null</code>.</li>\n<li>Mọi thất bại (không có user, sai mật khẩu, hash null) ⇒ <code>{ status: 401, body: { error: { code: \"INVALID_CREDENTIALS\", message: \"Email or password is incorrect\" } } }</code> — không bao giờ \"email đó không tồn tại\".</li>\n<li>Thành công ⇒ <code>{ status: 200, body: { userId } }</code>.</li></ul>\n<p><code>verifyPassword</code> giả mất 33 ms ảo và trả <code>false</code> cho <code>null</code>; các kiểm so thời gian phản hồi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mọi thất bại cùng mã, cùng body, cùng thời gian.</li>\n  <li>Mỗi lần đăng nhập một lần kiểm, không bao giờ là không.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await timed('an@vd.com', 'correct horse'), await timed('An@VD.com', 'wrong')]",
+          "output": "[{\"status\":200,\"body\":{\"userId\":1},\"ms\":34},{\"status\":401,\"body\":{\"error\":{\"code\":\"INVALID_CREDENTIALS\",\"message\":\"Email or password is incorrect\"}},\"ms\":34}]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const ok = await verifyPassword(user?.passwordHash ?? DUMMY_HASH, password);</code> runs before any decision.|||<code>const ok = await verifyPassword(user?.passwordHash ?? DUMMY_HASH, password);</code> chạy trước mọi quyết định.",
+        "Then <code>if (!user || !ok) return 401</code> — <code>Boolean(user) &amp;&amp; ok</code> is the lesson’s spelling.|||Rồi <code>if (!user || !ok) return 401</code> — <code>Boolean(user) &amp;&amp; ok</code> là cách viết của bài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function login(users, verifyPassword, DUMMY_HASH, email, password) {\n  // Write your solution here\n  const user = await users.findByEmail(email.toLowerCase());\n  if (!user) return { status: 401, body: { error: { code: 'NO_SUCH_EMAIL', message: 'That email does not exist' } } };\n  if (!user.passwordHash) return { status: 401, body: { error: { code: 'INVALID_CREDENTIALS', message: 'Email or password is incorrect' } } };\n  const ok = await verifyPassword(user.passwordHash, password);\n  if (!ok) return { status: 401, body: { error: { code: 'INVALID_CREDENTIALS', message: 'Email or password is incorrect' } } };\n  return { status: 200, body: { userId: user.id } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function login(users, verifyPassword, DUMMY_HASH, email, password) {\n  const user = await users.findByEmail(email.toLowerCase());\n  // ALWAYS run the expensive verification — against a dummy hash when the email does not exist —\n  // so the response time carries no information about which emails have accounts\n  const ok = await verifyPassword(user?.passwordHash ?? DUMMY_HASH, password);\n  if (!user || !ok) return { status: 401, body: { error: { code: 'INVALID_CREDENTIALS', message: 'Email or password is incorrect' } } };\n  return { status: 200, body: { userId: user.id } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A side channel is any observable difference between two outcomes you meant to look alike. Here the difference was work: no user meant no hash. Verifying against a DUMMY_HASH does the same work in every branch, so the time (34.73 ms vs 36.62 ms in the lesson), the status and the message are all the same — the response carries one bit: success or not.</p>",
+      "solutionExplanationHtmlVi": "<p>Kênh phụ là bất kỳ khác biệt quan sát được giữa hai kết quả mà bạn định cho giống nhau. Ở đây khác biệt là khối lượng việc: không có user nghĩa là không băm. Kiểm với DUMMY_HASH làm cùng một việc ở mọi nhánh, nên thời gian (34,73 ms so với 36,62 ms trong bài), mã trạng thái và thông điệp đều như nhau — phản hồi chỉ mang một bit: thành công hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Right and wrong password",
+              "vi": "Đúng và sai mật khẩu"
+            },
+            "goi": "[await timed('an@vd.com', 'correct horse'), await timed('An@VD.com', 'wrong')]",
+            "chuanBi": "const DUMMY_HASH = '$argon2id$v=19$m=19456,t=2,p=1$ZHVtbXk$ZHVtbXloYXNo';\nconst mkUsers = () => { const rows = [{ id: 1, email: 'an@vd.com', passwordHash: 'h:correct horse' }, { id: 2, email: 'google@vd.com', passwordHash: null }];\n  return { findByEmail: (e) => new Promise((ok) => setTimeout(() => ok(rows.find((r) => r.email === e) || null), 1)) }; };\nlet verifyCalls = 0;\n// fake argon2: 33 virtual ms per call, like the OWASP parameters; false for null / corrupt hashes instead of throwing\nconst verifyPassword = (hash, plain) => new Promise((ok) => setTimeout(() => { verifyCalls++; ok(typeof hash === 'string' && hash.startsWith('h:') && hash === 'h:' + plain); }, 33));\nconst timed = async (email, pw) => { const t0 = Date.now(); const r = await login(mkUsers(), verifyPassword, DUMMY_HASH, email, pw); return { ...r, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "userId": 1
+                },
+                "ms": 34
+              },
+              {
+                "status": 401,
+                "body": {
+                  "error": {
+                    "code": "INVALID_CREDENTIALS",
+                    "message": "Email or password is incorrect"
+                  }
+                },
+                "ms": 34
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Unknown email: same 401, same time, verify still ran",
+              "vi": "Email lạ: cùng 401, cùng thời gian, verify vẫn chạy"
+            },
+            "goi": "[await timed('nobody@vd.com', 'whatever'), verifyCalls]",
+            "chuanBi": "const DUMMY_HASH = '$argon2id$v=19$m=19456,t=2,p=1$ZHVtbXk$ZHVtbXloYXNo';\nconst mkUsers = () => { const rows = [{ id: 1, email: 'an@vd.com', passwordHash: 'h:correct horse' }, { id: 2, email: 'google@vd.com', passwordHash: null }];\n  return { findByEmail: (e) => new Promise((ok) => setTimeout(() => ok(rows.find((r) => r.email === e) || null), 1)) }; };\nlet verifyCalls = 0;\n// fake argon2: 33 virtual ms per call, like the OWASP parameters; false for null / corrupt hashes instead of throwing\nconst verifyPassword = (hash, plain) => new Promise((ok) => setTimeout(() => { verifyCalls++; ok(typeof hash === 'string' && hash.startsWith('h:') && hash === 'h:' + plain); }, 33));\nconst timed = async (email, pw) => { const t0 = Date.now(); const r = await login(mkUsers(), verifyPassword, DUMMY_HASH, email, pw); return { ...r, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              {
+                "status": 401,
+                "body": {
+                  "error": {
+                    "code": "INVALID_CREDENTIALS",
+                    "message": "Email or password is incorrect"
+                  }
+                },
+                "ms": 34
+              },
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "OAuth account with null hash",
+              "vi": "Tài khoản OAuth có hash null"
+            },
+            "goi": "[await timed('google@vd.com', ''), await timed('google@vd.com', 'x'), verifyCalls]",
+            "chuanBi": "const DUMMY_HASH = '$argon2id$v=19$m=19456,t=2,p=1$ZHVtbXk$ZHVtbXloYXNo';\nconst mkUsers = () => { const rows = [{ id: 1, email: 'an@vd.com', passwordHash: 'h:correct horse' }, { id: 2, email: 'google@vd.com', passwordHash: null }];\n  return { findByEmail: (e) => new Promise((ok) => setTimeout(() => ok(rows.find((r) => r.email === e) || null), 1)) }; };\nlet verifyCalls = 0;\n// fake argon2: 33 virtual ms per call, like the OWASP parameters; false for null / corrupt hashes instead of throwing\nconst verifyPassword = (hash, plain) => new Promise((ok) => setTimeout(() => { verifyCalls++; ok(typeof hash === 'string' && hash.startsWith('h:') && hash === 'h:' + plain); }, 33));\nconst timed = async (email, pw) => { const t0 = Date.now(); const r = await login(mkUsers(), verifyPassword, DUMMY_HASH, email, pw); return { ...r, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              {
+                "status": 401,
+                "body": {
+                  "error": {
+                    "code": "INVALID_CREDENTIALS",
+                    "message": "Email or password is incorrect"
+                  }
+                },
+                "ms": 34
+              },
+              {
+                "status": 401,
+                "body": {
+                  "error": {
+                    "code": "INVALID_CREDENTIALS",
+                    "message": "Email or password is incorrect"
+                  }
+                },
+                "ms": 34
+              },
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { const a = await timed('an@vd.com', 'nope'); const b = await timed('ghost@vd.com', 'nope'); return [a.ms === b.ms, a.body, b.body, verifyCalls]; })()",
+            "chuanBi": "const DUMMY_HASH = '$argon2id$v=19$m=19456,t=2,p=1$ZHVtbXk$ZHVtbXloYXNo';\nconst mkUsers = () => { const rows = [{ id: 1, email: 'an@vd.com', passwordHash: 'h:correct horse' }, { id: 2, email: 'google@vd.com', passwordHash: null }];\n  return { findByEmail: (e) => new Promise((ok) => setTimeout(() => ok(rows.find((r) => r.email === e) || null), 1)) }; };\nlet verifyCalls = 0;\n// fake argon2: 33 virtual ms per call, like the OWASP parameters; false for null / corrupt hashes instead of throwing\nconst verifyPassword = (hash, plain) => new Promise((ok) => setTimeout(() => { verifyCalls++; ok(typeof hash === 'string' && hash.startsWith('h:') && hash === 'h:' + plain); }, 33));\nconst timed = async (email, pw) => { const t0 = Date.now(); const r = await login(mkUsers(), verifyPassword, DUMMY_HASH, email, pw); return { ...r, ms: Date.now() - t0 }; };",
+            "mongDoi": [
+              true,
+              {
+                "error": {
+                  "code": "INVALID_CREDENTIALS",
+                  "message": "Email or password is incorrect"
+                }
+              },
+              {
+                "error": {
+                  "code": "INVALID_CREDENTIALS",
+                  "message": "Email or password is incorrect"
+                }
+              },
+              2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>if (!user) return 401</code> before hashing — 25× faster for unknown emails, an account-enumeration oracle.|||<code>if (!user) return 401</code> trước khi băm — nhanh hơn 25 lần với email lạ, một cỗ máy dò tài khoản."
+        },
+        {
+          "loi": "Different messages (“no such email” / “wrong password”) — the same leak without even measuring time.|||Thông điệp khác nhau (\"không có email\" / \"sai mật khẩu\") — cùng lỗ rò mà chẳng cần đo thời gian."
+        },
+        {
+          "loi": "Calling verify only when the hash is not null: OAuth accounts answer fast, and “log in with an empty password” is one bug away.|||Chỉ gọi verify khi hash khác null: tài khoản OAuth trả lời nhanh, và \"đăng nhập bằng mật khẩu rỗng\" chỉ cách một lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side channel",
+          "vi": "kênh phụ",
+          "giaiThich": "Thông tin lộ qua thời gian, kích thước…"
+        },
+        {
+          "en": "account enumeration",
+          "vi": "dò tài khoản"
+        }
+      ]
+    },
+    {
+      "title": "8.1 · 6 — Write loginAndUpgrade(): move users from bcrypt (or old argon2) without a password reset",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "password hashing",
+        "migration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>“Because the parameters live inside every stored string, you can migrate one user at a time, at the only moment you ever hold their plain password — the instant they log in.” Write <code>async loginAndUpgrade(user, password, { bcrypt, argon2, save })</code> returning <code>{ ok, upgraded }</code>:</p>\n<ul><li>No user or a null hash ⇒ <code>{ ok: false, upgraded: false }</code>.</li>\n<li>Pick the verifier from the stored prefix: <code>$2a$</code>/<code>$2b$</code>/<code>$2y$</code> ⇒ <code>await bcrypt.compare(password, hash)</code>; anything else ⇒ <code>await argon2.verify(hash, password)</code> (note the different argument orders — they are the real libraries’).</li>\n<li>Wrong password ⇒ <code>{ ok: false, upgraded: false }</code> and nothing saved.</li>\n<li>Right password and (the hash is bcrypt <b>or</b> <code>argon2.needsRehash(hash)</code>) ⇒ <code>await save(user.id, await argon2.hash(password))</code> ⇒ <code>{ ok: true, upgraded: true }</code>. Otherwise <code>{ ok: true, upgraded: false }</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Verify first, upgrade second — never on a failed login.</li>\n  <li>bcrypt.compare(plain, hash) vs argon2.verify(hash, plain).</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Vì tham số nằm trong mỗi chuỗi đã lưu, bạn có thể chuyển từng người một, đúng lúc duy nhất bạn cầm mật khẩu gốc của họ — khoảnh khắc họ đăng nhập.\" Viết <code>async loginAndUpgrade(user, password, { bcrypt, argon2, save })</code> trả <code>{ ok, upgraded }</code>:</p>\n<ul><li>Không có user hoặc hash null ⇒ <code>{ ok: false, upgraded: false }</code>.</li>\n<li>Chọn hàm kiểm theo tiền tố đã lưu: <code>$2a$</code>/<code>$2b$</code>/<code>$2y$</code> ⇒ <code>await bcrypt.compare(password, hash)</code>; còn lại ⇒ <code>await argon2.verify(hash, password)</code> (chú ý thứ tự đối số khác nhau — đúng như thư viện thật).</li>\n<li>Sai mật khẩu ⇒ <code>{ ok: false, upgraded: false }</code> và không lưu gì.</li>\n<li>Đúng mật khẩu và (hash là bcrypt <b>hoặc</b> <code>argon2.needsRehash(hash)</code>) ⇒ <code>await save(user.id, await argon2.hash(password))</code> ⇒ <code>{ ok: true, upgraded: true }</code>. Không thì <code>{ ok: true, upgraded: false }</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm trước, nâng cấp sau — không bao giờ khi đăng nhập hỏng.</li>\n  <li>bcrypt.compare(plain, hash) so với argon2.verify(hash, plain).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await loginAndUpgrade(U(1, bc('123456')), '123456', deps), saved]",
+          "output": "[{\"ok\":true,\"upgraded\":true},[{\"id\":1,\"hash\":\"$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$123456\"}]]",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>const isBcrypt = /^\\$2[aby]\\$/.test(hash)</code>.",
+        "The upgrade condition is <code>isBcrypt || argon2.needsRehash(hash)</code>; await the new hash, then await save.|||Điều kiện nâng cấp là <code>isBcrypt || argon2.needsRehash(hash)</code>; await hash mới, rồi await save."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function loginAndUpgrade(user, password, { bcrypt, argon2, save }) {\n  // Write your solution here\n  const ok = await argon2.verify(user.passwordHash, password);\n  if (argon2.needsRehash(user.passwordHash)) await save(user.id, await argon2.hash(password));\n  return { ok, upgraded: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function loginAndUpgrade(user, password, { bcrypt, argon2, save }) {\n  if (!user || !user.passwordHash) return { ok: false, upgraded: false };\n  const h = user.passwordHash;\n  // the stored prefix names the algorithm: verify with whichever one wrote it\n  const isBcrypt = /^\\$2[aby]\\$/.test(h);\n  const ok = isBcrypt ? await bcrypt.compare(password, h) : await argon2.verify(h, password);\n  if (!ok) return { ok: false, upgraded: false };                       // never touch the hash on a failed login\n  // the only moment you ever hold the plain password: re-hash with today's parameters if needed\n  if (isBcrypt || argon2.needsRehash(h)) {\n    await save(user.id, await argon2.hash(password));\n    return { ok: true, upgraded: true };\n  }\n  return { ok: true, upgraded: false };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The prefix tells you which function wrote the hash, so old and new users can coexist forever in one column. A successful login is the one moment you can derive a new hash; after a few months only inactive accounts remain on the old scheme, and those you expire. Raising argon2’s cost later is the same move, triggered by needsRehash.</p>",
+      "solutionExplanationHtmlVi": "<p>Tiền tố cho biết hàm nào đã viết hash, nên người dùng cũ và mới có thể sống chung mãi trong một cột. Một lần đăng nhập thành công là lúc duy nhất bạn tạo được hash mới; vài tháng sau chỉ còn tài khoản không hoạt động nằm ở cách cũ, và những cái đó bạn cho hết hạn. Tăng chi phí argon2 sau này là cùng một nước đi, kích hoạt bởi needsRehash.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "bcrypt user logs in ⇒ upgraded to argon2",
+              "vi": "Người dùng bcrypt đăng nhập ⇒ nâng lên argon2"
+            },
+            "goi": "[await loginAndUpgrade(U(1, bc('123456')), '123456', deps), saved]",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": [
+              {
+                "ok": true,
+                "upgraded": true
+              },
+              [
+                {
+                  "id": 1,
+                  "hash": "$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$123456"
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Wrong password ⇒ nothing saved",
+              "vi": "Sai mật khẩu ⇒ không lưu gì"
+            },
+            "goi": "[await loginAndUpgrade(U(1, bc('123456')), 'wrong', deps), saved]",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": [
+              {
+                "ok": false,
+                "upgraded": false
+              },
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Current argon2 ⇒ no upgrade",
+              "vi": "argon2 hiện hành ⇒ không nâng cấp"
+            },
+            "goi": "[await loginAndUpgrade(U(2, '$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$pw'), 'pw', deps), saved]",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": [
+              {
+                "ok": true,
+                "upgraded": false
+              },
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Old argon2 parameters ⇒ re-hashed",
+              "vi": "Tham số argon2 cũ ⇒ băm lại"
+            },
+            "goi": "[await loginAndUpgrade(U(3, '$argon2id$v=19$m=4096,t=3,p=1$c2FsdA$pw'), 'pw', deps), await loginAndUpgrade(U(4, '$argon2id$v=19$m=4096,t=3,p=1$c2FsdA$pw'), 'nope', deps), saved]",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": [
+              {
+                "ok": true,
+                "upgraded": true
+              },
+              {
+                "ok": false,
+                "upgraded": false
+              },
+              [
+                {
+                  "id": 3,
+                  "hash": "$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$pw"
+                }
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await loginAndUpgrade(null, 'x', deps), await loginAndUpgrade(U(5, null), '', deps), await loginAndUpgrade(U(6, '$2y$10$' + 'S'.repeat(22) + 'abc'.padEnd(31, '.')), 'abc', deps), saved.map((s) => s.id)]",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": [
+              {
+                "ok": false,
+                "upgraded": false
+              },
+              {
+                "ok": false,
+                "upgraded": false
+              },
+              {
+                "ok": true,
+                "upgraded": true
+              },
+              [
+                6
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Time: 78 ms bcrypt + 33 ms argon2 + 2 ms save",
+              "vi": "Thời gian: 78 ms bcrypt + 33 ms argon2 + 2 ms lưu"
+            },
+            "goi": "await (async () => { const t0 = Date.now(); await loginAndUpgrade(U(7, bc('pw')), 'pw', deps); return Date.now() - t0; })()",
+            "chuanBi": "const saved = [];\nconst deps = {\n  bcrypt: { compare: (pw, h) => new Promise((ok) => setTimeout(() => ok(h.slice(7) === 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31)), 78)) },\n  argon2: {\n    hash: (pw) => new Promise((ok) => setTimeout(() => ok('$argon2id$v=19$m=19456,t=2,p=1$c2FsdA$' + pw), 33)),\n    verify: (h, pw) => new Promise((ok) => setTimeout(() => ok(h.endsWith('$' + pw) && h.startsWith('$argon2id$')), 33)),\n    needsRehash: (h) => h.startsWith('$argon2') && !h.includes('m=19456,t=2,p=1'),   // like the real one, it only judges argon2 strings\n  },\n  save: (id, hash) => new Promise((ok) => setTimeout(() => { saved.push({ id, hash }); ok(); }, 2)),\n};\nconst bc = (pw) => '$2b$10$' + 'S'.repeat(22) + pw.padEnd(31, '.').slice(0, 31);\nconst U = (id, passwordHash) => ({ id, email: 'u' + id + '@vd.com', passwordHash });",
+            "mongDoi": 113,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping the argument order of one of the two libraries: every login fails, or worse, compares the hash to itself.|||Đảo thứ tự đối số của một trong hai thư viện: mọi lần đăng nhập hỏng, hoặc tệ hơn, so hash với chính nó."
+        },
+        {
+          "loi": "Re-hashing before verifying: a wrong password overwrites the right one.|||Băm lại trước khi kiểm: mật khẩu sai ghi đè mật khẩu đúng."
+        },
+        {
+          "loi": "Re-hashing on every login: 33 ms of argon2 plus a write on every request for no reason.|||Băm lại mọi lần đăng nhập: thêm 33 ms argon2 và một lần ghi mỗi request mà chẳng để làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rehash",
+          "vi": "băm lại"
+        },
+        {
+          "en": "needsRehash",
+          "vi": "needsRehash",
+          "giaiThich": "Hash có dùng tham số cũ không."
+        }
+      ]
+    }
+  ]
+}

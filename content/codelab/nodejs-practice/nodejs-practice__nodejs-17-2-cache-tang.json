@@ -1,0 +1,716 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-17-2-cache-tang",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-17-2-cache-tang"
+  },
+  "exercises": [
+    {
+      "title": "The cache rule, the context, and four silent cache breakers",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "Docker",
+        "build cache"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on lesson 17.2.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về bài 17.2.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rarely-changing things at the top, often-changing at the bottom.|||Thứ hiếm đổi ở trên, thứ hay đổi ở dưới.",
+        "The context is whatever was sent to BuildKit.|||Context là thứ đã được gửi cho BuildKit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The cache rule, the context, and four silent cache breakers\n\nAnswer in the answer panel (no code needed).\n\n1. What does the layer cache compare to decide whether a COPY step can be reused?Cache tầng so sánh gì để quyết định một bước COPY có dùng lại được không?\n2. package.json lives in ./api, the Dockerfile in the project root. COPY package*.json ./ finishes in 0.0 s with DONE. What happens next?package.json nằm trong ./api, Dockerfile ở gốc dự án. COPY package*.json ./ xong trong 0,0 s và in DONE. Chuyện gì xảy ra tiếp?\n3. Without .dockerignore, the COPY . . build sent 66.16 MB of context. What else was true of that image?Không có .dockerignore, bản build COPY . . gửi 66,16 MB context. Điều gì khác cũng đúng với ảnh đó?\n4. Which of these silently break the cache? (choose all that apply)Những thứ nào làm vỡ cache âm thầm? (chọn mọi câu đúng)\n5. An Apple Silicon Mac builds for a typical amd64 VPS. Measured: a 300-million-step loop 369 ms native vs 4,609 ms emulated, but npm ci 3.82 s vs 4.41 s. Why so different?Một Mac Apple Silicon build cho VPS amd64 thông thường. Đo được: vòng lặp 300 triệu bước 369 ms gốc so với 4.609 ms giả lập, nhưng npm ci 3,82 s so với 4,41 s. Vì sao chênh nhau thế?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The cache rule, the context, and four silent cache breakers — answer key\n\n1. What does the layer cache compare to decide whether a COPY step can be reused?Cache tầng so sánh gì để quyết định một bước COPY có dùng lại được không?\n   Answer: b) A checksum of the files copied (plus the layer below)\n   For RUN it is the command text plus the layer below — never the clock, never the network. When an input changes, that layer and every layer after it rebuild.VI: Với RUN là chữ của lệnh cộng tầng bên dưới — không bao giờ là đồng hồ hay mạng. Khi đầu vào đổi, tầng đó và mọi tầng sau nó build lại.\n\n2. package.json lives in ./api, the Dockerfile in the project root. COPY package*.json ./ finishes in 0.0 s with DONE. What happens next?package.json nằm trong ./api, Dockerfile ở gốc dự án. COPY package*.json ./ xong trong 0,0 s và in DONE. Chuyện gì xảy ra tiếp?\n   Answer: c) npm ci fails with EUSAGE (no lockfile) — the glob matched nothing and did not complain\n   A COPY with a glob does not complain when it matches no file. When you see this, check the build context first, not npm.VI: COPY có ký tự đại diện không phàn nàn khi không khớp tệp nào. Gặp cảnh này, kiểm build context trước, đừng đổ cho npm.\n\n3. Without .dockerignore, the COPY . . build sent 66.16 MB of context. What else was true of that image?Không có .dockerignore, bản build COPY . . gửi 66,16 MB context. Điều gì khác cũng đúng với ảnh đó?\n   Answer: b) It contained the whole DATABASE_URL line of the (fake) .env and the .git folder\n   With .dockerignore: 465 B sent, 5.98 s vs 10.76 s, 84.3 MB vs 103 MB, no .env, no .git. Selective COPY decides what goes into the image; .dockerignore decides what may ever leave your machine.VI: Có .dockerignore: gửi 465 B, 5,98 s so với 10,76 s, 84,3 MB so với 103 MB, không .env, không .git. COPY chọn lọc quyết định thứ vào ảnh; .dockerignore quyết định thứ được phép rời khỏi máy bạn.\n\n4. Which of these silently break the cache? (choose all that apply)Những thứ nào làm vỡ cache âm thầm? (chọn mọi câu đúng)\n   Answer: b) A moving base tag re-pulled with a new patch + c) A fresh CI runner with no --cache-from + d) An ARG that changes every build, declared at the top\n   Plus COPY . . before installing. docker build --progress=plain prints CACHED next to each reused step: if npm ci is not CACHED after a code-only change, something above it changed.VI: Cộng thêm COPY . . trước khi cài. docker build --progress=plain in CACHED cạnh mỗi bước dùng lại: nếu npm ci không CACHED sau khi chỉ đổi mã, có thứ gì phía trên nó đã đổi.\n\n5. An Apple Silicon Mac builds for a typical amd64 VPS. Measured: a 300-million-step loop 369 ms native vs 4,609 ms emulated, but npm ci 3.82 s vs 4.41 s. Why so different?Một Mac Apple Silicon build cho VPS amd64 thông thường. Đo được: vòng lặp 300 triệu bước 369 ms gốc so với 4.609 ms giả lập, nhưng npm ci 3,82 s so với 4,41 s. Vì sao chênh nhau thế?\n   Answer: b) npm ci mostly waits on the network; emulation only hurts what computes\n   Build with --platform set to the target, or buildx for both. Running the wrong one gives exec format error, or works 12.5× slower on CPU work.VI: Build với --platform đặt theo máy đích, hoặc buildx cho cả hai. Chạy sai kiến trúc thì báo exec format error, hoặc chạy chậm 12,5 lần với việc CPU.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A checksum of the files copied (plus the layer below)</p><p>For RUN it is the command text plus the layer below — never the clock, never the network. When an input changes, that layer and every layer after it rebuild.</p><p><i>VI: Với RUN là chữ của lệnh cộng tầng bên dưới — không bao giờ là đồng hồ hay mạng. Khi đầu vào đổi, tầng đó và mọi tầng sau nó build lại.</i></p></li><li><p><b>c)</b> npm ci fails with EUSAGE (no lockfile) — the glob matched nothing and did not complain</p><p>A COPY with a glob does not complain when it matches no file. When you see this, check the build context first, not npm.</p><p><i>VI: COPY có ký tự đại diện không phàn nàn khi không khớp tệp nào. Gặp cảnh này, kiểm build context trước, đừng đổ cho npm.</i></p></li><li><p><b>b)</b> It contained the whole DATABASE_URL line of the (fake) .env and the .git folder</p><p>With .dockerignore: 465 B sent, 5.98 s vs 10.76 s, 84.3 MB vs 103 MB, no .env, no .git. Selective COPY decides what goes into the image; .dockerignore decides what may ever leave your machine.</p><p><i>VI: Có .dockerignore: gửi 465 B, 5,98 s so với 10,76 s, 84,3 MB so với 103 MB, không .env, không .git. COPY chọn lọc quyết định thứ vào ảnh; .dockerignore quyết định thứ được phép rời khỏi máy bạn.</i></p></li><li><p><b>b)</b> A moving base tag re-pulled with a new patch + <b>c)</b> A fresh CI runner with no --cache-from + <b>d)</b> An ARG that changes every build, declared at the top</p><p>Plus COPY . . before installing. docker build --progress=plain prints CACHED next to each reused step: if npm ci is not CACHED after a code-only change, something above it changed.</p><p><i>VI: Cộng thêm COPY . . trước khi cài. docker build --progress=plain in CACHED cạnh mỗi bước dùng lại: nếu npm ci không CACHED sau khi chỉ đổi mã, có thứ gì phía trên nó đã đổi.</i></p></li><li><p><b>b)</b> npm ci mostly waits on the network; emulation only hurts what computes</p><p>Build with --platform set to the target, or buildx for both. Running the wrong one gives exec format error, or works 12.5× slower on CPU work.</p><p><i>VI: Build với --platform đặt theo máy đích, hoặc buildx cho cả hai. Chạy sai kiến trúc thì báo exec format error, hoặc chạy chậm 12,5 lần với việc CPU.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does the layer cache compare to decide whether a COPY step can be reused?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cache tầng so sánh gì để quyết định một bước COPY có dùng lại được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The network: whether the registry has a newer layer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A checksum of the files copied (plus the layer below)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The current date, so caches expire every night"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The modification time of the Dockerfile"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>For RUN it is the command text plus the layer below — never the clock, never the network. When an input changes, that layer and every layer after it rebuild.</p><p><i>VI: Với RUN là chữ của lệnh cộng tầng bên dưới — không bao giờ là đồng hồ hay mạng. Khi đầu vào đổi, tầng đó và mọi tầng sau nó build lại.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>package.json lives in ./api, the Dockerfile in the project root. COPY package*.json ./ finishes in 0.0 s with DONE. What happens next?</p><p style=\"opacity:.75;font-size:.92em\"><i>package.json nằm trong ./api, Dockerfile ở gốc dự án. COPY package*.json ./ xong trong 0,0 s và in DONE. Chuyện gì xảy ra tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The build stops at the COPY with “file not found”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm ci succeeds because it downloads package.json from the registry"
+              },
+              {
+                "ma": "c",
+                "noiDung": "npm ci fails with EUSAGE (no lockfile) — the glob matched nothing and did not complain"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker searches subfolders and copies ./api/package.json automatically"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A COPY with a glob does not complain when it matches no file. When you see this, check the build context first, not npm.</p><p><i>VI: COPY có ký tự đại diện không phàn nàn khi không khớp tệp nào. Gặp cảnh này, kiểm build context trước, đừng đổ cho npm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Without .dockerignore, the COPY . . build sent 66.16 MB of context. What else was true of that image?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không có .dockerignore, bản build COPY . . gửi 66,16 MB context. Điều gì khác cũng đúng với ảnh đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It was identical to the image built with .dockerignore"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It contained the whole DATABASE_URL line of the (fake) .env and the .git folder"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It built faster, because nothing had to be downloaded"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It was smaller, because the Mac’s node_modules replaced the npm ci layer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>With .dockerignore: 465 B sent, 5.98 s vs 10.76 s, 84.3 MB vs 103 MB, no .env, no .git. Selective COPY decides what goes into the image; .dockerignore decides what may ever leave your machine.</p><p><i>VI: Có .dockerignore: gửi 465 B, 5,98 s so với 10,76 s, 84,3 MB so với 103 MB, không .env, không .git. COPY chọn lọc quyết định thứ vào ảnh; .dockerignore quyết định thứ được phép rời khỏi máy bạn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which of these silently break the cache? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những thứ nào làm vỡ cache âm thầm? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Adding a comment line after the last RUN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A moving base tag re-pulled with a new patch"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A fresh CI runner with no --cache-from"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An ARG that changes every build, declared at the top"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Plus COPY . . before installing. docker build --progress=plain prints CACHED next to each reused step: if npm ci is not CACHED after a code-only change, something above it changed.</p><p><i>VI: Cộng thêm COPY . . trước khi cài. docker build --progress=plain in CACHED cạnh mỗi bước dùng lại: nếu npm ci không CACHED sau khi chỉ đổi mã, có thứ gì phía trên nó đã đổi.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An Apple Silicon Mac builds for a typical amd64 VPS. Measured: a 300-million-step loop 369 ms native vs 4,609 ms emulated, but npm ci 3.82 s vs 4.41 s. Why so different?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một Mac Apple Silicon build cho VPS amd64 thông thường. Đo được: vòng lặp 300 triệu bước 369 ms gốc so với 4.609 ms giả lập, nhưng npm ci 3,82 s so với 4,41 s. Vì sao chênh nhau thế?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Docker caches the amd64 npm ci layer from the registry"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm ci mostly waits on the network; emulation only hurts what computes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The loop used worker threads, which emulation cannot share"
+              },
+              {
+                "ma": "d",
+                "noiDung": "npm ci is written in Go, which is never emulated"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Build with --platform set to the target, or buildx for both. Running the wrong one gives exec format error, or works 12.5× slower on CPU work.</p><p><i>VI: Build với --platform đặt theo máy đích, hoặc buildx cho cả hai. Chạy sai kiến trúc thì báo exec format error, hoặc chạy chậm 12,5 lần với việc CPU.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming npm for an empty COPY glob.|||Đổ lỗi npm cho một COPY glob rỗng."
+        },
+        {
+          "loi": "Relying on selective COPY and skipping .dockerignore.|||Dựa vào COPY chọn lọc mà bỏ .dockerignore."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "build context",
+          "vi": "build context",
+          "giaiThich": "the folder sent to the builder"
+        },
+        {
+          "en": "BuildKit",
+          "vi": "BuildKit"
+        },
+        {
+          "en": "CACHED",
+          "vi": "CACHED",
+          "giaiThich": "the step reused a stored layer"
+        }
+      ]
+    },
+    {
+      "title": "Five layers in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "Docker"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Order the Dockerfile so that a one-line source change re-runs only the build.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp Dockerfile sao cho đổi một dòng mã nguồn chỉ chạy lại bước build.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of each line: how often does its input change?|||Hỏi mỗi dòng: đầu vào của nó đổi thường xuyên tới đâu?",
+        "An ARG that changes every commit belongs just above the one RUN that uses it.|||ARG đổi mỗi commit đứng ngay trên RUN duy nhất dùng nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five layers in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. From rarely to often changed.Từ hiếm đổi tới hay đổi.\n2. FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — reorder it (lesson exercise).FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — sắp lại (bài tập của bài).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Five layers in the right order — answer key\n\n1. From rarely to often changed.Từ hiếm đổi tới hay đổi.\n   Answer: m1) FROM node:22.23.4-slim (+ system packages)  →  m2) COPY package*.json ./  →  m3) RUN npm ci  →  m5) COPY src ./src  →  m4) RUN npm run build\n   npm ci is the most expensive layer and stays cached until the lockfile changes; the source changes every commit so it comes after it; the build re-runs on every code change, but that is work you really have to do. Measured: 4.36 s → 0.47 s (9.3×).VI: npm ci là tầng đắt nhất và được cache tới khi lockfile đổi; mã nguồn đổi mỗi commit nên đứng sau nó; build chạy lại mỗi lần đổi mã, nhưng đó là việc bắt buộc phải làm. Đo được: 4,36 s → 0,47 s (9,3 lần).\n\n2. FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — reorder it (lesson exercise).FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — sắp lại (bài tập của bài).\n   Answer: m1) FROM node:22.23.4-slim  →  m3) WORKDIR /app  →  m2) COPY package*.json ./  →  m6) RUN npm ci --omit=dev  →  m7) COPY src ./src  →  m4) ARG GIT_SHA  →  m5) RUN echo $GIT_SHA > version.txt\n   Every RUN after an ARG receives that variable, so a new value breaks its cache: declare build args as late as possible (6.53 s at the top vs 1.79 s right before its RUN).VI: Mọi RUN sau một ARG đều nhận biến đó, nên giá trị mới làm vỡ cache của nó: khai ARG càng muộn càng tốt (6,53 s khi ở đầu so với 1,79 s khi ngay trước RUN dùng nó).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>npm ci is the most expensive layer and stays cached until the lockfile changes; the source changes every commit so it comes after it; the build re-runs on every code change, but that is work you really have to do. Measured: 4.36 s → 0.47 s (9.3×).</p><p><i>VI: npm ci là tầng đắt nhất và được cache tới khi lockfile đổi; mã nguồn đổi mỗi commit nên đứng sau nó; build chạy lại mỗi lần đổi mã, nhưng đó là việc bắt buộc phải làm. Đo được: 4,36 s → 0,47 s (9,3 lần).</i></p><p>Every RUN after an ARG receives that variable, so a new value breaks its cache: declare build args as late as possible (6.53 s at the top vs 1.79 s right before its RUN).</p><p><i>VI: Mọi RUN sau một ARG đều nhận biến đó, nên giá trị mới làm vỡ cache của nó: khai ARG càng muộn càng tốt (6,53 s khi ở đầu so với 1,79 s khi ngay trước RUN dùng nó).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From rarely to often changed.</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ hiếm đổi tới hay đổi.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "FROM node:22.23.4-slim (+ system packages)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "COPY package*.json ./"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "RUN npm ci"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "RUN npm run build"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "COPY src ./src"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m3",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>npm ci is the most expensive layer and stays cached until the lockfile changes; the source changes every commit so it comes after it; the build re-runs on every code change, but that is work you really have to do. Measured: 4.36 s → 0.47 s (9.3×).</p><p><i>VI: npm ci là tầng đắt nhất và được cache tới khi lockfile đổi; mã nguồn đổi mỗi commit nên đứng sau nó; build chạy lại mỗi lần đổi mã, nhưng đó là việc bắt buộc phải làm. Đo được: 4,36 s → 0,47 s (9,3 lần).</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — reorder it (lesson exercise).</p><p style=\"opacity:.75;font-size:.92em\"><i>FROM · ARG GIT_SHA · WORKDIR · COPY . . · RUN npm ci --omit=dev · RUN echo $GIT_SHA > version.txt — sắp lại (bài tập của bài).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "FROM node:22.23.4-slim"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "COPY package*.json ./"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "WORKDIR /app"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ARG GIT_SHA"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "RUN echo $GIT_SHA > version.txt"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "RUN npm ci --omit=dev"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "COPY src ./src"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2",
+              "m6",
+              "m7",
+              "m4",
+              "m5"
+            ],
+            "giaiThich": "<p>Every RUN after an ARG receives that variable, so a new value breaks its cache: declare build args as late as possible (6.53 s at the top vs 1.79 s right before its RUN).</p><p><i>VI: Mọi RUN sau một ARG đều nhận biến đó, nên giá trị mới làm vỡ cache của nó: khai ARG càng muộn càng tốt (6,53 s khi ở đầu so với 1,79 s khi ngay trước RUN dùng nó).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "COPY . . before npm ci.|||COPY . . trước npm ci."
+        },
+        {
+          "loi": "ARG at the top of the file.|||ARG ở đầu tệp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ARG",
+          "vi": "ARG",
+          "giaiThich": "a build-time variable"
+        }
+      ]
+    },
+    {
+      "title": "contextFiles(files, dockerignore): what leaves your machine",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Docker",
+        "glob",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Before line 1 runs, Docker sends the build context to BuildKit, filtered by <code>.dockerignore</code>. Write <code>contextFiles(files, dockerignore)</code> returning the files that are <b>sent</b>, in input order. Rules (a simplified .dockerignore):</p><ul><li>one pattern per line; blank lines and lines starting with <code>#</code> are ignored; leading/trailing <code>/</code> are removed; paths are relative to the context root;</li><li>a pattern matches a path that equals it <b>or lies inside it</b> (<code>node_modules</code> matches <code>node_modules/express/index.js</code>);</li><li><code>*</code> matches any characters except <code>/</code>; <code>**/</code> matches zero or more directories (so <code>**/*.log</code> also matches <code>debug.log</code>), a bare <code>**</code> matches anything;</li><li><code>!pattern</code> re-includes; when several rules match, the <b>last</b> one wins.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi dòng 1 chạy, Docker gửi build context cho BuildKit, đã lọc qua <code>.dockerignore</code>. Viết <code>contextFiles(files, dockerignore)</code> trả về các tệp được <b>gửi đi</b>, theo thứ tự đầu vào. Luật (.dockerignore rút gọn):</p><ul><li>mỗi dòng một mẫu; dòng trống và dòng bắt đầu bằng <code>#</code> bị bỏ; <code>/</code> ở đầu/cuối được cắt; đường dẫn tính từ gốc context;</li><li>mẫu khớp đường dẫn bằng đúng nó <b>hoặc nằm bên trong nó</b> (<code>node_modules</code> khớp <code>node_modules/express/index.js</code>);</li><li><code>*</code> khớp mọi ký tự trừ <code>/</code>; <code>**/</code> khớp không hoặc nhiều thư mục (nên <code>**/*.log</code> khớp cả <code>debug.log</code>), <code>**</code> đứng riêng khớp mọi thứ;</li><li><code>!mẫu</code> mở lại; khi nhiều luật cùng khớp, luật <b>sau cùng</b> thắng.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "contextFiles([\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env\",\".env.example\",\".git/HEAD\",\".git/objects/ab/cdef\",\"node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node\",\"node_modules/express/index.js\",\"dist/index.js\",\"debug.log\",\"logs/app.log\",\"README.md\"], \"node_modules\\n.git\\n.env\\ndist\")",
+          "output": "[\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env.example\",\"debug.log\",\"logs/app.log\",\"README.md\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Turn each pattern into a RegExp: escape regex characters, **/ → (?:.*/)?, ** → .*, * → [^/]*, and allow an optional (/.*)? at the end for “inside it”.|||Biến mỗi mẫu thành RegExp: escape ký tự regex, **/ → (?:.*/)?, ** → .*, * → [^/]*, và cho phép (/.*)? ở cuối cho “nằm bên trong”.",
+        "For each file walk all rules in order and keep the result of the last match.|||Với mỗi tệp duyệt mọi luật theo thứ tự và giữ kết quả của lần khớp cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** files sent in the build context */\nfunction contextFiles(files, dockerignore) {\n  // Write your solution here\n  const rules = dockerignore.split('\\n').map((l) => l.trim()).filter(Boolean);\n  return files.filter((f) => !rules.includes(f));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction contextFiles(files, dockerignore) {\n  // Mỗi dòng là một luật; \"!\" mở lại; luật KHỚP SAU CÙNG thắng. Luật khớp chính đường dẫn, mọi thứ bên trong nó,\n  // hoặc theo ký tự đại diện (* trong một đoạn, ** qua nhiều đoạn), luôn tính từ gốc context.\n  const rules = dockerignore.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).map((l) => {\n    const neg = l.startsWith('!');\n    const p = (neg ? l.slice(1) : l).replace(/^\\/+|\\/+$/g, '');\n    const rx = new RegExp('^' + p.split(/(\\*\\*\\/|\\*\\*|\\*)/).map((t) => (t === '**/' ? '(?:.*/)?' : t === '**' ? '.*' : t === '*' ? '[^/]*' : t.replace(/[.+?^${}()|[\\]\\\\]/g, '\\\\$&'))).join('') + '(/.*)?$');\n    return { neg, rx };\n  });\n  return files.filter((f) => {\n    let ignored = false;\n    for (const r of rules) if (r.rx.test(f)) ignored = !r.neg;\n    return !ignored;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four lines — node_modules, .git, .env, dist — commit them on day one. node_modules is the wrong OS (the invalid ELF header of 17.1), .git holds a secret you deleted in a later commit, .env was readable in the image, and dist is rebuilt inside anyway.</p>",
+      "solutionExplanationHtmlVi": "<p>Bốn dòng — node_modules, .git, .env, dist — commit ngay ngày đầu. node_modules sai hệ điều hành (lỗi invalid ELF header của 17.1), .git giữ một bí mật bạn đã xoá ở commit sau, .env đọc được trong ảnh, còn dist được build lại bên trong.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The four-line .dockerignore",
+              "vi": ".dockerignore bốn dòng"
+            },
+            "goi": "contextFiles([\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env\",\".env.example\",\".git/HEAD\",\".git/objects/ab/cdef\",\"node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node\",\"node_modules/express/index.js\",\"dist/index.js\",\"debug.log\",\"logs/app.log\",\"README.md\"], \"node_modules\\n.git\\n.env\\ndist\")",
+            "mongDoi": [
+              "Dockerfile",
+              "package.json",
+              "package-lock.json",
+              "src/index.js",
+              "src/routes/notes.js",
+              ".env.example",
+              "debug.log",
+              "logs/app.log",
+              "README.md"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No .dockerignore at all",
+              "vi": "Không có .dockerignore"
+            },
+            "goi": "contextFiles([\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env\",\".env.example\",\".git/HEAD\",\".git/objects/ab/cdef\",\"node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node\",\"node_modules/express/index.js\",\"dist/index.js\",\"debug.log\",\"logs/app.log\",\"README.md\"], \"\")",
+            "mongDoi": [
+              "Dockerfile",
+              "package.json",
+              "package-lock.json",
+              "src/index.js",
+              "src/routes/notes.js",
+              ".env",
+              ".env.example",
+              ".git/HEAD",
+              ".git/objects/ab/cdef",
+              "node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node",
+              "node_modules/express/index.js",
+              "dist/index.js",
+              "debug.log",
+              "logs/app.log",
+              "README.md"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "contextFiles([\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env\",\".env.example\",\".git/HEAD\",\".git/objects/ab/cdef\",\"node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node\",\"node_modules/express/index.js\",\"dist/index.js\",\"debug.log\",\"logs/app.log\",\"README.md\"], \"# secrets\\n.env*\\n!.env.example\\n*.log\\nnode_modules/\\n/.git\")",
+            "mongDoi": [
+              "Dockerfile",
+              "package.json",
+              "package-lock.json",
+              "src/index.js",
+              "src/routes/notes.js",
+              ".env.example",
+              "dist/index.js",
+              "logs/app.log",
+              "README.md"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "contextFiles([\"Dockerfile\",\"package.json\",\"package-lock.json\",\"src/index.js\",\"src/routes/notes.js\",\".env\",\".env.example\",\".git/HEAD\",\".git/objects/ab/cdef\",\"node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node\",\"node_modules/express/index.js\",\"dist/index.js\",\"debug.log\",\"logs/app.log\",\"README.md\"], \"**/*.log\\nsrc\\n!src/index.js\\nREADME.md\")",
+            "mongDoi": [
+              "Dockerfile",
+              "package.json",
+              "package-lock.json",
+              "src/index.js",
+              ".env",
+              ".env.example",
+              ".git/HEAD",
+              ".git/objects/ab/cdef",
+              "node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node",
+              "node_modules/express/index.js",
+              "dist/index.js"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "contextFiles([\"a.txt\",\"b.txt\"], \"*\\n!b.txt\")",
+            "mongDoi": [
+              "b.txt"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Matching only exact paths: node_modules/… and .git/… are still sent — wrong-OS binaries and the whole history.|||Chỉ khớp đường dẫn chính xác: node_modules/… và .git/… vẫn bị gửi — binary sai hệ điều hành và toàn bộ lịch sử."
+        },
+        {
+          "loi": "Letting * cross “/”: *.log then also drops logs/app.log, which is not what .dockerignore does.|||Cho * vượt qua “/”: *.log khi đó bỏ cả logs/app.log, không đúng với .dockerignore."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": ".dockerignore",
+          "vi": ".dockerignore"
+        },
+        {
+          "en": "negation",
+          "vi": "phủ định",
+          "giaiThich": "!pattern re-includes"
+        }
+      ]
+    },
+    {
+      "title": "rebuiltSteps(dockerfile, change): which steps re-run after a change?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Docker",
+        "build cache",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Simulate the layer cache of a <b>single-stage</b> Dockerfile with a warm cache. <code>change = { files, args, baseMoved }</code>: the context files whose content changed, the build args whose value changed, and whether the base tag now points to a new image. Walk the steps in order (blank lines and comments skipped); once one step is invalidated, it and <b>every later step</b> rebuild. A step is invalidated by:</p><ul><li><code>FROM</code> — when <code>baseMoved</code>;</li><li><code>COPY</code> (without <code>--from</code>) — when a changed file matches one of its sources: <code>.</code> matches any file; otherwise the source matches a file equal to it or inside it, <code>*</code> matching anything but <code>/</code> (<code>package*.json</code>, <code>src</code>, <code>src/</code>); flags like <code>--chown=…</code> are not sources, the last token is the destination;</li><li><code>RUN</code> — when any <code>ARG</code> declared above it (name before an optional <code>=default</code>) is in <code>args</code>. An <code>ARG</code> line itself never invalidates.</li></ul><p>Return the rebuilt step lines, in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng cache tầng của một Dockerfile <b>một giai đoạn</b> với cache đã ấm. <code>change = { files, args, baseMoved }</code>: các tệp trong context đã đổi nội dung, các build arg đã đổi giá trị, và thẻ ảnh nền giờ có trỏ tới ảnh mới không. Duyệt các bước theo thứ tự (bỏ dòng trống và chú thích); một khi một bước bị vô hiệu, nó và <b>mọi bước sau</b> đều build lại. Một bước bị vô hiệu khi:</p><ul><li><code>FROM</code> — khi <code>baseMoved</code>;</li><li><code>COPY</code> (không có <code>--from</code>) — khi một tệp đã đổi khớp một nguồn của nó: <code>.</code> khớp mọi tệp; còn lại nguồn khớp tệp bằng đúng nó hoặc nằm trong nó, <code>*</code> khớp mọi thứ trừ <code>/</code> (<code>package*.json</code>, <code>src</code>, <code>src/</code>); cờ như <code>--chown=…</code> không phải nguồn, token cuối là đích;</li><li><code>RUN</code> — khi một <code>ARG</code> khai phía trên (tên đứng trước <code>=mặc định</code> nếu có) nằm trong <code>args</code>. Bản thân dòng <code>ARG</code> không bao giờ làm vô hiệu.</li></ul><p>Trả về các dòng bước được build lại, theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rebuiltSteps(\"FROM node:22-slim\\nWORKDIR /app\\nCOPY . .\\nRUN npm ci\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"files\":[\"src/index.js\"],\"args\":[],\"baseMoved\":false})",
+          "output": "[\"COPY . .\",\"RUN npm ci\",\"CMD [\\\"node\\\", \\\"src/index.js\\\"]\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a single boolean busted; before it flips, check the step’s own rule; after it flips, every step is pushed.|||Giữ một boolean busted; trước khi nó bật, xét luật riêng của bước; sau khi bật, bước nào cũng được đẩy vào.",
+        "Remember declared ARG names in an array as you walk; a RUN checks that array against change.args.|||Ghi nhớ tên các ARG đã khai vào một mảng khi duyệt; RUN so mảng đó với change.args."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which steps re-run? */\nfunction rebuiltSteps(dockerfile, change) {\n  // Write your solution here — this only marks the COPY steps themselves\n  const steps = dockerfile.split('\\n').map((l) => l.trim()).filter(Boolean);\n  return steps.filter((s) => /^COPY/i.test(s) && change.files.some((f) => s.includes(f.split('/')[0])));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rebuiltSteps(dockerfile, change) {\n  const steps = dockerfile.split('\\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));\n  const glob = (p) => new RegExp('^' + p.replace(/^\\.\\//, '').replace(/\\/$/, '').split('*').map((s) => s.replace(/[.+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('[^/]*') + '(/.*)?$');\n  const touches = (src) => src === '.' || src === './' ? change.files.length > 0 : change.files.some((f) => glob(src).test(f));\n  const args = [];\n  let busted = false;\n  const out = [];\n  for (const s of steps) {\n    const [kw, ...rest] = s.split(/\\s+/);\n    const k = kw.toUpperCase();\n    if (!busted) {\n      if (k === 'FROM' && change.baseMoved) busted = true;                                     // tầng đáy mới ⇒ mọi thứ build lại\n      if (k === 'ARG') args.push(rest[0].split('=')[0]);                                       // khai báo: chưa phá gì\n      if (k === 'RUN' && args.some((a) => (change.args || []).includes(a))) busted = true;     // RUN nhận mọi ARG đã khai ⇒ giá trị mới phá cache\n      if (k === 'COPY') {\n        const srcs = rest.filter((t) => !t.startsWith('--')).slice(0, -1);                     // bỏ cờ, bỏ đích\n        if (!rest.some((t) => t.startsWith('--from=')) && srcs.some(touches)) busted = true;    // checksum tệp được chép đã đổi\n      }\n    }\n    if (busted) out.push(s);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>COPY . . first: a one-line change to src/index.js re-runs npm ci (4.36 s). Package files first: npm ci stays CACHED, only COPY src and what follows re-run (0.47 s). An ARG BUILD_TIME at the top re-ran npm ci on every build (6.53 s); moved right before its RUN, only that step re-ran (1.79 s).</p>",
+      "solutionExplanationHtmlVi": "<p>COPY . . trước: đổi một dòng src/index.js làm npm ci chạy lại (4,36 s). Tệp package trước: npm ci vẫn CACHED, chỉ COPY src và các bước sau chạy lại (0,47 s). ARG BUILD_TIME ở đầu làm npm ci chạy lại mỗi lần build (6,53 s); dời tới ngay trước RUN của nó thì chỉ bước đó chạy lại (1,79 s).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "COPY . . first, one source line changed",
+              "vi": "COPY . . trước, đổi một dòng mã"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22-slim\\nWORKDIR /app\\nCOPY . .\\nRUN npm ci\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"files\":[\"src/index.js\"],\"args\":[],\"baseMoved\":false})",
+            "mongDoi": [
+              "COPY . .",
+              "RUN npm ci",
+              "CMD [\"node\", \"src/index.js\"]"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Package files first, same change",
+              "vi": "Tệp package trước, cùng thay đổi"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY src ./src\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"files\":[\"src/index.js\"],\"args\":[],\"baseMoved\":false})",
+            "mongDoi": [
+              "COPY src ./src",
+              "CMD [\"node\", \"src/index.js\"]"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY src ./src\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"files\":[\"package-lock.json\"],\"args\":[],\"baseMoved\":false})",
+            "mongDoi": [
+              "COPY package*.json ./",
+              "RUN npm ci",
+              "COPY src ./src",
+              "CMD [\"node\", \"src/index.js\"]"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nARG BUILD_TIME\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY src ./src\\nRUN echo $BUILD_TIME > built.txt\", {\"files\":[],\"args\":[\"BUILD_TIME\"],\"baseMoved\":false})",
+            "mongDoi": [
+              "RUN npm ci",
+              "COPY src ./src",
+              "RUN echo $BUILD_TIME > built.txt"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY src ./src\\nARG BUILD_TIME\\nRUN echo $BUILD_TIME > built.txt\", {\"files\":[],\"args\":[\"BUILD_TIME\"],\"baseMoved\":false})",
+            "mongDoi": [
+              "RUN echo $BUILD_TIME > built.txt"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nWORKDIR /app\\nCOPY package*.json ./\\nRUN npm ci\\nCOPY src ./src\\nCMD [\\\"node\\\", \\\"src/index.js\\\"]\", {\"files\":[\"README.md\"],\"args\":[],\"baseMoved\":true})",
+            "mongDoi": [
+              "FROM node:22.23.4-slim",
+              "WORKDIR /app",
+              "COPY package*.json ./",
+              "RUN npm ci",
+              "COPY src ./src",
+              "CMD [\"node\", \"src/index.js\"]"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "rebuiltSteps(\"FROM node:22.23.4-slim\\nARG NODE_VER=22\\nCOPY --chown=node:node package.json package-lock.json ./\\nRUN npm ci\\nCOPY --chown=node:node src/ ./src/\\nRUN npm test\", {\"files\":[\"README.md\",\"src/lib/x.js\"],\"args\":[\"OTHER\"],\"baseMoved\":false})",
+            "mongDoi": [
+              "COPY --chown=node:node src/ ./src/",
+              "RUN npm test"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Invalidating only the changed step: Docker rebuilds every layer AFTER it too, which is why npm ci re-ran on every commit.|||Chỉ vô hiệu bước đã đổi: Docker build lại cả mọi tầng SAU nó, nên npm ci mới chạy lại ở mọi commit."
+        },
+        {
+          "loi": "Treating the ARG line as the invalidated step: the cache break shows up at the first RUN after it.|||Coi dòng ARG là bước bị vô hiệu: chỗ vỡ cache hiện ra ở RUN đầu tiên sau nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache invalidation",
+          "vi": "vô hiệu cache"
+        },
+        {
+          "en": "warm cache",
+          "vi": "cache đã ấm"
+        }
+      ]
+    }
+  ]
+}

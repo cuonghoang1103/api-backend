@@ -1,0 +1,862 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-12-5-pubsub-streams",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-12-5-pubsub-streams"
+  },
+  "exercises": [
+    {
+      "title": "12.5 · Decide by what may be lost",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Pub/Sub",
+        "Streams"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Speed is a non-argument — PUBLISH, XADD and LPUSH are all one round trip (22–31 ms for 10,000 in a pipeline). Choose on semantics: what happens to a message nobody was listening for, and to a job whose worker dies?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tốc độ không phải lý lẽ — PUBLISH, XADD và LPUSH đều một vòng đi-về (22–31 ms cho 10.000 trong một pipeline). Chọn theo ngữ nghĩa: tin nhắn không ai nghe thì sao, và job có worker chết giữa chừng thì sao?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: if the receiver is down for 5 seconds, is that message still needed?|||Hỏi: nếu bên nhận tắt 5 giây, tin đó có còn cần không?",
+        "“Must complete” ⇒ acknowledgement ⇒ stream.|||\"Phải hoàn tất\" ⇒ cần xác nhận ⇒ stream."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5 · Decide by what may be lost\n\nAnswer in the answer panel (no code needed).\n\n1. Scenario → mechanismTình huống → cơ chế\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5 · Decide by what may be lost — answer key\n\n1. Scenario → mechanismTình huống → cơ chế\n   - r1.m: Pub/Sub\n   - r2.m: Pub/Sub\n   - r3.m: Stream + consumer group\n   - r4.m: Stream + consumer group\n   - r5.m: List + BRPOP\n   - r6.m: Pub/Sub\n   Pub/Sub delivers to whoever is listening at that instant and stores nothing — perfect when a missed message is harmless. List + BRPOP is one message to one worker with NO acknowledgement. A stream with a consumer group gives one message to one worker, a pending list for what was delivered and never acknowledged, and XAUTOCLAIM to reclaim it.VI: Pub/Sub giao cho ai đang nghe ngay lúc đó và không lưu gì — hoàn hảo khi lỡ một tin là vô hại. List + BRPOP là một tin cho một worker, KHÔNG xác nhận. Stream với consumer group cho một tin tới một worker, một danh sách chờ cho những gì đã giao mà chưa xác nhận, và XAUTOCLAIM để nhặt lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pub/Sub delivers to whoever is listening at that instant and stores nothing — perfect when a missed message is harmless. List + BRPOP is one message to one worker with NO acknowledgement. A stream with a consumer group gives one message to one worker, a pending list for what was delivered and never acknowledged, and XAUTOCLAIM to reclaim it.</p><p><i>VI: Pub/Sub giao cho ai đang nghe ngay lúc đó và không lưu gì — hoàn hảo khi lỡ một tin là vô hại. List + BRPOP là một tin cho một worker, KHÔNG xác nhận. Stream với consumer group cho một tin tới một worker, một danh sách chờ cho những gì đã giao mà chưa xác nhận, và XAUTOCLAIM để nhặt lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Scenario → mechanism</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → cơ chế</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Scenario"
+              },
+              {
+                "ma": "m",
+                "ten": "Mechanism",
+                "luaChon": [
+                  "Pub/Sub",
+                  "List + BRPOP",
+                  "Stream + consumer group"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "“Key note:42 changed — drop your local copy” to every Node process"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Socket.IO room broadcast between two Node processes (the Redis adapter)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Send the welcome email; a worker crash must not lose it"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Charge a card; you must be able to see what was delivered and never acknowledged"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "A throw-away local queue of thumbnail jobs where losing one on a crash is acceptable, lightest on RAM"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Live “who is online” presence that every client re-fetches after reconnecting"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "Pub/Sub",
+              "r2.m": "Pub/Sub",
+              "r3.m": "Stream + consumer group",
+              "r4.m": "Stream + consumer group",
+              "r5.m": "List + BRPOP",
+              "r6.m": "Pub/Sub"
+            },
+            "giaiThich": "<p>Pub/Sub delivers to whoever is listening at that instant and stores nothing — perfect when a missed message is harmless. List + BRPOP is one message to one worker with NO acknowledgement. A stream with a consumer group gives one message to one worker, a pending list for what was delivered and never acknowledged, and XAUTOCLAIM to reclaim it.</p><p><i>VI: Pub/Sub giao cho ai đang nghe ngay lúc đó và không lưu gì — hoàn hảo khi lỡ một tin là vô hại. List + BRPOP là một tin cho một worker, KHÔNG xác nhận. Stream với consumer group cho một tin tới một worker, một danh sách chờ cho những gì đã giao mà chưa xác nhận, và XAUTOCLAIM để nhặt lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Pub/Sub for email jobs: PUBLISH returns 0 when no worker listens, and the email is simply gone.|||Dùng Pub/Sub cho job email: PUBLISH trả 0 khi không worker nào nghe, và email biến mất."
+        },
+        {
+          "loi": "Using a List for payments: a worker that dies after BRPOP took the job loses it with no trace.|||Dùng List cho thanh toán: worker chết sau khi BRPOP lấy job là mất job không dấu vết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Pub/Sub",
+          "vi": "phát/đăng ký",
+          "giaiThich": "phát cho ai đang nghe; không lưu, không lấy lại được"
+        },
+        {
+          "en": "consumer group",
+          "vi": "nhóm tiêu thụ",
+          "giaiThich": "mỗi tin tới đúng một thành viên, có danh sách chờ xác nhận"
+        }
+      ]
+    },
+    {
+      "title": "12.5 · The traps that cost an afternoon each",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Pub/Sub",
+        "Streams"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Each question is a real failure from the lesson’s measurements.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi câu là một lỗi thật trong các phép đo của bài.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Pub/Sub has no memory; streams are a log.|||Pub/Sub không có trí nhớ; stream là một cuốn nhật ký.",
+        "Anything registered on reconnect is registered N times after N reconnects.|||Thứ gì đăng ký trong lúc nối lại sẽ bị đăng ký N lần sau N lần nối lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5 · The traps that cost an afternoon each\n\nAnswer in the answer panel (no code needed).\n\n1. A subscriber was disconnected while you published \"tin-khi-offline\". PUBLISH returned 0. Where is the message now?Bên đăng ký bị rớt khi bạn phát \"tin-khi-offline\". PUBLISH trả về 0. Tin đó giờ ở đâu?\n2. You call redis.get() on the shared client after calling subscribe() on it. What happens?Bạn gọi redis.get() trên client dùng chung sau khi đã gọi subscribe() trên nó. Chuyện gì xảy ra?\n3. After a reconnect your service received tin-4 TWICE. The cause in the lesson?Sau khi nối lại, dịch vụ nhận tin-4 HAI lần. Nguyên nhân trong bài?\n4. XTRIM jobs MAXLEN ~ 1000 on a stream of 50,000 left 40,000 entries. Why?XTRIM jobs MAXLEN ~ 1000 trên stream 50.000 mục để lại 40.000 mục. Vì sao?\n5. In the worker loop, why does XACK go AFTER handle(fields), never before?Trong vòng lặp worker, vì sao XACK đặt SAU handle(fields), không bao giờ trước?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5 · The traps that cost an afternoon each — answer key\n\n1. A subscriber was disconnected while you published \"tin-khi-offline\". PUBLISH returned 0. Where is the message now?Bên đăng ký bị rớt khi bạn phát \"tin-khi-offline\". PUBLISH trả về 0. Tin đó giờ ở đâu?\n   Answer: b) Nowhere — it was delivered to zero subscribers and Redis never stored it\n   0 is not an error, it is the number of receivers. Persistence saves keys; a published message was never a key.VI: 0 không phải lỗi, nó là số người nhận. Lưu bền lưu khoá; một tin đã phát chưa bao giờ là khoá.\n\n2. You call redis.get() on the shared client after calling subscribe() on it. What happens?Bạn gọi redis.get() trên client dùng chung sau khi đã gọi subscribe() trên nó. Chuyện gì xảy ra?\n   Answer: d) It throws: a subscribed connection only runs subscribe commands\n   A subscribed connection can only run subscribe-family commands. Share the singleton of 12.1 for subscribe and every other Redis call starts throwing.VI: Kết nối đã subscribe chỉ chạy được lệnh họ subscribe. Dùng chung singleton của 12.1 để subscribe là mọi lệnh Redis khác bắt đầu ném lỗi.\n\n3. After a reconnect your service received tin-4 TWICE. The cause in the lesson?Sau khi nối lại, dịch vụ nhận tin-4 HAI lần. Nguyên nhân trong bài?\n   Answer: c) sub.on('message', handler) was called again on reconnect, so two handlers fired\n   Register the listener ONCE, outside the reconnect path; on reconnect only re-subscribe. Otherwise one message becomes eight after a bad network week.VI: Đăng ký bộ nghe MỘT lần, ngoài đường nối lại; khi nối lại chỉ subscribe lại. Không thì một tin thành tám sau một tuần mạng xấu.\n\n4. XTRIM jobs MAXLEN ~ 1000 on a stream of 50,000 left 40,000 entries. Why?XTRIM jobs MAXLEN ~ 1000 trên stream 50.000 mục để lại 40.000 mục. Vì sao?\n   Answer: b) ~ trims only whole nodes and Redis caps how many it scans per call — use the exact form or LIMIT 0\n   The form every tutorial recommends freed almost nothing. Exact MAXLEN 1000 left 1,000 entries (0.03 MB). An untrimmed stream grows forever — it has no TTL to save you.VI: Dạng mọi hướng dẫn khuyên gần như không giải phóng gì. MAXLEN 1000 chính xác để lại 1.000 mục (0,03 MB). Stream không cắt sẽ lớn mãi — nó không có TTL nào cứu bạn.\n\n5. In the worker loop, why does XACK go AFTER handle(fields), never before?Trong vòng lặp worker, vì sao XACK đặt SAU handle(fields), không bao giờ trước?\n   Answer: d) An early ACK turns a crash into a silently dropped job\n   Delivered-but-unacknowledged entries sit in the pending entries list; if the worker dies, another reclaims them with XAUTOCLAIM. ACK first and there is nothing left to reclaim.VI: Mục đã giao mà chưa xác nhận nằm trong danh sách chờ; worker chết thì worker khác nhặt lại bằng XAUTOCLAIM. ACK trước thì không còn gì để nhặt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Nowhere — it was delivered to zero subscribers and Redis never stored it</p><p>0 is not an error, it is the number of receivers. Persistence saves keys; a published message was never a key.</p><p><i>VI: 0 không phải lỗi, nó là số người nhận. Lưu bền lưu khoá; một tin đã phát chưa bao giờ là khoá.</i></p></li><li><p><b>d)</b> It throws: a subscribed connection only runs subscribe commands</p><p>A subscribed connection can only run subscribe-family commands. Share the singleton of 12.1 for subscribe and every other Redis call starts throwing.</p><p><i>VI: Kết nối đã subscribe chỉ chạy được lệnh họ subscribe. Dùng chung singleton của 12.1 để subscribe là mọi lệnh Redis khác bắt đầu ném lỗi.</i></p></li><li><p><b>c)</b> sub.on('message', handler) was called again on reconnect, so two handlers fired</p><p>Register the listener ONCE, outside the reconnect path; on reconnect only re-subscribe. Otherwise one message becomes eight after a bad network week.</p><p><i>VI: Đăng ký bộ nghe MỘT lần, ngoài đường nối lại; khi nối lại chỉ subscribe lại. Không thì một tin thành tám sau một tuần mạng xấu.</i></p></li><li><p><b>b)</b> ~ trims only whole nodes and Redis caps how many it scans per call — use the exact form or LIMIT 0</p><p>The form every tutorial recommends freed almost nothing. Exact MAXLEN 1000 left 1,000 entries (0.03 MB). An untrimmed stream grows forever — it has no TTL to save you.</p><p><i>VI: Dạng mọi hướng dẫn khuyên gần như không giải phóng gì. MAXLEN 1000 chính xác để lại 1.000 mục (0,03 MB). Stream không cắt sẽ lớn mãi — nó không có TTL nào cứu bạn.</i></p></li><li><p><b>d)</b> An early ACK turns a crash into a silently dropped job</p><p>Delivered-but-unacknowledged entries sit in the pending entries list; if the worker dies, another reclaims them with XAUTOCLAIM. ACK first and there is nothing left to reclaim.</p><p><i>VI: Mục đã giao mà chưa xác nhận nằm trong danh sách chờ; worker chết thì worker khác nhặt lại bằng XAUTOCLAIM. ACK trước thì không còn gì để nhặt.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A subscriber was disconnected while you published \"tin-khi-offline\". PUBLISH returned 0. Where is the message now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bên đăng ký bị rớt khi bạn phát \"tin-khi-offline\". PUBLISH trả về 0. Tin đó giờ ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the subscriber’s socket buffer, delivered after reconnect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nowhere — it was delivered to zero subscribers and Redis never stored it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In a backlog that Redis replays when the subscriber reconnects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the AOF file, so turning on persistence would recover it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>0 is not an error, it is the number of receivers. Persistence saves keys; a published message was never a key.</p><p><i>VI: 0 không phải lỗi, nó là số người nhận. Lưu bền lưu khoá; một tin đã phát chưa bao giờ là khoá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>You call redis.get() on the shared client after calling subscribe() on it. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn gọi redis.get() trên client dùng chung sau khi đã gọi subscribe() trên nó. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It works, but the reply arrives as a message event"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The GET is queued until you unsubscribe, then it runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redis silently opens a second connection for the GET"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It throws: a subscribed connection only runs subscribe commands"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A subscribed connection can only run subscribe-family commands. Share the singleton of 12.1 for subscribe and every other Redis call starts throwing.</p><p><i>VI: Kết nối đã subscribe chỉ chạy được lệnh họ subscribe. Dùng chung singleton của 12.1 để subscribe là mọi lệnh Redis khác bắt đầu ném lỗi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After a reconnect your service received tin-4 TWICE. The cause in the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi nối lại, dịch vụ nhận tin-4 HAI lần. Nguyên nhân trong bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The publisher retried because PUBLISH returned 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two subscriber processes were in the same consumer group"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sub.on('message', handler) was called again on reconnect, so two handlers fired"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Redis redelivers the last message after every reconnect"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Register the listener ONCE, outside the reconnect path; on reconnect only re-subscribe. Otherwise one message becomes eight after a bad network week.</p><p><i>VI: Đăng ký bộ nghe MỘT lần, ngoài đường nối lại; khi nối lại chỉ subscribe lại. Không thì một tin thành tám sau một tuần mạng xấu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>XTRIM jobs MAXLEN ~ 1000 on a stream of 50,000 left 40,000 entries. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>XTRIM jobs MAXLEN ~ 1000 trên stream 50.000 mục để lại 40.000 mục. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "MAXLEN counts bytes, not entries, so 1,000 meant 1 KB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "~ trims only whole nodes and Redis caps how many it scans per call — use the exact form or LIMIT 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The stream had a consumer group, and pending entries cannot be trimmed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The trim runs in the background and finishes a few seconds later"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The form every tutorial recommends freed almost nothing. Exact MAXLEN 1000 left 1,000 entries (0.03 MB). An untrimmed stream grows forever — it has no TTL to save you.</p><p><i>VI: Dạng mọi hướng dẫn khuyên gần như không giải phóng gì. MAXLEN 1000 chính xác để lại 1.000 mục (0,03 MB). Stream không cắt sẽ lớn mãi — nó không có TTL nào cứu bạn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In the worker loop, why does XACK go AFTER handle(fields), never before?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong vòng lặp worker, vì sao XACK đặt SAU handle(fields), không bao giờ trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "XACK before the work blocks the stream for other consumers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis rejects XACK for an entry whose handler has not returned"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Acknowledging first doubles the throughput but loses ordering"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An early ACK turns a crash into a silently dropped job"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Delivered-but-unacknowledged entries sit in the pending entries list; if the worker dies, another reclaims them with XAUTOCLAIM. ACK first and there is nothing left to reclaim.</p><p><i>VI: Mục đã giao mà chưa xác nhận nằm trong danh sách chờ; worker chết thì worker khác nhặt lại bằng XAUTOCLAIM. ACK trước thì không còn gì để nhặt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“We will re-publish on reconnect” — that is building a stream badly.|||\"Nối lại thì phát lại\" — đó là tự xây một stream dở."
+        },
+        {
+          "loi": "Trusting MAXLEN ~ to bound memory without measuring XLEN afterwards.|||Tin MAXLEN ~ giới hạn được bộ nhớ mà không đo lại XLEN sau đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pending entries list (PEL)",
+          "vi": "danh sách chờ xác nhận",
+          "giaiThich": "tin đã giao cho một consumer mà chưa XACK"
+        },
+        {
+          "en": "XAUTOCLAIM",
+          "vi": "tự nhặt lại",
+          "giaiThich": "chuyển tin chờ quá lâu sang consumer khác"
+        }
+      ]
+    },
+    {
+      "title": "12.5 · A stream worker that never drops a job",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "consumer group",
+        "at-least-once"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s worker loop reads with <code>XREADGROUP … &gt;</code>, handles each entry, and acknowledges <b>only after the work succeeded</b>. Write two functions over the provided <code>FakeStream</code>:</p><ul><li><code>workBatch(stream, consumer, handle)</code> — read up to 10 new entries for <code>consumer</code>; for each, <code>await handle(fields)</code>; on success <code>XACK</code> it; on failure leave it pending and carry on with the next one. Resolve to <code>{ done: [ids], failed: [ids] }</code>.</li><li><code>reclaim(stream, consumer, minIdleMs, handle)</code> — take over entries that have been pending for at least <code>minIdleMs</code> (<code>xautoclaim</code>, up to 10) and process them exactly like <code>workBatch</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>XACK only after handle resolved.</li>\n  <li>One failing entry does not stop the batch, and is NOT acknowledged.</li>\n  <li>Share the processing code between the two functions.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vòng lặp worker của bài đọc bằng <code>XREADGROUP … &gt;</code>, xử lý từng mục, và chỉ xác nhận <b>sau khi việc đã thành công</b>. Viết hai hàm trên <code>FakeStream</code> có sẵn:</p><ul><li><code>workBatch(stream, consumer, handle)</code> — đọc tối đa 10 mục mới cho <code>consumer</code>; với mỗi mục <code>await handle(fields)</code>; thành công thì <code>XACK</code>; hỏng thì để nó chờ và làm tiếp mục sau. Resolve ra <code>{ done: [ids], failed: [ids] }</code>.</li><li><code>reclaim(stream, consumer, minIdleMs, handle)</code> — nhận lại các mục đã chờ ít nhất <code>minIdleMs</code> (<code>xautoclaim</code>, tối đa 10) và xử lý y như <code>workBatch</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ XACK sau khi handle đã resolve.</li>\n  <li>Một mục hỏng không dừng cả lô, và KHÔNG được xác nhận.</li>\n  <li>Dùng chung phần xử lý cho cả hai hàm.</li>\n</ul>",
+      "inputSpec": "stream — FakeStream · consumer — string · handle — async (fields) => any · minIdleMs — number|||stream — FakeStream · consumer — chuỗi · handle — async (fields) => any · minIdleMs — số",
+      "outputSpec": "Promise<{ done: string[], failed: string[] }>",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };\n[await workBatch(s, 'A', ok).then((r) => [r.done.length, r.failed.length]), sent, (await s.xpending()).count]",
+          "output": "[[5,0],[\"mail-1\",\"mail-2\",\"mail-3\",\"mail-4\",\"mail-5\"],0]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write one helper process(stream, entries, handle) that loops: try { await handle(f); await stream.xack(id); done.push(id) } catch { failed.push(id) }.|||Viết một hàm phụ process(stream, entries, handle) lặp: try { await handle(f); await stream.xack(id); done.push(id) } catch { failed.push(id) }.",
+        "workBatch = process(await stream.xreadgroup(consumer, 10)); reclaim = process(await stream.xautoclaim(consumer, minIdleMs, 10))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Read up to 10 new entries and process them. */\nasync function workBatch(stream, consumer, handle) {\n  // Write your solution here — this acknowledges BEFORE the work\n  const entries = await stream.xreadgroup(consumer, 10);\n  const done = [], failed = [];\n  for (const [id, fields] of entries) {\n    await stream.xack(id);\n    try { await handle(fields); done.push(id); } catch (e) { failed.push(id); }\n  }\n  return { done, failed };\n}\n\n/** Take over entries pending for at least minIdleMs and process them. */\nasync function reclaim(stream, consumer, minIdleMs, handle) {\n  return { done: [], failed: [] };\n}\n"
+        },
+        {
+          "name": "fake-stream.js",
+          "language": "javascript",
+          "code": "// fake-stream.js — PROVIDED by the exercise (loaded before answer.js). A Redis stream with ONE consumer group.\n// Every call is async (one 1 ms round trip on the virtual clock).\n//   await s.xadd({ job: 'mail-1' })                    → id '<ms>-<seq>'\n//   await s.xreadgroup(consumer, count)                → [[id, fields], …] never delivered before ('>'); they become PENDING for consumer\n//   await s.xack(...ids)                               → how many were removed from the pending list\n//   await s.xautoclaim(consumer, minIdleMs, count)     → [[id, fields], …] pending for ≥ minIdleMs, now owned by consumer\n//   await s.xpending()                                 → { count, byConsumer: { name: n } }\n//   s.log  — what happened, for the tests\nclass FakeStream {\n  constructor() { this.entries = []; this.lastMs = -1; this.seq = 0; this.next = 0; this.pending = new Map(); this.log = []; }\n  _rt(v) { return new Promise((ok) => setTimeout(() => ok(v), 1)); }\n  xadd(fields) {\n    const ms = Date.now(); this.seq = ms === this.lastMs ? this.seq + 1 : 0; this.lastMs = ms;\n    const id = ms + '-' + this.seq; this.entries.push([id, { ...fields }]); return this._rt(id);\n  }\n  xreadgroup(consumer, count) {\n    const out = this.entries.slice(this.next, this.next + (count || 10)); this.next += out.length;\n    for (const [id] of out) this.pending.set(id, { consumer, at: Date.now(), deliveries: 1 });\n    this.log.push(consumer + ' read ' + out.length);\n    return this._rt(out.map(([id, f]) => [id, { ...f }]));\n  }\n  xack(...ids) { let n = 0; for (const id of ids.flat()) if (this.pending.delete(id)) n++; this.log.push('ack ' + n); return this._rt(n); }\n  xautoclaim(consumer, minIdleMs, count) {\n    const now = Date.now(), out = [];\n    for (const [id, p] of this.pending) {\n      if (out.length >= (count || 10)) break;\n      if (now - p.at >= minIdleMs) { p.consumer = consumer; p.at = now; p.deliveries++; out.push([id, { ...this.entries.find((e) => e[0] === id)[1] }]); }\n    }\n    this.log.push(consumer + ' claimed ' + out.length);\n    return this._rt(out);\n  }\n  xpending() {\n    const byConsumer = {}; for (const p of this.pending.values()) byConsumer[p.consumer] = (byConsumer[p.consumer] || 0) + 1;\n    return this._rt({ count: this.pending.size, byConsumer });\n  }\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Process entries: acknowledge ONLY after the work succeeded. */\nasync function processEntries(stream, entries, handle) {\n  const done = [], failed = [];\n  for (const [id, fields] of entries) {\n    try {\n      await handle(fields);\n      await stream.xack(id);           // the job is finished — only now may it leave the pending list\n      done.push(id);\n    } catch (e) {\n      failed.push(id);                 // NOT acknowledged: it stays pending and can be reclaimed later\n    }\n  }\n  return { done, failed };\n}\n\n/** Read up to 10 new entries ('>') and process them. */\nasync function workBatch(stream, consumer, handle) {\n  return processEntries(stream, await stream.xreadgroup(consumer, 10), handle);\n}\n\n/** Take over entries pending for at least minIdleMs (their worker probably died) and process them. */\nasync function reclaim(stream, consumer, minIdleMs, handle) {\n  return processEntries(stream, await stream.xautoclaim(consumer, minIdleMs, 10), handle);\n}\n"
+        },
+        {
+          "name": "fake-stream.js",
+          "language": "javascript",
+          "code": "// fake-stream.js — PROVIDED by the exercise (loaded before answer.js). A Redis stream with ONE consumer group.\n// Every call is async (one 1 ms round trip on the virtual clock).\n//   await s.xadd({ job: 'mail-1' })                    → id '<ms>-<seq>'\n//   await s.xreadgroup(consumer, count)                → [[id, fields], …] never delivered before ('>'); they become PENDING for consumer\n//   await s.xack(...ids)                               → how many were removed from the pending list\n//   await s.xautoclaim(consumer, minIdleMs, count)     → [[id, fields], …] pending for ≥ minIdleMs, now owned by consumer\n//   await s.xpending()                                 → { count, byConsumer: { name: n } }\n//   s.log  — what happened, for the tests\nclass FakeStream {\n  constructor() { this.entries = []; this.lastMs = -1; this.seq = 0; this.next = 0; this.pending = new Map(); this.log = []; }\n  _rt(v) { return new Promise((ok) => setTimeout(() => ok(v), 1)); }\n  xadd(fields) {\n    const ms = Date.now(); this.seq = ms === this.lastMs ? this.seq + 1 : 0; this.lastMs = ms;\n    const id = ms + '-' + this.seq; this.entries.push([id, { ...fields }]); return this._rt(id);\n  }\n  xreadgroup(consumer, count) {\n    const out = this.entries.slice(this.next, this.next + (count || 10)); this.next += out.length;\n    for (const [id] of out) this.pending.set(id, { consumer, at: Date.now(), deliveries: 1 });\n    this.log.push(consumer + ' read ' + out.length);\n    return this._rt(out.map(([id, f]) => [id, { ...f }]));\n  }\n  xack(...ids) { let n = 0; for (const id of ids.flat()) if (this.pending.delete(id)) n++; this.log.push('ack ' + n); return this._rt(n); }\n  xautoclaim(consumer, minIdleMs, count) {\n    const now = Date.now(), out = [];\n    for (const [id, p] of this.pending) {\n      if (out.length >= (count || 10)) break;\n      if (now - p.at >= minIdleMs) { p.consumer = consumer; p.at = now; p.deliveries++; out.push([id, { ...this.entries.find((e) => e[0] === id)[1] }]); }\n    }\n    this.log.push(consumer + ' claimed ' + out.length);\n    return this._rt(out);\n  }\n  xpending() {\n    const byConsumer = {}; for (const p of this.pending.values()) byConsumer[p.consumer] = (byConsumer[p.consumer] || 0) + 1;\n    return this._rt({ count: this.pending.size, byConsumer });\n  }\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An entry is acknowledged only once its work is done, so every failure — an exception or a dead worker — leaves it in the pending list, where XAUTOCLAIM can hand it to another consumer. That is the lesson’s “A gets 3, B gets 2, B crashes ⇒ PENDING 2, C reclaims both ⇒ PENDING 0”: at-least-once delivery, nothing lost.</p>",
+      "solutionExplanationHtmlVi": "<p>Một mục chỉ được xác nhận khi việc của nó đã xong, nên mọi kiểu hỏng — ngoại lệ hay worker chết — đều để nó lại trong danh sách chờ, nơi XAUTOCLAIM có thể giao cho consumer khác. Đó là \"A nhận 3, B nhận 2, B sập ⇒ PENDING 2, C nhặt lại cả hai ⇒ PENDING 0\" của bài: giao ít nhất một lần, không mất gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-stream.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Five jobs, all succeed → pending 0",
+              "vi": "Năm job, đều thành công → còn chờ 0"
+            },
+            "goi": "[await workBatch(s, 'A', ok).then((r) => [r.done.length, r.failed.length]), sent, (await s.xpending()).count]",
+            "chuanBi": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };",
+            "mongDoi": [
+              [
+                5,
+                0
+              ],
+              [
+                "mail-1",
+                "mail-2",
+                "mail-3",
+                "mail-4",
+                "mail-5"
+              ],
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "mail-3 fails → it stays pending, the others are done",
+              "vi": "mail-3 hỏng → nó vẫn chờ, các job khác xong"
+            },
+            "goi": "[await workBatch(s, 'A', failOn('mail-3')).then((r) => r.failed.length), sent, await s.xpending()]",
+            "chuanBi": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };",
+            "mongDoi": [
+              1,
+              [
+                "mail-1",
+                "mail-2",
+                "mail-4",
+                "mail-5"
+              ],
+              {
+                "count": 1,
+                "byConsumer": {
+                  "A": 1
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "B read 2 and died; C reclaims them after 50 ms idle",
+              "vi": "B đọc 2 rồi chết; C nhặt lại chúng sau 50 ms nhàn rỗi"
+            },
+            "goi": "await (async () => { await s.xreadgroup('B', 2); await sleep(60); const r = await reclaim(s, 'C', 50, ok); const rest = await workBatch(s, 'A', ok); return [r.done.length, rest.done.length, sent.length, (await s.xpending()).count]; })()",
+            "chuanBi": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };",
+            "mongDoi": [
+              2,
+              3,
+              5,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { await s.xreadgroup('B', 3); await sleep(10); const early = await reclaim(s, 'C', 50, ok); await sleep(50); const late = await reclaim(s, 'C', 50, ok); return [early.done.length, late.done.length, (await s.xpending()).count]; })()",
+            "chuanBi": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };",
+            "mongDoi": [
+              0,
+              3,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const first = await workBatch(s, 'A', failOn('mail-2')); await sleep(100); const again = await reclaim(s, 'A', 50, ok); return [first.failed, again.done.length === 1 && again.done[0] === first.failed[0], sent.filter((x) => x === 'mail-2').length, (await s.xpending()).count]; })()",
+            "chuanBi": "const s = new FakeStream();\nfor (let i = 1; i <= 5; i++) await s.xadd({ job: 'mail-' + i });\nconst sent = [];\nconst ok = async (f) => { await sleep(5); sent.push(f.job); };\nconst failOn = (bad) => async (f) => { await sleep(5); if (f.job === bad) throw new Error('SMTP 421'); sent.push(f.job); };",
+            "mongDoi": [
+              [
+                "1767225600001-0"
+              ],
+              true,
+              1,
+              0
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "XACK right after reading “so the stream does not redeliver”: a crash in handle silently drops the job.|||XACK ngay sau khi đọc \"để stream khỏi giao lại\": sập trong handle là job mất lặng lẽ."
+        },
+        {
+          "loi": "Letting one exception escape the loop: the rest of the batch stays pending even though it was never tried.|||Để một ngoại lệ thoát khỏi vòng lặp: phần còn lại của lô nằm chờ dù chưa từng được thử."
+        },
+        {
+          "loi": "Processing a batch with Promise.all and acknowledging all ids at the end: one failure makes you choose between losing it and redoing the others.|||Xử lý lô bằng Promise.all rồi xác nhận tất cả cuối cùng: một mục hỏng buộc bạn chọn giữa làm mất nó và làm lại các mục khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "at-least-once",
+          "vi": "ít nhất một lần",
+          "giaiThich": "hàng đợi có thể chạy lại một job — thử lại, job treo được nhặt lại, thêm trùng"
+        },
+        {
+          "en": "XACK",
+          "vi": "xác nhận",
+          "giaiThich": "báo đã làm xong — mục rời danh sách chờ"
+        },
+        {
+          "en": "XAUTOCLAIM",
+          "vi": "tự nhặt lại",
+          "giaiThich": "chuyển tin chờ quá lâu sang consumer khác"
+        }
+      ]
+    },
+    {
+      "title": "12.5 · Re-subscribe on reconnect without doubling the handler",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Pub/Sub",
+        "reconnect"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson’s own bug: on reconnect it called <code>sub.on('message', handler)</code> again, so after one reconnect every message fired twice (<code>[tin-1, tin-2, tin-3, tin-4, tin-4]</code>). A reconnected Redis connection is NOT subscribed any more, so you do have to subscribe again — but only subscribe. Write <code>listen(sub, channel, handler)</code>:</p><ul><li>register ONE <code>'message'</code> listener that calls <code>handler(message)</code> only for messages of <code>channel</code>;</li><li>on every <code>'ready'</code> event (the first connection and each reconnect), subscribe to <code>channel</code> again;</li><li>return nothing.</li></ul><p>Messages published while the subscriber is down are lost — that is Pub/Sub, not a bug to fix here.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly one \"message\" listener, however many reconnects.</li>\n  <li>Subscribe again on every \"ready\".</li>\n  <li>Ignore messages of other channels.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lỗi của chính bài học: khi nối lại nó gọi <code>sub.on('message', handler)</code> thêm lần nữa, nên sau một lần nối lại mỗi tin chạy hai lần (<code>[tin-1, tin-2, tin-3, tin-4, tin-4]</code>). Kết nối Redis vừa nối lại KHÔNG còn subscribe nữa, nên bạn vẫn phải subscribe lại — nhưng chỉ subscribe. Viết <code>listen(sub, channel, handler)</code>:</p><ul><li>đăng ký MỘT bộ nghe <code>'message'</code> chỉ gọi <code>handler(message)</code> cho tin của <code>channel</code>;</li><li>ở mỗi sự kiện <code>'ready'</code> (kết nối đầu và mỗi lần nối lại), subscribe lại <code>channel</code>;</li><li>không trả về gì.</li></ul><p>Tin phát lúc bên đăng ký đang rớt sẽ mất — đó là Pub/Sub, không phải lỗi cần sửa ở đây.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng một bộ nghe \"message\", dù nối lại bao nhiêu lần.</li>\n  <li>Subscribe lại ở mọi sự kiện \"ready\".</li>\n  <li>Bỏ qua tin của kênh khác.</li>\n</ul>",
+      "inputSpec": "sub — subscriber client · channel — string · handler — (message) => void|||sub — client đăng ký · channel — chuỗi · handler — (message) => void",
+      "outputSpec": "undefined",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];\nawait (async () => { listen(sub, 'notes', (m) => got.push(m)); await sleep(5); for (const m of ['tin-1', 'tin-2', 'tin-3']) await bus.publish('notes', m); await sleep(5); return got; })()",
+          "output": "[\"tin-1\",\"tin-2\",\"tin-3\"]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two registrations at the top level of listen: sub.on('message', …) and sub.on('ready', …).|||Hai lần đăng ký ở cấp ngoài cùng của listen: sub.on('message', …) và sub.on('ready', …).",
+        "Inside the ready handler there is exactly one line: sub.subscribe(channel).|||Bên trong bộ nghe ready chỉ có đúng một dòng: sub.subscribe(channel)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Listen to one channel, surviving reconnects. */\nfunction listen(sub, channel, handler) {\n  // Write your solution here — the lesson's first version\n  sub.on('ready', () => {\n    sub.subscribe(channel);\n    sub.on('message', (ch, msg) => { if (ch === channel) handler(msg); });\n  });\n}\n"
+        },
+        {
+          "name": "fake-pubsub.js",
+          "language": "javascript",
+          "code": "// fake-pubsub.js — PROVIDED by the exercise (loaded before answer.js). Pub/Sub with a subscriber that can drop.\n//   const bus = new FakeBus(); const sub = bus.client();\n//   sub.on('message', (channel, message) => …)   sub.on('ready', () => …)   sub.listenerCount(event)\n//   await sub.subscribe(channel)                 sub.drop() (connection lost)   sub.reconnect() (emits 'ready', NOT re-subscribed)\n//   await bus.publish(channel, message)          → number of subscribers that received it (0 is not an error)\nclass FakeBus {\n  constructor() { this.clients = []; }\n  client() {\n    const bus = this, ls = {};\n    const sub = {\n      connected: true, channels: new Set(),\n      on(ev, fn) { (ls[ev] = ls[ev] || []).push(fn); return sub; },\n      listenerCount(ev) { return (ls[ev] || []).length; },\n      emit(ev, ...a) { for (const fn of ls[ev] || []) fn(...a); },\n      subscribe(ch) { sub.channels.add(ch); return new Promise((ok) => setTimeout(() => ok(sub.channels.size), 1)); },\n      drop() { sub.connected = false; sub.channels.clear(); },\n      reconnect() { sub.connected = true; setTimeout(() => sub.emit('ready'), 1); },\n    };\n    bus.clients.push(sub);\n    setTimeout(() => sub.emit('ready'), 1);    // the first connection also announces 'ready'\n    return sub;\n  }\n  publish(ch, msg) {\n    let n = 0;\n    for (const s of this.clients) if (s.connected && s.channels.has(ch)) { n++; setTimeout(() => s.emit('message', ch, msg), 1); }\n    return new Promise((ok) => setTimeout(() => ok(n), 1));\n  }\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Listen to one channel, surviving reconnects. */\nfunction listen(sub, channel, handler) {\n  // the LISTENER belongs to the client object: register it once, outside the reconnect path\n  sub.on('message', (ch, msg) => {\n    if (ch === channel) handler(msg);          // one client may hear several channels\n  });\n  // the SUBSCRIPTION belongs to the connection: a reconnected connection must subscribe again\n  sub.on('ready', () => {\n    sub.subscribe(channel);\n  });\n}\n"
+        },
+        {
+          "name": "fake-pubsub.js",
+          "language": "javascript",
+          "code": "// fake-pubsub.js — PROVIDED by the exercise (loaded before answer.js). Pub/Sub with a subscriber that can drop.\n//   const bus = new FakeBus(); const sub = bus.client();\n//   sub.on('message', (channel, message) => …)   sub.on('ready', () => …)   sub.listenerCount(event)\n//   await sub.subscribe(channel)                 sub.drop() (connection lost)   sub.reconnect() (emits 'ready', NOT re-subscribed)\n//   await bus.publish(channel, message)          → number of subscribers that received it (0 is not an error)\nclass FakeBus {\n  constructor() { this.clients = []; }\n  client() {\n    const bus = this, ls = {};\n    const sub = {\n      connected: true, channels: new Set(),\n      on(ev, fn) { (ls[ev] = ls[ev] || []).push(fn); return sub; },\n      listenerCount(ev) { return (ls[ev] || []).length; },\n      emit(ev, ...a) { for (const fn of ls[ev] || []) fn(...a); },\n      subscribe(ch) { sub.channels.add(ch); return new Promise((ok) => setTimeout(() => ok(sub.channels.size), 1)); },\n      drop() { sub.connected = false; sub.channels.clear(); },\n      reconnect() { sub.connected = true; setTimeout(() => sub.emit('ready'), 1); },\n    };\n    bus.clients.push(sub);\n    setTimeout(() => sub.emit('ready'), 1);    // the first connection also announces 'ready'\n    return sub;\n  }\n  publish(ch, msg) {\n    let n = 0;\n    for (const s of this.clients) if (s.connected && s.channels.has(ch)) { n++; setTimeout(() => s.emit('message', ch, msg), 1); }\n    return new Promise((ok) => setTimeout(() => ok(n), 1));\n  }\n}\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Listeners belong to the client object and survive a reconnect; subscriptions belong to the connection and do not. So the listener is registered once and the subscription is renewed on every ready event. The test drops the connection, publishes (PUBLISH returns 0, the message is gone), reconnects and expects each later message exactly once.</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ nghe thuộc về đối tượng client và sống qua lần nối lại; đăng ký kênh thuộc về kết nối và không sống qua. Nên bộ nghe đăng ký một lần, còn đăng ký kênh được làm lại ở mỗi sự kiện ready. Kiểm rớt kết nối, phát tin (PUBLISH trả 0, tin biến mất), nối lại và chờ mỗi tin sau đó đúng một lần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-pubsub.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three messages while listening → three received",
+              "vi": "Ba tin lúc đang nghe → nhận ba"
+            },
+            "goi": "await (async () => { listen(sub, 'notes', (m) => got.push(m)); await sleep(5); for (const m of ['tin-1', 'tin-2', 'tin-3']) await bus.publish('notes', m); await sleep(5); return got; })()",
+            "chuanBi": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];",
+            "mongDoi": [
+              "tin-1",
+              "tin-2",
+              "tin-3"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The lesson’s run: offline message lost (0), tin-4 exactly once",
+              "vi": "Lần chạy của bài: tin lúc rớt mất (0), tin-4 đúng một lần"
+            },
+            "goi": "await (async () => { listen(sub, 'notes', (m) => got.push(m)); await sleep(5); for (const m of ['tin-1', 'tin-2', 'tin-3']) await bus.publish('notes', m); sub.drop(); const lost = await bus.publish('notes', 'tin-khi-offline'); sub.reconnect(); await sleep(5); await bus.publish('notes', 'tin-4'); await sleep(5); return [got, lost, sub.listenerCount('message')]; })()",
+            "chuanBi": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];",
+            "mongDoi": [
+              [
+                "tin-1",
+                "tin-2",
+                "tin-3",
+                "tin-4"
+              ],
+              0,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Messages of other channels are ignored",
+              "vi": "Tin của kênh khác bị bỏ qua"
+            },
+            "goi": "await (async () => { listen(sub, 'notes', (m) => got.push(m)); await sleep(5); await bus.publish('other', 'x'); await bus.publish('notes', 'y'); await sleep(5); return got; })()",
+            "chuanBi": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];",
+            "mongDoi": [
+              "y"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "await (async () => { listen(sub, 'inv', (m) => got.push(m)); await sleep(5); for (let i = 0; i < 4; i++) { sub.drop(); sub.reconnect(); await sleep(5); } await bus.publish('inv', 'note:42'); await sleep(5); return [got, sub.listenerCount('message')]; })()",
+            "chuanBi": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];",
+            "mongDoi": [
+              [
+                "note:42"
+              ],
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { listen(sub, 'a', (m) => got.push('a:' + m)); listen(sub, 'b', (m) => got.push('b:' + m)); await sleep(5); sub.drop(); sub.reconnect(); await sleep(5); await bus.publish('a', 1); await bus.publish('b', 2); await sleep(5); return got; })()",
+            "chuanBi": "const bus = new FakeBus();\nconst sub = bus.client();\nconst got = [];",
+            "mongDoi": [
+              "a:1",
+              "b:2"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Registering the message listener inside the ready handler: N reconnects ⇒ N + 1 copies of every message.|||Đăng ký bộ nghe message bên trong bộ nghe ready: N lần nối lại ⇒ mỗi tin N + 1 bản."
+        },
+        {
+          "loi": "Subscribing only once at start: after the first reconnect the client hears nothing, forever, with no error.|||Chỉ subscribe một lần lúc đầu: sau lần nối lại đầu tiên client không nghe gì nữa, mãi mãi, không báo lỗi."
+        },
+        {
+          "loi": "Forgetting the channel check when one client listens to several channels.|||Quên kiểm kênh khi một client nghe nhiều kênh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "listener",
+          "vi": "bộ nghe",
+          "giaiThich": "hàm gắn vào sự kiện của client — sống qua lần nối lại"
+        },
+        {
+          "en": "subscription",
+          "vi": "đăng ký kênh",
+          "giaiThich": "thuộc về KẾT NỐI — mất khi kết nối rớt"
+        }
+      ]
+    },
+    {
+      "title": "12.5 · Resume after a stream id: compare ids as numbers",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "stream id"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Stream ids have the form <code>&lt;milliseconds&gt;-&lt;sequence&gt;</code> and are monotonic — which makes them the perfect “<code>?since=&lt;last id&gt;</code>” cursor after a socket reconnect (lesson 11.3). Write <code>entriesAfter(entries, lastId)</code>: <code>entries</code> is an array of <code>[id, fields]</code> in stream order; return the ones whose id is strictly greater than <code>lastId</code>. <code>'0'</code> or <code>'0-0'</code> means “from the beginning”. An id without a sequence part (<code>'1785182199789'</code>) means sequence 0.</p><p>Compare the two parts as NUMBERS: as strings, <code>'999-0' &gt; '1000-0'</code> and <code>'5-10' &lt; '5-9'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Strictly greater than lastId (the client already has lastId).</li>\n  <li>Compare milliseconds first, then sequence, both as numbers.</li>\n  <li>Do not modify entries.</li>\n</ul>",
+      "problemHtmlVi": "<p>Id của stream có dạng <code>&lt;mili-giây&gt;-&lt;số thứ tự&gt;</code> và tăng dần — nên nó là con trỏ \"<code>?since=&lt;id cuối&gt;</code>\" hoàn hảo sau khi socket nối lại (bài 11.3). Viết <code>entriesAfter(entries, lastId)</code>: <code>entries</code> là mảng <code>[id, fields]</code> theo thứ tự stream; trả những mục có id lớn hơn hẳn <code>lastId</code>. <code>'0'</code> hoặc <code>'0-0'</code> nghĩa là \"từ đầu\". Id không có phần thứ tự (<code>'1785182199789'</code>) nghĩa là thứ tự 0.</p><p>So hai phần dưới dạng SỐ: dạng chuỗi thì <code>'999-0' &gt; '1000-0'</code> và <code>'5-10' &lt; '5-9'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lớn hơn hẳn lastId (client đã có lastId rồi).</li>\n  <li>So mili-giây trước, rồi số thứ tự, cả hai dạng số.</li>\n  <li>Không sửa entries.</li>\n</ul>",
+      "inputSpec": "entries — [id, fields][] · lastId — string|||entries — [id, fields][] · lastId — chuỗi",
+      "outputSpec": "[id, fields][]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);\nids(entriesAfter(E, '999-0'))",
+          "output": "[\"1000-0\",\"1000-1\",\"1000-9\",\"1000-10\",\"1001-0\"]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const parse = (id) => { const [ms, seq = '0'] = String(id).split('-'); return [Number(ms), Number(seq)]; };",
+        "a is after b when a.ms > b.ms, or a.ms === b.ms and a.seq > b.seq.|||a đứng sau b khi a.ms > b.ms, hoặc a.ms === b.ms và a.seq > b.seq."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Entries strictly after lastId. */\nfunction entriesAfter(entries, lastId) {\n  // Write your solution here\n  if (lastId === '0') return entries.slice();\n  return entries.filter(([id]) => id > lastId);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** '<ms>-<seq>' → [ms, seq] as numbers ('1785…' alone means seq 0) */\nfunction parseId(id) {\n  const [ms, seq = '0'] = String(id).split('-');\n  return [Number(ms), Number(seq)];\n}\n\n/** Entries strictly after lastId — compare (ms, seq) as numbers, never as strings. */\nfunction entriesAfter(entries, lastId) {\n  const [lm, ls] = parseId(lastId);             // '0' and '0-0' both become [0, 0]: everything is after it\n  return entries.filter(([id]) => {\n    const [m, s] = parseId(id);\n    return m > lm || (m === lm && s > ls);      // strictly after: the client already has lastId\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An id is a timestamp plus a sequence for entries in the same millisecond, so ordering is lexicographic on the PAIR of numbers. Parsing both parts with Number() makes 999 < 1000 and 9 < 10 as they should be. Real Redis does this comparison for you in XRANGE key (lastId +; doing it in JavaScript is where the string bug appears.</p>",
+      "solutionExplanationHtmlVi": "<p>Id là mốc thời gian cộng số thứ tự cho các mục cùng mili-giây, nên thứ tự là thứ tự từ điển trên CẶP số. Parse cả hai phần bằng Number() cho 999 < 1000 và 9 < 10 như đúng ra phải thế. Redis thật tự so cho bạn trong XRANGE key (lastId +; làm bằng JavaScript mới là chỗ lỗi so chuỗi xuất hiện.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "After 999-0: 1000-* and 1001-0 (string compare would return nothing)",
+              "vi": "Sau 999-0: các 1000-* và 1001-0 (so chuỗi sẽ không trả gì)"
+            },
+            "goi": "ids(entriesAfter(E, '999-0'))",
+            "chuanBi": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);",
+            "mongDoi": [
+              "1000-0",
+              "1000-1",
+              "1000-9",
+              "1000-10",
+              "1001-0"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "After 1000-9: 1000-10 comes next",
+              "vi": "Sau 1000-9: kế tiếp là 1000-10"
+            },
+            "goi": "ids(entriesAfter(E, '1000-9'))",
+            "chuanBi": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);",
+            "mongDoi": [
+              "1000-10",
+              "1001-0"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "From the beginning, and nothing after the last",
+              "vi": "Từ đầu, và không có gì sau mục cuối"
+            },
+            "goi": "[entriesAfter(E, '0').length, entriesAfter(E, '0-0').length, entriesAfter(E, '1001-0').length]",
+            "chuanBi": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);",
+            "mongDoi": [
+              7,
+              7,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ids(entriesAfter(E, '1000'))",
+            "chuanBi": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);",
+            "mongDoi": [
+              "1000-1",
+              "1000-9",
+              "1000-10",
+              "1001-0"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[ids(entriesAfter([['1785182199789-0', {}], ['1785182199789-1', {}], ['1785182199790-0', {}]], '1785182199789-0')), E.length]",
+            "chuanBi": "const E = [['998-0', { t: 'a' }], ['999-0', { t: 'b' }], ['1000-0', { t: 'c' }], ['1000-1', { t: 'd' }], ['1000-9', { t: 'e' }], ['1000-10', { t: 'f' }], ['1001-0', { t: 'g' }]];\nconst ids = (r) => r.map(([id]) => id);",
+            "mongDoi": [
+              [
+                "1785182199789-1",
+                "1785182199790-0"
+              ],
+              7
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ids as strings: \"999-0\" sorts after \"1000-0\", so a client that reconnects at the wrong moment skips or replays messages.|||So id dạng chuỗi: \"999-0\" xếp sau \"1000-0\", nên client nối lại đúng lúc oan sẽ bỏ sót hoặc nhận lặp tin."
+        },
+        {
+          "loi": "Using >= instead of >: the last message the client already had is delivered again after every reconnect.|||Dùng >= thay vì >: tin cuối client đã có bị giao lại sau mỗi lần nối lại."
+        },
+        {
+          "loi": "Comparing only the millisecond part: two entries in the same millisecond are both skipped or both resent.|||Chỉ so phần mili-giây: hai mục cùng mili-giây cùng bị bỏ hoặc cùng bị gửi lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stream id",
+          "vi": "id của stream",
+          "giaiThich": "<mili-giây>-<thứ tự>, tăng dần, dùng làm con trỏ tiếp tục"
+        }
+      ]
+    }
+  ]
+}

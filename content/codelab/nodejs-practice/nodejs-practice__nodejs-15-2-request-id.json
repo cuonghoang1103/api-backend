@@ -1,0 +1,795 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-2-request-id",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-2-request-id"
+  },
+  "exercises": [
+    {
+      "title": "Correlation: what one id fixes, and what a global variable breaks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "logging",
+        "AsyncLocalStorage",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the measurements of lesson 15.2: three concurrent requests, the global-variable shortcut, the cost of AsyncLocalStorage and the rules for inbound ids.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về các phép đo của bài 15.2: ba request đồng thời, lối tắt biến toàn cục, chi phí của AsyncLocalStorage và luật cho mã được gửi tới.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think about what happens at every await when two requests overlap.|||Nghĩ xem chuyện gì xảy ra ở mỗi await khi hai request chồng nhau.",
+        "Compare the three instrumented rows with each other, not with the baseline.|||So ba dòng có đo đạc với nhau, không so với dòng gốc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Correlation: what one id fixes, and what a global variable breaks\n\nAnswer in the answer panel (no code needed).\n\n1. Three users hit GET /notes at the same moment and the log has 18 lines in a scrambled order. Adding a request id changes what?Ba người dùng gọi GET /notes cùng lúc và log có 18 dòng trộn lẫn. Thêm request id thay đổi điều gì?\n2. Why did global.currentReqId = id put the wrong id on 6 of 18 lines?Vì sao global.currentReqId = id gắn sai id cho 6 trên 18 dòng?\n3. Measured with autocannon: baseline 16,042 req/s, randomUUID + req.id 15,391, AsyncLocalStorage 15,078, ALS + child logger 15,231. The conclusion?Đo bằng autocannon: gốc 16.042 req/s, randomUUID + req.id 15.391, AsyncLocalStorage 15.078, ALS + logger con 15.231. Kết luận?\n4. curl sends a 20,000-character X-Request-ID. What happened in the lesson?curl gửi X-Request-ID dài 20.000 ký tự. Trong bài chuyện gì đã xảy ra?\n5. Where should the id go so that “it broke” becomes actionable? (choose all that apply)Mã id nên đi tới đâu để câu “nó hỏng rồi” thành thứ xử lý được? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Correlation: what one id fixes, and what a global variable breaks — answer key\n\n1. Three users hit GET /notes at the same moment and the log has 18 lines in a scrambled order. Adding a request id changes what?Ba người dùng gọi GET /notes cùng lúc và log có 18 dòng trộn lẫn. Thêm request id thay đổi điều gì?\n   Answer: d) The lines stay interleaved, but grep <id> rebuilds one complete request in order\n   Interleaving is what concurrency looks like and cannot change. The id is what lets you rebuild each story from a pile of steps.VI: Xen kẽ là hình dạng của chạy đồng thời và không đổi được. Mã id là thứ cho phép dựng lại từng câu chuyện từ một đống bước.\n\n2. Why did global.currentReqId = id put the wrong id on 6 of 18 lines?Vì sao global.currentReqId = id gắn sai id cho 6 trên 18 dòng?\n   Answer: d) Request A hits an await, B and C overwrite the global, A resumes and logs with C’s id\n   Requests overlap at every await. The result is the most expensive kind of wrong: every line has an id, so you trust it, and it lies.VI: Các request chồng lên nhau ở mỗi await. Kết quả là kiểu sai đắt nhất: dòng nào cũng có id nên bạn tin, và nó nói dối.\n\n3. Measured with autocannon: baseline 16,042 req/s, randomUUID + req.id 15,391, AsyncLocalStorage 15,078, ALS + child logger 15,231. The conclusion?Đo bằng autocannon: gốc 16.042 req/s, randomUUID + req.id 15.391, AsyncLocalStorage 15.078, ALS + logger con 15.231. Kết luận?\n   Answer: d) The three instrumented rows are within noise: the cost is the extra middleware and field, not ALS\n   The bad reputation came from the old async_hooks API. Since Node 16 the promise-context path is heavily optimised: use AsyncLocalStorage.VI: Tiếng xấu đến từ API async_hooks cũ. Từ Node 16 đường ngữ cảnh promise đã được tối ưu mạnh: hãy dùng AsyncLocalStorage.\n\n4. curl sends a 20,000-character X-Request-ID. What happened in the lesson?curl gửi X-Request-ID dài 20.000 ký tự. Trong bài chuyện gì đã xảy ra?\n   Answer: b) Node itself answered 431 Request Header Fields Too Large; the middleware never ran\n   Node’s default header limit is 16 KB (http.maxHeaderSize = 16384 in Node 22). Below that the middleware’s own rule applies: ≤ 64 characters is reused, longer is replaced. Trust, but truncate.VI: Giới hạn header mặc định của Node là 16 KB (http.maxHeaderSize = 16384 ở Node 22). Dưới mức đó thì luật của middleware áp dụng: ≤ 64 ký tự thì dùng lại, dài hơn thì thay. Tin, nhưng cắt.\n\n5. Where should the id go so that “it broke” becomes actionable? (choose all that apply)Mã id nên đi tới đâu để câu “nó hỏng rồi” thành thứ xử lý được? (chọn mọi câu đúng)\n   Answer: b) The BullMQ job payload, so a job ten minutes later traces back + c) The error body of the API, so support can paste it into a ticket + d) The response header, listed in Access-Control-Expose-Headers\n   Every report about a request can carry it — header, error body, Sentry tag, SQL comment, job payload, outgoing calls. Never a metric label: one series per request id is the cardinality bomb of lesson 15.4.VI: Mọi thứ báo cáo về một request đều có thể mang nó — header, body lỗi, tag Sentry, chú thích SQL, payload job, lời gọi ra ngoài. Không bao giờ là nhãn metric: mỗi request id một chuỗi thời gian là quả bom cardinality của bài 15.4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The lines stay interleaved, but grep &lt;id&gt; rebuilds one complete request in order</p><p>Interleaving is what concurrency looks like and cannot change. The id is what lets you rebuild each story from a pile of steps.</p><p><i>VI: Xen kẽ là hình dạng của chạy đồng thời và không đổi được. Mã id là thứ cho phép dựng lại từng câu chuyện từ một đống bước.</i></p></li><li><p><b>d)</b> Request A hits an await, B and C overwrite the global, A resumes and logs with C’s id</p><p>Requests overlap at every await. The result is the most expensive kind of wrong: every line has an id, so you trust it, and it lies.</p><p><i>VI: Các request chồng lên nhau ở mỗi await. Kết quả là kiểu sai đắt nhất: dòng nào cũng có id nên bạn tin, và nó nói dối.</i></p></li><li><p><b>d)</b> The three instrumented rows are within noise: the cost is the extra middleware and field, not ALS</p><p>The bad reputation came from the old async_hooks API. Since Node 16 the promise-context path is heavily optimised: use AsyncLocalStorage.</p><p><i>VI: Tiếng xấu đến từ API async_hooks cũ. Từ Node 16 đường ngữ cảnh promise đã được tối ưu mạnh: hãy dùng AsyncLocalStorage.</i></p></li><li><p><b>b)</b> Node itself answered 431 Request Header Fields Too Large; the middleware never ran</p><p>Node’s default header limit is 16 KB (http.maxHeaderSize = 16384 in Node 22). Below that the middleware’s own rule applies: ≤ 64 characters is reused, longer is replaced. Trust, but truncate.</p><p><i>VI: Giới hạn header mặc định của Node là 16 KB (http.maxHeaderSize = 16384 ở Node 22). Dưới mức đó thì luật của middleware áp dụng: ≤ 64 ký tự thì dùng lại, dài hơn thì thay. Tin, nhưng cắt.</i></p></li><li><p><b>b)</b> The BullMQ job payload, so a job ten minutes later traces back + <b>c)</b> The error body of the API, so support can paste it into a ticket + <b>d)</b> The response header, listed in Access-Control-Expose-Headers</p><p>Every report about a request can carry it — header, error body, Sentry tag, SQL comment, job payload, outgoing calls. Never a metric label: one series per request id is the cardinality bomb of lesson 15.4.</p><p><i>VI: Mọi thứ báo cáo về một request đều có thể mang nó — header, body lỗi, tag Sentry, chú thích SQL, payload job, lời gọi ra ngoài. Không bao giờ là nhãn metric: mỗi request id một chuỗi thời gian là quả bom cardinality của bài 15.4.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Three users hit GET /notes at the same moment and the log has 18 lines in a scrambled order. Adding a request id changes what?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba người dùng gọi GET /notes cùng lúc và log có 18 dòng trộn lẫn. Thêm request id thay đổi điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The repo and service lines disappear, only the route line remains per request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The lines come out grouped per request, because Node now runs them one by one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing in the file changes; the id only appears in the HTTP response header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The lines stay interleaved, but grep &lt;id&gt; rebuilds one complete request in order"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Interleaving is what concurrency looks like and cannot change. The id is what lets you rebuild each story from a pile of steps.</p><p><i>VI: Xen kẽ là hình dạng của chạy đồng thời và không đổi được. Mã id là thứ cho phép dựng lại từng câu chuyện từ một đống bước.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why did global.currentReqId = id put the wrong id on 6 of 18 lines?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao global.currentReqId = id gắn sai id cho 6 trên 18 dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "randomUUID() returned the same id twice, so two requests shared one value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express clears globals between middlewares, so later layers read an empty value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The global is copied per request by V8, but the copy is made after the first await"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Request A hits an await, B and C overwrite the global, A resumes and logs with C’s id"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Requests overlap at every await. The result is the most expensive kind of wrong: every line has an id, so you trust it, and it lies.</p><p><i>VI: Các request chồng lên nhau ở mỗi await. Kết quả là kiểu sai đắt nhất: dòng nào cũng có id nên bạn tin, và nó nói dối.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Measured with autocannon: baseline 16,042 req/s, randomUUID + req.id 15,391, AsyncLocalStorage 15,078, ALS + child logger 15,231. The conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đo bằng autocannon: gốc 16.042 req/s, randomUUID + req.id 15.391, AsyncLocalStorage 15.078, ALS + logger con 15.231. Kết luận?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The child logger makes ALS faster, so always create one per request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "randomUUID is the expensive part, so switch every id to a counter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ALS costs 6%, so pass reqId as a parameter instead on any busy route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The three instrumented rows are within noise: the cost is the extra middleware and field, not ALS"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The bad reputation came from the old async_hooks API. Since Node 16 the promise-context path is heavily optimised: use AsyncLocalStorage.</p><p><i>VI: Tiếng xấu đến từ API async_hooks cũ. Từ Node 16 đường ngữ cảnh promise đã được tối ưu mạnh: hãy dùng AsyncLocalStorage.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>curl sends a 20,000-character X-Request-ID. What happened in the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl gửi X-Request-ID dài 20.000 ký tự. Trong bài chuyện gì đã xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The middleware truncated it to 64 characters and logged the shortened value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node itself answered 431 Request Header Fields Too Large; the middleware never ran"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nginx rewrote it into a new nanoid before the request reached Node"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express accepted it and wrote all 20,000 characters into every log line"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Node’s default header limit is 16 KB (http.maxHeaderSize = 16384 in Node 22). Below that the middleware’s own rule applies: ≤ 64 characters is reused, longer is replaced. Trust, but truncate.</p><p><i>VI: Giới hạn header mặc định của Node là 16 KB (http.maxHeaderSize = 16384 ở Node 22). Dưới mức đó thì luật của middleware áp dụng: ≤ 64 ký tự thì dùng lại, dài hơn thì thay. Tin, nhưng cắt.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Where should the id go so that “it broke” becomes actionable? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã id nên đi tới đâu để câu “nó hỏng rồi” thành thứ xử lý được? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A Prometheus label on http_requests_total, so dashboards show it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The BullMQ job payload, so a job ten minutes later traces back"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The error body of the API, so support can paste it into a ticket"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The response header, listed in Access-Control-Expose-Headers"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Every report about a request can carry it — header, error body, Sentry tag, SQL comment, job payload, outgoing calls. Never a metric label: one series per request id is the cardinality bomb of lesson 15.4.</p><p><i>VI: Mọi thứ báo cáo về một request đều có thể mang nó — header, body lỗi, tag Sentry, chú thích SQL, payload job, lời gọi ra ngoài. Không bao giờ là nhãn metric: mỗi request id một chuỗi thời gian là quả bom cardinality của bài 15.4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a global variable for per-request data: it looks right and lies.|||Dùng biến toàn cục cho dữ liệu theo request: trông đúng và nói dối."
+        },
+        {
+          "loi": "Generating a new id at every hop, so one request through three services has three ids.|||Sinh id mới ở mỗi chặng, nên một request qua ba dịch vụ có ba id."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "request id",
+          "vi": "mã request",
+          "giaiThich": "one id stamped at the door and carried by every line"
+        },
+        {
+          "en": "AsyncLocalStorage",
+          "vi": "AsyncLocalStorage",
+          "giaiThich": "node:async_hooks — context that survives await"
+        },
+        {
+          "en": "ambient context",
+          "vi": "ngữ cảnh ngầm",
+          "giaiThich": "data every layer needs but no function signature should carry"
+        }
+      ]
+    },
+    {
+      "title": "pickRequestId(inbound, gen): reuse the id you were given, at most 64 characters",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "request id",
+        "input validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Do not generate a new id at every hop. Write <code>pickRequestId(inbound, gen)</code>: <code>inbound</code> is the value of the <code>x-request-id</code> header (a string, or <code>undefined</code> when absent); <code>gen</code> is a function that makes a new id. Return <code>inbound</code> when it is a non-empty string of <b>at most 64</b> characters; otherwise return <code>gen()</code>. Call <code>gen</code> only when you need it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đừng sinh id mới ở mỗi chặng. Viết <code>pickRequestId(inbound, gen)</code>: <code>inbound</code> là giá trị header <code>x-request-id</code> (chuỗi, hoặc <code>undefined</code> khi không có); <code>gen</code> là hàm sinh id mới. Trả về <code>inbound</code> khi đó là chuỗi khác rỗng dài <b>tối đa 64</b> ký tự; không thì trả về <code>gen()</code>. Chỉ gọi <code>gen</code> khi cần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pickRequestId(\"from-nginx-7f3a\", () => \"NEW\")",
+          "output": "\"from-nginx-7f3a\"",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three conditions: typeof === \"string\", length > 0, length <= 64.|||Ba điều kiện: typeof === \"string\", length > 0, length <= 64.",
+        "64 characters exactly is still accepted; 65 is replaced (the lesson’s curl test).|||Đúng 64 ký tự vẫn nhận; 65 thì thay (phép thử curl trong bài)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** reuse the inbound X-Request-ID, or generate one */\nfunction pickRequestId(inbound, gen) {\n  // Write your solution here\n  return inbound || gen();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pickRequestId(inbound, gen) {\n  // Dùng lại mã nginx/dịch vụ trước gửi tới — nếu là chuỗi 1..64 ký tự; không thì sinh mã mới.\n  // Header do kẻ tấn công kiểm soát: tin, nhưng cắt (website dùng đúng giới hạn 64).\n  if (typeof inbound === 'string' && inbound.length > 0 && inbound.length <= 64) return inbound;\n  return gen();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reusing the inbound id is what makes one request keep one id across nginx, the backend and any service it calls. The length check is the “trust, but truncate” rule: anything longer than 64 characters is not an id you want in a log store.</p>",
+      "solutionExplanationHtmlVi": "<p>Dùng lại id được gửi tới giúp một request giữ một id xuyên nginx, backend và mọi dịch vụ nó gọi. Kiểm độ dài là luật “tin, nhưng cắt”: thứ dài hơn 64 ký tự không phải id bạn muốn có trong kho log.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An id from nginx is reused as is",
+              "vi": "Id từ nginx được dùng lại nguyên vẹn"
+            },
+            "goi": "pickRequestId(\"from-nginx-7f3a\", () => \"NEW\")",
+            "mongDoi": "from-nginx-7f3a"
+          },
+          {
+            "moTa": {
+              "en": "No header: a new id",
+              "vi": "Không có header: id mới"
+            },
+            "goi": "pickRequestId(undefined, () => \"mJumRwAigpAO\")",
+            "mongDoi": "mJumRwAigpAO"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pickRequestId(\"x\".repeat(65), () => \"NEW\")",
+            "mongDoi": "NEW",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pickRequestId(\"y\".repeat(64), () => \"NEW\")",
+            "mongDoi": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[pickRequestId(\"\", gen), pickRequestId(\"ok\", gen), calls]",
+            "chuanBi": "let calls = 0; const gen = () => { calls++; return \"g\" + calls; };",
+            "mongDoi": [
+              "g1",
+              "ok",
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Always generating a fresh id: the nginx id and the backend id no longer match, so grep finds half the story.|||Luôn sinh id mới: id của nginx và id của backend không còn khớp, nên grep chỉ thấy nửa câu chuyện."
+        },
+        {
+          "loi": "Trusting any length: an attacker-controlled header goes into every log line you store.|||Tin mọi độ dài: một header do kẻ tấn công kiểm soát đi vào mọi dòng log bạn lưu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inbound header",
+          "vi": "header gửi tới",
+          "giaiThich": "set by the client or the proxy in front of you"
+        },
+        {
+          "en": "hop",
+          "vi": "chặng",
+          "giaiThich": "one process the request passes through"
+        }
+      ]
+    },
+    {
+      "title": "requestId(gen): the middleware at position 1b of src/index.ts",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "middleware",
+        "CORS",
+        "request id"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write the factory <code>requestId(gen)</code> that returns an Express middleware <code>(req, res, next)</code>:</p><ol><li>take <code>req.headers[\"x-request-id\"]</code>; reuse it if it is a non-empty string of at most 64 characters, otherwise <code>gen()</code>;</li><li>store it as <code>req.id</code>;</li><li>echo it with <code>res.setHeader(\"X-Request-ID\", id)</code>;</li><li>make sure <code>X-Request-ID</code> is listed in <code>Access-Control-Expose-Headers</code>: if the header is not set yet, set it to <code>\"X-Request-ID\"</code>; if it already has other names, append <code>\", X-Request-ID\"</code>; if it already lists it (any case), leave it;</li><li>call <code>next()</code>.</li></ol><p>The fake <code>res</code> of the tests stores headers in <code>res.headers</code> with <b>lower-case</b> names (like Node).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return a middleware function; do not send a response.</li>\n  <li>Call next() exactly once.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hàm tạo <code>requestId(gen)</code> trả về middleware Express <code>(req, res, next)</code>:</p><ol><li>lấy <code>req.headers[\"x-request-id\"]</code>; dùng lại nếu là chuỗi khác rỗng tối đa 64 ký tự, không thì <code>gen()</code>;</li><li>lưu vào <code>req.id</code>;</li><li>trả lại bằng <code>res.setHeader(\"X-Request-ID\", id)</code>;</li><li>bảo đảm <code>X-Request-ID</code> có trong <code>Access-Control-Expose-Headers</code>: nếu header chưa có thì đặt <code>\"X-Request-ID\"</code>; nếu đã có tên khác thì nối thêm <code>\", X-Request-ID\"</code>; nếu đã có nó rồi (hoa thường bất kỳ) thì để nguyên;</li><li>gọi <code>next()</code>.</li></ol><p><code>res</code> giả của các kiểm lưu header trong <code>res.headers</code> với tên <b>chữ thường</b> (như Node).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về một hàm middleware; không gửi response.</li>\n  <li>Gọi next() đúng một lần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "({ id: req.id, headers: res.headers, nexts })",
+          "output": "{\"id\":\"jM3OZ73RMcKa\",\"headers\":{\"x-request-id\":\"jM3OZ73RMcKa\",\"access-control-expose-headers\":\"X-Request-ID\"},\"nexts\":1}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Read the current value with res.headers[\"access-control-expose-headers\"].|||Đọc giá trị hiện tại bằng res.headers[\"access-control-expose-headers\"].",
+        "Check “already listed” case-insensitively, as a whole name in the comma list.|||Kiểm “đã có” không phân biệt hoa thường, như một tên trọn vẹn trong danh sách phẩy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** request-id middleware */\nfunction requestId(gen) {\n  return (req, res, next) => {\n    // Write your solution here\n    const id = req.headers['x-request-id'] || gen();\n    req.id = id;\n    res.setHeader('X-Request-ID', id);\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction requestId(gen) {\n  return (req, res, next) => {\n    const inbound = req.headers['x-request-id'];          // Node đưa tên header về chữ thường\n    const id = typeof inbound === 'string' && inbound.length > 0 && inbound.length <= 64 ? inbound : gen();\n    req.id = id;                                           // route nào cũng đọc được\n    res.setHeader('X-Request-ID', id);                     // trả lại cho người dùng — kể cả khi lỗi\n    // Không có dòng này thì JavaScript của frontend KHÔNG đọc được header (CORS) ⇒ không hiện id trong thông báo lỗi.\n    const cur = res.headers['access-control-expose-headers'];\n    if (!cur) res.setHeader('Access-Control-Expose-Headers', 'X-Request-ID');\n    else if (!/(^|,)\\s*x-request-id\\s*(,|$)/i.test(cur)) res.setHeader('Access-Control-Expose-Headers', `${cur}, X-Request-ID`);\n    next();\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the website’s middleware, mounted after Trust Proxy and before helmet, CORS and the rate limiter — so even a 429 carries an id. Returning the id is half of the value: it is how the only person who saw the failure can tell you which request it was.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là middleware của website, gắn sau Trust Proxy và trước helmet, CORS và bộ giới hạn tốc độ — nên kể cả 429 cũng mang id. Trả id về là một nửa giá trị: đó là cách người duy nhất thấy lỗi có thể nói cho bạn đó là request nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No inbound id",
+              "vi": "Không có id gửi tới"
+            },
+            "goi": "({ id: req.id, headers: res.headers, nexts })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const res = mkRes(); const req = { headers: {} }; let nexts = 0; requestId(() => \"jM3OZ73RMcKa\")(req, res, () => nexts++);",
+            "mongDoi": {
+              "id": "jM3OZ73RMcKa",
+              "headers": {
+                "x-request-id": "jM3OZ73RMcKa",
+                "access-control-expose-headers": "X-Request-ID"
+              },
+              "nexts": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "The nginx id is reused",
+              "vi": "Dùng lại id của nginx"
+            },
+            "goi": "({ id: req.id, headers: res.headers })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const res = mkRes(); const req = { headers: { 'x-request-id': 'from-nginx-7f3a' } }; requestId(() => \"NEW\")(req, res, () => {});",
+            "mongDoi": {
+              "id": "from-nginx-7f3a",
+              "headers": {
+                "x-request-id": "from-nginx-7f3a",
+                "access-control-expose-headers": "X-Request-ID"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "({ id: req.id, headers: res.headers })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const res = mkRes(); res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count'); const req = { headers: { 'x-request-id': 'z'.repeat(65) } }; requestId(() => \"NEW\")(req, res, () => {});",
+            "mongDoi": {
+              "id": "NEW",
+              "headers": {
+                "access-control-expose-headers": "X-Total-Count, X-Request-ID",
+                "x-request-id": "NEW"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "res.headers[\"access-control-expose-headers\"]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const res = mkRes(); res.setHeader('Access-Control-Expose-Headers', 'x-request-id, X-Total-Count'); const req = { headers: { 'x-request-id': 'abc' } }; requestId(() => \"NEW\")(req, res, () => {});",
+            "mongDoi": "x-request-id, X-Total-Count",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "res.headers[\"access-control-expose-headers\"]",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (k, v) => { r.headers[String(k).toLowerCase()] = v; return r; };\n  r.set = (k, v) => r.setHeader(k, v);\n  r.json = (b) => { r.body = b; r.ended = true; return r; };\n  r.send = (b) => { r.body = b; r.ended = true; return r; };\n  return r; }; const res = mkRes(); res.setHeader('Access-Control-Expose-Headers', 'X-Request-ID-Old'); const req = { headers: {} }; requestId(() => \"n1\")(req, res, () => {});",
+            "mongDoi": "X-Request-ID-Old, X-Request-ID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting Access-Control-Expose-Headers: the header is on the wire, but the browser will not let your front end read it, so the error toast cannot show the id.|||Quên Access-Control-Expose-Headers: header có trên đường truyền nhưng trình duyệt không cho frontend đọc, nên thông báo lỗi không hiện được id."
+        },
+        {
+          "loi": "Overwriting an existing expose list (e.g. \"X-Total-Count\"): another feature silently breaks.|||Ghi đè danh sách expose đang có (vd \"X-Total-Count\"): một tính năng khác hỏng âm thầm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware factory",
+          "vi": "hàm tạo middleware",
+          "giaiThich": "a function that returns (req, res, next)"
+        },
+        {
+          "en": "Access-Control-Expose-Headers",
+          "vi": "Access-Control-Expose-Headers",
+          "giaiThich": "which response headers browser JS may read"
+        }
+      ]
+    },
+    {
+      "title": "auditGlobalId(events): count the lines a global variable gets wrong",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "concurrency",
+        "event loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Replay the lesson’s referee. <code>events</code> is the order in which things really happened on the event loop: <code>{ req, op: \"start\" }</code> means the middleware ran <code>global.currentReqId = req</code>; <code>{ req, op: \"log\", msg }</code> means a line of request <code>req</code> was logged with whatever the global holds <b>at that moment</b>. Return <code>{ total, wrong, lines }</code>: the number of log lines, how many carry another request’s id (or none), and for each wrong line the text <code>\"&lt;msg&gt; [&lt;real req&gt; as &lt;logged id&gt;]\"</code> in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy lại trọng tài của bài. <code>events</code> là thứ tự mọi việc thật sự diễn ra trên event loop: <code>{ req, op: \"start\" }</code> nghĩa là middleware chạy <code>global.currentReqId = req</code>; <code>{ req, op: \"log\", msg }</code> nghĩa là một dòng của request <code>req</code> được ghi với giá trị biến toàn cục <b>ngay lúc đó</b>. Trả về <code>{ total, wrong, lines }</code>: số dòng log, bao nhiêu dòng mang id của request khác (hoặc không có), và với mỗi dòng sai là chuỗi <code>\"&lt;msg&gt; [&lt;req thật&gt; as &lt;id đã ghi&gt;]\"</code> theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "auditGlobalId([{\"req\":\"a1\",\"op\":\"start\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"b2\",\"op\":\"start\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"c3\",\"op\":\"start\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"repo: done\"}])",
+          "output": "{\"total\":6,\"wrong\":2,\"lines\":[\"repo: done [a1 as c3]\",\"repo: done [b2 as c3]\"]}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep one variable current; a start event overwrites it, a log event reads it.|||Giữ một biến current; sự kiện start ghi đè, sự kiện log đọc nó.",
+        "A log before any start logs undefined — format it with a template string, it prints \"undefined\".|||Dòng log trước mọi start ghi undefined — định dạng bằng template string sẽ in \"undefined\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** how many log lines does global.currentReqId get wrong? */\nfunction auditGlobalId(events) {\n  // Write your solution here\n  let total = 0;\n  for (const e of events) if (e.op === 'log') total++;\n  return { total, wrong: 0, lines: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction auditGlobalId(events) {\n  // Mô phỏng lối tắt global.currentReqId = id: 'start' ghi đè biến toàn cục, 'log' dùng giá trị ĐANG có.\n  // Trọng tài ẩn biết request thật của từng dòng (e.req) ⇒ đếm dòng bị gắn nhầm id.\n  let current;\n  let total = 0;\n  const wrong = [];\n  for (const e of events) {\n    if (e.op === 'start') current = e.req;\n    else if (e.op === 'log') {\n      total++;\n      if (current !== e.req) wrong.push(`${e.msg} [${e.req} as ${current}]`);\n    }\n  }\n  return { total, wrong: wrong.length, lines: wrong };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With three overlapping requests the first lines are right by luck and every completion line after the last start carries the last id — the lesson counted 12 of 18 lines with 4a4c9b4c and 6 of them wrong. A global is shared by every request in the process; per-request data needs context that follows the async chain.</p>",
+      "solutionExplanationHtmlVi": "<p>Với ba request chồng nhau, các dòng đầu đúng nhờ may mắn và mọi dòng hoàn tất sau lần start cuối đều mang id cuối — bài đếm 12/18 dòng mang 4a4c9b4c, 6 dòng trong đó sai. Biến toàn cục dùng chung cho mọi request của tiến trình; dữ liệu theo request cần ngữ cảnh đi theo chuỗi bất đồng bộ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three requests overlapping at an await",
+              "vi": "Ba request chồng nhau ở một await"
+            },
+            "goi": "auditGlobalId([{\"req\":\"a1\",\"op\":\"start\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"b2\",\"op\":\"start\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"c3\",\"op\":\"start\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"repo: done\"}])",
+            "mongDoi": {
+              "total": 6,
+              "wrong": 2,
+              "lines": [
+                "repo: done [a1 as c3]",
+                "repo: done [b2 as c3]"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "One request at a time: the global looks fine",
+              "vi": "Từng request một: biến toàn cục trông ổn"
+            },
+            "goi": "auditGlobalId([{\"req\":\"a1\",\"op\":\"start\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"x\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"y\"}])",
+            "mongDoi": {
+              "total": 2,
+              "wrong": 0,
+              "lines": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "auditGlobalId([{\"req\":\"z\",\"op\":\"log\",\"msg\":\"boot\"},{\"req\":\"a1\",\"op\":\"start\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"b2\",\"op\":\"start\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"c3\",\"op\":\"start\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"route: received\"},{\"req\":\"a1\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"c3\",\"op\":\"log\",\"msg\":\"repo: done\"},{\"req\":\"b2\",\"op\":\"log\",\"msg\":\"route: reply\"}])",
+            "mongDoi": {
+              "total": 8,
+              "wrong": 4,
+              "lines": [
+                "boot [z as undefined]",
+                "repo: done [a1 as c3]",
+                "repo: done [b2 as c3]",
+                "route: reply [b2 as c3]"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "auditGlobalId([])",
+            "mongDoi": {
+              "total": 0,
+              "wrong": 0,
+              "lines": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing each log line with the previous start of the SAME request: that is what AsyncLocalStorage gives you, not what a global does.|||So mỗi dòng log với lần start trước của CÙNG request: đó là thứ AsyncLocalStorage cho bạn, không phải thứ biến toàn cục làm."
+        },
+        {
+          "loi": "Counting only lines with no id: the dangerous lines are the ones with a WRONG id.|||Chỉ đếm dòng không có id: dòng nguy hiểm là dòng có id SAI."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interleaving",
+          "vi": "xen kẽ",
+          "giaiThich": "steps of concurrent requests mixed in time"
+        },
+        {
+          "en": "referee",
+          "vi": "trọng tài",
+          "giaiThich": "a hidden record of the truth used to check the output"
+        }
+      ]
+    },
+    {
+      "title": "createContext(): a hand-made AsyncLocalStorage (run, getStore, bind)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "AsyncLocalStorage",
+        "closures",
+        "callbacks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Only the runtime knows which async chain is running, so Node gives you <code>AsyncLocalStorage</code>. To see what it must do, build a hand-made one for callback code. <code>createContext()</code> returns <code>{ run, getStore, bind }</code>:</p><ul><li><code>run(store, fn)</code> — makes <code>store</code> the current store while <code>fn</code> runs synchronously, returns what <code>fn</code> returns, and <b>always</b> restores the previous store afterwards (even if <code>fn</code> throws; nested runs restore the outer store);</li><li><code>getStore()</code> — the current store, or <code>undefined</code> outside every run;</li><li><code>bind(fn)</code> — captures the store that is current <b>now</b> and returns a function that, whenever it is called later (e.g. by a timer), runs <code>fn</code> inside that captured store.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>No global state outside createContext(): two contexts must not see each other’s stores.</li>\n  <li>Restore the previous store in a finally block.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỉ runtime biết chuỗi bất đồng bộ nào đang chạy, nên Node cho bạn <code>AsyncLocalStorage</code>. Để thấy nó phải làm gì, hãy tự làm một bản cho mã dùng callback. <code>createContext()</code> trả về <code>{ run, getStore, bind }</code>:</p><ul><li><code>run(store, fn)</code> — đặt <code>store</code> làm store hiện hành trong lúc <code>fn</code> chạy đồng bộ, trả về thứ <code>fn</code> trả về, và <b>luôn</b> trả lại store cũ sau đó (kể cả khi <code>fn</code> ném lỗi; run lồng nhau trả lại store bên ngoài);</li><li><code>getStore()</code> — store hiện hành, hoặc <code>undefined</code> khi ở ngoài mọi run;</li><li><code>bind(fn)</code> — chụp store đang hiện hành <b>lúc này</b> và trả về một hàm mà mỗi khi được gọi về sau (vd bởi timer) sẽ chạy <code>fn</code> bên trong store đã chụp.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không trạng thái toàn cục ngoài createContext(): hai context không được thấy store của nhau.</li>\n  <li>Trả lại store cũ trong khối finally.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "seen",
+          "output": "[\"A\",\"B\",\"A\",\"undefined\"]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "run is: save prev, set current, try { return fn() } finally { current = prev }.|||run là: lưu prev, đặt current, try { return fn() } finally { current = prev }.",
+        "bind must read current at bind time, not at call time — store it in a const of the closure, then reuse run.|||bind phải đọc current lúc bind, không phải lúc gọi — giữ trong một const của closure, rồi dùng lại run."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** a hand-made AsyncLocalStorage */\nfunction createContext() {\n  // Write your solution here\n  let current;\n  return {\n    run(store, fn) { current = store; return fn(); },\n    getStore() { return current; },\n    bind(fn) { return fn; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createContext() {\n  // AsyncLocalStorage thu nhỏ cho mã dùng callback: Node làm việc \"mang ngữ cảnh qua await/timer\" TỰ ĐỘNG;\n  // ở đây ta làm bằng tay để thấy runtime phải làm gì.\n  let current;                                        // store đang hiệu lực (undefined = ngoài mọi run)\n  function run(store, fn) {\n    const prev = current;\n    current = store;\n    try { return fn(); } finally { current = prev; }  // luôn trả lại — kể cả khi fn ném lỗi\n  }\n  function getStore() { return current; }\n  function bind(fn) {\n    const captured = current;                         // chụp ngữ cảnh LÚC ĐĂNG KÝ callback\n    return (...args) => run(captured, () => fn(...args));\n  }\n  return { run, getStore, bind };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the contract of AsyncLocalStorage.run / getStore and AsyncLocalStorage.bind. In real Node you never call bind yourself for await, timers or promises: the runtime captures the context when each async resource is created and restores it when its callback runs — that is the part your code cannot do, and why the middleware is just als.run({ log: logger.child({ reqId }) }, next).</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là hợp đồng của AsyncLocalStorage.run / getStore và AsyncLocalStorage.bind. Trong Node thật bạn không bao giờ tự gọi bind cho await, timer hay promise: runtime chụp ngữ cảnh khi mỗi tài nguyên bất đồng bộ được tạo và khôi phục khi callback của nó chạy — đó là phần mã của bạn không làm được, và vì thế middleware chỉ là als.run({ log: logger.child({ reqId }) }, next).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Nested runs restore the outer store",
+              "vi": "Run lồng nhau trả lại store bên ngoài"
+            },
+            "goi": "seen",
+            "chuanBi": "const als = createContext(); const seen = []; als.run({ reqId: \"A\" }, () => { seen.push(als.getStore().reqId); als.run({ reqId: \"B\" }, () => seen.push(als.getStore().reqId)); seen.push(als.getStore().reqId); }); seen.push(String(als.getStore()));",
+            "mongDoi": [
+              "A",
+              "B",
+              "A",
+              "undefined"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Two requests, timers firing later",
+              "vi": "Hai request, timer chạy về sau"
+            },
+            "goi": "seen",
+            "chuanBi": "const als = createContext(); const seen = []; als.run({ reqId: \"A\" }, () => { setTimeout(als.bind(() => seen.push(als.getStore().reqId)), 20); }); als.run({ reqId: \"B\" }, () => { setTimeout(als.bind(() => seen.push(als.getStore().reqId)), 5); }); setTimeout(() => seen.push(String(als.getStore())), 1); await new Promise((r) => setTimeout(r, 40));",
+            "mongDoi": [
+              "undefined",
+              "B",
+              "A"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "[err, String(als.getStore())]",
+            "chuanBi": "const als = createContext(); let err = \"\"; try { als.run({ reqId: \"X\" }, () => { throw new Error(\"boom\"); }); } catch (e) { err = e.message; }",
+            "mongDoi": [
+              "boom",
+              "undefined"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "a.run(1, () => b.run(2, () => [a.getStore(), b.getStore()]))",
+            "chuanBi": "const a = createContext(); const b = createContext();",
+            "mongDoi": [
+              1,
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[f(2, 3), String(als.getStore())]",
+            "chuanBi": "const als = createContext(); const f = als.run({ u: \"an\" }, () => als.bind((x, y) => [als.getStore().u, x + y]));",
+            "mongDoi": [
+              [
+                "an",
+                5
+              ],
+              "undefined"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not restoring after run: code that runs later (a timer of another request) sees a store that is not its own — the global-variable bug again.|||Không trả lại sau run: mã chạy sau (timer của request khác) thấy store không phải của nó — lại là lỗi biến toàn cục."
+        },
+        {
+          "loi": "bind reading the store when the callback fires: by then another request owns “current”.|||bind đọc store lúc callback chạy: khi đó một request khác đã chiếm “current”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "store",
+          "vi": "kho ngữ cảnh",
+          "giaiThich": "the value visible to everything inside one run"
+        },
+        {
+          "en": "async chain",
+          "vi": "chuỗi bất đồng bộ",
+          "giaiThich": "callbacks and continuations started by one request"
+        }
+      ]
+    }
+  ]
+}

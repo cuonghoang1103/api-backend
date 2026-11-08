@@ -1,0 +1,723 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-0-1-gioi-thieu",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-0-1-gioi-thieu"
+  },
+  "exercises": [
+    {
+      "title": "What Node.js is, who made it, what it replaced",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the \"What is Node.js\" part of the lesson.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về phần \"Node.js là gì\" của bài.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Engine + loop = V8 + libuv.|||Engine + vòng lặp = V8 + libuv.",
+        "The lesson contrasts Node with \"one thread per request\".|||Bài so Node với \"mỗi request một luồng\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What Node.js is, who made it, what it replaced\n\nAnswer in the answer panel (no code needed).\n\n1. Who created Node.js, and when?Ai tạo ra Node.js, khi nào?\n2. Node.js is built on which two pieces?Node.js dựng trên hai mảnh nào?\n3. Which server model did Node replace for many teams?Node thay thế mô hình server nào ở nhiều đội?\n4. Roughly how much of the real job is \"write app.get('/', …)\", according to the lesson?Theo bài, \"viết app.get('/', …)\" chiếm khoảng bao nhiêu phần việc thật?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What Node.js is, who made it, what it replaced — answer key\n\n1. Who created Node.js, and when?Ai tạo ra Node.js, khi nào?\n   Answer: c) Ryan Dahl, 2009 (presented at JSConf EU)\n   Ryan Dahl wrapped Chrome's V8 engine so JavaScript could run on a server and presented it at JSConf EU 2009. Brendan Eich created JavaScript itself (1995); the OpenJS Foundation stewards Node today.VI: Ryan Dahl bọc engine V8 của Chrome để JavaScript chạy trên server và trình bày ở JSConf EU 2009. Brendan Eich tạo ra JavaScript (1995); OpenJS Foundation quản lý Node hiện nay.\n\n2. Node.js is built on which two pieces?Node.js dựng trên hai mảnh nào?\n   Answer: c) V8 (runs the JavaScript) and libuv (event loop and async I/O)\n   V8 executes your code; libuv gives the non-blocking event loop and async I/O. Chapter 2 pulls both apart.VI: V8 chạy code; libuv cho event loop không chặn và I/O bất đồng bộ. Chương 2 tách cả hai ra xem.\n\n3. Which server model did Node replace for many teams?Node thay thế mô hình server nào ở nhiều đội?\n   Answer: d) One heavy thread per request — Node uses one non-blocking event loop instead\n   Older servers handled each request on its own thread, which is heavy. One Node process juggles thousands of connections cheaply — ideal for I/O-heavy APIs. The other big change: one language for the whole stack.VI: Server cũ xử lý mỗi request trên một luồng riêng — nặng. Một process Node xoay xở hàng nghìn kết nối với chi phí thấp — hợp cho API nhiều I/O. Thay đổi lớn kia: một ngôn ngữ cho cả stack.\n\n4. Roughly how much of the real job is \"write app.get('/', …)\", according to the lesson?Theo bài, \"viết app.get('/', …)\" chiếm khoảng bao nhiêu phần việc thật?\n   Answer: a) About 5% — the rest decides whether the API survives real users\n   Most of the course is the other 95%: the event loop under load, auth done right, data that does not corrupt, deploys that do not go down.VI: Phần lớn khoá học là 95% còn lại: event loop khi tải cao, xác thực đúng, dữ liệu không hỏng, deploy không sập.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Ryan Dahl, 2009 (presented at JSConf EU)</p><p>Ryan Dahl wrapped Chrome's V8 engine so JavaScript could run on a server and presented it at JSConf EU 2009. Brendan Eich created JavaScript itself (1995); the OpenJS Foundation stewards Node today.</p><p><i>VI: Ryan Dahl bọc engine V8 của Chrome để JavaScript chạy trên server và trình bày ở JSConf EU 2009. Brendan Eich tạo ra JavaScript (1995); OpenJS Foundation quản lý Node hiện nay.</i></p></li><li><p><b>c)</b> V8 (runs the JavaScript) and libuv (event loop and async I/O)</p><p>V8 executes your code; libuv gives the non-blocking event loop and async I/O. Chapter 2 pulls both apart.</p><p><i>VI: V8 chạy code; libuv cho event loop không chặn và I/O bất đồng bộ. Chương 2 tách cả hai ra xem.</i></p></li><li><p><b>d)</b> One heavy thread per request — Node uses one non-blocking event loop instead</p><p>Older servers handled each request on its own thread, which is heavy. One Node process juggles thousands of connections cheaply — ideal for I/O-heavy APIs. The other big change: one language for the whole stack.</p><p><i>VI: Server cũ xử lý mỗi request trên một luồng riêng — nặng. Một process Node xoay xở hàng nghìn kết nối với chi phí thấp — hợp cho API nhiều I/O. Thay đổi lớn kia: một ngôn ngữ cho cả stack.</i></p></li><li><p><b>a)</b> About 5% — the rest decides whether the API survives real users</p><p>Most of the course is the other 95%: the event loop under load, auth done right, data that does not corrupt, deploys that do not go down.</p><p><i>VI: Phần lớn khoá học là 95% còn lại: event loop khi tải cao, xác thực đúng, dữ liệu không hỏng, deploy không sập.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "h1",
+            "de": "<p>Who created Node.js, and when?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai tạo ra Node.js, khi nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Brendan Eich, 1995"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Google, 2008, together with Chrome"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ryan Dahl, 2009 (presented at JSConf EU)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The OpenJS Foundation, 2015"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Ryan Dahl wrapped Chrome's V8 engine so JavaScript could run on a server and presented it at JSConf EU 2009. Brendan Eich created JavaScript itself (1995); the OpenJS Foundation stewards Node today.</p><p><i>VI: Ryan Dahl bọc engine V8 của Chrome để JavaScript chạy trên server và trình bày ở JSConf EU 2009. Brendan Eich tạo ra JavaScript (1995); OpenJS Foundation quản lý Node hiện nay.</i></p>"
+          },
+          {
+            "ma": "h2",
+            "de": "<p>Node.js is built on which two pieces?</p><p style=\"opacity:.75;font-size:.92em\"><i>Node.js dựng trên hai mảnh nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express (the web framework) and npm (the package manager)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The browser DOM (the page) and the Fetch API (the network)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "V8 (runs the JavaScript) and libuv (event loop and async I/O)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Java's JVM (the runtime) and a thread pool (one per request)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>V8 executes your code; libuv gives the non-blocking event loop and async I/O. Chapter 2 pulls both apart.</p><p><i>VI: V8 chạy code; libuv cho event loop không chặn và I/O bất đồng bộ. Chương 2 tách cả hai ra xem.</i></p>"
+          },
+          {
+            "ma": "h3",
+            "de": "<p>Which server model did Node replace for many teams?</p><p style=\"opacity:.75;font-size:.92em\"><i>Node thay thế mô hình server nào ở nhiều đội?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Serverless functions — Node keeps one function per route in memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Servers written in assembly — Node compiles JavaScript to it ahead of time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One process per user — Node starts a fresh process for every login"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One heavy thread per request — Node uses one non-blocking event loop instead"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Older servers handled each request on its own thread, which is heavy. One Node process juggles thousands of connections cheaply — ideal for I/O-heavy APIs. The other big change: one language for the whole stack.</p><p><i>VI: Server cũ xử lý mỗi request trên một luồng riêng — nặng. Một process Node xoay xở hàng nghìn kết nối với chi phí thấp — hợp cho API nhiều I/O. Thay đổi lớn kia: một ngôn ngữ cho cả stack.</i></p>"
+          },
+          {
+            "ma": "h4",
+            "de": "<p>Roughly how much of the real job is \"write app.get('/', …)\", according to the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo bài, \"viết app.get('/', …)\" chiếm khoảng bao nhiêu phần việc thật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 5% — the rest decides whether the API survives real users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 90% — once routes exist the API is basically finished"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 50% — the other half is mostly styling the frontend"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All of it — everything else is optional polish for large companies"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Most of the course is the other 95%: the event loop under load, auth done right, data that does not corrupt, deploys that do not go down.</p><p><i>VI: Phần lớn khoá học là 95% còn lại: event loop khi tải cao, xác thực đúng, dữ liệu không hỏng, deploy không sập.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling Node.js a framework (that is Express) or a language (that is JavaScript).|||Gọi Node.js là framework (đó là Express) hay ngôn ngữ (đó là JavaScript)."
+        },
+        {
+          "loi": "Thinking Node is fast at heavy computation — it is fast at WAITING (chapter 2).|||Nghĩ Node giỏi tính toán nặng — nó giỏi CHỜ (chương 2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "A runtime that runs JavaScript outside the browser — created by Ryan Dahl in 2009."
+        },
+        {
+          "en": "V8",
+          "vi": "V8",
+          "giaiThich": "Chrome's JavaScript engine: the part that executes your code."
+        },
+        {
+          "en": "libuv",
+          "vi": "libuv",
+          "giaiThich": "The C library giving Node its non-blocking event loop and async I/O."
+        },
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "The single-threaded scheduler that lets one process juggle thousands of connections."
+        },
+        {
+          "en": "LTS",
+          "vi": "LTS",
+          "giaiThich": "Long-term-support release (even majors) — what production should run."
+        }
+      ]
+    },
+    {
+      "title": "Which chapter teaches it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Use the roadmap: for each topic the lesson mentions, pick the chapter (1–18) that teaches it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng bản đồ khoá học: với mỗi chủ đề bài nhắc tới, chọn chương (1–18) dạy nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Find the stage first (what kind of problem is it?), then the chapter inside the stage.|||Tìm chặng trước (vấn đề thuộc loại gì?), rồi tới chương trong chặng.",
+        "Exit code 137 is a container being killed — that is Docker & deployment.|||Mã thoát 137 là container bị giết — thuộc Docker & triển khai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which chapter teaches it?\n\nAnswer in the answer panel (no code needed).\n\n1. Topic → chapter.Chủ đề → chương.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which chapter teaches it? — answer key\n\n1. Topic → chapter.Chủ đề → chương.\n   - r1.ch: 1\n   - r2.ch: 2\n   - r3.ch: 4\n   - r4.ch: 5\n   - r5.ch: 7\n   - r6.ch: 8\n   - r7.ch: 10\n   - r8.ch: 12\n   - r9.ch: 15\n   - r10.ch: 17\n   Stage 1 Foundations = 1–4 (JS, runtime, core modules, npm). Stage 2 API = 5–7 (Express, REST, Prisma). Stage 3 Safety = 8–10 (auth, web security, uploads). Stage 4 Real systems = 11–13 (WebSockets, Redis, jobs). Stage 5 Operations = 14–16 (testing, observability, performance). Stage 6 Shipping = 17–18 (Docker & deploy, architecture).VI: Chặng 1 Nền tảng = 1–4. Chặng 2 API = 5–7. Chặng 3 An toàn = 8–10. Chặng 4 Hệ thống thật = 11–13. Chặng 5 Vận hành = 14–16. Chặng 6 Đưa lên = 17–18.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stage 1 Foundations = 1–4 (JS, runtime, core modules, npm). Stage 2 API = 5–7 (Express, REST, Prisma). Stage 3 Safety = 8–10 (auth, web security, uploads). Stage 4 Real systems = 11–13 (WebSockets, Redis, jobs). Stage 5 Operations = 14–16 (testing, observability, performance). Stage 6 Shipping = 17–18 (Docker & deploy, architecture).</p><p><i>VI: Chặng 1 Nền tảng = 1–4. Chặng 2 API = 5–7. Chặng 3 An toàn = 8–10. Chặng 4 Hệ thống thật = 11–13. Chặng 5 Vận hành = 14–16. Chặng 6 Đưa lên = 17–18.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "r1",
+            "de": "<p>Topic → chapter.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chủ đề → chương.</i></p>",
+            "cot": [
+              {
+                "ma": "chu",
+                "ten": "Topic|||Chủ đề"
+              },
+              {
+                "ma": "ch",
+                "ten": "Chapter|||Chương",
+                "luaChon": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "chu": "Scope, closures, this, async from the ground up"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "chu": "V8, libuv, the event loop, why blocking is fatal"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "chu": "package.json, semver, lockfiles, supply-chain safety"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "chu": "Routing, middleware, error handling in Express"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "chu": "Schema, migrations, transactions, the N+1 trap"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "chu": "Password hashing, JWT, refresh-token rotation"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "chu": "Presigned URLs, S3 / Cloudflare R2, CDN delivery"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "chu": "Cache patterns, invalidation, rate-limit counters in Redis"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "chu": "Structured logs, request ids, health checks"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "chu": "A container that exits with code 137, zero-downtime deploys"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ch": "1",
+              "r2.ch": "2",
+              "r3.ch": "4",
+              "r4.ch": "5",
+              "r5.ch": "7",
+              "r6.ch": "8",
+              "r7.ch": "10",
+              "r8.ch": "12",
+              "r9.ch": "15",
+              "r10.ch": "17"
+            },
+            "giaiThich": "<p>Stage 1 Foundations = 1–4 (JS, runtime, core modules, npm). Stage 2 API = 5–7 (Express, REST, Prisma). Stage 3 Safety = 8–10 (auth, web security, uploads). Stage 4 Real systems = 11–13 (WebSockets, Redis, jobs). Stage 5 Operations = 14–16 (testing, observability, performance). Stage 6 Shipping = 17–18 (Docker & deploy, architecture).</p><p><i>VI: Chặng 1 Nền tảng = 1–4. Chặng 2 API = 5–7. Chặng 3 An toàn = 8–10. Chặng 4 Hệ thống thật = 11–13. Chặng 5 Vận hành = 14–16. Chặng 6 Đưa lên = 17–18.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting JWT under \"web security\" (9) — authentication has its own chapter (8).|||Xếp JWT vào \"bảo mật web\" (9) — xác thực có chương riêng (8)."
+        },
+        {
+          "loi": "Putting rate-limit counters under security — in this course they are built with Redis (12).|||Xếp bộ đếm rate limit vào bảo mật — khoá này dựng bằng Redis (12)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "A runtime that runs JavaScript outside the browser — created by Ryan Dahl in 2009."
+        },
+        {
+          "en": "V8",
+          "vi": "V8",
+          "giaiThich": "Chrome's JavaScript engine: the part that executes your code."
+        },
+        {
+          "en": "libuv",
+          "vi": "libuv",
+          "giaiThich": "The C library giving Node its non-blocking event loop and async I/O."
+        },
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "The single-threaded scheduler that lets one process juggle thousands of connections."
+        },
+        {
+          "en": "LTS",
+          "vi": "LTS",
+          "giaiThich": "Long-term-support release (even majors) — what production should run."
+        }
+      ]
+    },
+    {
+      "title": "Stage 1 and Stage 2, chapter by chapter",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Each chapter assumes the one before it. Put the first seven chapters in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi chương dựa trên chương trước. Sắp bảy chương đầu đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Core modules come before npm packages; Express is an npm package.|||Module lõi đến trước gói npm; Express là một gói npm.",
+        "The database arrives after the API shape is clear.|||CSDL đến sau khi hình dạng API đã rõ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stage 1 and Stage 2, chapter by chapter\n\nAnswer in the answer panel (no code needed).\n\n1. Chapters 1–7.Chương 1–7.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Stage 1 and Stage 2, chapter by chapter — answer key\n\n1. Chapters 1–7.Chương 1–7.\n   Answer: m7) JavaScript you actually need for the backend  →  m3) Inside the Node.js runtime  →  m4) Core modules (fs, path, streams, buffers, http)  →  m6) npm & project hygiene  →  m5) Express core  →  m2) REST API design  →  m1) Database with Prisma & PostgreSQL\n   The language, then the runtime that runs it, then the runtime's built-in modules, then packages — only then a framework (Express), the API design on top of it, and finally a real database replacing the in-memory array.VI: Ngôn ngữ, rồi runtime chạy nó, rồi module có sẵn của runtime, rồi gói npm — chỉ khi đó mới tới framework (Express), thiết kế API trên nó, cuối cùng là CSDL thật thay mảng trong RAM.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The language, then the runtime that runs it, then the runtime's built-in modules, then packages — only then a framework (Express), the API design on top of it, and finally a real database replacing the in-memory array.</p><p><i>VI: Ngôn ngữ, rồi runtime chạy nó, rồi module có sẵn của runtime, rồi gói npm — chỉ khi đó mới tới framework (Express), thiết kế API trên nó, cuối cùng là CSDL thật thay mảng trong RAM.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Chapters 1–7.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương 1–7.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Database with Prisma & PostgreSQL"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "REST API design"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Inside the Node.js runtime"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Core modules (fs, path, streams, buffers, http)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Express core"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "npm & project hygiene"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "JavaScript you actually need for the backend"
+              }
+            ],
+            "dapAn": [
+              "m7",
+              "m3",
+              "m4",
+              "m6",
+              "m5",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>The language, then the runtime that runs it, then the runtime's built-in modules, then packages — only then a framework (Express), the API design on top of it, and finally a real database replacing the in-memory array.</p><p><i>VI: Ngôn ngữ, rồi runtime chạy nó, rồi module có sẵn của runtime, rồi gói npm — chỉ khi đó mới tới framework (Express), thiết kế API trên nó, cuối cùng là CSDL thật thay mảng trong RAM.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with Express — it is unreadable without async and the event loop.|||Bắt đầu bằng Express — không đọc nổi nếu chưa có async và event loop."
+        },
+        {
+          "loi": "Putting the database before REST design.|||Đặt CSDL trước thiết kế REST."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "A runtime that runs JavaScript outside the browser — created by Ryan Dahl in 2009."
+        },
+        {
+          "en": "V8",
+          "vi": "V8",
+          "giaiThich": "Chrome's JavaScript engine: the part that executes your code."
+        },
+        {
+          "en": "libuv",
+          "vi": "libuv",
+          "giaiThich": "The C library giving Node its non-blocking event loop and async I/O."
+        },
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "The single-threaded scheduler that lets one process juggle thousands of connections."
+        },
+        {
+          "en": "LTS",
+          "vi": "LTS",
+          "giaiThich": "Long-term-support release (even majors) — what production should run."
+        }
+      ]
+    },
+    {
+      "title": "Reading a backend course the right way",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson ends with a trap, a time budget and the stack of this website. Pick the right statement.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài kết bằng một cái bẫy, quỹ thời gian và stack của web này. Chọn phát biểu đúng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The trap in the lesson is about what you can and cannot see.|||Cái bẫy trong bài là về thứ bạn thấy và không thấy được.",
+        "LTS = even.|||LTS = chẵn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reading a backend course the right way\n\nAnswer in the answer panel (no code needed).\n\n1. Why does almost every chapter end with a measurement rather than a screenshot?Vì sao gần như chương nào cũng kết bằng một phép đo thay vì ảnh chụp?\n2. How much time does the lesson budget for the course?Bài dự trù bao nhiêu thời gian cho khoá?\n3. Which stack does this website run on (the course's production examples)?Web này chạy stack nào (ví dụ production của khoá)?\n4. Which Node release line should production run?Production nên chạy dòng phát hành Node nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reading a backend course the right way — answer key\n\n1. Why does almost every chapter end with a measurement rather than a screenshot?Vì sao gần như chương nào cũng kết bằng một phép đo thay vì ảnh chụp?\n   Answer: b) Server bugs rarely show on screen; only running it under production-like conditions proves it works\n   A leaked socket per request or a transaction that is not one looks exactly like working code on screen. \"It works\" is a much weaker signal here than in frontend work.VI: Rò một socket mỗi request hay giao dịch không phải giao dịch trông y như code chạy đúng trên màn hình. \"Nó chạy\" là tín hiệu yếu hơn nhiều so với frontend.\n\n2. How much time does the lesson budget for the course?Bài dự trù bao nhiêu thời gian cho khoá?\n   Answer: a) About 3–4 hours per chapter, 60–70 hours in total, typing every example\n   \"Speed is not the goal — being able to rebuild it from memory is.\"VI: \"Tốc độ không phải mục tiêu — tự dựng lại được từ trí nhớ mới là mục tiêu.\"\n\n3. Which stack does this website run on (the course's production examples)?Web này chạy stack nào (ví dụ production của khoá)?\n   Answer: a) Node.js + Express + TypeScript, PostgreSQL via Prisma, Redis, Socket.IO, Cloudflare R2, Docker on a VPS\n   When a chapter says \"here is how it is done in production\", it means this stack, on this site.VI: Khi một chương nói \"trong production làm thế này\", nó nói về đúng stack này, trên web này.\n\n4. Which Node release line should production run?Production nên chạy dòng phát hành Node nào?\n   Answer: a) An LTS release — an even-numbered major\n   Even majors become LTS and are supported for about 30 months; odd majors are experimental (lesson 0.3).VI: Bản chính chẵn thành LTS và được hỗ trợ khoảng 30 tháng; bản lẻ là thử nghiệm (bài 0.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Server bugs rarely show on screen; only running it under production-like conditions proves it works</p><p>A leaked socket per request or a transaction that is not one looks exactly like working code on screen. \"It works\" is a much weaker signal here than in frontend work.</p><p><i>VI: Rò một socket mỗi request hay giao dịch không phải giao dịch trông y như code chạy đúng trên màn hình. \"Nó chạy\" là tín hiệu yếu hơn nhiều so với frontend.</i></p></li><li><p><b>a)</b> About 3–4 hours per chapter, 60–70 hours in total, typing every example</p><p>\"Speed is not the goal — being able to rebuild it from memory is.\"</p><p><i>VI: \"Tốc độ không phải mục tiêu — tự dựng lại được từ trí nhớ mới là mục tiêu.\"</i></p></li><li><p><b>a)</b> Node.js + Express + TypeScript, PostgreSQL via Prisma, Redis, Socket.IO, Cloudflare R2, Docker on a VPS</p><p>When a chapter says \"here is how it is done in production\", it means this stack, on this site.</p><p><i>VI: Khi một chương nói \"trong production làm thế này\", nó nói về đúng stack này, trên web này.</i></p></li><li><p><b>a)</b> An LTS release — an even-numbered major</p><p>Even majors become LTS and are supported for about 30 months; odd majors are experimental (lesson 0.3).</p><p><i>VI: Bản chính chẵn thành LTS và được hỗ trợ khoảng 30 tháng; bản lẻ là thử nghiệm (bài 0.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "<p>Why does almost every chapter end with a measurement rather than a screenshot?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao gần như chương nào cũng kết bằng một phép đo thay vì ảnh chụp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Measurements are quicker to write than a screenshot is to take and crop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Server bugs rarely show on screen; only running it under production-like conditions proves it works"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Screenshots of terminals are too large to store on the course website"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Backend code has no user interface, so a screenshot would show nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A leaked socket per request or a transaction that is not one looks exactly like working code on screen. \"It works\" is a much weaker signal here than in frontend work.</p><p><i>VI: Rò một socket mỗi request hay giao dịch không phải giao dịch trông y như code chạy đúng trên màn hình. \"Nó chạy\" là tín hiệu yếu hơn nhiều so với frontend.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "<p>How much time does the lesson budget for the course?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài dự trù bao nhiêu thời gian cho khoá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 3–4 hours per chapter, 60–70 hours in total, typing every example"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 10 hours in total, skimming the text and skipping the labs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One weekend in total, if you watch the videos at double speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "About 300 hours in total, rewriting every chapter twice from memory"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"Speed is not the goal — being able to rebuild it from memory is.\"</p><p><i>VI: \"Tốc độ không phải mục tiêu — tự dựng lại được từ trí nhớ mới là mục tiêu.\"</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "<p>Which stack does this website run on (the course's production examples)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Web này chạy stack nào (ví dụ production của khoá)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Node.js + Express + TypeScript, PostgreSQL via Prisma, Redis, Socket.IO, Cloudflare R2, Docker on a VPS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PHP + Laravel, MySQL, Memcached and file uploads on a shared hosting plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Java + Spring Boot, Oracle, Kafka and Azure Blob Storage on AWS Lambda"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Python + Django, MongoDB, RabbitMQ and Amazon S3 on a Kubernetes cluster"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>When a chapter says \"here is how it is done in production\", it means this stack, on this site.</p><p><i>VI: Khi một chương nói \"trong production làm thế này\", nó nói về đúng stack này, trên web này.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "<p>Which Node release line should production run?</p><p style=\"opacity:.75;font-size:.92em\"><i>Production nên chạy dòng phát hành Node nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An LTS release — an even-numbered major"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The newest odd-numbered major, for the features"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Any version, as long as npm installs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Whatever the laptop has"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Even majors become LTS and are supported for about 30 months; odd majors are experimental (lesson 0.3).</p><p><i>VI: Bản chính chẵn thành LTS và được hỗ trợ khoảng 30 tháng; bản lẻ là thử nghiệm (bài 0.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skimming the course like a frontend tutorial and trusting \"it runs\".|||Lướt khoá như hướng dẫn frontend và tin \"nó chạy\"."
+        },
+        {
+          "loi": "Deploying an odd-numbered major.|||Deploy bản chính số lẻ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Node.js",
+          "vi": "Node.js",
+          "giaiThich": "A runtime that runs JavaScript outside the browser — created by Ryan Dahl in 2009."
+        },
+        {
+          "en": "V8",
+          "vi": "V8",
+          "giaiThich": "Chrome's JavaScript engine: the part that executes your code."
+        },
+        {
+          "en": "libuv",
+          "vi": "libuv",
+          "giaiThich": "The C library giving Node its non-blocking event loop and async I/O."
+        },
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện",
+          "giaiThich": "The single-threaded scheduler that lets one process juggle thousands of connections."
+        },
+        {
+          "en": "LTS",
+          "vi": "LTS",
+          "giaiThich": "Long-term-support release (even majors) — what production should run."
+        }
+      ]
+    }
+  ]
+}

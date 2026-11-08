@@ -1,0 +1,818 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-15-1-log-co-cau-truc",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-15-1-log-co-cau-truc"
+  },
+  "exercises": [
+    {
+      "title": "Three pillars, and what the 100,000-line benchmark really measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "logging",
+        "observability",
+        "event loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the measurements of lesson 15.1: which pillar answers which question, why pino beat console.log, and what one burst of logging does to the event loop.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về các phép đo của bài 15.1: trụ cột nào trả lời câu hỏi nào, vì sao pino thắng console.log, và một loạt log làm gì với event loop.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Remember the three words: that, where, what.|||Nhớ ba chữ: có chuyện, ở đâu, chuyện gì.",
+        "Look at the row that changed only one thing (sync: true) — it tells you what the variable was.|||Nhìn dòng chỉ đổi một thứ (sync: true) — nó cho biết biến số là gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three pillars, and what the 100,000-line benchmark really measured\n\nAnswer in the answer panel (no code needed).\n\n1. An alert fires: “5xx rate rose from 0.1% to 4% in 10 minutes”. Which pillar told you that, and which one tells you WHAT exactly happened to one failing request?Cảnh báo bật: “tỉ lệ 5xx tăng từ 0,1% lên 4% trong 10 phút”. Trụ cột nào báo điều đó, và trụ cột nào cho biết CHÍNH XÁC chuyện gì xảy ra với một request lỗi?\n2. 100,000 lines: console.log 417.3 ms, pino to stdout 172.8 ms, pino with sync: true 526.8 ms. What made pino fast?100.000 dòng: console.log 417,3 ms, pino ra stdout 172,8 ms, pino với sync: true 526,8 ms. Điều gì làm pino nhanh?\n3. A heartbeat setInterval(…, 20) was late by up to 371 ms while console.log wrote a burst to a FILE. What happened during those 371 ms?Một nhịp setInterval(…, 20) bị trễ tới 371 ms trong lúc console.log ghi một loạt vào FILE. Trong 371 ms đó chuyện gì xảy ra?\n4. The same burst into a pipe that nobody reads (a stalled Docker log driver) took only 78 ms in a Linux container. Why is that NOT good news?Cùng loạt log đó vào một pipe không ai đọc (log driver của Docker bị kẹt) chỉ mất 78 ms trong container Linux. Vì sao đó KHÔNG phải tin tốt?\n5. Which statements about log levels are true, measured in this lesson? (choose all that apply)Những câu nào về cấp độ log là đúng theo phép đo của bài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three pillars, and what the 100,000-line benchmark really measured — answer key\n\n1. An alert fires: “5xx rate rose from 0.1% to 4% in 10 minutes”. Which pillar told you that, and which one tells you WHAT exactly happened to one failing request?Cảnh báo bật: “tỉ lệ 5xx tăng từ 0,1% lên 4% trong 10 phút”. Trụ cột nào báo điều đó, và trụ cột nào cho biết CHÍNH XÁC chuyện gì xảy ra với một request lỗi?\n   Answer: c) A metric said THAT it is wrong; the log line of that request says WHAT happened\n   Metric = that, trace = where, log = what. Incidents usually walk them in that order. Debugging with metrics is impossible: a metric contains no single request.VI: Metric = có chuyện, trace = ở đâu, log = chuyện gì. Sự cố thường đi theo thứ tự đó. Gỡ lỗi bằng metric là bất khả: metric không chứa request riêng lẻ nào.\n\n2. 100,000 lines: console.log 417.3 ms, pino to stdout 172.8 ms, pino with sync: true 526.8 ms. What made pino fast?100.000 dòng: console.log 417,3 ms, pino ra stdout 172,8 ms, pino với sync: true 526,8 ms. Điều gì làm pino nhanh?\n   Answer: a) Buffering: lines are collected in memory and written in one big write() later\n   The same pino with sync: true dropped back to console.log speed, so the library was never the variable — buffering was. pino even wrote MORE bytes (17 MB vs 10.4 MB).VI: Cùng pino mà sync: true thì tụt về tốc độ console.log, nên thư viện không phải biến số — bộ đệm mới là. pino còn ghi NHIỀU byte hơn (17 MB so với 10,4 MB).\n\n3. A heartbeat setInterval(…, 20) was late by up to 371 ms while console.log wrote a burst to a FILE. What happened during those 371 ms?Một nhịp setInterval(…, 20) bị trễ tới 371 ms trong lúc console.log ghi một loạt vào FILE. Trong 371 ms đó chuyện gì xảy ra?\n   Answer: d) Nothing else ran: each write to the file blocked the event loop until the kernel took the bytes\n   stdout pointing to a file is written synchronously: no request parsed, no promise resolved, no timer fired. It never shows in your logs, because the thing that would log it is the thing being blocked.VI: stdout trỏ vào file được ghi đồng bộ: không request nào được đọc, không promise nào resolve, không timer nào chạy. Nó không bao giờ hiện trong log, vì thứ lẽ ra ghi log chính là thứ đang bị chặn.\n\n4. The same burst into a pipe that nobody reads (a stalled Docker log driver) took only 78 ms in a Linux container. Why is that NOT good news?Cùng loạt log đó vào một pipe không ai đọc (log driver của Docker bị kẹt) chỉ mất 78 ms trong container Linux. Vì sao đó KHÔNG phải tin tốt?\n   Answer: a) The 10.3 MB waits in the process’s own memory, and it grows without limit while the consumer stalls\n   RSS went 50 → 88 MB: a latency spike was traded for a memory leak. The only good answer is buffered AND bounded.VI: RSS tăng 50 → 88 MB: đổi một cú trễ lấy một chỗ rò bộ nhớ. Câu trả lời đúng duy nhất: có bộ đệm VÀ có giới hạn.\n\n5. Which statements about log levels are true, measured in this lesson? (choose all that apply)Những câu nào về cấp độ log là đúng theo phép đo của bài? (chọn mọi câu đúng)\n   Answer: a) log.debug() at level warn costs about 5 ns, but its argument expression still runs + b) if (log.isLevelEnabled('debug')) stops an expensive argument from being computed + d) Every log.info() you write is a line you will pay for in production\n   JavaScript evaluates arguments BEFORE calling the function: countEverything() ran 1,000 times out of 1,000 although nothing was written. Guard expensive arguments; debug calls themselves are cheap.VI: JavaScript tính đối số TRƯỚC khi gọi hàm: countEverything() chạy 1.000/1.000 lần dù không ghi gì. Hãy rào các đối số đắt; bản thân lời gọi debug thì rẻ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A metric said THAT it is wrong; the log line of that request says WHAT happened</p><p>Metric = that, trace = where, log = what. Incidents usually walk them in that order. Debugging with metrics is impossible: a metric contains no single request.</p><p><i>VI: Metric = có chuyện, trace = ở đâu, log = chuyện gì. Sự cố thường đi theo thứ tự đó. Gỡ lỗi bằng metric là bất khả: metric không chứa request riêng lẻ nào.</i></p></li><li><p><b>a)</b> Buffering: lines are collected in memory and written in one big write() later</p><p>The same pino with sync: true dropped back to console.log speed, so the library was never the variable — buffering was. pino even wrote MORE bytes (17 MB vs 10.4 MB).</p><p><i>VI: Cùng pino mà sync: true thì tụt về tốc độ console.log, nên thư viện không phải biến số — bộ đệm mới là. pino còn ghi NHIỀU byte hơn (17 MB so với 10,4 MB).</i></p></li><li><p><b>d)</b> Nothing else ran: each write to the file blocked the event loop until the kernel took the bytes</p><p>stdout pointing to a file is written synchronously: no request parsed, no promise resolved, no timer fired. It never shows in your logs, because the thing that would log it is the thing being blocked.</p><p><i>VI: stdout trỏ vào file được ghi đồng bộ: không request nào được đọc, không promise nào resolve, không timer nào chạy. Nó không bao giờ hiện trong log, vì thứ lẽ ra ghi log chính là thứ đang bị chặn.</i></p></li><li><p><b>a)</b> The 10.3 MB waits in the process’s own memory, and it grows without limit while the consumer stalls</p><p>RSS went 50 → 88 MB: a latency spike was traded for a memory leak. The only good answer is buffered AND bounded.</p><p><i>VI: RSS tăng 50 → 88 MB: đổi một cú trễ lấy một chỗ rò bộ nhớ. Câu trả lời đúng duy nhất: có bộ đệm VÀ có giới hạn.</i></p></li><li><p><b>a)</b> log.debug() at level warn costs about 5 ns, but its argument expression still runs + <b>b)</b> if (log.isLevelEnabled('debug')) stops an expensive argument from being computed + <b>d)</b> Every log.info() you write is a line you will pay for in production</p><p>JavaScript evaluates arguments BEFORE calling the function: countEverything() ran 1,000 times out of 1,000 although nothing was written. Guard expensive arguments; debug calls themselves are cheap.</p><p><i>VI: JavaScript tính đối số TRƯỚC khi gọi hàm: countEverything() chạy 1.000/1.000 lần dù không ghi gì. Hãy rào các đối số đắt; bản thân lời gọi debug thì rẻ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An alert fires: “5xx rate rose from 0.1% to 4% in 10 minutes”. Which pillar told you that, and which one tells you WHAT exactly happened to one failing request?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cảnh báo bật: “tỉ lệ 5xx tăng từ 0,1% lên 4% trong 10 phút”. Trụ cột nào báo điều đó, và trụ cột nào cho biết CHÍNH XÁC chuyện gì xảy ra với một request lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A metric said THAT it is wrong; another metric with a user label says WHAT happened"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A trace said THAT it is wrong; the metric of that request says WHAT happened"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A metric said THAT it is wrong; the log line of that request says WHAT happened"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A log said THAT it is wrong; the trace of that request says WHAT happened"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Metric = that, trace = where, log = what. Incidents usually walk them in that order. Debugging with metrics is impossible: a metric contains no single request.</p><p><i>VI: Metric = có chuyện, trace = ở đâu, log = chuyện gì. Sự cố thường đi theo thứ tự đó. Gỡ lỗi bằng metric là bất khả: metric không chứa request riêng lẻ nào.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>100,000 lines: console.log 417.3 ms, pino to stdout 172.8 ms, pino with sync: true 526.8 ms. What made pino fast?</p><p style=\"opacity:.75;font-size:.92em\"><i>100.000 dòng: console.log 417,3 ms, pino ra stdout 172,8 ms, pino với sync: true 526,8 ms. Điều gì làm pino nhanh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Buffering: lines are collected in memory and written in one big write() later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSON itself: a JSON line is cheaper to print than a plain text line"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Worker threads: pino always formats lines on another CPU core"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fewer bytes: pino writes shorter lines than console.log does"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The same pino with sync: true dropped back to console.log speed, so the library was never the variable — buffering was. pino even wrote MORE bytes (17 MB vs 10.4 MB).</p><p><i>VI: Cùng pino mà sync: true thì tụt về tốc độ console.log, nên thư viện không phải biến số — bộ đệm mới là. pino còn ghi NHIỀU byte hơn (17 MB so với 10,4 MB).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A heartbeat setInterval(…, 20) was late by up to 371 ms while console.log wrote a burst to a FILE. What happened during those 371 ms?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một nhịp setInterval(…, 20) bị trễ tới 371 ms trong lúc console.log ghi một loạt vào FILE. Trong 371 ms đó chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The garbage collector ran, because console.log allocates a string per line"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The disk was full, so Node retried each write until the kernel accepted it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only timers stopped; requests and promises kept being handled on other threads"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing else ran: each write to the file blocked the event loop until the kernel took the bytes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>stdout pointing to a file is written synchronously: no request parsed, no promise resolved, no timer fired. It never shows in your logs, because the thing that would log it is the thing being blocked.</p><p><i>VI: stdout trỏ vào file được ghi đồng bộ: không request nào được đọc, không promise nào resolve, không timer nào chạy. Nó không bao giờ hiện trong log, vì thứ lẽ ra ghi log chính là thứ đang bị chặn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The same burst into a pipe that nobody reads (a stalled Docker log driver) took only 78 ms in a Linux container. Why is that NOT good news?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng loạt log đó vào một pipe không ai đọc (log driver của Docker bị kẹt) chỉ mất 78 ms trong container Linux. Vì sao đó KHÔNG phải tin tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The 10.3 MB waits in the process’s own memory, and it grows without limit while the consumer stalls"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The lines are silently dropped by Docker, so the incident leaves no evidence at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Docker restarts the container when the pipe is full, so all in-flight requests are lost"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pipe compresses the lines, so the log store later receives a corrupted file"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>RSS went 50 → 88 MB: a latency spike was traded for a memory leak. The only good answer is buffered AND bounded.</p><p><i>VI: RSS tăng 50 → 88 MB: đổi một cú trễ lấy một chỗ rò bộ nhớ. Câu trả lời đúng duy nhất: có bộ đệm VÀ có giới hạn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statements about log levels are true, measured in this lesson? (choose all that apply)</p><p style=\"opacity:.75;font-size:.92em\"><i>Những câu nào về cấp độ log là đúng theo phép đo của bài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "log.debug() at level warn costs about 5 ns, but its argument expression still runs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "if (log.isLevelEnabled('debug')) stops an expensive argument from being computed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "log.debug() at level warn costs nothing, because Node skips the call and its arguments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every log.info() you write is a line you will pay for in production"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>JavaScript evaluates arguments BEFORE calling the function: countEverything() ran 1,000 times out of 1,000 although nothing was written. Guard expensive arguments; debug calls themselves are cheap.</p><p><i>VI: JavaScript tính đối số TRƯỚC khi gọi hàm: countEverything() chạy 1.000/1.000 lần dù không ghi gì. Hãy rào các đối số đắt; bản thân lời gọi debug thì rẻ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding “JSON is slow” without measuring: structure was never the slow part.|||Kết luận “JSON chậm” mà không đo: cấu trúc chưa bao giờ là phần chậm."
+        },
+        {
+          "loi": "Thinking a skipped debug() line is free even when its argument is a database query.|||Nghĩ dòng debug() bị bỏ qua là miễn phí dù đối số của nó là một truy vấn DB."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "structured log",
+          "vi": "log có cấu trúc",
+          "giaiThich": "each line is a JSON record a machine can query"
+        },
+        {
+          "en": "buffering",
+          "vi": "gom bộ đệm",
+          "giaiThich": "collect lines in memory, write them in one system call"
+        },
+        {
+          "en": "event-loop lag",
+          "vi": "độ trễ event loop",
+          "giaiThich": "how late a timer fires because the loop was busy"
+        }
+      ]
+    },
+    {
+      "title": "worstLag(beats, interval): the heartbeat that caught the 371 ms freeze",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "event loop",
+        "measurement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson measured how a burst of logging freezes the event loop with a heartbeat: <code>setInterval(fn, 20)</code>, and on each beat <code>lag = now - last - 20</code>, keeping the <b>worst</b> value. Write <code>worstLag(beats, interval)</code>: <code>beats</code> is the array of times (ms) at which the beat really ran, in order. Return the largest lag between two consecutive beats, or <code>0</code> if no beat was late (or there are fewer than two beats).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài đo việc một loạt log làm đứng event loop bằng một “nhịp tim”: <code>setInterval(fn, 20)</code>, mỗi nhịp tính <code>lag = now - last - 20</code> và giữ giá trị <b>tệ nhất</b>. Viết <code>worstLag(beats, interval)</code>: <code>beats</code> là mảng thời điểm (ms) nhịp thật sự chạy, theo thứ tự. Trả về độ trễ lớn nhất giữa hai nhịp liền nhau, hoặc <code>0</code> nếu không nhịp nào trễ (hoặc có ít hơn hai nhịp).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "beats — number[] (ms, increasing); interval — number (ms)|||beats — number[] (ms, tăng dần); interval — number (ms)",
+      "outputSpec": "number — the worst lag in ms (≥ 0)|||number — độ trễ tệ nhất tính bằng ms (≥ 0)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "worstLag([0,20,40,411,431], 20)",
+          "output": "351",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Lag of beat i = beats[i] − beats[i−1] − interval.|||Độ trễ của nhịp i = beats[i] − beats[i−1] − interval.",
+        "Keep a running maximum that starts at 0; an early beat (negative lag) never counts.|||Giữ một giá trị lớn nhất bắt đầu từ 0; nhịp tới sớm (độ trễ âm) không tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** worst event-loop lag seen by a heartbeat */\nfunction worstLag(beats, interval) {\n  // Write your solution here\n  if (beats.length < 2) return 0;\n  const total = beats[beats.length - 1] - beats[0];\n  return total / (beats.length - 1) - interval;   // average gap — is that what we want?\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction worstLag(beats, interval) {\n  // beats[i] = thời điểm (ms) nhịp thứ i THẬT SỰ chạy; mỗi nhịp lẽ ra cách nhịp trước đúng `interval` ms.\n  let worst = 0;\n  for (let i = 1; i < beats.length; i++) {\n    const lag = beats[i] - beats[i - 1] - interval;   // now - last - 20 như đoạn mã của bài\n    if (lag > worst) worst = lag;                       // giữ giá trị TỆ NHẤT, không lấy trung bình\n  }\n  return worst;                                         // < 2 nhịp, hoặc mọi nhịp đúng giờ ⇒ 0\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A blocked loop delays the NEXT beat, so the gap between two consecutive beats grows by the blocked time. The maximum is the number that matters: users wait during the worst freeze, not during the average one.</p>",
+      "solutionExplanationHtmlVi": "<p>Event loop bị chặn làm nhịp KẾ TIẾP tới muộn, nên khoảng cách giữa hai nhịp liền nhau dài thêm đúng bằng thời gian bị chặn. Giá trị lớn nhất mới là con số quan trọng: người dùng chờ trong cú đứng tệ nhất, không phải cú trung bình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A 371 ms freeze between two beats",
+              "vi": "Một cú đứng 371 ms giữa hai nhịp"
+            },
+            "goi": "worstLag([0,20,40,411,431], 20)",
+            "mongDoi": 351
+          },
+          {
+            "moTa": {
+              "en": "A healthy loop: at most 1 ms late",
+              "vi": "Event loop khoẻ: trễ tối đa 1 ms"
+            },
+            "goi": "worstLag([0,21,41,62], 20)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "worstLag([100], 20)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "worstLag([0,20,197,217,237,239], 20)",
+            "mongDoi": 157,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "worstLag([0,19,38,57], 20)",
+            "mongDoi": 0,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the average lag: one 371 ms freeze averaged over 1,000 beats looks like 0.4 ms — exactly the spike you wanted to see.|||Trả về độ trễ trung bình: một cú đứng 371 ms chia cho 1.000 nhịp trông như 0,4 ms — đúng cái gai bạn muốn thấy bị xoá mất."
+        },
+        {
+          "loi": "Measuring from the start (beats[i] − beats[0]) instead of from the previous beat.|||Đo từ đầu (beats[i] − beats[0]) thay vì từ nhịp ngay trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "heartbeat",
+          "vi": "nhịp tim",
+          "giaiThich": "a timer used to detect that the loop was busy"
+        },
+        {
+          "en": "lag",
+          "vi": "độ trễ"
+        }
+      ]
+    },
+    {
+      "title": "redactUrl(url): the morgan :url override that keeps ?token= out of the access log",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "logging",
+        "security",
+        "regex"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Some endpoints of the website accept a JWT as <code>?token=</code> (SSE streaming), so morgan’s default <code>:url</code> would write the token into every access-log line. The site redefines the url token so the value of <code>token</code> and <code>code</code> becomes <code>[REDACTED]</code>. Write <code>redactUrl(url)</code>: replace the value (possibly empty) of every query parameter named exactly <code>token</code> or <code>code</code> with <code>[REDACTED]</code>. Everything else — path, other parameters, their order, a <code>#fragment</code> — stays byte-for-byte the same.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vài endpoint của website nhận JWT qua <code>?token=</code> (SSE), nên <code>:url</code> mặc định của morgan sẽ ghi token vào mọi dòng access log. Website định nghĩa lại token url để giá trị của <code>token</code> và <code>code</code> thành <code>[REDACTED]</code>. Viết <code>redactUrl(url)</code>: thay giá trị (có thể rỗng) của mọi tham số query tên đúng là <code>token</code> hoặc <code>code</code> bằng <code>[REDACTED]</code>. Mọi thứ khác — đường dẫn, tham số khác, thứ tự, <code>#fragment</code> — giữ nguyên từng byte.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "url — the request URL as morgan sees it (path + query)|||url — URL của request như morgan thấy (đường dẫn + query)",
+      "outputSpec": "string — the same URL with the two values hidden|||string — cùng URL với hai giá trị bị che",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "redactUrl(\"/api/v1/ai/stream?token=eyJhbGciOi.abc.def&lesson=12\")",
+          "output": "\"/api/v1/ai/stream?token=[REDACTED]&lesson=12\"",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A parameter starts right after ? or &. Match that character too, so mytoken= is not a match.|||Một tham số bắt đầu ngay sau ? hoặc &. Bắt cả ký tự đó, để mytoken= không bị khớp.",
+        "The value ends at the next & or # (or the end): [^&#]*. Use the g flag — a URL can carry both.|||Giá trị dừng ở & hoặc # kế tiếp (hoặc hết chuỗi): [^&#]*. Dùng cờ g — URL có thể mang cả hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** hide ?token= and ?code= values in an access-log URL */\nfunction redactUrl(url) {\n  // Write your solution here\n  return url.replace(/token=[^&]*/, 'token=[REDACTED]');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction redactUrl(url) {\n  // Chỉ thay GIÁ TRỊ của đúng hai tham số token và code; mọi thứ khác giữ nguyên từng ký tự (không mã hoá lại).\n  // ([?&]) bắt dấu mở đầu tham số ⇒ \"mytoken=\" hay \"barcode=\" không bị đụng; giá trị dừng ở & hoặc #.\n  return url.replace(/([?&])(token|code)=([^&#]*)/g, '$1$2=[REDACTED]');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the same leak the lesson found in pino-http (authorization and cookie headers in plaintext), blocked in advance for the URL. A token in a 90-day log store is a 90-day incident: whoever can read the dashboard can become that user.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là đúng chỗ rò bài học tìm thấy ở pino-http (header authorization và cookie ở dạng rõ), được chặn trước cho URL. Một token trong kho log 90 ngày là một sự cố kéo dài 90 ngày: ai đọc được dashboard đều trở thành người dùng đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An SSE URL with a JWT",
+              "vi": "URL SSE kèm JWT"
+            },
+            "goi": "redactUrl(\"/api/v1/ai/stream?token=eyJhbGciOi.abc.def&lesson=12\")",
+            "mongDoi": "/api/v1/ai/stream?token=[REDACTED]&lesson=12"
+          },
+          {
+            "moTa": {
+              "en": "An OAuth callback code",
+              "vi": "Mã code của OAuth callback"
+            },
+            "goi": "redactUrl(\"/api/v1/auth/google/callback?state=xyz&code=4/0AbCd\")",
+            "mongDoi": "/api/v1/auth/google/callback?state=xyz&code=[REDACTED]"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "redactUrl(\"/notes?mytoken=keep&barcode=9&token=t1&code=c2#top\")",
+            "mongDoi": "/notes?mytoken=keep&barcode=9&token=[REDACTED]&code=[REDACTED]#top",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "redactUrl(\"/notes?page=2\")",
+            "mongDoi": "/notes?page=2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "redactUrl(\"/x?token=&code=\")",
+            "mongDoi": "/x?token=[REDACTED]&code=[REDACTED]",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "/token=[^&]*/ also rewrites ?mytoken=… and misses code= entirely.|||/token=[^&]*/ sửa cả ?mytoken=… và bỏ sót hoàn toàn code=."
+        },
+        {
+          "loi": "Parsing with URLSearchParams and printing it back: it re-encodes other values, so the log line no longer matches what the client sent.|||Phân tích bằng URLSearchParams rồi in lại: nó mã hoá lại các giá trị khác, nên dòng log không còn khớp thứ client gửi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "access log",
+          "vi": "log truy cập",
+          "giaiThich": "one line per request: method, url, status, time"
+        },
+        {
+          "en": "redaction",
+          "vi": "che giấu",
+          "giaiThich": "replacing a secret value before it is written"
+        }
+      ]
+    },
+    {
+      "title": "redact(obj, paths): pino-style redaction, including what *.password does NOT cover",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "logging",
+        "security",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Implement the redaction rule of the lesson’s pino config. <code>paths</code> uses pino’s syntax: segments separated by <code>.</code>; a segment in brackets like <code>[\"set-cookie\"]</code> is one key; <code>*</code> matches <b>exactly one key, any name</b>, at that position. Return a <b>copy</b> of <code>obj</code> where every value at a matching path is replaced by the string <code>\"[REDACTED]\"</code>. A path that does not exist adds nothing.</p><p>Run for real with pino 9: with <code>*.password</code>, <code>body.password</code> is censored but a top-level <code>password</code> and <code>body.user.password</code> are <b>not</b>. Your function must behave the same way.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cài đặt luật che của cấu hình pino trong bài. <code>paths</code> theo cú pháp pino: các đoạn phân tách bằng <code>.</code>; đoạn trong ngoặc như <code>[\"set-cookie\"]</code> là một khoá; <code>*</code> khớp <b>đúng một khoá, tên bất kỳ</b>, ở vị trí đó. Trả về <b>bản sao</b> của <code>obj</code> trong đó mọi giá trị ở đường dẫn khớp được thay bằng chuỗi <code>\"[REDACTED]\"</code>. Đường dẫn không tồn tại thì không thêm gì.</p><p>Chạy thật với pino 9: với <code>*.password</code>, <code>body.password</code> bị che nhưng <code>password</code> ở gốc và <code>body.user.password</code> thì <b>không</b>. Hàm của bạn phải cư xử y như vậy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "obj — a plain JSON object (a log record); paths — string[]|||obj — object JSON thuần (một bản ghi log); paths — string[]",
+      "outputSpec": "a new object; obj itself is unchanged|||object mới; obj giữ nguyên",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "redact({\"req\":{\"method\":\"POST\",\"url\":\"/auth/login\",\"headers\":{\"authorization\":\"Bearer FAKE.jwt\",\"cookie\":\"backend_token=FAKE\",\"user-agent\":\"curl/8.7\"}},\"body\":{\"email\":\"an@example.com\",\"password\":\"FAKE-pass\",\"refresh\":{\"token\":\"FAKE-rt\"}},\"res\":{\"headers\":{\"set-cookie\":\"backend_token=FAKE2\"}}}, [\"req.headers.authorization\",\"req.headers.cookie\",\"res.headers[\\\"set-cookie\\\"]\",\"*.password\",\"*.token\"])",
+          "output": "{\"req\":{\"method\":\"POST\",\"url\":\"/auth/login\",\"headers\":{\"authorization\":\"[REDACTED]\",\"cookie\":\"[REDACTED]\",\"user-agent\":\"curl/8.7\"}},\"body\":{\"email\":\"an@example.com\",\"password\":\"[REDACTED]\",\"refresh\":{\"token\":\"FAKE-rt\"}},\"res\":{\"headers\":{\"set-cookie\":\"[REDACTED]\"}}}",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split each path into segments first: /\\[\"[^\"]*\"\\]|[^.[\\]]+/g, then strip the [\" \"].|||Tách mỗi đường dẫn thành các đoạn trước: /\\[\"[^\"]*\"\\]|[^.[\\]]+/g, rồi bỏ [\" \"].",
+        "Walk recursively: at a \"*\" loop over Object.keys(node); at the last segment replace the value, but only if the key exists.|||Duyệt đệ quy: gặp \"*\" thì lặp Object.keys(node); tới đoạn cuối thì thay giá trị, nhưng chỉ khi khoá có thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** pino-style redaction */\nfunction redact(obj, paths) {\n  // Write your solution here\n  const out = JSON.parse(JSON.stringify(obj));\n  for (const p of paths) {\n    const segs = p.split('.');\n    let node = out;\n    for (let i = 0; i < segs.length - 1; i++) node = node && node[segs[i]];\n    if (node) node[segs[segs.length - 1]] = '[REDACTED]';\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction redact(obj, paths) {\n  // Ý nghĩa đường dẫn giống pino (đã chạy thật với pino 9): phân tách bằng \".\", [\"tên-có-gạch\"] là một khoá,\n  // và \"*\" khớp ĐÚNG MỘT khoá bất kỳ ở vị trí đó — \"*.password\" che body.password nhưng KHÔNG che password ở\n  // gốc, cũng không che body.user.password.\n  const out = structuredCloneLite(obj);                       // không sửa object gốc\n  for (const p of paths) {\n    const segs = p.match(/\\[\"[^\"]*\"\\]|[^.[\\]]+/g).map((s) => (s.startsWith('[\"') ? s.slice(2, -2) : s));\n    walk(out, segs);\n  }\n  return out;\n\n  function walk(node, segs) {\n    if (!node || typeof node !== 'object') return;\n    const [head, ...rest] = segs;\n    const keys = head === '*' ? Object.keys(node) : [head];\n    for (const k of keys) {\n      if (!Object.prototype.hasOwnProperty.call(node, k)) continue;  // không có ⇒ không thêm khoá mới\n      if (rest.length === 0) node[k] = '[REDACTED]';\n      else walk(node[k], rest);\n    }\n  }\n  function structuredCloneLite(v) {\n    if (Array.isArray(v)) return v.map(structuredCloneLite);\n    if (v && typeof v === 'object') { const o = {}; for (const k of Object.keys(v)) o[k] = structuredCloneLite(v[k]); return o; }\n    return v;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Redaction is a list of paths decided before the first deploy, not something every developer must remember. Knowing the exact reach of a wildcard is what keeps the list honest: the lesson’s login test only passed because the secrets sat exactly one level below the top.</p>",
+      "solutionExplanationHtmlVi": "<p>Che bí mật là một danh sách đường dẫn chốt trước lần deploy đầu, không phải thứ mọi lập trình viên phải tự nhớ. Biết chính xác tầm với của ký tự đại diện mới giữ cho danh sách trung thực: bài kiểm tra login của bài học chỉ qua vì các bí mật nằm đúng một tầng dưới gốc.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The login request of the lesson",
+              "vi": "Request đăng nhập của bài học"
+            },
+            "goi": "redact({\"req\":{\"method\":\"POST\",\"url\":\"/auth/login\",\"headers\":{\"authorization\":\"Bearer FAKE.jwt\",\"cookie\":\"backend_token=FAKE\",\"user-agent\":\"curl/8.7\"}},\"body\":{\"email\":\"an@example.com\",\"password\":\"FAKE-pass\",\"refresh\":{\"token\":\"FAKE-rt\"}},\"res\":{\"headers\":{\"set-cookie\":\"backend_token=FAKE2\"}}}, [\"req.headers.authorization\",\"req.headers.cookie\",\"res.headers[\\\"set-cookie\\\"]\",\"*.password\",\"*.token\"])",
+            "mongDoi": {
+              "req": {
+                "method": "POST",
+                "url": "/auth/login",
+                "headers": {
+                  "authorization": "[REDACTED]",
+                  "cookie": "[REDACTED]",
+                  "user-agent": "curl/8.7"
+                }
+              },
+              "body": {
+                "email": "an@example.com",
+                "password": "[REDACTED]",
+                "refresh": {
+                  "token": "FAKE-rt"
+                }
+              },
+              "res": {
+                "headers": {
+                  "set-cookie": "[REDACTED]"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "* is exactly one level (as pino 9 does)",
+              "vi": "* đúng một tầng (như pino 9)"
+            },
+            "goi": "redact({\"password\":\"top\",\"body\":{\"password\":\"one\",\"user\":{\"password\":\"two\"}}}, [\"*.password\"])",
+            "mongDoi": {
+              "password": "top",
+              "body": {
+                "password": "[REDACTED]",
+                "user": {
+                  "password": "two"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "redact({\"msg\":\"ok\",\"req\":{\"headers\":{}}}, [\"req.headers.authorization\",\"req.headers.cookie\",\"res.headers[\\\"set-cookie\\\"]\",\"*.password\",\"*.token\"])",
+            "mongDoi": {
+              "msg": "ok",
+              "req": {
+                "headers": {}
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input object is not modified",
+              "vi": "Object đầu vào không bị sửa"
+            },
+            "goi": "(() => { const o = {\"req\":{\"method\":\"POST\",\"url\":\"/auth/login\",\"headers\":{\"authorization\":\"Bearer FAKE.jwt\",\"cookie\":\"backend_token=FAKE\",\"user-agent\":\"curl/8.7\"}},\"body\":{\"email\":\"an@example.com\",\"password\":\"FAKE-pass\",\"refresh\":{\"token\":\"FAKE-rt\"}},\"res\":{\"headers\":{\"set-cookie\":\"backend_token=FAKE2\"}}}; redact(o, [\"req.headers.authorization\",\"req.headers.cookie\",\"res.headers[\\\"set-cookie\\\"]\",\"*.password\",\"*.token\"]); return o.body.password; })()",
+            "mongDoi": "FAKE-pass",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "redact({\"a\":{\"token\":1},\"b\":{\"token\":2,\"c\":{\"token\":3}}}, [\"*.token\",\"*.*.token\"])",
+            "mongDoi": {
+              "a": {
+                "token": "[REDACTED]"
+              },
+              "b": {
+                "token": "[REDACTED]",
+                "c": {
+                  "token": "[REDACTED]"
+                }
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating *.password as “password anywhere”: it is one level, so a password logged at the top level or two levels deep is written in plaintext. List those paths too (password, *.*.password).|||Hiểu *.password là “password ở bất kỳ đâu”: nó chỉ một tầng, nên password log ở gốc hay sâu hai tầng vẫn bị ghi rõ. Hãy liệt kê cả các đường đó (password, *.*.password)."
+        },
+        {
+          "loi": "Mutating the record in place: the same object may still be used by the request handler after it was logged.|||Sửa trực tiếp bản ghi: chính object đó có thể còn được handler dùng sau khi đã ghi log."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wildcard",
+          "vi": "ký tự đại diện",
+          "giaiThich": "* = any one key"
+        },
+        {
+          "en": "censor",
+          "vi": "giá trị thay thế",
+          "giaiThich": "the text written instead of the secret"
+        }
+      ]
+    },
+    {
+      "title": "createLogger(level, out): levels, lazy arguments and child loggers",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "logging",
+        "closures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write a tiny structured logger. Levels: <code>trace 10, debug 20, info 30, warn 40, error 50</code>. <code>createLogger(level, out)</code> returns an object with:</p><ul><li><code>trace/debug/info/warn/error(fields, msg)</code> — if the call’s level is ≥ the logger’s level, push <code>{ level: \"&lt;name&gt;\", ...bindings, ...fields, msg }</code> into the array <code>out</code>; otherwise do nothing;</li><li><code>fields</code> may be a <b>function</b>: call it only when the line is really written (the lesson’s <code>countEverything()</code> trap);</li><li><code>isLevelEnabled(name)</code> → boolean;</li><li><code>child(bindings)</code> → a logger with the same level and <code>out</code> whose lines also carry <code>bindings</code> (a child of a child carries both).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Push plain objects into out (no JSON string).</li>\n  <li>Field order in a line: level, bindings, fields, msg (later keys win).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết một logger có cấu trúc nhỏ. Cấp độ: <code>trace 10, debug 20, info 30, warn 40, error 50</code>. <code>createLogger(level, out)</code> trả về object có:</p><ul><li><code>trace/debug/info/warn/error(fields, msg)</code> — nếu cấp của lời gọi ≥ cấp của logger thì đẩy <code>{ level: \"&lt;tên&gt;\", ...bindings, ...fields, msg }</code> vào mảng <code>out</code>; không thì không làm gì;</li><li><code>fields</code> có thể là <b>hàm</b>: chỉ gọi khi dòng thật sự được ghi (bẫy <code>countEverything()</code> của bài);</li><li><code>isLevelEnabled(name)</code> → boolean;</li><li><code>child(bindings)</code> → logger cùng cấp và cùng <code>out</code>, mỗi dòng mang thêm <code>bindings</code> (con của con mang cả hai).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đẩy object thuần vào out (không phải chuỗi JSON).</li>\n  <li>Thứ tự trường trong một dòng: level, bindings, fields, msg (khoá sau thắng).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "out",
+          "output": "[{\"level\":\"info\",\"route\":\"/notes\",\"msg\":\"list\"},{\"level\":\"error\",\"code\":\"E1\",\"msg\":\"boom\"}]",
+          "explanation": "The first sample case (Run executes the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep a table LEVELS = { trace: 10, … } and compare numbers, not names.|||Giữ bảng LEVELS = { trace: 10, … } và so số, không so tên.",
+        "child can simply call createLogger again with the merged bindings — same level, same out array.|||child chỉ cần gọi lại createLogger với bindings đã gộp — cùng cấp, cùng mảng out."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** a tiny structured logger */\nfunction createLogger(level, out, bindings = {}) {\n  // Write your solution here\n  const log = {};\n  for (const name of ['trace', 'debug', 'info', 'warn', 'error']) {\n    log[name] = (fields, msg) => {\n      const f = typeof fields === 'function' ? fields() : fields;\n      if (name >= level) out.push({ level: name, ...bindings, ...f, msg });\n    };\n  }\n  log.isLevelEnabled = (l) => l >= level;\n  log.child = (more) => createLogger(level, out, more);\n  return log;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction createLogger(level, out, bindings = {}) {\n  const LEVELS = { trace: 10, debug: 20, info: 30, warn: 40, error: 50 };\n  const min = LEVELS[level];\n  const log = { isLevelEnabled: (l) => LEVELS[l] >= min };\n  for (const name of Object.keys(LEVELS)) {\n    log[name] = (fields, msg) => {\n      if (LEVELS[name] < min) return;                         // dưới ngưỡng: không làm gì, KHÔNG gọi hàm đối số\n      const f = typeof fields === 'function' ? fields() : fields;   // đối số đắt viết dạng hàm ⇒ chỉ tính khi thật sự ghi\n      out.push({ level: name, ...bindings, ...f, msg });\n    };\n  }\n  // logger con mang thêm trường cố định (reqId…) — đúng thứ AsyncLocalStorage giữ ở bài 15.2\n  log.child = (more) => createLogger(level, out, { ...bindings, ...more });\n  return log;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A level is a threshold, and a skipped call must cost (almost) nothing — but JavaScript evaluates arguments before the call. Accepting a function and calling it only after the check is exactly what if (log.isLevelEnabled('debug')) does by hand. child() is how a request id rides on every line (lesson 15.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Cấp độ là một ngưỡng, và một lời gọi bị bỏ qua phải (gần như) không tốn gì — nhưng JavaScript tính đối số trước khi gọi. Nhận một hàm và chỉ gọi nó sau khi xét cấp chính là việc if (log.isLevelEnabled('debug')) làm bằng tay. child() là cách mã request đi theo mọi dòng (bài 15.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Level info: debug skipped, info and error written",
+              "vi": "Cấp info: bỏ debug, ghi info và error"
+            },
+            "goi": "out",
+            "chuanBi": "const out = []; const log = createLogger(\"info\", out); log.debug({ a: 1 }, \"hidden\"); log.info({ route: \"/notes\" }, \"list\"); log.error({ code: \"E1\" }, \"boom\");",
+            "mongDoi": [
+              {
+                "level": "info",
+                "route": "/notes",
+                "msg": "list"
+              },
+              {
+                "level": "error",
+                "code": "E1",
+                "msg": "boom"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The countEverything() trap: 1,000 skipped calls",
+              "vi": "Bẫy countEverything(): 1.000 lời gọi bị bỏ qua"
+            },
+            "goi": "({ runs, written: out.length })",
+            "chuanBi": "const out = []; const log = createLogger(\"warn\", out); let runs = 0; for (let i = 0; i < 1000; i++) log.debug(() => { runs++; return { rows: 42 }; }, \"stats\");",
+            "mongDoi": {
+              "runs": 0,
+              "written": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "out",
+            "chuanBi": "const out = []; const log = createLogger(\"debug\", out); const a = log.child({ reqId: \"f360ef6b\" }); const b = a.child({ userId: \"an\" }); b.debug(() => ({ rows: 3 }), \"repo: done\"); a.info({}, \"route: reply\");",
+            "mongDoi": [
+              {
+                "level": "debug",
+                "reqId": "f360ef6b",
+                "userId": "an",
+                "rows": 3,
+                "msg": "repo: done"
+              },
+              {
+                "level": "info",
+                "reqId": "f360ef6b",
+                "msg": "route: reply"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[\"trace\",\"debug\",\"info\",\"warn\",\"error\"].map((l) => log.isLevelEnabled(l))",
+            "chuanBi": "const log = createLogger(\"warn\", []);",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              true,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "out",
+            "chuanBi": "const out = []; const log = createLogger(\"error\", out); log.warn({ x: 1 }, \"w\"); log.error({ code: \"E2\" }, \"e\");",
+            "mongDoi": [
+              {
+                "level": "error",
+                "code": "E2",
+                "msg": "e"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Evaluating a function argument before checking the level: nothing is written, yet the expensive work runs on every call, forever.|||Tính đối số dạng hàm trước khi xét cấp: không ghi gì mà việc đắt vẫn chạy ở mọi lời gọi, mãi mãi."
+        },
+        {
+          "loi": "Comparing level names as strings: \"warn\" > \"info\" happens to work, \"error\" > \"debug\" does not.|||So tên cấp như chuỗi: \"warn\" > \"info\" tình cờ đúng, \"error\" > \"debug\" thì sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "log level",
+          "vi": "cấp độ log",
+          "giaiThich": "a threshold: calls below it are skipped"
+        },
+        {
+          "en": "child logger",
+          "vi": "logger con",
+          "giaiThich": "a logger that adds fixed fields to every line"
+        },
+        {
+          "en": "lazy evaluation",
+          "vi": "tính trễ",
+          "giaiThich": "compute only when the value is needed"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,898 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-6-1-react-deploy",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-6-1-react-deploy"
+  },
+  "exercises": [
+    {
+      "title": "Deploying and BaaS: config in the environment, not in code",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "deploy",
+        "BaaS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The deployment ideas of the lesson and CLO7 (Backend-as-a-Service).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các ý về triển khai của bài và CLO7 (Backend-as-a-Service).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: where does this value live — client, server or host?|||Hỏi: giá trị này nằm ở đâu — client, server hay host?",
+        "A React build is public.|||Bản build React là công khai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploying and BaaS: config in the environment, not in code\n\nAnswer in the answer panel (no code needed).\n\n1. The API works locally but answers 500 on Render right after deploy. What is the most likely cause?API chạy ở máy nhưng trả 500 trên Render ngay sau khi deploy. Nguyên nhân khả dĩ nhất?\n2. What does the 12-factor config rule say?Luật cấu hình 12-factor nói gì?\n3. When does a BaaS (Firebase, Supabase, Atlas App Services) make sense?Khi nào BaaS (Firebase, Supabase, Atlas App Services) hợp lý?\n4. The React app on https://myapp.vercel.app calls the API on Render. What must be configured? (choose all)App React ở https://myapp.vercel.app gọi API trên Render. Phải cấu hình gì? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploying and BaaS: config in the environment, not in code — answer key\n\n1. The API works locally but answers 500 on Render right after deploy. What is the most likely cause?API chạy ở máy nhưng trả 500 trên Render ngay sau khi deploy. Nguyên nhân khả dĩ nhất?\n   Answer: d) An environment variable (MONGODB_URI, JWT_SECRET) was never set in the host dashboard\n   \"Setting env vars in the host dashboard is a separate step from pushing code.\"VI: \"Đặt biến môi trường trên bảng điều khiển của host là một bước riêng, khác với việc push mã.\"\n\n2. What does the 12-factor config rule say?Luật cấu hình 12-factor nói gì?\n   Answer: c) The same code runs everywhere; only environment variables differ between local and production\n   Local Mongo vs Atlas, dev secret vs prod secret: the code reads process.env and never changes.VI: Mongo cục bộ vs Atlas, secret dev vs secret prod: mã đọc process.env và không bao giờ đổi.\n\n3. When does a BaaS (Firebase, Supabase, Atlas App Services) make sense?Khi nào BaaS (Firebase, Supabase, Atlas App Services) hợp lý?\n   Answer: a) A small app where speed matters more than control: ready-made auth, database and storage, no server to build\n   BaaS handles secure client–server communication for you; the trade-off is control (rules live in the vendor's console).VI: BaaS lo giao tiếp client–server an toàn cho bạn; cái giá là quyền kiểm soát (luật nằm trong console của nhà cung cấp).\n\n4. The React app on https://myapp.vercel.app calls the API on Render. What must be configured? (choose all)App React ở https://myapp.vercel.app gọi API trên Render. Phải cấu hình gì? (chọn hết)\n   Answer: b) The API URL in the React build (e.g. VITE_API_URL) + d) CORS on the API allowing https://myapp.vercel.app + e) MONGODB_URI and JWT_SECRET on Render\n   Anything in the React bundle is public. Secrets live only on the server.VI: Mọi thứ trong bundle React đều công khai. Bí mật chỉ nằm ở server.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> An environment variable (MONGODB_URI, JWT_SECRET) was never set in the host dashboard</p><p>\"Setting env vars in the host dashboard is a separate step from pushing code.\"</p><p><i>VI: \"Đặt biến môi trường trên bảng điều khiển của host là một bước riêng, khác với việc push mã.\"</i></p></li><li><p><b>c)</b> The same code runs everywhere; only environment variables differ between local and production</p><p>Local Mongo vs Atlas, dev secret vs prod secret: the code reads <code>process.env</code> and never changes.</p><p><i>VI: Mongo cục bộ vs Atlas, secret dev vs secret prod: mã đọc <code>process.env</code> và không bao giờ đổi.</i></p></li><li><p><b>a)</b> A small app where speed matters more than control: ready-made auth, database and storage, no server to build</p><p>BaaS handles secure client–server communication for you; the trade-off is control (rules live in the vendor's console).</p><p><i>VI: BaaS lo giao tiếp client–server an toàn cho bạn; cái giá là quyền kiểm soát (luật nằm trong console của nhà cung cấp).</i></p></li><li><p><b>b)</b> The API URL in the React build (e.g. <code>VITE_API_URL</code>) + <b>d)</b> CORS on the API allowing <code>https://myapp.vercel.app</code> + <b>e)</b> MONGODB_URI and JWT_SECRET on Render</p><p>Anything in the React bundle is public. Secrets live only on the server.</p><p><i>VI: Mọi thứ trong bundle React đều công khai. Bí mật chỉ nằm ở server.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "d1",
+            "de": "<p>The API works locally but answers 500 on Render right after deploy. What is the most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>API chạy ở máy nhưng trả 500 trên Render ngay sau khi deploy. Nguyên nhân khả dĩ nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The React app is not deployed yet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Render does not support Express"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MongoDB Atlas blocks every request coming from a host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An environment variable (MONGODB_URI, JWT_SECRET) was never set in the host dashboard"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>\"Setting env vars in the host dashboard is a separate step from pushing code.\"</p><p><i>VI: \"Đặt biến môi trường trên bảng điều khiển của host là một bước riêng, khác với việc push mã.\"</i></p>"
+          },
+          {
+            "ma": "d2",
+            "de": "<p>What does the 12-factor config rule say?</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật cấu hình 12-factor nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ports and URLs should be hard-coded for speed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each environment needs its own branch of the code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The same code runs everywhere; only environment variables differ between local and production"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Config files must be committed so the host can read them"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Local Mongo vs Atlas, dev secret vs prod secret: the code reads <code>process.env</code> and never changes.</p><p><i>VI: Mongo cục bộ vs Atlas, secret dev vs secret prod: mã đọc <code>process.env</code> và không bao giờ đổi.</i></p>"
+          },
+          {
+            "ma": "d3",
+            "de": "<p>When does a BaaS (Firebase, Supabase, Atlas App Services) make sense?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào BaaS (Firebase, Supabase, Atlas App Services) hợp lý?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A small app where speed matters more than control: ready-made auth, database and storage, no server to build"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whenever you need custom business rules that must run on your own server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never — BaaS cannot do authentication"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for apps without users"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>BaaS handles secure client–server communication for you; the trade-off is control (rules live in the vendor's console).</p><p><i>VI: BaaS lo giao tiếp client–server an toàn cho bạn; cái giá là quyền kiểm soát (luật nằm trong console của nhà cung cấp).</i></p>"
+          },
+          {
+            "ma": "d4",
+            "de": "<p>The React app on <code>https://myapp.vercel.app</code> calls the API on Render. What must be configured? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>App React ở <code>https://myapp.vercel.app</code> gọi API trên Render. Phải cấu hình gì? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "MongoDB credentials inside the React code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The API URL in the React build (e.g. <code>VITE_API_URL</code>)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The JWT secret inside the React code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CORS on the API allowing <code>https://myapp.vercel.app</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "MONGODB_URI and JWT_SECRET on Render"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Anything in the React bundle is public. Secrets live only on the server.</p><p><i>VI: Mọi thứ trong bundle React đều công khai. Bí mật chỉ nằm ở server.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting env vars on the host.|||Quên biến môi trường trên host."
+        },
+        {
+          "loi": "Shipping secrets in the front-end.|||Đưa bí mật vào front-end."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BaaS",
+          "vi": "Backend-as-a-Service"
+        },
+        {
+          "en": "12-factor app",
+          "vi": "ứng dụng 12 yếu tố"
+        }
+      ]
+    },
+    {
+      "title": "Deployment steps, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "deploy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The deployment steps of the lesson, plus the check that proves it worked.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các bước triển khai của bài, cộng phép kiểm chứng minh nó chạy.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Config before code leaves your machine.|||Cấu hình trước khi mã rời máy bạn.",
+        "Testing is last.|||Kiểm thử là bước cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deployment steps, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the steps of the first deploy of your API.Sắp các bước của lần deploy API đầu tiên.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deployment steps, in order — answer key\n\n1. Order the steps of the first deploy of your API.Sắp các bước của lần deploy API đầu tiên.\n   Answer: m3) Read PORT, MONGODB_URI, JWT_SECRET from process.env in the code  →  m1) Push the code to GitHub (with .env git-ignored)  →  m2) Create the service on Render/Railway; it runs npm start  →  m4) Add the same variables in the host dashboard  →  m5) Call a public route (e.g. GET /api/products) on the live URL\n   Code first reads config from the environment; Git carries only code; the host builds and starts it; the variables are a separate dashboard step; a real request is the only proof it works.VI: Mã đọc cấu hình từ môi trường trước; Git chỉ mang mã; host build và khởi động; biến môi trường là một bước riêng trên bảng điều khiển; một request thật là bằng chứng duy nhất nó chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code first reads config from the environment; Git carries only code; the host builds and starts it; the variables are a separate dashboard step; a real request is the only proof it works.</p><p><i>VI: Mã đọc cấu hình từ môi trường trước; Git chỉ mang mã; host build và khởi động; biến môi trường là một bước riêng trên bảng điều khiển; một request thật là bằng chứng duy nhất nó chạy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "<p>Order the steps of the first deploy of your API.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước của lần deploy API đầu tiên.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Push the code to GitHub (with <code>.env</code> git-ignored)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Create the service on Render/Railway; it runs <code>npm start</code>"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Read PORT, MONGODB_URI, JWT_SECRET from <code>process.env</code> in the code"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Add the same variables in the host dashboard"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Call a public route (e.g. <code>GET /api/products</code>) on the live URL"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m1",
+              "m2",
+              "m4",
+              "m5"
+            ],
+            "giaiThich": "<p>Code first reads config from the environment; Git carries only code; the host builds and starts it; the variables are a separate dashboard step; a real request is the only proof it works.</p><p><i>VI: Mã đọc cấu hình từ môi trường trước; Git chỉ mang mã; host build và khởi động; biến môi trường là một bước riêng trên bảng điều khiển; một request thật là bằng chứng duy nhất nó chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Committing .env to make the host work.|||Commit .env để host chạy được."
+        },
+        {
+          "loi": "Never calling the live URL.|||Không bao giờ gọi URL thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "host",
+          "vi": "nơi chạy ứng dụng"
+        }
+      ]
+    },
+    {
+      "title": "Config via env: loadConfig(env) that fails loudly",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "configuration",
+        "fail fast"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>loadConfig(env)</code> (called once at startup with <code>process.env</code>) that returns</p>\n<pre>{ port, mongoUri, jwtSecret, corsOrigin }</pre>\n<ul><li><code>port</code> — <code>Number(env.PORT)</code>, default <code>3000</code> when PORT is absent or empty; a PORT that is not a whole number ⇒ throw <code>Error('PORT must be a number')</code>;</li>\n<li><code>mongoUri</code> ← <code>MONGODB_URI</code>, <code>jwtSecret</code> ← <code>JWT_SECRET</code>: both required — if any is missing or empty throw ONE error listing all missing names: <code>Error('Missing environment variables: MONGODB_URI, JWT_SECRET')</code>;</li>\n<li><code>corsOrigin</code> ← <code>CORS_ORIGIN</code>, default <code>http://localhost:5173</code>.</li></ul>\n<p>Check order: missing variables first, then PORT.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never default a secret.</li>\n  <li>Do not read the real <code>process.env</code> inside — use the <code>env</code> argument (easy to test).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>loadConfig(env)</code> (gọi một lần lúc khởi động với <code>process.env</code>) trả</p>\n<pre>{ port, mongoUri, jwtSecret, corsOrigin }</pre>\n<ul><li><code>port</code> — <code>Number(env.PORT)</code>, mặc định <code>3000</code> khi PORT vắng hoặc rỗng; PORT không phải số nguyên ⇒ ném <code>Error('PORT must be a number')</code>;</li>\n<li><code>mongoUri</code> ← <code>MONGODB_URI</code>, <code>jwtSecret</code> ← <code>JWT_SECRET</code>: cả hai bắt buộc — thiếu hay rỗng cái nào thì ném MỘT lỗi liệt kê mọi tên thiếu: <code>Error('Missing environment variables: MONGODB_URI, JWT_SECRET')</code>;</li>\n<li><code>corsOrigin</code> ← <code>CORS_ORIGIN</code>, mặc định <code>http://localhost:5173</code>.</li></ul>\n<p>Thứ tự kiểm: biến thiếu trước, rồi tới PORT.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ đặt mặc định cho bí mật.</li>\n  <li>Đừng đọc <code>process.env</code> thật bên trong — dùng đối số <code>env</code> (dễ kiểm thử).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "loadConfig({ MONGODB_URI: \"mongodb+srv://…\", JWT_SECRET: \"s3cret\" })",
+          "output": "{\"port\":3000,\"mongoUri\":\"mongodb+srv://…\",\"jwtSecret\":\"s3cret\",\"corsOrigin\":\"http://localhost:5173\"}",
+          "explanation": "Defaults for PORT and CORS_ORIGIN.|||Mặc định cho PORT và CORS_ORIGIN."
+        },
+        {
+          "input": "loadConfig({ PORT: \"8080\" })",
+          "output": "throws Error: Missing environment variables: MONGODB_URI, JWT_SECRET",
+          "explanation": "Both names in one message.|||Cả hai tên trong một thông báo."
+        }
+      ],
+      "hintsJson": [
+        "<code>const missing = ['MONGODB_URI', 'JWT_SECRET'].filter((k) => !env[k]);</code>",
+        "<code>Number.isInteger(Number(env.PORT))</code> rejects \"abc\" and \"80.5\".|||<code>Number.isInteger(Number(env.PORT))</code> từ chối \"abc\" và \"80.5\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function loadConfig(env) {\n  return {\n    port: env.PORT || 3000,\n    mongoUri: env.MONGODB_URI || 'mongodb://localhost/test',\n    jwtSecret: env.JWT_SECRET || 'dev',\n    corsOrigin: env.CORS_ORIGIN,\n  };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function loadConfig(env) {\n  // 1) required settings: report ALL missing names at once\n  const missing = ['MONGODB_URI', 'JWT_SECRET'].filter((k) => !env[k]);\n  if (missing.length) throw new Error('Missing environment variables: ' + missing.join(', '));\n\n  // 2) PORT: optional, but if present it must be a whole number\n  let port = 3000;\n  if (env.PORT !== undefined && env.PORT !== '') {\n    port = Number(env.PORT);\n    if (!Number.isInteger(port)) throw new Error('PORT must be a number');\n  }\n\n  return {\n    port,\n    mongoUri: env.MONGODB_URI,\n    jwtSecret: env.JWT_SECRET,                         // never defaulted\n    corsOrigin: env.CORS_ORIGIN || 'http://localhost:5173',\n  };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reading every setting once, validating it and failing at startup turns \"500 in production\" into a clear crash log that names the missing variables — the fastest possible feedback for the deploy step that the lesson warns about.</p>",
+      "solutionExplanationHtmlVi": "<p>Đọc mọi cấu hình một lần, kiểm tra và hỏng ngay lúc khởi động biến \"500 ở production\" thành log sập rõ ràng nêu tên các biến thiếu — phản hồi nhanh nhất có thể cho bước deploy mà bài cảnh báo.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Defaults for PORT and CORS_ORIGIN",
+              "vi": "Mặc định cho PORT và CORS_ORIGIN"
+            },
+            "goi": "loadConfig({ MONGODB_URI: 'mongodb+srv://u:p@c/shop', JWT_SECRET: 's3cret' })",
+            "mongDoi": {
+              "port": 3000,
+              "mongoUri": "mongodb+srv://u:p@c/shop",
+              "jwtSecret": "s3cret",
+              "corsOrigin": "http://localhost:5173"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Both missing → one error naming both",
+              "vi": "Thiếu cả hai → một lỗi nêu cả hai"
+            },
+            "goi": "loadConfig({ PORT: '8080' })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Missing environment variables: MONGODB_URI, JWT_SECRET"
+            }
+          },
+          {
+            "moTa": {
+              "en": "PORT=abc → error",
+              "vi": "PORT=abc → lỗi"
+            },
+            "goi": "loadConfig({ MONGODB_URI: 'x', JWT_SECRET: 'y', PORT: 'abc' })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "PORT must be a number"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "loadConfig({ MONGODB_URI: 'x', JWT_SECRET: 'y', PORT: '9999', CORS_ORIGIN: 'https://myapp.vercel.app' })",
+            "mongDoi": {
+              "port": 9999,
+              "mongoUri": "x",
+              "jwtSecret": "y",
+              "corsOrigin": "https://myapp.vercel.app"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "[(() => { try { loadConfig({ MONGODB_URI: 'x', JWT_SECRET: '' }); } catch (e) { return e.message; } })(), loadConfig({ MONGODB_URI: 'x', JWT_SECRET: 'y', PORT: '' }).port]",
+            "mongDoi": [
+              "Missing environment variables: JWT_SECRET",
+              3000
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>jwtSecret: env.JWT_SECRET || 'dev'</code> — production quietly signs tokens with \"dev\".|||<code>jwtSecret: env.JWT_SECRET || 'dev'</code> — production lặng lẽ ký token bằng \"dev\"."
+        },
+        {
+          "loi": "Throwing on the first missing variable only: you fix one, redeploy, and discover the next.|||Chỉ ném ở biến thiếu đầu tiên: sửa một cái, deploy lại, rồi mới thấy cái tiếp theo."
+        },
+        {
+          "loi": "Keeping PORT as a string — fine for listen, wrong for anything that compares numbers.|||Giữ PORT dạng chuỗi — listen thì được, nhưng sai với mọi chỗ so số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fail fast",
+          "vi": "hỏng sớm"
+        },
+        {
+          "en": "environment variable",
+          "vi": "biến môi trường"
+        }
+      ]
+    },
+    {
+      "title": "The React side: fetchProducts(apiUrl, token)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "fetch",
+        "Bearer token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write the function a React component calls (the lesson's snippet, finished): <code>fetchProducts(apiUrl, token)</code></p>\n<ul><li><code>GET `${apiUrl}/api/products`</code> with header <code>Authorization: Bearer &lt;token&gt;</code>;</li>\n<li>status 401 ⇒ throw <code>Error('Session expired, please log in again')</code>;</li>\n<li>any other non-2xx ⇒ throw <code>Error('Request failed: &lt;status&gt;')</code>;</li>\n<li>otherwise return the parsed JSON.</li></ul>\n<p><code>fetch</code> is simulated by the grader (no network): it answers from a table and records every call.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>fetch</code> does NOT reject on 401/500 — check <code>res.ok</code> / <code>res.status</code> yourself.</li>\n  <li>Do not add a trailing slash problem: <code>apiUrl</code> has no trailing slash.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hàm mà một component React gọi (đoạn mã của bài, làm cho xong): <code>fetchProducts(apiUrl, token)</code></p>\n<ul><li><code>GET `${apiUrl}/api/products`</code> kèm header <code>Authorization: Bearer &lt;token&gt;</code>;</li>\n<li>mã 401 ⇒ ném <code>Error('Session expired, please log in again')</code>;</li>\n<li>mã không phải 2xx khác ⇒ ném <code>Error('Request failed: &lt;status&gt;')</code>;</li>\n<li>còn lại trả JSON đã parse.</li></ul>\n<p><code>fetch</code> do máy chấm giả lập (không có mạng): nó trả lời theo một bảng và ghi lại mọi lời gọi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>fetch</code> KHÔNG reject khi 401/500 — tự kiểm <code>res.ok</code> / <code>res.status</code>.</li>\n  <li>Đừng tạo lỗi dấu gạch cuối: <code>apiUrl</code> không có gạch chéo cuối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await fetchProducts(\"https://api.shop.dev\", \"tok123\")",
+          "output": "[{\"id\":1,\"name\":\"Book\"}]",
+          "explanation": "Header sent: Authorization: Bearer tok123.|||Header đã gửi: Authorization: Bearer tok123."
+        },
+        {
+          "input": "the API answers 401",
+          "output": "throws Error: Session expired, please log in again",
+          "explanation": "The UI can send the user to /login.|||Giao diện có thể đưa người dùng về /login."
+        }
+      ],
+      "hintsJson": [
+        "<code>const res = await fetch(`${apiUrl}/api/products`, { headers: { Authorization: `Bearer ${token}` } });</code>",
+        "<code>if (res.status === 401) throw new Error(…); if (!res.ok) throw new Error('Request failed: ' + res.status);</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function fetchProducts(apiUrl, token) {\n  const res = await fetch(apiUrl + '/api/products', { headers: { Authorization: token } });\n  return res.json();\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function fetchProducts(apiUrl, token) {\n  const res = await fetch(`${apiUrl}/api/products`, {\n    headers: { Authorization: `Bearer ${token}` },      // the JWT travels in the header\n  });\n  // fetch only rejects on NETWORK failure — HTTP errors must be checked by hand\n  if (res.status === 401) throw new Error('Session expired, please log in again');\n  if (!res.ok) throw new Error('Request failed: ' + res.status);\n  return res.json();\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The front-end half of the contract: send the JWT in the Authorization header, read the status code before the body, and turn 401 into a specific, actionable error. This mirrors the back-end: the API chose the codes, the client acts on them.</p>",
+      "solutionExplanationHtmlVi": "<p>Nửa phía front-end của hợp đồng: gửi JWT trong header Authorization, đọc mã trạng thái trước thân, và biến 401 thành một lỗi cụ thể, xử lý được. Nó soi gương phía back-end: API chọn mã, client hành động theo mã.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "200 → the JSON; the Bearer header was sent",
+              "vi": "200 → JSON; header Bearer đã gửi"
+            },
+            "goi": "[await fetchProducts('https://api.shop.dev', 'tok123'), __fetchDaGoi.map((c) => c.method + ' ' + c.url + ' ' + (c.headers.Authorization || c.headers.authorization))]",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "json": [
+                  {
+                    "id": 1,
+                    "name": "Book"
+                  }
+                ]
+              }
+            },
+            "mongDoi": [
+              [
+                {
+                  "id": 1,
+                  "name": "Book"
+                }
+              ],
+              [
+                "GET https://api.shop.dev/api/products Bearer tok123"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "401 → Session expired error",
+              "vi": "401 → lỗi Session expired"
+            },
+            "goi": "await fetchProducts('https://api.shop.dev', 'old')",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "status": 401,
+                "json": {
+                  "error": "Token expired"
+                }
+              }
+            },
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Session expired"
+            }
+          },
+          {
+            "moTa": {
+              "en": "500 → Request failed: 500",
+              "vi": "500 → Request failed: 500"
+            },
+            "goi": "await fetchProducts('https://api.shop.dev', 't').catch((e) => e.message)",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "status": 500,
+                "json": {
+                  "error": "Internal Server Error"
+                }
+              }
+            },
+            "mongDoi": "Request failed: 500"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "await fetchProducts('http://localhost:3000', 'abc')",
+            "fetchGia": {
+              "GET http://localhost:3000/api/products": {
+                "json": []
+              }
+            },
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "await fetchProducts('https://api.shop.dev', 't').catch((e) => e.message)",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "status": 403,
+                "json": {
+                  "error": "Forbidden"
+                }
+              }
+            },
+            "mongDoi": "Request failed: 403",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return res.json()</code> without checking <code>res.ok</code>: the error body becomes the \"products\" and the page shows nothing.|||<code>return res.json()</code> không kiểm <code>res.ok</code>: thân lỗi thành \"sản phẩm\" và trang không hiện gì."
+        },
+        {
+          "loi": "<code>Authorization: token</code> without \"Bearer \" — requireAuth answers 401.|||<code>Authorization: token</code> thiếu \"Bearer \" — requireAuth trả 401."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fetch",
+          "vi": "API gửi request của trình duyệt"
+        },
+        {
+          "en": "res.ok",
+          "vi": "đúng khi mã 200–299"
+        }
+      ]
+    },
+    {
+      "title": "A small API client for the whole app: apiRequest(path, options)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "fetch",
+        "error handling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>createApi(baseUrl)</code> → <code>apiRequest(path, { method = 'GET', body, token } = {})</code> used by every React page:</p>\n<ul><li>sends JSON: if <code>body</code> is given, <code>Content-Type: application/json</code> and <code>JSON.stringify(body)</code>; adds <code>Authorization: Bearer …</code> when <code>token</code> is given;</li>\n<li>a network failure (fetch rejects) ⇒ throw <code>Error('Network error — is the API running?')</code>;</li>\n<li><code>204</code> ⇒ return <code>null</code> (no body to parse);</li>\n<li>a response whose <code>Content-Type</code> is not JSON (e.g. a host's HTML 502 page) ⇒ throw <code>Error('Server error ' + status)</code>;</li>\n<li>a JSON error (non-2xx) ⇒ throw <code>Error(body.error || 'Request failed: ' + status)</code> with a property <code>status</code>;</li>\n<li>otherwise return the parsed JSON.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Read the type with <code>res.headers.get('content-type')</code>.</li>\n  <li>Check 204 BEFORE trying to parse.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>createApi(baseUrl)</code> → <code>apiRequest(path, { method = 'GET', body, token } = {})</code> dùng cho mọi trang React:</p>\n<ul><li>gửi JSON: có <code>body</code> thì <code>Content-Type: application/json</code> và <code>JSON.stringify(body)</code>; có <code>token</code> thì thêm <code>Authorization: Bearer …</code>;</li>\n<li>mạng hỏng (fetch reject) ⇒ ném <code>Error('Network error — is the API running?')</code>;</li>\n<li><code>204</code> ⇒ trả <code>null</code> (không có thân để parse);</li>\n<li>response có <code>Content-Type</code> không phải JSON (vd trang HTML 502 của host) ⇒ ném <code>Error('Server error ' + status)</code>;</li>\n<li>lỗi JSON (không phải 2xx) ⇒ ném <code>Error(body.error || 'Request failed: ' + status)</code> kèm thuộc tính <code>status</code>;</li>\n<li>còn lại trả JSON đã parse.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc kiểu bằng <code>res.headers.get('content-type')</code>.</li>\n  <li>Kiểm 204 TRƯỚC khi parse.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await api('/api/products', { method: 'POST', body: { name: 'Pen' }, token: 't' })",
+          "output": "{\"_id\":\"p1\",\"name\":\"Pen\"}",
+          "explanation": "JSON in, JSON out.|||JSON vào, JSON ra."
+        },
+        {
+          "input": "the host answers 502 with an HTML page",
+          "output": "throws Error: Server error 502",
+          "explanation": "Not \"Unexpected token <\".|||Không phải \"Unexpected token <\"."
+        }
+      ],
+      "hintsJson": [
+        "<code>let res; try { res = await fetch(baseUrl + path, init); } catch { throw new Error('Network error — is the API running?'); }</code>",
+        "<code>const isJson = (res.headers.get('content-type') || '').includes('application/json');</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createApi(baseUrl) {\n  return async function apiRequest(path, { method = 'GET', body, token } = {}) {\n    const res = await fetch(baseUrl + path, { method, body, headers: { Authorization: 'Bearer ' + token } });\n    return res.json();\n  };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function createApi(baseUrl) {\n  return async function apiRequest(path, { method = 'GET', body, token } = {}) {\n    const headers = {};\n    if (body !== undefined) headers['Content-Type'] = 'application/json';\n    if (token) headers.Authorization = 'Bearer ' + token;\n\n    let res;\n    try {\n      res = await fetch(baseUrl + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });\n    } catch {\n      throw new Error('Network error — is the API running?');      // fetch rejects only when there is no response\n    }\n\n    if (res.status === 204) return null;                            // nothing to parse\n    const isJson = (res.headers.get('content-type') || '').includes('application/json');\n    if (!isJson) throw new Error('Server error ' + res.status);      // e.g. the host's HTML 502 page\n    const data = await res.json();\n    if (!res.ok) {\n      const err = new Error(data.error || 'Request failed: ' + res.status);\n      err.status = res.status;                                      // the UI can react to 401/403/404\n      throw err;\n    }\n    return data;\n  };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One client function encodes the whole HTTP contract on the React side: JSON in both directions, the token in a header, and every failure mode turned into one readable Error — network down, the host's HTML error page during a deploy, the API's own <code>{ error }</code> envelope (with its status kept for the UI), and the empty 204.</p>",
+      "solutionExplanationHtmlVi": "<p>Một hàm client mã hoá toàn bộ hợp đồng HTTP ở phía React: JSON cả hai chiều, token trong header, và mọi kiểu thất bại thành một Error đọc được — mạng sập, trang lỗi HTML của host lúc deploy, vỏ <code>{ error }</code> của chính API (giữ lại mã cho giao diện), và 204 rỗng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "POST sends JSON + headers and returns the JSON",
+              "vi": "POST gửi JSON + header và trả JSON"
+            },
+            "goi": "[await api('/api/products', { method: 'POST', body: { name: 'Pen' }, token: 't' }), call0()]",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "POST https://api.shop.dev/api/products": {
+                "status": 201,
+                "json": {
+                  "_id": "p1",
+                  "name": "Pen"
+                }
+              }
+            },
+            "mongDoi": [
+              {
+                "_id": "p1",
+                "name": "Pen"
+              },
+              {
+                "method": "POST",
+                "url": "https://api.shop.dev/api/products",
+                "headers": {
+                  "content-type": "application/json",
+                  "authorization": "Bearer t"
+                },
+                "body": {
+                  "name": "Pen"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "204 → null",
+              "vi": "204 → null"
+            },
+            "goi": "await fail(api('/api/products/p1', { method: 'DELETE', token: 't' }))",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "DELETE https://api.shop.dev/api/products/p1": {
+                "status": 204,
+                "text": ""
+              }
+            },
+            "mongDoi": {
+              "ok": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "HTML 502 → Server error 502",
+              "vi": "HTML 502 → Server error 502"
+            },
+            "goi": "await fail(api('/api/products'))",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "status": 502,
+                "text": "<html><body>Bad Gateway</body></html>",
+                "headers": {
+                  "content-type": "text/html"
+                }
+              }
+            },
+            "mongDoi": {
+              "error": "Server error 502",
+              "status": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "JSON 400 → its error message + status",
+              "vi": "JSON 400 → thông báo lỗi của nó + status"
+            },
+            "goi": "await fail(api('/api/products', { method: 'POST', body: {} }))",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "POST https://api.shop.dev/api/products": {
+                "status": 400,
+                "json": {
+                  "error": "name and price required"
+                }
+              }
+            },
+            "mongDoi": {
+              "error": "name and price required",
+              "status": 400
+            }
+          },
+          {
+            "moTa": {
+              "en": "Network down → readable error",
+              "vi": "Mạng sập → lỗi đọc được"
+            },
+            "goi": "await fail(api('/api/products'))",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "loiMang": true
+              }
+            },
+            "mongDoi": {
+              "error": "Network error — is the API running?",
+              "status": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 6",
+              "vi": "Kiểm ẩn 6"
+            },
+            "goi": "[await fail(api('/api/me', { token: 'x' })), call0().headers]",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/me": {
+                "status": 401,
+                "json": {}
+              }
+            },
+            "mongDoi": [
+              {
+                "error": "Request failed: 401",
+                "status": 401
+              },
+              {
+                "authorization": "Bearer x"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 7",
+              "vi": "Kiểm ẩn 7"
+            },
+            "goi": "[await api('/api/products'), call0()]",
+            "chuanBi": "const api = createApi('https://api.shop.dev'); const fail = (p) => p.then((v) => ({ ok: v }), (e) => ({ error: e.message, status: e.status === undefined ? null : e.status }));\nconst call0 = () => { const c = __fetchDaGoi[0]; const h = {}; Object.keys(c.headers || {}).forEach((k) => { h[k.toLowerCase()] = c.headers[k]; }); return { method: c.method, url: c.url, headers: h, body: c.body == null ? null : JSON.parse(c.body) }; };",
+            "fetchGia": {
+              "GET https://api.shop.dev/api/products": {
+                "json": []
+              }
+            },
+            "mongDoi": [
+              [],
+              {
+                "method": "GET",
+                "url": "https://api.shop.dev/api/products",
+                "headers": {},
+                "body": null
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>await res.json()</code> on an HTML 502: \"Unexpected token &lt;\" reaches the user instead of a readable message.|||<code>await res.json()</code> trên trang HTML 502: \"Unexpected token &lt;\" tới tay người dùng thay vì một thông báo đọc được."
+        },
+        {
+          "loi": "Parsing a 204: there is no body.|||Parse một 204: không có thân."
+        },
+        {
+          "loi": "Sending a JS object as <code>body</code> without <code>JSON.stringify</code>: fetch sends \"[object Object]\".|||Gửi đối tượng JS làm <code>body</code> mà không <code>JSON.stringify</code>: fetch gửi \"[object Object]\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "API client",
+          "vi": "hàm gọi API dùng chung"
+        }
+      ]
+    }
+  ]
+}

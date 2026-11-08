@@ -1,0 +1,1210 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-6-3-validate-schema",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-6-3-validate-schema"
+  },
+  "exercises": [
+    {
+      "title": "6.3 · 1 — What a schema really does at the edge",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "validation",
+        "zod"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 6.3 replaces the wall of <code>if</code>s with a zod schema at the router. Six questions on what the schema does for you — and the one thing it cannot do.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 6.3 thay bức tường <code>if</code> bằng một lược đồ zod ở router. Sáu câu hỏi về những gì lược đồ làm giúp bạn — và một điều nó không làm được.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think about what reaches the service: parsed.data, never req.body.|||Nghĩ xem cái gì tới được service: parsed.data, không bao giờ là req.body.",
+        "Separate “is this value well-formed?” (schema) from “does it collide with the world?” (database).|||Tách \"giá trị có đúng dạng?\" (lược đồ) khỏi \"nó có va chạm với thế giới?\" (CSDL)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3 · 1 — What a schema really does at the edge\n\nAnswer in the answer panel (no code needed).\n\n1. Why does the lesson’s route use safeParse instead of parse?Vì sao route của bài dùng safeParse thay vì parse?\n2. A client sends {\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1} to a route that does CreateNote.safeParse(req.body). What is in parsed.data?Client gửi {\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1} tới route làm CreateNote.safeParse(req.body). parsed.data chứa gì?\n3. In Express 5 a middleware writes req.query = parsed.data. What happens?Trong Express 5 một middleware viết req.query = parsed.data. Chuyện gì xảy ra?\n4. Why is .max(50) on limit called “a load-bearing character”?Vì sao .max(50) trên limit được gọi là \"ký tự chịu lực\"?\n5. Two requests register the same email at the same instant. Both pass the schema. What stops the duplicate?Hai request đăng ký cùng email ở cùng khoảnh khắc. Cả hai qua lược đồ. Cái gì chặn bản trùng?\n6. {\"titel\":\"x\"} (a typo) is validated as “title missing”. Which option turns the typo itself into a loud error?{\"titel\":\"x\"} (gõ nhầm) được báo là \"thiếu title\". Tuỳ chọn nào biến chính lỗi gõ nhầm thành lỗi rõ ràng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3 · 1 — What a schema really does at the edge — answer key\n\n1. Why does the lesson’s route use safeParse instead of parse?Vì sao route của bài dùng safeParse thay vì parse?\n   Answer: d) It returns { success, data | error } instead of throwing, so the branch stays in the route\n   Both report every issue; throwing from parse into the 5.4 handler also works. safeParse keeps the branch in the route. A form that reveals its errors one per submit is a form users abandon.VI: Cả hai đều báo mọi lỗi; ném từ parse sang bộ xử lý của 5.4 cũng được. safeParse giữ nhánh ngay trong route. Form lộ lỗi từng cái một là form người dùng bỏ đi.\n\n2. A client sends {\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1} to a route that does CreateNote.safeParse(req.body). What is in parsed.data?Client gửi {\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1} tới route làm CreateNote.safeParse(req.body). parsed.data chứa gì?\n   Answer: a) Only the declared fields (title plus the defaults) — z.object() strips unknown keys by default\n   That is why spreading parsed.data is safe and spreading req.body is mass assignment.VI: Vì thế rải parsed.data là an toàn còn rải req.body là mass assignment.\n\n3. In Express 5 a middleware writes req.query = parsed.data. What happens?Trong Express 5 một middleware viết req.query = parsed.data. Chuyện gì xảy ra?\n   Answer: d) It throws or silently does nothing\n   Another v4 snippet that stops working when you upgrade.VI: Thêm một đoạn code thời v4 ngừng chạy khi nâng cấp.\n\n4. Why is .max(50) on limit called “a load-bearing character”?Vì sao .max(50) trên limit được gọi là \"ký tự chịu lực\"?\n   Answer: a) Without it, ?limit=1000000 loads a million rows and stalls the event loop\n   Reject when the client should learn; clamp (Math.min(50, limit)) when the client is a browser you also wrote. Just do one of the two.VI: Từ chối khi client cần học; kẹp (Math.min(50, limit)) khi client là trình duyệt do bạn viết. Chỉ cần làm một trong hai.\n\n5. Two requests register the same email at the same instant. Both pass the schema. What stops the duplicate?Hai request đăng ký cùng email ở cùng khoảnh khắc. Cả hai qua lược đồ. Cái gì chặn bản trùng?\n   Answer: c) The unique index in the database\n   “Not a replacement for DB constraints” — chapter 7 needs both.VI: \"Không thay được ràng buộc CSDL\" — chương 7 cần cả hai.\n\n6. {\"titel\":\"x\"} (a typo) is validated as “title missing”. Which option turns the typo itself into a loud error?{\"titel\":\"x\"} (gõ nhầm) được báo là \"thiếu title\". Tuỳ chọn nào biến chính lỗi gõ nhầm thành lỗi rõ ràng?\n   Answer: b) .strict()\n   Right for an internal API where a typo should fail loudly instead of being dropped.VI: Hợp với API nội bộ, nơi gõ nhầm nên báo lỗi to thay vì bị bỏ lặng lẽ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> It returns { success, data | error } instead of throwing, so the branch stays in the route</p><p>Both report every issue; throwing from parse into the 5.4 handler also works. safeParse keeps the branch in the route. A form that reveals its errors one per submit is a form users abandon.</p><p><i>VI: Cả hai đều báo mọi lỗi; ném từ parse sang bộ xử lý của 5.4 cũng được. safeParse giữ nhánh ngay trong route. Form lộ lỗi từng cái một là form người dùng bỏ đi.</i></p></li><li><p><b>a)</b> Only the declared fields (title plus the defaults) — z.object() strips unknown keys by default</p><p>That is why spreading parsed.data is safe and spreading req.body is mass assignment.</p><p><i>VI: Vì thế rải parsed.data là an toàn còn rải req.body là mass assignment.</i></p></li><li><p><b>d)</b> It throws or silently does nothing</p><p>Another v4 snippet that stops working when you upgrade.</p><p><i>VI: Thêm một đoạn code thời v4 ngừng chạy khi nâng cấp.</i></p></li><li><p><b>a)</b> Without it, ?limit=1000000 loads a million rows and stalls the event loop</p><p>Reject when the client should learn; clamp (Math.min(50, limit)) when the client is a browser you also wrote. Just do one of the two.</p><p><i>VI: Từ chối khi client cần học; kẹp (Math.min(50, limit)) khi client là trình duyệt do bạn viết. Chỉ cần làm một trong hai.</i></p></li><li><p><b>c)</b> The unique index in the database</p><p>“Not a replacement for DB constraints” — chapter 7 needs both.</p><p><i>VI: \"Không thay được ràng buộc CSDL\" — chương 7 cần cả hai.</i></p></li><li><p><b>b)</b> .strict()</p><p>Right for an internal API where a typo should fail loudly instead of being dropped.</p><p><i>VI: Hợp với API nội bộ, nơi gõ nhầm nên báo lỗi to thay vì bị bỏ lặng lẽ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does the lesson’s route use <code>safeParse</code> instead of <code>parse</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao route của bài dùng <code>safeParse</code> thay vì <code>parse</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "parse runs asynchronously and would block the event loop while it waits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "safeParse also escapes HTML, so its output is always safe to render"
+              },
+              {
+                "ma": "c",
+                "noiDung": "parse only reports the first field, while safeParse reports all of them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It returns { success, data | error } instead of throwing, so the branch stays in the route"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Both report every issue; throwing from parse into the 5.4 handler also works. safeParse keeps the branch in the route. A form that reveals its errors one per submit is a form users abandon.</p><p><i>VI: Cả hai đều báo mọi lỗi; ném từ parse sang bộ xử lý của 5.4 cũng được. safeParse giữ nhánh ngay trong route. Form lộ lỗi từng cái một là form người dùng bỏ đi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A client sends <code>{\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1}</code> to a route that does <code>CreateNote.safeParse(req.body)</code>. What is in <code>parsed.data</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client gửi <code>{\"title\":\"hi\",\"isAdmin\":true,\"authorId\":1}</code> tới route làm <code>CreateNote.safeParse(req.body)</code>. <code>parsed.data</code> chứa gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the declared fields (title plus the defaults) — z.object() strips unknown keys by default"
+              },
+              {
+                "ma": "b",
+                "noiDung": "title, isAdmin and authorId, with isAdmin converted to a string"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing — unknown keys make safeParse fail"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Everything the client sent, because zod only checks the declared fields"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is why spreading parsed.data is safe and spreading req.body is mass assignment.</p><p><i>VI: Vì thế rải parsed.data là an toàn còn rải req.body là mass assignment.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In Express 5 a middleware writes <code>req.query = parsed.data</code>. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Express 5 một middleware viết <code>req.query = parsed.data</code>. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express copies the value into req.params"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It works exactly as in Express 4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It deletes the query string from the URL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It throws or silently does nothing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Another v4 snippet that stops working when you upgrade.</p><p><i>VI: Thêm một đoạn code thời v4 ngừng chạy khi nâng cấp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why is <code>.max(50)</code> on <code>limit</code> called “a load-bearing character”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>.max(50)</code> trên <code>limit</code> được gọi là \"ký tự chịu lực\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Without it, ?limit=1000000 loads a million rows and stalls the event loop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL cannot return more than 50 rows from a single SELECT query"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Browsers truncate any JSON array that is longer than 50 elements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "zod rejects every number above 50 unless you configure a bigger maximum"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reject when the client should learn; clamp (Math.min(50, limit)) when the client is a browser you also wrote. Just do one of the two.</p><p><i>VI: Từ chối khi client cần học; kẹp (Math.min(50, limit)) khi client là trình duyệt do bạn viết. Chỉ cần làm một trong hai.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Two requests register the same email at the same instant. Both pass the schema. What stops the duplicate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai request đăng ký cùng email ở cùng khoảnh khắc. Cả hai qua lược đồ. Cái gì chặn bản trùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "z.string().email() rejects the second one"
+              },
+              {
+                "ma": "b",
+                "noiDung": ".strict() on the object"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The unique index in the database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "safeParse locks the email until the first request finishes"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>“Not a replacement for DB constraints” — chapter 7 needs both.</p><p><i>VI: \"Không thay được ràng buộc CSDL\" — chương 7 cần cả hai.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p><code>{\"titel\":\"x\"}</code> (a typo) is validated as “title missing”. Which option turns the typo itself into a loud error?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>{\"titel\":\"x\"}</code> (gõ nhầm) được báo là \"thiếu title\". Tuỳ chọn nào biến chính lỗi gõ nhầm thành lỗi rõ ràng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "z.coerce.string()"
+              },
+              {
+                "ma": "b",
+                "noiDung": ".strict()"
+              },
+              {
+                "ma": "c",
+                "noiDung": ".default() on title"
+              },
+              {
+                "ma": "d",
+                "noiDung": ".optional() on every field"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Right for an internal API where a typo should fail loudly instead of being dropped.</p><p><i>VI: Hợp với API nội bộ, nơi gõ nhầm nên báo lỗi to thay vì bị bỏ lặng lẽ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing validation makes a unique index unnecessary.|||Tin rằng kiểm dữ liệu làm chỉ mục unique thành thừa."
+        },
+        {
+          "loi": "Writing the parsed query back onto req.query in Express 5.|||Ghi query đã kiểm ngược lại vào req.query trong Express 5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safeParse",
+          "vi": "safeParse",
+          "giaiThich": "Trả {success, data|error}, không ném."
+        },
+        {
+          "en": "mass assignment",
+          "vi": "gán hàng loạt",
+          "giaiThich": "Client đặt những trường bạn không định mở."
+        },
+        {
+          "en": "strip",
+          "vi": "lược bỏ",
+          "giaiThich": "Bỏ khoá lạ khỏi kết quả."
+        }
+      ]
+    },
+    {
+      "title": "6.3 · 2 — Write toFieldErrors(issues) and validationBody(issues): the 422 the lesson prints",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "validation errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>zod reports problems as <code>error.issues</code>: <code>[{ path: ['title'], message: 'title must not be empty', code: 'too_small' }, { path: ['tags', 2], message: '…' }]</code>. The client needs one string per field. Write:</p>\n<ul><li><code>toFieldErrors(issues)</code> ⇒ <code>[{ path, message }]</code>, same order, where <code>path</code> is the path parts joined with <code>\".\"</code> (numbers included: <code>['tags', 2]</code> ⇒ <code>\"tags.2\"</code>; an empty path ⇒ <code>\"\"</code>). Drop every other key of the issue.</li>\n<li><code>validationBody(issues, code = 'VALIDATION_FAILED')</code> ⇒ <code>{ error: { code, message: \"The submitted data is not valid\", fields: toFieldErrors(issues) } }</code> — exactly the body of lesson 6.3’s real output.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Keep the order of the issues.</li>\n  <li>Only <code>path</code> and <code>message</code> in each entry.</li>\n</ul>",
+      "problemHtmlVi": "<p>zod báo lỗi qua <code>error.issues</code>: <code>[{ path: ['title'], message: 'title must not be empty', code: 'too_small' }, { path: ['tags', 2], message: '…' }]</code>. Client cần một chuỗi cho mỗi trường. Viết:</p>\n<ul><li><code>toFieldErrors(issues)</code> ⇒ <code>[{ path, message }]</code>, giữ thứ tự, với <code>path</code> là các phần của đường dẫn nối bằng <code>\".\"</code> (kể cả số: <code>['tags', 2]</code> ⇒ <code>\"tags.2\"</code>; đường dẫn rỗng ⇒ <code>\"\"</code>). Bỏ mọi khoá khác của issue.</li>\n<li><code>validationBody(issues, code = 'VALIDATION_FAILED')</code> ⇒ <code>{ error: { code, message: \"The submitted data is not valid\", fields: toFieldErrors(issues) } }</code> — đúng body trong output thật của bài 6.3.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giữ thứ tự các issue.</li>\n  <li>Mỗi mục chỉ có <code>path</code> và <code>message</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "validationBody([{ path: ['title'], message: 'title must not be empty', code: 'too_small' }, { path: ['tags'], message: 'Too big: expected array to have <=5 items', code: 'too_big' }, { path: ['pinned'], message: 'Invalid input: expected boolean, received string', code: 'invalid_type' }])",
+          "output": "{\"error\":{\"code\":\"VALIDATION_FAILED\",\"message\":\"The submitted data is not valid\",\"fields\":[{\"path\":\"title\",\"message\":\"title must not be empty\"},{\"path\":\"tags\",\"message\":\"Too big: expected array to have <=5 items\"},{\"path\":\"pinned\",\"message\":\"Invalid input: expected boolean, received string\"}]}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>issues.map(i => ({ path: …, message: i.message }))</code>.",
+        "<code>[].join(\".\")</code> is <code>\"\"</code>, and <code>[\"tags\", 2].join(\".\")</code> is already <code>\"tags.2\"</code>.|||<code>[].join(\".\")</code> là <code>\"\"</code>, còn <code>[\"tags\", 2].join(\".\")</code> đã là <code>\"tags.2\"</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function toFieldErrors(issues) {\n  // Write your solution here\n  return [{ path: issues[0].path[0], message: issues[0].message }];\n}\nfunction validationBody(issues, code = 'VALIDATION_FAILED') {\n  return { error: { code, message: issues.map((i) => i.message).join('; ') } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function toFieldErrors(issues) {\n  // zod gives path as an ARRAY (['tags', 2]); the client wants one string per field: 'tags.2'\n  return issues.map((i) => ({ path: i.path.map(String).join('.'), message: i.message }));\n}\n\nfunction validationBody(issues, code = 'VALIDATION_FAILED') {\n  // one envelope, every bad field listed — a form can highlight all of them from one response\n  return { error: { code, message: 'The submitted data is not valid', fields: toFieldErrors(issues) } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A path plus a message per field is the smallest shape that lets a form put each error under its own input. It is also a stable contract: zod’s internal issue format can change between versions; your fields[] does not.</p>",
+      "solutionExplanationHtmlVi": "<p>Một đường dẫn và một thông điệp cho mỗi trường là hình dạng nhỏ nhất để form đặt mỗi lỗi dưới ô của nó. Nó cũng là hợp đồng ổn định: định dạng issue nội bộ của zod có thể đổi giữa các phiên bản; fields[] của bạn thì không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The three issues of the lesson’s request",
+              "vi": "Ba lỗi trong request của bài"
+            },
+            "goi": "validationBody([{ path: ['title'], message: 'title must not be empty', code: 'too_small' }, { path: ['tags'], message: 'Too big: expected array to have <=5 items', code: 'too_big' }, { path: ['pinned'], message: 'Invalid input: expected boolean, received string', code: 'invalid_type' }])",
+            "mongDoi": {
+              "error": {
+                "code": "VALIDATION_FAILED",
+                "message": "The submitted data is not valid",
+                "fields": [
+                  {
+                    "path": "title",
+                    "message": "title must not be empty"
+                  },
+                  {
+                    "path": "tags",
+                    "message": "Too big: expected array to have <=5 items"
+                  },
+                  {
+                    "path": "pinned",
+                    "message": "Invalid input: expected boolean, received string"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: toFieldErrors([{ path: ['tags', 2], message: 'Invalid input: expected string,...",
+              "vi": "Ca 2"
+            },
+            "goi": "toFieldErrors([{ path: ['tags', 2], message: 'Invalid input: expected string, received number', code: 'invalid_type', expected: 'string' }])",
+            "mongDoi": [
+              {
+                "path": "tags.2",
+                "message": "Invalid input: expected string, received number"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "validationBody([{ path: ['limit'], message: 'Too big: expected number to be <=50' }, { path: ['sort'], message: 'Invalid option: expected one of \"createdAt\"|\"title\"' }], 'INVALID_QUERY')",
+            "mongDoi": {
+              "error": {
+                "code": "INVALID_QUERY",
+                "message": "The submitted data is not valid",
+                "fields": [
+                  {
+                    "path": "limit",
+                    "message": "Too big: expected number to be <=50"
+                  },
+                  {
+                    "path": "sort",
+                    "message": "Invalid option: expected one of \"createdAt\"|\"title\""
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[toFieldErrors([]), toFieldErrors([{ path: [], message: 'Invalid input: expected object, received null' }])]",
+            "mongDoi": [
+              [],
+              [
+                {
+                  "path": "",
+                  "message": "Invalid input: expected object, received null"
+                }
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "toFieldErrors([{ path: ['author', 'address', 'city'], message: 'Required' }, { path: ['a'], message: 'x' }])",
+            "mongDoi": [
+              {
+                "path": "author.address.city",
+                "message": "Required"
+              },
+              {
+                "path": "a",
+                "message": "x"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning only the first issue — one error per submit.|||Chỉ trả issue đầu tiên — mỗi lần gửi một lỗi."
+        },
+        {
+          "loi": "Sending zod’s raw issues (with <code>code</code>, <code>origin</code>, <code>maximum</code>…) as the public contract.|||Gửi nguyên issue của zod (có <code>code</code>, <code>origin</code>, <code>maximum</code>…) làm hợp đồng công khai."
+        },
+        {
+          "loi": "Joining every message into one string, so the form cannot attach errors to inputs.|||Nối mọi thông điệp thành một chuỗi, nên form không gắn được lỗi vào từng ô."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "issue",
+          "vi": "vấn đề",
+          "giaiThich": "Một lỗi do lược đồ phát hiện."
+        },
+        {
+          "en": "field error",
+          "vi": "lỗi trường",
+          "giaiThich": "{ path, message }"
+        }
+      ]
+    },
+    {
+      "title": "6.3 · 3 — Write parseCreateNote(input): the CreateNote schema by hand, with zod’s exact messages",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "validation",
+        "mass assignment",
+        "zod"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>To see what a schema buys you, implement the lesson’s schema without a library:</p>\n<pre>const CreateNote = z.object({\n  title:  z.string().min(1, 'title must not be empty').max(200),\n  body:   z.string().max(10_000).default(''),\n  tags:   z.array(z.string()).max(5).optional(),\n  pinned: z.boolean().default(false),\n});</pre>\n<p><code>parseCreateNote(input)</code> returns <code>{ success: true, data }</code> or <code>{ success: false, issues: [{ path: [...], message }] }</code> listing <b>every</b> problem in field order title → body → tags → pinned. Messages (zod 4.4.3), where <i>&lt;kind&gt;</i> is <code>null</code>, <code>array</code>, <code>NaN</code> or the <code>typeof</code>:</p>\n<ul><li>wrong type: <code>\"Invalid input: expected string, received &lt;kind&gt;\"</code> (also <code>array</code>, <code>boolean</code>); a missing title is <code>received undefined</code>; a non-object input ⇒ one issue with path <code>[]</code> and <code>\"Invalid input: expected object, received &lt;kind&gt;\"</code>.</li>\n<li><code>title</code> empty ⇒ <code>\"title must not be empty\"</code>; longer than 200 ⇒ <code>\"Too big: expected string to have &lt;=200 characters\"</code>; <code>body</code> longer than 10000 ⇒ <code>\"Too big: expected string to have &lt;=10000 characters\"</code>.</li>\n<li><code>tags</code>: each non-string element ⇒ path <code>['tags', i]</code>; then, if more than 5 ⇒ <code>\"Too big: expected array to have &lt;=5 items\"</code> on path <code>['tags']</code>.</li>\n<li>Defaults: missing <code>body</code> ⇒ <code>\"\"</code>, missing <code>pinned</code> ⇒ <code>false</code>; missing <code>tags</code> stays absent. <b>Unknown keys are stripped</b> from <code>data</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Collect every issue — never stop at the first.</li>\n  <li><code>data</code> contains only title, body, pinned (and tags when sent).</li>\n  <li>Messages must match exactly — the frontend of lesson 6.3 shows them.</li>\n</ul>",
+      "problemHtmlVi": "<p>Để thấy lược đồ mang lại gì, hãy cài lược đồ của bài mà không dùng thư viện (xem khối code ở bản tiếng Anh). <code>parseCreateNote(input)</code> trả <code>{ success: true, data }</code> hoặc <code>{ success: false, issues: [{ path: [...], message }] }</code> liệt kê <b>mọi</b> lỗi theo thứ tự trường title → body → tags → pinned. Thông điệp (zod 4.4.3), với <i>&lt;kind&gt;</i> là <code>null</code>, <code>array</code>, <code>NaN</code> hoặc <code>typeof</code>:</p>\n<ul><li>sai kiểu: <code>\"Invalid input: expected string, received &lt;kind&gt;\"</code> (tương tự <code>array</code>, <code>boolean</code>); thiếu title là <code>received undefined</code>; input không phải object ⇒ một issue với path <code>[]</code> và <code>\"Invalid input: expected object, received &lt;kind&gt;\"</code>.</li>\n<li><code>title</code> rỗng ⇒ <code>\"title must not be empty\"</code>; dài hơn 200 ⇒ <code>\"Too big: expected string to have &lt;=200 characters\"</code>; <code>body</code> dài hơn 10000 ⇒ <code>\"Too big: expected string to have &lt;=10000 characters\"</code>.</li>\n<li><code>tags</code>: mỗi phần tử không phải chuỗi ⇒ path <code>['tags', i]</code>; sau đó, nếu nhiều hơn 5 ⇒ <code>\"Too big: expected array to have &lt;=5 items\"</code> ở path <code>['tags']</code>.</li>\n<li>Mặc định: thiếu <code>body</code> ⇒ <code>\"\"</code>, thiếu <code>pinned</code> ⇒ <code>false</code>; thiếu <code>tags</code> thì vẫn vắng. <b>Khoá lạ bị lược bỏ</b> khỏi <code>data</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gom mọi lỗi — không dừng ở lỗi đầu.</li>\n  <li><code>data</code> chỉ có title, body, pinned (và tags khi được gửi).</li>\n  <li>Thông điệp phải khớp từng chữ — frontend của bài 6.3 hiển thị chúng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseCreateNote({ title: '', tags: ['a', 'b', 'c', 'd', 'e', 'f'], pinned: 'yes' })",
+          "output": "{\"success\":false,\"issues\":[{\"path\":[\"title\"],\"message\":\"title must not be empty\"},{\"path\":[\"tags\"],\"message\":\"Too big: expected array to have <=5 items\"},{\"path\":[\"pinned\"],\"message\":\"Invalid input: expected boolean, received string\"}]}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write a tiny <code>kindOf(v)</code>: <code>null</code> → \"null\", arrays → \"array\", NaN → \"NaN\", else <code>typeof v</code>.|||Viết một <code>kindOf(v)</code> nhỏ: <code>null</code> → \"null\", mảng → \"array\", NaN → \"NaN\", còn lại <code>typeof v</code>.",
+        "Build <code>data</code> field by field from the checks that passed — never start from <code>{ ...input }</code>; that is exactly how mass assignment gets in.|||Dựng <code>data</code> từng trường từ những phép kiểm đã qua — đừng bao giờ bắt đầu từ <code>{ ...input }</code>; đó chính là đường mass assignment lọt vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseCreateNote(input) {\n  // Write your solution here\n  if (!input.title) return { success: false, issues: [{ path: ['title'], message: 'title must not be empty' }] };\n  return { success: true, data: { ...input } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function kindOf(v) {\n  if (v === null) return 'null';\n  if (Array.isArray(v)) return 'array';\n  if (typeof v === 'number' && Number.isNaN(v)) return 'NaN';\n  return typeof v;\n}\n\nfunction parseCreateNote(input) {\n  const issues = [];\n  const bad = (path, message) => issues.push({ path, message });\n  const expected = (path, type, v) => bad(path, 'Invalid input: expected ' + type + ', received ' + kindOf(v));\n  if (kindOf(input) !== 'object') return { success: false, issues: [{ path: [], message: 'Invalid input: expected object, received ' + kindOf(input) }] };\n  const data = {};\n  // title: z.string().min(1, 'title must not be empty').max(200)\n  if (typeof input.title !== 'string') expected(['title'], 'string', input.title);\n  else if (input.title.length < 1) bad(['title'], 'title must not be empty');\n  else if (input.title.length > 200) bad(['title'], 'Too big: expected string to have <=200 characters');\n  else data.title = input.title;\n  // body: z.string().max(10_000).default('')\n  if (input.body === undefined) data.body = '';\n  else if (typeof input.body !== 'string') expected(['body'], 'string', input.body);\n  else if (input.body.length > 10000) bad(['body'], 'Too big: expected string to have <=10000 characters');\n  else data.body = input.body;\n  // tags: z.array(z.string()).max(5).optional()\n  if (input.tags !== undefined) {\n    if (!Array.isArray(input.tags)) expected(['tags'], 'array', input.tags);\n    else {\n      input.tags.forEach((t, i) => { if (typeof t !== 'string') expected(['tags', i], 'string', t); });\n      if (input.tags.length > 5) bad(['tags'], 'Too big: expected array to have <=5 items');\n      data.tags = input.tags;\n    }\n  }\n  // pinned: z.boolean().default(false)\n  if (input.pinned === undefined) data.pinned = false;\n  else if (typeof input.pinned !== 'boolean') expected(['pinned'], 'boolean', input.pinned);\n  else data.pinned = input.pinned;\n  // unknown keys (isAdmin, authorId, createdAt…) are simply never copied into data: that is the strip\n  return issues.length ? { success: false, issues } : { success: true, data };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Writing it by hand shows the three jobs one schema does at once: it CHECKS (types, lengths, sizes), it COMPLETES (defaults, so services never write <code>?? \"\"</code>), and it STRIPS (only declared keys reach the service — mass assignment closed structurally, not by remembering to delete fields). In real code you write the four zod lines; now you know what they are worth.</p>",
+      "solutionExplanationHtmlVi": "<p>Viết tay cho thấy ba việc một lược đồ làm cùng lúc: KIỂM (kiểu, độ dài, kích thước), BỔ SUNG (giá trị mặc định, nên service không phải viết <code>?? \"\"</code>), và LƯỢC (chỉ khoá đã khai mới tới service — chặn mass assignment bằng cấu trúc, không phải nhờ nhớ xoá trường). Code thật bạn viết bốn dòng zod; giờ bạn biết chúng đáng giá thế nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s request with three problems",
+              "vi": "Request của bài với ba lỗi"
+            },
+            "goi": "parseCreateNote({ title: '', tags: ['a', 'b', 'c', 'd', 'e', 'f'], pinned: 'yes' })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "title"
+                  ],
+                  "message": "title must not be empty"
+                },
+                {
+                  "path": [
+                    "tags"
+                  ],
+                  "message": "Too big: expected array to have <=5 items"
+                },
+                {
+                  "path": [
+                    "pinned"
+                  ],
+                  "message": "Invalid input: expected boolean, received string"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Defaults fill body and pinned",
+              "vi": "Mặc định điền body và pinned"
+            },
+            "goi": "parseCreateNote({ title: 'A valid note' })",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "title": "A valid note",
+                "body": "",
+                "pinned": false
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Mass assignment is stripped",
+              "vi": "Mass assignment bị lược"
+            },
+            "goi": "parseCreateNote({ title: 'hi', isAdmin: true, authorId: 1, createdAt: '2020-01-01' })",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "title": "hi",
+                "body": "",
+                "pinned": false
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "A typo ⇒ title missing",
+              "vi": "Gõ nhầm ⇒ thiếu title"
+            },
+            "goi": "parseCreateNote({ titel: 'x' })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "title"
+                  ],
+                  "message": "Invalid input: expected string, received undefined"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseCreateNote({ title: 'x'.repeat(201), body: 42, tags: ['ok', 7, null], pinned: true })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "title"
+                  ],
+                  "message": "Too big: expected string to have <=200 characters"
+                },
+                {
+                  "path": [
+                    "body"
+                  ],
+                  "message": "Invalid input: expected string, received number"
+                },
+                {
+                  "path": [
+                    "tags",
+                    1
+                  ],
+                  "message": "Invalid input: expected string, received number"
+                },
+                {
+                  "path": [
+                    "tags",
+                    2
+                  ],
+                  "message": "Invalid input: expected string, received null"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[parseCreateNote(null), parseCreateNote([]), parseCreateNote('{\"title\":\"x\"}')]",
+            "mongDoi": [
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Invalid input: expected object, received null"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Invalid input: expected object, received array"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Invalid input: expected object, received string"
+                  }
+                ]
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseCreateNote({ title: 'T', body: 'b'.repeat(10000), tags: 'work', pinned: false, version: 9 })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "tags"
+                  ],
+                  "message": "Invalid input: expected array, received string"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "parseCreateNote({ title: 'T', body: 'b'.repeat(10001), tags: ['a', 'b', 'c', 'd', 'e'] })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "body"
+                  ],
+                  "message": "Too big: expected string to have <=10000 characters"
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>const data = { ...input }</code> then delete the bad ones: <code>isAdmin</code> and <code>authorId</code> survive.|||<code>const data = { ...input }</code> rồi xoá cái sai: <code>isAdmin</code> và <code>authorId</code> vẫn còn."
+        },
+        {
+          "loi": "<code>if (!input.title)</code> treats a missing title and an empty title the same — two different messages.|||<code>if (!input.title)</code> coi thiếu title và title rỗng là một — hai thông điệp khác nhau."
+        },
+        {
+          "loi": "<code>typeof null === \"object\"</code>: a null input slips through as an object.|||<code>typeof null === \"object\"</code>: input null lọt qua như một object."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default",
+          "vi": "giá trị mặc định",
+          "giaiThich": ".default() điền trường vắng."
+        },
+        {
+          "en": "strip unknown keys",
+          "vi": "lược khoá lạ",
+          "giaiThich": "Hành vi mặc định của z.object()."
+        }
+      ]
+    },
+    {
+      "title": "6.3 · 4 — Write parseListQuery(query): strings in, numbers out, limit capped",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "coercion",
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Lesson 5.2: everything in <code>req.query</code> is a string. Lesson 6.3’s schema coerces and clamps in one breath:</p>\n<pre>const ListQuery = z.object({\n  page:  z.coerce.number().int().min(1).default(1),\n  limit: z.coerce.number().int().min(1).max(50).default(10),\n  sort:  z.enum(['createdAt', 'title']).default('createdAt'),\n  order: z.enum(['asc', 'desc']).default('desc'),\n});</pre>\n<p>Write <code>parseListQuery(query)</code> (values are strings or absent) returning <code>{ success: true, data: { page, limit, sort, order } }</code> or <code>{ success: false, error: { code: \"INVALID_QUERY\", fields: [{ path, message }] } }</code> with every bad key in the order page, limit, sort, order. For numbers, check in this order (<code>Number(value)</code> is the coercion):</p>\n<ul><li>NaN ⇒ <code>\"Invalid input: expected number, received NaN\"</code>; not an integer ⇒ <code>\"Invalid input: expected int, received number\"</code>; below the minimum ⇒ <code>\"Too small: expected number to be &gt;=1\"</code>; above 50 (limit only) ⇒ <code>\"Too big: expected number to be &lt;=50\"</code>.</li>\n<li>Enums: a value not on the list ⇒ <code>\"Invalid option: expected one of \"createdAt\"|\"title\"\"</code> (each option in double quotes, joined by <code>|</code>).</li></ul>\n<p>Real output of the lesson: <code>?page=3&amp;limit=25&amp;order=asc</code> ⇒ <code>{ page: 3, limit: 25, sort: \"createdAt\", order: \"asc\" }</code> (numbers, not strings).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return real numbers for page and limit.</li>\n  <li>Reject (do not clamp) a limit above 50.</li>\n  <li>sort/order are allow-lists: no other value may pass.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 5.2: mọi thứ trong <code>req.query</code> là chuỗi. Lược đồ của bài 6.3 vừa ép kiểu vừa chặn trần (xem khối code bản tiếng Anh). Viết <code>parseListQuery(query)</code> (giá trị là chuỗi hoặc vắng) trả <code>{ success: true, data: { page, limit, sort, order } }</code> hoặc <code>{ success: false, error: { code: \"INVALID_QUERY\", fields: [{ path, message }] } }</code> với mọi khoá sai theo thứ tự page, limit, sort, order. Với số, kiểm theo thứ tự (<code>Number(value)</code> là phép ép kiểu):</p>\n<ul><li>NaN ⇒ <code>\"Invalid input: expected number, received NaN\"</code>; không phải số nguyên ⇒ <code>\"Invalid input: expected int, received number\"</code>; nhỏ hơn tối thiểu ⇒ <code>\"Too small: expected number to be &gt;=1\"</code>; lớn hơn 50 (chỉ limit) ⇒ <code>\"Too big: expected number to be &lt;=50\"</code>.</li>\n<li>Enum: giá trị không nằm trong danh sách ⇒ <code>\"Invalid option: expected one of \"createdAt\"|\"title\"\"</code> (mỗi lựa chọn trong ngoặc kép, nối bằng <code>|</code>).</li></ul>\n<p>Output thật của bài: <code>?page=3&amp;limit=25&amp;order=asc</code> ⇒ <code>{ page: 3, limit: 25, sort: \"createdAt\", order: \"asc\" }</code> (số, không phải chuỗi).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả số thật cho page và limit.</li>\n  <li>Từ chối (không kẹp) limit lớn hơn 50.</li>\n  <li>sort/order là danh sách cho phép: không giá trị nào khác được qua.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseListQuery({ page: '3', limit: '25', order: 'asc' })",
+          "output": "{\"success\":true,\"data\":{\"page\":3,\"limit\":25,\"sort\":\"createdAt\",\"order\":\"asc\"}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write one helper for numeric keys <code>num(key, min, max, default)</code> and one for enums <code>oneOf(key, allowed, default)</code>.|||Viết một hàm cho khoá số <code>num(key, min, max, default)</code> và một cho enum <code>oneOf(key, allowed, default)</code>.",
+        "<code>Number(\"2.5\")</code> is 2.5 ⇒ “expected int”; <code>Number(\"abc\")</code> is NaN; <code>Number(\"\")</code> is 0 ⇒ “Too small”.|||<code>Number(\"2.5\")</code> là 2.5 ⇒ \"expected int\"; <code>Number(\"abc\")</code> là NaN; <code>Number(\"\")</code> là 0 ⇒ \"Too small\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseListQuery(query) {\n  // Write your solution here\n  return { success: true, data: { page: query.page || 1, limit: parseInt(query.limit) || 10, sort: query.sort || 'createdAt', order: query.order || 'desc' } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function parseListQuery(query) {\n  const fields = [];\n  const data = {};\n  // z.coerce.number().int().min(lo).max(hi).default(d): everything in req.query is a STRING\n  const num = (key, lo, hi, d) => {\n    if (query[key] === undefined) { data[key] = d; return; }\n    const n = Number(query[key]);\n    if (Number.isNaN(n)) fields.push({ path: key, message: 'Invalid input: expected number, received NaN' });\n    else if (!Number.isInteger(n)) fields.push({ path: key, message: 'Invalid input: expected int, received number' });\n    else if (n < lo) fields.push({ path: key, message: 'Too small: expected number to be >=' + lo });\n    else if (hi !== undefined && n > hi) fields.push({ path: key, message: 'Too big: expected number to be <=' + hi });\n    else data[key] = n;\n  };\n  // z.enum([...]).default(d): an ALLOW-LIST — anything else never reaches the query\n  const oneOf = (key, allowed, d) => {\n    if (query[key] === undefined) { data[key] = d; return; }\n    if (allowed.includes(query[key])) data[key] = query[key];\n    else fields.push({ path: key, message: 'Invalid option: expected one of ' + allowed.map((a) => '\"' + a + '\"').join('|') });\n  };\n  num('page', 1, undefined, 1);\n  num('limit', 1, 50, 10);\n  oneOf('sort', ['createdAt', 'title'], 'createdAt');\n  oneOf('order', ['asc', 'desc'], 'desc');\n  return fields.length ? { success: false, error: { code: 'INVALID_QUERY', fields } } : { success: true, data };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Coercion, defaults and limits in one declaration mean the handler receives a value that is complete, typed and bounded. The allow-list on sort is not decoration either: it is the only safe way to let a client choose a column name, because identifiers cannot be bound as SQL parameters.</p>",
+      "solutionExplanationHtmlVi": "<p>Ép kiểu, mặc định và giới hạn trong một khai báo nghĩa là handler nhận giá trị đầy đủ, đúng kiểu và có biên. Danh sách cho phép trên sort cũng không phải trang trí: đó là cách an toàn duy nhất để client chọn tên cột, vì định danh không truyền được dưới dạng tham số SQL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "?page=3&limit=25&order=asc",
+              "vi": "?page=3&limit=25&order=asc"
+            },
+            "goi": "parseListQuery({ page: '3', limit: '25', order: 'asc' })",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "page": 3,
+                "limit": 25,
+                "sort": "createdAt",
+                "order": "asc"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "?limit=500&sort=colour ⇒ two errors",
+              "vi": "?limit=500&sort=colour ⇒ hai lỗi"
+            },
+            "goi": "parseListQuery({ limit: '500', sort: 'colour' })",
+            "mongDoi": {
+              "success": false,
+              "error": {
+                "code": "INVALID_QUERY",
+                "fields": [
+                  {
+                    "path": "limit",
+                    "message": "Too big: expected number to be <=50"
+                  },
+                  {
+                    "path": "sort",
+                    "message": "Invalid option: expected one of \"createdAt\"|\"title\""
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "No query ⇒ all defaults",
+              "vi": "Không có query ⇒ mọi giá trị mặc định"
+            },
+            "goi": "parseListQuery({})",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "page": 1,
+                "limit": 10,
+                "sort": "createdAt",
+                "order": "desc"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseListQuery({ page: '2.5', limit: '25abc', sort: 'title', order: 'DESC' })",
+            "mongDoi": {
+              "success": false,
+              "error": {
+                "code": "INVALID_QUERY",
+                "fields": [
+                  {
+                    "path": "page",
+                    "message": "Invalid input: expected int, received number"
+                  },
+                  {
+                    "path": "limit",
+                    "message": "Invalid input: expected number, received NaN"
+                  },
+                  {
+                    "path": "order",
+                    "message": "Invalid option: expected one of \"asc\"|\"desc\""
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseListQuery({ page: '0', limit: '' })",
+            "mongDoi": {
+              "success": false,
+              "error": {
+                "code": "INVALID_QUERY",
+                "fields": [
+                  {
+                    "path": "page",
+                    "message": "Too small: expected number to be >=1"
+                  },
+                  {
+                    "path": "limit",
+                    "message": "Too small: expected number to be >=1"
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseListQuery({ page: '100', limit: '50', sort: 'title' })",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "page": 100,
+                "limit": 50,
+                "sort": "title",
+                "order": "desc"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseListQuery({ sort: 'createdAt; DROP TABLE \"Note\"', limit: '-1' })",
+            "mongDoi": {
+              "success": false,
+              "error": {
+                "code": "INVALID_QUERY",
+                "fields": [
+                  {
+                    "path": "limit",
+                    "message": "Too small: expected number to be >=1"
+                  },
+                  {
+                    "path": "sort",
+                    "message": "Invalid option: expected one of \"createdAt\"|\"title\""
+                  }
+                ]
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>parseInt(limit)</code>: \"25abc\" becomes 25 and \"2.5\" becomes 2 — garbage accepted silently.|||<code>parseInt(limit)</code>: \"25abc\" thành 25 và \"2.5\" thành 2 — rác được nhận lặng lẽ."
+        },
+        {
+          "loi": "No maximum on limit: ?limit=1000000 turns the endpoint into a denial-of-service tool.|||Không có trần cho limit: ?limit=1000000 biến endpoint thành công cụ tấn công từ chối dịch vụ."
+        },
+        {
+          "loi": "Passing <code>sort</code> straight into ORDER BY — the injection that lesson 6.4 shows.|||Đưa thẳng <code>sort</code> vào ORDER BY — lỗ chèn mã mà bài 6.4 chỉ ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "coercion",
+          "vi": "ép kiểu",
+          "giaiThich": "Chuỗi \"25\" thành số 25."
+        },
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép",
+          "giaiThich": "Chỉ giá trị đã liệt kê mới được qua."
+        }
+      ]
+    },
+    {
+      "title": "6.3 · 5 — Write validate(schemas): the middleware that makes every route start clean",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "middleware",
+        "validation",
+        "Express 5"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The same six lines in every route is duplication. Write the lesson’s middleware factory <code>validate(schemas)</code> that returns <code>(req, res, next)</code>. <code>schemas</code> may have <code>body</code>, <code>query</code> and/or <code>params</code>; each has <code>safeParse(value)</code> returning <code>{ success: true, data }</code> or <code>{ success: false, error: { issues: [{ path: [...], message }] } }</code>.</p>\n<ul><li>Check the parts in the order <code>body</code>, <code>query</code>, <code>params</code>, skipping the ones without a schema.</li>\n<li>On the first failure call <code>next(err)</code> <b>once</b> with <code>err = new AppError(422, 'VALIDATION_FAILED', 'The submitted data is not valid')</code> and <code>err.fields = [{ path: 'a.b', message }]</code>, and stop.</li>\n<li>On success store the parsed value in <code>req.valid[key]</code> (create <code>req.valid</code> if needed) and finally call <code>next()</code> with no argument.</li>\n<li><b>Never assign <code>req.query</code></b>: in the grader, as in Express 5, it is a getter and assigning it throws.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li><code>next</code> is called exactly once per request.</li>\n  <li>Write parsed values to <code>req.valid</code> only.</li>\n  <li>The error carries <code>status 422</code>, <code>code VALIDATION_FAILED</code> and <code>fields</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu dòng giống nhau trong mọi route là trùng lặp. Viết hàm tạo middleware của bài <code>validate(schemas)</code> trả về <code>(req, res, next)</code>. <code>schemas</code> có thể có <code>body</code>, <code>query</code> và/hoặc <code>params</code>; mỗi cái có <code>safeParse(value)</code> trả <code>{ success: true, data }</code> hoặc <code>{ success: false, error: { issues: [{ path: [...], message }] } }</code>.</p>\n<ul><li>Kiểm các phần theo thứ tự <code>body</code>, <code>query</code>, <code>params</code>, bỏ qua phần không có lược đồ.</li>\n<li>Lỗi đầu tiên: gọi <code>next(err)</code> <b>một lần</b> với <code>err = new AppError(422, 'VALIDATION_FAILED', 'The submitted data is not valid')</code> và <code>err.fields = [{ path: 'a.b', message }]</code>, rồi dừng.</li>\n<li>Thành công: lưu giá trị đã kiểm vào <code>req.valid[key]</code> (tạo <code>req.valid</code> nếu chưa có) và cuối cùng gọi <code>next()</code> không đối số.</li>\n<li><b>Không bao giờ gán <code>req.query</code></b>: trong máy chấm, cũng như Express 5, nó là getter và gán sẽ ném lỗi.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>next</code> được gọi đúng một lần mỗi request.</li>\n  <li>Chỉ ghi giá trị đã kiểm vào <code>req.valid</code>.</li>\n  <li>Lỗi mang <code>status 422</code>, <code>code VALIDATION_FAILED</code> và <code>fields</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "run({ body: S.note }, { body: { title: 'A valid note', isAdmin: true } })",
+          "output": "{\"calls\":[\"next()\"],\"valid\":{\"body\":{\"title\":\"A valid note\",\"body\":\"\",\"pinned\":false}},\"rawQuery\":{}}",
+          "explanation": "The first visible case (Run shows every visible case; hidden ones only run on Submit).|||Ca hiện đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Loop over <code>[\"body\", \"query\", \"params\"]</code>; <code>if (!schemas[key]) continue;</code>.|||Lặp qua <code>[\"body\", \"query\", \"params\"]</code>; <code>if (!schemas[key]) continue;</code>.",
+        "<code>return next(err)</code> inside the loop — the <code>return</code> is what prevents the second <code>next()</code> at the end.|||<code>return next(err)</code> trong vòng lặp — chính <code>return</code> ngăn lần <code>next()</code> thứ hai ở cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const validate = (schemas) => (req, res, next) => {\n  // Write your solution here\n  for (const key of ['body', 'query', 'params']) {\n    if (!schemas[key]) continue;\n    const r = schemas[key].safeParse(req[key]);\n    if (!r.success) next(new AppError(422, 'VALIDATION_FAILED', 'The submitted data is not valid'));\n    req[key] = r.data;\n  }\n  next();\n};\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nconst validate = (schemas) => (req, res, next) => {\n  for (const key of ['body', 'query', 'params']) {\n    if (!schemas[key]) continue;                    // only validate the parts this route declared\n    const r = schemas[key].safeParse(req[key]);\n    if (!r.success) {\n      // hand the problem to the error handler of 6.2 — one shape, one place\n      const err = new AppError(422, 'VALIDATION_FAILED', 'The submitted data is not valid');\n      err.fields = r.error.issues.map((i) => ({ path: i.path.join('.'), message: i.message }));\n      return next(err);                             // return: next must run exactly once\n    }\n    req.valid ??= {};\n    req.valid[key] = r.data;                        // NOT req.query = … (a getter in Express 5)\n  }\n  next();\n};\n"
+        },
+        {
+          "name": "helpers.js",
+          "language": "javascript",
+          "code": "// provided — the AppError of lesson 5.4\nclass AppError extends Error {\n  constructor(status, code, message) { super(message || code); this.name = 'AppError'; this.status = status; this.code = code; }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A middleware turns “every route must remember to validate” into “a route declares its schema”. Routing the failure through <code>next(err)</code> keeps one owner for the error shape (6.2), and <code>req.valid</code> gives handlers a value that is guaranteed clean — while <code>req.query</code> stays the raw, untrusted input it always was.</p>",
+      "solutionExplanationHtmlVi": "<p>Middleware biến \"route nào cũng phải nhớ kiểm\" thành \"route khai lược đồ của nó\". Chuyển lỗi qua <code>next(err)</code> giữ một chủ duy nhất cho hình dạng lỗi (6.2), và <code>req.valid</code> cho handler một giá trị chắc chắn sạch — còn <code>req.query</code> vẫn là dữ liệu thô, không tin được như vốn dĩ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "helpers.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid body ⇒ req.valid.body, one next()",
+              "vi": "Body hợp lệ ⇒ req.valid.body, một next()"
+            },
+            "goi": "run({ body: S.note }, { body: { title: 'A valid note', isAdmin: true } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                "next()"
+              ],
+              "valid": {
+                "body": {
+                  "title": "A valid note",
+                  "body": "",
+                  "pinned": false
+                }
+              },
+              "rawQuery": {}
+            }
+          },
+          {
+            "moTa": {
+              "en": "Invalid body ⇒ next(err) once",
+              "vi": "Body sai ⇒ next(err) một lần"
+            },
+            "goi": "run({ body: S.note }, { body: { title: '' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                {
+                  "status": 422,
+                  "code": "VALIDATION_FAILED",
+                  "fields": [
+                    {
+                      "path": "title",
+                      "message": "title must not be empty"
+                    }
+                  ],
+                  "isAppError": true
+                }
+              ],
+              "valid": null,
+              "rawQuery": {}
+            }
+          },
+          {
+            "moTa": {
+              "en": "Query parsed without touching req.query",
+              "vi": "Query được kiểm mà không đụng req.query"
+            },
+            "goi": "run({ query: S.list }, { query: { page: '3', limit: '25' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                "next()"
+              ],
+              "valid": {
+                "query": {
+                  "page": 3,
+                  "limit": 25
+                }
+              },
+              "rawQuery": {
+                "page": "3",
+                "limit": "25"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "run({ body: S.note, query: S.list, params: S.id }, { body: { title: 'x' }, query: { limit: '500' }, params: { id: '42' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                {
+                  "status": 422,
+                  "code": "VALIDATION_FAILED",
+                  "fields": [
+                    {
+                      "path": "limit",
+                      "message": "Too big: expected number to be <=50"
+                    }
+                  ],
+                  "isAppError": true
+                }
+              ],
+              "valid": {
+                "body": {
+                  "title": "x",
+                  "body": "",
+                  "pinned": false
+                }
+              },
+              "rawQuery": {
+                "limit": "500"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "run({ params: S.id }, { params: { id: 'abc' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                {
+                  "status": 422,
+                  "code": "VALIDATION_FAILED",
+                  "fields": [
+                    {
+                      "path": "id",
+                      "message": "Invalid input: expected int, received NaN"
+                    },
+                    {
+                      "path": "extra.0",
+                      "message": "x"
+                    }
+                  ],
+                  "isAppError": true
+                }
+              ],
+              "valid": null,
+              "rawQuery": {}
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "run({}, { body: { anything: 1 } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                "next()"
+              ],
+              "valid": null,
+              "rawQuery": {}
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "run({ body: S.note, params: S.id }, { body: { title: 'ok' }, params: { id: '7' }, query: { ignored: '1' } })",
+            "chuanBi": "const mkRes = () => { const r = { statusCode: 200, headers: {}, body: undefined, sent: 0, ended: false };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.get = (k) => r.headers[String(k).toLowerCase()];\n  r.location = (u) => { r.headers.location = u; return r; };\n  r.json = (b) => { r.body = b; r.sent++; r.headers['content-type'] = 'application/json'; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.ended = true; r.sent++; return r; };\n  return r; };\nconst mkNext = () => { const n = (err) => { n.calls.push(err); }; n.calls = []; return n; };\nconst mkReq = (o = {}) => { const h = {}; for (const k of Object.keys(o.headers || {})) h[k.toLowerCase()] = o.headers[k];\n  return { method: 'GET', path: '/', params: {}, query: {}, body: undefined, cookies: {}, ...o, headers: h, get: (k) => h[String(k).toLowerCase()] }; };\nconst view = (res) => ({ status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, sent: res.sent, ended: res.ended });\nconst errView = (e) => (e ? { status: e.status, code: e.code } : null);\nconst S = { // tiny fake schemas with zod's safeParse contract\n  note: { safeParse: (v) => (v && typeof v.title === 'string' && v.title ? { success: true, data: { title: v.title, body: v.body ?? '', pinned: false } } : { success: false, error: { issues: [{ path: ['title'], message: 'title must not be empty' }] } }) },\n  list: { safeParse: (v) => (v.limit === undefined || Number(v.limit) <= 50 ? { success: true, data: { page: Number(v.page ?? 1), limit: Number(v.limit ?? 10) } } : { success: false, error: { issues: [{ path: ['limit'], message: 'Too big: expected number to be <=50' }] } }) },\n  id: { safeParse: (v) => (/^\\d+$/.test(v.id) ? { success: true, data: { id: Number(v.id) } } : { success: false, error: { issues: [{ path: ['id'], message: 'Invalid input: expected int, received NaN' }, { path: ['extra', 0], message: 'x' }] } }) },\n};\nconst reqWith = (o) => { const q = o.query || {}; const r = mkReq({ ...o, query: undefined });\n  Object.defineProperty(r, 'query', { get: () => q, set: () => { throw new TypeError('Cannot set property query of #<IncomingMessage> which has only a getter'); } });\n  return r; };\nconst run = (schemas, o) => { const req = reqWith(o); const next = mkNext(); validate(schemas)(req, mkRes(), next);\n  return { calls: next.calls.map((e) => (e === undefined ? 'next()' : { status: e.status, code: e.code, fields: e.fields, isAppError: e instanceof AppError })), valid: req.valid ?? null, rawQuery: req.query }; };",
+            "mongDoi": {
+              "calls": [
+                "next()"
+              ],
+              "valid": {
+                "body": {
+                  "title": "ok",
+                  "body": "",
+                  "pinned": false
+                },
+                "params": {
+                  "id": 7
+                }
+              },
+              "rawQuery": {
+                "ignored": "1"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>req.query = r.data</code> — the v4 snippet that throws in Express 5.|||<code>req.query = r.data</code> — đoạn code thời v4 ném lỗi trong Express 5."
+        },
+        {
+          "loi": "<code>next(err)</code> without <code>return</code>: the loop continues and <code>next()</code> runs again — the handler executes after the error was sent.|||<code>next(err)</code> mà không <code>return</code>: vòng lặp chạy tiếp và <code>next()</code> chạy lần nữa — handler vẫn chạy sau khi lỗi đã gửi."
+        },
+        {
+          "loi": "Answering <code>res.status(422)</code> directly in the middleware, bypassing the one error handler that owns the shape.|||Trả thẳng <code>res.status(422)</code> trong middleware, bỏ qua bộ xử lý lỗi duy nhất quản hình dạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware factory",
+          "vi": "hàm tạo middleware",
+          "giaiThich": "Hàm nhận cấu hình, trả (req, res, next)."
+        },
+        {
+          "en": "getter",
+          "vi": "getter",
+          "giaiThich": "Thuộc tính tính lúc đọc; không gán được."
+        }
+      ]
+    }
+  ]
+}

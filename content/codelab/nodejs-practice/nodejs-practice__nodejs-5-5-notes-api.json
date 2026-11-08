@@ -1,0 +1,954 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-5-5-notes-api",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-5-5-notes-api"
+  },
+  "exercises": [
+    {
+      "title": "5.5 · Why the Notes API is split the way it is",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "Express"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Questions on the file layout (index / app / routes / services / middleware), on the curl session and on the SIGTERM experiment of the lesson.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu về cách chia tệp (index / app / routes / services / middleware), về phiên curl và thí nghiệm SIGTERM của bài.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of each file: what does it know about HTTP?|||Hỏi với từng tệp: nó biết gì về HTTP?",
+        "“Graceful” means: finish what is in flight, accept nothing new.|||“Êm” nghĩa là: làm xong những gì đang chạy, không nhận thêm gì mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5 · Why the Notes API is split the way it is\n\nAnswer in the answer panel (no code needed).\n\n1. A service needs the id of the current user. The lesson’s rule says…Một service cần id của người dùng hiện tại. Luật của bài nói…\n2. Why does createApp() return the app instead of calling listen()?Vì sao createApp() trả về app thay vì gọi listen()?\n3. POST /api/v1/notes succeeds. What does the lesson’s response contain?POST /api/v1/notes thành công. Phản hồi của bài gồm gì?\n4. Docker sends SIGTERM during a deploy while a 3-second request is running. With the lesson’s handler…Docker gửi SIGTERM lúc deploy trong khi một request 3 giây đang chạy. Với handler của bài…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5 · Why the Notes API is split the way it is — answer key\n\n1. A service needs the id of the current user. The lesson’s rule says…Một service cần id của người dùng hiện tại. Luật của bài nói…\n   Answer: d) Take a userId argument — a service never imports or receives req/res\n   That single restriction lets you call the same function from a route, a background job (ch. 13) and a test (ch. 14) without a fake HTTP request.VI: Chỉ một ràng buộc đó cho phép gọi cùng hàm từ route, từ việc nền (ch. 13) và từ test (ch. 14) mà không cần request HTTP giả.\n\n2. Why does createApp() return the app instead of calling listen()?Vì sao createApp() trả về app thay vì gọi listen()?\n   Answer: a) Tests can build it with no port, no socket and nothing to clean up\n   Any file that calls app.listen() at import time is a file you cannot test without starting a server. index.mjs owns the port and the signals.VI: Tệp nào gọi app.listen() ngay lúc import là tệp không test được nếu không khởi động server. index.mjs sở hữu cổng và tín hiệu.\n\n3. POST /api/v1/notes succeeds. What does the lesson’s response contain?POST /api/v1/notes thành công. Phản hồi của bài gồm gì?\n   Answer: c) 201, a Location header (/api/v1/notes/1) and the note as JSON\n   201 with a Location pointing at the created resource is what “created” means in HTTP; chapter 6 makes it a habit.VI: 201 kèm Location trỏ tới tài nguyên vừa tạo là ý nghĩa của “created” trong HTTP; chương 6 biến nó thành thói quen.\n\n4. Docker sends SIGTERM during a deploy while a 3-second request is running. With the lesson’s handler…Docker gửi SIGTERM lúc deploy trong khi một request 3 giây đang chạy. Với handler của bài…\n   Answer: d) server.close() stops new connections, the slow request finishes with 200, then the process exits 0\n   Measured in the lesson: “/slow responded … clean exit, client {\"done\":true} [200]”. Without the handler every deploy silently kills whatever was in flight (Docker sends SIGKILL ~10 s later).VI: Đo trong bài: “/slow responded … clean exit, client {\"done\":true} [200]”. Không có handler, mọi lần deploy âm thầm giết những gì đang chạy (Docker gửi SIGKILL ~10 giây sau).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Take a userId argument — a service never imports or receives req/res</p><p>That single restriction lets you call the same function from a route, a background job (ch. 13) and a test (ch. 14) without a fake HTTP request.</p><p><i>VI: Chỉ một ràng buộc đó cho phép gọi cùng hàm từ route, từ việc nền (ch. 13) và từ test (ch. 14) mà không cần request HTTP giả.</i></p></li><li><p><b>a)</b> Tests can build it with no port, no socket and nothing to clean up</p><p>Any file that calls app.listen() at import time is a file you cannot test without starting a server. index.mjs owns the port and the signals.</p><p><i>VI: Tệp nào gọi app.listen() ngay lúc import là tệp không test được nếu không khởi động server. index.mjs sở hữu cổng và tín hiệu.</i></p></li><li><p><b>c)</b> 201, a Location header (/api/v1/notes/1) and the note as JSON</p><p>201 with a Location pointing at the created resource is what “created” means in HTTP; chapter 6 makes it a habit.</p><p><i>VI: 201 kèm Location trỏ tới tài nguyên vừa tạo là ý nghĩa của “created” trong HTTP; chương 6 biến nó thành thói quen.</i></p></li><li><p><b>d)</b> server.close() stops new connections, the slow request finishes with 200, then the process exits 0</p><p>Measured in the lesson: “/slow responded … clean exit, client {\"done\":true} [200]”. Without the handler every deploy silently kills whatever was in flight (Docker sends SIGKILL ~10 s later).</p><p><i>VI: Đo trong bài: “/slow responded … clean exit, client {\"done\":true} [200]”. Không có handler, mọi lần deploy âm thầm giết những gì đang chạy (Docker gửi SIGKILL ~10 giây sau).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A service needs the id of the current user. The lesson’s rule says…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một service cần id của người dùng hiện tại. Luật của bài nói…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Pass req to the service so it can read req.user itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Store the user in a global set by a middleware"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Read it from a cookie inside the service"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Take a userId argument — a service never imports or receives req/res"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>That single restriction lets you call the same function from a route, a background job (ch. 13) and a test (ch. 14) without a fake HTTP request.</p><p><i>VI: Chỉ một ràng buộc đó cho phép gọi cùng hàm từ route, từ việc nền (ch. 13) và từ test (ch. 14) mà không cần request HTTP giả.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does <code>createApp()</code> return the app instead of calling <code>listen()</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>createApp()</code> trả về app thay vì gọi <code>listen()</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tests can build it with no port, no socket and nothing to clean up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express cannot call listen() from inside a function, only at top level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because listen() is deprecated in Express 5 and prints a warning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It makes the app start faster in production, since nothing listens"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Any file that calls app.listen() at import time is a file you cannot test without starting a server. index.mjs owns the port and the signals.</p><p><i>VI: Tệp nào gọi app.listen() ngay lúc import là tệp không test được nếu không khởi động server. index.mjs sở hữu cổng và tín hiệu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>POST /api/v1/notes</code> succeeds. What does the lesson’s response contain?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>POST /api/v1/notes</code> thành công. Phản hồi của bài gồm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200 OK and a small JSON body that says { \"ok\": true }"
+              },
+              {
+                "ma": "b",
+                "noiDung": "204 No Content with a Location header and no body at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "201, a Location header (/api/v1/notes/1) and the note as JSON"
+              },
+              {
+                "ma": "d",
+                "noiDung": "201 Created and the full list of notes, including the new one"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>201 with a Location pointing at the created resource is what “created” means in HTTP; chapter 6 makes it a habit.</p><p><i>VI: 201 kèm Location trỏ tới tài nguyên vừa tạo là ý nghĩa của “created” trong HTTP; chương 6 biến nó thành thói quen.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Docker sends SIGTERM during a deploy while a 3-second request is running. With the lesson’s handler…</p><p style=\"opacity:.75;font-size:.92em\"><i>Docker gửi SIGTERM lúc deploy trong khi một request 3 giây đang chạy. Với handler của bài…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Docker waits forever because the request has not finished"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the slow request is restarted on the new container"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the process exits immediately and the client gets a connection reset"
+              },
+              {
+                "ma": "d",
+                "noiDung": "server.close() stops new connections, the slow request finishes with 200, then the process exits 0"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured in the lesson: “/slow responded … clean exit, client {\"done\":true} [200]”. Without the handler every deploy silently kills whatever was in flight (Docker sends SIGKILL ~10 s later).</p><p><i>VI: Đo trong bài: “/slow responded … clean exit, client {\"done\":true} [200]”. Không có handler, mọi lần deploy âm thầm giết những gì đang chạy (Docker gửi SIGKILL ~10 giây sau).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Passing req into services “to save time”.|||Truyền req vào service “cho nhanh”."
+        },
+        {
+          "loi": "Calling process.exit() straight away on SIGTERM.|||Gọi process.exit() ngay khi nhận SIGTERM."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "layered structure",
+          "vi": "cấu trúc phân tầng"
+        },
+        {
+          "en": "graceful shutdown",
+          "vi": "tắt êm"
+        },
+        {
+          "en": "SIGTERM",
+          "vi": "tín hiệu yêu cầu dừng"
+        }
+      ]
+    },
+    {
+      "title": "5.5 · notes.service: business rules with zero HTTP knowledge",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "architecture",
+        "services"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>createNotesService()</code> — the file chapter 7 will swap for PostgreSQL without touching the router. It returns an object with:</p>\n<ul><li><code>create({ title, body = '' })</code> → <code>{ id, title, body, createdAt }</code>: ids start at 1 and are <b>never reused</b>; <code>createdAt = new Date(Date.now()).toISOString()</code>;</li><li><code>get(id)</code> → the note or <code>null</code>;</li><li><code>list({ page = 1, limit = 10, q })</code> → <code>{ items, page, limit, total }</code> in id order; <code>q</code> keeps notes whose title or body contains it, case-insensitively; <code>total</code> counts after filtering, before paging;</li><li><code>update(id, patch)</code> → changes only the <code>title</code>/<code>body</code> fields present in patch; returns the note or <code>null</code>;</li><li><code>remove(id)</code> → <code>true</code> if it existed.</li></ul><p>Return <b>copies</b>: changing an object you got back must not change the store. And no <code>req</code>, no <code>res</code> anywhere in this file.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>createNotesService()</code> — tệp mà chương 7 sẽ thay bằng PostgreSQL mà không chạm vào router. Nó trả về object có:</p>\n<ul><li><code>create({ title, body = '' })</code> → <code>{ id, title, body, createdAt }</code>: id bắt đầu từ 1 và <b>không bao giờ dùng lại</b>; <code>createdAt = new Date(Date.now()).toISOString()</code>;</li><li><code>get(id)</code> → ghi chú hoặc <code>null</code>;</li><li><code>list({ page = 1, limit = 10, q })</code> → <code>{ items, page, limit, total }</code> theo thứ tự id; <code>q</code> giữ ghi chú có title hoặc body chứa nó, không phân biệt hoa thường; <code>total</code> đếm sau khi lọc, trước khi phân trang;</li><li><code>update(id, patch)</code> → chỉ đổi các trường <code>title</code>/<code>body</code> có trong patch; trả ghi chú hoặc <code>null</code>;</li><li><code>remove(id)</code> → <code>true</code> nếu nó từng tồn tại.</li></ul><p>Trả về <b>bản sao</b>: sửa object nhận được không được làm đổi kho. Và không có <code>req</code>, không có <code>res</code> ở đâu trong tệp này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "plain arguments (ids are numbers)|||đối số thường (id là số)",
+      "outputSpec": "plain objects — never HTTP|||object thường — không bao giờ là HTTP",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const s = createNotesService(); s.create({ title: \"Learning Express\", body: \"chapter 5\" }); s.create({ title: \"Second note\" }); return [s.list({ page: 1, limit: 10 }), s.list({ q: \"EXPRESS\" }).total]; })()",
+          "output": "[{\"items\":[{\"id\":1,\"title\":\"Learning Express\",\"body\":\"chapter 5\",\"createdAt\":\"2026-01-01T00:00:00.000Z\"},{\"id\":2,\"title\":\"Second note\",\"body\":\"\",\"createdAt\":\"2026-01-01T00:00:00.000Z\"}],\"page\":1,\"limit\":10,\"total\":2},1]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A Map keyed by id keeps insertion order — that is your id order.|||Map theo id giữ thứ tự chèn — đó chính là thứ tự id.",
+        "Keep nextId in the closure; increment it on create only.|||Giữ nextId trong closure; chỉ tăng khi create.",
+        "slice((page - 1) * limit, page * limit) after filtering.|||slice((page - 1) * limit, page * limit) sau khi lọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "notes.service.js",
+          "language": "javascript",
+          "code": "/** the notes business rules — no req, no res */\nfunction createNotesService() {\n  // Write your solution here — this version leaks its internals and reuses ids\n  const notes = [];\n  return {\n    list({ page = 1, limit = 10 } = {}) { const items = notes.slice((page - 1) * limit, page * limit); return { items, page, limit, total: items.length }; },\n    get(id) { return notes.find((n) => n.id === id) || null; },\n    create({ title, body = '' }) { const note = { id: notes.length + 1, title, body, createdAt: new Date(Date.now()).toISOString() }; notes.push(note); return note; },\n    update(id, patch) { const n = notes.find((x) => x.id === id); if (!n) return null; Object.assign(n, patch); return n; },\n    remove(id) { const i = notes.findIndex((n) => n.id === id); if (i < 0) return false; notes.splice(i, 1); return true; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "notes.service.js",
+          "language": "javascript",
+          "code": "// Reference solution — a Map, a counter, and copies on the way out\nfunction createNotesService() {\n  const notes = new Map();      // in memory for now; chapter 7 swaps THIS file for PostgreSQL\n  let nextId = 1;               // never reused, even after a delete\n  const copy = (n) => ({ ...n });   // callers get copies: they cannot change the store behind our back\n  return {\n    list({ page = 1, limit = 10, q } = {}) {\n      let all = [...notes.values()];\n      if (q) {\n        const needle = String(q).toLowerCase();\n        all = all.filter((n) => n.title.toLowerCase().includes(needle) || n.body.toLowerCase().includes(needle));\n      }\n      const items = all.slice((page - 1) * limit, page * limit).map(copy);\n      return { items, page, limit, total: all.length };\n    },\n    get(id) {\n      const n = notes.get(id);\n      return n ? copy(n) : null;\n    },\n    create({ title, body = '' }) {\n      const note = { id: nextId++, title, body, createdAt: new Date(Date.now()).toISOString() };\n      notes.set(note.id, note);\n      return copy(note);\n    },\n    update(id, patch) {\n      const n = notes.get(id);\n      if (!n) return null;\n      if (patch.title !== undefined) n.title = patch.title;   // only the fields that were sent\n      if (patch.body !== undefined) n.body = patch.body;\n      return copy(n);\n    },\n    remove(id) {\n      return notes.delete(id);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Everything in this file can be called from a route, a job or a test with plain values — exactly the property the lesson builds the whole layout around. The grader’s clock starts at 2026-01-01T00:00:00Z, so createdAt values are deterministic.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi thứ trong tệp này gọi được từ route, việc nền hay test bằng giá trị thường — đúng tính chất mà bài dựng cả bố cục xoay quanh. Đồng hồ của máy chấm bắt đầu ở 2026-01-01T00:00:00Z, nên giá trị createdAt cố định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "notes.service.js",
+        "tepNap": [
+          "notes.service.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s list and ?q=express",
+              "vi": "Danh sách và ?q=express của bài"
+            },
+            "goi": "(() => { const s = createNotesService(); s.create({ title: \"Learning Express\", body: \"chapter 5\" }); s.create({ title: \"Second note\" }); return [s.list({ page: 1, limit: 10 }), s.list({ q: \"EXPRESS\" }).total]; })()",
+            "mongDoi": [
+              {
+                "items": [
+                  {
+                    "id": 1,
+                    "title": "Learning Express",
+                    "body": "chapter 5",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  },
+                  {
+                    "id": 2,
+                    "title": "Second note",
+                    "body": "",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  }
+                ],
+                "page": 1,
+                "limit": 10,
+                "total": 2
+              },
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Ids are never reused",
+              "vi": "id không bao giờ dùng lại"
+            },
+            "goi": "(() => { const s = createNotesService(); s.create({ title: \"a\" }); s.create({ title: \"b\" }); s.remove(1); return [s.create({ title: \"c\" }).id, s.get(1), s.remove(1)]; })()",
+            "mongDoi": [
+              3,
+              null,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "PATCH changes only the fields sent",
+              "vi": "PATCH chỉ đổi các trường được gửi"
+            },
+            "goi": "(() => { const s = createNotesService(); s.create({ title: \"Learning Express\", body: \"chapter 5\" }); return [s.update(1, { body: \"edited\" }), s.update(9, { body: \"x\" })]; })()",
+            "mongDoi": [
+              {
+                "id": 1,
+                "title": "Learning Express",
+                "body": "edited",
+                "createdAt": "2026-01-01T00:00:00.000Z"
+              },
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const s = createNotesService(); const n = s.create({ title: \"safe\" }); n.title = \"hacked\"; s.get(1).body = \"hacked too\"; s.list().items[0].title = \"again\"; return s.get(1); })()",
+            "mongDoi": {
+              "id": 1,
+              "title": "safe",
+              "body": "",
+              "createdAt": "2026-01-01T00:00:00.000Z"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const s = createNotesService(); for (let i = 1; i <= 23; i++) s.create({ title: \"note \" + i, body: i % 2 ? \"odd\" : \"even\" }); return [s.list({ page: 3, limit: 10 }).items.map((n) => n.id), s.list({ page: 2, limit: 5, q: \"ODD\" }), s.list({ page: 9 }).items.length]; })()",
+            "mongDoi": [
+              [
+                21,
+                22,
+                23
+              ],
+              {
+                "items": [
+                  {
+                    "id": 11,
+                    "title": "note 11",
+                    "body": "odd",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  },
+                  {
+                    "id": 13,
+                    "title": "note 13",
+                    "body": "odd",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  },
+                  {
+                    "id": 15,
+                    "title": "note 15",
+                    "body": "odd",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  },
+                  {
+                    "id": 17,
+                    "title": "note 17",
+                    "body": "odd",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  },
+                  {
+                    "id": 19,
+                    "title": "note 19",
+                    "body": "odd",
+                    "createdAt": "2026-01-01T00:00:00.000Z"
+                  }
+                ],
+                "page": 2,
+                "limit": 5,
+                "total": 12
+              },
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(() => { const s = createNotesService(); s.create({ title: \"x\" }); return [s.update(1, { title: undefined }), s.update(1, { title: \"y\", extra: 1 })]; })()",
+            "mongDoi": [
+              {
+                "id": 1,
+                "title": "x",
+                "body": "",
+                "createdAt": "2026-01-01T00:00:00.000Z"
+              },
+              {
+                "id": 1,
+                "title": "y",
+                "body": "",
+                "createdAt": "2026-01-01T00:00:00.000Z"
+              }
+            ],
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "The service never mentions req or res",
+              "vi": "Service không nhắc tới req hay res"
+            },
+            "khop": "\\breq\\b|\\bres\\b",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "id = notes.size + 1: delete note 1 of 2, create again, and two notes share id 2.|||id = notes.size + 1: xoá ghi chú 1 trong 2, tạo lại, và hai ghi chú cùng id 2."
+        },
+        {
+          "loi": "Returning the stored object: the router (or a test) mutates it and the store changes silently.|||Trả về chính object đang lưu: router (hay test) sửa nó và kho âm thầm đổi theo."
+        },
+        {
+          "loi": "total = items.length: the frontend then thinks there is only one page.|||total = items.length: frontend tưởng chỉ có một trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "service layer",
+          "vi": "tầng nghiệp vụ"
+        },
+        {
+          "en": "defensive copy",
+          "vi": "bản sao phòng thủ"
+        }
+      ]
+    },
+    {
+      "title": "5.5 · notes.routes: HTTP in, status codes out",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "REST"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>notesRouter(service)</code> — “HTTP, and nothing else”. The service, <code>AppError</code>, <code>notFound</code>, <code>errorHandler</code> and <code>createApp()</code> (which mounts your router at <code>/api/v1/notes</code> after <code>express.json()</code>) are provided. No try/catch: <b>throw</b> an <code>AppError</code> and the error handler answers.</p>\n<table><thead><tr><th>route</th><th>success</th><th>errors</th></tr></thead><tbody>\n<tr><td>GET /</td><td>200 <code>service.list({ page, limit, q })</code> — page = <code>Number(req.query.page ?? 1)</code>, limit = <code>Math.min(Number(req.query.limit ?? 10), 50)</code></td><td></td></tr>\n<tr><td>GET /:id</td><td>200 the note</td><td>404 <code>NOTE_NOT_FOUND</code> “Note &lt;id&gt; does not exist”</td></tr>\n<tr><td>POST /</td><td>201 + header <code>Location: /api/v1/notes/&lt;id&gt;</code> + the note (title trimmed, body default <code>\"\"</code>)</td><td>422 <code>VALIDATION_FAILED</code> “title is required”</td></tr>\n<tr><td>PATCH /:id</td><td>200 the updated note</td><td>422 “title must not be empty” if a title is sent but blank · 404</td></tr>\n<tr><td>DELETE /:id</td><td>204, no body</td><td>404</td></tr></tbody></table><p><i>The editor also has <code>mini-express.js</code>: a small subset of Express 5 checked against the real express@5 (routing, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handlers). The tests call <code>request(app, method, url, { body, headers })</code> — a tiny supertest that resolves to <code>{ status, headers, text, body }</code>. Leave that file alone and write your code exactly as you would in a real project.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>No try/catch and no res.status(4xx) in the router: throw AppError.</li>\n  <li>Convert req.params.id with Number before calling the service.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>notesRouter(service)</code> — “HTTP, và không gì khác”. Có sẵn service, <code>AppError</code>, <code>notFound</code>, <code>errorHandler</code> và <code>createApp()</code> (gắn router của bạn ở <code>/api/v1/notes</code> sau <code>express.json()</code>). Không try/catch: <b>throw</b> một <code>AppError</code> và error handler sẽ trả lời.</p>\n<table><thead><tr><th>route</th><th>thành công</th><th>lỗi</th></tr></thead><tbody>\n<tr><td>GET /</td><td>200 <code>service.list({ page, limit, q })</code> — page = <code>Number(req.query.page ?? 1)</code>, limit = <code>Math.min(Number(req.query.limit ?? 10), 50)</code></td><td></td></tr>\n<tr><td>GET /:id</td><td>200 ghi chú</td><td>404 <code>NOTE_NOT_FOUND</code> “Note &lt;id&gt; does not exist”</td></tr>\n<tr><td>POST /</td><td>201 + header <code>Location: /api/v1/notes/&lt;id&gt;</code> + ghi chú (title đã trim, body mặc định <code>\"\"</code>)</td><td>422 <code>VALIDATION_FAILED</code> “title is required”</td></tr>\n<tr><td>PATCH /:id</td><td>200 ghi chú đã sửa</td><td>422 “title must not be empty” nếu gửi title mà rỗng · 404</td></tr>\n<tr><td>DELETE /:id</td><td>204, không thân</td><td>404</td></tr></tbody></table><p><i>Trình soạn thảo có thêm <code>mini-express.js</code>: một tập con của Express 5 đã đối chiếu với express@5 thật (định tuyến, <code>Router</code>, <code>express.json()</code>, <code>res.json/status/send/sendStatus/end</code>, error handler). Máy chấm gọi <code>request(app, method, url, { body, headers })</code> — một supertest tí hon trả về <code>{ status, headers, text, body }</code>. Đừng sửa tệp đó; viết code y như trong dự án thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không try/catch và không res.status(4xx) trong router: throw AppError.</li>\n  <li>Đổi req.params.id bằng Number trước khi gọi service.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[s(await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Learning Express\", body: \"chapter 5\" } })), s(await request(app, \"POST\", \"/api/v1/notes\", { body: { body: \"no title\" } }))]",
+          "output": "[{\"status\":201,\"location\":\"/api/v1/notes/1\",\"body\":{\"id\":1,\"title\":\"Learning Express\",\"body\":\"chapter 5\",\"createdAt\":\"2026-01-01T00:00:00.000Z\"}},{\"status\":422,\"location\":null,\"body\":{\"error\":{\"code\":\"VALIDATION_FAILED\",\"message\":\"title is required\"}}}]",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The lesson shows GET /, GET /:id, POST / and DELETE /:id almost line for line.|||Bài cho GET /, GET /:id, POST / và DELETE /:id gần như từng dòng.",
+        "res.status(201).location(url).json(note) — three chained calls.|||res.status(201).location(url).json(note) — ba lời gọi nối tiếp.",
+        "For PATCH, validate only what was sent: title === undefined means “do not change it”.|||Với PATCH, chỉ kiểm thứ được gửi: title === undefined nghĩa là “đừng đổi”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "notes.routes.js",
+          "language": "javascript",
+          "code": "// ── provided: errors.js and the service (from the previous exercises) ──\nclass AppError extends Error { constructor(status, code, message) { super(message); this.status = status; this.code = code; } }\nfunction notFound(req, res) { res.status(404).json({ error: { code: 'NOT_FOUND', message: `Cannot ${req.method} ${req.path}` } }); }\nfunction errorHandler(err, req, res, next) {\n  if (err.type === 'entity.parse.failed') err = new AppError(400, 'INVALID_JSON', 'Request body is not valid JSON');\n  const status = err.status || 500;\n  res.status(status).json({ error: { code: err.code || 'INTERNAL', message: status >= 500 ? 'Internal server error' : err.message } });\n}\nfunction createNotesService() {\n  const notes = new Map();      // in memory for now; chapter 7 swaps THIS file for PostgreSQL\n  let nextId = 1;               // never reused, even after a delete\n  const copy = (n) => ({ ...n });   // callers get copies: they cannot change the store behind our back\n  return {\n    list({ page = 1, limit = 10, q } = {}) {\n      let all = [...notes.values()];\n      if (q) {\n        const needle = String(q).toLowerCase();\n        all = all.filter((n) => n.title.toLowerCase().includes(needle) || n.body.toLowerCase().includes(needle));\n      }\n      const items = all.slice((page - 1) * limit, page * limit).map(copy);\n      return { items, page, limit, total: all.length };\n    },\n    get(id) {\n      const n = notes.get(id);\n      return n ? copy(n) : null;\n    },\n    create({ title, body = '' }) {\n      const note = { id: nextId++, title, body, createdAt: new Date(Date.now()).toISOString() };\n      notes.set(note.id, note);\n      return copy(note);\n    },\n    update(id, patch) {\n      const n = notes.get(id);\n      if (!n) return null;\n      if (patch.title !== undefined) n.title = patch.title;   // only the fields that were sent\n      if (patch.body !== undefined) n.body = patch.body;\n      return copy(n);\n    },\n    remove(id) {\n      return notes.delete(id);\n    },\n  };\n}\n\n/** the notes router: HTTP in, status codes out */\nfunction notesRouter(service) {\n  const router = express.Router();\n  // Write your solution here\n  router.get('/', (req, res) => res.json(service.list({})));\n  router.post('/', (req, res) => {\n    const note = service.create(req.body);\n    res.json(note);\n  });\n  return router;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "notes.routes.js",
+          "language": "javascript",
+          "code": "// ── provided: errors.js and the service (from the previous exercises) ──\nclass AppError extends Error { constructor(status, code, message) { super(message); this.status = status; this.code = code; } }\nfunction notFound(req, res) { res.status(404).json({ error: { code: 'NOT_FOUND', message: `Cannot ${req.method} ${req.path}` } }); }\nfunction errorHandler(err, req, res, next) {\n  if (err.type === 'entity.parse.failed') err = new AppError(400, 'INVALID_JSON', 'Request body is not valid JSON');\n  const status = err.status || 500;\n  res.status(status).json({ error: { code: err.code || 'INTERNAL', message: status >= 500 ? 'Internal server error' : err.message } });\n}\nfunction createNotesService() {\n  const notes = new Map();      // in memory for now; chapter 7 swaps THIS file for PostgreSQL\n  let nextId = 1;               // never reused, even after a delete\n  const copy = (n) => ({ ...n });   // callers get copies: they cannot change the store behind our back\n  return {\n    list({ page = 1, limit = 10, q } = {}) {\n      let all = [...notes.values()];\n      if (q) {\n        const needle = String(q).toLowerCase();\n        all = all.filter((n) => n.title.toLowerCase().includes(needle) || n.body.toLowerCase().includes(needle));\n      }\n      const items = all.slice((page - 1) * limit, page * limit).map(copy);\n      return { items, page, limit, total: all.length };\n    },\n    get(id) {\n      const n = notes.get(id);\n      return n ? copy(n) : null;\n    },\n    create({ title, body = '' }) {\n      const note = { id: nextId++, title, body, createdAt: new Date(Date.now()).toISOString() };\n      notes.set(note.id, note);\n      return copy(note);\n    },\n    update(id, patch) {\n      const n = notes.get(id);\n      if (!n) return null;\n      if (patch.title !== undefined) n.title = patch.title;   // only the fields that were sent\n      if (patch.body !== undefined) n.body = patch.body;\n      return copy(n);\n    },\n    remove(id) {\n      return notes.delete(id);\n    },\n  };\n}\n\n// Reference solution — translate HTTP to service calls; errors are thrown, not answered here\nfunction notesRouter(service) {\n  const router = express.Router();\n  router.get('/', (req, res) => {\n    const page = Number(req.query.page ?? 1);\n    const limit = Math.min(Number(req.query.limit ?? 10), 50);\n    res.json(service.list({ page, limit, q: req.query.q }));\n  });\n  router.get('/:id', (req, res) => {\n    const note = service.get(Number(req.params.id));\n    if (!note) throw new AppError(404, 'NOTE_NOT_FOUND', `Note ${req.params.id} does not exist`);   // no try/catch: the handler gets it\n    res.json(note);\n  });\n  router.post('/', (req, res) => {\n    const { title, body } = req.body ?? {};\n    if (typeof title !== 'string' || title.trim() === '') throw new AppError(422, 'VALIDATION_FAILED', 'title is required');\n    const note = service.create({ title: title.trim(), body: body ?? '' });\n    res.status(201).location(`/api/v1/notes/${note.id}`).json(note);   // \"created\" in HTTP = 201 + Location\n  });\n  router.patch('/:id', (req, res) => {\n    const { title, body } = req.body ?? {};\n    if (title !== undefined && (typeof title !== 'string' || title.trim() === '')) throw new AppError(422, 'VALIDATION_FAILED', 'title must not be empty');\n    const note = service.update(Number(req.params.id), { title: title === undefined ? undefined : title.trim(), body });\n    if (!note) throw new AppError(404, 'NOTE_NOT_FOUND', `Note ${req.params.id} does not exist`);\n    res.json(note);\n  });\n  router.delete('/:id', (req, res) => {\n    if (!service.remove(Number(req.params.id))) throw new AppError(404, 'NOTE_NOT_FOUND', `Note ${req.params.id} does not exist`);\n    res.status(204).end();\n  });\n  return router;\n}\n"
+        },
+        {
+          "name": "mini-express.js",
+          "language": "javascript",
+          "code": "/* mini-express.js — a small, faithful subset of Express 5, so Express code runs inside the browser grader.\n * You do not need to edit this file. Write your code in the other file exactly as you would with real Express.\n *\n *   express()                 app.use([path], ...fns) · app.get/post/put/patch/delete/all(path, ...fns)\n *                             app.disable('x-powered-by') · app.set(k, v) · app.get(k)\n *   express.Router({ mergeParams })   the same methods, mounted with app.use('/prefix', router)\n *   express.json({ limit })   parses a JSON body into req.body (400 entity.parse.failed · 413 entity.too.large)\n *   req   method · url · originalUrl · baseUrl · path · query · params · headers · body · get(name)\n *   res   status() · set() · get() · location() · type() · json() · send() · sendStatus() · end()\n *         headersSent · statusCode · locals · on('finish', fn)\n *   request(app, method, url, { body, headers, timeoutMs })  — a tiny supertest: resolves to\n *         { status, headers, text, body } when the response ends, or { status: 0, timedOut: true }\n *         when nothing answers within timeoutMs (default 5000 ms of the grader's virtual clock).\n * Not included: ETag, express.static, view engines, app.listen (export createApp() instead — lesson 5.5).\n */\nvar express = (function () {\n  'use strict';\n  var STATUS = { 200: 'OK', 201: 'Created', 202: 'Accepted', 204: 'No Content', 301: 'Moved Permanently', 302: 'Found', 304: 'Not Modified', 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed', 409: 'Conflict', 413: 'Payload Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Entity', 429: 'Too Many Requests', 500: 'Internal Server Error', 503: 'Service Unavailable' };\n  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];\n\n  function utf8Len(s) {\n    var n = 0;\n    for (var i = 0; i < s.length; i++) {\n      var c = s.charCodeAt(i);\n      if (c < 0x80) n += 1; else if (c < 0x800) n += 2;\n      else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) { n += 4; i++; } else n += 3;\n    }\n    return n;\n  }\n  function headersSentError() {\n    var e = new Error('Cannot set headers after they are sent to the client');\n    e.code = 'ERR_HTTP_HEADERS_SENT';\n    return e;\n  }\n  function decode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }\n  // Express 5 default query parser = node:querystring — repeated key ⇒ array, '+' ⇒ space, everything a string\n  function parseQuery(qs) {\n    var out = Object.create(null);\n    if (!qs) return out;\n    qs.split('&').forEach(function (part) {\n      if (!part) return;\n      var i = part.indexOf('=');\n      var k = decode((i < 0 ? part : part.slice(0, i)).replace(/\\+/g, ' '));\n      var v = i < 0 ? '' : decode(part.slice(i + 1).replace(/\\+/g, ' '));\n      if (!(k in out)) out[k] = v;\n      else if (Array.isArray(out[k])) out[k].push(v);\n      else out[k] = [out[k], v];\n    });\n    return out;\n  }\n  function splitUrl(u) { var i = u.indexOf('?'); return i < 0 ? [u, ''] : [u.slice(0, i), u.slice(i + 1)]; }\n  function parseBytes(v) {\n    if (typeof v === 'number') return v;\n    var m = /^(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb)?$/i.exec(String(v || '100kb'));\n    if (!m) return 102400;\n    return Math.floor(parseFloat(m[1]) * { b: 1, kb: 1024, mb: 1048576, gb: 1073741824 }[(m[2] || 'b').toLowerCase()]);\n  }\n\n  // ── path patterns (path-to-regexp 8 subset): literals, :name, *name; case-insensitive; trailing slash optional ──\n  function compile(path, end) {\n    if (typeof path !== 'string') throw new TypeError('path must be a string');\n    var keys = [], re = '', i = 0;\n    while (i < path.length) {\n      var ch = path[i];\n      if (ch === ':' || ch === '*') {\n        var m = /^[A-Za-z_$][A-Za-z0-9_$]*/.exec(path.slice(i + 1));\n        if (!m) throw new TypeError('Missing parameter name at index ' + (i + 1) + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n        keys.push({ name: m[0], splat: ch === '*' });\n        re += ch === '*' ? '(.+)' : '([^\\\\/]+?)';\n        i += 1 + m[0].length;\n      } else if ('()[]?+!{}'.indexOf(ch) >= 0) {\n        throw new TypeError('Unexpected ' + ch + ' at index ' + i + ': ' + path + '; visit https://git.new/pathToRegexpError for info');\n      } else { re += ch.replace(/[.^$|\\\\/]/g, '\\\\$&'); i++; }\n    }\n    re = re.replace(/\\\\\\/$/, '');   // a trailing slash in the pattern is optional anyway\n    return { re: new RegExp('^' + re + (end ? '\\\\/?$' : '(?=\\\\/|$)'), 'i'), keys: keys };\n  }\n  function matchLayer(layer, pathname) {\n    if (layer.all) return { params: {}, path: '' };\n    var m = layer.rx.re.exec(pathname);\n    if (!m) return null;\n    var params = {};\n    layer.rx.keys.forEach(function (k, j) {\n      var v = m[j + 1];\n      if (v === undefined) return;\n      params[k.name] = k.splat ? v.split('/').map(decode) : decode(v);\n    });\n    return { params: params, path: m[0] };\n  }\n\n  function makeRouter(opts) {\n    opts = opts || {};\n    function router(req, res, next) { router.handle(req, res, next); }\n    router.stack = [];\n    router.mergeParams = !!opts.mergeParams;\n    router.use = function () {\n      var args = Array.prototype.slice.call(arguments);\n      var path = typeof args[0] === 'string' ? args.shift() : '/';\n      var fns = [].concat.apply([], args);\n      if (!fns.length) throw new TypeError('app.use() requires a middleware function');\n      fns.forEach(function (fn) {\n        if (typeof fn !== 'function') throw new TypeError('app.use() requires a middleware function but got a ' + typeof fn);\n        router.stack.push({ kind: 'use', all: path === '/' || path === '', rx: compile(path, false), fn: fn });\n      });\n      return router;\n    };\n    function addRoute(method) {\n      return function (path) {\n        var fns = [].concat.apply([], Array.prototype.slice.call(arguments, 1));\n        fns.forEach(function (fn) {\n          if (typeof fn !== 'function') throw new TypeError('Route.' + method + '() requires a callback function but got a ' + typeof fn);\n        });\n        router.stack.push({ kind: 'route', method: method, rx: compile(path, true), fns: fns });\n        return router;\n      };\n    }\n    METHODS.forEach(function (m) { router[m] = addRoute(m.toUpperCase()); });\n    router.all = addRoute('*');\n    router.handle = function (req, res, out) {\n      var idx = 0;\n      var parentParams = req.params || {};\n      var parentUrl = req.url, parentBase = req.baseUrl || '';\n      function restore() { req.url = parentUrl; req.baseUrl = parentBase; }\n      function next(err) {\n        restore();\n        if (err === 'router') { req.params = parentParams; return out(); }\n        var layer = router.stack[idx++];\n        if (!layer) { req.params = parentParams; return out(err); }\n        var pathname = splitUrl(req.url)[0] || '/';\n        var m = matchLayer(layer, pathname);\n        if (!m) return next(err);\n        if (layer.kind === 'route' && layer.method !== '*' && layer.method !== req.method) return next(err);\n        var own = m.params;\n        req.params = router.mergeParams ? Object.assign({}, parentParams, own) : own;\n        if (layer.kind === 'use') {\n          if (m.path && m.path !== '/') {\n            var rest = req.url.slice(m.path.length);\n            req.url = rest.charAt(0) === '/' ? rest : '/' + rest;\n            req.baseUrl = parentBase + m.path.replace(/\\/$/, '');\n          }\n          return call(layer.fn, err, req, res, next);\n        }\n        // a route: run its handlers in order, each one's next() goes to the following handler\n        var j = 0;\n        (function step(e) {\n          if (e === 'route') return next();\n          var fn = layer.fns[j++];\n          if (!fn) return next(e);\n          call(fn, e, req, res, step);\n        })(err);\n      }\n      next();\n    };\n    return router;\n  }\n  // error handlers are recognised by their number of declared parameters (fn.length === 4), as in Express\n  function call(fn, err, req, res, next) {\n    var isErr = fn.length === 4;\n    if (err && !isErr) return next(err);\n    if (!err && isErr) return next();\n    try {\n      var r = isErr ? fn(err, req, res, next) : fn(req, res, next);\n      if (r && typeof r.then === 'function') r.then(null, function (e) { next(e || new Error('Rejected promise')); });   // Express 5\n    } catch (e) { next(e); }\n  }\n\n  function makeRes(req, app, onEnd) {\n    var listeners = {};\n    var res = {\n      statusCode: 200, headersSent: false, finished: false, locals: {}, req: req, app: app, _headers: {}, _body: '',\n      on: function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); return res; },\n      once: function (ev, fn) { function w() { res.off(ev, w); fn.apply(res, arguments); } w.listener = fn; return res.on(ev, w); },\n      off: function (ev, fn) { listeners[ev] = (listeners[ev] || []).filter(function (f) { return f !== fn && f.listener !== fn; }); return res; },\n      emit: function (ev) { var a = Array.prototype.slice.call(arguments, 1); (listeners[ev] || []).slice().forEach(function (f) { f.apply(res, a); }); return true; },\n      status: function (n) { res.statusCode = n; return res; },\n      setHeader: function (k, v) { if (res.headersSent) throw headersSentError(); res._headers[String(k).toLowerCase()] = String(v); return res; },\n      getHeader: function (k) { return res._headers[String(k).toLowerCase()]; },\n      removeHeader: function (k) { delete res._headers[String(k).toLowerCase()]; },\n      set: function (k, v) {\n        if (k && typeof k === 'object') { Object.keys(k).forEach(function (x) { res.set(x, k[x]); }); return res; }\n        var val = String(v);\n        if (String(k).toLowerCase() === 'content-type') val = contentType(val);\n        return res.setHeader(k, val);\n      },\n      get: function (k) { return res.getHeader(k); },\n      type: function (t) { return res.set('Content-Type', t); },\n      location: function (u) { return res.set('Location', u); },\n      json: function (obj) {\n        var body = JSON.stringify(obj);\n        if (!res.get('content-type')) res.set('Content-Type', 'application/json');\n        return res.send(body === undefined ? '' : body);\n      },\n      send: function (body) {\n        if (body !== null && body !== undefined && typeof body === 'object' && !(body instanceof Uint8Array)) return res.json(body);\n        if (typeof body === 'number' || typeof body === 'boolean') return res.json(body);\n        var text;\n        if (body instanceof Uint8Array) {\n          if (!res.get('content-type')) res.set('Content-Type', 'application/octet-stream');\n          text = Array.prototype.map.call(body, function (b) { return String.fromCharCode(b); }).join('');\n          res.set('Content-Length', String(body.length));\n        } else {\n          text = body == null ? '' : String(body);\n          if (typeof body === 'string' && !res.get('content-type')) res.set('Content-Type', 'text/html');\n          res.set('Content-Length', String(utf8Len(text)));\n        }\n        if (res.statusCode === 204 || res.statusCode === 304) {\n          res.removeHeader('content-type'); res.removeHeader('content-length'); text = '';\n        }\n        return res.end(text);\n      },\n      sendStatus: function (n) {\n        res.statusCode = n;\n        res.type('text/plain');\n        return res.send(STATUS[n] || String(n));\n      },\n      end: function (chunk) {\n        if (res.finished) {\n          if (chunk !== undefined && chunk !== '') { var e = new Error('write after end'); e.code = 'ERR_STREAM_WRITE_AFTER_END'; throw e; }\n          return res;\n        }\n        if (chunk !== undefined) res._body = String(chunk);\n        res.headersSent = true; res.finished = true;\n        Promise.resolve().then(function () {\n          try { res.emit('finish'); } catch (e) { console.error('[finish listener]', e && e.message); }\n          onEnd(res);\n        });\n        return res;\n      },\n    };\n    return res;\n  }\n  function contentType(v) {\n    var map = { json: 'application/json', html: 'text/html', text: 'text/plain', txt: 'text/plain' };\n    if (v.indexOf('/') < 0 && map[v]) v = map[v];\n    if (!/charset=/i.test(v) && (/^text\\//i.test(v) || /^application\\/json/i.test(v))) v += '; charset=utf-8';\n    return v;\n  }\n\n  // what Express answers when nothing else did: a 404 page, or an error page (status from err.status, else 500)\n  function finalHandler(req, res) {\n    function page(status, text) {\n      var xpb = res.getHeader('x-powered-by');\n      res._headers = {};\n      if (xpb) res.setHeader('X-Powered-By', xpb);\n      res.statusCode = status;\n      var html = '<!DOCTYPE html>\\n<html lang=\"en\">\\n<head>\\n<meta charset=\"utf-8\">\\n<title>Error</title>\\n</head>\\n<body>\\n<pre>' + text + '</pre>\\n</body>\\n</html>\\n';\n      res.set('Content-Security-Policy', \"default-src 'none'\");\n      res.set('X-Content-Type-Options', 'nosniff');\n      res.set('Content-Type', 'text/html');\n      res.set('Content-Length', String(utf8Len(html)));\n      res.end(html);\n    }\n    return function (err) {\n      if (err) {\n        var st = err.status || err.statusCode;\n        if (!(st >= 400 && st < 600)) st = 500;\n        console.error(err && err.name ? err.name + ': ' + err.message : String(err));\n        if (res.headersSent) return;   // Express can only drop the connection here\n        return page(st, err && err.name ? err.name + ': ' + err.message : 'Internal Server Error');\n      }\n      if (res.headersSent) return;\n      page(404, 'Cannot ' + req.method + ' ' + splitUrl(req.originalUrl)[0]);\n    };\n  }\n\n  function express() {\n    var router = makeRouter();\n    var settings = { 'x-powered-by': true };\n    function app(req, res) { app.handle(req, res); }\n    app.stack = router.stack;\n    app.use = function () { router.use.apply(null, arguments); return app; };\n    METHODS.forEach(function (m) { if (m !== 'get') app[m] = function () { router[m].apply(null, arguments); return app; }; });\n    app.get = function (path) {\n      if (arguments.length === 1) return settings[path];\n      router.get.apply(null, arguments); return app;\n    };\n    app.all = function () { router.all.apply(null, arguments); return app; };\n    app.set = function (k, v) { settings[k] = v; return app; };\n    app.enable = function (k) { settings[k] = true; return app; };\n    app.disable = function (k) { settings[k] = false; return app; };\n    app.enabled = function (k) { return !!settings[k]; };\n    app.disabled = function (k) { return !settings[k]; };\n    app.listen = function () { throw new Error('app.listen() is not available in the browser grader: export createApp() and let the test call request(app, …) (lesson 5.5)'); };\n    app.handle = function (req, res) {\n      if (settings['x-powered-by']) res.setHeader('X-Powered-By', 'Express');\n      req.app = app; res.app = app;\n      router.handle(req, res, finalHandler(req, res));\n    };\n    return app;\n  }\n  express.Router = makeRouter;\n  express.json = function (opts) {\n    opts = opts || {};\n    var limit = parseBytes(opts.limit);\n    var strict = opts.strict !== false;\n    return function jsonParser(req, res, next) {\n      if (req._bodyRead) return next();\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._raw === undefined || !/^application\\/(.+\\+)?json\\b/.test(type)) return next();\n      req._bodyRead = true;\n      var raw = req._raw;\n      if (utf8Len(raw) > limit) {\n        var big = new Error('request entity too large'); big.name = 'PayloadTooLargeError'; big.status = 413; big.statusCode = 413; big.type = 'entity.too.large'; big.expose = true;\n        return next(big);\n      }\n      if (raw === '') { req.body = {}; return next(); }\n      if (strict && !/^[\\s]*[{[]/.test(raw)) {\n        var bad = new SyntaxError('Unexpected token ' + JSON.stringify(raw.trim().charAt(0)) + ', ' + JSON.stringify(raw.slice(0, 20)) + ' is not valid JSON');\n        bad.status = 400; bad.statusCode = 400; bad.type = 'entity.parse.failed'; bad.body = raw; bad.expose = true;\n        return next(bad);\n      }\n      try { req.body = JSON.parse(raw); } catch (e) {\n        e.status = 400; e.statusCode = 400; e.type = 'entity.parse.failed'; e.body = raw; e.expose = true;\n        return next(e);\n      }\n      next();\n    };\n  };\n  express.urlencoded = function () {\n    return function urlencodedParser(req, res, next) {\n      var type = String(req.headers['content-type'] || '').toLowerCase();\n      if (req._bodyRead || req._raw === undefined || type.indexOf('application/x-www-form-urlencoded') !== 0) return next();\n      req._bodyRead = true;\n      req.body = Object.assign({}, parseQuery(req._raw));\n      next();\n    };\n  };\n  express.static = function () { throw new Error('express.static() is not available in the browser grader'); };\n\n  express.__request = function (app, method, url, opts) {\n    opts = opts || {};\n    return new Promise(function (resolve) {\n      var headers = {};\n      Object.keys(opts.headers || {}).forEach(function (k) { headers[k.toLowerCase()] = String(opts.headers[k]); });\n      var raw;\n      if (opts.body !== undefined) {\n        raw = typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body);\n        if (!headers['content-type']) headers['content-type'] = 'application/json';\n        headers['content-length'] = String(utf8Len(raw));\n      }\n      var u = String(url);\n      var req = {\n        method: String(method).toUpperCase(), url: u, originalUrl: u, baseUrl: '', headers: headers, params: {}, _raw: raw, body: undefined,\n        get: function (name) { return headers[String(name).toLowerCase()]; },\n      };\n      req.header = req.get;\n      Object.defineProperty(req, 'path', { get: function () { return splitUrl(req.url)[0] || '/'; }, enumerable: true });\n      var q = parseQuery(splitUrl(u)[1]);\n      Object.defineProperty(req, 'query', { get: function () { return q; }, enumerable: true });\n      var done = false;\n      var timer = setTimeout(function () { if (!done) { done = true; resolve({ status: 0, timedOut: true, headers: {}, text: '', body: undefined }); } }, opts.timeoutMs || 5000);\n      var res = makeRes(req, null, function (r) {\n        if (done) return;\n        done = true; clearTimeout(timer);\n        var body;\n        if (/json/.test(r._headers['content-type'] || '') && r._body !== '') { try { body = JSON.parse(r._body); } catch (e) { body = undefined; } }\n        resolve({ status: r.statusCode, headers: Object.assign({}, r._headers), text: r._body, body: body });\n      });\n      req.res = res; res.req = req;\n      app(req, res);\n    });\n  };\n  return express;\n})();\nvar Router = express.Router;\nfunction request(app, method, url, opts) { return express.__request(app, method, url, opts); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The grader replays the lesson’s curl session against your router: 201 · 422 · 200 · 200 · 404 · 200 · 204 · 404, every error in the same <code>{ error: { code, message } }</code> shape. What is left in the router is only what you can decide: which status code, which validation, which service call.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chấm phát lại phiên curl của bài trên router của bạn: 201 · 422 · 200 · 200 · 404 · 200 · 204 · 404, mọi lỗi cùng dạng <code>{ error: { code, message } }</code>. Những gì còn lại trong router chỉ là thứ bạn quyết định được: mã trạng thái nào, kiểm tra gì, gọi service nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "notes.routes.js",
+        "tepNap": [
+          "mini-express.js",
+          "notes.routes.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "201 + Location, then 422",
+              "vi": "201 + Location, rồi 422"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Learning Express\", body: \"chapter 5\" } })), s(await request(app, \"POST\", \"/api/v1/notes\", { body: { body: \"no title\" } }))]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 201,
+                "location": "/api/v1/notes/1",
+                "body": {
+                  "id": 1,
+                  "title": "Learning Express",
+                  "body": "chapter 5",
+                  "createdAt": "2026-01-01T00:00:00.000Z"
+                }
+              },
+              {
+                "status": 422,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title is required"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "List, search, 404",
+              "vi": "Danh sách, tìm kiếm, 404"
+            },
+            "goi": "[s(await request(app, \"GET\", \"/api/v1/notes?page=1&limit=10\")), s(await request(app, \"GET\", \"/api/v1/notes?q=express\")), s(await request(app, \"GET\", \"/api/v1/notes/999\"))]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp(); await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Learning Express\", body: \"chapter 5\" } }); await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Second note\" } });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "location": null,
+                "body": {
+                  "items": [
+                    {
+                      "id": 1,
+                      "title": "Learning Express",
+                      "body": "chapter 5",
+                      "createdAt": "2026-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "id": 2,
+                      "title": "Second note",
+                      "body": "",
+                      "createdAt": "2026-01-01T00:00:00.000Z"
+                    }
+                  ],
+                  "page": 1,
+                  "limit": 10,
+                  "total": 2
+                }
+              },
+              {
+                "status": 200,
+                "location": null,
+                "body": {
+                  "items": [
+                    {
+                      "id": 1,
+                      "title": "Learning Express",
+                      "body": "chapter 5",
+                      "createdAt": "2026-01-01T00:00:00.000Z"
+                    }
+                  ],
+                  "page": 1,
+                  "limit": 10,
+                  "total": 1
+                }
+              },
+              {
+                "status": 404,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Note 999 does not exist"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "PATCH 200, DELETE 204, JSON 404",
+              "vi": "PATCH 200, DELETE 204, 404 JSON"
+            },
+            "goi": "[s(await request(app, \"PATCH\", \"/api/v1/notes/1\", { body: { body: \"edited\" } })), s(await request(app, \"DELETE\", \"/api/v1/notes/2\")), s(await request(app, \"GET\", \"/api/v1/khong-co\"))]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp(); await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Learning Express\", body: \"chapter 5\" } }); await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"Second note\" } });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "location": null,
+                "body": {
+                  "id": 1,
+                  "title": "Learning Express",
+                  "body": "edited",
+                  "createdAt": "2026-01-01T00:00:00.000Z"
+                }
+              },
+              {
+                "status": 204,
+                "location": null,
+                "body": null
+              },
+              {
+                "status": 404,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "NOT_FOUND",
+                    "message": "Cannot GET /api/v1/khong-co"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[s(await request(app, \"PATCH\", \"/api/v1/notes/1\", { body: { title: \"  \" } })), s(await request(app, \"PATCH\", \"/api/v1/notes/7\", { body: { body: \"x\" } })), s(await request(app, \"DELETE\", \"/api/v1/notes/7\")), s(await request(app, \"DELETE\", \"/api/v1/notes/1\")), s(await request(app, \"GET\", \"/api/v1/notes/1\"))]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp(); await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"a\" } });",
+            "mongDoi": [
+              {
+                "status": 422,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title must not be empty"
+                  }
+                }
+              },
+              {
+                "status": 404,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Note 7 does not exist"
+                  }
+                }
+              },
+              {
+                "status": 404,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Note 7 does not exist"
+                  }
+                }
+              },
+              {
+                "status": 204,
+                "location": null,
+                "body": null
+              },
+              {
+                "status": 404,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "NOTE_NOT_FOUND",
+                    "message": "Note 1 does not exist"
+                  }
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[(await request(app, \"GET\", \"/api/v1/notes?limit=1000\")).body.items.length, (await request(app, \"GET\", \"/api/v1/notes?page=2&limit=25\")).body.items[0], (await request(app, \"GET\", \"/api/v1/notes\")).body.total]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp(); for (let i = 0; i < 60; i++) await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \" n\" + i + \" \" } });",
+            "mongDoi": [
+              50,
+              {
+                "id": 26,
+                "title": "n25",
+                "body": "",
+                "createdAt": "2026-01-01T00:00:00.000Z"
+              },
+              60
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[s(await request(app, \"POST\", \"/api/v1/notes\", { body: \"{broken\" })), s(await request(app, \"POST\", \"/api/v1/notes\", { body: { title: 42 } })), s(await request(app, \"POST\", \"/api/v1/notes\", { body: { title: \"x\" }, headers: { \"content-type\": \"text/plain\" } }))]",
+            "chuanBi": "function createApp() { const app = express(); app.disable('x-powered-by'); app.use(express.json({ limit: '100kb' }));\napp.get('/health', (req, res) => res.json({ status: 'ok' })); app.use('/api/v1/notes', notesRouter(createNotesService()));\napp.use(notFound); app.use(errorHandler); return app; }\nconst s = (r) => ({ status: r.status, location: r.headers.location || null, body: r.body ?? null });\nconst app = createApp();",
+            "mongDoi": [
+              {
+                "status": 400,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "INVALID_JSON",
+                    "message": "Request body is not valid JSON"
+                  }
+                }
+              },
+              {
+                "status": 422,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title is required"
+                  }
+                }
+              },
+              {
+                "status": 422,
+                "location": null,
+                "body": {
+                  "error": {
+                    "code": "VALIDATION_FAILED",
+                    "message": "title is required"
+                  }
+                }
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "service.get(req.params.id): the Map has number keys, every lookup 404s.|||service.get(req.params.id): Map dùng khoá số, mọi lần tra đều 404."
+        },
+        {
+          "loi": "Answering 200 to a POST, or 201 without Location.|||Trả 200 cho POST, hoặc 201 mà thiếu Location."
+        },
+        {
+          "loi": "Sending a JSON body with 204.|||Gửi thân JSON kèm 204."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Location header",
+          "vi": "header trỏ tới tài nguyên vừa tạo"
+        },
+        {
+          "en": "PATCH",
+          "vi": "sửa một phần"
+        }
+      ]
+    },
+    {
+      "title": "5.5 · Graceful shutdown that actually finishes in time",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "process",
+        "http",
+        "deploy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Write <code>shutdown(signal, server, proc, timers)</code>, called on SIGTERM/SIGINT (<code>timers</code> = Node’s <code>setTimeout/setInterval/clearInterval</code>, whose handles have <code>unref()</code>):</p>\n<ol><li><code>console.log(`${signal}: no longer accepting connections, draining…`)</code>;</li><li><code>server.close(cb)</code> — in <code>cb</code>: stop the sweep, <code>console.log('all in-flight requests done — clean exit')</code>, <code>proc.exit(0)</code>;</li><li>a <b>hard cap</b>: <code>timers.setTimeout(() =&gt; proc.exit(1), 10000)</code>, <code>.unref()</code>’d;</li><li>the lesson’s measured fix: a request busy when shutdown starts leaves a keep-alive connection that stays open 5 s more. <b>Keep sweeping</b> — <code>timers.setInterval(() =&gt; server.closeIdleConnections(), 100)</code> — and clear that interval in the close callback (8.5 s → 2.5 s in the lesson);</li><li>a second signal while draining does nothing (set <code>shutdown.started</code>).</li></ol><p>The grader models node:http on its virtual clock: SIGTERM at 500 ms while a request runs until 3000 ms.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>shutdown(signal, server, proc, timers)</code>, được gọi khi nhận SIGTERM/SIGINT (<code>timers</code> = <code>setTimeout/setInterval/clearInterval</code> của Node, handle của chúng có <code>unref()</code>):</p>\n<ol><li><code>console.log(`${signal}: no longer accepting connections, draining…`)</code>;</li><li><code>server.close(cb)</code> — trong <code>cb</code>: dừng vòng quét, <code>console.log('all in-flight requests done — clean exit')</code>, <code>proc.exit(0)</code>;</li><li>một <b>trần cứng</b>: <code>timers.setTimeout(() =&gt; proc.exit(1), 10000)</code>, có <code>.unref()</code>;</li><li>cách sửa đã đo của bài: request đang bận lúc bắt đầu tắt để lại một kết nối keep-alive mở thêm 5 giây. <b>Quét liên tục</b> — <code>timers.setInterval(() =&gt; server.closeIdleConnections(), 100)</code> — và xoá interval đó trong callback của close (bài đo: 8,5 s → 2,5 s);</li><li>tín hiệu thứ hai trong lúc đang rút cạn thì không làm gì (đặt <code>shutdown.started</code>).</li></ol><p>Máy chấm mô phỏng node:http trên đồng hồ ảo: SIGTERM lúc 500 ms trong khi một request chạy tới 3000 ms.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "signal; server { close, closeIdleConnections }; proc { exit }; timers",
+      "outputSpec": "nothing — the process exits through proc.exit|||không trả gì — tiến trình thoát qua proc.exit",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(await scenario([3000], 500))",
+          "output": "{\"exitCode\":0,\"exitAt\":3000,\"closeCalls\":1,\"hardCapUnref\":true,\"sweepCleared\":true,\"logs\":[\"SIGTERM: no longer accepting connections, draining…\",\"all in-flight requests done — clean exit\"]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Start with the lesson’s shutdown() and add two lines: the interval and its clearInterval.|||Bắt đầu từ shutdown() của bài và thêm hai dòng: interval và clearInterval của nó.",
+        "Calling closeIdleConnections() once, right after close(), changes nothing — the connection is still busy at that moment.|||Gọi closeIdleConnections() một lần ngay sau close() không đổi gì — lúc đó kết nối vẫn đang bận.",
+        "A function is an object: shutdown.started works as a flag.|||Hàm là một object: shutdown.started dùng làm cờ được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** stop accepting, finish what is in flight, then exit */\nfunction shutdown(signal, server, proc, timers) {\n  // Write your solution here — the lesson's first version: no sweep, no guard\n  console.log(`${signal}: no longer accepting connections, draining…`);\n  server.close(() => {\n    console.log('all in-flight requests done — clean exit');\n    proc.exit(0);\n  });\n  timers.setTimeout(() => proc.exit(1), 10_000).unref();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — close, sweep idle keep-alive connections, hard cap, run once\nfunction shutdown(signal, server, proc, timers) {\n  if (shutdown.started) return;                 // a second Ctrl+C while draining must not close twice\n  shutdown.started = true;\n  console.log(`${signal}: no longer accepting connections, draining…`);\n  // keep sweeping: a connection that is busy now turns keep-alive idle later and would otherwise wait 5 s\n  const sweep = timers.setInterval(() => server.closeIdleConnections(), 100);\n  server.close(() => {                          // stop accepting, finish what is in flight\n    timers.clearInterval(sweep);\n    console.log('all in-flight requests done — clean exit');\n    proc.exit(0);\n  });\n  timers.setTimeout(() => proc.exit(1), 10_000).unref();   // hard cap — unref so it never keeps us alive\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the model, the lesson’s version (close + hard cap, no sweep) exits at 8000 ms: the slow request ends at 3000 and its keep-alive connection waits out the 5 s timeout. With the sweep it exits at 3000–3100 ms; a request stuck past the cap ends with exit(1) at 10.5 s. These are the lesson’s Node 22 measurements, reproduced on a virtual clock.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên mô hình, bản của bài (close + trần cứng, không quét) thoát lúc 8000 ms: request chậm xong lúc 3000 và kết nối keep-alive của nó chờ hết 5 giây. Có quét thì thoát lúc 3000–3100 ms; request kẹt quá trần kết thúc bằng exit(1) lúc 10,5 s. Đây là các số đo Node 22 của bài, tái hiện trên đồng hồ ảo.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lesson’s /slow request: exits 0 soon after 3000 ms",
+              "vi": "Request /slow của bài: thoát 0 ngay sau 3000 ms"
+            },
+            "goi": "(await scenario([3000], 500))",
+            "chuanBi": "// virtual-clock model of node:http's server for one shutdown (keepAliveTimeout = 5000 ms)\nfunction scenario(busyUntil, signalAt) { const T0 = Date.now(); const log = []; const out = { exits: [], closeCalls: 0, sweeps: 0 };\nconst conns = busyUntil.map((b) => ({ busyUntil: b, closed: false }));\nlet closing = false, closeCb = null;\nconst now = () => Date.now() - T0;\nconst idle = (c) => !c.closed && now() >= c.busyUntil;\nconst finish = () => { if (closing && closeCb && conns.every((c) => c.closed)) { const cb = closeCb; closeCb = null; setTimeout(cb, 0); } };\nconns.forEach((c) => { setTimeout(() => { log.push(now() + 'ms request done'); setTimeout(() => { if (!c.closed) { c.closed = true; log.push(now() + 'ms keep-alive timeout closed a connection'); finish(); } }, 5000); }, c.busyUntil); });\nconst server = { close(cb) { out.closeCalls++; if (closing) { setTimeout(() => cb(Object.assign(new Error('Server is not running.'), { code: 'ERR_SERVER_NOT_RUNNING' })), 0); return; } closing = true; closeCb = cb; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); },\n  closeIdleConnections() { out.sweeps++; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); } };\nconst timers = { handles: [], setTimeout(fn, ms) { const h = { id: setTimeout(fn, ms), unrefed: false, unref() { h.unrefed = true; return h; } }; timers.handles.push(h); return h; },\n  setInterval(fn, ms) { const h = { id: setInterval(fn, ms), cleared: false, unref() { return h; } }; timers.handles.push(h); return h; }, clearInterval(h) { clearInterval(h.id); h.cleared = true; }, clearTimeout(h) { clearTimeout(h.id); } };\nreturn new Promise((resolve) => { const proc = { exit(code) { out.exits.push([code, now()]); resolve({ exitCode: code, exitAt: now(), closeCalls: out.closeCalls, hardCapUnref: timers.handles.some((h) => h.unrefed), sweepCleared: timers.handles.filter((h) => 'cleared' in h).every((h) => h.cleared), logs: __log.slice() }); } };\n  setTimeout(() => { shutdown.started = false; shutdown('SIGTERM', server, proc, timers); }, signalAt); }); }",
+            "timeoutMs": 20000,
+            "mongDoi": {
+              "exitCode": 0,
+              "exitAt": 3000,
+              "closeCalls": 1,
+              "hardCapUnref": true,
+              "sweepCleared": true,
+              "logs": [
+                "SIGTERM: no longer accepting connections, draining…",
+                "all in-flight requests done — clean exit"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nothing in flight: exits 0 at once",
+              "vi": "Không có gì đang chạy: thoát 0 ngay"
+            },
+            "goi": "(await scenario([], 200))",
+            "chuanBi": "// virtual-clock model of node:http's server for one shutdown (keepAliveTimeout = 5000 ms)\nfunction scenario(busyUntil, signalAt) { const T0 = Date.now(); const log = []; const out = { exits: [], closeCalls: 0, sweeps: 0 };\nconst conns = busyUntil.map((b) => ({ busyUntil: b, closed: false }));\nlet closing = false, closeCb = null;\nconst now = () => Date.now() - T0;\nconst idle = (c) => !c.closed && now() >= c.busyUntil;\nconst finish = () => { if (closing && closeCb && conns.every((c) => c.closed)) { const cb = closeCb; closeCb = null; setTimeout(cb, 0); } };\nconns.forEach((c) => { setTimeout(() => { log.push(now() + 'ms request done'); setTimeout(() => { if (!c.closed) { c.closed = true; log.push(now() + 'ms keep-alive timeout closed a connection'); finish(); } }, 5000); }, c.busyUntil); });\nconst server = { close(cb) { out.closeCalls++; if (closing) { setTimeout(() => cb(Object.assign(new Error('Server is not running.'), { code: 'ERR_SERVER_NOT_RUNNING' })), 0); return; } closing = true; closeCb = cb; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); },\n  closeIdleConnections() { out.sweeps++; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); } };\nconst timers = { handles: [], setTimeout(fn, ms) { const h = { id: setTimeout(fn, ms), unrefed: false, unref() { h.unrefed = true; return h; } }; timers.handles.push(h); return h; },\n  setInterval(fn, ms) { const h = { id: setInterval(fn, ms), cleared: false, unref() { return h; } }; timers.handles.push(h); return h; }, clearInterval(h) { clearInterval(h.id); h.cleared = true; }, clearTimeout(h) { clearTimeout(h.id); } };\nreturn new Promise((resolve) => { const proc = { exit(code) { out.exits.push([code, now()]); resolve({ exitCode: code, exitAt: now(), closeCalls: out.closeCalls, hardCapUnref: timers.handles.some((h) => h.unrefed), sweepCleared: timers.handles.filter((h) => 'cleared' in h).every((h) => h.cleared), logs: __log.slice() }); } };\n  setTimeout(() => { shutdown.started = false; shutdown('SIGTERM', server, proc, timers); }, signalAt); }); }",
+            "timeoutMs": 20000,
+            "mongDoi": {
+              "exitCode": 0,
+              "exitAt": 200,
+              "closeCalls": 1,
+              "hardCapUnref": true,
+              "sweepCleared": true,
+              "logs": [
+                "SIGTERM: no longer accepting connections, draining…",
+                "all in-flight requests done — clean exit"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A stuck request: the hard cap exits 1 at 10.5 s",
+              "vi": "Request kẹt: trần cứng thoát 1 lúc 10,5 s"
+            },
+            "goi": "(await scenario([20000], 500))",
+            "chuanBi": "// virtual-clock model of node:http's server for one shutdown (keepAliveTimeout = 5000 ms)\nfunction scenario(busyUntil, signalAt) { const T0 = Date.now(); const log = []; const out = { exits: [], closeCalls: 0, sweeps: 0 };\nconst conns = busyUntil.map((b) => ({ busyUntil: b, closed: false }));\nlet closing = false, closeCb = null;\nconst now = () => Date.now() - T0;\nconst idle = (c) => !c.closed && now() >= c.busyUntil;\nconst finish = () => { if (closing && closeCb && conns.every((c) => c.closed)) { const cb = closeCb; closeCb = null; setTimeout(cb, 0); } };\nconns.forEach((c) => { setTimeout(() => { log.push(now() + 'ms request done'); setTimeout(() => { if (!c.closed) { c.closed = true; log.push(now() + 'ms keep-alive timeout closed a connection'); finish(); } }, 5000); }, c.busyUntil); });\nconst server = { close(cb) { out.closeCalls++; if (closing) { setTimeout(() => cb(Object.assign(new Error('Server is not running.'), { code: 'ERR_SERVER_NOT_RUNNING' })), 0); return; } closing = true; closeCb = cb; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); },\n  closeIdleConnections() { out.sweeps++; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); } };\nconst timers = { handles: [], setTimeout(fn, ms) { const h = { id: setTimeout(fn, ms), unrefed: false, unref() { h.unrefed = true; return h; } }; timers.handles.push(h); return h; },\n  setInterval(fn, ms) { const h = { id: setInterval(fn, ms), cleared: false, unref() { return h; } }; timers.handles.push(h); return h; }, clearInterval(h) { clearInterval(h.id); h.cleared = true; }, clearTimeout(h) { clearTimeout(h.id); } };\nreturn new Promise((resolve) => { const proc = { exit(code) { out.exits.push([code, now()]); resolve({ exitCode: code, exitAt: now(), closeCalls: out.closeCalls, hardCapUnref: timers.handles.some((h) => h.unrefed), sweepCleared: timers.handles.filter((h) => 'cleared' in h).every((h) => h.cleared), logs: __log.slice() }); } };\n  setTimeout(() => { shutdown.started = false; shutdown('SIGTERM', server, proc, timers); }, signalAt); }); }",
+            "timeoutMs": 20000,
+            "mongDoi": {
+              "exitCode": 1,
+              "exitAt": 10500,
+              "closeCalls": 1,
+              "hardCapUnref": true,
+              "sweepCleared": false,
+              "logs": [
+                "SIGTERM: no longer accepting connections, draining…"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(await scenario([1000, 3000, 2500], 600))",
+            "chuanBi": "// virtual-clock model of node:http's server for one shutdown (keepAliveTimeout = 5000 ms)\nfunction scenario(busyUntil, signalAt) { const T0 = Date.now(); const log = []; const out = { exits: [], closeCalls: 0, sweeps: 0 };\nconst conns = busyUntil.map((b) => ({ busyUntil: b, closed: false }));\nlet closing = false, closeCb = null;\nconst now = () => Date.now() - T0;\nconst idle = (c) => !c.closed && now() >= c.busyUntil;\nconst finish = () => { if (closing && closeCb && conns.every((c) => c.closed)) { const cb = closeCb; closeCb = null; setTimeout(cb, 0); } };\nconns.forEach((c) => { setTimeout(() => { log.push(now() + 'ms request done'); setTimeout(() => { if (!c.closed) { c.closed = true; log.push(now() + 'ms keep-alive timeout closed a connection'); finish(); } }, 5000); }, c.busyUntil); });\nconst server = { close(cb) { out.closeCalls++; if (closing) { setTimeout(() => cb(Object.assign(new Error('Server is not running.'), { code: 'ERR_SERVER_NOT_RUNNING' })), 0); return; } closing = true; closeCb = cb; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); },\n  closeIdleConnections() { out.sweeps++; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); } };\nconst timers = { handles: [], setTimeout(fn, ms) { const h = { id: setTimeout(fn, ms), unrefed: false, unref() { h.unrefed = true; return h; } }; timers.handles.push(h); return h; },\n  setInterval(fn, ms) { const h = { id: setInterval(fn, ms), cleared: false, unref() { return h; } }; timers.handles.push(h); return h; }, clearInterval(h) { clearInterval(h.id); h.cleared = true; }, clearTimeout(h) { clearTimeout(h.id); } };\nreturn new Promise((resolve) => { const proc = { exit(code) { out.exits.push([code, now()]); resolve({ exitCode: code, exitAt: now(), closeCalls: out.closeCalls, hardCapUnref: timers.handles.some((h) => h.unrefed), sweepCleared: timers.handles.filter((h) => 'cleared' in h).every((h) => h.cleared), logs: __log.slice() }); } };\n  setTimeout(() => { shutdown.started = false; shutdown('SIGTERM', server, proc, timers); }, signalAt); }); }",
+            "timeoutMs": 20000,
+            "mongDoi": {
+              "exitCode": 0,
+              "exitAt": 3000,
+              "closeCalls": 1,
+              "hardCapUnref": true,
+              "sweepCleared": true,
+              "logs": [
+                "SIGTERM: no longer accepting connections, draining…",
+                "all in-flight requests done — clean exit"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(await new Promise((r) => { const p = scenario([2000], 300); setTimeout(() => shutdown(\"SIGINT\", { close() { throw new Error(\"closed twice\"); }, closeIdleConnections() {} }, { exit() {} }, { setTimeout: () => ({ unref() {} }), setInterval: () => ({}), clearInterval() {} }), 400); p.then(r); }))",
+            "chuanBi": "// virtual-clock model of node:http's server for one shutdown (keepAliveTimeout = 5000 ms)\nfunction scenario(busyUntil, signalAt) { const T0 = Date.now(); const log = []; const out = { exits: [], closeCalls: 0, sweeps: 0 };\nconst conns = busyUntil.map((b) => ({ busyUntil: b, closed: false }));\nlet closing = false, closeCb = null;\nconst now = () => Date.now() - T0;\nconst idle = (c) => !c.closed && now() >= c.busyUntil;\nconst finish = () => { if (closing && closeCb && conns.every((c) => c.closed)) { const cb = closeCb; closeCb = null; setTimeout(cb, 0); } };\nconns.forEach((c) => { setTimeout(() => { log.push(now() + 'ms request done'); setTimeout(() => { if (!c.closed) { c.closed = true; log.push(now() + 'ms keep-alive timeout closed a connection'); finish(); } }, 5000); }, c.busyUntil); });\nconst server = { close(cb) { out.closeCalls++; if (closing) { setTimeout(() => cb(Object.assign(new Error('Server is not running.'), { code: 'ERR_SERVER_NOT_RUNNING' })), 0); return; } closing = true; closeCb = cb; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); },\n  closeIdleConnections() { out.sweeps++; conns.forEach((c) => { if (idle(c)) c.closed = true; }); finish(); } };\nconst timers = { handles: [], setTimeout(fn, ms) { const h = { id: setTimeout(fn, ms), unrefed: false, unref() { h.unrefed = true; return h; } }; timers.handles.push(h); return h; },\n  setInterval(fn, ms) { const h = { id: setInterval(fn, ms), cleared: false, unref() { return h; } }; timers.handles.push(h); return h; }, clearInterval(h) { clearInterval(h.id); h.cleared = true; }, clearTimeout(h) { clearTimeout(h.id); } };\nreturn new Promise((resolve) => { const proc = { exit(code) { out.exits.push([code, now()]); resolve({ exitCode: code, exitAt: now(), closeCalls: out.closeCalls, hardCapUnref: timers.handles.some((h) => h.unrefed), sweepCleared: timers.handles.filter((h) => 'cleared' in h).every((h) => h.cleared), logs: __log.slice() }); } };\n  setTimeout(() => { shutdown.started = false; shutdown('SIGTERM', server, proc, timers); }, signalAt); }); }",
+            "timeoutMs": 20000,
+            "mongDoi": {
+              "exitCode": 0,
+              "exitAt": 2000,
+              "closeCalls": 1,
+              "hardCapUnref": true,
+              "sweepCleared": true,
+              "logs": [
+                "SIGTERM: no longer accepting connections, draining…",
+                "all in-flight requests done — clean exit"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "proc.exit() on the spot: the in-flight request dies with the deploy.|||proc.exit() ngay lập tức: request đang chạy chết theo lần deploy."
+        },
+        {
+          "loi": "No hard cap: a leaked connection keeps the process alive forever — until Docker’s SIGKILL.|||Không có trần cứng: một kết nối rò giữ tiến trình sống mãi — cho tới SIGKILL của Docker."
+        },
+        {
+          "loi": "Forgetting unref(): the 10-second timer itself keeps a healthy process alive for 10 seconds.|||Quên unref(): chính bộ hẹn giờ 10 giây giữ một tiến trình khoẻ mạnh sống thêm 10 giây."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keep-alive",
+          "vi": "giữ kết nối mở cho request sau"
+        },
+        {
+          "en": "unref()",
+          "vi": "không giữ tiến trình sống vì bộ hẹn giờ này"
+        },
+        {
+          "en": "SIGKILL",
+          "vi": "tín hiệu giết tiến trình, không bắt được"
+        }
+      ]
+    }
+  ]
+}

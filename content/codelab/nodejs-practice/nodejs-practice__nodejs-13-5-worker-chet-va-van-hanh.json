@@ -1,0 +1,959 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-13-5-worker-chet-va-van-hanh",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-13-5-worker-chet-va-van-hanh"
+  },
+  "exercises": [
+    {
+      "title": "13.5 · Killed, blocked, deployed: what survives?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "stalled jobs",
+        "graceful shutdown"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lesson killed a worker on purpose, mid-job, and measured what survived. Each question is one of those runs.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài cố ý giết worker giữa lúc đang làm job và đo xem cái gì sống sót. Mỗi câu là một lần chạy đó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every rescue is the 12.4 lock with a TTL, applied per job.|||Mọi lần cứu đều là khoá có TTL của 12.4, áp cho từng job.",
+        "Ask what keeps running on the event loop while a handler works.|||Hỏi xem thứ gì vẫn phải chạy trên event loop trong lúc handler làm việc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.5 · Killed, blocked, deployed: what survives?\n\nAnswer in the answer panel (no code needed).\n\n1. SIGKILL in the middle of a job. Right after: active=1, waiting=0. 2,036 ms later a new worker picked it up and a \"stalled\" event fired. What mechanism rescued it?SIGKILL giữa lúc job đang chạy. Ngay sau đó: active=1, waiting=0. 2.036 ms sau một worker mới nhặt lại nó và sự kiện \"stalled\" xảy ra. Cơ chế nào đã cứu nó?\n2. lockDuration 1 s. A job that AWAITS for 3 s completes fine; a job that spins in a while loop for 3 s runs twice and ends with \"Missing lock for job 1. moveToFinished\". Why?lockDuration 1 s. Job AWAIT 3 s hoàn tất êm; job quay vòng while 3 s chạy hai lần và kết thúc bằng \"Missing lock for job 1. moveToFinished\". Vì sao?\n3. A deploy sends SIGTERM. With a handler: exits after 1,296 ms, job completed. Without: exits after 5 ms. What happens to the job in the second case?Một lần deploy gửi SIGTERM. Có handler: thoát sau 1.296 ms, job xong. Không có: thoát sau 5 ms. Job ở trường hợp hai ra sao?\n4. Your jobs take up to 60 s and you deploy with Docker’s defaults. What else must you change?Job của bạn mất tới 60 s và bạn deploy với mặc định của Docker. Còn phải đổi gì?\n5. 3,000 completed jobs with no cleanup kept 3,000 records (+3.94 MB); with removeOnComplete: 100, +0.49 MB. Why keep FAILED jobs much longer than completed ones?3.000 job xong không dọn giữ lại 3.000 bản ghi (+3,94 MB); với removeOnComplete: 100 là +0,49 MB. Vì sao giữ job HỎNG lâu hơn hẳn job xong?\n6. Redis is down. What does queue.add() do (BullMQ 6.7.2, measured)?Redis sập. queue.add() làm gì (BullMQ 6.7.2, đã đo)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.5 · Killed, blocked, deployed: what survives? — answer key\n\n1. SIGKILL in the middle of a job. Right after: active=1, waiting=0. 2,036 ms later a new worker picked it up and a \"stalled\" event fired. What mechanism rescued it?SIGKILL giữa lúc job đang chạy. Ngay sau đó: active=1, waiting=0. 2.036 ms sau một worker mới nhặt lại nó và sự kiện \"stalled\" xảy ra. Cơ chế nào đã cứu nó?\n   Answer: b) The per-job lock: nobody renewed it, it expired, and another worker’s stalled check moved the job back to wait\n   A worker holds a lock (lockDuration, default 30 s) and renews it while it works. With the defaults the same rescue took 60,070 ms — lock expiry plus the next stalled check.VI: Worker giữ một khoá (lockDuration, mặc định 30 s) và gia hạn nó trong lúc làm. Với cấu hình mặc định, cùng lần cứu đó mất 60.070 ms — khoá hết hạn cộng lần kiểm treo kế tiếp.\n\n2. lockDuration 1 s. A job that AWAITS for 3 s completes fine; a job that spins in a while loop for 3 s runs twice and ends with \"Missing lock for job 1. moveToFinished\". Why?lockDuration 1 s. Job AWAIT 3 s hoàn tất êm; job quay vòng while 3 s chạy hai lần và kết thúc bằng \"Missing lock for job 1. moveToFinished\". Vì sao?\n   Answer: b) The renewal timer runs on the event loop; a blocking handler stops it, so the job is declared stalled and re-run\n   Chapter 2.4 with a new consequence: there it cost latency, here it costs correctness. CPU-heavy work needs a sandboxed processor, a worker thread or a separate process — never a tighter lockDuration.VI: Chương 2.4 với một hậu quả mới: ở đó tốn độ trễ, ở đây tốn tính đúng đắn. Việc nặng CPU cần sandboxed processor, worker thread hoặc tiến trình riêng — không bao giờ là lockDuration chặt hơn.\n\n3. A deploy sends SIGTERM. With a handler: exits after 1,296 ms, job completed. Without: exits after 5 ms. What happens to the job in the second case?Một lần deploy gửi SIGTERM. Có handler: thoát sau 1.296 ms, job xong. Không có: thoát sau 5 ms. Job ở trường hợp hai ra sao?\n   Answer: c) It is cut mid-way, sits in active, is rescued only by the stalled mechanism later — and then runs a second time\n   Not lost either way — but “eventually” is up to lockDuration + stalledInterval away, and the work runs again. Multiply by every deploy.VI: Không mất ở cả hai cách — nhưng \"rồi sẽ được\" có thể là lockDuration + stalledInterval sau, và việc chạy lại lần nữa. Nhân với mọi lần deploy.\n\n4. Your jobs take up to 60 s and you deploy with Docker’s defaults. What else must you change?Job của bạn mất tới 60 s và bạn deploy với mặc định của Docker. Còn phải đổi gì?\n   Answer: d) Raise stop_grace_period above your longest job — Docker sends SIGKILL 10 s after SIGTERM\n   Or keep jobs short: a job you finish in a few seconds makes graceful shutdown trivial, a 20-minute job makes every deploy a decision.VI: Hoặc giữ job ngắn: job xong trong vài giây làm tắt êm trở nên dễ dàng, job 20 phút làm mỗi lần deploy là một quyết định.\n\n5. 3,000 completed jobs with no cleanup kept 3,000 records (+3.94 MB); with removeOnComplete: 100, +0.49 MB. Why keep FAILED jobs much longer than completed ones?3.000 job xong không dọn giữ lại 3.000 bản ghi (+3,94 MB); với removeOnComplete: 100 là +0,49 MB. Vì sao giữ job HỎNG lâu hơn hẳn job xong?\n   Answer: d) A failed job is evidence you will replay after the fix\n   removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 days }. Leave both unset and Redis grows until it refuses writes with OOM.VI: removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 ngày }. Bỏ trống cả hai thì Redis lớn dần tới khi từ chối ghi với OOM.\n\n6. Redis is down. What does queue.add() do (BullMQ 6.7.2, measured)?Redis sập. queue.add() làm gì (BullMQ 6.7.2, đã đo)?\n   Answer: a) It hangs — no answer after 15 s, even with enableOfflineQueue: false — and your HTTP route hangs with it\n   Wrap it in a timeout (Promise.race, ~1 s) and decide per queue: a welcome email fails open (the signup still succeeds), a payment fails closed.VI: Bọc nó trong một giới hạn thời gian (Promise.race, ~1 s) và quyết định theo từng hàng đợi: email chào mừng thì fail-open (đăng ký vẫn thành công), thanh toán thì fail-closed.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The per-job lock: nobody renewed it, it expired, and another worker’s stalled check moved the job back to wait</p><p>A worker holds a lock (lockDuration, default 30 s) and renews it while it works. With the defaults the same rescue took 60,070 ms — lock expiry plus the next stalled check.</p><p><i>VI: Worker giữ một khoá (lockDuration, mặc định 30 s) và gia hạn nó trong lúc làm. Với cấu hình mặc định, cùng lần cứu đó mất 60.070 ms — khoá hết hạn cộng lần kiểm treo kế tiếp.</i></p></li><li><p><b>b)</b> The renewal timer runs on the event loop; a blocking handler stops it, so the job is declared stalled and re-run</p><p>Chapter 2.4 with a new consequence: there it cost latency, here it costs correctness. CPU-heavy work needs a sandboxed processor, a worker thread or a separate process — never a tighter lockDuration.</p><p><i>VI: Chương 2.4 với một hậu quả mới: ở đó tốn độ trễ, ở đây tốn tính đúng đắn. Việc nặng CPU cần sandboxed processor, worker thread hoặc tiến trình riêng — không bao giờ là lockDuration chặt hơn.</i></p></li><li><p><b>c)</b> It is cut mid-way, sits in active, is rescued only by the stalled mechanism later — and then runs a second time</p><p>Not lost either way — but “eventually” is up to lockDuration + stalledInterval away, and the work runs again. Multiply by every deploy.</p><p><i>VI: Không mất ở cả hai cách — nhưng \"rồi sẽ được\" có thể là lockDuration + stalledInterval sau, và việc chạy lại lần nữa. Nhân với mọi lần deploy.</i></p></li><li><p><b>d)</b> Raise stop_grace_period above your longest job — Docker sends SIGKILL 10 s after SIGTERM</p><p>Or keep jobs short: a job you finish in a few seconds makes graceful shutdown trivial, a 20-minute job makes every deploy a decision.</p><p><i>VI: Hoặc giữ job ngắn: job xong trong vài giây làm tắt êm trở nên dễ dàng, job 20 phút làm mỗi lần deploy là một quyết định.</i></p></li><li><p><b>d)</b> A failed job is evidence you will replay after the fix</p><p>removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 days }. Leave both unset and Redis grows until it refuses writes with OOM.</p><p><i>VI: removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 ngày }. Bỏ trống cả hai thì Redis lớn dần tới khi từ chối ghi với OOM.</i></p></li><li><p><b>a)</b> It hangs — no answer after 15 s, even with enableOfflineQueue: false — and your HTTP route hangs with it</p><p>Wrap it in a timeout (Promise.race, ~1 s) and decide per queue: a welcome email fails open (the signup still succeeds), a payment fails closed.</p><p><i>VI: Bọc nó trong một giới hạn thời gian (Promise.race, ~1 s) và quyết định theo từng hàng đợi: email chào mừng thì fail-open (đăng ký vẫn thành công), thanh toán thì fail-closed.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>SIGKILL in the middle of a job. Right after: active=1, waiting=0. 2,036 ms later a new worker picked it up and a \"stalled\" event fired. What mechanism rescued it?</p><p style=\"opacity:.75;font-size:.92em\"><i>SIGKILL giữa lúc job đang chạy. Ngay sau đó: active=1, waiting=0. 2.036 ms sau một worker mới nhặt lại nó và sự kiện \"stalled\" xảy ra. Cơ chế nào đã cứu nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The SIGKILL handler, which put the job back before the process exited"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The per-job lock: nobody renewed it, it expired, and another worker’s stalled check moved the job back to wait"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BullMQ’s daemon process, which monitors every worker over TCP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Redis persistence: the AOF replayed the job when the worker restarted"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A worker holds a lock (lockDuration, default 30 s) and renews it while it works. With the defaults the same rescue took 60,070 ms — lock expiry plus the next stalled check.</p><p><i>VI: Worker giữ một khoá (lockDuration, mặc định 30 s) và gia hạn nó trong lúc làm. Với cấu hình mặc định, cùng lần cứu đó mất 60.070 ms — khoá hết hạn cộng lần kiểm treo kế tiếp.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>lockDuration 1 s. A job that AWAITS for 3 s completes fine; a job that spins in a while loop for 3 s runs twice and ends with \"Missing lock for job 1. moveToFinished\". Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>lockDuration 1 s. Job AWAIT 3 s hoàn tất êm; job quay vòng while 3 s chạy hai lần và kết thúc bằng \"Missing lock for job 1. moveToFinished\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "while loops are forbidden in BullMQ handlers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The renewal timer runs on the event loop; a blocking handler stops it, so the job is declared stalled and re-run"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The second run was a retry because the first threw an error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Awaiting renews the lock automatically, a loop releases it on purpose"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Chapter 2.4 with a new consequence: there it cost latency, here it costs correctness. CPU-heavy work needs a sandboxed processor, a worker thread or a separate process — never a tighter lockDuration.</p><p><i>VI: Chương 2.4 với một hậu quả mới: ở đó tốn độ trễ, ở đây tốn tính đúng đắn. Việc nặng CPU cần sandboxed processor, worker thread hoặc tiến trình riêng — không bao giờ là lockDuration chặt hơn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A deploy sends SIGTERM. With a handler: exits after 1,296 ms, job completed. Without: exits after 5 ms. What happens to the job in the second case?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lần deploy gửi SIGTERM. Có handler: thoát sau 1.296 ms, job xong. Không có: thoát sau 5 ms. Job ở trường hợp hai ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It completes anyway, because Node finishes pending promises before exiting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It moves to failed with reason SIGTERM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is cut mid-way, sits in active, is rescued only by the stalled mechanism later — and then runs a second time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is lost forever, because SIGTERM deletes the lock"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Not lost either way — but “eventually” is up to lockDuration + stalledInterval away, and the work runs again. Multiply by every deploy.</p><p><i>VI: Không mất ở cả hai cách — nhưng \"rồi sẽ được\" có thể là lockDuration + stalledInterval sau, và việc chạy lại lần nữa. Nhân với mọi lần deploy.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Your jobs take up to 60 s and you deploy with Docker’s defaults. What else must you change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Job của bạn mất tới 60 s và bạn deploy với mặc định của Docker. Còn phải đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing: worker.close() blocks SIGKILL until the jobs finish"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Use SIGINT instead of SIGTERM for deploys"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Set lockDuration to 10 s so jobs finish before the kill"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Raise stop_grace_period above your longest job — Docker sends SIGKILL 10 s after SIGTERM"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Or keep jobs short: a job you finish in a few seconds makes graceful shutdown trivial, a 20-minute job makes every deploy a decision.</p><p><i>VI: Hoặc giữ job ngắn: job xong trong vài giây làm tắt êm trở nên dễ dàng, job 20 phút làm mỗi lần deploy là một quyết định.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>3,000 completed jobs with no cleanup kept 3,000 records (+3.94 MB); with removeOnComplete: 100, +0.49 MB. Why keep FAILED jobs much longer than completed ones?</p><p style=\"opacity:.75;font-size:.92em\"><i>3.000 job xong không dọn giữ lại 3.000 bản ghi (+3,94 MB); với removeOnComplete: 100 là +0,49 MB. Vì sao giữ job HỎNG lâu hơn hẳn job xong?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Failed jobs are smaller because they have no returnvalue"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Completed jobs block the wait list until they are removed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BullMQ cannot delete failed jobs automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A failed job is evidence you will replay after the fix"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 days }. Leave both unset and Redis grows until it refuses writes with OOM.</p><p><i>VI: removeOnComplete: { age: 3600, count: 1000 }, removeOnFail: { age: 7 ngày }. Bỏ trống cả hai thì Redis lớn dần tới khi từ chối ghi với OOM.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Redis is down. What does queue.add() do (BullMQ 6.7.2, measured)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Redis sập. queue.add() làm gì (BullMQ 6.7.2, đã đo)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It hangs — no answer after 15 s, even with enableOfflineQueue: false — and your HTTP route hangs with it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It returns null so the caller can retry"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It throws ECONNREFUSED at once"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It stores the job in memory and sends it when Redis returns"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Wrap it in a timeout (Promise.race, ~1 s) and decide per queue: a welcome email fails open (the signup still succeeds), a payment fails closed.</p><p><i>VI: Bọc nó trong một giới hạn thời gian (Promise.race, ~1 s) và quyết định theo từng hàng đợi: email chào mừng thì fail-open (đăng ký vẫn thành công), thanh toán thì fail-closed.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tightening lockDuration to “detect stalls faster” for a CPU-heavy job — it only makes the double run arrive sooner.|||Siết lockDuration để \"phát hiện treo nhanh hơn\" cho job nặng CPU — chỉ làm lần chạy đôi tới sớm hơn."
+        },
+        {
+          "loi": "No SIGTERM handler: every deploy abandons the running jobs.|||Không có handler SIGTERM: mỗi lần deploy bỏ dở các job đang chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stalled job",
+          "vi": "job treo",
+          "giaiThich": "job ở trạng thái active mà khoá không còn được gia hạn — worker đã chết hoặc chặn event loop"
+        },
+        {
+          "en": "lockDuration",
+          "vi": "thời hạn khoá job",
+          "giaiThich": "worker phải gia hạn trước khi hết; mặc định 30 s"
+        },
+        {
+          "en": "graceful shutdown",
+          "vi": "tắt êm",
+          "giaiThich": "ngừng nhận job mới, làm nốt job đang chạy rồi mới thoát"
+        }
+      ]
+    },
+    {
+      "title": "13.5 · A graceful shutdown, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "graceful shutdown"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>docker stop sends SIGTERM to the worker process. Order what the shutdown handler of the lesson does, from the signal to the exit.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>docker stop gửi SIGTERM tới tiến trình worker. Sắp thứ tự những gì handler tắt của bài làm, từ tín hiệu tới lúc thoát.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What still needs Redis while the last job finishes?|||Thứ gì còn cần Redis trong lúc job cuối làm nốt?",
+        "Exit only after the work is done.|||Chỉ thoát khi việc đã xong."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.5 · A graceful shutdown, in order\n\nAnswer in the answer panel (no code needed).\n\n1. From SIGTERM to exitTừ SIGTERM tới lúc thoát\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 13.5 · A graceful shutdown, in order — answer key\n\n1. From SIGTERM to exitTừ SIGTERM tới lúc thoát\n   Answer: m3) process.on('SIGTERM') fires and logs “shutting down worker”  →  m2) await worker.close() — stop taking NEW jobs, wait for the running ones to finish  →  m1) await queue.close()  →  m5) await redis.quit() — close the shared connection last, everything above still needed it  →  m4) process.exit(0) — before Docker’s grace period ends and SIGKILL arrives\n   The worker must stop taking work before anything else closes, and Redis must close last because both the worker and the queue use it. All of it has to fit in stop_grace_period (10 s by default).VI: Worker phải ngừng nhận việc trước khi bất cứ thứ gì khác đóng, và Redis phải đóng sau cùng vì cả worker lẫn queue đều dùng nó. Tất cả phải gọn trong stop_grace_period (mặc định 10 s).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The worker must stop taking work before anything else closes, and Redis must close last because both the worker and the queue use it. All of it has to fit in stop_grace_period (10 s by default).</p><p><i>VI: Worker phải ngừng nhận việc trước khi bất cứ thứ gì khác đóng, và Redis phải đóng sau cùng vì cả worker lẫn queue đều dùng nó. Tất cả phải gọn trong stop_grace_period (mặc định 10 s).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From SIGTERM to exit</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ SIGTERM tới lúc thoát</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "await queue.close()"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "await worker.close() — stop taking NEW jobs, wait for the running ones to finish"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "process.on('SIGTERM') fires and logs “shutting down worker”"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "process.exit(0) — before Docker’s grace period ends and SIGKILL arrives"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "await redis.quit() — close the shared connection last, everything above still needed it"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m1",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>The worker must stop taking work before anything else closes, and Redis must close last because both the worker and the queue use it. All of it has to fit in stop_grace_period (10 s by default).</p><p><i>VI: Worker phải ngừng nhận việc trước khi bất cứ thứ gì khác đóng, và Redis phải đóng sau cùng vì cả worker lẫn queue đều dùng nó. Tất cả phải gọn trong stop_grace_period (mặc định 10 s).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Closing Redis first: the running job cannot record its completion.|||Đóng Redis trước: job đang chạy không ghi được việc hoàn tất của nó."
+        },
+        {
+          "loi": "process.exit(0) straight away: the 5 ms exit that leaves the job stuck in active.|||process.exit(0) ngay lập tức: lần thoát 5 ms để job kẹt ở active."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SIGTERM",
+          "vi": "tín hiệu xin dừng",
+          "giaiThich": "bắt và xử lý được — khác SIGKILL"
+        },
+        {
+          "en": "stop_grace_period",
+          "vi": "thời gian ân hạn khi dừng",
+          "giaiThich": "Docker chờ chừng này rồi gửi SIGKILL"
+        }
+      ]
+    },
+    {
+      "title": "13.5 · The stalled-job check",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "stalled jobs",
+        "locks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Every <code>stalledInterval</code>, a worker looks at the ACTIVE jobs. A job whose lock expired (<code>lockUntil &lt;= now</code>) has nobody working on it any more. BullMQ moves it back to wait — unless it has already stalled <code>maxStalledCount</code> times (default 1), in which case it fails with the reason <code>'job stalled more than allowable limit'</code>. Write <code>checkStalled(active, now, maxStalledCount = 1)</code>:</p><ul><li><code>active</code> is <code>[{ id, lockUntil, stalledCount }]</code>;</li><li>a live lock (<code>lockUntil &gt; now</code>) ⇒ the id goes to <code>stillActive</code>;</li><li>an expired lock ⇒ <code>stalledCount + 1</code>; if that is greater than <code>maxStalledCount</code> ⇒ <code>failed</code> as <code>{ id, reason }</code>, otherwise ⇒ <code>toWait</code> as <code>{ id, stalledCount }</code>;</li><li>return <code>{ stillActive, toWait, failed }</code> in input order.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>A job whose lock is still valid is never touched — however long it has been running.</li>\n  <li>maxStalledCount defaults to 1.</li>\n  <li>Do not modify the input.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cứ mỗi <code>stalledInterval</code>, một worker nhìn các job ACTIVE. Job có khoá đã hết hạn (<code>lockUntil &lt;= now</code>) không còn ai làm nữa. BullMQ đưa nó về wait — trừ khi nó đã treo <code>maxStalledCount</code> lần (mặc định 1), khi đó nó hỏng với lý do <code>'job stalled more than allowable limit'</code>. Viết <code>checkStalled(active, now, maxStalledCount = 1)</code>:</p><ul><li><code>active</code> là <code>[{ id, lockUntil, stalledCount }]</code>;</li><li>khoá còn sống (<code>lockUntil &gt; now</code>) ⇒ id vào <code>stillActive</code>;</li><li>khoá đã hết ⇒ <code>stalledCount + 1</code>; nếu lớn hơn <code>maxStalledCount</code> ⇒ <code>failed</code> dạng <code>{ id, reason }</code>, ngược lại ⇒ <code>toWait</code> dạng <code>{ id, stalledCount }</code>;</li><li>trả <code>{ stillActive, toWait, failed }</code> theo thứ tự đầu vào.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Job có khoá còn hiệu lực không bao giờ bị đụng — dù đã chạy bao lâu.</li>\n  <li>maxStalledCount mặc định là 1.</li>\n  <li>Không sửa dữ liệu vào.</li>\n</ul>",
+      "inputSpec": "active — [{ id, lockUntil, stalledCount }] · now — ms · maxStalledCount — number|||active — [{ id, lockUntil, stalledCount }] · now — ms · maxStalledCount — số",
+      "outputSpec": "{ stillActive: id[], toWait: { id, stalledCount }[], failed: { id, reason }[] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });\ncheckStalled([A(1, 5000), A(2, -1), A(3, 0)], now)",
+          "output": "{\"stillActive\":[\"1\"],\"toWait\":[{\"id\":\"2\",\"stalledCount\":1},{\"id\":\"3\",\"stalledCount\":1}],\"failed\":[]}",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The only question about a running job is: is its lock still alive? Not: how long has it run?|||Câu hỏi duy nhất với job đang chạy là: khoá của nó còn sống không? Không phải: nó đã chạy bao lâu?",
+        "const n = (j.stalledCount || 0) + 1; n > maxStalledCount ? failed : toWait."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** One pass of the stalled-job check. */\nfunction checkStalled(active, now, maxStalledCount = 1) {\n  // Write your solution here — \"long-running\" is not \"stalled\"\n  const stillActive = [], toWait = [], failed = [];\n  for (const j of active) {\n    if (now - (j.lockUntil - 30000) > 30000) toWait.push({ id: j.id, stalledCount: j.stalledCount + 1 });\n    else stillActive.push(j.id);\n  }\n  return { stillActive, toWait, failed };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** One pass of the stalled-job check (what every worker runs each stalledInterval). */\nfunction checkStalled(active, now, maxStalledCount = 1) {\n  const stillActive = [], toWait = [], failed = [];\n  for (const j of active) {\n    if (j.lockUntil > now) { stillActive.push(j.id); continue; }   // someone is renewing it: alive, however long\n    const n = (j.stalledCount || 0) + 1;                            // the lock is dead: nobody works on this job\n    if (n > maxStalledCount) failed.push({ id: j.id, reason: 'job stalled more than allowable limit' });\n    else toWait.push({ id: j.id, stalledCount: n });                // back to wait: another worker will run it AGAIN\n  }\n  return { stillActive, toWait, failed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the distributed lock of 12.4 applied per job: liveness is proven by renewal, not by elapsed time. A dead worker stops renewing, the lock expires, and the next check returns the job to wait — the 2,036 ms rescue. The counter is what keeps a job that blocks the event loop from bouncing between active and wait forever: after the allowed number of stalls it fails, and the failed set tells you why.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là khoá phân tán của 12.4 áp cho từng job: sự sống được chứng minh bằng việc gia hạn, không bằng thời gian đã trôi. Worker chết thôi gia hạn, khoá hết hạn, và lần kiểm kế đưa job về wait — lần cứu 2.036 ms. Bộ đếm là thứ giữ cho job chặn event loop không nảy qua lại giữa active và wait mãi mãi: sau số lần treo cho phép nó hỏng, và tập failed cho bạn biết vì sao.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Alive / expired / expired exactly now",
+              "vi": "Còn sống / đã hết / hết đúng lúc này"
+            },
+            "goi": "checkStalled([A(1, 5000), A(2, -1), A(3, 0)], now)",
+            "chuanBi": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });",
+            "mongDoi": {
+              "stillActive": [
+                "1"
+              ],
+              "toWait": [
+                {
+                  "id": "2",
+                  "stalledCount": 1
+                },
+                {
+                  "id": "3",
+                  "stalledCount": 1
+                }
+              ],
+              "failed": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "A job that already stalled once fails (default limit 1)",
+              "vi": "Job đã treo một lần thì hỏng (giới hạn mặc định 1)"
+            },
+            "goi": "checkStalled([A(4, -10, 1), A(5, -10, 0)], now)",
+            "chuanBi": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });",
+            "mongDoi": {
+              "stillActive": [],
+              "toWait": [
+                {
+                  "id": "5",
+                  "stalledCount": 1
+                }
+              ],
+              "failed": [
+                {
+                  "id": "4",
+                  "reason": "job stalled more than allowable limit"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "A higher limit re-queues more",
+              "vi": "Giới hạn cao hơn thì xếp lại nhiều hơn"
+            },
+            "goi": "checkStalled([A(6, -10, 1), A(7, -10, 2)], now, 3)",
+            "chuanBi": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });",
+            "mongDoi": {
+              "stillActive": [],
+              "toWait": [
+                {
+                  "id": "6",
+                  "stalledCount": 2
+                },
+                {
+                  "id": "7",
+                  "stalledCount": 3
+                }
+              ],
+              "failed": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(() => { const xs = [A(8, 999999), A(9, -1, 0)]; const r = checkStalled(xs, now); return [r, xs[1].stalledCount]; })()",
+            "chuanBi": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });",
+            "mongDoi": [
+              {
+                "stillActive": [
+                  "8"
+                ],
+                "toWait": [
+                  {
+                    "id": "9",
+                    "stalledCount": 1
+                  }
+                ],
+                "failed": []
+              },
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[checkStalled([], now), checkStalled([{ id: '10', lockUntil: now - 1 }], now)]",
+            "chuanBi": "const now = 1000000;\nconst A = (id, lockIn, stalledCount = 0) => ({ id: String(id), lockUntil: now + lockIn, stalledCount });",
+            "mongDoi": [
+              {
+                "stillActive": [],
+                "toWait": [],
+                "failed": []
+              },
+              {
+                "stillActive": [],
+                "toWait": [
+                  {
+                    "id": "10",
+                    "stalledCount": 1
+                  }
+                ],
+                "failed": []
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring a job stalled because it has been active for a long time: long-but-healthy jobs (the 3-second await) renew their lock and must be left alone.|||Coi job là treo vì nó active đã lâu: job dài mà khoẻ (lần await 3 giây) có gia hạn khoá và phải được để yên."
+        },
+        {
+          "loi": "Re-queueing forever: a job that blocks the event loop stalls on every run and never ends — maxStalledCount is what turns it into a visible failure.|||Xếp lại mãi mãi: job chặn event loop treo ở mọi lần chạy và không bao giờ kết thúc — maxStalledCount là thứ biến nó thành một lỗi nhìn thấy được."
+        },
+        {
+          "loi": "Using < instead of <= for the expiry: a lock that expired exactly now is not dead yet in your code, and the rescue is delayed by one whole interval.|||Dùng < thay vì <= cho hạn: khoá vừa hết đúng lúc này trong code bạn chưa chết, và lần cứu bị lùi cả một chu kỳ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stalled job",
+          "vi": "job treo",
+          "giaiThich": "job ở trạng thái active mà khoá không còn được gia hạn — worker đã chết hoặc chặn event loop"
+        },
+        {
+          "en": "maxStalledCount",
+          "vi": "số lần treo tối đa",
+          "giaiThich": "quá số này job bị đánh hỏng thay vì xếp lại"
+        }
+      ]
+    },
+    {
+      "title": "13.5 · removeOnComplete: { age, count }",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "retention"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Completed jobs are kept by default, forever — 3,000 trivial jobs cost 3.94 MB. Write <code>prune(jobs, now, keep)</code> that applies a retention rule like <code>removeOnComplete: { age: 3600, count: 1000 }</code>: keep a job only if it finished less than <code>age</code> SECONDS ago (<code>now - finishedOn &lt; age * 1000</code>) <b>and</b> it is among the <code>count</code> most recently finished. Either field may be missing (no limit of that kind). Return <code>{ kept, removed }</code> — two arrays of ids, newest first; ties on <code>finishedOn</code> go to the larger id first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>age is in seconds; finishedOn and now in milliseconds.</li>\n  <li>Both limits apply together (a job must satisfy both).</li>\n  <li>Do not modify jobs.</li>\n</ul>",
+      "problemHtmlVi": "<p>Job đã xong được giữ mặc định, mãi mãi — 3.000 job vặt tốn 3,94 MB. Viết <code>prune(jobs, now, keep)</code> áp một luật lưu giữ kiểu <code>removeOnComplete: { age: 3600, count: 1000 }</code>: chỉ giữ job nếu nó xong cách đây chưa tới <code>age</code> GIÂY (<code>now - finishedOn &lt; age * 1000</code>) <b>và</b> nó nằm trong <code>count</code> job xong gần nhất. Trường nào cũng có thể vắng (không giới hạn kiểu đó). Trả <code>{ kept, removed }</code> — hai mảng id, mới nhất trước; trùng <code>finishedOn</code> thì id lớn hơn trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>age tính bằng giây; finishedOn và now bằng mili-giây.</li>\n  <li>Cả hai giới hạn áp cùng lúc (job phải thoả cả hai).</li>\n  <li>Không sửa jobs.</li>\n</ul>",
+      "inputSpec": "jobs — [{ id, finishedOn }] · now — ms · keep — { age?, count? }",
+      "outputSpec": "{ kept: string[], removed: string[] } — newest first|||{ kept: string[], removed: string[] } — mới nhất trước",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];\nprune(jobs, now, { age: 3600 })",
+          "output": "{\"kept\":[\"6\",\"4\",\"2\",\"3\"],\"removed\":[\"5\",\"1\"]}",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sort a copy newest first: (a, b) => b.finishedOn - a.finishedOn || Number(b.id) - Number(a.id).|||Sắp một bản sao mới nhất trước: (a, b) => b.finishedOn - a.finishedOn || Number(b.id) - Number(a.id).",
+        "Walk it with an index i: young = keep.age == null || now - j.finishedOn < keep.age * 1000; within = keep.count == null || i < keep.count.|||Đi qua nó với chỉ số i: young = keep.age == null || now - j.finishedOn < keep.age * 1000; within = keep.count == null || i < keep.count."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Apply removeOnComplete: { age, count }. */\nfunction prune(jobs, now, keep) {\n  // Write your solution here\n  const kept = jobs.filter((j) => now - j.finishedOn < keep.age).slice(0, keep.count).map((j) => j.id);\n  const removed = jobs.map((j) => j.id).filter((id) => !kept.includes(id));\n  return { kept, removed };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Apply removeOnComplete: { age (seconds), count }. A missing field = no limit of that kind. */\nfunction prune(jobs, now, keep) {\n  const order = [...jobs].sort((a, b) => b.finishedOn - a.finishedOn || Number(b.id) - Number(a.id));   // newest first\n  const kept = [], removed = [];\n  order.forEach((j, i) => {\n    const young = keep.age == null || now - j.finishedOn < keep.age * 1000;   // age is in SECONDS\n    const within = keep.count == null || i < keep.count;                       // among the newest count\n    (young && within ? kept : removed).push(j.id);\n  });\n  return { kept, removed };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Retention is two caps on one ordering: by recency of completion. Sorting newest-first makes the count cap a prefix, and the age cap a filter on the same pass. Set it on every queue — and keep failures far longer than successes, because the failed set is what you replay after a fix.</p>",
+      "solutionExplanationHtmlVi": "<p>Lưu giữ là hai cái trần trên cùng một thứ tự: độ gần của lúc hoàn tất. Sắp mới-nhất-trước biến trần count thành một tiền tố, còn trần age là bộ lọc trong cùng một lượt đi. Đặt nó cho mọi hàng đợi — và giữ job hỏng lâu hơn hẳn job thành công, vì tập failed là thứ bạn chạy lại sau khi sửa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "age 3600 s only: older than an hour is removed",
+              "vi": "Chỉ age 3600 s: cũ hơn một giờ bị xoá"
+            },
+            "goi": "prune(jobs, now, { age: 3600 })",
+            "chuanBi": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];",
+            "mongDoi": {
+              "kept": [
+                "6",
+                "4",
+                "2",
+                "3"
+              ],
+              "removed": [
+                "5",
+                "1"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "count 2 only: the two newest stay",
+              "vi": "Chỉ count 2: hai job mới nhất ở lại"
+            },
+            "goi": "prune(jobs, now, { count: 2 })",
+            "chuanBi": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];",
+            "mongDoi": {
+              "kept": [
+                "6",
+                "4"
+              ],
+              "removed": [
+                "2",
+                "3",
+                "5",
+                "1"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Both limits",
+              "vi": "Cả hai giới hạn"
+            },
+            "goi": "prune(jobs, now, { age: 3600, count: 3 })",
+            "chuanBi": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];",
+            "mongDoi": {
+              "kept": [
+                "6",
+                "4",
+                "2"
+              ],
+              "removed": [
+                "3",
+                "5",
+                "1"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[prune([J(7, 1), J(8, 1), J(9, 2)], now, { count: 2 }), prune(jobs, now, {}).removed]",
+            "chuanBi": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];",
+            "mongDoi": [
+              {
+                "kept": [
+                  "8",
+                  "7"
+                ],
+                "removed": [
+                  "9"
+                ]
+              },
+              []
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(() => { const r = prune(jobs, now, { age: 60, count: 100 }); return [r, jobs.map((j) => j.id).join(',')]; })()",
+            "chuanBi": "const now = 10000000;\nconst J = (id, agoSec) => ({ id: String(id), finishedOn: now - agoSec * 1000 });\nconst jobs = [J(1, 7200), J(2, 30), J(3, 3599), J(4, 10), J(5, 3600), J(6, 5)];",
+            "mongDoi": [
+              {
+                "kept": [
+                  "6",
+                  "4",
+                  "2"
+                ],
+                "removed": [
+                  "3",
+                  "5",
+                  "1"
+                ]
+              },
+              "1,2,3,4,5,6"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing age (seconds) with milliseconds: everything older than 3.6 s is deleted.|||So age (giây) với mili-giây: mọi thứ cũ hơn 3,6 s bị xoá."
+        },
+        {
+          "loi": "Keeping the FIRST count jobs in the array instead of the newest — the history you keep is last month’s.|||Giữ count job ĐẦU mảng thay vì mới nhất — lịch sử bạn giữ là của tháng trước."
+        },
+        {
+          "loi": "Treating { count } alone as also “no older than an hour” (or the reverse): a missing field means no limit of that kind.|||Coi { count } một mình cũng là \"không cũ hơn một giờ\" (hoặc ngược lại): trường vắng nghĩa là không giới hạn kiểu đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "removeOnComplete",
+          "vi": "dọn job đã xong",
+          "giaiThich": "{ age (giây), count } — giữ bao lâu, giữ bao nhiêu"
+        },
+        {
+          "en": "retention",
+          "vi": "lưu giữ",
+          "giaiThich": "giữ lại bao nhiêu lịch sử"
+        }
+      ]
+    },
+    {
+      "title": "13.5 · When Redis is down, add() hangs: fail open or fail closed",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "timeouts",
+        "fail-open / fail-closed"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>With Redis down, <code>queue.add()</code> does not throw — it hangs, and your HTTP route hangs with it. Write three things:</p><ol><li><code>addWithTimeout(queue, name, data, ms = 1000)</code> — resolve with what <code>add</code> resolves, or reject with <code>Error('QUEUE_TIMEOUT')</code> after <code>ms</code>. Clear the timer when <code>add</code> wins.</li><li><code>makeSignup({ createUser, emailQueue })</code> → handler: create the user, then enqueue <code>'welcome'</code> with <code>{ userId }</code> through <code>addWithTimeout</code>. If that fails, <code>console.warn('welcome email not queued: ' + err.message)</code> and STILL answer <code>201 { id, email }</code> — the user cares about the account, not the email (fail open).</li><li><code>makeCheckout({ paymentQueue })</code> → handler: enqueue <code>'charge'</code> with <code>req.body</code> (<code>{ orderId, amount }</code>) through <code>addWithTimeout</code>; success ⇒ <code>202 { jobId }</code>; failure ⇒ <code>503 { error: 'PAYMENTS_UNAVAILABLE' }</code> — never pretend a payment was accepted (fail closed).</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>No route waits longer than ~1 s when Redis is down.</li>\n  <li>Signup: fail open with a warning. Checkout: fail closed with 503.</li>\n  <li>The timer is cleared when add() resolves in time.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi Redis sập, <code>queue.add()</code> không ném lỗi — nó treo, và route HTTP của bạn treo theo. Viết ba thứ:</p><ol><li><code>addWithTimeout(queue, name, data, ms = 1000)</code> — resolve bằng thứ <code>add</code> resolve, hoặc reject với <code>Error('QUEUE_TIMEOUT')</code> sau <code>ms</code>. Xoá hẹn giờ khi <code>add</code> thắng.</li><li><code>makeSignup({ createUser, emailQueue })</code> → handler: tạo user, rồi xếp hàng <code>'welcome'</code> với <code>{ userId }</code> qua <code>addWithTimeout</code>. Nếu hỏng, <code>console.warn('welcome email not queued: ' + err.message)</code> và VẪN trả <code>201 { id, email }</code> — người dùng cần tài khoản, không cần email (fail-open).</li><li><code>makeCheckout({ paymentQueue })</code> → handler: xếp hàng <code>'charge'</code> với <code>req.body</code> (<code>{ orderId, amount }</code>) qua <code>addWithTimeout</code>; thành công ⇒ <code>202 { jobId }</code>; hỏng ⇒ <code>503 { error: 'PAYMENTS_UNAVAILABLE' }</code> — không bao giờ giả vờ đã nhận một khoản thanh toán (fail-closed).</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không route nào chờ quá ~1 s khi Redis sập.</li>\n  <li>Đăng ký: fail-open kèm cảnh báo. Thanh toán: fail-closed với 503.</li>\n  <li>Hẹn giờ được xoá khi add() resolve kịp.</li>\n</ul>",
+      "inputSpec": "queues and createUser from fake-queues.js · (req, res) from fake-http.js|||hàng đợi và createUser trong fake-queues.js · (req, res) trong fake-http.js",
+      "outputSpec": "addWithTimeout → Promise · makeSignup / makeCheckout → async (req, res) => void",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });\n[await call(signup, { email: 'an@x.vn' }).then((r) => [r.status, r.body, r.thrown]), emailQueue.added]",
+          "output": "[[201,{\"id\":101,\"email\":\"an@x.vn\"},null],[{\"name\":\"welcome\",\"data\":{\"userId\":101}}]]",
+          "explanation": "The first sample case (Run shows every visible case; hidden ones only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "let t; const timeout = new Promise((_, no) => { t = setTimeout(() => no(new Error('QUEUE_TIMEOUT')), ms); }); try { return await Promise.race([queue.add(name, data), timeout]); } finally { clearTimeout(t); }",
+        "The two handlers differ only in their catch block — and that difference is the whole decision.|||Hai handler chỉ khác nhau ở khối catch — và khác biệt đó chính là toàn bộ quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "async function addWithTimeout(queue, name, data, ms = 1000) {\n  // Write your solution here\n  return queue.add(name, data);\n}\n\nfunction makeSignup({ createUser, emailQueue }) {\n  return async (req, res) => {\n    const user = await createUser(req.body);\n    await addWithTimeout(emailQueue, 'welcome', { userId: user.id });\n    res.status(201).json({ id: user.id, email: user.email });\n  };\n}\n\nfunction makeCheckout({ paymentQueue }) {\n  return async (req, res) => {\n    const job = await addWithTimeout(paymentQueue, 'charge', req.body);\n    res.status(202).json({ jobId: job.id });\n  };\n}\n"
+        },
+        {
+          "name": "fake-queues.js",
+          "language": "javascript",
+          "code": "// fake-queues.js — PROVIDED (loaded before answer.js).\n//   emailQueue / paymentQueue: await q.add(name, data) → { id } after 2 ms; q.hang = true ⇒ add() NEVER resolves\n//   (BullMQ 6.7.2 with Redis down: no answer after 15 s, even with enableOfflineQueue: false)\n//   createUser(body) → { id, email } after 10 ms · q.added — what was enqueued\nfunction makeQueue() {\n  const q = { added: [], hang: false,\n    add(name, data) { if (q.hang) return new Promise(() => {}); q.added.push({ name, data }); return new Promise((ok) => setTimeout(() => ok({ id: String(q.added.length) }), 2)); } };\n  return q;\n}\nconst emailQueue = makeQueue();\nconst paymentQueue = makeQueue();\nlet uid = 100;\nconst createUser = async (body) => { await new Promise((ok) => setTimeout(ok, 10)); return { id: ++uid, email: body.email }; };\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** queue.add() with a deadline: Redis down ⇒ add() hangs, so race it against a timer. */\nasync function addWithTimeout(queue, name, data, ms = 1000) {\n  let t;\n  const timeout = new Promise((_, no) => { t = setTimeout(() => no(new Error('QUEUE_TIMEOUT')), ms); });\n  try {\n    return await Promise.race([queue.add(name, data), timeout]);\n  } finally {\n    clearTimeout(t);                       // add() won (or lost): the timer must not linger\n  }\n}\n\n/** Signup: the account matters, the email does not — FAIL OPEN. */\nfunction makeSignup({ createUser, emailQueue }) {\n  return async (req, res) => {\n    const user = await createUser(req.body);\n    try {\n      await addWithTimeout(emailQueue, 'welcome', { userId: user.id });\n    } catch (err) {\n      console.warn('welcome email not queued: ' + err.message);   // visible, but not the user's problem\n    }\n    res.status(201).json({ id: user.id, email: user.email });\n  };\n}\n\n/** Checkout: never pretend a payment was accepted — FAIL CLOSED. */\nfunction makeCheckout({ paymentQueue }) {\n  return async (req, res) => {\n    try {\n      const job = await addWithTimeout(paymentQueue, 'charge', req.body);\n      res.status(202).json({ jobId: job.id });\n    } catch (err) {\n      res.status(503).json({ error: 'PAYMENTS_UNAVAILABLE' });\n    }\n  };\n}\n"
+        },
+        {
+          "name": "fake-queues.js",
+          "language": "javascript",
+          "code": "// fake-queues.js — PROVIDED (loaded before answer.js).\n//   emailQueue / paymentQueue: await q.add(name, data) → { id } after 2 ms; q.hang = true ⇒ add() NEVER resolves\n//   (BullMQ 6.7.2 with Redis down: no answer after 15 s, even with enableOfflineQueue: false)\n//   createUser(body) → { id, email } after 10 ms · q.added — what was enqueued\nfunction makeQueue() {\n  const q = { added: [], hang: false,\n    add(name, data) { if (q.hang) return new Promise(() => {}); q.added.push({ name, data }); return new Promise((ok) => setTimeout(() => ok({ id: String(q.added.length) }), 2)); } };\n  return q;\n}\nconst emailQueue = makeQueue();\nconst paymentQueue = makeQueue();\nlet uid = 100;\nconst createUser = async (body) => { await new Promise((ok) => setTimeout(ok, 10)); return { id: ++uid, email: body.email }; };\n"
+        },
+        {
+          "name": "fake-http.js",
+          "language": "javascript",
+          "code": "// fake-http.js — PROVIDED by the exercise (loaded before answer.js). Express-like req / res for handlers.\n//   const req = mkReq({ ip, headers, body, params, user });\n//   const res = mkRes();   res.status(429).set('Retry-After', '12').json({ … })   → res.statusCode · res.headers · res.body\n//   const next = mkNext(); … next.calls → ['next()'] or ['next(<message>)']\nfunction mkReq(o) { o = o || {}; return { ip: o.ip || '127.0.0.1', method: o.method || 'GET', path: o.path || '/', headers: o.headers || {}, body: o.body, params: o.params || {}, user: o.user || null }; }\nfunction mkRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, sent: 0 };\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.set = (k, v) => { r.headers[String(k).toLowerCase()] = String(v); return r; };\n  r.setHeader = r.set;\n  r.json = (b) => { r.body = b; r.sent++; return r; };\n  r.send = (b) => { r.body = b; r.sent++; return r; };\n  r.end = () => { r.sent++; return r; };\n  return r;\n}\nfunction mkNext() { const n = (err) => { n.calls.push(err === undefined ? 'next()' : 'next(' + (err && err.message ? err.message : String(err)) + ')'); }; n.calls = []; return n; }\nvar sleep = typeof sleep === 'function' ? sleep : (ms) => new Promise((ok) => setTimeout(ok, ms));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Promise.race turns “hangs forever” into “fails in a second”, and finally clears the timer either way. What a failure MEANS is a product decision per queue — the same fail-open versus fail-closed choice the rate limiter made in 12.4: losing a welcome email is acceptable, silently losing a payment is not.</p>",
+      "solutionExplanationHtmlVi": "<p>Promise.race biến \"treo mãi\" thành \"hỏng sau một giây\", và finally xoá hẹn giờ ở cả hai kết cục. Một lần hỏng có NGHĨA là gì là quyết định sản phẩm cho từng hàng đợi — đúng lựa chọn fail-open hay fail-closed mà bộ giới hạn tần suất đã làm ở 12.4: mất email chào mừng thì chấp nhận được, lặng lẽ mất một khoản thanh toán thì không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "fake-queues.js",
+          "fake-http.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Redis up: 201 and the job is queued",
+              "vi": "Redis sống: 201 và job được xếp hàng"
+            },
+            "goi": "[await call(signup, { email: 'an@x.vn' }).then((r) => [r.status, r.body, r.thrown]), emailQueue.added]",
+            "chuanBi": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });",
+            "mongDoi": [
+              [
+                201,
+                {
+                  "id": 101,
+                  "email": "an@x.vn"
+                },
+                null
+              ],
+              [
+                {
+                  "name": "welcome",
+                  "data": {
+                    "userId": 101
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Redis down: signup still 201 within ~1 s, with a warning",
+              "vi": "Redis sập: đăng ký vẫn 201 trong ~1 s, kèm cảnh báo"
+            },
+            "goi": "await (async () => { emailQueue.hang = true; const r = await call(signup, { email: 'b@x.vn' }); return [r.status, r.body, r.ms <= 1100, __log]; })()",
+            "chuanBi": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });",
+            "mongDoi": [
+              201,
+              {
+                "id": 101,
+                "email": "b@x.vn"
+              },
+              true,
+              [
+                "welcome email not queued: QUEUE_TIMEOUT"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Redis down: checkout answers 503, never 202",
+              "vi": "Redis sập: thanh toán trả 503, không bao giờ 202"
+            },
+            "goi": "await (async () => { paymentQueue.hang = true; const r = await call(checkout, { orderId: 'ORD-1', amount: 100000 }); return [r.status, r.body, r.ms <= 1100]; })()",
+            "chuanBi": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });",
+            "mongDoi": [
+              503,
+              {
+                "error": "PAYMENTS_UNAVAILABLE"
+              },
+              true
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await call(checkout, { orderId: 'ORD-2', amount: 5 }).then((r) => [r.status, r.body]), paymentQueue.added]",
+            "chuanBi": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });",
+            "mongDoi": [
+              [
+                202,
+                {
+                  "jobId": "1"
+                }
+              ],
+              [
+                {
+                  "name": "charge",
+                  "data": {
+                    "orderId": "ORD-2",
+                    "amount": 5
+                  }
+                }
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { const slow = { add: () => new Promise((ok) => setTimeout(() => ok({ id: 'late' }), 300)) }; const a = await addWithTimeout(slow, 'x', {}, 1000); let b; try { await addWithTimeout(slow, 'x', {}, 100); } catch (e) { b = e.message; } return [a, b]; })()",
+            "chuanBi": "const call = async (h, body) => { const req = mkReq({ method: 'POST', body }); const res = mkRes(); const t0 = Date.now(); let thrown = null; try { await h(req, res); } catch (e) { thrown = e.message; } return { status: res.statusCode, body: res.body, ms: Date.now() - t0, thrown }; };\nconst signup = makeSignup({ createUser, emailQueue });\nconst checkout = makeCheckout({ paymentQueue });",
+            "mongDoi": [
+              {
+                "id": "late"
+              },
+              "QUEUE_TIMEOUT"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await queue.add() with no timeout: Redis restarts and every signup request hangs until the client gives up.|||await queue.add() không giới hạn giờ: Redis khởi động lại là mọi request đăng ký treo tới khi client bỏ cuộc."
+        },
+        {
+          "loi": "Letting the enqueue error reach the error handler: a working signup becomes a 500 because an email could not be queued.|||Để lỗi xếp hàng chảy tới bộ xử lý lỗi: một lượt đăng ký thành công biến thành 500 chỉ vì một email không xếp được."
+        },
+        {
+          "loi": "Failing open on payments: the client is told “accepted” for a charge that was never recorded.|||Fail-open cho thanh toán: client được báo \"đã nhận\" cho một khoản chưa từng được ghi lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fail-open",
+          "vi": "hỏng thì cho qua",
+          "giaiThich": "phụ thuộc phụ trợ hỏng thì vẫn phục vụ"
+        },
+        {
+          "en": "fail-closed",
+          "vi": "hỏng thì chặn",
+          "giaiThich": "không chắc chắn thì từ chối, không giả vờ thành công"
+        },
+        {
+          "en": "Promise.race",
+          "vi": "cuộc đua promise",
+          "giaiThich": "lấy kết quả của promise về đích trước"
+        }
+      ]
+    }
+  ]
+}

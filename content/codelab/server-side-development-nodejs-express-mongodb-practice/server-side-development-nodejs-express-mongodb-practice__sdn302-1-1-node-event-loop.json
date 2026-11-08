@@ -1,0 +1,916 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-1-1-node-event-loop",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-1-1-node-event-loop"
+  },
+  "exercises": [
+    {
+      "title": "One thread, non-blocking I/O, and two module systems",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "event loop",
+        "modules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Questions on the ideas of the lesson. The snippets were run with Node 22.23.3 on 08/11/2026.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về các ý của bài. Các đoạn mã đã chạy bằng Node 22.23.3 ngày 08/11/2026.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate \"waiting\" (I/O) from \"working\" (CPU).|||Tách \"chờ\" (I/O) khỏi \"làm\" (CPU).",
+        "Callbacks only run when the stack is empty.|||Callback chỉ chạy khi stack trống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One thread, non-blocking I/O, and two module systems\n\nAnswer in the answer panel (no code needed).\n\n1. How can one Node.js thread serve thousands of connections at the same time?Vì sao một luồng Node.js phục vụ được hàng nghìn kết nối cùng lúc?\n2. const data = fs.readFileSync('big.txt') inside a request handler. What is the real problem?const data = fs.readFileSync('big.txt') trong một request handler. Vấn đề thật là gì?\n3. A script starts a setTimeout(…, 0), then runs a 50 ms while loop. When does the timer callback run? (measured)Một script đặt setTimeout(…, 0), rồi chạy vòng while 50 ms. Khi nào callback hẹn giờ chạy? (đã đo)\n4. package.json has \"type\": \"module\", and app.js says const express = require('express'). What happens? (measured)package.json có \"type\": \"module\", và app.js viết const express = require('express'). Chuyện gì xảy ra? (đã đo)\n5. Which of these make the event loop stall for EVERY client? (choose all)Cái nào làm event loop đứng hình với MỌI client? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One thread, non-blocking I/O, and two module systems — answer key\n\n1. How can one Node.js thread serve thousands of connections at the same time?Vì sao một luồng Node.js phục vụ được hàng nghìn kết nối cùng lúc?\n   Answer: a) While waiting for I/O it registers a callback and moves on; the event loop runs callbacks when results are ready\n   Waiting (disk, network, database) is handed to the system; the thread is free for other requests in the meantime. Only your JavaScript runs on the single thread.VI: Việc chờ (đĩa, mạng, CSDL) được giao cho hệ thống; trong lúc đó luồng rảnh để lo request khác. Chỉ JavaScript của bạn chạy trên luồng duy nhất.\n\n2. const data = fs.readFileSync('big.txt') inside a request handler. What is the real problem?const data = fs.readFileSync('big.txt') trong một request handler. Vấn đề thật là gì?\n   Answer: a) The only thread is frozen during the read, so every other request waits too\n   Sync calls are fine at startup (reading a config once) but block everyone when used per request.VI: Gọi đồng bộ thì ổn lúc khởi động (đọc cấu hình một lần) nhưng chặn tất cả khi dùng cho mỗi request.\n\n3. A script starts a setTimeout(…, 0), then runs a 50 ms while loop. When does the timer callback run? (measured)Một script đặt setTimeout(…, 0), rồi chạy vòng while 50 ms. Khi nào callback hẹn giờ chạy? (đã đo)\n   Answer: a) Only after the loop and the rest of the script finish — at least 50 ms late\n   The event loop can only run callbacks when the call stack is empty. This is why CPU-heavy work must leave the main thread (worker thread, separate service).VI: Event loop chỉ chạy callback khi call stack trống. Vì vậy việc nặng CPU phải rời luồng chính (worker thread, dịch vụ riêng).\n\n4. package.json has \"type\": \"module\", and app.js says const express = require('express'). What happens? (measured)package.json có \"type\": \"module\", và app.js viết const express = require('express'). Chuyện gì xảy ra? (đã đo)\n   Answer: c) ReferenceError: require is not defined — in an ES module use import express from 'express'\n   CommonJS (require / module.exports) and ES Modules (import / export) are chosen per file. With \"type\": \"module\", every .js file is ESM and require does not exist there.VI: CommonJS (require / module.exports) và ES Modules (import / export) được chọn theo từng tệp. Có \"type\": \"module\" thì mọi tệp .js là ESM và ở đó không có require.\n\n5. Which of these make the event loop stall for EVERY client? (choose all)Cái nào làm event loop đứng hình với MỌI client? (chọn hết)\n   Answer: b) Resizing a 20 MB image with a pure-JavaScript loop inside a route + d) A while loop that hashes 10 million strings + e) fs.readFileSync of a big file in every request\n   Awaiting I/O only pauses THAT request; the thread keeps serving others. Synchronous CPU work and sync I/O pause the thread itself.VI: Await I/O chỉ tạm dừng CHÍNH request đó; luồng vẫn phục vụ request khác. Việc CPU đồng bộ và I/O đồng bộ thì tạm dừng chính luồng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> While waiting for I/O it registers a callback and moves on; the event loop runs callbacks when results are ready</p><p>Waiting (disk, network, database) is handed to the system; the thread is free for other requests in the meantime. Only your JavaScript runs on the single thread.</p><p><i>VI: Việc chờ (đĩa, mạng, CSDL) được giao cho hệ thống; trong lúc đó luồng rảnh để lo request khác. Chỉ JavaScript của bạn chạy trên luồng duy nhất.</i></p></li><li><p><b>a)</b> The only thread is frozen during the read, so every other request waits too</p><p>Sync calls are fine at startup (reading a config once) but block everyone when used per request.</p><p><i>VI: Gọi đồng bộ thì ổn lúc khởi động (đọc cấu hình một lần) nhưng chặn tất cả khi dùng cho mỗi request.</i></p></li><li><p><b>a)</b> Only after the loop and the rest of the script finish — at least 50 ms late</p><p>The event loop can only run callbacks when the call stack is empty. This is why CPU-heavy work must leave the main thread (worker thread, separate service).</p><p><i>VI: Event loop chỉ chạy callback khi call stack trống. Vì vậy việc nặng CPU phải rời luồng chính (worker thread, dịch vụ riêng).</i></p></li><li><p><b>c)</b> <code>ReferenceError: require is not defined</code> — in an ES module use <code>import express from 'express'</code></p><p>CommonJS (<code>require</code> / <code>module.exports</code>) and ES Modules (<code>import</code> / <code>export</code>) are chosen per file. With <code>\"type\": \"module\"</code>, every .js file is ESM and <code>require</code> does not exist there.</p><p><i>VI: CommonJS (<code>require</code> / <code>module.exports</code>) và ES Modules (<code>import</code> / <code>export</code>) được chọn theo từng tệp. Có <code>\"type\": \"module\"</code> thì mọi tệp .js là ESM và ở đó không có <code>require</code>.</i></p></li><li><p><b>b)</b> Resizing a 20 MB image with a pure-JavaScript loop inside a route + <b>d)</b> A <code>while</code> loop that hashes 10 million strings + <b>e)</b> <code>fs.readFileSync</code> of a big file in every request</p><p>Awaiting I/O only pauses THAT request; the thread keeps serving others. Synchronous CPU work and sync I/O pause the thread itself.</p><p><i>VI: Await I/O chỉ tạm dừng CHÍNH request đó; luồng vẫn phục vụ request khác. Việc CPU đồng bộ và I/O đồng bộ thì tạm dừng chính luồng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "n1",
+            "de": "<p>How can one Node.js thread serve thousands of connections at the same time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một luồng Node.js phục vụ được hàng nghìn kết nối cùng lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "While waiting for I/O it registers a callback and moves on; the event loop runs callbacks when results are ready"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It starts one operating-system thread per connection behind the scenes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "JavaScript on the server runs on every CPU core automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It answers requests one after another so quickly that they never overlap"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Waiting (disk, network, database) is handed to the system; the thread is free for other requests in the meantime. Only your JavaScript runs on the single thread.</p><p><i>VI: Việc chờ (đĩa, mạng, CSDL) được giao cho hệ thống; trong lúc đó luồng rảnh để lo request khác. Chỉ JavaScript của bạn chạy trên luồng duy nhất.</i></p>"
+          },
+          {
+            "ma": "n2",
+            "de": "<p><code>const data = fs.readFileSync('big.txt')</code> inside a request handler. What is the real problem?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>const data = fs.readFileSync('big.txt')</code> trong một request handler. Vấn đề thật là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The only thread is frozen during the read, so every other request waits too"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It reads the file twice, once for each CPU core"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot read files larger than 64 KB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "readFileSync returns a Promise that must be awaited"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Sync calls are fine at startup (reading a config once) but block everyone when used per request.</p><p><i>VI: Gọi đồng bộ thì ổn lúc khởi động (đọc cấu hình một lần) nhưng chặn tất cả khi dùng cho mỗi request.</i></p>"
+          },
+          {
+            "ma": "n3",
+            "de": "<p>A script starts a <code>setTimeout(…, 0)</code>, then runs a 50 ms <code>while</code> loop. When does the timer callback run? (measured)</p><p style=\"opacity:.75;font-size:.92em\"><i>Một script đặt <code>setTimeout(…, 0)</code>, rồi chạy vòng <code>while</code> 50 ms. Khi nào callback hẹn giờ chạy? (đã đo)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only after the loop and the rest of the script finish — at least 50 ms late"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Never: a busy loop cancels pending timers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "At 0 ms, interrupting the loop"
+              },
+              {
+                "ma": "d",
+                "noiDung": "At 1 ms, because the minimum timer delay is 1 ms"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The event loop can only run callbacks when the call stack is empty. This is why CPU-heavy work must leave the main thread (worker thread, separate service).</p><p><i>VI: Event loop chỉ chạy callback khi call stack trống. Vì vậy việc nặng CPU phải rời luồng chính (worker thread, dịch vụ riêng).</i></p>"
+          },
+          {
+            "ma": "n4",
+            "de": "<p><code>package.json</code> has <code>\"type\": \"module\"</code>, and <code>app.js</code> says <code>const express = require('express')</code>. What happens? (measured)</p><p style=\"opacity:.75;font-size:.92em\"><i><code>package.json</code> có <code>\"type\": \"module\"</code>, và <code>app.js</code> viết <code>const express = require('express')</code>. Chuyện gì xảy ra? (đã đo)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It works: Node converts require to import automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express is loaded twice, once per module system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>ReferenceError: require is not defined</code> — in an ES module use <code>import express from 'express'</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>SyntaxError: Unexpected token 'const'</code>"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>CommonJS (<code>require</code> / <code>module.exports</code>) and ES Modules (<code>import</code> / <code>export</code>) are chosen per file. With <code>\"type\": \"module\"</code>, every .js file is ESM and <code>require</code> does not exist there.</p><p><i>VI: CommonJS (<code>require</code> / <code>module.exports</code>) và ES Modules (<code>import</code> / <code>export</code>) được chọn theo từng tệp. Có <code>\"type\": \"module\"</code> thì mọi tệp .js là ESM và ở đó không có <code>require</code>.</i></p>"
+          },
+          {
+            "ma": "n5",
+            "de": "<p>Which of these make the event loop stall for EVERY client? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào làm event loop đứng hình với MỌI client? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>await Product.find()</code> on a slow database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Resizing a 20 MB image with a pure-JavaScript loop inside a route"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>fs.readFile(path, callback)</code> on a big file"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A <code>while</code> loop that hashes 10 million strings"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>fs.readFileSync</code> of a big file in every request"
+              }
+            ],
+            "dapAn": [
+              [
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Awaiting I/O only pauses THAT request; the thread keeps serving others. Synchronous CPU work and sync I/O pause the thread itself.</p><p><i>VI: Await I/O chỉ tạm dừng CHÍNH request đó; luồng vẫn phục vụ request khác. Việc CPU đồng bộ và I/O đồng bộ thì tạm dừng chính luồng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking await blocks the whole server.|||Tưởng await chặn cả server."
+        },
+        {
+          "loi": "Mixing require and import in one ESM file.|||Trộn require và import trong một tệp ESM."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "vòng lặp sự kiện"
+        },
+        {
+          "en": "non-blocking I/O",
+          "vi": "I/O không chặn"
+        },
+        {
+          "en": "CommonJS / ES Modules",
+          "vi": "hai hệ module của Node"
+        }
+      ]
+    },
+    {
+      "title": "Predict the output: sync code, promises and timers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "event loop order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Each snippet is a CommonJS file run with <code>node file.js</code> (Node 22.23.3). Put the printed lines in order — work it out before running anything.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đoạn là một tệp CommonJS chạy bằng <code>node file.js</code> (Node 22.23.3). Sắp các dòng in ra theo thứ tự — tự suy ra trước khi chạy thử.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three levels: synchronous code → microtasks → timers.|||Ba tầng: mã đồng bộ → microtask → timer.",
+        "await = \"the rest of this function is a microtask\".|||await = \"phần còn lại của hàm là một microtask\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the output: sync code, promises and timers\n\nAnswer in the answer panel (no code needed).\n\n1. console.log('A'); setTimeout(() => console.log('B'), 0); Promise.resolve().then(() => console.log('C')); console.log('D');The snippet of the lesson (★ note).Đoạn của bài (mục ★).\n2. async function f() { console.log('1'); await null; console.log('2'); } console.log('0'); f(); console.log('3');await splits the function in two.await chia hàm làm hai.\n3. setTimeout(() => console.log('timeout'), 0); Promise.resolve().then(() => console.log('promise')); process.nextTick(() => console.log('nextTick')); console.log('sync');Now with process.nextTick (a CommonJS file).Thêm process.nextTick (tệp CommonJS).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the output: sync code, promises and timers — answer key\n\n1. console.log('A'); setTimeout(() => console.log('B'), 0); Promise.resolve().then(() => console.log('C')); console.log('D');The snippet of the lesson (★ note).Đoạn của bài (mục ★).\n   Answer: m1) A  →  m2) D  →  m4) C  →  m3) B\n   Synchronous code first (A, D). Then the microtask queue is drained completely (C) before the event loop moves to timers (B) — that is the ★ note of the lesson.VI: Mã đồng bộ trước (A, D). Rồi hàng microtask được xả hết (C) trước khi event loop sang timer (B) — đúng ghi chú ★ của bài.\n\n2. async function f() { console.log('1'); await null; console.log('2'); } console.log('0'); f(); console.log('3');await splits the function in two.await chia hàm làm hai.\n   Answer: m3) 0  →  m4) 1  →  m2) 3  →  m1) 2\n   An async function runs synchronously until its first await; the rest continues as a microtask after the current script. Calling f() without awaiting it does not wait for \"2\".VI: Hàm async chạy đồng bộ tới await đầu tiên; phần còn lại tiếp tục như một microtask sau script hiện tại. Gọi f() mà không await thì không chờ \"2\".\n\n3. setTimeout(() => console.log('timeout'), 0); Promise.resolve().then(() => console.log('promise')); process.nextTick(() => console.log('nextTick')); console.log('sync');Now with process.nextTick (a CommonJS file).Thêm process.nextTick (tệp CommonJS).\n   Answer: m3) sync  →  m2) nextTick  →  m4) promise  →  m1) timeout\n   In a CommonJS script the nextTick queue runs before the promise microtasks, and both before any timer. (Run the same lines as an .mjs ES module and \"promise\" prints before \"nextTick\" — measured; do not build logic on that difference.)VI: Trong script CommonJS, hàng nextTick chạy trước microtask của promise, và cả hai trước mọi timer. (Chạy cùng các dòng đó dưới dạng ES module .mjs thì \"promise\" in trước \"nextTick\" — đã đo; đừng xây logic dựa trên khác biệt đó.)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Synchronous code first (A, D). Then the microtask queue is drained completely (C) before the event loop moves to timers (B) — that is the ★ note of the lesson.</p><p><i>VI: Mã đồng bộ trước (A, D). Rồi hàng microtask được xả hết (C) trước khi event loop sang timer (B) — đúng ghi chú ★ của bài.</i></p><p>An async function runs synchronously until its first <code>await</code>; the rest continues as a microtask after the current script. Calling <code>f()</code> without awaiting it does not wait for \"2\".</p><p><i>VI: Hàm async chạy đồng bộ tới <code>await</code> đầu tiên; phần còn lại tiếp tục như một microtask sau script hiện tại. Gọi <code>f()</code> mà không await thì không chờ \"2\".</i></p><p>In a CommonJS script the nextTick queue runs before the promise microtasks, and both before any timer. (Run the same lines as an .mjs ES module and \"promise\" prints before \"nextTick\" — measured; do not build logic on that difference.)</p><p><i>VI: Trong script CommonJS, hàng nextTick chạy trước microtask của promise, và cả hai trước mọi timer. (Chạy cùng các dòng đó dưới dạng ES module .mjs thì \"promise\" in trước \"nextTick\" — đã đo; đừng xây logic dựa trên khác biệt đó.)</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "p1",
+            "de": "<p><pre>console.log('A');\nsetTimeout(() => console.log('B'), 0);\nPromise.resolve().then(() => console.log('C'));\nconsole.log('D');</pre>The snippet of the lesson (★ note).</p><p style=\"opacity:.75;font-size:.92em\"><i>Đoạn của bài (mục ★).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "A"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "D"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "B"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "C"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Synchronous code first (A, D). Then the microtask queue is drained completely (C) before the event loop moves to timers (B) — that is the ★ note of the lesson.</p><p><i>VI: Mã đồng bộ trước (A, D). Rồi hàng microtask được xả hết (C) trước khi event loop sang timer (B) — đúng ghi chú ★ của bài.</i></p>"
+          },
+          {
+            "ma": "p2",
+            "de": "<p><pre>async function f() {\n  console.log('1');\n  await null;\n  console.log('2');\n}\nconsole.log('0');\nf();\nconsole.log('3');</pre>await splits the function in two.</p><p style=\"opacity:.75;font-size:.92em\"><i>await chia hàm làm hai.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "2"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "3"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "0"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m4",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>An async function runs synchronously until its first <code>await</code>; the rest continues as a microtask after the current script. Calling <code>f()</code> without awaiting it does not wait for \"2\".</p><p><i>VI: Hàm async chạy đồng bộ tới <code>await</code> đầu tiên; phần còn lại tiếp tục như một microtask sau script hiện tại. Gọi <code>f()</code> mà không await thì không chờ \"2\".</i></p>"
+          },
+          {
+            "ma": "p3",
+            "de": "<p><pre>setTimeout(() => console.log('timeout'), 0);\nPromise.resolve().then(() => console.log('promise'));\nprocess.nextTick(() => console.log('nextTick'));\nconsole.log('sync');</pre>Now with process.nextTick (a CommonJS file).</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm process.nextTick (tệp CommonJS).</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "timeout"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "nextTick"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "sync"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "promise"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m4",
+              "m1"
+            ],
+            "giaiThich": "<p>In a CommonJS script the nextTick queue runs before the promise microtasks, and both before any timer. (Run the same lines as an .mjs ES module and \"promise\" prints before \"nextTick\" — measured; do not build logic on that difference.)</p><p><i>VI: Trong script CommonJS, hàng nextTick chạy trước microtask của promise, và cả hai trước mọi timer. (Chạy cùng các dòng đó dưới dạng ES module .mjs thì \"promise\" in trước \"nextTick\" — đã đo; đừng xây logic dựa trên khác biệt đó.)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking setTimeout(…, 0) runs immediately.|||Tưởng setTimeout(…, 0) chạy ngay."
+        },
+        {
+          "loi": "Thinking an un-awaited async call finishes before the next line.|||Tưởng lời gọi async không await chạy xong trước dòng sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "microtask",
+          "vi": "vi tác vụ",
+          "giaiThich": "callback của Promise/await"
+        },
+        {
+          "en": "macrotask",
+          "vi": "tác vụ",
+          "giaiThich": "timer, I/O…"
+        }
+      ]
+    },
+    {
+      "title": "From readFileSync to a non-blocking fs.readFile",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "non-blocking",
+        "callbacks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>The starter is the \"blocking\" example of the lesson: it reads <code>big.txt</code> with <code>fs.readFileSync</code>, so <code>doNext</code> waits for the disk. Rewrite <code>main()</code> the Node way:</p>\n<ol><li>print <code>start</code>;</li>\n<li>start reading <code>big.txt</code> with <code>fs.readFile(path, 'utf8', callback)</code>;</li>\n<li>print <code>doNext</code> <b>immediately</b>, without waiting;</li>\n<li>in the callback print <code>loaded N chars</code> (N = length of the text), or <code>error: CODE</code> (e.g. <code>error: ENOENT</code>) if reading failed.</li></ol>\n<p>The disk here is simulated: <code>big.txt</code> takes 50 ms to read.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>No <code>readFileSync</code> anywhere.</li>\n  <li>Node callbacks are <b>error-first</b>: <code>(err, data) => { if (err) … }</code>.</li>\n  <li>Pass <code>'utf8'</code> so <code>data</code> is a string, not a Buffer.</li>\n</ul>",
+      "problemHtmlVi": "<p>Code khởi đầu là ví dụ \"chặn\" của bài: đọc <code>big.txt</code> bằng <code>fs.readFileSync</code>, nên <code>doNext</code> phải chờ đĩa. Viết lại <code>main()</code> theo kiểu Node:</p>\n<ol><li>in <code>start</code>;</li>\n<li>bắt đầu đọc <code>big.txt</code> bằng <code>fs.readFile(path, 'utf8', callback)</code>;</li>\n<li>in <code>doNext</code> <b>ngay</b>, không chờ;</li>\n<li>trong callback in <code>loaded N chars</code> (N = độ dài chữ), hoặc <code>error: CODE</code> (vd <code>error: ENOENT</code>) nếu đọc hỏng.</li></ol>\n<p>Ổ đĩa ở đây là giả lập: <code>big.txt</code> mất 50 ms để đọc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không có <code>readFileSync</code> ở đâu cả.</li>\n  <li>Callback của Node là <b>lỗi-trước</b>: <code>(err, data) => { if (err) … }</code>.</li>\n  <li>Truyền <code>'utf8'</code> để <code>data</code> là chuỗi, không phải Buffer.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "main() with big.txt = \"hello world\"",
+          "output": "start\ndoNext\nloaded 11 chars",
+          "explanation": "doNext is printed while the disk is still reading.|||doNext được in trong lúc đĩa vẫn đang đọc."
+        },
+        {
+          "input": "main() without big.txt",
+          "output": "start\ndoNext\nerror: ENOENT",
+          "explanation": "The error arrives in the callback, not as a throw.|||Lỗi đến trong callback, không phải bị ném ra."
+        }
+      ],
+      "hintsJson": [
+        "Move the code that needs the file INTO the callback; everything after the <code>fs.readFile(…)</code> call runs right away.|||Đưa phần mã cần nội dung tệp VÀO callback; mọi thứ sau lời gọi <code>fs.readFile(…)</code> chạy ngay.",
+        "<code>fs.readFile('big.txt', 'utf8', (err, data) => { if (err) return console.log('error: ' + err.code); console.log(`loaded ${data.length} chars`); });</code>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\nfunction main() {\n  console.log('start');\n  const data = fs.readFileSync('big.txt', 'utf8');   // the thread is frozen here\n  console.log(`loaded ${data.length} chars`);\n  console.log('doNext');\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\nfunction main() {\n  console.log('start');\n  // non-blocking: hand the read to the system and continue immediately\n  fs.readFile('big.txt', 'utf8', (err, data) => {   // error-first callback, runs ~50 ms later\n    if (err) {\n      console.log('error: ' + err.code);              // e.g. ENOENT — a value, not a throw\n      return;\n    }\n    console.log(`loaded ${data.length} chars`);\n  });\n  console.log('doNext');                              // runs before the file arrives\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>fs.readFile</code> hands the read to the system and returns at once, so <code>doNext</code> prints at time 0; 50 ms later the event loop calls the callback with <code>(err, data)</code>. The error-first convention means a failure is a value you check, not an exception you catch — <code>try/catch</code> around <code>fs.readFile</code> would never see it.</p>",
+      "solutionExplanationHtmlVi": "<p><code>fs.readFile</code> giao việc đọc cho hệ thống và trả về ngay, nên <code>doNext</code> in ở thời điểm 0; 50 ms sau event loop gọi callback với <code>(err, data)</code>. Quy ước lỗi-trước nghĩa là lỗi là một giá trị bạn kiểm tra, không phải ngoại lệ bạn bắt — <code>try/catch</code> quanh <code>fs.readFile</code> sẽ không bao giờ thấy nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "start, doNext, then loaded 11 chars",
+              "vi": "start, doNext, rồi loaded 11 chars"
+            },
+            "goi": "(main(), await __sleep(100), __log)",
+            "chuanBi": "__disk.put('big.txt', 'hello world', 50);",
+            "mongDoi": [
+              "start",
+              "doNext",
+              "loaded 11 chars"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Missing file → error: ENOENT in the callback",
+              "vi": "Thiếu tệp → error: ENOENT trong callback"
+            },
+            "goi": "(main(), await __sleep(100), __log)",
+            "chuanBi": "__disk.put('big.txt', 'hello world', 50);\n__disk.del('big.txt');",
+            "mongDoi": [
+              "start",
+              "doNext",
+              "error: ENOENT"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "(__disk.put('big.txt', 'x'.repeat(2048), 50), main(), await __sleep(100), __log)",
+            "chuanBi": "__disk.put('big.txt', 'hello world', 50);",
+            "mongDoi": [
+              "start",
+              "doNext",
+              "loaded 2048 chars"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "doNext is printed synchronously, before any waiting",
+              "vi": "doNext được in đồng bộ, trước mọi chờ đợi"
+            },
+            "goi": "(main(), __log.slice())",
+            "chuanBi": "__disk.put('big.txt', 'hello world', 50);",
+            "mongDoi": [
+              "start",
+              "doNext"
+            ],
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "No readFileSync",
+              "vi": "Không dùng readFileSync"
+            },
+            "khop": "readFileSync",
+            "tep": "answer.js",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Printing <code>doNext</code> inside the callback — it is non-blocking code that behaves like blocking code.|||In <code>doNext</code> trong callback — mã không chặn mà hành xử y như mã chặn."
+        },
+        {
+          "loi": "Reading <code>data</code> outside the callback: <code>let data; fs.readFile(…, (e, d) => { data = d; }); console.log(data.length)</code> → TypeError, data is still undefined.|||Đọc <code>data</code> bên ngoài callback: <code>let data; fs.readFile(…, (e, d) => { data = d; }); console.log(data.length)</code> → TypeError, data vẫn undefined."
+        },
+        {
+          "loi": "Ignoring <code>err</code>: a missing file then crashes on <code>data.length</code>.|||Bỏ qua <code>err</code>: tệp không có thì sập ở <code>data.length</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error-first callback",
+          "vi": "callback lỗi-trước",
+          "giaiThich": "(err, data)"
+        },
+        {
+          "en": "blocking",
+          "vi": "chặn",
+          "giaiThich": "luồng đứng chờ"
+        }
+      ]
+    },
+    {
+      "title": "Wrap a callback API in a Promise: readJson(path)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "promises",
+        "promisify"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Mongoose, fetch and Express all speak Promises, but <code>fs.readFile</code> speaks callbacks. Write <code>readJson(path)</code> that returns a <b>Promise</b>:</p>\n<ul><li>resolves with the parsed JSON of the file;</li>\n<li>rejects with the original error when the file cannot be read (so <code>err.code === 'ENOENT'</code> still works);</li>\n<li>rejects with the <code>SyntaxError</code> when the text is not valid JSON.</li></ul>\n<p>Build it with <code>new Promise((resolve, reject) => …)</code> around <code>fs.readFile</code>, or with <code>util.promisify(fs.readFile)</code>. Then <code>await readJson('config.json')</code> works anywhere.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not use <code>readFileSync</code>.</li>\n  <li><code>JSON.parse</code> can throw — make sure that becomes a rejection, not an uncaught exception inside the callback.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mongoose, fetch và Express đều nói \"Promise\", còn <code>fs.readFile</code> nói \"callback\". Viết <code>readJson(path)</code> trả về một <b>Promise</b>:</p>\n<ul><li>resolve với JSON đã parse của tệp;</li>\n<li>reject với lỗi gốc khi không đọc được tệp (để <code>err.code === 'ENOENT'</code> vẫn dùng được);</li>\n<li>reject với <code>SyntaxError</code> khi chữ không phải JSON hợp lệ.</li></ul>\n<p>Dựng bằng <code>new Promise((resolve, reject) => …)</code> quanh <code>fs.readFile</code>, hoặc bằng <code>util.promisify(fs.readFile)</code>. Rồi <code>await readJson('config.json')</code> dùng được ở mọi nơi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không dùng <code>readFileSync</code>.</li>\n  <li><code>JSON.parse</code> có thể ném lỗi — bảo đảm nó thành reject, không phải ngoại lệ không ai bắt trong callback.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await readJson('config.json')  // {\"port\":3000}",
+          "output": "{ port: 3000 }",
+          "explanation": "The parsed object.|||Đối tượng đã parse."
+        },
+        {
+          "input": "await readJson('nope.json')",
+          "output": "rejects: Error ENOENT",
+          "explanation": "err.code is \"ENOENT\".|||err.code là \"ENOENT\"."
+        }
+      ],
+      "hintsJson": [
+        "<code>return new Promise((resolve, reject) => { fs.readFile(path, 'utf8', (err, text) => { if (err) return reject(err); … }); });</code>",
+        "Inside the callback: <code>try { resolve(JSON.parse(text)); } catch (e) { reject(e); }</code>|||Trong callback: <code>try { resolve(JSON.parse(text)); } catch (e) { reject(e); }</code>",
+        "Or: <code>const readFile = util.promisify(fs.readFile); async function readJson(p) { return JSON.parse(await readFile(p, 'utf8')); }</code> — an async function turns a throw into a rejection for you.|||Hoặc: <code>const readFile = util.promisify(fs.readFile); async function readJson(p) { return JSON.parse(await readFile(p, 'utf8')); }</code> — hàm async tự biến lỗi ném thành reject."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\nfunction readJson(path) {\n  fs.readFile(path, 'utf8', (err, text) => {\n    return JSON.parse(text);\n  });\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\n// returns a Promise: resolve(parsed JSON) | reject(read error or SyntaxError)\nfunction readJson(path) {\n  return new Promise((resolve, reject) => {\n    fs.readFile(path, 'utf8', (err, text) => {      // error-first callback\n      if (err) return reject(err);                    // keep the ORIGINAL error (err.code === 'ENOENT')\n      try {\n        resolve(JSON.parse(text));\n      } catch (parseError) {\n        reject(parseError);                           // a throw here would escape into the event loop\n      }\n    });\n  });\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A Promise is a box that is filled later: <code>resolve</code> and <code>reject</code> are the two ways to fill it, and the callback of <code>fs.readFile</code> decides which. Catching the parse error and rejecting keeps every failure on one channel, so the caller writes one <code>try { await readJson(p) } catch (e) { … }</code>. This \"promisify\" step is exactly what Mongoose did for you: its queries return Promises, so you <code>await</code> them.</p>",
+      "solutionExplanationHtmlVi": "<p>Promise là một chiếc hộp được lấp sau: <code>resolve</code> và <code>reject</code> là hai cách lấp, và callback của <code>fs.readFile</code> quyết định cách nào. Bắt lỗi parse rồi reject giữ mọi thất bại trên một kênh, nên bên gọi chỉ viết một <code>try { await readJson(p) } catch (e) { … }</code>. Bước \"promisify\" này chính là thứ Mongoose đã làm sẵn cho bạn: truy vấn của nó trả Promise nên bạn <code>await</code> được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "config.json → the parsed object",
+              "vi": "config.json → đối tượng đã parse"
+            },
+            "goi": "await readJson('config.json')",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": {
+              "port": 3000,
+              "db": "mongodb://localhost/shop"
+            }
+          },
+          {
+            "moTa": {
+              "en": "readJson returns a Promise",
+              "vi": "readJson trả về một Promise"
+            },
+            "goi": "readJson('config.json') instanceof Promise",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Missing file → rejects with code ENOENT",
+              "vi": "Thiếu tệp → reject với code ENOENT"
+            },
+            "goi": "await readJson('nope.json').catch((e) => e.code)",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": "ENOENT"
+          },
+          {
+            "moTa": {
+              "en": "Broken JSON → rejects with SyntaxError",
+              "vi": "JSON hỏng → reject với SyntaxError"
+            },
+            "goi": "await readJson('broken.json')",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": {
+              "loi": "SyntaxError"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "await readJson('list.json')",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 6",
+              "vi": "Kiểm ẩn 6"
+            },
+            "goi": "await readJson('/app/missing/x.json').then(() => 'resolved', (e) => e.name + ':' + e.code)",
+            "chuanBi": "__disk.put('config.json', '{\"port\":3000,\"db\":\"mongodb://localhost/shop\"}', 20); __disk.put('broken.json', '{\"port\": 3000,', 20); __disk.put('list.json', '[1,2,3]', 20);",
+            "mongDoi": "Error:ENOENT",
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "No readFileSync",
+              "vi": "Không dùng readFileSync"
+            },
+            "khop": "readFileSync",
+            "tep": "answer.js",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling <code>JSON.parse</code> in the callback without try/catch: the SyntaxError is thrown inside the event loop, nobody can catch it, and a real server crashes.|||Gọi <code>JSON.parse</code> trong callback không có try/catch: SyntaxError bị ném trong event loop, không ai bắt được, server thật sập."
+        },
+        {
+          "loi": "Returning from the callback (<code>return JSON.parse(text)</code>) and expecting readJson to return it — the callback's return value goes nowhere.|||Return trong callback (<code>return JSON.parse(text)</code>) và mong readJson trả về nó — giá trị return của callback chẳng đi đâu cả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "promisify",
+          "vi": "chuyển callback thành Promise"
+        },
+        {
+          "en": "reject",
+          "vi": "từ chối",
+          "giaiThich": "đặt Promise vào trạng thái lỗi"
+        }
+      ]
+    },
+    {
+      "title": "Sequential vs parallel: load three files with Promise.all",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Promise.all",
+        "Promise.allSettled",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>A dashboard needs three files; each takes <b>100 ms</b> to read. The starter awaits them one by one: 300 ms. Rewrite <code>loadAll(paths)</code> so the reads run <b>at the same time</b> (≈100 ms in total) and it resolves with</p>\n<pre>{ files: [text or null, …],   // same order as paths\n  missing: ['…'] }             // paths that could not be read, in input order</pre>\n<p>A missing file must not make the whole call fail. Use <code>fs.promises.readFile(path, 'utf8')</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Start every read before awaiting any of them (<code>paths.map(…)</code>), then await all of them together.</li>\n  <li>Keep the order of <code>paths</code> in <code>files</code>, whatever order the reads finish in.</li>\n  <li>One failure ⇒ <code>null</code> at its position + its path in <code>missing</code> (look at <code>Promise.allSettled</code>).</li>\n</ul>",
+      "problemHtmlVi": "<p>Một dashboard cần ba tệp; mỗi tệp đọc mất <b>100 ms</b>. Code khởi đầu await lần lượt từng cái: 300 ms. Viết lại <code>loadAll(paths)</code> để các lần đọc chạy <b>cùng lúc</b> (≈100 ms tổng) và resolve với</p>\n<pre>{ files: [chữ hoặc null, …],   // cùng thứ tự với paths\n  missing: ['…'] }               // các đường không đọc được, theo thứ tự đầu vào</pre>\n<p>Một tệp thiếu không được làm cả lời gọi thất bại. Dùng <code>fs.promises.readFile(path, 'utf8')</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bắt đầu mọi lần đọc trước khi await cái nào (<code>paths.map(…)</code>), rồi await tất cả cùng lúc.</li>\n  <li>Giữ thứ tự của <code>paths</code> trong <code>files</code>, dù các lần đọc xong theo thứ tự nào.</li>\n  <li>Một thất bại ⇒ <code>null</code> ở vị trí của nó + đường dẫn của nó trong <code>missing</code> (xem <code>Promise.allSettled</code>).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await loadAll(['a.txt', 'b.txt', 'c.txt'])",
+          "output": "{\"files\":[\"A\",\"B\",\"C\"],\"missing\":[]}  in ≈100 ms",
+          "explanation": "All three reads overlap.|||Ba lần đọc chồng lên nhau."
+        },
+        {
+          "input": "await loadAll(['a.txt', 'nope.txt'])",
+          "output": "{\"files\":[\"A\",null],\"missing\":[\"nope.txt\"]}",
+          "explanation": "The missing file does not reject the whole call.|||Tệp thiếu không làm cả lời gọi reject."
+        }
+      ],
+      "hintsJson": [
+        "<code>const jobs = paths.map((p) => fs.promises.readFile(p, 'utf8'));</code> starts all reads now.|||<code>const jobs = paths.map((p) => fs.promises.readFile(p, 'utf8'));</code> bắt đầu mọi lần đọc ngay.",
+        "<code>Promise.all</code> rejects on the first failure; <code>Promise.allSettled</code> gives <code>[{ status: 'fulfilled', value } | { status: 'rejected', reason }]</code> in input order.|||<code>Promise.all</code> reject ở thất bại đầu tiên; <code>Promise.allSettled</code> trả <code>[{ status: 'fulfilled', value } | { status: 'rejected', reason }]</code> theo thứ tự đầu vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\nasync function loadAll(paths) {\n  const files = [];\n  for (const p of paths) {\n    files.push(await fs.promises.readFile(p, 'utf8'));   // one after another\n  }\n  return { files, missing: [] };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const fs = require('fs');\n\nasync function loadAll(paths) {\n  // 1) START every read now — they wait for the disk at the same time\n  const jobs = paths.map((p) => fs.promises.readFile(p, 'utf8'));\n  // 2) wait for all of them; allSettled never rejects and keeps the input order\n  const results = await Promise.allSettled(jobs);\n  const files = [];\n  const missing = [];\n  results.forEach((r, i) => {\n    if (r.status === 'fulfilled') files.push(r.value);\n    else { files.push(null); missing.push(paths[i]); }\n  });\n  return { files, missing };\n}\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Calling <code>readFile</code> three times in a row starts three reads that wait in parallel — the single thread is free while the disk works. Awaiting <code>Promise.allSettled(jobs)</code> waits for the slowest one (100 ms), not for the sum (300 ms), and its results come back in input order, which fills <code>files</code> and <code>missing</code> in one pass. This is the same move as <code>await Promise.all([User.find(), Post.find()])</code> in a controller that needs two independent queries.</p>",
+      "solutionExplanationHtmlVi": "<p>Gọi <code>readFile</code> ba lần liền nhau là bắt đầu ba lần đọc chờ song song — luồng duy nhất rảnh trong lúc đĩa làm. Await <code>Promise.allSettled(jobs)</code> chờ cái chậm nhất (100 ms), không phải tổng (300 ms), và kết quả về theo thứ tự đầu vào, nên một vòng là điền xong <code>files</code> và <code>missing</code>. Đây cũng là nước đi <code>await Promise.all([User.find(), Post.find()])</code> trong controller cần hai truy vấn độc lập.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three files in ≈100 ms, not 300",
+              "vi": "Ba tệp trong ≈100 ms, không phải 300"
+            },
+            "goi": "[await loadAll(['a.txt', 'b.txt', 'c.txt']), Date.now() - t0]",
+            "chuanBi": "__disk.put('a.txt', 'A', 100); __disk.put('b.txt', 'B', 100); __disk.put('c.txt', 'C', 100); __disk.put('slow.txt', 'S', 180); const t0 = Date.now();",
+            "mongDoi": [
+              {
+                "files": [
+                  "A",
+                  "B",
+                  "C"
+                ],
+                "missing": []
+              },
+              100
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A missing file → null + listed in missing",
+              "vi": "Tệp thiếu → null + có trong missing"
+            },
+            "goi": "await loadAll(['a.txt', 'nope.txt', 'c.txt'])",
+            "chuanBi": "__disk.put('a.txt', 'A', 100); __disk.put('b.txt', 'B', 100); __disk.put('c.txt', 'C', 100); __disk.put('slow.txt', 'S', 180); const t0 = Date.now();",
+            "mongDoi": {
+              "files": [
+                "A",
+                null,
+                "C"
+              ],
+              "missing": [
+                "nope.txt"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Order follows paths even if the first file is the slowest",
+              "vi": "Thứ tự theo paths dù tệp đầu chậm nhất"
+            },
+            "goi": "[await loadAll(['slow.txt', 'a.txt']), Date.now() - t0]",
+            "chuanBi": "__disk.put('a.txt', 'A', 100); __disk.put('b.txt', 'B', 100); __disk.put('c.txt', 'C', 100); __disk.put('slow.txt', 'S', 180); const t0 = Date.now();",
+            "mongDoi": [
+              {
+                "files": [
+                  "S",
+                  "A"
+                ],
+                "missing": []
+              },
+              180
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 4",
+              "vi": "Kiểm ẩn 4"
+            },
+            "goi": "[await loadAll([]), Date.now() - t0]",
+            "chuanBi": "__disk.put('a.txt', 'A', 100); __disk.put('b.txt', 'B', 100); __disk.put('c.txt', 'C', 100); __disk.put('slow.txt', 'S', 180); const t0 = Date.now();",
+            "mongDoi": [
+              {
+                "files": [],
+                "missing": []
+              },
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 5",
+              "vi": "Kiểm ẩn 5"
+            },
+            "goi": "await loadAll(['x.txt', 'y.txt'])",
+            "chuanBi": "__disk.put('a.txt', 'A', 100); __disk.put('b.txt', 'B', 100); __disk.put('c.txt', 'C', 100); __disk.put('slow.txt', 'S', 180); const t0 = Date.now();",
+            "mongDoi": {
+              "files": [
+                null,
+                null
+              ],
+              "missing": [
+                "x.txt",
+                "y.txt"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>for (const p of paths) out.push(await read(p))</code> — correct result, three times slower.|||<code>for (const p of paths) out.push(await read(p))</code> — kết quả đúng, chậm gấp ba."
+        },
+        {
+          "loi": "<code>paths.forEach(async (p) => out.push(await read(p)))</code> — forEach does not wait, so <code>out</code> is returned empty.|||<code>paths.forEach(async (p) => out.push(await read(p)))</code> — forEach không chờ, nên <code>out</code> trả về rỗng."
+        },
+        {
+          "loi": "<code>Promise.all</code> without handling failures: one missing file loses the two that were read.|||<code>Promise.all</code> không xử lý thất bại: một tệp thiếu làm mất cả hai tệp đã đọc được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "concurrent",
+          "vi": "đồng thời",
+          "giaiThich": "nhiều việc chờ cùng lúc"
+        },
+        {
+          "en": "settled",
+          "vi": "đã xong",
+          "giaiThich": "fulfilled hoặc rejected"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1005 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-10-4-phuc-vu-media-cache",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-10-4-phuc-vu-media-cache"
+  },
+  "exercises": [
+    {
+      "title": "The read path: formats, cache headers and the CDN",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "caching",
+        "CDN",
+        "media"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>From the lesson: sharp on two 4032×3024 sources, the real headers of media.cuongthai.com, the HEAD-vs-GET trap at Cloudflare, 304/206/404, and the cost of proxying media through the API.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ bài: sharp trên hai ảnh nguồn 4032×3024, header thật của media.cuongthai.com, bẫy HEAD và GET ở Cloudflare, 304/206/404, và cái giá của việc proxy media qua API.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Re-read the three \"honest readings\" after measurement 1.|||Đọc lại ba \"cách đọc trung thực\" sau phép đo 1.",
+        "The HEAD/GET pitfall box explains question 3.|||Khung bẫy HEAD/GET giải thích câu 3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The read path: formats, cache headers and the CDN\n\nAnswer in the answer panel (no code needed).\n\n1. What saved the most bytes on the smooth 298.6 KB photo?Điều gì tiết kiệm nhiều byte nhất trên ảnh mượt 298,6 KB?\n2. Why is cache-control: public, max-age=31536000, immutable safe on this site’s media?Vì sao cache-control: public, max-age=31536000, immutable an toàn với media của site này?\n3. curl -I on the cover image shows cf-cache-status: DYNAMIC three times. What does that prove?curl -I lên ảnh bìa cho cf-cache-status: DYNAMIC ba lần. Điều đó chứng minh gì?\n4. A private invoice must be checked on every read but you want the bytes off your server. Best option from the lesson?Một hoá đơn riêng tư phải kiểm quyền mỗi lần đọc nhưng bạn muốn byte không đi qua máy chủ. Phương án tốt nhất trong bài?\n5. Which are real read-path mistakes from the lesson? (choose all)Cái nào là lỗi thật ở đường đọc trong bài? (chọn mọi câu đúng)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The read path: formats, cache headers and the CDN — answer key\n\n1. What saved the most bytes on the smooth 298.6 KB photo?Điều gì tiết kiệm nhiều byte nhất trên ảnh mượt 298,6 KB?\n   Answer: a) Resizing: 4032 px → 1200 px removed about 92% before the format mattered\n   Resizing dominates everything. WebP beat JPEG 2.25× on smooth content but lost slightly on noisy content; AVIF is smallest but 4–12× slower to encode.VI: Thu nhỏ quan trọng hơn mọi thứ. WebP thắng JPEG 2,25× trên ảnh mượt nhưng thua nhẹ trên ảnh nhiễu; AVIF nhỏ nhất nhưng mã hoá chậm hơn 4–12×.\n\n2. Why is cache-control: public, max-age=31536000, immutable safe on this site’s media?Vì sao cache-control: public, max-age=31536000, immutable an toàn với media của site này?\n   Answer: a) Keys contain a timestamp and random bytes, so a changed image is a different key, never a changed object\n   \"Content-addressed keys and immutable are the same decision made twice.\" On a mutable key (avatars/u7.jpg) users would see the old avatar for a year.VI: \"Khoá theo nội dung và immutable là cùng một quyết định đưa ra hai lần.\" Với khoá đổi được (avatars/u7.jpg) người dùng thấy ảnh cũ suốt một năm.\n\n3. curl -I on the cover image shows cf-cache-status: DYNAMIC three times. What does that prove?curl -I lên ảnh bìa cho cf-cache-status: DYNAMIC ba lần. Điều đó chứng minh gì?\n   Answer: c) Nothing: -I sends HEAD, which Cloudflare answers with DYNAMIC; a GET showed HIT with age 27107\n   Verify a CDN with curl -s -o /dev/null -D - (a GET) and read age, which a cold cache cannot fake.VI: Kiểm CDN bằng curl -s -o /dev/null -D - (một GET) và đọc age, thứ cache lạnh không giả được.\n\n4. A private invoice must be checked on every read but you want the bytes off your server. Best option from the lesson?Một hoá đơn riêng tư phải kiểm quyền mỗi lần đọc nhưng bạn muốn byte không đi qua máy chủ. Phương án tốt nhất trong bài?\n   Answer: b) The API checks permission and answers 302 to a presigned URL valid for a few minutes\n   The 302 keeps the access check and still keeps the transfer off your server. Buffering in a proxy cost RSS 69.8 → 125.9 MB for 20 requests; a presigned URL inside cached HTML outlives its signature and 403s later.VI: 302 giữ được phép kiểm quyền mà byte vẫn không đi qua máy chủ. Proxy đệm tốn RSS 69,8 → 125,9 MB cho 20 request; URL ký sẵn trong HTML được cache sống lâu hơn chữ ký và 403 về sau.\n\n5. Which are real read-path mistakes from the lesson? (choose all)Cái nào là lỗi thật ở đường đọc trong bài? (chọn mọi câu đúng)\n   Answer: a) Serving user uploads from the main domain that holds the cookies + b) A media proxy that does not implement Range — video seeking breaks + d) Forgetting Content-Disposition: attachment on documents + e) No Cache-Control on the object at PutObject time\n   The last one is the recommended setup. The other four are on the lesson’s list of six.VI: Cái cuối là cách được khuyên dùng. Bốn cái kia nằm trong danh sách sáu lỗi của bài.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Resizing: 4032 px → 1200 px removed about 92% before the format mattered</p><p>Resizing dominates everything. WebP beat JPEG 2.25× on smooth content but lost slightly on noisy content; AVIF is smallest but 4–12× slower to encode.</p><p><i>VI: Thu nhỏ quan trọng hơn mọi thứ. WebP thắng JPEG 2,25× trên ảnh mượt nhưng thua nhẹ trên ảnh nhiễu; AVIF nhỏ nhất nhưng mã hoá chậm hơn 4–12×.</i></p></li><li><p><b>a)</b> Keys contain a timestamp and random bytes, so a changed image is a different key, never a changed object</p><p>\"Content-addressed keys and immutable are the same decision made twice.\" On a mutable key (avatars/u7.jpg) users would see the old avatar for a year.</p><p><i>VI: \"Khoá theo nội dung và immutable là cùng một quyết định đưa ra hai lần.\" Với khoá đổi được (avatars/u7.jpg) người dùng thấy ảnh cũ suốt một năm.</i></p></li><li><p><b>c)</b> Nothing: -I sends HEAD, which Cloudflare answers with DYNAMIC; a GET showed HIT with age 27107</p><p>Verify a CDN with <code>curl -s -o /dev/null -D -</code> (a GET) and read <code>age</code>, which a cold cache cannot fake.</p><p><i>VI: Kiểm CDN bằng <code>curl -s -o /dev/null -D -</code> (một GET) và đọc <code>age</code>, thứ cache lạnh không giả được.</i></p></li><li><p><b>b)</b> The API checks permission and answers 302 to a presigned URL valid for a few minutes</p><p>The 302 keeps the access check and still keeps the transfer off your server. Buffering in a proxy cost RSS 69.8 → 125.9 MB for 20 requests; a presigned URL inside cached HTML outlives its signature and 403s later.</p><p><i>VI: 302 giữ được phép kiểm quyền mà byte vẫn không đi qua máy chủ. Proxy đệm tốn RSS 69,8 → 125,9 MB cho 20 request; URL ký sẵn trong HTML được cache sống lâu hơn chữ ký và 403 về sau.</i></p></li><li><p><b>a)</b> Serving user uploads from the main domain that holds the cookies + <b>b)</b> A media proxy that does not implement Range — video seeking breaks + <b>d)</b> Forgetting Content-Disposition: attachment on documents + <b>e)</b> No Cache-Control on the object at PutObject time</p><p>The last one is the recommended setup. The other four are on the lesson’s list of six.</p><p><i>VI: Cái cuối là cách được khuyên dùng. Bốn cái kia nằm trong danh sách sáu lỗi của bài.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What saved the most bytes on the smooth 298.6 KB photo?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì tiết kiệm nhiều byte nhất trên ảnh mượt 298,6 KB?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Resizing: 4032 px → 1200 px removed about 92% before the format mattered"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Switching JPEG to WebP, which is always about 30% smaller"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AVIF q50, because it is the smallest at every size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Lowering JPEG quality from 80 to 50"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Resizing dominates everything. WebP beat JPEG 2.25× on smooth content but lost slightly on noisy content; AVIF is smallest but 4–12× slower to encode.</p><p><i>VI: Thu nhỏ quan trọng hơn mọi thứ. WebP thắng JPEG 2,25× trên ảnh mượt nhưng thua nhẹ trên ảnh nhiễu; AVIF nhỏ nhất nhưng mã hoá chậm hơn 4–12×.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is <code>cache-control: public, max-age=31536000, immutable</code> safe on this site’s media?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao <code>cache-control: public, max-age=31536000, immutable</code> an toàn với media của site này?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keys contain a timestamp and random bytes, so a changed image is a different key, never a changed object"
+              },
+              {
+                "ma": "b",
+                "noiDung": "R2 refuses to overwrite an object that has immutable in its metadata"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Browsers revalidate immutable objects once a day anyway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cloudflare purges the cache automatically whenever an object is overwritten"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"Content-addressed keys and immutable are the same decision made twice.\" On a mutable key (avatars/u7.jpg) users would see the old avatar for a year.</p><p><i>VI: \"Khoá theo nội dung và immutable là cùng một quyết định đưa ra hai lần.\" Với khoá đổi được (avatars/u7.jpg) người dùng thấy ảnh cũ suốt một năm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p><code>curl -I</code> on the cover image shows <code>cf-cache-status: DYNAMIC</code> three times. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>curl -I</code> lên ảnh bìa cho <code>cf-cache-status: DYNAMIC</code> ba lần. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That Cloudflare is not caching the object at the edge"
+              },
+              {
+                "ma": "b",
+                "noiDung": "That the object has no Cache-Control header in R2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing: -I sends HEAD, which Cloudflare answers with DYNAMIC; a GET showed HIT with age 27107"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That the cache is cold and the next request will be a HIT"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Verify a CDN with <code>curl -s -o /dev/null -D -</code> (a GET) and read <code>age</code>, which a cold cache cannot fake.</p><p><i>VI: Kiểm CDN bằng <code>curl -s -o /dev/null -D -</code> (một GET) và đọc <code>age</code>, thứ cache lạnh không giả được.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A private invoice must be checked on every read but you want the bytes off your server. Best option from the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một hoá đơn riêng tư phải kiểm quyền mỗi lần đọc nhưng bạn muốn byte không đi qua máy chủ. Phương án tốt nhất trong bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A public URL with immutable caching, since the key is unguessable"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The API checks permission and answers 302 to a presigned URL valid for a few minutes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A proxy route that buffers the object and sends it with res.send"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Embedding a one-week presigned URL in the cached HTML page"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The 302 keeps the access check and still keeps the transfer off your server. Buffering in a proxy cost RSS 69.8 → 125.9 MB for 20 requests; a presigned URL inside cached HTML outlives its signature and 403s later.</p><p><i>VI: 302 giữ được phép kiểm quyền mà byte vẫn không đi qua máy chủ. Proxy đệm tốn RSS 69,8 → 125,9 MB cho 20 request; URL ký sẵn trong HTML được cache sống lâu hơn chữ ký và 403 về sau.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which are real read-path mistakes from the lesson? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào là lỗi thật ở đường đọc trong bài? (chọn mọi câu đúng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Serving user uploads from the main domain that holds the cookies"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A media proxy that does not implement Range — video seeking breaks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Serving public images from a separate media domain through a CDN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Forgetting Content-Disposition: attachment on documents"
+              },
+              {
+                "ma": "e",
+                "noiDung": "No Cache-Control on the object at PutObject time"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d",
+                "e"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>The last one is the recommended setup. The other four are on the lesson’s list of six.</p><p><i>VI: Cái cuối là cách được khuyên dùng. Bốn cái kia nằm trong danh sách sáu lỗi của bài.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding \"the CDN is not caching\" from curl -I.|||Kết luận \"CDN không cache\" từ curl -I."
+        },
+        {
+          "loi": "Putting immutable on a key that gets overwritten.|||Đặt immutable lên khoá bị ghi đè."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "immutable",
+          "vi": "bất biến",
+          "giaiThich": "trình duyệt không cần hỏi lại"
+        },
+        {
+          "en": "CDN edge",
+          "vi": "máy chủ biên của CDN",
+          "giaiThich": "bản sao gần người dùng"
+        },
+        {
+          "en": "age",
+          "vi": "tuổi trong cache",
+          "giaiThich": "số giây object đã nằm ở edge"
+        }
+      ]
+    },
+    {
+      "title": "Choose the headers to store with each object",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "caching",
+        "object storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"Set it at PutObject time; it is stored with the object.\" Write <code>mediaHeadersFor(key)</code> → <code>{ contentType, cacheControl, contentDisposition }</code>:</p>\n<ul><li><code>contentType</code> from the key’s extension (case-insensitive): jpg/jpeg → <code>image/jpeg</code>, png, webp, avif, gif → <code>image/&lt;ext&gt;</code>, mp4 → <code>video/mp4</code>, mp3 → <code>audio/mpeg</code>, pdf → <code>application/pdf</code>; anything else (or none) → <code>application/octet-stream</code>;</li>\n<li><code>cacheControl</code>: <code>public, max-age=31536000, immutable</code> only if the last segment is content-addressed — <code>&lt;13 digits&gt;-&lt;12 hex&gt;.&lt;ext&gt;</code>, hex and extension in lower case exactly as <code>buildKey</code> writes them; otherwise <code>public, no-cache</code> (a key that can be overwritten, like <code>avatars/u7.jpg</code>);</li>\n<li><code>contentDisposition</code>: <code>attachment</code> for keys under <code>documents/</code>, otherwise <code>null</code>.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Đặt nó lúc PutObject; nó được lưu cùng object.\" Viết <code>mediaHeadersFor(key)</code> → <code>{ contentType, cacheControl, contentDisposition }</code>:</p>\n<ul><li><code>contentType</code> theo đuôi của khoá (không phân biệt hoa thường): jpg/jpeg → <code>image/jpeg</code>, png, webp, avif, gif → <code>image/&lt;đuôi&gt;</code>, mp4 → <code>video/mp4</code>, mp3 → <code>audio/mpeg</code>, pdf → <code>application/pdf</code>; còn lại (hoặc không có) → <code>application/octet-stream</code>;</li>\n<li><code>cacheControl</code>: <code>public, max-age=31536000, immutable</code> chỉ khi đoạn cuối là khoá theo nội dung — <code>&lt;13 chữ số&gt;-&lt;12 hex&gt;.&lt;đuôi&gt;</code>, hex và đuôi viết thường đúng như <code>buildKey</code> ghi; không thì <code>public, no-cache</code> (khoá có thể bị ghi đè, như <code>avatars/u7.jpg</code>);</li>\n<li><code>contentDisposition</code>: <code>attachment</code> cho khoá dưới <code>documents/</code>, không thì <code>null</code>.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "mediaHeadersFor('images/post/u7/1753660000000-a1b2c3d4e5f6.webp')",
+          "output": "{\"contentType\":\"image/webp\",\"cacheControl\":\"public, max-age=31536000, immutable\",\"contentDisposition\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Work on the last path segment: <code>key.split(\"/\").pop()</code>.|||Làm trên đoạn cuối của đường dẫn: <code>key.split(\"/\").pop()</code>.",
+        "One regex decides immutability: <code>/^\\d{13}-[0-9a-f]{12}\\.[a-z0-9]+$/</code>.|||Một regex quyết định tính bất biến: <code>/^\\d{13}-[0-9a-f]{12}\\.[a-z0-9]+$/</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Headers to store with an object at PutObject time. */\nfunction mediaHeadersFor(key) {\n  // Write your solution here\n  return { contentType: 'image/' + key.split('.').pop(), cacheControl: 'public, max-age=31536000, immutable', contentDisposition: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction mediaHeadersFor(key) {\n  const TYPES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', avif: 'image/avif', gif: 'image/gif', mp4: 'video/mp4', mp3: 'audio/mpeg', pdf: 'application/pdf' };\n  const last = String(key).split('/').pop();\n  const ext = (/\\.([a-z0-9]+)$/i.exec(last) || [])[1];\n  // Content-Type comes from OUR extension (the key was rebuilt, e.g. \".webp\"), never from the client's original string.\n  const contentType = (ext && TYPES[ext.toLowerCase()]) || 'application/octet-stream';\n  // immutable is only true if the key can never be reused: Date.now()-<12 hex> names are content-addressed in practice.\n  const contentAddressed = /^\\d{13}-[0-9a-f]{12}\\.[a-z0-9]+$/.test(last);\n  const cacheControl = contentAddressed ? 'public, max-age=31536000, immutable' : 'public, no-cache';\n  // A document is downloaded, not rendered: an HTML file missed by validation will not run.\n  const contentDisposition = String(key).startsWith('documents/') ? 'attachment' : null;\n  return { contentType, cacheControl, contentDisposition };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Headers stored with the object are served by the storage and the CDN with no code of yours in the read path, so they must be right at write time. A long immutable lifetime is only correct when the key itself changes whenever the content changes; a reusable key gets <code>no-cache</code>, which still allows a cheap 304 via the ETag. Deriving the type from a server-chosen extension closes mistake (4).</p>",
+      "solutionExplanationHtmlVi": "<p>Header lưu cùng object được storage và CDN phục vụ mà không có dòng code nào của bạn trên đường đọc, nên chúng phải đúng ngay lúc ghi. Thời hạn dài immutable chỉ đúng khi chính khoá đổi mỗi khi nội dung đổi; khoá dùng lại nhận <code>no-cache</code>, vẫn cho phép 304 rẻ nhờ ETag. Lấy kiểu từ đuôi do máy chủ chọn là đóng lỗi (4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A content-addressed image",
+              "vi": "Ảnh có khoá theo nội dung"
+            },
+            "goi": "mediaHeadersFor('images/post/u7/1753660000000-a1b2c3d4e5f6.webp')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "contentType": "image/webp",
+              "cacheControl": "public, max-age=31536000, immutable",
+              "contentDisposition": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "A mutable avatar key",
+              "vi": "Khoá avatar đổi được"
+            },
+            "goi": "mediaHeadersFor('avatars/u7.jpg')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "contentType": "image/jpeg",
+              "cacheControl": "public, no-cache",
+              "contentDisposition": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "A document is downloaded",
+              "vi": "Tài liệu được tải xuống"
+            },
+            "goi": "mediaHeadersFor('documents/u7/1753660000000-a1b2c3d4e5f6.pdf')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": {
+              "contentType": "application/pdf",
+              "cacheControl": "public, max-age=31536000, immutable",
+              "contentDisposition": "attachment"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[mediaHeadersFor('video/u7/1753660001234-deadbeef1234.MP4'), mediaHeadersFor('audio/u2/1753660001234-deadbeef1234.mp3'), mediaHeadersFor('images/course-covers/nodejs.png')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "contentType": "video/mp4",
+                "cacheControl": "public, no-cache",
+                "contentDisposition": null
+              },
+              {
+                "contentType": "audio/mpeg",
+                "cacheControl": "public, max-age=31536000, immutable",
+                "contentDisposition": null
+              },
+              {
+                "contentType": "image/png",
+                "cacheControl": "public, no-cache",
+                "contentDisposition": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[mediaHeadersFor('documents/u1/1753660000000-a1b2c3d4e5f6.html'), mediaHeadersFor('images/post/u7/175366000000-a1b2c3d4e5f6.jpg'), mediaHeadersFor('images/post/u7/1753660000000-A1B2C3D4E5F6.jpg'), mediaHeadersFor('misc/README')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              {
+                "contentType": "application/octet-stream",
+                "cacheControl": "public, max-age=31536000, immutable",
+                "contentDisposition": "attachment"
+              },
+              {
+                "contentType": "image/jpeg",
+                "cacheControl": "public, no-cache",
+                "contentDisposition": null
+              },
+              {
+                "contentType": "image/jpeg",
+                "cacheControl": "public, no-cache",
+                "contentDisposition": null
+              },
+              {
+                "contentType": "application/octet-stream",
+                "cacheControl": "public, no-cache",
+                "contentDisposition": null
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "immutable on every key — the overwritten avatar stays old for a year and no refresh helps.|||immutable cho mọi khoá — avatar bị ghi đè giữ bản cũ suốt một năm, làm mới cũng vô ích."
+        },
+        {
+          "loi": "Echoing the MIME the client uploaded with — validation on the way in is pointless if you echo their MIME on the way out.|||Lặp lại MIME client gửi lúc upload — kiểm lúc vào là vô nghĩa nếu lúc ra lại dùng MIME của họ."
+        },
+        {
+          "loi": "Serving PDFs inline: a document you meant to be downloaded opens in the page.|||Phục vụ PDF dạng inline: tài liệu bạn định cho tải về lại mở ngay trong trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Cache-Control",
+          "vi": "chỉ dẫn cache",
+          "giaiThich": "public / max-age / immutable / no-cache"
+        },
+        {
+          "en": "Content-Disposition",
+          "vi": "cách trình bày",
+          "giaiThich": "attachment = tải xuống, không hiển thị"
+        }
+      ]
+    },
+    {
+      "title": "Turn a stored key into a URL — and keep the blob: scar",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "URLs",
+        "frontend"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><code>getMediaUrl()</code> in <code>frontend/src/lib/utils.ts</code> turns a bare key into a full URL, \"and its first branch is a scar\": an optimistic preview made by <code>URL.createObjectURL()</code> got the CDN base prepended → <code>https://&lt;r2&gt;/blob:https://…</code> → 400 on every in-flight preview. Write <code>getMediaUrl(lp, base)</code>:</p>\n<ul><li><code>null</code>, <code>undefined</code> or <code>''</code> → <code>''</code>;</li>\n<li>starts with <code>blob:</code> or <code>data:</code> → returned unchanged;</li>\n<li>an absolute <code>http://</code> / <code>https://</code> URL (any case) → unchanged;</li>\n<li>otherwise it is a key: <code>base</code> without trailing slashes + <code>/</code> + key without leading slashes.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>getMediaUrl()</code> trong <code>frontend/src/lib/utils.ts</code> biến khoá trần thành URL đầy đủ, \"và nhánh đầu tiên của nó là một vết sẹo\": ảnh xem trước lạc quan tạo bằng <code>URL.createObjectURL()</code> bị dán gốc CDN vào trước → <code>https://&lt;r2&gt;/blob:https://…</code> → 400 với mọi ảnh xem trước đang upload. Viết <code>getMediaUrl(lp, base)</code>:</p>\n<ul><li><code>null</code>, <code>undefined</code> hoặc <code>''</code> → <code>''</code>;</li>\n<li>bắt đầu bằng <code>blob:</code> hoặc <code>data:</code> → giữ nguyên;</li>\n<li>URL tuyệt đối <code>http://</code> / <code>https://</code> (mọi kiểu chữ) → giữ nguyên;</li>\n<li>còn lại là khoá: <code>base</code> bỏ gạch chéo cuối + <code>/</code> + khoá bỏ gạch chéo đầu.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "getMediaUrl('images/course-covers/nodejs.png', 'https://media.cuongthai.com')",
+          "output": "\"https://media.cuongthai.com/images/course-covers/nodejs.png\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order matters: handle blob:/data: before deciding it is a key.|||Thứ tự quan trọng: xử lý blob:/data: trước khi coi nó là khoá.",
+        "<code>base.replace(/\\/+$/, \"\")</code> and <code>key.replace(/^\\/+/, \"\")</code> avoid both <code>//</code> and a missing slash.|||<code>base.replace(/\\/+$/, \"\")</code> và <code>key.replace(/^\\/+/, \"\")</code> tránh cả <code>//</code> lẫn thiếu gạch chéo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Bare key -> full media URL. */\nfunction getMediaUrl(lp, base) {\n  // Write your solution here\n  if (!lp) return '';\n  if (lp.startsWith('http')) return lp;\n  return base + '/' + lp;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction getMediaUrl(lp, base) {\n  if (lp === null || lp === undefined || lp === '') return '';\n  const s = String(lp);\n  // The scar: object/data URLs are ALREADY renderable. Prepending the CDN made https://<r2>/blob:https://… → 400.\n  if (s.startsWith('blob:') || s.startsWith('data:')) return s;\n  // Absolute URLs (an external thumbnail, an already-resolved URL) are left alone.\n  if (/^https?:\\/\\//i.test(s)) return s;\n  // A bare key: join with exactly one slash, whatever the config or the key carries.\n  return String(base).replace(/\\/+$/, '') + '/' + s.replace(/^\\/+/, '');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A URL helper has to recognise everything that is already a URL before it treats a string as a key. Object and data URLs are renderable as they are; absolute URLs belong to someone else; only a bare key needs the media domain. Normalising the slashes on both sides makes the result independent of how the environment variable was written.</p>",
+      "solutionExplanationHtmlVi": "<p>Một hàm phụ cho URL phải nhận ra mọi thứ đã là URL trước khi coi một chuỗi là khoá. URL object và data hiển thị được ngay; URL tuyệt đối là của nơi khác; chỉ khoá trần mới cần tên miền media. Chuẩn hoá gạch chéo cả hai phía làm kết quả không phụ thuộc vào cách biến môi trường được viết.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A bare key",
+              "vi": "Một khoá trần"
+            },
+            "goi": "getMediaUrl('images/course-covers/nodejs.png', 'https://media.cuongthai.com')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "https://media.cuongthai.com/images/course-covers/nodejs.png"
+          },
+          {
+            "moTa": {
+              "en": "The scar: an optimistic preview",
+              "vi": "Vết sẹo: ảnh xem trước lạc quan"
+            },
+            "goi": "getMediaUrl('blob:https://cuongthai.com/7c1e2a40-9f1d-4b8e-a3c2-1f2e3d4c5b6a', 'https://media.cuongthai.com')",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": "blob:https://cuongthai.com/7c1e2a40-9f1d-4b8e-a3c2-1f2e3d4c5b6a"
+          },
+          {
+            "moTa": {
+              "en": "Slashes, null, a foreign URL",
+              "vi": "Gạch chéo, null, URL của nơi khác"
+            },
+            "goi": "[getMediaUrl('/images/a.webp', 'https://media.cuongthai.com/'), getMediaUrl(null, 'https://media.cuongthai.com'), getMediaUrl('https://i.ytimg.com/vi/x/hq.jpg', 'https://media.cuongthai.com')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "https://media.cuongthai.com/images/a.webp",
+              "",
+              "https://i.ytimg.com/vi/x/hq.jpg"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[getMediaUrl('data:image/png;base64,iVBORw0KGgo=', 'https://m.example'), getMediaUrl('HTTPS://X.example/a.png', 'https://m.example'), getMediaUrl(undefined, 'x'), getMediaUrl('', 'x')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "data:image/png;base64,iVBORw0KGgo=",
+              "HTTPS://X.example/a.png",
+              "",
+              ""
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[getMediaUrl('//images/x.jpg', 'https://media.cuongthai.com///'), getMediaUrl('http-docs/u1/a.pdf', 'https://media.cuongthai.com'), getMediaUrl('blobs/u1/a.bin', 'https://media.cuongthai.com')]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n",
+            "mongDoi": [
+              "https://media.cuongthai.com/images/x.jpg",
+              "https://media.cuongthai.com/http-docs/u1/a.pdf",
+              "https://media.cuongthai.com/blobs/u1/a.bin"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Prepending the CDN to everything (the original bug).|||Dán CDN vào trước mọi thứ (lỗi gốc)."
+        },
+        {
+          "loi": "<code>base + \"/\" + key</code> with a base that already ends in <code>/</code>: <code>…com//images/…</code>.|||<code>base + \"/\" + key</code> với base đã có <code>/</code> ở cuối: <code>…com//images/…</code>."
+        },
+        {
+          "loi": "Treating a relative CourseCard thumbnail as fine — CourseCard uses thumbnailUrl directly, so it must be absolute.|||Coi ảnh bìa tương đối của CourseCard là ổn — CourseCard dùng thẳng thumbnailUrl nên nó phải tuyệt đối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "object URL",
+          "vi": "URL đối tượng",
+          "giaiThich": "blob:… do URL.createObjectURL tạo"
+        },
+        {
+          "en": "optimistic preview",
+          "vi": "xem trước lạc quan",
+          "giaiThich": "hiện ảnh trước khi upload xong"
+        }
+      ]
+    },
+    {
+      "title": "If you must proxy media: 304 and Range, or seeking breaks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "HTTP caching",
+        "range requests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>Measurement 3: <code>If-None-Match</code> → 304 with 0 bytes; <code>Range: bytes=0-99</code> → 206 with 100 bytes; a missing key → 404. \"If you ever proxy media yourself, you must implement Range or seeking silently breaks.\" Write <code>serveObject(headers, obj)</code> → <code>{ status, headers, body }</code>, where <code>obj</code> is <code>{ etag, body }</code> (a string) or <code>null</code>:</p>\n<ul><li><code>null</code> → <code>{ status:404, headers:{}, body:'' }</code>;</li>\n<li>every other answer carries <code>accept-ranges: bytes</code> and <code>etag</code> (lower-case header names);</li>\n<li><code>if-none-match</code> (request header names are case-insensitive) equal to the etag — comparing without a <code>W/</code> prefix, in a comma-separated list, or <code>*</code> → 304, body <code>''</code>;</li>\n<li><code>range: bytes=a-b</code>, <code>bytes=a-</code> or <code>bytes=-n</code> (last n bytes): end is clamped to <code>size-1</code>; start ≥ size → 416 with <code>content-range: bytes */size</code>; otherwise 206 with <code>content-range: bytes start-end/size</code>, <code>content-length</code> and the slice. A malformed range is ignored;</li>\n<li>otherwise 200 with <code>content-length</code> and the whole body.</li></ul><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép đo 3: <code>If-None-Match</code> → 304 với 0 byte; <code>Range: bytes=0-99</code> → 206 với 100 byte; khoá không có → 404. \"Nếu có lúc bạn tự proxy media, bạn phải cài Range, không thì tua video âm thầm hỏng.\" Viết <code>serveObject(headers, obj)</code> → <code>{ status, headers, body }</code>, với <code>obj</code> là <code>{ etag, body }</code> (chuỗi) hoặc <code>null</code>:</p>\n<ul><li><code>null</code> → <code>{ status:404, headers:{}, body:'' }</code>;</li>\n<li>mọi câu trả lời khác mang <code>accept-ranges: bytes</code> và <code>etag</code> (tên header viết thường);</li>\n<li><code>if-none-match</code> (tên header của request không phân biệt hoa thường) bằng etag — so sau khi bỏ tiền tố <code>W/</code>, trong danh sách cách nhau bằng dấu phẩy, hoặc <code>*</code> → 304, thân <code>''</code>;</li>\n<li><code>range: bytes=a-b</code>, <code>bytes=a-</code> hoặc <code>bytes=-n</code> (n byte cuối): end bị kẹp về <code>size-1</code>; start ≥ size → 416 với <code>content-range: bytes */size</code>; còn lại 206 với <code>content-range: bytes start-end/size</code>, <code>content-length</code> và đoạn cắt. Range sai dạng thì bỏ qua;</li>\n<li>còn lại 200 với <code>content-length</code> và cả thân.</li></ul><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(() => { const r = serveObject({ 'If-None-Match': COVER.etag }, COVER); return [r.status, r.body.length, r.headers]; })()",
+          "output": "[304,0,{\"accept-ranges\":\"bytes\",\"etag\":\"\\\"6a5e9970fab4f24ecec396e4a64ac9d0\\\"\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Lower-case the request header names first; then handle 404 → 304 → Range → 200 in that order.|||Viết thường tên header của request trước; rồi xử lý 404 → 304 → Range → 200 theo thứ tự đó.",
+        "One regex reads all three range forms: <code>/^bytes=(\\d*)-(\\d*)$/</code>.|||Một regex đọc cả ba dạng range: <code>/^bytes=(\\d*)-(\\d*)$/</code>.",
+        "<code>slice(start, end + 1)</code> — ranges are inclusive on both ends.|||<code>slice(start, end + 1)</code> — range bao gồm cả hai đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Serve an object with conditional GET and Range support. */\nfunction serveObject(headers, obj) {\n  // Write your solution here\n  if (!obj) return { status: 404, headers: {}, body: '' };\n  return { status: 200, headers: { 'accept-ranges': 'bytes', etag: obj.etag, 'content-length': String(obj.body.length) }, body: obj.body };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction serveObject(headers, obj) {\n  if (!obj) return { status: 404, headers: {}, body: '' };\n  const size = obj.body.length;\n  const base = { 'accept-ranges': 'bytes', etag: obj.etag };\n  const h = {};\n  for (const k of Object.keys(headers || {})) h[k.toLowerCase()] = String(headers[k]);\n  // 1) Conditional GET: the client already has this version ⇒ 304, zero body bytes.\n  const inm = h['if-none-match'];\n  if (inm !== undefined) {\n    const strip = (t) => t.trim().replace(/^W\\//, '');                 // weak comparison, like browsers use for GET\n    if (inm.trim() === '*' || inm.split(',').map(strip).includes(strip(obj.etag))) return { status: 304, headers: base, body: '' };\n  }\n  // 2) Range: what makes <video> seekable. One range only; a malformed header is ignored (full 200).\n  const m = /^bytes=(\\d*)-(\\d*)$/.exec((h.range || '').trim());\n  if (m && (m[1] !== '' || m[2] !== '')) {\n    let start, end;\n    if (m[1] === '') { start = Math.max(0, size - Number(m[2])); end = size - 1; }   // bytes=-500: the LAST 500\n    else { start = Number(m[1]); end = m[2] === '' ? size - 1 : Math.min(Number(m[2]), size - 1); }\n    if (start >= size || start > end) return { status: 416, headers: { ...base, 'content-range': 'bytes */' + size }, body: '' };\n    return { status: 206, headers: { ...base, 'content-range': 'bytes ' + start + '-' + end + '/' + size, 'content-length': String(end - start + 1) }, body: obj.body.slice(start, end + 1) };\n  }\n  return { status: 200, headers: { ...base, 'content-length': String(size) }, body: obj.body };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A CDN and object storage already do this; a proxy that skips it silently turns every revisit into a full download and every seek into a restart. 304 trades the body for a round trip; 206 lets a video element fetch the bytes around the timestamp. The real conclusion of the lesson is one level up: public media should not go through this code at all.</p>",
+      "solutionExplanationHtmlVi": "<p>CDN và object storage đã làm sẵn việc này; proxy bỏ qua nó âm thầm biến mỗi lần xem lại thành tải đủ, mỗi lần tua thành bắt đầu lại. 304 đổi thân lấy một vòng đi về; 206 cho thẻ video lấy các byte quanh mốc thời gian. Kết luận thật của bài ở tầng cao hơn: media công khai không nên đi qua đoạn code này chút nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "If-None-Match → 304, 0 bytes",
+              "vi": "If-None-Match → 304, 0 byte"
+            },
+            "goi": "(() => { const r = serveObject({ 'If-None-Match': COVER.etag }, COVER); return [r.status, r.body.length, r.headers]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              304,
+              0,
+              {
+                "accept-ranges": "bytes",
+                "etag": "\"6a5e9970fab4f24ecec396e4a64ac9d0\""
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Range 0-99 → 206, 100 bytes",
+              "vi": "Range 0-99 → 206, 100 byte"
+            },
+            "goi": "(() => { const r = serveObject({ Range: 'bytes=0-99' }, COVER); return [r.status, r.body.length, r.headers['content-range']]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              206,
+              100,
+              "bytes 0-99/1010"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "404 and a plain 200",
+              "vi": "404 và một 200 thường"
+            },
+            "goi": "[serveObject({}, null), serveObject({}, VIDEO)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              {
+                "status": 404,
+                "headers": {},
+                "body": ""
+              },
+              {
+                "status": 200,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-length": "36"
+                },
+                "body": "0123456789abcdefghijklmnopqrstuvwxyz"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[serveObject({ range: 'bytes=30-' }, VIDEO), serveObject({ range: 'bytes=-4' }, VIDEO), serveObject({ range: 'bytes=10-1000' }, VIDEO), serveObject({ range: 'bytes=36-40' }, VIDEO)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              {
+                "status": 206,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes 30-35/36",
+                  "content-length": "6"
+                },
+                "body": "uvwxyz"
+              },
+              {
+                "status": 206,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes 32-35/36",
+                  "content-length": "4"
+                },
+                "body": "wxyz"
+              },
+              {
+                "status": 206,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes 10-35/36",
+                  "content-length": "26"
+                },
+                "body": "abcdefghijklmnopqrstuvwxyz"
+              },
+              {
+                "status": 416,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes */36"
+                },
+                "body": ""
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[serveObject({ 'if-none-match': 'W/\"v1\"' }, VIDEO).status, serveObject({ 'if-none-match': '\"x\", \"v1\"' }, VIDEO).status, serveObject({ 'if-none-match': '*' }, VIDEO).status, serveObject({ 'if-none-match': '\"old\"' }, VIDEO).status, serveObject({ range: 'items=0-5' }, VIDEO).status, serveObject({ range: 'bytes=-' }, VIDEO).status]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              304,
+              304,
+              304,
+              200,
+              200,
+              200
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[serveObject({ range: 'bytes=5-2' }, VIDEO), serveObject({ RANGE: 'bytes=0-0' }, VIDEO)]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst COVER = { etag: '\"6a5e9970fab4f24ecec396e4a64ac9d0\"', body: 'x'.repeat(1000) + 'ABCDEFGHIJ' };\nconst VIDEO = { etag: '\"v1\"', body: '0123456789abcdefghijklmnopqrstuvwxyz' };\n",
+            "mongDoi": [
+              {
+                "status": 416,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes */36"
+                },
+                "body": ""
+              },
+              {
+                "status": 206,
+                "headers": {
+                  "accept-ranges": "bytes",
+                  "etag": "\"v1\"",
+                  "content-range": "bytes 0-0/36",
+                  "content-length": "1"
+                },
+                "body": "0"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>slice(start, end)</code>: every range is one byte short and the video decoder chokes.|||<code>slice(start, end)</code>: mọi range thiếu một byte và bộ giải mã video nghẹn."
+        },
+        {
+          "loi": "Reading <code>bytes=-500</code> as \"from 0 to 500\" instead of the last 500 bytes.|||Đọc <code>bytes=-500</code> thành \"từ 0 tới 500\" thay vì 500 byte cuối."
+        },
+        {
+          "loi": "Answering 200 to a Range request: the player downloads the whole file to seek.|||Trả 200 cho request có Range: trình phát tải cả file để tua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "conditional request",
+          "vi": "request có điều kiện",
+          "giaiThich": "If-None-Match + ETag ⇒ 304"
+        },
+        {
+          "en": "206 Partial Content",
+          "vi": "nội dung một phần",
+          "giaiThich": "trả đúng đoạn byte được hỏi"
+        },
+        {
+          "en": "416",
+          "vi": "range không đáp ứng được",
+          "giaiThich": "start vượt cỡ file"
+        }
+      ]
+    },
+    {
+      "title": "Delete the post — and its files, in the right order",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "object storage",
+        "cleanup",
+        "error handling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>\"Storage has no foreign keys. Delete a post row and the objects stay, paid for, forever.\" Write two functions, like <code>deleteByUrls()</code> and the nightly <code>PendingUpload</code> sweep:</p>\n<p><code>async deletePost(post, { db, storage, base, log })</code> — <code>post = { id, media: [urls] }</code>:</p>\n<ul><li>a URL that does not start with <code>base + '/'</code> (base may end with <code>/</code>) is <b>skipped</b> (foreign — not ours to delete);</li>\n<li>for each of ours, key = the URL without that prefix; <code>await storage.del(key)</code>; if it throws push <code>{ level:'warn', key, message }</code> to <code>log</code> and continue — <b>never throw</b>;</li>\n<li><b>objects first</b>, then <code>await db.deletePost(post.id)</code>;</li>\n<li>return <code>{ deleted, failed, skipped }</code> (keys, keys, URLs, in order).</li></ul>\n<p><code>async sweepPending(rows, now, { storage, db })</code> — for each row with <code>status === 'PENDING'</code> and <code>expiresAt &lt;= now</code>: delete the object (<code>row.key</code>), then <code>db.removePending(row.id)</code>; if either throws, leave the row for the next sweep. Return the removed ids. <code>CONFIRMED</code> rows are never touched.</p>\n<p>The fakes record every call in order in <code>calls</code>.</p><p><i>Graded in your browser: there is no real Express, network, Buffer or <code>crypto</code> here. The tests call your function with small fake objects (a fake <code>res</code> that records <code>status()</code>, headers and <code>json()</code>; fake stores with async methods), exactly the way Chapter 14 tests a handler without a server. <code>Date.now()</code> and timers run on a virtual clock, so waiting costs no real time.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Storage không có khoá ngoại. Xoá dòng bài viết thì object vẫn ở đó, bị tính tiền, mãi mãi.\" Viết hai hàm, như <code>deleteByUrls()</code> và lượt quét <code>PendingUpload</code> hằng đêm:</p>\n<p><code>async deletePost(post, { db, storage, base, log })</code> — <code>post = { id, media: [url] }</code>:</p>\n<ul><li>URL không bắt đầu bằng <code>base + '/'</code> (base có thể có <code>/</code> ở cuối) bị <b>bỏ qua</b> (của nơi khác — không phải của ta để xoá);</li>\n<li>với mỗi URL của ta, khoá = URL bỏ tiền tố đó; <code>await storage.del(key)</code>; nếu ném lỗi thì đẩy <code>{ level:'warn', key, message }</code> vào <code>log</code> rồi tiếp tục — <b>không bao giờ ném</b>;</li>\n<li><b>object trước</b>, rồi mới <code>await db.deletePost(post.id)</code>;</li>\n<li>trả <code>{ deleted, failed, skipped }</code> (khoá, khoá, URL, theo thứ tự).</li></ul>\n<p><code>async sweepPending(rows, now, { storage, db })</code> — với mỗi dòng <code>status === 'PENDING'</code> và <code>expiresAt &lt;= now</code>: xoá object (<code>row.key</code>), rồi <code>db.removePending(row.id)</code>; nếu một trong hai ném lỗi thì để dòng đó cho lượt quét sau. Trả các id đã xoá. Dòng <code>CONFIRMED</code> không bao giờ bị đụng.</p>\n<p>Đồ giả ghi mọi lời gọi theo thứ tự vào <code>calls</code>.</p><p><i>Chấm ngay trong trình duyệt: ở đây không có Express thật, mạng, Buffer hay <code>crypto</code>. Bộ kiểm gọi hàm của bạn với các object GIẢ nhỏ (một <code>res</code> giả ghi lại <code>status()</code>, header và <code>json()</code>; kho giả có hàm async), đúng cách Chương 14 kiểm một handler mà không cần máy chủ. <code>Date.now()</code> và hẹn giờ chạy trên đồng hồ ẢO nên chờ không tốn thời gian thật.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[await deletePost({ id: 42, media: [BASE + \"/images/post/u7/1753660000000-a1b2c3d4e5f6.webp\", \"https://i.ytimg.com/vi/abc/hqdefault.jpg\"] }, { db, storage, base: BASE, log }), calls]",
+          "output": "[{\"deleted\":[\"images/post/u7/1753660000000-a1b2c3d4e5f6.webp\"],\"failed\":[],\"skipped\":[\"https://i.ytimg.com/vi/abc/hqdefault.jpg\"]},[\"del images/post/u7/1753660000000-a1b2c3d4e5f6.webp\",\"row 42\"]]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute <code>prefix = base.replace(/\\/+$/, \"\") + \"/\"</code> once.|||Tính <code>prefix = base.replace(/\\/+$/, \"\") + \"/\"</code> một lần.",
+        "Put the try/catch around each <code>storage.del</code>, not around the whole loop — one failure must not stop the others.|||Đặt try/catch quanh từng <code>storage.del</code>, không quanh cả vòng lặp — một lỗi không được chặn những cái khác.",
+        "In the sweep, compare <code>row.expiresAt &lt;= now</code> and check the status first.|||Trong lượt quét, so <code>row.expiresAt &lt;= now</code> và kiểm trạng thái trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Delete a post and its media. */\nasync function deletePost(post, { db, storage, base, log }) {\n  // Write your solution here\n  await db.deletePost(post.id);\n  const deleted = [];\n  for (const url of post.media) {\n    const key = url.replace(base + '/', '');\n    await storage.del(key);\n    deleted.push(key);\n  }\n  return { deleted, failed: [], skipped: [] };\n}\n\n/** Nightly: remove abandoned uploads. */\nasync function sweepPending(rows, now, { storage, db }) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nasync function deletePost(post, { db, storage, base, log }) {\n  const prefix = String(base).replace(/\\/+$/, '') + '/';\n  const deleted = [], failed = [], skipped = [];\n  // 1) OBJECTS FIRST: a failed row delete then leaves a file that cleanup can find; the reverse leaves a row\n  //    pointing at nothing (or a file nobody will ever find again).\n  for (const url of post.media || []) {\n    if (!String(url).startsWith(prefix)) { skipped.push(url); continue; }   // a YouTube thumbnail is not ours to delete\n    const key = String(url).slice(prefix.length);\n    try {\n      await storage.del(key);\n      deleted.push(key);\n    } catch (err) {\n      // A failed delete is a LEAK, not a user-facing error: log it and carry on.\n      log.push({ level: 'warn', key, message: String(err && err.message) });\n      failed.push(key);\n    }\n  }\n  // 2) …then the row.\n  await db.deletePost(post.id);\n  return { deleted, failed, skipped };\n}\n\nasync function sweepPending(rows, now, { storage, db }) {\n  const removed = [];\n  for (const row of rows) {\n    // Only abandoned uploads: still PENDING and past their 24 h TTL. CONFIRMED rows belong to real posts.\n    if (row.status !== 'PENDING' || row.expiresAt > now) continue;\n    try {\n      await storage.del(row.key);      // object first, row second — same rule as above\n      await db.removePending(row.id);\n      removed.push(row.id);\n    } catch {\n      // leave the row: tomorrow's sweep retries it\n    }\n  }\n  return removed;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With no foreign keys, the order of the two deletes decides which failure is recoverable: objects first means the worst case is a file still referenced by a row (found and retried), never an orphan nobody can find. Resolving URLs against our own base and skipping the rest keeps the cleanup from touching what is not ours; logging instead of throwing treats a failed delete as the leak it is. The TTL sweep closes the third leak — uploads abandoned before a post existed.</p>",
+      "solutionExplanationHtmlVi": "<p>Không có khoá ngoại, thứ tự hai lần xoá quyết định lỗi nào sửa được: object trước nghĩa là trường hợp xấu nhất là một file vẫn được một dòng tham chiếu (tìm thấy và thử lại), không bao giờ là file mồ côi không ai tìm ra. Giải URL theo gốc của mình và bỏ qua phần còn lại giữ việc dọn không đụng thứ không phải của mình; ghi log thay vì ném coi lần xoá hỏng đúng là rò rỉ. Lượt quét theo TTL đóng rò rỉ thứ ba — upload bị bỏ dở trước khi có bài viết.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Objects first, the YouTube thumbnail skipped",
+              "vi": "Object trước, ảnh YouTube bị bỏ qua"
+            },
+            "goi": "[await deletePost({ id: 42, media: [BASE + \"/images/post/u7/1753660000000-a1b2c3d4e5f6.webp\", \"https://i.ytimg.com/vi/abc/hqdefault.jpg\"] }, { db, storage, base: BASE, log }), calls]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst BASE = 'https://media.cuongthai.com';\nconst calls = []; const log = [];\nconst storage = { broken: new Set(), async del(key) { await new Promise((r) => setTimeout(r, 5)); calls.push('del ' + key); if (this.broken.has(key)) throw new Error('R2 503 SlowDown'); } };\nconst db = { async deletePost(id) { calls.push('row ' + id); }, async removePending(id) { calls.push('pending ' + id); } };\nconst DAY = 24 * 3600 * 1000;\n",
+            "mongDoi": [
+              {
+                "deleted": [
+                  "images/post/u7/1753660000000-a1b2c3d4e5f6.webp"
+                ],
+                "failed": [],
+                "skipped": [
+                  "https://i.ytimg.com/vi/abc/hqdefault.jpg"
+                ]
+              },
+              [
+                "del images/post/u7/1753660000000-a1b2c3d4e5f6.webp",
+                "row 42"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One delete fails: logged, the others still go, the row is deleted",
+              "vi": "Một lần xoá hỏng: ghi log, cái khác vẫn chạy, dòng vẫn bị xoá"
+            },
+            "goi": "await (async () => { storage.broken.add(\"images/post/u7/1753660000000-000000000002.webp\"); const r = await deletePost({ id: 7, media: [BASE + \"/images/post/u7/1753660000000-000000000001.webp\", BASE + \"/images/post/u7/1753660000000-000000000002.webp\", BASE + \"/images/post/u7/1753660000000-000000000003.webp\"] }, { db, storage, base: BASE + \"/\", log }); return [r, calls, log]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst BASE = 'https://media.cuongthai.com';\nconst calls = []; const log = [];\nconst storage = { broken: new Set(), async del(key) { await new Promise((r) => setTimeout(r, 5)); calls.push('del ' + key); if (this.broken.has(key)) throw new Error('R2 503 SlowDown'); } };\nconst db = { async deletePost(id) { calls.push('row ' + id); }, async removePending(id) { calls.push('pending ' + id); } };\nconst DAY = 24 * 3600 * 1000;\n",
+            "mongDoi": [
+              {
+                "deleted": [
+                  "images/post/u7/1753660000000-000000000001.webp",
+                  "images/post/u7/1753660000000-000000000003.webp"
+                ],
+                "failed": [
+                  "images/post/u7/1753660000000-000000000002.webp"
+                ],
+                "skipped": []
+              },
+              [
+                "del images/post/u7/1753660000000-000000000001.webp",
+                "del images/post/u7/1753660000000-000000000002.webp",
+                "del images/post/u7/1753660000000-000000000003.webp",
+                "row 7"
+              ],
+              [
+                {
+                  "level": "warn",
+                  "key": "images/post/u7/1753660000000-000000000002.webp",
+                  "message": "R2 503 SlowDown"
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Sweep: only expired PENDING rows",
+              "vi": "Quét: chỉ dòng PENDING đã hết hạn"
+            },
+            "goi": "[await sweepPending([{ id: 1, key: \"video/u7/a.mp4\", status: \"PENDING\", expiresAt: 1000 }, { id: 2, key: \"video/u7/b.mp4\", status: \"CONFIRMED\", expiresAt: 1000 }, { id: 3, key: \"video/u7/c.mp4\", status: \"PENDING\", expiresAt: 5000 }], 2000, { storage, db }), calls]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst BASE = 'https://media.cuongthai.com';\nconst calls = []; const log = [];\nconst storage = { broken: new Set(), async del(key) { await new Promise((r) => setTimeout(r, 5)); calls.push('del ' + key); if (this.broken.has(key)) throw new Error('R2 503 SlowDown'); } };\nconst db = { async deletePost(id) { calls.push('row ' + id); }, async removePending(id) { calls.push('pending ' + id); } };\nconst DAY = 24 * 3600 * 1000;\n",
+            "mongDoi": [
+              [
+                1
+              ],
+              [
+                "del video/u7/a.mp4",
+                "pending 1"
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "[await deletePost({ id: 1, media: [] }, { db, storage, base: BASE, log }), await deletePost({ id: 2, media: [\"https://media.cuongthai.com.evil.example/x.jpg\", \"http://media.cuongthai.com/y.jpg\"] }, { db, storage, base: BASE, log }), calls]",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst BASE = 'https://media.cuongthai.com';\nconst calls = []; const log = [];\nconst storage = { broken: new Set(), async del(key) { await new Promise((r) => setTimeout(r, 5)); calls.push('del ' + key); if (this.broken.has(key)) throw new Error('R2 503 SlowDown'); } };\nconst db = { async deletePost(id) { calls.push('row ' + id); }, async removePending(id) { calls.push('pending ' + id); } };\nconst DAY = 24 * 3600 * 1000;\n",
+            "mongDoi": [
+              {
+                "deleted": [],
+                "failed": [],
+                "skipped": []
+              },
+              {
+                "deleted": [],
+                "failed": [],
+                "skipped": [
+                  "https://media.cuongthai.com.evil.example/x.jpg",
+                  "http://media.cuongthai.com/y.jpg"
+                ]
+              },
+              [
+                "row 1",
+                "row 2"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "await (async () => { storage.broken.add(\"video/u7/b.mp4\"); const r = await sweepPending([{ id: 1, key: \"video/u7/a.mp4\", status: \"PENDING\", expiresAt: 0 }, { id: 2, key: \"video/u7/b.mp4\", status: \"PENDING\", expiresAt: 0 }, { id: 3, key: \"video/u7/c.mp4\", status: \"PENDING\", expiresAt: 10 * DAY }], 10 * DAY, { storage, db }); return [r, calls]; })()",
+            "chuanBi": "\nfunction makeRes() {\n  const r = { statusCode: 200, headers: {}, body: undefined, ended: false };\n  const k = (x) => String(x).toLowerCase();\n  r.status = (s) => { r.statusCode = s; return r; };\n  r.setHeader = (n, v) => { r.headers[k(n)] = Array.isArray(v) ? v.join(', ') : String(v); return r; };\n  r.set = (n, v) => { if (typeof n === 'object') { for (const x of Object.keys(n)) r.setHeader(x, n[x]); return r; } return r.setHeader(n, v); };\n  r.header = r.set;\n  r.getHeader = (n) => r.headers[k(n)];\n  r.get = r.getHeader;\n  r.removeHeader = (n) => { delete r.headers[k(n)]; };\n  r.append = (n, v) => { const o = r.headers[k(n)]; r.headers[k(n)] = o ? o + ', ' + v : String(v); return r; };\n  r.vary = (f) => { const o = r.headers.vary; if (!o) r.headers.vary = f; else if (!o.split(/\\s*,\\s*/).map(k).includes(k(f))) r.headers.vary = o + ', ' + f; return r; };\n  r.json = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; if (!r.headers['content-type']) r.headers['content-type'] = 'application/json; charset=utf-8'; return r; };\n  r.send = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b; r.ended = true; return r; };\n  r.end = (b) => { if (r.ended) throw new Error('Cannot set headers after they are sent to the client'); r.body = b === undefined ? null : b; r.ended = true; return r; };\n  r.sendStatus = (s) => { r.statusCode = s; return r.end(); };\n  r.redirect = (a, b) => { if (b === undefined) { b = a; a = 302; } r.statusCode = a; r.headers.location = String(b); return r.end(); };\n  return r;\n}\nasync function runMw(mw, req, res) {\n  res = res || makeRes();\n  req = req || {};\n  if (!req.headers) req.headers = {};\n  const next = [];\n  await mw(req, res, (err) => { next.push(err === undefined ? 'next' : 'next:' + (err && err.message !== undefined ? err.message : String(err))); });\n  return { status: res.statusCode, headers: res.headers, body: res.body === undefined ? null : res.body, ended: res.ended, next };\n}\nfunction bytes(s) { const a = []; for (let i = 0; i < s.length; i++) a.push(s.charCodeAt(i) & 255); return a; }\n\nconst BASE = 'https://media.cuongthai.com';\nconst calls = []; const log = [];\nconst storage = { broken: new Set(), async del(key) { await new Promise((r) => setTimeout(r, 5)); calls.push('del ' + key); if (this.broken.has(key)) throw new Error('R2 503 SlowDown'); } };\nconst db = { async deletePost(id) { calls.push('row ' + id); }, async removePending(id) { calls.push('pending ' + id); } };\nconst DAY = 24 * 3600 * 1000;\n",
+            "mongDoi": [
+              [
+                1,
+                3
+              ],
+              [
+                "del video/u7/a.mp4",
+                "pending 1",
+                "del video/u7/b.mp4",
+                "del video/u7/c.mp4",
+                "pending 3"
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting the row first: if the object delete then fails, nothing references the file and it is billed forever.|||Xoá dòng trước: nếu sau đó xoá object hỏng, không còn gì tham chiếu tới file và nó bị tính tiền mãi."
+        },
+        {
+          "loi": "Deleting every URL in the post, including a YouTube thumbnail that belongs to someone else.|||Xoá mọi URL trong bài, kể cả ảnh thu nhỏ YouTube thuộc về nơi khác."
+        },
+        {
+          "loi": "Throwing on a failed object delete: the user sees an error for a cleanup problem.|||Ném lỗi khi xoá object hỏng: người dùng thấy lỗi vì một vấn đề dọn dẹp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "orphaned object",
+          "vi": "object mồ côi",
+          "giaiThich": "không dòng nào tham chiếu nhưng vẫn tính tiền"
+        },
+        {
+          "en": "sweep",
+          "vi": "lượt quét dọn",
+          "giaiThich": "cron xoá thứ bỏ dở"
+        }
+      ]
+    }
+  ]
+}

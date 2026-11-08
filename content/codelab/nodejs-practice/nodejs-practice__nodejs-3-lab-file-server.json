@@ -1,0 +1,759 @@
+{
+  "trackSlug": "nodejs-practice",
+  "moduleSlug": "nodejs-3-lab-file-server",
+  "lesson": {
+    "course": "nodejs",
+    "slug": "nodejs-3-5-http-server"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 · 1 — Which lesson does each line come from?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "path",
+        "fs",
+        "Buffer",
+        "streams",
+        "http"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p>The lab builds a tiny file server with nothing but core modules: <code>GET /files/:name</code> and an upload endpoint. Before writing it, match each line of the plan with the rule it applies.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the lesson's code with Node 22), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab dựng một file server nhỏ chỉ bằng module lõi: <code>GET /files/:name</code> và một endpoint upload. Trước khi viết, ghép mỗi dòng của kế hoạch với luật mà nó áp dụng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy code của bài bằng Node 22) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lessons 3.1 → 3.5 each own one line of the plan.|||Mỗi bài 3.1 → 3.5 sở hữu một dòng của kế hoạch.",
+        "Ask: is this error about the request, or about us?|||Hỏi: lỗi này là do request, hay do mình?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 3 · 1 — Which lesson does each line come from?\n\nAnswer in the answer panel (no code needed).\n\n1. const full = safeResolve(root, name) runs BEFORE any fs call. Why?const full = safeResolve(root, name) chạy TRƯỚC mọi lời gọi fs. Vì sao?\n2. The file exists but readFile fails with EMFILE. The response is…File có thật nhưng readFile lỗi EMFILE. Phản hồi là…\n3. Content-Length for a binary file is bytes.length, but for a JSON body it is utf8Length(body). Why the difference?Content-Length của file nhị phân là bytes.length, còn của body JSON là utf8Length(body). Vì sao khác?\n4. During an upload, dest.write(chunk) returns false. The handler should…Trong lúc upload, dest.write(chunk) trả false. Handler nên…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 3 · 1 — Which lesson does each line come from? — answer key\n\n1. const full = safeResolve(root, name) runs BEFORE any fs call. Why?const full = safeResolve(root, name) chạy TRƯỚC mọi lời gọi fs. Vì sao?\n   Answer: b) A name like ../../etc/passwd must be refused without touching the disk (3.1, path traversal)\n   Decide on the normalised path, then read. A traversal attempt should cost you nothing and reveal nothing.VI: Quyết định trên đường đã chuẩn hoá, rồi mới đọc. Một lần thử duyệt ngược không được tốn gì và không lộ gì.\n\n2. The file exists but readFile fails with EMFILE. The response is…File có thật nhưng readFile lỗi EMFILE. Phản hồi là…\n   Answer: c) 500 with a generic message — it is our problem, and the error text is logged, not sent\n   ENOENT/EACCES/EISDIR are about the request; anything else is a server fault. Never echo internal error messages (they leak paths).VI: ENOENT/EACCES/EISDIR là chuyện của request; mọi thứ khác là lỗi phía server. Không bao giờ gửi lại thông điệp lỗi nội bộ (chúng lộ đường dẫn).\n\n3. Content-Length for a binary file is bytes.length, but for a JSON body it is utf8Length(body). Why the difference?Content-Length của file nhị phân là bytes.length, còn của body JSON là utf8Length(body). Vì sao khác?\n   Answer: b) The file is already bytes; the JSON is a string whose byte size must be computed (3.2)\n   Content-Length is always bytes. A Buffer’s length IS its byte count; a string’s .length is not.VI: Content-Length luôn là byte. length của Buffer CHÍNH LÀ số byte; .length của chuỗi thì không.\n\n4. During an upload, dest.write(chunk) returns false. The handler should…Trong lúc upload, dest.write(chunk) trả false. Handler nên…\n   Answer: b) req.pause(), and req.resume() when dest emits \"drain\" (3.3, backpressure)\n   The request is a Readable you can pause. Without it, a fast client fills your memory with chunks the disk cannot take yet.VI: Request là một Readable có thể tạm dừng. Thiếu bước này, client nhanh lấp đầy RAM của bạn bằng các chunk mà đĩa chưa nhận kịp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A name like ../../etc/passwd must be refused without touching the disk (3.1, path traversal)</p><p>Decide on the normalised path, then read. A traversal attempt should cost you nothing and reveal nothing.</p><p><i>VI: Quyết định trên đường đã chuẩn hoá, rồi mới đọc. Một lần thử duyệt ngược không được tốn gì và không lộ gì.</i></p></li><li><p><b>c)</b> 500 with a generic message — it is our problem, and the error text is logged, not sent</p><p>ENOENT/EACCES/EISDIR are about the request; anything else is a server fault. Never echo internal error messages (they leak paths).</p><p><i>VI: ENOENT/EACCES/EISDIR là chuyện của request; mọi thứ khác là lỗi phía server. Không bao giờ gửi lại thông điệp lỗi nội bộ (chúng lộ đường dẫn).</i></p></li><li><p><b>b)</b> The file is already bytes; the JSON is a string whose byte size must be computed (3.2)</p><p>Content-Length is always bytes. A Buffer’s length IS its byte count; a string’s .length is not.</p><p><i>VI: Content-Length luôn là byte. length của Buffer CHÍNH LÀ số byte; .length của chuỗi thì không.</i></p></li><li><p><b>b)</b> req.pause(), and req.resume() when dest emits \"drain\" (3.3, backpressure)</p><p>The request is a Readable you can pause. Without it, a fast client fills your memory with chunks the disk cannot take yet.</p><p><i>VI: Request là một Readable có thể tạm dừng. Thiếu bước này, client nhanh lấp đầy RAM của bạn bằng các chunk mà đĩa chưa nhận kịp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p><code>const full = safeResolve(root, name)</code> runs BEFORE any fs call. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>const full = safeResolve(root, name)</code> chạy TRƯỚC mọi lời gọi fs. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "safeResolve also checks that the file exists, saving one fs call"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A name like ../../etc/passwd must be refused without touching the disk (3.1, path traversal)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It converts the name to bytes so Content-Length is right"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fs.readFile cannot open relative paths, so the path must be resolved first"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Decide on the normalised path, then read. A traversal attempt should cost you nothing and reveal nothing.</p><p><i>VI: Quyết định trên đường đã chuẩn hoá, rồi mới đọc. Một lần thử duyệt ngược không được tốn gì và không lộ gì.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The file exists but <code>readFile</code> fails with <code>EMFILE</code>. The response is…</p><p style=\"opacity:.75;font-size:.92em\"><i>File có thật nhưng <code>readFile</code> lỗi <code>EMFILE</code>. Phản hồi là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "400, because the request caused too many open files"
+              },
+              {
+                "ma": "b",
+                "noiDung": "503 with the full error message so the client can retry"
+              },
+              {
+                "ma": "c",
+                "noiDung": "500 with a generic message — it is our problem, and the error text is logged, not sent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404, because the client could not get the file"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>ENOENT/EACCES/EISDIR are about the request; anything else is a server fault. Never echo internal error messages (they leak paths).</p><p><i>VI: ENOENT/EACCES/EISDIR là chuyện của request; mọi thứ khác là lỗi phía server. Không bao giờ gửi lại thông điệp lỗi nội bộ (chúng lộ đường dẫn).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Content-Length for a binary file is <code>bytes.length</code>, but for a JSON body it is <code>utf8Length(body)</code>. Why the difference?</p><p style=\"opacity:.75;font-size:.92em\"><i>Content-Length của file nhị phân là <code>bytes.length</code>, còn của body JSON là <code>utf8Length(body)</code>. Vì sao khác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "utf8Length is slower, so it is only used for small bodies"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The file is already bytes; the JSON is a string whose byte size must be computed (3.2)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Binary files are sent without encoding, so their length is in characters"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Content-Length is optional for JSON responses"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Content-Length is always bytes. A Buffer’s length IS its byte count; a string’s .length is not.</p><p><i>VI: Content-Length luôn là byte. length của Buffer CHÍNH LÀ số byte; .length của chuỗi thì không.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>During an upload, <code>dest.write(chunk)</code> returns false. The handler should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong lúc upload, <code>dest.write(chunk)</code> trả false. Handler nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reject the upload with 503 because the disk is full"
+              },
+              {
+                "ma": "b",
+                "noiDung": "req.pause(), and req.resume() when dest emits \"drain\" (3.3, backpressure)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "call dest.end() to flush, then continue writing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "keep the chunk in an array and write it later"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The request is a Readable you can pause. Without it, a fast client fills your memory with chunks the disk cannot take yet.</p><p><i>VI: Request là một Readable có thể tạm dừng. Thiếu bước này, client nhanh lấp đầy RAM của bạn bằng các chunk mà đĩa chưa nhận kịp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reading the file first and checking the path afterwards.|||Đọc file trước rồi mới kiểm đường dẫn."
+        },
+        {
+          "loi": "Sending err.message to the client on a 500.|||Gửi err.message cho client khi lỗi 500."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "core modules",
+          "vi": "module lõi (có sẵn trong Node)"
+        },
+        {
+          "en": "upload",
+          "vi": "tải lên"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3 · 2 — GET /files/:name with no framework",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "http",
+        "path",
+        "fs",
+        "Buffer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><b>Brief.</b> Serve files from <code>root = /srv/files</code> with a raw <code>node:http</code> handler. Write <code>async serveFile(fs, root, req, res)</code> (<code>fs.readFile(path)</code> resolves a <b>Uint8Array</b> like a Buffer, or rejects with a real <code>err.code</code>). Provided: <code>safeResolve</code>, <code>utf8Length</code>, <code>sendJson(res, status, data, extraHeaders?)</code> and the <code>MIME</code> table.</p>\n<table><thead><tr><th>#</th><th>situation</th><th>response</th></tr></thead><tbody>\n<tr><td>1</td><td>method is not GET</td><td>405 <code>{ error: \"Method Not Allowed\" }</code> + header <code>Allow: GET</code></td></tr>\n<tr><td>2</td><td>path does not start with <code>/files/</code></td><td>404 <code>{ error: \"Not Found\" }</code></td></tr>\n<tr><td>3</td><td>the name (URL-decoded with <code>decodeURIComponent</code>) escapes root, or cannot be decoded</td><td>400 <code>{ error: \"Invalid path\" }</code> — <b>without calling fs</b></td></tr>\n<tr><td>4</td><td>ENOENT / EACCES / EISDIR</td><td>404 Not Found / 403 Forbidden / 400 Is a directory (same <code>{ error }</code> shape)</td></tr>\n<tr><td>5</td><td>any other fs error</td><td>500 <code>{ error: \"Internal Server Error\" }</code> — never the error message</td></tr>\n<tr><td>6</td><td>found</td><td>200, <code>Content-Type</code> from the extension (lower-cased, <code>application/octet-stream</code> if unknown), <code>Content-Length</code> = number of bytes, body = the bytes</td></tr></tbody></table>\n<p>Every request ends with exactly one response.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Check the path before any fs call; a traversal attempt must make zero fs calls.</li>\n  <li>return in front of every response.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đề.</b> Phục vụ file từ <code>root = /srv/files</code> bằng một handler <code>node:http</code> thuần. Viết <code>async serveFile(fs, root, req, res)</code> (<code>fs.readFile(path)</code> resolve một <b>Uint8Array</b> giống Buffer, hoặc reject với <code>err.code</code> thật). Có sẵn: <code>safeResolve</code>, <code>utf8Length</code>, <code>sendJson(res, status, data, extraHeaders?)</code> và bảng <code>MIME</code>.</p>\n<table><thead><tr><th>#</th><th>tình huống</th><th>phản hồi</th></tr></thead><tbody>\n<tr><td>1</td><td>method không phải GET</td><td>405 <code>{ error: \"Method Not Allowed\" }</code> + header <code>Allow: GET</code></td></tr>\n<tr><td>2</td><td>đường dẫn không bắt đầu bằng <code>/files/</code></td><td>404 <code>{ error: \"Not Found\" }</code></td></tr>\n<tr><td>3</td><td>tên (giải mã URL bằng <code>decodeURIComponent</code>) thoát khỏi root, hoặc không giải mã được</td><td>400 <code>{ error: \"Invalid path\" }</code> — <b>không gọi fs</b></td></tr>\n<tr><td>4</td><td>ENOENT / EACCES / EISDIR</td><td>404 Not Found / 403 Forbidden / 400 Is a directory (cùng dạng <code>{ error }</code>)</td></tr>\n<tr><td>5</td><td>lỗi fs khác</td><td>500 <code>{ error: \"Internal Server Error\" }</code> — không bao giờ gửi thông điệp lỗi</td></tr>\n<tr><td>6</td><td>tìm thấy</td><td>200, <code>Content-Type</code> theo phần mở rộng (viết thường, không biết thì <code>application/octet-stream</code>), <code>Content-Length</code> = số byte, thân = các byte</td></tr></tbody></table>\n<p>Mọi request kết thúc bằng đúng một phản hồi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm đường dẫn trước mọi lời gọi fs; một lần thử duyệt ngược phải có không lời gọi fs nào.</li>\n  <li>return trước mọi phản hồi.</li>\n</ul>",
+      "inputSpec": "fs (fake fs/promises), root, req { method, url }, res (node:http response)|||fs (fs/promises giả), root, req { method, url }, res (response của node:http)",
+      "outputSpec": "one response per request (see the table)|||mỗi request một phản hồi (xem bảng)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "await get(fs, \"/files/hello.txt\")",
+          "output": "{\"status\":200,\"type\":\"text/plain; charset=utf-8\",\"length\":8,\"allow\":null,\"body\":\"bytes:8\",\"ends\":1,\"fsCalls\":[\"/srv/files/hello.txt\"],\"errors\":[]}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order: method → prefix → decode + safeResolve (one try/catch) → readFile (one try/catch) → 200.|||Thứ tự: method → tiền tố → decode + safeResolve (một try/catch) → readFile (một try/catch) → 200.",
+        "decodeURIComponent(\"%E0%A4%A\") throws URIError — the same catch turns it into 400.|||decodeURIComponent(\"%E0%A4%A\") ném URIError — cùng catch đó biến nó thành 400.",
+        "The extension: last segment, last dot, dot not at position 0, toLowerCase() — \"PHOTO.PNG\" is image/png.|||Phần mở rộng: đoạn cuối, dấu chấm cuối, dấu chấm không ở vị trí 0, toLowerCase() — \"PHOTO.PNG\" là image/png."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided: your solutions from lessons 3.1 and 3.5 ──\nfunction normalizeAbs(p) {\n  const stack = [];\n  for (const seg of p.split('/')) { if (seg === '' || seg === '.') continue; if (seg === '..') stack.pop(); else stack.push(seg); }\n  return '/' + stack.join('/');\n}\nfunction safeResolve(root, name) {\n  const full = normalizeAbs(name.startsWith('/') ? name : root + '/' + name);\n  if (!full.startsWith(normalizeAbs(root) + '/')) throw new Error('invalid path');\n  return full;\n}\nfunction utf8Length(str) {\n  let n = 0;\n  for (const ch of str) { const cp = ch.codePointAt(0); n += cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4; }\n  return n;\n}\nfunction sendJson(res, status, data, extraHeaders) {\n  const body = JSON.stringify(data);\n  res.writeHead(status, Object.assign({ 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': utf8Length(body) }, extraHeaders || {}));\n  res.end(body);\n}\nconst MIME = { '.txt': 'text/plain; charset=utf-8', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.pdf': 'application/pdf' };\n\n/** GET /files/:name — safe path, real error codes, bytes on the wire */\nasync function serveFile(fs, root, req, res) {\n  // Write your solution here — this version reads first and checks nothing\n  const name = req.url.slice('/files/'.length);\n  try {\n    const bytes = await fs.readFile(root + '/' + name);\n    res.writeHead(200, { 'Content-Type': 'text/plain', 'Content-Length': String(bytes).length });\n    res.end(bytes);\n  } catch (err) {\n    sendJson(res, 404, { error: err.message });\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided: your solutions from lessons 3.1 and 3.5 ──\nfunction normalizeAbs(p) {\n  const stack = [];\n  for (const seg of p.split('/')) { if (seg === '' || seg === '.') continue; if (seg === '..') stack.pop(); else stack.push(seg); }\n  return '/' + stack.join('/');\n}\nfunction safeResolve(root, name) {\n  const full = normalizeAbs(name.startsWith('/') ? name : root + '/' + name);\n  if (!full.startsWith(normalizeAbs(root) + '/')) throw new Error('invalid path');\n  return full;\n}\nfunction utf8Length(str) {\n  let n = 0;\n  for (const ch of str) { const cp = ch.codePointAt(0); n += cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4; }\n  return n;\n}\nfunction sendJson(res, status, data, extraHeaders) {\n  const body = JSON.stringify(data);\n  res.writeHead(status, Object.assign({ 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': utf8Length(body) }, extraHeaders || {}));\n  res.end(body);\n}\nconst MIME = { '.txt': 'text/plain; charset=utf-8', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.pdf': 'application/pdf' };\n\n// Reference solution — decide on the path, try the read, map the error codes\nfunction extOf(name) {\n  // the extension of the last segment, from its last dot; a leading dot (\".env\") is not an extension\n  const base = name.slice(name.lastIndexOf('/') + 1);\n  const dot = base.lastIndexOf('.');\n  return dot <= 0 ? '' : base.slice(dot).toLowerCase();\n}\n\nasync function serveFile(fs, root, req, res) {\n  if (req.method !== 'GET') return sendJson(res, 405, { error: 'Method Not Allowed' }, { Allow: 'GET' });\n  const pathname = new URL(req.url, 'http://localhost').pathname;\n  if (!pathname.startsWith('/files/')) return sendJson(res, 404, { error: 'Not Found' });\n  // 1. decide on the path BEFORE touching the disk\n  let full;\n  try {\n    full = safeResolve(root, decodeURIComponent(pathname.slice('/files/'.length)));   // %2e%2e%2f is ../ too\n  } catch {\n    return sendJson(res, 400, { error: 'Invalid path' });\n  }\n  // 2. just read it — no exists() check (3.1)\n  let bytes;\n  try {\n    bytes = await fs.readFile(full);\n  } catch (err) {\n    if (err.code === 'ENOENT') return sendJson(res, 404, { error: 'Not Found' });\n    if (err.code === 'EACCES') return sendJson(res, 403, { error: 'Forbidden' });\n    if (err.code === 'EISDIR') return sendJson(res, 400, { error: 'Is a directory' });\n    console.error('[serveFile]', err.code, err.message);                // log it, never send it\n    return sendJson(res, 500, { error: 'Internal Server Error' });\n  }\n  // 3. bytes are bytes: Content-Length is their count (3.2)\n  res.writeHead(200, { 'Content-Type': MIME[extOf(full)] || 'application/octet-stream', 'Content-Length': bytes.length });\n  res.end(bytes);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each lesson of chapter 3 owns one line: path decides (3.1), fs is tried, not pre-checked (3.1), bytes give Content-Length (3.2), and the raw http rules — status, headers, exactly one end — are yours to keep (3.5). Lesson 5.3’s <code>express.static()</code> does all of this, plus ETag/304; now you know what it is saving you from.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi bài của chương 3 sở hữu một dòng: path quyết định (3.1), fs được thử chứ không kiểm trước (3.1), byte cho ra Content-Length (3.2), và các luật của http thuần — status, header, đúng một lần end — là việc của bạn (3.5). <code>express.static()</code> ở bài 5.3 làm tất cả những điều này, thêm ETag/304; giờ bạn biết nó đang cứu bạn khỏi những gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A text file: type, length, bytes",
+              "vi": "File chữ: kiểu, độ dài, byte"
+            },
+            "goi": "await get(fs, \"/files/hello.txt\")",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({ '/srv/files/hello.txt': 'xin chao' });",
+            "mongDoi": {
+              "status": 200,
+              "type": "text/plain; charset=utf-8",
+              "length": 8,
+              "allow": null,
+              "body": "bytes:8",
+              "ends": 1,
+              "fsCalls": [
+                "/srv/files/hello.txt"
+              ],
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Traversal: 400 and zero fs calls",
+              "vi": "Duyệt ngược: 400 và không lời gọi fs nào"
+            },
+            "goi": "await get(fs, \"/files/../../etc/passwd\")",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({});",
+            "mongDoi": {
+              "status": 404,
+              "type": "application/json; charset=utf-8",
+              "length": 21,
+              "allow": null,
+              "body": {
+                "error": "Not Found"
+              },
+              "ends": 1,
+              "fsCalls": [],
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "ENOENT → 404",
+              "vi": "ENOENT → 404"
+            },
+            "goi": "await get(fs, \"/files/missing.png\")",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({});",
+            "mongDoi": {
+              "status": 404,
+              "type": "application/json; charset=utf-8",
+              "length": 21,
+              "allow": null,
+              "body": {
+                "error": "Not Found"
+              },
+              "ends": 1,
+              "fsCalls": [
+                "/srv/files/missing.png"
+              ],
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "POST → 405 + Allow",
+              "vi": "POST → 405 + Allow"
+            },
+            "goi": "await get(fs, \"/files/a.txt\", \"POST\")",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({ '/srv/files/a.txt': 'a' });",
+            "mongDoi": {
+              "status": 405,
+              "type": "application/json; charset=utf-8",
+              "length": 30,
+              "allow": "GET",
+              "body": {
+                "error": "Method Not Allowed"
+              },
+              "ends": 1,
+              "fsCalls": [],
+              "errors": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "[await get(fs, \"/files/%2e%2e%2f%2e%2e%2fetc%2fpasswd\"), await get(fs, \"/files/%E0%A4%A\")]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({});",
+            "mongDoi": [
+              {
+                "status": 400,
+                "type": "application/json; charset=utf-8",
+                "length": 24,
+                "allow": null,
+                "body": {
+                  "error": "Invalid path"
+                },
+                "ends": 1,
+                "fsCalls": [],
+                "errors": []
+              },
+              {
+                "status": 400,
+                "type": "application/json; charset=utf-8",
+                "length": 24,
+                "allow": null,
+                "body": {
+                  "error": "Invalid path"
+                },
+                "ends": 1,
+                "fsCalls": [],
+                "errors": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "[await get(fs, \"/files/secret.txt\"), await get(fs, \"/files/docs\"), await get(fs, \"/files/x.txt\")]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({ '/srv/files/secret.txt': '#EACCES', '/srv/files/docs': '#EISDIR', '/srv/files/x.txt': '#EMFILE' });",
+            "mongDoi": [
+              {
+                "status": 403,
+                "type": "application/json; charset=utf-8",
+                "length": 21,
+                "allow": null,
+                "body": {
+                  "error": "Forbidden"
+                },
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/secret.txt"
+                ],
+                "errors": []
+              },
+              {
+                "status": 400,
+                "type": "application/json; charset=utf-8",
+                "length": 26,
+                "allow": null,
+                "body": {
+                  "error": "Is a directory"
+                },
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/secret.txt",
+                  "/srv/files/docs"
+                ],
+                "errors": []
+              },
+              {
+                "status": 500,
+                "type": "application/json; charset=utf-8",
+                "length": 33,
+                "allow": null,
+                "body": {
+                  "error": "Internal Server Error"
+                },
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/secret.txt",
+                  "/srv/files/docs",
+                  "/srv/files/x.txt"
+                ],
+                "errors": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "[await get(fs, \"/files/2026/./PHOTO.PNG\"), await get(fs, \"/files/data.bin\"), await get(fs, \"/files/.env\")]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({ '/srv/files/2026/PHOTO.PNG': 'abcdef', '/srv/files/data.bin': 'zz', '/srv/files/.env': 'K=V' });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "type": "image/png",
+                "length": 6,
+                "allow": null,
+                "body": "bytes:6",
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/2026/PHOTO.PNG"
+                ],
+                "errors": []
+              },
+              {
+                "status": 200,
+                "type": "application/octet-stream",
+                "length": 2,
+                "allow": null,
+                "body": "bytes:2",
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/2026/PHOTO.PNG",
+                  "/srv/files/data.bin"
+                ],
+                "errors": []
+              },
+              {
+                "status": 200,
+                "type": "application/octet-stream",
+                "length": 3,
+                "allow": null,
+                "body": "bytes:3",
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/2026/PHOTO.PNG",
+                  "/srv/files/data.bin",
+                  "/srv/files/.env"
+                ],
+                "errors": []
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "[await get(fs, \"/files/ghi%20ch%C3%BA.txt\"), await get(fs, \"/other\"), await get(fs, \"/files/sub/../ghi%20ch%C3%BA.txt?download=1\")]",
+            "chuanBi": "function mkRes() { var rec = { status: null, headers: {}, body: null, ends: 0, errors: [] };\nvar res = { headersSent: false, writableEnded: false, statusCode: 200, rec: rec };\nfunction sent(w) { var e = new Error('Cannot ' + w + ' headers after they are sent to the client'); e.code = 'ERR_HTTP_HEADERS_SENT'; rec.errors.push(e.code); throw e; }\nres.setHeader = function (k, v) { if (res.headersSent) sent('set'); rec.headers[String(k).toLowerCase()] = v; return res; };\nres.writeHead = function (s, h) { if (res.headersSent) sent('write'); res.statusCode = s; Object.keys(h || {}).forEach(function (k) { rec.headers[k.toLowerCase()] = h[k]; }); res.headersSent = true; rec.status = s; return res; };\nres.end = function (b) { if (res.writableEnded) { if (b !== undefined) rec.errors.push('ERR_STREAM_WRITE_AFTER_END'); return res; } if (!res.headersSent) { res.headersSent = true; rec.status = res.statusCode; } res.writableEnded = true; rec.ends++; rec.body = b === undefined ? null : String(b); return res; };\nreturn res; }\nfunction bytesOf(s) { return new Uint8Array(Array.from(s).map(function (ch) { return ch.charCodeAt(0) & 255; })); }\nfunction mkFs(files) { var calls = [];\nfunction fail(code, msg, p) { var e = new Error(code + ': ' + msg + \", open '\" + p + \"'\"); e.code = code; return e; }\nreturn { calls: calls, readFile: function (p) { calls.push(p); return new Promise(function (ok, no) { setTimeout(function () { var v = files[p];\n  if (v === undefined) return no(fail('ENOENT', 'no such file or directory', p)); if (v === '#EACCES') return no(fail('EACCES', 'permission denied', p));\n  if (v === '#EISDIR') return no(fail('EISDIR', 'illegal operation on a directory, read', p)); if (v === '#EMFILE') return no(fail('EMFILE', 'too many open files', p));\n  ok(bytesOf(v)); }, 2); }); } }; }\nasync function get(fs, url, method) { var res = mkRes(); await serveFile(fs, '/srv/files', { method: method || 'GET', url: url, headers: {} }, res); var r = res.rec; var body = r.body;\n  if (r.headers['content-type'] && /json/.test(r.headers['content-type'])) body = JSON.parse(body); else if (body !== null) body = 'bytes:' + String(body).split(',').length;\n  return { status: r.status, type: r.headers['content-type'] || null, length: r.headers['content-length'] === undefined ? null : Number(r.headers['content-length']), allow: r.headers.allow || null, body: body, ends: r.ends, fsCalls: fs.calls.slice(), errors: r.errors }; }\nconst fs = mkFs({ '/srv/files/ghi chú.txt': 'ok' });",
+            "mongDoi": [
+              {
+                "status": 200,
+                "type": "text/plain; charset=utf-8",
+                "length": 2,
+                "allow": null,
+                "body": "bytes:2",
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/ghi chú.txt"
+                ],
+                "errors": []
+              },
+              {
+                "status": 404,
+                "type": "application/json; charset=utf-8",
+                "length": 21,
+                "allow": null,
+                "body": {
+                  "error": "Not Found"
+                },
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/ghi chú.txt"
+                ],
+                "errors": []
+              },
+              {
+                "status": 200,
+                "type": "text/plain; charset=utf-8",
+                "length": 2,
+                "allow": null,
+                "body": "bytes:2",
+                "ends": 1,
+                "fsCalls": [
+                  "/srv/files/ghi chú.txt",
+                  "/srv/files/ghi chú.txt"
+                ],
+                "errors": []
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Checking for \"..\" in the raw URL: %2e%2e%2f decodes to ../ after your check.|||Tìm \"..\" trong URL thô: %2e%2e%2f giải mã thành ../ sau khi bạn đã kiểm."
+        },
+        {
+          "loi": "Content-Length from a string conversion of the bytes instead of bytes.length.|||Content-Length từ việc đổi các byte thành chuỗi thay vì bytes.length."
+        },
+        {
+          "loi": "catch (err) { sendJson(res, 500, { error: err.message }) } — leaks \"/srv/files/…\" to the client.|||catch (err) { sendJson(res, 500, { error: err.message }) } — lộ \"/srv/files/…\" cho client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MIME type",
+          "vi": "kiểu nội dung",
+          "giaiThich": "image/png, text/plain…"
+        },
+        {
+          "en": "405 Method Not Allowed",
+          "vi": "phương thức không được phép"
+        },
+        {
+          "en": "URL decoding",
+          "vi": "giải mã URL (%xx)"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3 · 3 — Receive an upload: byte limit + backpressure",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "streams",
+        "backpressure",
+        "events",
+        "http"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "nodejs"
+      ],
+      "problemHtml": "<p><b>Brief.</b> <code>POST /upload</code> streams the request body straight into a writable <code>dest</code> (a file on disk) — never into memory. Write <code>receiveUpload(req, dest, limitBytes)</code> returning a Promise of <code>{ status, bytes }</code>:</p>\n<ol><li>On every <code>'data'</code> chunk (a Uint8Array) add its length to <code>bytes</code>.</li>\n<li>If <code>bytes</code> goes over <code>limitBytes</code>: <code>req.destroy()</code>, <code>dest.destroy()</code>, resolve <code>{ status: 413, bytes }</code> (bytes counted so far). Do not write that chunk.</li>\n<li>Otherwise <code>dest.write(chunk)</code>; if it returns <code>false</code>, <code>req.pause()</code> and <code>req.resume()</code> on the next <code>'drain'</code>.</li>\n<li>On <code>'end'</code>: <code>dest.end()</code>, and resolve <code>{ status: 201, bytes }</code> only on dest’s <code>'finish'</code>.</li>\n<li>On req <code>'error'</code> (client disconnected): <code>dest.destroy()</code>, resolve <code>{ status: 500, bytes }</code>.</li></ol>\n<p>The grader’s fake disk stores one chunk every few ms and records its peak buffer; the fake request really stops emitting while paused.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never collect chunks in an array.</li>\n  <li>Settle the promise exactly once.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đề.</b> <code>POST /upload</code> cho thân request chảy thẳng vào một writable <code>dest</code> (file trên đĩa) — không bao giờ vào RAM. Viết <code>receiveUpload(req, dest, limitBytes)</code> trả về Promise của <code>{ status, bytes }</code>:</p>\n<ol><li>Với mỗi chunk <code>'data'</code> (Uint8Array) cộng độ dài của nó vào <code>bytes</code>.</li>\n<li>Nếu <code>bytes</code> vượt <code>limitBytes</code>: <code>req.destroy()</code>, <code>dest.destroy()</code>, resolve <code>{ status: 413, bytes }</code> (số byte đã đếm tới lúc đó). Không ghi chunk đó.</li>\n<li>Ngược lại <code>dest.write(chunk)</code>; nếu nó trả <code>false</code>, <code>req.pause()</code> và <code>req.resume()</code> ở lần <code>'drain'</code> kế tiếp.</li>\n<li>Khi <code>'end'</code>: <code>dest.end()</code>, và chỉ resolve <code>{ status: 201, bytes }</code> ở sự kiện <code>'finish'</code> của dest.</li>\n<li>Khi req <code>'error'</code> (client ngắt kết nối): <code>dest.destroy()</code>, resolve <code>{ status: 500, bytes }</code>.</li></ol>\n<p>Đĩa giả của máy chấm lưu một chunk mỗi vài ms và ghi lại đỉnh bộ đệm; request giả thật sự ngừng phát khi bị pause.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ gom chunk vào mảng.</li>\n  <li>Promise chỉ được settle đúng một lần.</li>\n</ul>",
+      "inputSpec": "req — Readable (data/end/error, pause/resume/destroy); dest — Writable (write/end/destroy, drain/finish)",
+      "outputSpec": "Promise of { status: 201 | 413 | 500, bytes }|||Promise của { status: 201 | 413 | 500, bytes }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "snap(r, d, await receiveUpload(r, d, 10000))",
+          "output": "{\"result\":{\"status\":201,\"bytes\":800},\"stored\":800,\"maxBuffered\":2,\"endCalls\":1,\"destDestroyed\":false,\"reqDestroyed\":false,\"pausedSometimes\":true}",
+          "explanation": "The first sample case (Run runs the visible cases; hidden ones run only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three listeners on req (data, end, error) inside one new Promise.|||Ba listener trên req (data, end, error) bên trong một new Promise.",
+        "Use a done flag: after a 413 more events may still be in flight.|||Dùng cờ done: sau 413 vẫn có thể còn sự kiện đang trên đường tới.",
+        "Pause/resume is the manual version of what pipeline() does for you — 3.3’s writeAll with a Readable as the source.|||Pause/resume là bản thủ công của việc pipeline() làm giúp bạn — writeAll của bài 3.3 với nguồn là một Readable."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** stream an upload into dest: 413 over the limit, backpressure, 201 on finish */\nfunction receiveUpload(req, dest, limitBytes) {\n  // Write your solution here — no limit, no backpressure, 201 too early\n  return new Promise((resolve) => {\n    let bytes = 0;\n    req.on('data', (chunk) => { bytes += chunk.length; dest.write(chunk); });\n    req.on('end', () => { dest.end(); resolve({ status: 201, bytes }); });\n  });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution — count, limit, pause on false, resume on drain, 201 on finish\nfunction receiveUpload(req, dest, limitBytes) {\n  return new Promise((resolve) => {\n    let bytes = 0;\n    let done = false;\n    const finish = (result) => { if (!done) { done = true; resolve(result); } };\n    req.on('data', (chunk) => {\n      if (done) return;\n      bytes += chunk.length;                       // Uint8Array: length IS bytes\n      if (bytes > limitBytes) {\n        req.destroy();                             // stop the upload as soon as it is too big\n        dest.destroy();                            // and throw away the partial file\n        return finish({ status: 413, bytes });\n      }\n      // backpressure: if the destination is full, pause the request until it drains\n      if (!dest.write(chunk)) {\n        req.pause();\n        dest.once('drain', () => req.resume());\n      }\n    });\n    req.on('end', () => {\n      if (done) return;\n      dest.once('finish', () => finish({ status: 201, bytes }));   // 201 only when every byte is stored\n      dest.end();\n    });\n    req.on('error', () => {                        // the client disconnected mid-upload\n      dest.destroy();\n      finish({ status: 500, bytes });\n    });\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is lesson 3.3’s backpressure loop with a real Readable as the source, plus the two exits every upload needs (too big, client gone). The grader checks the peak buffer stays at the disk’s highWaterMark, that the request was actually paused, and that a failed upload leaves no open file. Chapter 10 does the same with multipart uploads straight to object storage.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là vòng backpressure của bài 3.3 với nguồn là một Readable thật, thêm hai lối thoát mọi upload đều cần (quá lớn, client bỏ đi). Máy chấm kiểm đỉnh bộ đệm giữ ở highWaterMark của đĩa, request thật sự đã bị pause, và upload hỏng không để lại file mở. Chương 10 làm đúng điều này với upload multipart thẳng lên object storage.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "800 bytes into a slow disk: paused, peak ≤ 2, 201 after finish",
+              "vi": "800 byte vào đĩa chậm: có pause, đỉnh ≤ 2, 201 sau finish"
+            },
+            "goi": "snap(r, d, await receiveUpload(r, d, 10000))",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload([100, 100, 100, 100, 100, 100, 100, 100]); const d = mkDest(2, 5);",
+            "mongDoi": {
+              "result": {
+                "status": 201,
+                "bytes": 800
+              },
+              "stored": 800,
+              "maxBuffered": 2,
+              "endCalls": 1,
+              "destDestroyed": false,
+              "reqDestroyed": false,
+              "pausedSometimes": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Over the limit at the 3rd chunk → 413, both destroyed",
+              "vi": "Vượt giới hạn ở chunk thứ 3 → 413, huỷ cả hai"
+            },
+            "goi": "snap(r, d, await receiveUpload(r, d, 1000))",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload([400, 400, 400, 400]); const d = mkDest(10, 1);",
+            "mongDoi": {
+              "result": {
+                "status": 413,
+                "bytes": 1200
+              },
+              "stored": 800,
+              "maxBuffered": 1,
+              "endCalls": 0,
+              "destDestroyed": true,
+              "reqDestroyed": true,
+              "pausedSometimes": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Client disconnects → 500, dest destroyed",
+              "vi": "Client ngắt → 500, dest bị huỷ"
+            },
+            "goi": "snap(r, d, await receiveUpload(r, d, 1000))",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload([10, 10, 10, 10], 2); const d = mkDest(10, 1);",
+            "mongDoi": {
+              "result": {
+                "status": 500,
+                "bytes": 20
+              },
+              "stored": 20,
+              "maxBuffered": 1,
+              "endCalls": 0,
+              "destDestroyed": true,
+              "reqDestroyed": true,
+              "pausedSometimes": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "snap(r, d, await receiveUpload(r, d, 1e6))",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload(Array.from({ length: 40 }, () => 64)); const d = mkDest(3, 4);",
+            "mongDoi": {
+              "result": {
+                "status": 201,
+                "bytes": 2560
+              },
+              "stored": 2560,
+              "maxBuffered": 3,
+              "endCalls": 1,
+              "destDestroyed": false,
+              "reqDestroyed": false,
+              "pausedSometimes": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "snap(r, d, await receiveUpload(r, d, 10))",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload([]); const d = mkDest(3, 4);",
+            "mongDoi": {
+              "result": {
+                "status": 201,
+                "bytes": 0
+              },
+              "stored": 0,
+              "maxBuffered": 0,
+              "endCalls": 1,
+              "destDestroyed": false,
+              "reqDestroyed": false,
+              "pausedSometimes": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(await new Promise((z) => setTimeout(z, 20)), { settledBeforeDiskFinished: early !== null, stillBuffered: d.buffered })",
+            "chuanBi": "function __em(o) { var L = {}; o = o || {};\no.on = function (e, f) { (L[e] = L[e] || []).push(f); return o; };\no.once = function (e, f) { function w() { o.off(e, w); return f.apply(o, arguments); } w.listener = f; return o.on(e, w); };\no.off = o.removeListener = function (e, f) { L[e] = (L[e] || []).filter(function (x) { return x !== f && x.listener !== f; }); return o; };\no.emit = function (e) { var a = [].slice.call(arguments, 1); var ls = (L[e] || []).slice(); ls.forEach(function (f) { f.apply(o, a); }); return ls.length > 0; };\no.listenerCount = function (e) { return (L[e] || []).length; };\nreturn o; }\nfunction mkUpload(sizes, failAt) { var r = __em({ destroyed: false, paused: false, pauses: 0 }); var i = 0, timer = null;\nr.pause = function () { if (!r.paused) { r.paused = true; r.pauses++; } }; r.resume = function () { r.paused = false; tick(); }; r.destroy = function () { r.destroyed = true; };\nfunction tick() { if (timer !== null) return; timer = setTimeout(function () { timer = null; if (r.destroyed || r.paused) return;\n  if (failAt !== undefined && i === failAt) { r.destroyed = true; var e = new Error('aborted'); e.code = 'ECONNRESET'; r.emit('error', e); return; }\n  if (i < sizes.length) { var c = new Uint8Array(sizes[i]); i++; r.emit('data', c); tick(); } else r.emit('end'); }, 1); }\ntick(); return r; }\nfunction mkDest(hwm, ms) { var d = __em({ buffered: 0, maxBuffered: 0, stored: 0, endCalls: 0, destroyed: false }); var need = false, t = null, ended = false;\nfunction pump() { if (t !== null) return; t = setTimeout(function () { t = null; if (d.destroyed) return; if (d.buffered > 0) { d.buffered--; } if (d.buffered === 0) { if (need) { need = false; d.emit('drain'); } if (ended) { d.emit('finish'); return; } } if (d.buffered > 0) pump(); }, ms); }\nd.write = function (c) { if (d.destroyed || ended) return false; d.buffered++; d.stored += c.length; if (d.buffered > d.maxBuffered) d.maxBuffered = d.buffered; pump(); var ok = d.buffered < hwm; if (!ok) need = true; return ok; };\nd.end = function () { d.endCalls++; ended = true; if (d.buffered === 0) setTimeout(function () { d.emit('finish'); }, 0); };\nd.destroy = function () { d.destroyed = true; };\nreturn d; }\nfunction snap(r, d, out) { return { result: out, stored: d.stored, maxBuffered: d.maxBuffered, endCalls: d.endCalls, destDestroyed: d.destroyed, reqDestroyed: r.destroyed, pausedSometimes: r.pauses > 0 }; }\nconst r = mkUpload([5, 5]); const d = mkDest(100, 50); let early = null; receiveUpload(r, d, 100).then((x) => { early = x; });",
+            "mongDoi": {
+              "settledBeforeDiskFinished": false,
+              "stillBuffered": 2
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring dest.write()’s false: the fake disk’s buffer climbs to the whole upload.|||Phớt lờ false của dest.write(): bộ đệm của đĩa giả leo tới cỡ cả upload."
+        },
+        {
+          "loi": "Answering 201 on req \"end\": the last chunks are not on disk yet — wait for \"finish\".|||Trả 201 ở \"end\" của req: các chunk cuối chưa xuống đĩa — chờ \"finish\"."
+        },
+        {
+          "loi": "On 413, destroying req but leaving dest open: a half-written file stays on disk.|||Khi 413, huỷ req nhưng để dest mở: một file ghi dở nằm lại trên đĩa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pause / resume",
+          "vi": "tạm dừng / tiếp tục đọc"
+        },
+        {
+          "en": "destroy",
+          "vi": "huỷ stream (giải phóng tài nguyên)"
+        },
+        {
+          "en": "ECONNRESET",
+          "vi": "kết nối bị đầu kia cắt"
+        }
+      ]
+    }
+  ]
+}

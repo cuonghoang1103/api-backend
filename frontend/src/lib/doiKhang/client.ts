@@ -10,7 +10,7 @@
  * xong). Dùng `connectSocket()` nên chạy được cả web lẫn app desktop (`datNguonSocket`).
  */
 import type { Socket } from 'socket.io-client';
-import { connectSocket } from '@/lib/socket';
+import { connectSocket, getSocket, onSocketReplaced } from '@/lib/socket';
 import api from '@/lib/api';
 import type { KetQua, MaTro, CapDoBot } from './luat';
 
@@ -57,6 +57,8 @@ export interface PhongDTO {
   gheCuaToi: number | null;
   /** Date.now() của máy chủ lúc gửi — để bù lệch đồng hồ. */
   gioMayChu?: number;
+  /** Lời mời đang chờ trả lời (máy chủ ≥ 08/11/2026). `het` = Date.now() máy chủ lúc hết hạn. */
+  dangMoi?: { userId: number; ten: string; het: number }[];
 }
 export interface Ack {
   ok: boolean;
@@ -71,9 +73,37 @@ export interface NguoiMoi {
   avatar: string | null;
 }
 export interface LoiMoiDen {
+  /** Có từ 08/11/2026 — máy chủ cũ không gửi. */
+  id?: string;
   maPhong: string;
   tro: MaTro;
   tu: NguoiMoi;
+  /** Date.now() của máy chủ lúc lời mời hết hạn. */
+  hetLuc?: number;
+}
+/** Lời mời đã kết thúc (nhận ở thiết bị khác / từ chối / hết hạn / phòng đóng) ⇒ tắt thẻ. */
+export interface LoiMoiXong {
+  id?: string;
+  maPhong: string;
+  ketQua: 'nhan' | 'tu-choi' | 'het-han' | null;
+  lyDo?: string;
+}
+/** Gửi cho người MỜI: kết quả lời mời của mình. */
+export interface KetQuaMoi {
+  id?: string;
+  maPhong: string;
+  userId: number;
+  ten: string;
+  ketQua: 'nhan' | 'tu-choi' | 'het-han';
+}
+export interface PhongCongKhai {
+  maPhong: string;
+  tro: MaTro;
+  trangThai: 'cho' | 'dang-danh';
+  conCho: boolean;
+  ghe: { ten: string; avatar: string | null; bot: boolean; trong: boolean }[];
+  nguoiXem: number;
+  thoiGian: { phut: number; congGiay: number };
 }
 /** Dữ liệu `dk:nuoc` — đặc tả chỉ nói "nước vừa đi + đồng hồ", nên đọc phòng thủ. */
 export interface SuKienNuoc {
@@ -120,6 +150,10 @@ export interface SuKienMayChu {
   'dk:ghep-xong': { maPhong: string; tro?: MaTro; phong?: PhongDTO };
   'dk:dong': { maPhong: string };
   'dk:tu-choi': { maPhong: string; userId: number; ten: string };
+  'dk:loi-moi-xong': LoiMoiXong;
+  'dk:moi-ket-qua': KetQuaMoi;
+  /** Hiện diện của bạn bè (máy chủ tin nhắn phát) — để danh sách mời cập nhật tức thì. */
+  'presence:update': { userId: number; online: boolean; lastSeen?: number };
 }
 
 // ─── Socket ──────────────────────────────────────────────────────────────────
@@ -159,8 +193,15 @@ async function gui(ten: string, duLieu: unknown): Promise<Ack> {
 export const taoPhong = (d: { tro: MaTro; thoiGian: { phut: number; congGiay: number }; rieng?: boolean; soGhe?: number }) =>
   guiAck('dk:tao', d);
 export const vaoPhong = (maPhong: string) => guiAck('dk:vao', { maPhong });
-export const roiPhong = (maPhong: string) => gui('dk:roi', { maPhong });
+/** `han` = bấm "Rời phòng" thật (rời ngay). Không có = chỉ rời trang — máy chủ giữ ghế 3 phút. */
+export const roiPhong = (maPhong: string, han = false) => gui('dk:roi', han ? { maPhong, han: true } : { maPhong });
+/** Ack: `{ ok, id, online, het }` — `online: false` = bạn ấy không mở web/app, lời mời đã vào chuông thông báo. */
 export const moi = (maPhong: string, userId: number) => guiAck('dk:moi', { maPhong, userId });
+export const huyMoi = (maPhong: string, userId: number) => gui('dk:huy-moi', { maPhong, userId });
+export async function layDsPhong(tro?: MaTro): Promise<PhongCongKhai[]> {
+  const a = await guiAck('dk:ds-phong', tro ? { tro } : {});
+  return a.ok && Array.isArray(a.phong) ? (a.phong as unknown as PhongCongKhai[]) : [];
+}
 export const traLoiMoi = (maPhong: string, dongY: boolean) => gui('dk:tra-loi-moi', { maPhong, dongY });
 /** Ack `{ ok, dangCho: true }` = đang chờ (đối thủ tới thì nhận `dk:ghep-xong`); `{ ok, maPhong }` = ghép xong ngay. */
 export const ghep = (tro: MaTro) => guiAck('dk:ghep', { tro });
@@ -179,46 +220,81 @@ export const taiDau = (maPhong: string) => gui('dk:tai-dau', { maPhong });
 export const chat = (maPhong: string, text: string) => gui('dk:chat', { maPhong, text: text.slice(0, 200) });
 export const camXuc = (maPhong: string, emoji: string) => gui('dk:cam-xuc', { maPhong, emoji });
 
-/** Gắn listener; trả hàm huỷ. An toàn khi gọi trước lúc socket nối xong. */
+/**
+ * Gắn listener lên socket HIỆN HÀNH và GIỮ nó gắn suốt vòng đời (viết lại 08/11/2026). Trả hàm huỷ.
+ *
+ * Bản cũ gắn một lần vào socket của lần `connectSocket()` đầu tiên và `.catch(() => undefined)`:
+ * - lượt bắt tay ĐẦU hỏng (cookie JWT 24 h vừa hết, lượt làm mới chạy đua với trang) ⇒ listener
+ *   không bao giờ được gắn, thẻ mời đối kháng "điếc" tới khi tải lại trang — trong khi phía người
+ *   mời vẫn thấy mình online;
+ * - socket bị THAY (trang Tin nhắn bấm "thử lại", app desktop nối lại bằng token mới) ⇒
+ *   `removeAllListeners()` gỡ sạch, listener chết theo.
+ * Giờ: gắn lại mỗi khi có socket mới (`onSocketReplaced`), và nối hỏng thì thử lại có giãn cách.
+ */
 export function nghe<K extends keyof SuKienMayChu>(ten: K, fn: (d: SuKienMayChu[K]) => void): () => void {
+  return gan((sk, huy) => {
+    const h = (d: SuKienMayChu[K]) => { if (!huy()) fn(d); };
+    sk.on(ten as string, h as (...a: unknown[]) => void);
+    return () => { sk.off(ten as string, h as (...a: unknown[]) => void); };
+  });
+}
+
+/** Lõi chung của `nghe`/`ngheKetNoi`: gắn `lap(socket)` lên socket hiện hành + mọi socket thay thế. */
+/** `laThay` = đây là socket THAY THẾ (không phải lần gắn đầu) — phòng cần vào lại trên socket mới. */
+function gan(lap: (sk: Socket, daHuy: () => boolean, laThay: boolean) => () => void): () => void {
   let huy = false;
-  let s: Socket | null = null;
-  const h = (d: SuKienMayChu[K]) => {
-    if (!huy) fn(d);
+  let dangGan: Socket | null = null;
+  let go: (() => void) | null = null;
+  let hen: ReturnType<typeof setTimeout> | null = null;
+  let lanThu = 0;
+  const daHuy = () => huy;
+
+  const ganVao = (sk: Socket) => {
+    if (huy || sk === dangGan) return;
+    const laThay = dangGan != null;
+    go?.();
+    dangGan = sk;
+    go = lap(sk, daHuy, laThay);
   };
-  connectSocket()
-    .then((sk) => {
-      if (huy) return;
-      s = sk;
-      sk.on(ten as string, h as (...a: unknown[]) => void);
-    })
-    .catch(() => undefined);
+  const thu = () => {
+    hen = null;
+    if (huy) return;
+    connectSocket()
+      .then((sk) => { lanThu = 0; ganVao(sk); })
+      .catch(() => {
+        if (huy) return;
+        // 2 s → 4 → 8 → … tối đa 30 s. Socket thay thế tới sớm hơn thì `onSocketReplaced` gắn luôn.
+        lanThu += 1;
+        hen = setTimeout(thu, Math.min(30_000, 1000 * 2 ** lanThu));
+      });
+  };
+  const goThay = onSocketReplaced((sk) => ganVao(sk));
+  const coSan = getSocket();
+  if (coSan) ganVao(coSan);
+  if (!coSan?.connected) thu();
+
   return () => {
     huy = true;
-    s?.off(ten as string, h as (...a: unknown[]) => void);
+    if (hen) clearTimeout(hen);
+    goThay();
+    go?.();
+    go = null;
   };
 }
 
 /** Theo dõi trạng thái kết nối (để hiện băng "Đang nối lại…"). Gọi `fn(true)` khi nối lại được. */
 export function ngheKetNoi(fn: (ketNoi: boolean) => void): () => void {
-  let huy = false;
-  let s: Socket | null = null;
-  const len = () => !huy && fn(true);
-  const xuong = () => !huy && fn(false);
-  connectSocket()
-    .then((sk) => {
-      if (huy) return;
-      s = sk;
-      sk.on('connect', len);
-      sk.on('disconnect', xuong);
-      fn(sk.connected);
-    })
-    .catch(() => !huy && fn(false));
-  return () => {
-    huy = true;
-    s?.off('connect', len);
-    s?.off('disconnect', xuong);
-  };
+  return gan((sk, huy, laThay) => {
+    const len = () => { if (!huy()) fn(true); };
+    const xuong = () => { if (!huy()) fn(false); };
+    sk.on('connect', len);
+    sk.on('disconnect', xuong);
+    // Socket mới thay socket cũ: máy chủ không biết socket này đang ở phòng nào ⇒ báo "mất rồi có lại"
+    // để người dùng (`useVanOnline`) vào lại phòng, kể cả khi socket mới đã nối sẵn.
+    if (laThay) xuong();
+    if (!huy()) fn(sk.connected);
+    return () => { sk.off('connect', len); sk.off('disconnect', xuong); };
+  });
 }
 
 // ─── REST (đường /api/v1/doi-khang/…, bọc `{ success, data }`) ──────────────────

@@ -38,6 +38,7 @@ export const ALL_NOTIFY_TYPES: NotifyType[] = [
   'FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW',
   'NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE', 'NEW_POST', 'ADMIN_ANNOUNCEMENT',
   'WORK_INVITE', 'WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION', 'WORK_ALERT',
+  'GAME_INVITE',
 ];
 
 export interface NotifyTypeMeta {
@@ -68,6 +69,7 @@ export const NOTIFY_TYPE_META: Record<NotifyType, NotifyTypeMeta> = {
   WORK_COMMENT: { label: 'CT Work: new comment', description: 'Someone commented on an issue you follow', icon: 'MessageCircle' },
   WORK_MENTION: { label: 'CT Work: mentioned', description: 'Someone @mentioned you in an issue', icon: 'AtSign' },
   WORK_ALERT: { label: 'CT Work: alerts', description: 'Automation rules and due-date reminders', icon: 'Bell' },
+  GAME_INVITE: { label: 'Lời mời chơi đối kháng', description: 'Bạn bè mời bạn vào phòng cờ / bài khi bạn đang offline', icon: 'UserPlus' },
 };
 
 export interface SoundKindMeta {

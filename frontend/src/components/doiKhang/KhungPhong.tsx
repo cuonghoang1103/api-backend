@@ -14,7 +14,16 @@ import {
 } from 'lucide-react';
 import { LUAT, type CapDoBot, type MaTro } from '@/lib/doiKhang/luat';
 import type { GheDTO, PhongDTO } from '@/lib/doiKhang/client';
-import { layBanOnline, type BanOnline } from '@/lib/doiKhang/client';
+import { layBanOnline, nghe, type BanOnline } from '@/lib/doiKhang/client';
+
+/**
+ * Link mời phải mở được ở MÁY NGƯỜI KHÁC. Trong app desktop `window.location.origin` là
+ * `app://cuongthai` — chép link đó gửi bạn là gửi một địa chỉ vô dụng (08/11/2026).
+ */
+function linkMoi(maPhong: string): string {
+  const goc = typeof window !== 'undefined' && /^https?:/.test(window.location.origin) ? window.location.origin : 'https://cuongthai.com';
+  return `${goc}/games/doi-khang?phong=${maPhong}`;
+}
 import { tatTieng, datTatTieng } from '@/components/games/shared/amThanh';
 import { phaoGiay } from '@/components/games/shared/hieuUng';
 import type { DieuKhienPhong } from './dieuKhien';
@@ -235,15 +244,28 @@ function KhungChat({ dk }: { dk: DieuKhienPhong }) {
 // ─── Phòng chờ (online) ─────────────────────────────────────────────────────
 function PhongCho({ phong, dk }: { phong: PhongDTO; dk: DieuKhienPhong }) {
   const [ban, setBan] = useState<BanOnline[] | null>(null);
-  const [daMoi, setDaMoi] = useState<Record<number, 'dang' | 'xong' | 'loi'>>({});
+  /** Trạng thái nút mời theo bạn: đang gửi · đã gửi vào chuông (bạn ấy offline) · lỗi kèm lý do. */
+  const [daMoi, setDaMoi] = useState<Record<number, { tt: 'dang' | 'chuong' | 'loi'; loi?: string }>>({});
   const [daChep, setDaChep] = useState(false);
   const [capBot, setCapBot] = useState<CapDoBot>(2);
+  const [bayGio, setBayGio] = useState(() => Date.now());
   useEffect(() => {
     let song = true;
-    void layBanOnline().then((b) => song && setBan(b));
-    return () => { song = false; };
+    const tai = () => void layBanOnline().then((b) => song && setBan(b));
+    tai();
+    // Online/offline của bạn bè cập nhật TỨC THÌ (trước đây chỉ tải một lần lúc mở phòng ⇒ bạn vừa vào
+    // web vẫn hiện "Offline", nút mời bị khoá). Tải lại định kỳ để bắt cả bạn mới kết bạn.
+    const huy = nghe('presence:update', (d) => {
+      if (!song || !d) return;
+      setBan((c) => c?.map((b) => (b.id === d.userId ? { ...b, online: !!d.online } : b)) ?? c);
+    });
+    const t = setInterval(tai, 45_000);
+    const dem = setInterval(() => setBayGio(Date.now()), 1000);
+    return () => { song = false; huy(); clearInterval(t); clearInterval(dem); };
   }, []);
-  const link = typeof window !== 'undefined' ? `${window.location.origin}/games/doi-khang?phong=${phong.maPhong}` : '';
+  const dangMoi = new Map((phong.dangMoi ?? []).map((m) => [m.userId, m]));
+  const lechGio = phong.gioMayChu ? Date.now() - phong.gioMayChu : 0;
+  const link = linkMoi(phong.maPhong);
   const toi = phong.gheCuaToi;
   const gheToi = toi != null ? phong.ghe[toi] : null;
   const laChu = dk.kieu === 'online' && phong.chuId != null && gheToi?.userId === phong.chuId;
@@ -283,7 +305,11 @@ function PhongCho({ phong, dk }: { phong: PhongDTO; dk: DieuKhienPhong }) {
                   <button type="button" className="text-xs text-rose-300 hover:underline" onClick={() => dk.boBot!(i)}>Bỏ máy</button>
                 ) : <span className="text-xs text-white/40">Máy</span>
               ) : g.userId != null ? (
-                <span className={`text-xs font-semibold ${g.sanSang ? 'text-emerald-400' : 'text-amber-300'}`}>{g.sanSang ? 'Sẵn sàng' : 'Chưa'}</span>
+                !g.online ? (
+                  <span className="text-xs font-semibold text-white/40" title="Đã rời trang — ghế được giữ 3 phút">Tạm vắng</span>
+                ) : (
+                  <span className={`text-xs font-semibold ${g.sanSang ? 'text-emerald-400' : 'text-amber-300'}`}>{g.sanSang ? 'Sẵn sàng' : 'Chưa'}</span>
+                )
               ) : null}
             </div>
           ))}
@@ -320,25 +346,57 @@ function PhongCho({ phong, dk }: { phong: PhongDTO; dk: DieuKhienPhong }) {
             {ban?.length === 0 && <p className="py-3 text-center text-xs text-white/40">Chưa có bạn bè nào — gửi link mời ở trên nhé.</p>}
             {ban?.map((b) => {
               const tt = daMoi[b.id];
+              const cho = dangMoi.get(b.id);
+              const conGiay = cho ? Math.max(0, Math.ceil((cho.het + lechGio - bayGio) / 1000)) : 0;
+              const daVao = daNgoi.has(b.id);
               return (
-                <div key={b.id} className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 hover:bg-white/[0.04]">
-                  <div className="relative">
-                    <AnhDaiDien ten={b.ten} src={b.avatar} kich={30} />
-                    <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#100e24] ${b.online ? 'bg-emerald-400' : 'bg-slate-500'}`} />
+                <div key={b.id} className="rounded-xl px-2 py-1.5 hover:bg-white/[0.04]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative">
+                      <AnhDaiDien ten={b.ten} src={b.avatar} kich={30} />
+                      <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-[#100e24] ${b.online ? 'bg-emerald-400' : 'bg-slate-500'}`} />
+                    </div>
+                    <span className="min-w-0 flex-1 truncate text-sm text-white/85">
+                      {b.ten}
+                      {!b.online && <span className="ml-1.5 text-[11px] text-white/35">offline</span>}
+                    </span>
+                    {daVao ? (
+                      <span className="text-xs font-semibold text-emerald-400">Đã vào</span>
+                    ) : cho ? (
+                      <span className="inline-flex items-center gap-1.5 text-xs text-amber-200/90">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin motion-reduce:animate-none" />
+                        Chờ trả lời · {conGiay}s
+                        {laChu && dk.huyMoi && (
+                          <button type="button" className="rounded p-0.5 text-white/40 hover:bg-white/10 hover:text-white" aria-label={`Huỷ lời mời ${b.ten}`} onClick={() => dk.huyMoi!(b.id)}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={(!conTrong && phong.tro !== 'tien-len') || tt?.tt === 'dang' || !dk.moiBan}
+                        className="inline-flex items-center gap-1 rounded-lg bg-violet-500/25 px-2.5 py-1 text-xs font-semibold text-violet-100 hover:bg-violet-500/40 disabled:opacity-40"
+                        title={b.online ? undefined : 'Bạn ấy đang offline — lời mời sẽ vào chuông thông báo'}
+                        onClick={() => {
+                          setDaMoi((m) => ({ ...m, [b.id]: { tt: 'dang' } }));
+                          void dk.moiBan!(b.id).then((a) =>
+                            setDaMoi((m) => {
+                              const { [b.id]: _cu, ...con } = m;
+                              // Gửi được + bạn ấy online ⇒ trạng thái "chờ trả lời" lấy từ máy chủ (`phong.dangMoi`).
+                              if (a.ok && a.online !== false) return con;
+                              return { ...con, [b.id]: !a.ok ? { tt: 'loi', loi: a.loi || 'Không mời được' } : { tt: 'chuong' } };
+                            }),
+                          );
+                        }}
+                      >
+                        {tt?.tt === 'dang' ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UserPlus className="h-3.5 w-3.5" />}
+                        {tt?.tt === 'loi' || tt?.tt === 'chuong' ? 'Mời lại' : 'Mời'}
+                      </button>
+                    )}
                   </div>
-                  <span className="flex-1 truncate text-sm text-white/85">{b.ten}</span>
-                  <button
-                    type="button"
-                    disabled={!b.online || daNgoi.has(b.id) || tt === 'dang' || tt === 'xong' || !dk.moiBan}
-                    className="inline-flex items-center gap-1 rounded-lg bg-violet-500/25 px-2.5 py-1 text-xs font-semibold text-violet-100 hover:bg-violet-500/40 disabled:opacity-40"
-                    onClick={() => {
-                      setDaMoi((m) => ({ ...m, [b.id]: 'dang' }));
-                      void dk.moiBan!(b.id).then((a) => setDaMoi((m) => ({ ...m, [b.id]: a.ok ? 'xong' : 'loi' })));
-                    }}
-                  >
-                    <UserPlus className="h-3.5 w-3.5" />
-                    {daNgoi.has(b.id) ? 'Đã vào' : tt === 'xong' ? 'Đã mời' : tt === 'loi' ? 'Mời lại' : b.online ? 'Mời' : 'Offline'}
-                  </button>
+                  {!daVao && !cho && tt?.tt === 'loi' && <p className="mt-1 pl-10 text-[11px] text-rose-300">{tt.loi}</p>}
+                  {!daVao && !cho && tt?.tt === 'chuong' && <p className="mt-1 pl-10 text-[11px] text-white/45">Bạn ấy không online — đã gửi vào thông báo, mở là vào thẳng phòng.</p>}
                 </div>
               );
             })}
@@ -394,7 +452,7 @@ function ManKetQua({ phong, dk, onDong }: { phong: PhongDTO; dk: DieuKhienPhong;
               {gheToi?.taiDau ? 'Đang chờ…' : 'Tái đấu'}
             </button>
           )}
-          <Link href="/games/doi-khang" className={`${NUT_KINH} flex-1`}>Về sảnh</Link>
+          <Link href="/games/doi-khang" className={`${NUT_KINH} flex-1`} onClick={() => dk.roiHan?.()}>Về sảnh</Link>
         </div>
       </div>
     </div>
@@ -510,7 +568,7 @@ export default function KhungPhong({ dk }: { dk: DieuKhienPhong }) {
   const luot = phong.van?.luot ?? -1;
   const tenLuot = luot >= 0 ? phong.ghe[luot]?.ten : '';
   const conLaiRoi = nguoiRoi != null && nguoiRoi >= 0 ? Math.max(0, 60 - Math.floor((bayGio - (roiLucRef.current.get(nguoiRoi) ?? bayGio)) / 1000)) : 0;
-  const link = typeof window !== 'undefined' ? `${window.location.origin}/games/doi-khang?phong=${phong.maPhong}` : '';
+  const link = linkMoi(phong.maPhong);
 
   let ban: React.ReactNode = null;
   if (nhin) {
@@ -547,7 +605,7 @@ export default function KhungPhong({ dk }: { dk: DieuKhienPhong }) {
     >
       {/* thanh trên */}
       <div className="flex flex-wrap items-center gap-2 px-3 pt-3 sm:px-5">
-        <Link href="/games/doi-khang" className="inline-flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-sm text-white/70 hover:bg-white/5 hover:text-white">
+        <Link href="/games/doi-khang" onClick={() => dk.roiHan?.()} className="inline-flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-sm text-white/70 hover:bg-white/5 hover:text-white">
           <ArrowLeft className="h-4 w-4" /> Sảnh
         </Link>
         <h1 className="text-lg font-bold" style={{ color: mau.a }}>{TEN_TRO[tro]}</h1>

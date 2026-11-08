@@ -49,6 +49,7 @@ const CAU: Record<string, string> = {
   FRIEND_ACCEPT: 'đã chấp nhận lời mời kết bạn', NEW_FOLLOW: 'đã theo dõi bạn',
   NOTE_SHARE: 'đã chia sẻ một thư mục ghi chú với bạn', NOTE_COMMENT: 'đã bình luận ghi chú',
   NOTE_REPLY: 'đã trả lời trong ghi chú', ADMIN_ANNOUNCEMENT: 'đăng thông báo mới',
+  GAME_INVITE: 'mời bạn chơi đối kháng',
 };
 
 function ten(p: GoiThongBao['sender']): string {

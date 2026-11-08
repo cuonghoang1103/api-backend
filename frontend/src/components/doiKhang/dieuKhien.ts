@@ -56,6 +56,10 @@ export interface DieuKhienPhong {
   moiBan?: (userId: number) => Promise<dk.Ack>;
   themBot?: (cap: CapDoBot) => void;
   boBot?: (ghe: number) => void;
+  /** Huỷ lời mời đã gửi (chủ phòng). */
+  huyMoi?: (userId: number) => void;
+  /** Bấm "Rời phòng" / "Về sảnh" THẬT — rời ngay, không giữ ghế 3 phút như khi chỉ chuyển trang. */
+  roiHan?: () => void;
   xoaLoi: () => void;
 }
 
@@ -345,6 +349,7 @@ export function useVanOnline(maPhong: string): DieuKhienPhong {
   const userId = useAuthStore((s) => s.user?.id ?? null);
   const userIdRef = useRef(userId);
   userIdRef.current = userId;
+  const daRoiHan = useRef(false);
 
   const nhan = useCallback((p: PhongDTO | undefined | null) => {
     if (!p || String(p.maPhong).toUpperCase() !== ma) return;
@@ -369,6 +374,7 @@ export function useVanOnline(maPhong: string): DieuKhienPhong {
       });
     void vao();
     let tungMat = false;
+    const vuaBao = new Map<number, number>();
     const huy = [
       dk.nghe('dk:phong', (p) => nhan(p)),
       dk.nghe('dk:chat', (d) => {
@@ -388,8 +394,20 @@ export function useVanOnline(maPhong: string): DieuKhienPhong {
       dk.nghe('dk:dong', (d) => {
         if (d.maPhong === ma) setHong('Phòng đã đóng.');
       }),
+      // Kết quả lời mời của mình (máy chủ ≥ 08/11/2026). `dk:tu-choi` giữ cho máy chủ cũ; máy chủ mới phát
+      // CẢ HAI khi bị từ chối ⇒ chống báo trùng bằng mốc vừa báo.
+      dk.nghe('dk:moi-ket-qua', (d) => {
+        if (d.maPhong !== ma) return;
+        vuaBao.set(d.userId, Date.now());
+        setThongBao(
+          d.ketQua === 'nhan' ? `${d.ten} đã nhận lời mời`
+            : d.ketQua === 'tu-choi' ? `${d.ten} đã từ chối lời mời`
+              : `${d.ten} chưa phản hồi — lời mời đã hết hạn`,
+        );
+      }),
       dk.nghe('dk:tu-choi', (d) => {
-        if (d.maPhong === ma) setThongBao(`${d.ten} đã từ chối lời mời`);
+        if (d.maPhong !== ma || Date.now() - (vuaBao.get(d.userId) ?? 0) < 3000) return;
+        setThongBao(`${d.ten} đã từ chối lời mời`);
       }),
       dk.ngheKetNoi((k) => {
         if (!song) return;
@@ -406,6 +424,7 @@ export function useVanOnline(maPhong: string): DieuKhienPhong {
       huy.forEach((f) => f());
       henDs.forEach(clearTimeout);
       henDs.clear();
+      if (daRoiHan.current) return; // đã gửi "rời hẳn" — khỏi gửi thêm lệnh rời-tạm
       henRoi.set(ma, setTimeout(() => { henRoi.delete(ma); void dk.roiPhong(ma); }, 400));
     };
   }, [ma, nhan]);
@@ -459,6 +478,13 @@ export function useVanOnline(maPhong: string): DieuKhienPhong {
     moiBan: (uid) => dk.moi(ma, uid),
     themBot: (cap) => void dk.themBot(ma, cap).then(ketQuaLoi),
     boBot: (ghe) => void dk.boBot(ma, ghe),
+    huyMoi: (uid) => void dk.huyMoi(ma, uid),
+    roiHan: () => {
+      daRoiHan.current = true;
+      const cu = henRoi.get(ma);
+      if (cu) { clearTimeout(cu); henRoi.delete(ma); }
+      void dk.roiPhong(ma, true);
+    },
     xoaLoi: () => setLoi(null),
   };
 }

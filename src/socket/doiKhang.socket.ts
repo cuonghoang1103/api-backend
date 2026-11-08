@@ -14,7 +14,7 @@
 import type { Server as IOServer, Socket } from 'socket.io';
 import { logger } from '../utils/logger.js';
 import { LUAT, type CapDoBot, type KetQua, type MaTro } from '../services/doiKhang/luat/index.js';
-import { banOnline, layElo, layNguoi, luuVan, tenHienThi } from '../services/doiKhang/doiKhang.service.js';
+import { banOnline, layElo, layNguoi, luuVan, moiDuoc, tenHienThi } from '../services/doiKhang/doiKhang.service.js';
 
 interface ConnUser { id: number; username: string }
 
@@ -46,7 +46,63 @@ const THOI_GIAN_GHEP: Record<MaTro, { phut: number; congGiay: number }> = {
   'co-vua': { phut: 10, congGiay: 0 }, 'co-tuong': { phut: 15, congGiay: 0 }, 'tien-len': { phut: 5, congGiay: 3 }, caro: { phut: 5, congGiay: 0 },
 };
 const CHO_QUAY_LAI_MS = 60_000;
+/**
+ * Giữ ghế ở phòng CHỜ / phòng vừa XONG khi người chơi rời trang (08/11/2026).
+ *
+ * Trước đó rời trang là mất ghế NGAY, người cuối rời là phòng bị xoá NGAY. Chủ phòng tạo phòng,
+ * mời bạn, rồi mở Tin nhắn để nhắn "vào đi" ⇒ phòng biến mất ⇒ bạn bấm Nhận được "Không tìm thấy
+ * phòng". Điện thoại khoá màn hình (socket rớt) cũng vậy. Ba phút đủ cho một lượt nhắn tin; bấm
+ * "Rời phòng" thật (`dk:roi { han: true }`) thì vẫn rời ngay.
+ */
+const GIU_PHONG_CHO_MS = 3 * 60_000;
+/** Lời mời sống bao lâu. Hết hạn ⇒ máy chủ báo người mời "không phản hồi" và tắt thẻ ở người được mời. */
+const LOI_MOI_HAN_MS = 60_000;
 const phongs = new Map<string, Phong>();
+
+/** Lời mời đang chờ trả lời — máy chủ giữ để mọi thiết bị của hai bên thấy CÙNG một trạng thái. */
+interface LoiMoi {
+  id: string; maPhong: string; tro: MaTro; tuId: number; denId: number; denTen: string; het: number;
+  hen: NodeJS.Timeout;
+}
+/** khoá `${maPhong}:${denId}` — mời lại cùng người cùng phòng thì thay lời mời cũ. */
+const loiMois = new Map<string, LoiMoi>();
+const khoaMoi = (maPhong: string, denId: number) => `${maPhong}:${denId}`;
+/** Chống spam theo NGƯỜI (trước đây theo socket — mở thêm tab là lách được). */
+const moiGanNhat = new Map<number, number>();
+const TEN_TRO_VI: Record<MaTro, string> = { 'co-vua': 'Cờ vua', 'co-tuong': 'Cờ tướng', 'tien-len': 'Tiến lên', caro: 'Caro' };
+
+type Phat = { to(room: string): { emit(ev: string, payload: unknown): unknown } };
+
+/**
+ * Kết thúc một lời mời: báo người MỜI kết quả (`dk:moi-ket-qua`) và tắt thẻ ở MỌI thiết bị của người
+ * được mời (`dk:loi-moi-xong`). `ketQua = null` ⇒ chỉ tắt thẻ (phòng đóng/đủ người), không báo người mời.
+ * Xuất ra để test được không cần socket thật.
+ */
+export function dongLoiMoi(
+  io: Phat, m: LoiMoi, ketQua: 'nhan' | 'tu-choi' | 'het-han' | null, lyDo?: string,
+): void {
+  clearTimeout(m.hen);
+  loiMois.delete(khoaMoi(m.maPhong, m.denId));
+  io.to(`user:${m.denId}`).emit('dk:loi-moi-xong', { id: m.id, maPhong: m.maPhong, ketQua, lyDo });
+  if (ketQua) {
+    io.to(`user:${m.tuId}`).emit('dk:moi-ket-qua', { id: m.id, maPhong: m.maPhong, userId: m.denId, ten: m.denTen, ketQua });
+    // Bản cũ (app ≤ 0.5.212, tab web chưa tải lại) chỉ nghe `dk:tu-choi`.
+    if (ketQua === 'tu-choi') io.to(`user:${m.tuId}`).emit('dk:tu-choi', { maPhong: m.maPhong, userId: m.denId, ten: m.denTen });
+  }
+}
+
+/** Đóng mọi lời mời còn treo của một phòng (phòng đóng / đủ người / đã bắt đầu). */
+function dongMoiCuaPhong(io: Phat, maPhong: string, lyDo: string): void {
+  for (const m of [...loiMois.values()]) if (m.maPhong === maPhong) dongLoiMoi(io, m, null, lyDo);
+}
+
+const gheTrong = (): Ghe => ({ userId: null, ten: '', avatar: null, elo: null, sanSang: false, taiDau: false, roiLuc: null });
+/** Phòng còn chỗ cho người mới không (tiến lên được thêm ghế tới tối đa). */
+function conCho(p: Phong): boolean {
+  if (p.trangThai !== 'cho') return false;
+  if (p.ghe.some((g) => g.userId == null && !g.bot)) return true;
+  return p.tro === 'tien-len' && p.ghe.length < LUAT['tien-len'].soNguoi.max;
+}
 const hangGhep = new Map<MaTro, { userId: number; socketId: string }[]>();
 const khoa = (ma: string) => `dk:${ma}`;
 
@@ -79,10 +135,39 @@ function dto(p: Phong, viewerId: number | null) {
       nuocCuoi: p.lichSu.length ? p.lichSu[p.lichSu.length - 1] : null, lichSu: p.lichSu.map((l) => l.moTa),
     },
     ketQua: p.ketQua, doiElo: p.doiElo, xinHoa: p.xinHoa, gheCuaToi: ghe, gioMayChu: Date.now(),
+    /** Lời mời đang chờ trả lời của phòng — để mọi người trong phòng thấy "đang chờ X…" (08/11/2026). */
+    dangMoi: [...loiMois.values()].filter((m) => m.maPhong === p.ma).map((m) => ({ userId: m.denId, ten: m.denTen, het: m.het })),
   };
 }
 
-export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): void {
+/**
+ * Những gì đụng DB / dịch vụ ngoài — tách ra để test dựng được máy chủ socket.io THẬT với nhiều client
+ * mà không cần Postgres (`doiKhang.socket.test.ts`). Mặc định là bản thật.
+ */
+export interface DichVuDoiKhang {
+  layNguoi: typeof layNguoi;
+  layElo: typeof layElo;
+  luuVan: typeof luuVan;
+  moiDuoc: typeof moiDuoc;
+  banOnline: typeof banOnline;
+  baoMoiOffline: (den: number, tu: number, phong: { maPhong: string; tro: string; tenTro: string }) => Promise<void>;
+  /** Thời hạn lời mời (ms) — test đặt ngắn. */
+  hanMoiMs?: number;
+  /** Giữ ghế phòng chờ khi rời trang (ms) — test đặt ngắn. */
+  giuPhongMs?: number;
+}
+const DICH_VU_THAT: DichVuDoiKhang = {
+  layNguoi, layElo, luuVan, moiDuoc, banOnline,
+  baoMoiOffline: async (den, tu, phong) => {
+    const { notifyGameInvite } = await import('../services/notification.service.js');
+    await notifyGameInvite(den, tu, phong);
+  },
+};
+
+export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser, dvTruyen?: Partial<DichVuDoiKhang>): void {
+  const dv: DichVuDoiKhang = { ...DICH_VU_THAT, ...dvTruyen };
+  const hanMoi = dv.hanMoiMs ?? LOI_MOI_HAN_MS;
+  const giuPhong = dv.giuPhongMs ?? GIU_PHONG_CHO_MS;
   const phat = (p: Phong) => {
     p.chamLuc = Date.now();
     for (const [sid, uid] of p.nghe) io.to(sid).emit('dk:phong', dto(p, uid));
@@ -90,10 +175,21 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
   const traLoi = (cb: unknown, data: unknown) => { if (typeof cb === 'function') (cb as (d: unknown) => void)(data); };
   const layPhong = (raw: unknown) => phongs.get(String((raw as { maPhong?: unknown })?.maPhong ?? '').toUpperCase());
 
+  /**
+   * Ngồi vào ghế `idx`. GIỮ GHẾ NGAY (đồng bộ) rồi mới đọc DB lấy tên/Elo — trước đây ghế chỉ được
+   * ghi SAU `await`, nên hai người bấm vào cùng lúc cùng thấy ghế trống và cùng ngồi: người đầu bị
+   * ghi đè, im lặng thành người xem (08/11/2026).
+   */
   async function ngoiVao(p: Phong, idx: number, userId: number) {
-    const [nguoi, elo] = await Promise.all([layNguoi([userId]), layElo(p.tro, [userId])]);
+    const ten = userId === user.id ? user.username : '';
+    p.ghe[idx] = { userId, ten, avatar: null, elo: null, sanSang: false, taiDau: false, roiLuc: null };
+    const [nguoi, elo] = await Promise.all([dv.layNguoi([userId]), dv.layElo(p.tro, [userId])]);
     const u = nguoi.get(userId);
-    p.ghe[idx] = { userId, ten: u ? tenHienThi(u) : user.username, avatar: u?.avatarUrl ?? null, elo: elo.get(userId) ?? 1200, sanSang: false, taiDau: false, roiLuc: null };
+    const g = p.ghe[idx];
+    if (!g || g.userId !== userId) return; // ghế đã đổi trong lúc chờ DB (rời ngay) — đừng ghi đè
+    g.ten = u ? tenHienThi(u) : g.ten || user.username;
+    g.avatar = u?.avatarUrl ?? null;
+    g.elo = elo.get(userId) ?? 1200;
   }
 
   function dungHen(p: Phong) {
@@ -129,6 +225,7 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
     p.dongHo = p.ghe.map(() => p.thoiGian.phut * 60_000); p.dongHoLuc = Date.now();
     p.trangThai = 'dang-danh'; p.batDau = new Date();
     p.ghe.forEach((g) => { g.taiDau = false; });
+    dongMoiCuaPhong(io, p.ma, 'da-bat-dau');
     henLuot(p);
     phat(p);
   }
@@ -136,7 +233,9 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
   function thuBatDau(p: Phong) {
     if (p.trangThai !== 'cho') return;
     if (p.ghe.length < LUAT[p.tro].soNguoi.min) return;
-    if (p.ghe.every((g) => g.bot || (g.userId != null && g.sanSang))) batDau(p);
+    // Người đang vắng (rời trang, ghế còn giữ) thì CHƯA bắt đầu — không để ván chạy đồng hồ khi họ không ở đó.
+    const coMat = new Set(p.nghe.values());
+    if (p.ghe.every((g) => g.bot || (g.userId != null && g.sanSang && coMat.has(g.userId)))) batDau(p);
   }
 
   function diNuoc(p: Phong, ghe: number, nuoc: unknown): string | null {
@@ -177,7 +276,7 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
     if (kq.thuHang?.length) p.nguoiDiTruoc = kq.thuHang[0]!;
     phat(p);
     const nguoiChoi = p.ghe.map((g) => (g.bot ? 0 : g.userId ?? 0));
-    void luuVan({ tro: p.tro, maPhong: p.ma, nguoiChoi, ketQua: kq, soNuoc: p.soNuoc, lichSu: p.lichSu.map((l) => ({ g: l.ghe, n: l.nuoc })), batDau: p.batDau ?? new Date() })
+    void dv.luuVan({ tro: p.tro, maPhong: p.ma, nguoiChoi, ketQua: kq, soNuoc: p.soNuoc, lichSu: p.lichSu.map((l) => ({ g: l.ghe, n: l.nuoc })), batDau: p.batDau ?? new Date() })
       .then((r) => {
         if (!r) return;
         p.doiElo = r.sau.map((e, i) => e - r.truoc[i]!);
@@ -187,9 +286,24 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
       .catch((e) => logger.error('[doiKhang] lưu ván lỗi', { err: String(e) }));
   }
 
-  function roiGhe(p: Phong, userId: number) {
+  function roiGhe(p: Phong, userId: number, han = false) {
     const idx = p.ghe.findIndex((g) => g.userId === userId);
     if (idx < 0) return;
+    if (!han && p.trangThai !== 'dang-danh') {
+      // Phòng chờ / vừa xong: GIỮ GHẾ một lúc (xem GIU_PHONG_CHO_MS). Quay lại trong hạn ⇒ `vaoNghe` huỷ hẹn.
+      p.ghe[idx]!.roiLuc = Date.now();
+      if (!p.henRoi.has(userId)) {
+        p.henRoi.set(userId, setTimeout(() => {
+          p.henRoi.delete(userId);
+          if (!phongs.has(p.ma) || [...p.nghe.values()].includes(userId)) return;
+          roiGhe(p, userId, true);
+          if (phongs.has(p.ma)) phat(p);
+        }, giuPhong));
+      }
+      return;
+    }
+    const henCu = p.henRoi.get(userId);
+    if (han && henCu && p.trangThai !== 'dang-danh') { clearTimeout(henCu); p.henRoi.delete(userId); }
     if (p.trangThai === 'dang-danh') {
       // Đang đánh: giữ ghế 60 giây cho nối lại, quá hạn xử thua.
       p.ghe[idx]!.roiLuc = Date.now();
@@ -204,15 +318,21 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
     } else if (p.tro === 'tien-len' && p.ghe.length > 2 && p.trangThai === 'cho') {
       p.ghe.splice(idx, 1); p.tiSo.splice(idx, 1);
     } else {
-      p.ghe[idx] = { userId: null, ten: '', avatar: null, elo: null, sanSang: false, taiDau: false, roiLuc: null };
+      p.ghe[idx] = gheTrong();
     }
     if (!p.ghe.some((g) => g.userId != null && !g.bot)) { xoaPhong(p); return; }
+    if (p.trangThai === 'xong') {
+      // Ván đã xong mà đối thủ rời hẳn: người còn lại đừng đứng chờ "đấu lại" vô hạn — về phòng chờ, mời người khác.
+      p.trangThai = 'cho'; p.state = null; p.ketQua = null; p.doiElo = null; p.xinHoa = null;
+      p.ghe.forEach((x) => { x.sanSang = !!x.bot; x.taiDau = false; });
+    }
     if (p.chuId === userId) p.chuId = p.ghe.find((g) => g.userId != null && !g.bot)!.userId!;
   }
 
   function xoaPhong(p: Phong) {
     dungHen(p);
     p.henRoi.forEach((t) => clearTimeout(t));
+    dongMoiCuaPhong(io, p.ma, 'phong-dong');
     for (const sid of p.nghe.keys()) io.to(sid).emit('dk:dong', { maPhong: p.ma });
     io.in(khoa(p.ma)).socketsLeave(khoa(p.ma));
     phongs.delete(p.ma);
@@ -266,40 +386,124 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
       if (!p.ghe.some((g) => g.userId === user.id) && p.trangThai === 'cho') {
         const trong = p.ghe.findIndex((g) => g.userId == null && !g.bot);
         if (trong >= 0) await ngoiVao(p, trong, user.id);
-        else if (p.tro === 'tien-len' && p.ghe.length < LUAT['tien-len'].soNguoi.max) { p.ghe.push({ userId: null, ten: '', avatar: null, elo: null, sanSang: false, taiDau: false, roiLuc: null }); p.tiSo.push(0); await ngoiVao(p, p.ghe.length - 1, user.id); }
+        else if (p.tro === 'tien-len' && p.ghe.length < LUAT['tien-len'].soNguoi.max) { p.ghe.push(gheTrong()); p.tiSo.push(0); await ngoiVao(p, p.ghe.length - 1, user.id); }
       }
       vaoNghe(p);
+      // Vào phòng mình đang được mời (kể cả mở từ link/thông báo, không bấm "Nhận") = đã nhận lời mời.
+      const m = loiMois.get(khoaMoi(p.ma, user.id));
+      if (m && p.ghe.some((g) => g.userId === user.id)) dongLoiMoi(io, m, 'nhan');
+      if (!conCho(p)) dongMoiCuaPhong(io, p.ma, 'da-du');
       traLoi(cb, { ok: true, phong: dto(p, user.id) });
       phat(p);
+      thuBatDau(p); // người vắng vừa quay lại — mọi người đã sẵn sàng thì vào ván luôn
     } catch (e) { logger.error('[doiKhang] vao', { err: String(e) }); traLoi(cb, { ok: false, loi: 'Không vào được phòng.' }); }
   });
 
+  /** `{ han: true }` = người chơi bấm "Rời phòng" thật ⇒ rời ngay. Không có ⇒ chỉ rời trang, ghế được giữ. */
   socket.on('dk:roi', (raw: any) => {
     const p = layPhong(raw);
     if (!p) return;
     p.nghe.delete(socket.id);
     void socket.leave(khoa(p.ma));
-    if (![...p.nghe.values()].includes(user.id)) roiGhe(p, user.id);
+    if (![...p.nghe.values()].includes(user.id)) roiGhe(p, user.id, raw?.han === true);
     if (phongs.has(p.ma)) phat(p);
   });
 
-  let moiGanNhat = 0;
+  /**
+   * Mời một người BẠN vào phòng (viết lại 08/11/2026).
+   *
+   * Bản cũ: phát `dk:loi-moi` rồi trả `{ ok: true }` bất kể người kia có kết nối hay không, phòng
+   * còn chỗ hay không, có phải bạn hay không ⇒ nút hiện "Đã mời" mà không gì xảy ra. Giờ:
+   * - chỉ mời được bạn bè, không chặn nhau, phòng còn chỗ, người kia chưa ngồi trong phòng;
+   * - lời mời có id + hạn, máy chủ giữ ⇒ Nhận / Từ chối / Hết hạn báo lại người mời, và thẻ ở MỌI
+   *   thiết bị của người được mời tắt cùng lúc (trước đây tab kia hết 30 s tự gửi "từ chối" oan);
+   * - người kia không có kết nối nào ⇒ thêm thông báo vào chuông (+ đẩy ra điện thoại) thay vì mất.
+   */
   socket.on('dk:moi', async (raw: any, cb: unknown) => {
-    const p = layPhong(raw);
-    const den = Number(raw?.userId);
-    if (!p || !p.ghe.some((g) => g.userId === user.id) || !Number.isInteger(den) || den === user.id) return traLoi(cb, { ok: false, loi: 'Không mời được.' });
-    if (Date.now() - moiGanNhat < 1500) return traLoi(cb, { ok: false, loi: 'Chậm lại một chút nhé.' });
-    moiGanNhat = Date.now();
-    const nguoi = await layNguoi([user.id]).catch(() => new Map());
-    const u = nguoi.get(user.id);
-    io.to(`user:${den}`).emit('dk:loi-moi', { maPhong: p.ma, tro: p.tro, tu: { id: user.id, ten: u ? tenHienThi(u) : user.username, avatar: u?.avatarUrl ?? null } });
-    traLoi(cb, { ok: true });
+    try {
+      const p = layPhong(raw);
+      const den = Number(raw?.userId);
+      if (!p || !p.ghe.some((g) => g.userId === user.id) || !Number.isInteger(den) || den === user.id) return traLoi(cb, { ok: false, loi: 'Không mời được.' });
+      if (p.ghe.some((g) => g.userId === den)) return traLoi(cb, { ok: false, loi: 'Bạn ấy đã ở trong phòng.' });
+      if (!conCho(p)) return traLoi(cb, { ok: false, loi: p.trangThai === 'cho' ? 'Phòng đã đủ người.' : 'Ván đã bắt đầu — mời ở ván sau nhé.' });
+      const truoc = moiGanNhat.get(user.id) ?? 0;
+      if (Date.now() - truoc < 1200) return traLoi(cb, { ok: false, loi: 'Chậm lại một chút nhé.' });
+      moiGanNhat.set(user.id, Date.now());
+      if (!(await dv.moiDuoc(user.id, den))) return traLoi(cb, { ok: false, loi: 'Chỉ mời được bạn bè.' });
+
+      const nguoi = await dv.layNguoi([user.id, den]).catch(() => new Map());
+      const u = nguoi.get(user.id); const v = nguoi.get(den);
+      const tu = { id: user.id, ten: u ? tenHienThi(u) : user.username, avatar: u?.avatarUrl ?? null };
+      const cu = loiMois.get(khoaMoi(p.ma, den));
+      if (cu) clearTimeout(cu.hen);
+      const m: LoiMoi = {
+        id: `${p.ma}-${den}-${Date.now().toString(36)}`, maPhong: p.ma, tro: p.tro, tuId: user.id, denId: den,
+        denTen: v ? tenHienThi(v) : 'Bạn ấy', het: Date.now() + hanMoi,
+        hen: setTimeout(() => {
+          if (loiMois.get(khoaMoi(m.maPhong, den)) !== m) return;
+          dongLoiMoi(io, m, 'het-han');
+          const ph = phongs.get(m.maPhong); if (ph) phat(ph);
+        }, hanMoi),
+      };
+      m.hen.unref?.();
+      loiMois.set(khoaMoi(p.ma, den), m);
+
+      // Đếm qua adapter (Redis) — đúng cả khi người kia nối vào tiến trình khác.
+      const soThietBi = (await io.in(`user:${den}`).fetchSockets().catch(() => [])).length;
+      io.to(`user:${den}`).emit('dk:loi-moi', { id: m.id, maPhong: p.ma, tro: p.tro, tu, hetLuc: m.het });
+      if (soThietBi === 0) {
+        void dv.baoMoiOffline(den, user.id, { maPhong: p.ma, tro: p.tro, tenTro: TEN_TRO_VI[p.tro] })
+          .catch((e) => logger.warn('[doiKhang] báo lời mời offline lỗi', { err: String(e) }));
+      }
+      traLoi(cb, { ok: true, id: m.id, online: soThietBi > 0, het: m.het });
+      phat(p);
+    } catch (e) {
+      logger.error('[doiKhang] moi', { err: String(e) });
+      traLoi(cb, { ok: false, loi: 'Không gửi được lời mời.' });
+    }
   });
 
-  socket.on('dk:tra-loi-moi', (raw: any) => {
+  /** Chủ phòng huỷ lời mời đã gửi. */
+  socket.on('dk:huy-moi', (raw: any) => {
     const p = layPhong(raw);
-    if (!p || raw?.dongY) return;
-    io.to(`user:${p.chuId}`).emit('dk:tu-choi', { maPhong: p.ma, userId: user.id, ten: user.username });
+    const m = p ? loiMois.get(khoaMoi(p.ma, Number(raw?.userId))) : undefined;
+    if (!p || !m || m.tuId !== user.id) return;
+    dongLoiMoi(io, m, null, 'huy');
+    phat(p);
+  });
+
+  socket.on('dk:tra-loi-moi', async (raw: any) => {
+    const p = layPhong(raw);
+    if (!p) return;
+    const m = loiMois.get(khoaMoi(p.ma, user.id));
+    // Đã ngồi trong phòng rồi ⇒ mọi "từ chối" là của một tab/thiết bị khác hết giờ — bỏ qua.
+    if (p.ghe.some((g) => g.userId === user.id)) { if (m) dongLoiMoi(io, m, 'nhan'); return; }
+    if (raw?.dongY) return; // "Nhận" được xác nhận khi người đó thật sự vào phòng (`dk:vao`).
+    if (m) { dongLoiMoi(io, m, 'tu-choi'); phat(p); return; }
+    // Lời mời không còn trong bộ nhớ (đã hết hạn / máy chủ vừa khởi động lại): vẫn báo chủ phòng như cũ.
+    const nguoi = await dv.layNguoi([user.id]).catch(() => new Map());
+    const u = nguoi.get(user.id);
+    io.to(`user:${p.chuId}`).emit('dk:tu-choi', { maPhong: p.ma, userId: user.id, ten: u ? tenHienThi(u) : user.username });
+  });
+
+  /**
+   * Danh sách phòng CÔNG KHAI đang chờ người / đang đánh (để vào chơi hoặc xem) — sảnh hiện để người
+   * chơi không phải có mã mới vào được (08/11/2026; cờ `rieng` lưu từ đầu mà chưa từng được dùng).
+   */
+  socket.on('dk:ds-phong', (raw: any, cb: unknown) => {
+    const tro = docTro(raw?.tro);
+    const ds = [...phongs.values()]
+      .filter((p) => !p.rieng && (tro == null || p.tro === tro) && p.trangThai !== 'xong')
+      .filter((p) => p.ghe.some((g) => g.userId != null && !g.bot && [...p.nghe.values()].includes(g.userId)))
+      .sort((a, b) => Number(conCho(b)) - Number(conCho(a)) || b.chamLuc - a.chamLuc)
+      .slice(0, 30)
+      .map((p) => ({
+        maPhong: p.ma, tro: p.tro, trangThai: p.trangThai, conCho: conCho(p),
+        ghe: p.ghe.map((g) => ({ ten: g.ten, avatar: g.avatar, bot: !!g.bot, trong: g.userId == null && !g.bot })),
+        nguoiXem: new Set([...p.nghe.values()].filter((id) => !p.ghe.some((g) => g.userId === id))).size,
+        thoiGian: p.thoiGian,
+      }));
+    traLoi(cb, { ok: true, phong: ds });
   });
 
   socket.on('dk:ghep', async (raw: any, cb: unknown) => {
@@ -405,6 +609,13 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
     const g = p?.ghe.find((x) => x.userId === user.id);
     if (!p || !g || p.trangThai !== 'xong') return;
     g.taiDau = true;
+    // Ghế đã trống (đối thủ rời hẳn) ⇒ đừng treo "chờ đối thủ" mãi: về phòng chờ để mời người khác.
+    if (p.ghe.some((x) => x.userId == null && !x.bot)) {
+      p.trangThai = 'cho'; p.state = null; p.ketQua = null; p.doiElo = null;
+      p.ghe.forEach((x) => { x.sanSang = !!x.bot; x.taiDau = false; });
+      phat(p);
+      return;
+    }
     if (p.ghe.every((x) => x.bot || x.taiDau)) {
       // Hai người: đổi bên mỗi ván (Trắng/Đỏ/đi trước luân phiên) — đảo ghế cùng tỷ số.
       if (p.ghe.length === 2 && p.tro !== 'tien-len' && !p.ghe.some((x) => x.bot)) { p.ghe.reverse(); p.tiSo.reverse(); }
@@ -435,7 +646,7 @@ export function registerDoiKhang(io: IOServer, socket: Socket, user: ConnUser): 
   socket.on('dk:ban-online', async (_raw: unknown, cb: unknown) => {
     try {
       const { getOnlineUserIds } = await import('./messaging.socket.js');
-      traLoi(cb, { ok: true, ban: await banOnline(user.id, new Set(getOnlineUserIds())) });
+      traLoi(cb, { ok: true, ban: await dv.banOnline(user.id, new Set(getOnlineUserIds())) });
     } catch { traLoi(cb, { ok: false, ban: [] }); }
   });
 

@@ -18,7 +18,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
+import { Gamepad2,
   Bell, BellRing, Heart, MessageCircle, AtSign, MessageSquare, UserPlus, UserCheck,
   Check, Loader2, FolderOpen, Share2, Crown, Send, CornerDownRight,
   Settings as SettingsIcon, CheckCheck, Inbox,
@@ -54,6 +54,12 @@ function describeWork(n: SocialNotification): string {
   }
 }
 
+/** Lời mời đối kháng: chỉ đi theo đường /games/doi-khang (không mở chuyển hướng tuỳ ý). */
+function gameUrl(n: SocialNotification): string {
+  const ma = String(n.payload?.maPhong ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  return ma ? `/games/doi-khang?phong=${ma}` : '/games/doi-khang';
+}
+
 /** payload.url is an app path; only follow it inside /work (no open redirect). */
 function workUrl(n: SocialNotification): string {
   const url = n.payload?.url;
@@ -85,6 +91,7 @@ function describeNotification(n: SocialNotification): string {
     case 'NOTE_REPLY': return `${name} đã trả lời thảo luận trong ghi chú`;
     case 'NOTE_MENTION': return `${name} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE': return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'GAME_INVITE': return `${name} mời bạn chơi ${String(n.payload?.tenTro ?? 'đối kháng')} — bấm để vào phòng`;
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
@@ -114,6 +121,7 @@ function typeIcon(t: NotificationType) {
     case 'NOTE_REPLY': return CornerDownRight;
     case 'NOTE_MENTION': return AtSign;
     case 'HUB_SHARE': return Share2;
+    case 'GAME_INVITE': return Gamepad2;
     case 'WORK_INVITE': return UserPlus;
     case 'WORK_ASSIGN': return UserCheck;
     case 'WORK_COMMENT': return MessageCircle;
@@ -140,6 +148,7 @@ function typeColor(t: NotificationType): string {
     case 'NOTE_REPLY': return '#22d3ee';
     case 'NOTE_MENTION': return '#8b5cf6';
     case 'HUB_SHARE': return '#f59e0b';
+    case 'GAME_INVITE': return '#d946ef';
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
@@ -172,6 +181,7 @@ function targetUrl(n: SocialNotification): string {
     return `/notes?${params.toString()}`;
   }
   if (n.type === 'HUB_SHARE') return '/hub';
+  if (n.type === 'GAME_INVITE') return gameUrl(n);
   if (isWorkType(n.type)) return workUrl(n);
   if (n.type === 'ADMIN_ANNOUNCEMENT') return n.entityId ? `/forum/${n.entityId}` : '/forum';
   if (n.entityId) {

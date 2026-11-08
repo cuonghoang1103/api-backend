@@ -8,10 +8,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Bot, Zap, UserPlus, Swords, Trophy, History, Users, Loader2, X, LogIn, Crown } from 'lucide-react';
+import { Bot, Zap, UserPlus, Swords, Trophy, History, Users, Loader2, X, LogIn, Crown, Eye, Globe2, Lock } from 'lucide-react';
 import type { CapDoBot, MaTro } from '@/lib/doiKhang/luat';
 import * as dk from '@/lib/doiKhang/client';
-import type { BanOnline, DongXepHang, HangCuaToi, VanCuaToi } from '@/lib/doiKhang/client';
+import type { BanOnline, DongXepHang, HangCuaToi, PhongCongKhai, VanCuaToi } from '@/lib/doiKhang/client';
 import { useAuthStore } from '@/store/authStore';
 import { AnhDaiDien, CHIP, MAU_TRO, MO_TA_TRO, NUT_KINH, TEN_TRO, lyDoChu } from './chung';
 import { MinhHoaCaro, MinhHoaCoTuong, MinhHoaCoVua, MinhHoaTienLen } from './MinhHoa';
@@ -131,6 +131,9 @@ export default function SanhDoiKhang() {
   const [dangBan, setDangBan] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
   const [moiBan, setMoiBan] = useState<BanOnline | null>(null);
+  /** Phòng công khai đang mở (vào chơi / vào xem không cần mã) + phòng mới tạo có công khai không. */
+  const [dsPhong, setDsPhong] = useState<PhongCongKhai[] | null>(null);
+  const [congKhai, setCongKhai] = useState(false);
   const ghepRef = useRef<MaTro | null>(null);
   ghepRef.current = ghepTro;
 
@@ -140,6 +143,24 @@ export default function SanhDoiKhang() {
     void dk.layBanOnline().then((b) => song && setBan(b));
     void dk.layCuaToi().then((c) => song && setCuaToi(c));
     const t = setInterval(() => void dk.layBanOnline().then((b) => song && setBan(b)), 30_000);
+    // Bạn vừa vào/ra web ⇒ chấm xanh đổi NGAY, không chờ 30 giây (08/11/2026).
+    const huy = dk.nghe('presence:update', (d) => {
+      if (!song || !d) return;
+      setBan((c) => {
+        if (!c) return c;
+        const moi = c.map((b) => (b.id === d.userId ? { ...b, online: !!d.online } : b));
+        return moi.sort((a, b) => Number(b.online) - Number(a.online) || a.ten.localeCompare(b.ten, 'vi'));
+      });
+    });
+    return () => { song = false; clearInterval(t); huy(); };
+  }, [daDangNhap]);
+
+  useEffect(() => {
+    if (!daDangNhap) { setDsPhong([]); return; }
+    let song = true;
+    const tai = () => void dk.layDsPhong().then((d) => song && setDsPhong(d));
+    tai();
+    const t = setInterval(tai, 8_000);
     return () => { song = false; clearInterval(t); };
   }, [daDangNhap]);
 
@@ -189,12 +210,16 @@ export default function SanhDoiKhang() {
 
   const taoPhong = useCallback(async (tro: MaTro, moiAi?: number) => {
     setDangBan(true);
-    const a = await dk.taoPhong({ tro, thoiGian: THOI_GIAN[tro], rieng: true, soGhe: tro === 'tien-len' ? 4 : 2 });
+    // Mời đích danh một bạn ⇒ luôn phòng riêng; tạo phòng thường ⇒ theo công tắc "Công khai".
+    const a = await dk.taoPhong({ tro, thoiGian: THOI_GIAN[tro], rieng: moiAi ? true : !congKhai, soGhe: tro === 'tien-len' ? 4 : 2 });
     setDangBan(false);
     if (!a.ok || !a.phong) { setLoi(a.loi || 'Không tạo được phòng'); return; }
-    if (moiAi) void dk.moi(a.phong.maPhong, moiAi);
+    if (moiAi) {
+      const m = await dk.moi(a.phong.maPhong, moiAi);
+      if (!m.ok) setLoi(m.loi || 'Không gửi được lời mời');
+    }
     router.push(`/games/doi-khang?phong=${a.phong.maPhong}`);
-  }, [router]);
+  }, [router, congKhai]);
 
   const vaoMa = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,6 +276,46 @@ export default function SanhDoiKhang() {
 
             {daDangNhap && (
               <section className="rounded-3xl border border-white/[0.08] bg-white/[0.03] p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <h2 className="flex flex-1 items-center gap-2 text-sm font-semibold text-white/80"><Globe2 className="h-4 w-4 text-sky-300" /> Phòng đang mở</h2>
+                  <button
+                    type="button"
+                    onClick={() => setCongKhai((x) => !x)}
+                    className="inline-flex items-center gap-1 rounded-lg border border-white/10 px-2 py-1 text-[11px] text-white/70 hover:bg-white/5"
+                    title="Phòng bạn tạo bằng nút 'Tạo phòng' sẽ hiện ở đây cho mọi người vào, hay chỉ người có mã/được mời"
+                  >
+                    {congKhai ? <Globe2 className="h-3 w-3 text-sky-300" /> : <Lock className="h-3 w-3" />}
+                    Phòng mới: {congKhai ? 'Công khai' : 'Riêng tư'}
+                  </button>
+                </div>
+                {dsPhong === null && <p className="py-3 text-center text-xs text-white/40"><Loader2 className="mr-1 inline h-3.5 w-3.5 animate-spin" />Đang tải…</p>}
+                {dsPhong?.length === 0 && <p className="py-2 text-xs text-white/40">Chưa có phòng công khai nào. Bật “Công khai” rồi Tạo phòng để người khác vào cùng.</p>}
+                <ul className="max-h-60 space-y-1 overflow-y-auto">
+                  {dsPhong?.map((p) => (
+                    <li key={p.maPhong} className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 hover:bg-white/[0.04]">
+                      <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: MAU_TRO[p.tro]?.a }} />
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-sm text-white/85">{TEN_TRO[p.tro]} · {p.ghe.filter((g) => !g.trong).map((g) => g.ten).join(', ') || '—'}</div>
+                        <div className="text-[11px] text-white/40">
+                          {p.trangThai === 'dang-danh' ? 'Đang đánh' : `Còn ${p.ghe.filter((g) => g.trong).length || 1} chỗ`} · {p.thoiGian.phut}′{p.nguoiXem ? ` · ${p.nguoiXem} người xem` : ''}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => router.push(`/games/doi-khang?phong=${p.maPhong}`)}
+                        className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold ${p.conCho ? 'bg-emerald-500/25 text-emerald-100 hover:bg-emerald-500/40' : 'bg-white/10 text-white/75 hover:bg-white/15'}`}
+                      >
+                        {p.conCho ? <UserPlus className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                        {p.conCho ? 'Vào' : 'Xem'}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {daDangNhap && (
+              <section className="rounded-3xl border border-white/[0.08] bg-white/[0.03] p-4">
                 <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80"><Users className="h-4 w-4 text-emerald-300" /> Bạn bè</h2>
                 {ban === null && <p className="py-4 text-center text-xs text-white/40"><Loader2 className="mr-1 inline h-3.5 w-3.5 animate-spin" />Đang tải…</p>}
                 {ban?.length === 0 && <p className="py-3 text-xs text-white/40">Chưa có bạn bè nào. Tạo phòng rồi gửi link mời nhé.</p>}
@@ -264,7 +329,8 @@ export default function SanhDoiKhang() {
                       <span className={`flex-1 truncate text-sm ${b.online ? 'text-white/90' : 'text-white/45'}`}>{b.ten}</span>
                       <button
                         type="button"
-                        disabled={!b.online || dangBan}
+                        disabled={dangBan}
+                        title={b.online ? undefined : 'Bạn ấy đang offline — lời mời sẽ vào chuông thông báo'}
                         onClick={() => setMoiBan(b)}
                         className="rounded-lg bg-violet-500/25 px-2.5 py-1 text-xs font-semibold text-violet-100 hover:bg-violet-500/40 disabled:opacity-35"
                       >

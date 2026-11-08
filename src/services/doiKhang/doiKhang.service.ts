@@ -146,3 +146,24 @@ export async function banOnline(userId: number, online: Set<number>) {
     .map((u) => ({ userId: u.id, ten: tenHienThi(u), username: u.username, avatar: u.avatarUrl, online: online.has(u.id) }))
     .sort((a, b) => Number(b.online) - Number(a.online) || a.ten.localeCompare(b.ten, 'vi'));
 }
+
+/**
+ * Hai người có phải BẠN (đã chấp nhận) và không ai chặn ai không — điều kiện để gửi lời mời đối kháng
+ * (08/11/2026). Trước đó `dk:moi` nhận MỌI userId: ai cũng mời được ai, kể cả người đã chặn mình.
+ */
+export async function moiDuoc(tuId: number, denId: number): Promise<boolean> {
+  const [ban, chan] = await Promise.all([
+    prisma.friendship.findFirst({
+      where: {
+        status: 'ACCEPTED',
+        OR: [{ requesterId: tuId, addresseeId: denId }, { requesterId: denId, addresseeId: tuId }],
+      },
+      select: { requesterId: true },
+    }),
+    prisma.userBlock.findFirst({
+      where: { OR: [{ blockerId: tuId, blockedId: denId }, { blockerId: denId, blockedId: tuId }] },
+      select: { blockerId: true },
+    }).catch(() => null),
+  ]);
+  return !!ban && !chan;
+}

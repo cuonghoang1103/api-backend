@@ -69,6 +69,11 @@ export const NOTIFICATION_TYPES = [
   'WORK_MENTION',
   // Luật tự động / nhắc hạn: payload.message là câu hiển thị.
   'WORK_ALERT',
+  // ─── Đối kháng (08/11/2026) ───────────────────────────────
+  // Lời mời chơi khi người được mời KHÔNG có kết nối nào (offline / đóng app) — trước đó lời mời
+  // chỉ là một sự kiện socket, người offline không bao giờ biết mình được mời.
+  // payload: { maPhong, tro, tenTro, url: '/games/doi-khang?phong=MÃ' }.
+  'GAME_INVITE',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -191,6 +196,7 @@ function chuThongBao(type: string, ten: string, payload: unknown): string {
     case 'WORK_COMMENT': return `${ten} commented on ${String(p.issueKey ?? 'an issue')}: ${String(p.excerpt ?? p.title ?? '')}`.trim();
     case 'WORK_MENTION': return `${ten} mentioned you in ${String(p.issueKey ?? 'an issue')}: ${String(p.excerpt ?? '')}`.trim();
     case 'WORK_ALERT': return `${String(p.issueKey ?? 'CT Work')}: ${String(p.message ?? 'needs your attention')}`;
+    case 'GAME_INVITE': return `${ten} mời bạn chơi ${String(p.tenTro ?? 'đối kháng')} — phòng ${String(p.maPhong ?? '')}`.trim();
     case 'NEW_POST':
     default: return `${ten} đã đăng bài viết mới`;
   }
@@ -395,6 +401,21 @@ export async function notifyFriendAccept(
     senderId,
     type: 'FRIEND_ACCEPT',
     entityId: senderId,
+  });
+}
+
+/** Lời mời chơi đối kháng gửi tới người đang offline (08/11/2026). entityId = người mời. */
+export async function notifyGameInvite(
+  recipientId: number,
+  senderId: number,
+  phong: { maPhong: string; tro: string; tenTro: string },
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type: 'GAME_INVITE',
+    entityId: senderId,
+    payload: { ...phong, url: `/games/doi-khang?phong=${encodeURIComponent(phong.maPhong)}` },
   });
 }
 

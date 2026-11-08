@@ -237,6 +237,8 @@ export type NotificationType =
   | 'NOTE_REPLY'
   | 'NOTE_MENTION'
   | 'HUB_SHARE'    // Hub folder/file/link was shared with you
+  // Đối kháng (08/11/2026): lời mời chơi tới người đang offline. payload { maPhong, tro, tenTro, url }.
+  | 'GAME_INVITE'
   // CT Work (/work, added 2026-09-23). payload.url is an app path under /work;
   // WORK_INVITE → { workspaceName, url }, others → { issueKey, title, url, excerpt? }.
   | 'WORK_INVITE'

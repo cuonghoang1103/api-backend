@@ -163,7 +163,16 @@ export async function connectSocket(): Promise<Socket> {
       // First-attempt error — surface so the store can show a
       // user-visible message. After the first connection we
       // let Socket.IO's reconnection logic handle retries.
-      if (!socket) finish(err);
+      if (!socket) {
+        finish(err);
+        /* 08/11/2026: ĐÓNG socket hỏng này. Để nó sống thì nó tự nối lại ở nền (reconnection: true),
+           vào được `user:<id>` và làm người khác thấy mình ONLINE — nhưng không ai giữ tham chiếu
+           tới nó, nên không listener nào gắn được: lời mời đối kháng, tin nhắn tới mà không ai nghe.
+           Người gọi tự thử lại bằng `connectSocket()` (đã có cookie mới từ lượt làm mới ở trên). */
+        setTimeout(() => {
+          if (socket !== s) { s.removeAllListeners(); s.disconnect(); }
+        }, 0);
+      }
     });
 
     // Safety timeout in case neither event fires

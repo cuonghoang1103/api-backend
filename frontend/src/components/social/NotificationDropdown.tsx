@@ -24,7 +24,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
+import { Gamepad2,
   Bell,
   BellRing,
   Heart,
@@ -123,6 +123,8 @@ function describeNotification(n: SocialNotification): string {
       return `${name} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE':
       return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'GAME_INVITE':
+      return `${name} mời bạn chơi ${String(n.payload?.tenTro ?? 'đối kháng')} — bấm để vào phòng`;
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
@@ -154,6 +156,7 @@ function typeIcon(t: NotificationType) {
     case 'NOTE_REPLY': return MessageCircle;
     case 'NOTE_MENTION': return AtSign;
     case 'HUB_SHARE': return Share2;
+    case 'GAME_INVITE': return Gamepad2;
     case 'WORK_INVITE': return UserPlus;
     case 'WORK_ASSIGN': return UserCheck;
     case 'WORK_COMMENT': return MessageCircle;
@@ -178,6 +181,7 @@ function typeIconColor(t: NotificationType): string {
     case 'NOTE_REPLY': return '#22d3ee';
     case 'NOTE_MENTION': return '#8b5cf6';
     case 'HUB_SHARE': return '#f59e0b'; // amber
+    case 'GAME_INVITE': return '#d946ef'; // fuchsia — màu đối kháng
     case 'WORK_INVITE':
     case 'WORK_ASSIGN':
     case 'WORK_COMMENT':
@@ -236,6 +240,11 @@ function targetUrl(n: SocialNotification): string {
     return `/notes?${params.toString()}`;
   }
   if (n.type === 'HUB_SHARE') return '/hub';
+  // Lời mời đối kháng: chỉ đi theo đường /games/doi-khang (không mở chuyển hướng tuỳ ý).
+  if (n.type === 'GAME_INVITE') {
+    const ma = String(n.payload?.maPhong ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return ma ? `/games/doi-khang?phong=${ma}` : '/games/doi-khang';
+  }
   // CT Work: payload.url is the app path to open (issue or workspace).
   if (isWorkType(n.type)) return workUrl(n);
   // Admin announcement: entityId is the announcement id → /forum/:id

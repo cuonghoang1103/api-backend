@@ -47,7 +47,7 @@ export default {
     "osg202-7-2-shell-script": { yt: "tK9Oc6AEnR4", credit: "freeCodeCamp.org — Bash Scripting Tutorial for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI'},
 
     // N1 — from OS to the cloud
-    "osg202-n1-1-cloud-container": { yt: "Jz8Gs4UHTO8", credit: "ByteByteGo — Big Misconceptions about Bare Metal, Virtual Machines, and Containers" },
+    "osg202-n1-1-cloud-container": { yt: "Jz8Gs4UHTO8", credit: "ByteByteGo — Big Misconceptions about Bare Metal, Virtual Machines, and Containers", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-01-slide-ao-hoa-dam-may-tron-e231b5a6.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-77ac60a2.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-hoc-the-nao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-cai-moi-truong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-320af3b1.mp4' }, defaultVideoTrack: 'VI'},
@@ -78,5 +78,7 @@ export default {
     'osg202-lab-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-lab-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-05-lab-3-lap-trinh-c-tron-bd81e18a.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-lab-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-06-lab-4-quan-sat-he-thong-tron-4bb6fe04.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg7-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-01-slide-ao-hoa-dam-may-tron-e231b5a6.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-n1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-02-thuc-hanh-n1-tron-2f99df2f.mp4' }, defaultVideoTrack: 'VI' },
   },
 };
